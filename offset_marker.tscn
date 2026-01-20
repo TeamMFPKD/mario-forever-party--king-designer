@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://cwhj0wm6uciv4"]
+
+[node name="OffsetMarker" type="Marker2D"]
+gizmo_extents = 4.0

@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://0pxyeyw6pisu"]
+
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://offset_marker.tscn" id="1_ldfyv"]
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://spawner_set.gd" id="1_sw1m1"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_72er8"]
+load_path = "res://.godot/imported/test_fafa.png-d69a450290cc247bf443f4c041087858.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldfyv"]
+atlas = SubResource("CompressedTexture2D_72er8")
+region = Rect2(0, 0, 33, 48)
+
+[node name="Spawner" type="Node2D"]
+script = ExtResource("1_sw1m1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, -8)
+texture = SubResource("AtlasTexture_ldfyv")
+
+[node name="OffsetMarker" parent="." instance=ExtResource("1_ldfyv")]
+position = Vector2(16, 0)
