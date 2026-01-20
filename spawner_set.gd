@@ -1,5 +1,7 @@
 extends Node2D
 
+class_name Spawner
+
 @export var spawn_object_scene : PackedScene
 
 var isInLevel: bool

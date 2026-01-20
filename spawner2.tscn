@@ -12,6 +12,7 @@ region = Rect2(0, 0, 33, 48)
 
 [node name="Spawner" type="Node2D"]
 script = ExtResource("1_sw1m1")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(16, -8)

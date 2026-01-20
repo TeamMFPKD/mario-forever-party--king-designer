@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene load_steps=12 format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Texture2D" uid="uid://djr2lscpgyin2" path="res://icon.svg" id="1_aiegb"]
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://tilemap_draw.gd" id="1_ju58f"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://tileset/Overworld.png" id="3_arrdh"]
 [ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://spawner.tscn" id="5_sqxie"]
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://spawner2.tscn" id="6_bd7ek"]
+[ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://extra_settings.gd" id="7_f0xav"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oqbmf"]
 
@@ -416,6 +417,18 @@ shape = SubResource("RectangleShape2D_oqbmf")
 
 [node name="Grid2d" parent="." instance=ExtResource("2_oqbmf")]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="ItemToSave" type="Node" parent="."]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="ItemToSave"]
 tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAAHAAEAAQAAAAAAAQA=")
 tile_set = SubResource("TileSet_sqxie")
+
+[node name="ExtraSettings" type="Node" parent="ItemToSave"]
+script = ExtResource("7_f0xav")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 25.0
+offset_top = 28.0
+offset_right = 112.0
+offset_bottom = 86.0
+text = "保存"
