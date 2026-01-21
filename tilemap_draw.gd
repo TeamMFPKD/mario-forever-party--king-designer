@@ -1,16 +1,9 @@
 extends Node2D
 
-var tile_map: TileMapLayer
+@export var tile_map: TileMapLayer
+
 var is_drawing = false
-var brush_mode = false # true for drawing, false for erasing
-
-func _ready():
-	tile_map = get_node("TileMapLayer") as TileMapLayer
-	if tile_map:
-		print("TileMapLayer found and assigned.")
-	else:
-		print("Error: TileMapLayer not found as child of this node.")
-
+var brush_mode = true # true for drawing, false for erasing
 
 func _input(event):
 	if not tile_map:
@@ -52,9 +45,9 @@ func place_tile_at_cursor(cursor_pos):
 		# 放置瓦片 - 使用正确的 Godot 4 API 参数顺序
 		if tile_map.get_cell_source_id(cell_coords) == -1:
 			# Draw Enemy
-			tile_map.set_cell(cell_coords, 1, Vector2i(0, 0), 2)
+			#tile_map.set_cell(cell_coords, 1, Vector2i(0, 0), 2)
 			# Draw Terrain
-			#tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
+			tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
 	else:
 		# 擦除瓦片
 		tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)

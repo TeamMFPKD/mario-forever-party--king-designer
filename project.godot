@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Mario Forever Party: King Designer"
-run/main_scene="uid://bnx7r3slvtcdt"
+run/main_scene="uid://bqed5i52qbmpu"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -21,6 +21,10 @@ window/size/viewport_width=640
 window/size/viewport_height=480
 window/size/window_width_override=1280
 window/size/window_height_override=960
+
+[dotnet]
+
+project/assembly_name="Mario Forever Party- King Designer"
 
 [rendering]
 

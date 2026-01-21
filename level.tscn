@@ -1,0 +1,82 @@
+[gd_scene load_steps=16 format=4 uid="uid://bnx7r3slvtcdt"]
+
+[ext_resource type="Texture2D" uid="uid://djr2lscpgyin2" path="res://icon.svg" id="1_aiegb"]
+[ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://tilemap_draw.gd" id="1_ju58f"]
+[ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://grid/grid_2d.tscn" id="2_oqbmf"]
+[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="4_f0xav"]
+[ext_resource type="TileSet" uid="uid://c8pmlu48uv5lk" path="res://tileset/tileset_object.tres" id="5_3vbl4"]
+[ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://save_level.gd" id="7_8b0r0"]
+[ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://extra_settings.gd" id="7_f0xav"]
+[ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://test_node.gd" id="8_3vbl4"]
+[ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://load_level.gd" id="8_h6smj"]
+[ext_resource type="TileSet" uid="uid://dcao53javhom0" path="res://tileset/tileset_cave.tres" id="8_l3001"]
+[ext_resource type="TileSet" uid="uid://veua56o6gx5g" path="res://tileset/tileset_night.tres" id="9_dsxg1"]
+[ext_resource type="TileSet" uid="uid://1qb7klskvwt2" path="res://tileset/tileset_overworld.tres" id="10_hmsmm"]
+[ext_resource type="TileSet" uid="uid://yt3oayicpe20" path="res://tileset/tileset_sand.tres" id="11_ns36f"]
+[ext_resource type="TileSet" uid="uid://kipkw1ykiuq8" path="res://tileset/tileset_snow.tres" id="12_fxut8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oqbmf"]
+
+[node name="Level" type="Node2D" node_paths=PackedStringArray("tile_map")]
+script = ExtResource("1_ju58f")
+tile_map = NodePath("ItemToSave/TileMapLayer")
+
+[node name="TestImageButton" type="TouchScreenButton" parent="."]
+position = Vector2(234, 202)
+texture_normal = ExtResource("1_aiegb")
+shape = SubResource("RectangleShape2D_oqbmf")
+
+[node name="Grid2d" parent="." instance=ExtResource("2_oqbmf")]
+
+[node name="ItemToSave" type="Node" parent="."]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="ItemToSave"]
+tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAA=")
+tile_set = ExtResource("4_f0xav")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="ItemToSave"]
+tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAAHAAEAAQAAAAAAAQA=")
+tile_set = ExtResource("5_3vbl4")
+
+[node name="ExtraSettings" type="Node" parent="ItemToSave"]
+script = ExtResource("7_f0xav")
+
+[node name="SaveButton" type="Button" parent="." node_paths=PackedStringArray("tile_map")]
+offset_left = 25.0
+offset_top = 28.0
+offset_right = 112.0
+offset_bottom = 86.0
+text = "Save"
+script = ExtResource("7_8b0r0")
+tile_map = NodePath("../ItemToSave/TileMapLayer")
+
+[node name="SaveLevel" type="Node" parent="." node_paths=PackedStringArray("tile_map")]
+script = ExtResource("7_8b0r0")
+tile_map = NodePath("../ItemToSave/TileMapLayer")
+
+[node name="LoadButton" type="Button" parent="."]
+offset_left = 26.0
+offset_top = 96.0
+offset_right = 111.0
+offset_bottom = 150.0
+text = "Load"
+
+[node name="LoadLevel" type="Node" parent="." node_paths=PackedStringArray("tile_map")]
+script = ExtResource("8_h6smj")
+tile_map = NodePath("../ItemToSave/TileMapLayer")
+
+[node name="TestNode" type="Node" parent="." node_paths=PackedStringArray("tile_map")]
+script = ExtResource("8_3vbl4")
+tile_map = NodePath("../ItemToSave/TileMapLayer")
+tilesets = Dictionary[int, TileSet]({
+0: ExtResource("4_f0xav"),
+1: ExtResource("8_l3001"),
+2: ExtResource("9_dsxg1"),
+3: ExtResource("9_dsxg1"),
+4: ExtResource("10_hmsmm"),
+5: ExtResource("11_ns36f"),
+6: ExtResource("12_fxut8")
+})
+
+[connection signal="pressed" from="SaveButton" to="SaveLevel" method="_on_save_button_pressed"]
+[connection signal="pressed" from="LoadButton" to="LoadLevel" method="_on_load_button_pressed"]
