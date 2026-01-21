@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://yt3oayicpe20"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c5koerlaba07m"]
 
-[ext_resource type="Texture2D" uid="uid://dmab4gsr188r3" path="res://tileset/tile_sand.png" id="1_1yh0x"]
+[ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://tileset/tile_castle_b.png" id="1_xb7pn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tr7ll"]
-texture = ExtResource("1_1yh0x")
+texture = ExtResource("1_xb7pn")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/terrain_set = 0
@@ -382,9 +382,9 @@ texture_region_size = Vector2i(32, 32)
 11:3/0/terrains_peering_bit/left_side = 0
 11:3/0/terrains_peering_bit/top_left_corner = 0
 11:3/0/terrains_peering_bit/top_side = 0
-0:4/0 = 0
 1:4/0 = 0
 1:4/0/custom_data_0 = true
+0:4/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)

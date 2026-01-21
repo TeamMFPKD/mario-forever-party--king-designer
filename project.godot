@@ -19,12 +19,19 @@ config/icon="res://icon.svg"
 
 window/size/viewport_width=640
 window/size/viewport_height=480
-window/size/window_width_override=1280
-window/size/window_height_override=960
+window/size/window_width_override=1920
+window/size/window_height_override=1080
 
 [dotnet]
 
 project/assembly_name="Mario Forever Party- King Designer"
+
+[file_customization]
+
+folder_colors={
+"res://scene/background/": "green",
+"res://script/": "gray"
+}
 
 [rendering]
 

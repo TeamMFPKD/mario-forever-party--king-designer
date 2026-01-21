@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://brqnc1crjuab"]
+
+[ext_resource type="Script" uid="uid://bunsnb4qcf7yw" path="res://script/background/background_set.gd" id="1_rl26k"]
+[ext_resource type="Texture2D" uid="uid://5s4jmq2ypbel" path="res://sprite/background/lava_castle_pattern_bottom.bg.png" id="2_5gfq7"]
+[ext_resource type="Texture2D" uid="uid://dx0jtouycgpl3" path="res://sprite/background/lava_castle_pattern_normal.bg.png" id="3_07vc5"]
+
+[sub_resource type="Gradient" id="Gradient_tyk2y"]
+colors = PackedColorArray(0, 0, 0, 1, 0.5411765, 0, 0.10980392, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_f6h3m"]
+gradient = SubResource("Gradient_tyk2y")
+width = 640
+height = 480
+fill_to = Vector2(0, 1)
+
+[node name="BackgroundCastleB" type="Node2D" node_paths=PackedStringArray("gradient", "background_bottom")]
+z_index = -500
+script = ExtResource("1_rl26k")
+gradient = NodePath("Parallax2DGradient/Gradient")
+background_bottom = NodePath("Parallax2DBottom/Bottom")
+metadata/_custom_type_script = "uid://bunsnb4qcf7yw"
+
+[node name="Parallax2DGradient" type="Parallax2D" parent="."]
+scroll_scale = Vector2(0, 1)
+
+[node name="Gradient" type="Sprite2D" parent="Parallax2DGradient"]
+position = Vector2(320, 240)
+texture = SubResource("GradientTexture2D_f6h3m")
+
+[node name="Parallax2DPatternNormal" type="Parallax2D" parent="."]
+scroll_scale = Vector2(1, 0)
+repeat_size = Vector2(1024, 1)
+repeat_times = 2
+
+[node name="PatternNormal" type="Sprite2D" parent="Parallax2DPatternNormal"]
+scale = Vector2(1, 480)
+texture = ExtResource("3_07vc5")
+offset = Vector2(512, 0.5)
+
+[node name="Parallax2DBottom" type="Parallax2D" parent="."]
+repeat_size = Vector2(1024, 0)
+repeat_times = 2
+
+[node name="Bottom" type="Sprite2D" parent="Parallax2DBottom"]
+texture = ExtResource("2_5gfq7")
+offset = Vector2(512, -65)

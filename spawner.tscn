@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://test_fafa.png" id="1_yp5lu"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://offset_marker.tscn" id="2_ttk4a"]
-[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://spawner_set.gd" id="3_mcln3"]
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/spawner_set.gd" id="3_mcln3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ttk4a"]
 atlas = ExtResource("1_yp5lu")

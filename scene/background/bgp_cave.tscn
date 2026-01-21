@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvnk0x43bm6nj"]
+
+[ext_resource type="Script" uid="uid://bunsnb4qcf7yw" path="res://script/background/background_set.gd" id="1_0bqjv"]
+[ext_resource type="Texture2D" uid="uid://d017d108uv42j" path="res://sprite/background/cave.bg.png" id="2_ryc7m"]
+
+[node name="BackgroundCave" type="Node2D"]
+z_index = -500
+script = ExtResource("1_0bqjv")
+metadata/_custom_type_script = "uid://bunsnb4qcf7yw"
+
+[node name="Parallax2DNormal" type="Parallax2D" parent="."]
+repeat_size = Vector2(511, 449)
+repeat_times = 3
+
+[node name="Normal" type="Sprite2D" parent="Parallax2DNormal"]
+texture = ExtResource("2_ryc7m")
+offset = Vector2(255, 224)

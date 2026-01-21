@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://k6e8y7cf8iyh"]
+
+[ext_resource type="Script" uid="uid://bunsnb4qcf7yw" path="res://script/background/background_set.gd" id="1_jxcog"]
+[ext_resource type="Texture2D" uid="uid://b7mk81dvw74c" path="res://sprite/background/volcano_bottom.bg.png" id="2_qco5t"]
+[ext_resource type="Texture2D" uid="uid://ln33jwb45rgj" path="res://sprite/background/volcano_sky.bg.png" id="3_t7ubn"]
+
+[sub_resource type="Gradient" id="Gradient_7pdba"]
+colors = PackedColorArray(0.2509804, 0.3137255, 0.21960784, 1, 0.2509804, 0.3137255, 0.21960784, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sttui"]
+gradient = SubResource("Gradient_7pdba")
+width = 640
+height = 480
+
+[node name="BackgroundVolcano" type="Node2D" node_paths=PackedStringArray("gradient", "background_bottom", "cloud_top")]
+z_index = -500
+script = ExtResource("1_jxcog")
+gradient = NodePath("Parallax2DNormal/Normal")
+background_bottom = NodePath("Parallax2DBottom/Bottom")
+cloud_top = NodePath("Parallax2D/Sprite2D")
+metadata/_custom_type_script = "uid://bunsnb4qcf7yw"
+
+[node name="Parallax2DNormal" type="Parallax2D" parent="."]
+repeat_size = Vector2(640, 480)
+repeat_times = 3
+
+[node name="Normal" type="Sprite2D" parent="Parallax2DNormal"]
+texture = SubResource("GradientTexture2D_sttui")
+offset = Vector2(320, 240)
+
+[node name="Parallax2DBottom" type="Parallax2D" parent="."]
+repeat_size = Vector2(640, 0)
+repeat_times = 2
+
+[node name="Bottom" type="Sprite2D" parent="Parallax2DBottom"]
+texture = ExtResource("2_qco5t")
+offset = Vector2(320, -84)
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+repeat_size = Vector2(640, 0)
+repeat_times = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
+texture = ExtResource("3_t7ubn")
+offset = Vector2(320, 135)
