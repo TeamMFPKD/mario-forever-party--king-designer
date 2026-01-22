@@ -1,78 +1,77 @@
-[gd_resource type="Resource" script_class="TileMapBlockDatabase" load_steps=23 format=3 uid="uid://djxsjh4om7cvk"]
+[gd_resource type="Resource" script_class="BackgroundDatabase" load_steps=22 format=3 uid="uid://y6cupcof3uqw"]
 
-[ext_resource type="Script" uid="uid://6as1rookwmdm" path="res://script/tilemap/tile_map_block_database.gd" id="1_hyd7o"]
-[ext_resource type="Script" uid="uid://cyiibxigdwr06" path="res://script/tilemap/tile_map_block_database_entry.gd" id="2_vp2qs"]
-[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="3_uvuqr"]
-[ext_resource type="TileSet" uid="uid://c5koerlaba07m" path="res://tileset/tileset_castle_b.tres" id="4_38pgq"]
-[ext_resource type="TileSet" uid="uid://dcao53javhom0" path="res://tileset/tileset_cave.tres" id="5_p7akc"]
-[ext_resource type="TileSet" uid="uid://cvq7red82gpcy" path="res://tileset/tileset_dusk.tres" id="6_ikftf"]
-[ext_resource type="TileSet" uid="uid://veua56o6gx5g" path="res://tileset/tileset_night.tres" id="7_h31vt"]
-[ext_resource type="TileSet" uid="uid://1qb7klskvwt2" path="res://tileset/tileset_overworld.tres" id="8_fm0tr"]
-[ext_resource type="TileSet" uid="uid://yt3oayicpe20" path="res://tileset/tileset_sand.tres" id="9_vsgqy"]
-[ext_resource type="TileSet" uid="uid://kipkw1ykiuq8" path="res://tileset/tileset_snow.tres" id="10_ul7d0"]
-[ext_resource type="TileSet" uid="uid://cnhqax16b8vxn" path="res://tileset/tileset_snow_b.tres" id="11_n0moo"]
-[ext_resource type="TileSet" uid="uid://p5u0wevedk7h" path="res://tileset/tileset_volcano.tres" id="12_jcg2v"]
+[ext_resource type="Script" uid="uid://cagoblqdkevb1" path="res://script/background/background_database_entry.gd" id="1_irw4x"]
+[ext_resource type="Script" uid="uid://dwcdlj86cjidb" path="res://script/background/background_database.gd" id="2_f6hl6"]
+[ext_resource type="PackedScene" uid="uid://dha8d80anf6b7" path="res://scene/background/bgp_castle.tscn" id="2_rh00t"]
+[ext_resource type="PackedScene" uid="uid://brqnc1crjuab" path="res://scene/background/bgp_castle_b.tscn" id="3_qwnx4"]
+[ext_resource type="PackedScene" uid="uid://bvnk0x43bm6nj" path="res://scene/background/bgp_cave.tscn" id="4_rbxa1"]
+[ext_resource type="PackedScene" uid="uid://0bl7o4o5hpcp" path="res://scene/background/bgp_dusk.tscn" id="5_d6g7n"]
+[ext_resource type="PackedScene" uid="uid://b5avji0wwedl5" path="res://scene/background/bgp_night.tscn" id="5_nxp13"]
+[ext_resource type="PackedScene" uid="uid://bcnkw2lj4logj" path="res://scene/background/bgp_overworld.tscn" id="6_d6g7n"]
+[ext_resource type="PackedScene" uid="uid://bnbpq400iqem" path="res://scene/background/bgp_sand.tscn" id="7_uvuqr"]
+[ext_resource type="PackedScene" uid="uid://c481lfk1oouvv" path="res://scene/background/bgp_snow.tscn" id="8_38pgq"]
+[ext_resource type="PackedScene" uid="uid://k6e8y7cf8iyh" path="res://scene/background/bgp_volcano.tscn" id="9_p7akc"]
+
+[sub_resource type="Resource" id="Resource_hyd7o"]
+script = ExtResource("1_irw4x")
+background_scene = ExtResource("2_rh00t")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
+
+[sub_resource type="Resource" id="Resource_vp2qs"]
+script = ExtResource("1_irw4x")
+level_theme = 1
+background_scene = ExtResource("3_qwnx4")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
 [sub_resource type="Resource" id="Resource_lskja"]
-script = ExtResource("2_vp2qs")
-tile_set = ExtResource("3_uvuqr")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
-
-[sub_resource type="Resource" id="Resource_0cku8"]
-script = ExtResource("2_vp2qs")
-level_theme = 1
-tile_set = ExtResource("4_38pgq")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
-
-[sub_resource type="Resource" id="Resource_gsyuj"]
-script = ExtResource("2_vp2qs")
+script = ExtResource("1_irw4x")
 level_theme = 2
-tile_set = ExtResource("5_p7akc")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("4_rbxa1")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_ut28t"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_rh00t"]
+script = ExtResource("1_irw4x")
 level_theme = 3
-tile_set = ExtResource("6_ikftf")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("5_d6g7n")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_asxlk"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_qwnx4"]
+script = ExtResource("1_irw4x")
 level_theme = 4
-tile_set = ExtResource("7_h31vt")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("5_nxp13")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_hbosx"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_rbxa1"]
+script = ExtResource("1_irw4x")
 level_theme = 5
-tile_set = ExtResource("8_fm0tr")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("6_d6g7n")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_odrsn"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_2uox7"]
+script = ExtResource("1_irw4x")
 level_theme = 6
-tile_set = ExtResource("9_vsgqy")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("7_uvuqr")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_4o6en"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_puu8q"]
+script = ExtResource("1_irw4x")
 level_theme = 7
-tile_set = ExtResource("10_ul7d0")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("8_38pgq")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_vn1p4"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_nxp13"]
+script = ExtResource("1_irw4x")
 level_theme = 8
-tile_set = ExtResource("11_n0moo")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("5_nxp13")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
-[sub_resource type="Resource" id="Resource_wcbjc"]
-script = ExtResource("2_vp2qs")
+[sub_resource type="Resource" id="Resource_d6g7n"]
+script = ExtResource("1_irw4x")
 level_theme = 9
-tile_set = ExtResource("12_jcg2v")
-metadata/_custom_type_script = "uid://cyiibxigdwr06"
+background_scene = ExtResource("9_p7akc")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
 [resource]
-script = ExtResource("1_hyd7o")
-tile_map_block_database = Array[ExtResource("2_vp2qs")]([SubResource("Resource_lskja"), SubResource("Resource_0cku8"), SubResource("Resource_gsyuj"), SubResource("Resource_ut28t"), SubResource("Resource_asxlk"), SubResource("Resource_hbosx"), SubResource("Resource_odrsn"), SubResource("Resource_4o6en"), SubResource("Resource_vn1p4"), SubResource("Resource_wcbjc")])
-metadata/_custom_type_script = "uid://6as1rookwmdm"
+script = ExtResource("2_f6hl6")
+background_entries = Array[ExtResource("1_irw4x")]([SubResource("Resource_hyd7o"), SubResource("Resource_vp2qs"), SubResource("Resource_lskja"), SubResource("Resource_rh00t"), SubResource("Resource_qwnx4"), SubResource("Resource_rbxa1"), SubResource("Resource_2uox7"), SubResource("Resource_puu8q"), SubResource("Resource_nxp13"), SubResource("Resource_d6g7n")])
+metadata/_custom_type_script = "uid://dwcdlj86cjidb"

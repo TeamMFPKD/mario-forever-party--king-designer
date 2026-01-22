@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dha8d80anf6b7"]
+
+[ext_resource type="Script" uid="uid://bunsnb4qcf7yw" path="res://script/background/background_set.gd" id="1_w4pdm"]
+[ext_resource type="Texture2D" uid="uid://jwpx88yx23r7" path="res://sprite/background/castle.bg.png" id="2_w4pdm"]
+
+[node name="BackgroundCastle" type="Node2D"]
+z_index = -500
+script = ExtResource("1_w4pdm")
+metadata/_custom_type_script = "uid://bunsnb4qcf7yw"
+
+[node name="Parallax2DNormal" type="Parallax2D" parent="."]
+repeat_size = Vector2(1022, 480)
+repeat_times = 3
+
+[node name="Normal" type="Sprite2D" parent="Parallax2DNormal"]
+texture = ExtResource("2_w4pdm")
+offset = Vector2(511, 240)

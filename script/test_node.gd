@@ -1,7 +1,5 @@
 extends Node
 
-@export var tile_map: TileMapLayer
-
 enum TileSetNames {
 	CASTLE,
 	CASTLE_B,
@@ -15,27 +13,27 @@ enum TileSetNames {
 	VOLCANO,
 }
 
-@export var tilesets: Dictionary[TileSetNames, TileSet]
+@export var level_data_node : LevelData
 
 func _physics_process(delta: float) -> void:
 	if (Input.is_key_pressed(KEY_1)):
-		tile_map.tile_set = tilesets[TileSetNames.CASTLE]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.CASTLE
 	elif (Input.is_key_pressed(KEY_2)):
-		tile_map.tile_set = tilesets[TileSetNames.CASTLE_B]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.CASTLE_B
 	elif (Input.is_key_pressed(KEY_3)):
-		tile_map.tile_set = tilesets[TileSetNames.CAVE]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.CAVE
 	elif (Input.is_key_pressed(KEY_4)):
-		tile_map.tile_set = tilesets[TileSetNames.DUSK]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.DUSK
 	elif (Input.is_key_pressed(KEY_5)):
-		tile_map.tile_set = tilesets[TileSetNames.NIGHT]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.NIGHT
 	elif (Input.is_key_pressed(KEY_6)):
-		tile_map.tile_set = tilesets[TileSetNames.OVERWORLD]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.OVERWORLD
 	elif (Input.is_key_pressed(KEY_7)):
-		tile_map.tile_set = tilesets[TileSetNames.SAND]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.SAND
 	elif (Input.is_key_pressed(KEY_8)):
-		tile_map.tile_set = tilesets[TileSetNames.SNOW]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.SNOW
 	elif (Input.is_key_pressed(KEY_9)):
-		tile_map.tile_set = tilesets[TileSetNames.SNOW_B]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.SNOW_B
 	elif (Input.is_key_pressed(KEY_0)):
-		tile_map.tile_set = tilesets[TileSetNames.VOLCANO]
+		level_data_node.level_theme = LevelData.LevelThemeEnum.VOLCANO
 		

@@ -12,11 +12,11 @@ width = 640
 height = 480
 fill_to = Vector2(0, 1)
 
-[node name="BackgroundGrassland" type="Node2D" node_paths=PackedStringArray("gradient", "background_bottom")]
+[node name="BackgroundOverworld" type="Node2D" node_paths=PackedStringArray("gradient", "background_bottom")]
 z_index = -500
 script = ExtResource("1_cek8s")
 gradient = NodePath("Parallax2DGradient/Gradient")
-background_bottom = NodePath("Parallax2DGradient/Gradient")
+background_bottom = NodePath("Parallax2DBottom/Bottom")
 metadata/_custom_type_script = "uid://bunsnb4qcf7yw"
 
 [node name="Parallax2DGradient" type="Parallax2D" parent="."]

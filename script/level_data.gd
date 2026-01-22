@@ -24,6 +24,8 @@ enum LevelThemeEnum {
 
 @export_category("References")
 @export var tile_map : TileMapLayer
+@export var tile_set_manager : TileSetManager
+@export var bgp_manager : BgpManager
 
 var level_data_dict: Dictionary
 
@@ -67,5 +69,6 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	
 func update_theme() -> void:
 	# Update TileMap and Background
-	tile_map.update_tile_set(level_theme)
+	tile_set_manager.update_tile_set(level_theme)
+	bgp_manager.update_bgp(level_theme)
 	
