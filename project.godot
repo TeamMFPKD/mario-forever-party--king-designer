@@ -10,10 +10,17 @@ config_version=5
 
 [application]
 
-config/name="Mario Forever Party: King Designer"
-run/main_scene="uid://bqed5i52qbmpu"
+config/name="MFP: KD"
+run/main_scene="uid://bnx7r3slvtcdt"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://icon.svg"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+boot_splash/image="uid://bijlbaumcevx5"
+config/icon="uid://bijlbaumcevx5"
+
+[autoload]
+
+InputHandlerSingleton="*res://input_handler.tscn"
 
 [display]
 

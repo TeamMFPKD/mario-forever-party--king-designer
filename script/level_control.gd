@@ -1,0 +1,185 @@
+extends Node
+
+class_name LevelControl
+
+# 绘图模式枚举
+enum DrawingMode {
+	TILEMAP,
+	OBJECTMAP,
+	ERASER
+}
+
+# 信号
+signal drawing_mode_changed(mode: DrawingMode)
+signal object_selected(object_index: int)
+
+# 当前绘图模式
+var current_drawing_mode: DrawingMode = DrawingMode.TILEMAP
+var current_object_index: int = 0
+
+# 节点引用
+@export var tile_map_draw: Node
+@export var object_map_layer: ObjectMapLayer
+@export var object_map_draw: Node
+
+# 按钮引用
+@export var tile_button: Button
+@export var object_button1: Button
+@export var object_button2: Button
+@export var button_eraser: Button
+
+func _ready():
+	# 连接按钮信号
+	if tile_button:
+		print("LevelControl: 找到tile_button，准备连接信号")
+		tile_button.pressed.connect(_on_tile_button_pressed)
+		print("LevelControl: tile_button信号连接完成")
+	else:
+		print("LevelControl: 错误：tile_button未找到")
+	
+	if object_button1:
+		print("LevelControl: 找到object_button1，准备连接信号")
+		object_button1.pressed.connect(_on_object_button1_pressed)
+		print("LevelControl: object_button1信号连接完成")
+	else:
+		print("LevelControl: 错误：object_button1未找到")
+	
+	if object_button2:
+		print("LevelControl: 找到object_button2，准备连接信号")
+		object_button2.pressed.connect(_on_object_button2_pressed)
+		print("LevelControl: object_button2信号连接完成")
+	else:
+		print("LevelControl: 错误：object_button2未找到")
+	
+	if button_eraser:
+		print("LevelControl: 找到button_eraser，准备连接信号")
+		button_eraser.pressed.connect(_on_eraser_button_pressed)
+		print("LevelControl: button_eraser信号连接完成")
+	else:
+		print("LevelControl: 错误：button_eraser未找到")
+	
+	# 初始化模式
+	switch_to_tilemap_mode()
+
+func switch_to_tilemap_mode():
+	current_drawing_mode = DrawingMode.TILEMAP
+	
+	# 启用TileMap绘制，禁用ObjectMap绘制和橡皮擦
+	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
+		tile_map_draw.set_drawing_enabled(true)
+		if tile_map_draw.has_method("set_brush_mode"):
+			tile_map_draw.set_brush_mode(true)  # 设置为绘制模式
+	
+	if object_map_layer and object_map_layer.has_method("stop_placing_object"):
+		object_map_layer.stop_placing_object()
+		object_map_layer.drawing_enabled = false
+	
+	# 更新按钮状态
+	update_button_states()
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	
+	print("切换到TileMap绘图模式")
+
+func switch_to_objectmap_mode(object_index: int = 0):
+	current_drawing_mode = DrawingMode.OBJECTMAP
+	current_object_index = object_index
+	
+	# 禁用TileMap绘制，启用ObjectMap绘制
+	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
+		tile_map_draw.set_drawing_enabled(false)
+	
+	if object_map_layer and object_map_layer.has_method("start_placing_object"):
+		object_map_layer.start_placing_object(object_index)
+		object_map_layer.drawing_enabled = true
+	
+	# 更新按钮状态
+	update_button_states()
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	object_selected.emit(object_index)
+	
+	print("切换到ObjectMap绘图模式，对象索引: ", object_index)
+
+func switch_to_eraser_mode():
+	current_drawing_mode = DrawingMode.ERASER
+	
+	# 启用TileMap绘制但设置为擦除模式，禁用ObjectMap绘制
+	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
+		tile_map_draw.set_drawing_enabled(true)
+		if tile_map_draw.has_method("set_brush_mode"):
+			tile_map_draw.set_brush_mode(false)  # 设置为擦除模式
+	
+	if object_map_layer and object_map_layer.has_method("stop_placing_object"):
+		object_map_layer.stop_placing_object()
+		object_map_layer.drawing_enabled = false
+	
+	# 更新按钮状态
+	update_button_states()
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	
+	print("切换到橡皮擦模式")
+
+func update_button_states():
+	if tile_button:
+		tile_button.disabled = (current_drawing_mode == DrawingMode.TILEMAP)
+	
+	if object_button1:
+		object_button1.disabled = (current_drawing_mode == DrawingMode.OBJECTMAP and current_object_index == 0)
+	
+	if object_button2:
+		object_button2.disabled = (current_drawing_mode == DrawingMode.OBJECTMAP and current_object_index == 1)
+	
+	if button_eraser:
+		button_eraser.disabled = (current_drawing_mode == DrawingMode.ERASER)
+
+func _on_tile_button_pressed():
+	switch_to_tilemap_mode()
+
+func _on_object_button1_pressed():
+	switch_to_objectmap_mode(0)
+
+func _on_object_button2_pressed():
+	switch_to_objectmap_mode(1)
+
+func _on_eraser_button_pressed():
+	switch_to_eraser_mode()
+
+# 获取当前绘图模式
+func get_current_drawing_mode() -> DrawingMode:
+	return current_drawing_mode
+
+# 获取当前选中的对象索引
+func get_current_object_index() -> int:
+	return current_object_index
+
+# 检查是否在TileMap模式
+func is_tilemap_mode() -> bool:
+	return current_drawing_mode == DrawingMode.TILEMAP
+
+# 检查是否在ObjectMap模式
+func is_objectmap_mode() -> bool:
+	return current_drawing_mode == DrawingMode.OBJECTMAP
+
+# 检查是否在橡皮擦模式
+func is_eraser_mode() -> bool:
+	return current_drawing_mode == DrawingMode.ERASER
+
+# 橡皮擦功能：在指定位置清除Tile和Object
+func erase_at_position(position: Vector2):
+	if current_drawing_mode != DrawingMode.ERASER:
+		return
+	
+	# 清除Tile
+	if tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
+		tile_map_draw.erase_tile_at_position(position)
+	
+	# 清除Object
+	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
+		object_map_layer.remove_object_at_position(position)
+	
+	print("橡皮擦：清除位置 ", position)

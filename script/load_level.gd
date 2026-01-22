@@ -1,6 +1,6 @@
 extends Node
 
-@export var level_data_node: LevelData
+@export var level_data_node: LevelManager
 
 var file_name: String = "user://mfp_kd_"
 var date_time: String = "datetime"

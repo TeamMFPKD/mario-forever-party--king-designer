@@ -6,7 +6,7 @@ class_name BgpManager
 
 var bgp: Node
 
-func update_bgp(level_theme: LevelData.LevelThemeEnum) -> void:
+func update_bgp(level_theme: LevelManager.LevelThemeEnum) -> void:
 	if bgp != null:
 		bgp.free()
 	var bgp_scene: PackedScene

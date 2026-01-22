@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://b41scgyg4lqe8"]
+
+[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/item_box.png" id="1_072lp"]
+[ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_tw4dc"]
+
+[node name="Button" type="Button"]
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 160.0
+offset_bottom = 160.0
+theme = ExtResource("1_tw4dc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(75.99999, 76.99999)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_072lp")
