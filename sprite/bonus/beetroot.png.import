@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ciu4jkh28vrfr"
-path="res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"
+uid="uid://boougl1n17n1k"
+path="res://.godot/imported/beetroot.png-8454476dffaad017c992cd4cd1c63033.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/pipe_horizontal.png"
-dest_files=["res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"]
+source_file="res://sprite/bonus/beetroot.png"
+dest_files=["res://.godot/imported/beetroot.png-8454476dffaad017c992cd4cd1c63033.ctex"]
 
 [params]
 

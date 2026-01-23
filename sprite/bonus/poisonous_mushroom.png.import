@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwuhhrliqqmpq"
-path="res://.godot/imported/test_fafa.png-bdb9b6a48a3a1a93663822f351fb39e8.ctex"
+uid="uid://boa8ojba4ua7m"
+path="res://.godot/imported/poisonous_mushroom.png-feb7c732b301123f85d77871e1320b45.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/test_fafa.png"
-dest_files=["res://.godot/imported/test_fafa.png-bdb9b6a48a3a1a93663822f351fb39e8.ctex"]
+source_file="res://sprite/bonus/poisonous_mushroom.png"
+dest_files=["res://.godot/imported/poisonous_mushroom.png-feb7c732b301123f85d77871e1320b45.ctex"]
 
 [params]
 

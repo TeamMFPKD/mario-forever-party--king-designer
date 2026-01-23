@@ -1,37 +1,163 @@
-[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=11 format=3 uid="uid://bts1hfa763775"]
+[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=47 format=3 uid="uid://bts1hfa763775"]
 
 [ext_resource type="Script" uid="uid://dm2vri801p6qq" path="res://script/objectmap/object_database_entry.gd" id="1_id4ej"]
-[ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://scene/spawner/spawner_fafa_1.tscn" id="2_j82gr"]
-[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://scene/spawner/spawner_pipe_vertical_up.tscn" id="3_j82gr"]
-[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://scene/spawner/spawner_pipe_vertical_middle.tscn" id="4_cd8f3"]
+[ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://scene/spawner/enemy/spawner_piranha_green_up.tscn" id="2_803y3"]
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://scene/spawner/pipe/spawner_pipe_vertical_up.tscn" id="3_11f4k"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://scene/spawner/pipe/spawner_pipe_vertical_middle.tscn" id="4_1i5ur"]
 [ext_resource type="Script" uid="uid://caqq52ddr6o8s" path="res://script/objectmap/object_database.gd" id="4_olmxw"]
-[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://scene/spawner/spawner_pipe_vertical_down.tscn" id="5_olmxw"]
-
-[sub_resource type="Resource" id="Resource_mhsst"]
-script = ExtResource("1_id4ej")
-object_name = "fafa_1"
-object_scene = ExtResource("2_j82gr")
-metadata/_custom_type_script = "uid://dm2vri801p6qq"
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://scene/spawner/pipe/spawner_pipe_vertical_down.tscn" id="5_llym7"]
+[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://scene/spawner/pipe/spawner_pipe_horizontal_left.tscn" id="6_vdl7r"]
+[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://scene/spawner/pipe/spawner_pipe_horizontal_middle.tscn" id="7_lei4y"]
+[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://scene/spawner/pipe/spawner_pipe_horizontal_right.tscn" id="8_t0bnu"]
+[ext_resource type="PackedScene" uid="uid://djjo46dqfedvs" path="res://scene/spawner/bonus/spawner_question_block.tscn" id="8_t2jpc"]
+[ext_resource type="PackedScene" uid="uid://dgkew1nv882t7" path="res://scene/spawner/bonus/spawner_question_block_hidden.tscn" id="9_j65qk"]
+[ext_resource type="PackedScene" uid="uid://dj57ohfor8c4s" path="res://scene/spawner/bonus/spawner_question_block_fire_flower.tscn" id="10_obv1q"]
+[ext_resource type="PackedScene" uid="uid://cpky4vb3llk66" path="res://scene/spawner/bonus/spawner_question_block_fire_flower_hidden.tscn" id="11_gxscb"]
+[ext_resource type="PackedScene" uid="uid://b7v67223vfp8m" path="res://scene/spawner/bonus/spawner_question_block_beetroot.tscn" id="12_bglkn"]
+[ext_resource type="PackedScene" uid="uid://dmkl5ftk81o05" path="res://scene/spawner/bonus/spawner_question_block_beetroot_hidden.tscn" id="13_klo0b"]
+[ext_resource type="PackedScene" uid="uid://b3rsqouk671qg" path="res://scene/spawner/bonus/spawner_question_block_lui.tscn" id="14_1n1vf"]
+[ext_resource type="PackedScene" uid="uid://bj7hmulpgllfb" path="res://scene/spawner/bonus/spawner_question_block_lui_hidden.tscn" id="15_gq0mr"]
+[ext_resource type="PackedScene" uid="uid://cuar55lfjt7w3" path="res://scene/spawner/bonus/spawner_question_block_poisonous_mushroom.tscn" id="16_tcmxf"]
+[ext_resource type="PackedScene" uid="uid://dehkdwlyvw5t0" path="res://scene/spawner/bonus/spawner_question_block_poisonous_mushroom_hidden.tscn" id="17_6axbp"]
+[ext_resource type="PackedScene" uid="uid://0c30qgvyd7b0" path="res://scene/spawner/bonus/spawner_question_block_super_star.tscn" id="18_fyu1c"]
+[ext_resource type="PackedScene" uid="uid://4yfp5xnayqp7" path="res://scene/spawner/bonus/spawner_question_block_super_star_hidden.tscn" id="19_ddjbe"]
+[ext_resource type="PackedScene" uid="uid://cxyryskp5di4u" path="res://scene/spawner/bonus/spawner_coin.tscn" id="20_ybgbs"]
+[ext_resource type="PackedScene" uid="uid://jdihiuywa7ll" path="res://scene/spawner/bonus/spawner_brick.tscn" id="21_h4fec"]
+[ext_resource type="PackedScene" uid="uid://d0i8bjplv5aia" path="res://scene/spawner/enemy/spawner_piranha_green_down.tscn" id="23_7bxjl"]
 
 [sub_resource type="Resource" id="Resource_b7y0g"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_vertical_up"
-object_scene = ExtResource("3_j82gr")
+object_scene = ExtResource("3_11f4k")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_j82gr"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_vertical_middle"
-object_scene = ExtResource("4_cd8f3")
+object_scene = ExtResource("4_1i5ur")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_uoicw"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_vertical_down"
-object_scene = ExtResource("5_olmxw")
+object_scene = ExtResource("5_llym7")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_hwqcn"]
+script = ExtResource("1_id4ej")
+object_name = "pipe_horizontal_left"
+object_scene = ExtResource("6_vdl7r")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_mxc0p"]
+script = ExtResource("1_id4ej")
+object_name = "pipe_horizontal_middle"
+object_scene = ExtResource("7_lei4y")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_57x2i"]
+script = ExtResource("1_id4ej")
+object_name = "pipe_horizontal_right"
+object_scene = ExtResource("8_t0bnu")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_427p0"]
+script = ExtResource("1_id4ej")
+object_name = "question_block"
+object_scene = ExtResource("8_t2jpc")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_0x85g"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_hidden"
+object_scene = ExtResource("9_j65qk")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_11f4k"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_fire_flower"
+object_scene = ExtResource("10_obv1q")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_1i5ur"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_fire_flower_hidden"
+object_scene = ExtResource("11_gxscb")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_llym7"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_beetroot"
+object_scene = ExtResource("12_bglkn")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_vdl7r"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_beetroot_hidden"
+object_scene = ExtResource("13_klo0b")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_t2jpc"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_lui"
+object_scene = ExtResource("14_1n1vf")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_j65qk"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_lui_hidden"
+object_scene = ExtResource("15_gq0mr")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_obv1q"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_poisonous_mushroom"
+object_scene = ExtResource("16_tcmxf")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_gxscb"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_poisonous_mushroom_hidden"
+object_scene = ExtResource("17_6axbp")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_bglkn"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_super_star"
+object_scene = ExtResource("18_fyu1c")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_klo0b"]
+script = ExtResource("1_id4ej")
+object_name = "question_block_super_star_hidden"
+object_scene = ExtResource("19_ddjbe")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_t0bnu"]
+script = ExtResource("1_id4ej")
+object_name = "coin"
+object_scene = ExtResource("20_ybgbs")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_wbnpj"]
+script = ExtResource("1_id4ej")
+object_name = "brick"
+object_scene = ExtResource("21_h4fec")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_mhsst"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_green_up"
+object_scene = ExtResource("2_803y3")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_3xsoo"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_green_down"
+object_scene = ExtResource("23_7bxjl")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [resource]
 script = ExtResource("4_olmxw")
-object_database_entry = Array[ExtResource("1_id4ej")]([SubResource("Resource_mhsst"), SubResource("Resource_b7y0g"), SubResource("Resource_j82gr"), SubResource("Resource_uoicw"), null])
+object_database_entry = Array[ExtResource("1_id4ej")]([SubResource("Resource_b7y0g"), SubResource("Resource_j82gr"), SubResource("Resource_uoicw"), SubResource("Resource_hwqcn"), SubResource("Resource_mxc0p"), SubResource("Resource_57x2i"), SubResource("Resource_427p0"), SubResource("Resource_0x85g"), SubResource("Resource_11f4k"), SubResource("Resource_1i5ur"), SubResource("Resource_llym7"), SubResource("Resource_vdl7r"), SubResource("Resource_t2jpc"), SubResource("Resource_j65qk"), SubResource("Resource_obv1q"), SubResource("Resource_gxscb"), SubResource("Resource_bglkn"), SubResource("Resource_klo0b"), SubResource("Resource_t0bnu"), SubResource("Resource_wbnpj"), SubResource("Resource_mhsst"), SubResource("Resource_3xsoo"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 metadata/_custom_type_script = "uid://caqq52ddr6o8s"

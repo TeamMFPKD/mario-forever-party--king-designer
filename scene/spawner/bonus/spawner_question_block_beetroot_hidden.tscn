@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://dmkl5ftk81o05"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/spawner_set.gd" id="1_os8ux"]
+[ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="2_c6htj"]
+[ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="3_os8ux"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://scene/spawner/offset_marker.tscn" id="4_wjxpc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3n6qb"]
+atlas = ExtResource("3_os8ux")
+region = Rect2(0, 0, 29, 34)
+
+[node name="SpawnerQuestionBlockBeetrootHidden" type="Node2D"]
+script = ExtResource("1_os8ux")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_c6htj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_3n6qb")
+
+[node name="OffsetMarker" parent="." instance=ExtResource("4_wjxpc")]

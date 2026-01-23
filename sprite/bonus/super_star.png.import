@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2tlv1vmg08gv"
-path="res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"
+uid="uid://4lr60loieckk"
+path="res://.godot/imported/super_star.png-52d25058ccb41f9e1c16ef5666f8d152.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/pipe_vertical.png"
-dest_files=["res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"]
+source_file="res://sprite/bonus/super_star.png"
+dest_files=["res://.godot/imported/super_star.png-52d25058ccb41f9e1c16ef5666f8d152.ctex"]
 
 [params]
 
