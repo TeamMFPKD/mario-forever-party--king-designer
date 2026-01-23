@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwuhhrliqqmpq"
-path="res://.godot/imported/test_fafa.png-d69a450290cc247bf443f4c041087858.ctex"
+uid="uid://ciu4jkh28vrfr"
+path="res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://test_fafa.png"
-dest_files=["res://.godot/imported/test_fafa.png-d69a450290cc247bf443f4c041087858.ctex"]
+source_file="res://sprite/pipe_horizontal.png"
+dest_files=["res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"]
 
 [params]
 

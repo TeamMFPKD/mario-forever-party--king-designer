@@ -2,6 +2,8 @@ extends Node
 
 class_name LevelManager
 
+signal level_theme_changed(level_theme: LevelThemeEnum)
+
 @export_category("Level Data")
 @export var version: String = "1.0"
 enum LevelThemeEnum {
@@ -20,6 +22,8 @@ enum LevelThemeEnum {
 	set(value):
 		level_theme = value
 		update_theme()
+		emit_signal("level_theme_changed", level_theme)
+		
 @export var tile_data: PackedByteArray
 
 @export_category("References")

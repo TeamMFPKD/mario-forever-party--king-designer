@@ -13,6 +13,7 @@ config_version=5
 config/name="MFP: KD"
 run/main_scene="uid://bnx7r3slvtcdt"
 config/features=PackedStringArray("4.5", "GL Compatibility")
+boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 boot_splash/image="uid://bijlbaumcevx5"
@@ -20,14 +21,12 @@ config/icon="uid://bijlbaumcevx5"
 
 [autoload]
 
-InputHandlerSingleton="*res://input_handler.tscn"
+InputHandlerSingleton="*res://scene/input_handler.tscn"
 
 [display]
 
-window/size/viewport_width=640
-window/size/viewport_height=480
-window/size/window_width_override=1920
-window/size/window_height_override=1080
+window/size/viewport_width=1920
+window/size/viewport_height=1080
 
 [dotnet]
 

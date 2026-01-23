@@ -1,10 +1,9 @@
-[gd_scene load_steps=21 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene load_steps=31 format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap_draw.gd" id="1_ju58f"]
 [ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://grid/grid_2d.tscn" id="2_oqbmf"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="4_f0xav"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="4_rgrya"]
-[ext_resource type="TileSet" uid="uid://c8pmlu48uv5lk" path="res://tileset/tileset_object.tres" id="5_3vbl4"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/save_level.gd" id="7_8b0r0"]
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/level_manager.gd" id="7_f0xav"]
 [ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/test_node.gd" id="8_3vbl4"]
@@ -14,16 +13,44 @@
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="11_1o17k"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/input_handler.gd" id="14_agra6"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="15_rcaub"]
-[ext_resource type="PackedScene" uid="uid://b41scgyg4lqe8" path="res://room/item_button.tscn" id="16_rgrya"]
+[ext_resource type="PackedScene" uid="uid://b41scgyg4lqe8" path="res://scene/item_button.tscn" id="16_rgrya"]
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/objectmap/object_map_layer.gd" id="17_1fopa"]
 [ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/objectmap/object_map_draw.gd" id="18_b64qb"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/database_holder.gd" id="19_1fopa"]
+[ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="20_1o17k"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="20_b64qb"]
+[ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe_vertical.png" id="20_iovuq"]
+[ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/test_fafa.png" id="20_j8vv5"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="21_b64qb"]
+[ext_resource type="Texture2D" uid="uid://ciu4jkh28vrfr" path="res://sprite/pipe_horizontal.png" id="22_j8vv5"]
 
-[node name="Level" type="Node2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttk4a"]
+atlas = ExtResource("20_j8vv5")
+region = Rect2(0, 48, 33, 50)
 
-[node name="UsedForScreenCentering" type="Camera2D" parent="."]
+[sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
+atlas = ExtResource("20_iovuq")
+region = Rect2(0, 0, 448, 64)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1o17k"]
+load_path = "res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8vv5"]
+atlas = SubResource("CompressedTexture2D_1o17k")
+region = Rect2(0, 64, 448, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_biayx"]
+load_path = "res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edo08"]
+atlas = SubResource("CompressedTexture2D_biayx")
+region = Rect2(0, 96, 448, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ud7lq"]
+atlas = ExtResource("22_j8vv5")
+region = Rect2(0, 0, 64, 448)
+
+[node name="Room" type="Node2D"]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -61,7 +88,7 @@ background_database = ExtResource("21_b64qb")
 object_database = ExtResource("4_rgrya")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map", "tile_set_manager", "object_map", "bgp_manager")]
+[node name="LevelManager" type="Node" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("7_f0xav")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
@@ -110,15 +137,13 @@ size_flags_vertical = 15
 text = "Load"
 metadata/_edit_lock_ = true
 
-[node name="LevelControl" type="Node" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "object_button1", "object_button2", "button_eraser")]
+[node name="LevelControl" type="Node" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
 script = ExtResource("8_s5qn0")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
 object_map_layer = NodePath("../ObjectMapLayer")
 object_map_draw = NodePath("../ObjectMapLayer/ObjectMapDraw")
-tile_button = NodePath("../../../../Items/Button")
-object_button1 = NodePath("../../../../Items/Button2")
-object_button2 = NodePath("../../../../Items/Button3")
-button_eraser = NodePath("../../../../Items/ButtonEraser")
+tile_button = NodePath("../../../../Items/ItemButtonTile")
+button_eraser = NodePath("../../../../Items/ItemButtonEraser")
 metadata/_custom_type_script = "uid://dl0jbge2cmsy8"
 
 [node name="Grid2d" parent="Control/SubViewportContainer/SubViewport/Level" instance=ExtResource("2_oqbmf")]
@@ -136,22 +161,6 @@ tile_map = NodePath("..")
 script = ExtResource("1_ju58f")
 tile_map = NodePath("..")
 
-[node name="TileMapLayerEnemy" type="TileMapLayer" parent="Control/SubViewportContainer/SubViewport/Level"]
-tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAAHAAEAAQAAAAAAAQA=")
-tile_set = ExtResource("5_3vbl4")
-
-[node name="BgpManager" type="Node2D" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("database_holder")]
-script = ExtResource("11_1o17k")
-database_holder = NodePath("../DatabaseHolder")
-
-[node name="TestNode" type="Node" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_data_node")]
-script = ExtResource("8_3vbl4")
-level_data_node = NodePath("../LevelManager")
-
-[node name="InputHandler" type="Node" parent="Control/SubViewportContainer/SubViewport/Level"]
-script = ExtResource("14_agra6")
-metadata/_custom_type_script = "uid://devgf5ccfvhwv"
-
 [node name="ObjectMapLayer" type="Node2D" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("database_holder")]
 script = ExtResource("17_1fopa")
 database_holder = NodePath("../DatabaseHolder")
@@ -160,6 +169,18 @@ metadata/_custom_type_script = "uid://omfdsevbgrom"
 [node name="ObjectMapDraw" type="Node2D" parent="Control/SubViewportContainer/SubViewport/Level/ObjectMapLayer" node_paths=PackedStringArray("object_map_layer")]
 script = ExtResource("18_b64qb")
 object_map_layer = NodePath("..")
+
+[node name="BgpManager" type="Node2D" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("database_holder")]
+script = ExtResource("11_1o17k")
+database_holder = NodePath("../DatabaseHolder")
+
+[node name="InputHandler" type="Node" parent="Control/SubViewportContainer/SubViewport/Level"]
+script = ExtResource("14_agra6")
+metadata/_custom_type_script = "uid://devgf5ccfvhwv"
+
+[node name="TestNode" type="Node" parent="Control/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_data_node")]
+script = ExtResource("8_3vbl4")
+level_data_node = NodePath("../LevelManager")
 
 [node name="Items" type="Control" parent="Control"]
 layout_mode = 1
@@ -175,33 +196,88 @@ offset_bottom = 91.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Button" parent="Control/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonTile" parent="Control/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 153.0
-offset_bottom = 154.0
+offset_left = -97.0
+offset_top = 14.0
+offset_right = 56.0
+offset_bottom = 168.0
+item_type = 0
 
-[node name="Button2" parent="Control/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonFafa" parent="Control/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 211.0
-offset_top = -3.0
-offset_right = 364.0
-offset_bottom = 151.0
+offset_left = 79.0
+offset_top = 14.0
+offset_right = 232.0
+offset_bottom = 168.0
+object_name = "fafa_1"
 
-[node name="Button3" parent="Control/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 441.0
-offset_top = -5.0
-offset_right = 594.0
-offset_bottom = 149.0
+[node name="ItemPreview" parent="Control/Items/ItemButtonFafa/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_ttk4a")
 
-[node name="ButtonEraser" parent="Control/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeVerticalUp" parent="Control/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 654.0
-offset_top = -2.0
-offset_right = 807.0
-offset_bottom = 152.0
+offset_left = 255.0
+offset_top = 14.0
+offset_right = 408.0
+offset_bottom = 168.0
+object_name = "pipe_vertical_up"
+
+[node name="ItemPreview" parent="Control/Items/ItemButtonPipeVerticalUp/ButtonTexture" index="0"]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_r2ek7")
+hframes = 7
+
+[node name="ItemButtonPipeVerticalMiddle" parent="Control/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 423.0
+offset_top = 14.0
+offset_right = 576.0
+offset_bottom = 168.0
+object_name = "pipe_vertical_middle"
+
+[node name="ItemPreview" parent="Control/Items/ItemButtonPipeVerticalMiddle/ButtonTexture" index="0"]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_j8vv5")
+hframes = 7
+
+[node name="ItemButtonPipeVerticalDown" parent="Control/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 591.0
+offset_top = 14.0
+offset_right = 744.0
+offset_bottom = 168.0
+object_name = "pipe_vertical_down"
+
+[node name="ItemPreview" parent="Control/Items/ItemButtonPipeVerticalDown/ButtonTexture" index="0"]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_edo08")
+hframes = 7
+
+[node name="ItemButtonEraser" parent="Control/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 759.0
+offset_top = 14.0
+offset_right = 912.0
+offset_bottom = 168.0
+item_type = 2
+
+[node name="ItemPreview" parent="Control/Items/ItemButtonEraser/ButtonTexture" index="0"]
+scale = Vector2(7, 7)
+texture = ExtResource("20_1o17k")
+
+[node name="ItemButtonPipeHorizontalLeft" parent="Control/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 255.0
+offset_top = 174.0
+offset_right = 408.0
+offset_bottom = 328.0
+object_name = "pipe_horizontal_left"
+
+[node name="ItemPreview" parent="Control/Items/ItemButtonPipeHorizontalLeft/ButtonTexture" index="0"]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_ud7lq")
+vframes = 7
 
 [node name="BackgroundParallax2D" type="Parallax2D" parent="."]
 z_index = -800
@@ -214,5 +290,15 @@ metadata/_edit_lock_ = true
 texture = ExtResource("15_rcaub")
 metadata/_edit_lock_ = true
 
+[node name="UsedForScreenCentering" type="Camera2D" parent="."]
+
 [connection signal="pressed" from="Control/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/SaveButton" to="Control/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="Control/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/LoadButton" to="Control/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
+
+[editable path="Control/Items/ItemButtonTile"]
+[editable path="Control/Items/ItemButtonFafa"]
+[editable path="Control/Items/ItemButtonPipeVerticalUp"]
+[editable path="Control/Items/ItemButtonPipeVerticalMiddle"]
+[editable path="Control/Items/ItemButtonPipeVerticalDown"]
+[editable path="Control/Items/ItemButtonEraser"]
+[editable path="Control/Items/ItemButtonPipeHorizontalLeft"]

@@ -1,23 +1,37 @@
-[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=7 format=3 uid="uid://bts1hfa763775"]
+[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=11 format=3 uid="uid://bts1hfa763775"]
 
 [ext_resource type="Script" uid="uid://dm2vri801p6qq" path="res://script/objectmap/object_database_entry.gd" id="1_id4ej"]
-[ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://spawner.tscn" id="2_cd8f3"]
-[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://spawner2.tscn" id="3_j82gr"]
+[ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://scene/spawner/spawner_fafa_1.tscn" id="2_j82gr"]
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://scene/spawner/spawner_pipe_vertical_up.tscn" id="3_j82gr"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://scene/spawner/spawner_pipe_vertical_middle.tscn" id="4_cd8f3"]
 [ext_resource type="Script" uid="uid://caqq52ddr6o8s" path="res://script/objectmap/object_database.gd" id="4_olmxw"]
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://scene/spawner/spawner_pipe_vertical_down.tscn" id="5_olmxw"]
 
 [sub_resource type="Resource" id="Resource_mhsst"]
 script = ExtResource("1_id4ej")
 object_name = "fafa_1"
-object_scene = ExtResource("2_cd8f3")
+object_scene = ExtResource("2_j82gr")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_b7y0g"]
 script = ExtResource("1_id4ej")
-object_name = "fafa_2"
+object_name = "pipe_vertical_up"
 object_scene = ExtResource("3_j82gr")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_j82gr"]
+script = ExtResource("1_id4ej")
+object_name = "pipe_vertical_middle"
+object_scene = ExtResource("4_cd8f3")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_uoicw"]
+script = ExtResource("1_id4ej")
+object_name = "pipe_vertical_down"
+object_scene = ExtResource("5_olmxw")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [resource]
 script = ExtResource("4_olmxw")
-object_database_entry = Array[ExtResource("1_id4ej")]([SubResource("Resource_mhsst"), SubResource("Resource_b7y0g")])
+object_database_entry = Array[ExtResource("1_id4ej")]([SubResource("Resource_mhsst"), SubResource("Resource_b7y0g"), SubResource("Resource_j82gr"), SubResource("Resource_uoicw"), null])
 metadata/_custom_type_script = "uid://caqq52ddr6o8s"

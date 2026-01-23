@@ -2,7 +2,6 @@ extends Node
 
 class_name LevelControl
 
-# 绘图模式枚举
 enum DrawingMode {
 	TILEMAP,
 	OBJECTMAP,
@@ -11,21 +10,19 @@ enum DrawingMode {
 
 # 信号
 signal drawing_mode_changed(mode: DrawingMode)
-signal object_selected(object_index: int)
+signal object_selected(object_name: String)
 
 # 当前绘图模式
 var current_drawing_mode: DrawingMode = DrawingMode.TILEMAP
-var current_object_index: int = 0
+var current_object_name: String = ""
 
 # 节点引用
 @export var tile_map_draw: Node
 @export var object_map_layer: ObjectMapLayer
 @export var object_map_draw: Node
 
-# 按钮引用
+# 按钮引用（只保留非ItemButton的按钮）
 @export var tile_button: Button
-@export var object_button1: Button
-@export var object_button2: Button
 @export var button_eraser: Button
 
 func _ready():
@@ -36,20 +33,6 @@ func _ready():
 		print("LevelControl: tile_button信号连接完成")
 	else:
 		print("LevelControl: 错误：tile_button未找到")
-	
-	if object_button1:
-		print("LevelControl: 找到object_button1，准备连接信号")
-		object_button1.pressed.connect(_on_object_button1_pressed)
-		print("LevelControl: object_button1信号连接完成")
-	else:
-		print("LevelControl: 错误：object_button1未找到")
-	
-	if object_button2:
-		print("LevelControl: 找到object_button2，准备连接信号")
-		object_button2.pressed.connect(_on_object_button2_pressed)
-		print("LevelControl: object_button2信号连接完成")
-	else:
-		print("LevelControl: 错误：object_button2未找到")
 	
 	if button_eraser:
 		print("LevelControl: 找到button_eraser，准备连接信号")
@@ -63,6 +46,7 @@ func _ready():
 
 func switch_to_tilemap_mode():
 	current_drawing_mode = DrawingMode.TILEMAP
+	current_object_name = ""
 	
 	# 启用TileMap绘制，禁用ObjectMap绘制和橡皮擦
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
@@ -82,16 +66,17 @@ func switch_to_tilemap_mode():
 	
 	print("切换到TileMap绘图模式")
 
-func switch_to_objectmap_mode(object_index: int = 0):
+# 切换到对象地图模式（通过对象名称）
+func switch_to_objectmap_mode(object_name: String):
 	current_drawing_mode = DrawingMode.OBJECTMAP
-	current_object_index = object_index
+	current_object_name = object_name
 	
 	# 禁用TileMap绘制，启用ObjectMap绘制
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
 		tile_map_draw.set_drawing_enabled(false)
 	
 	if object_map_layer and object_map_layer.has_method("start_placing_object"):
-		object_map_layer.start_placing_object(object_index)
+		object_map_layer.start_placing_object(object_name)
 		object_map_layer.drawing_enabled = true
 	
 	# 更新按钮状态
@@ -99,12 +84,13 @@ func switch_to_objectmap_mode(object_index: int = 0):
 	
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
-	object_selected.emit(object_index)
+	object_selected.emit(object_name)
 	
-	print("切换到ObjectMap绘图模式，对象索引: ", object_index)
+	print("切换到ObjectMap绘图模式，对象名称: ", object_name)
 
 func switch_to_eraser_mode():
 	current_drawing_mode = DrawingMode.ERASER
+	current_object_name = ""
 	
 	# 启用TileMap绘制但设置为擦除模式，禁用ObjectMap绘制
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
@@ -128,23 +114,11 @@ func update_button_states():
 	if tile_button:
 		tile_button.disabled = (current_drawing_mode == DrawingMode.TILEMAP)
 	
-	if object_button1:
-		object_button1.disabled = (current_drawing_mode == DrawingMode.OBJECTMAP and current_object_index == 0)
-	
-	if object_button2:
-		object_button2.disabled = (current_drawing_mode == DrawingMode.OBJECTMAP and current_object_index == 1)
-	
 	if button_eraser:
 		button_eraser.disabled = (current_drawing_mode == DrawingMode.ERASER)
 
 func _on_tile_button_pressed():
 	switch_to_tilemap_mode()
-
-func _on_object_button1_pressed():
-	switch_to_objectmap_mode(0)
-
-func _on_object_button2_pressed():
-	switch_to_objectmap_mode(1)
 
 func _on_eraser_button_pressed():
 	switch_to_eraser_mode()
@@ -153,9 +127,9 @@ func _on_eraser_button_pressed():
 func get_current_drawing_mode() -> DrawingMode:
 	return current_drawing_mode
 
-# 获取当前选中的对象索引
-func get_current_object_index() -> int:
-	return current_object_index
+# 获取当前选中的对象名称
+func get_current_object_name() -> String:
+	return current_object_name
 
 # 检查是否在TileMap模式
 func is_tilemap_mode() -> bool:
@@ -183,3 +157,24 @@ func erase_at_position(position: Vector2):
 		object_map_layer.remove_object_at_position(position)
 	
 	print("橡皮擦：清除位置 ", position)
+
+# 处理ItemButton的按下事件
+func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton):
+	var object_name = ""  # 在函数开头定义object_name变量
+	
+	match item_type:
+		ItemButton.ItemType.TILE:
+			switch_to_tilemap_mode()
+		ItemButton.ItemType.OBJECT:
+			# 使用按钮的object_name属性
+			object_name = button.object_name
+			if object_name == "":
+				# 如果object_name为空，使用按钮名称作为默认值
+				object_name = button.name.replace("ItemButton", "").to_lower()
+				print("警告：ItemButton ", button.name, " 的object_name为空，使用默认名称: ", object_name)
+			
+			switch_to_objectmap_mode(object_name)
+		ItemButton.ItemType.ERASER:
+			switch_to_eraser_mode()
+	
+	print("ItemButton按下: ", button.name, " 类型: ", item_type, " 对象名称: ", object_name)

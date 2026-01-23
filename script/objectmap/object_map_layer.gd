@@ -7,7 +7,7 @@ class_name ObjectMapLayer
 
 # 输入处理相关变量
 var is_placing = false
-var current_object_index = 0
+var current_object_name = ""
 var drawing_enabled = false
 
 func _ready():
@@ -52,24 +52,25 @@ func setup_input_handler():
 		print("ObjectMapLayer: Error: Failed to find or create InputHandler")
 
 func _on_input_clicked(position: Vector2):
-	if drawing_enabled and database_holder and database_holder.object_database and database_holder.object_database.object_database_entry.size() > current_object_index:
+	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
 		place_object_at_position(position)
 
 func _on_input_released(position: Vector2):
 	is_placing = false
 
-# 公共方法：开始放置对象
-func start_placing_object(object_index: int):
-	if database_holder and database_holder.object_database and database_holder.object_database.object_database_entry.size() > object_index:
-		current_object_index = object_index
+# 公共方法：开始放置对象（通过对象名称）
+func start_placing_object(object_name: String):
+	if database_holder and database_holder.object_database:
+		current_object_name = object_name
 		is_placing = true
 		drawing_enabled = true
-		print("ObjectMapLayer: 开始放置对象，索引: ", object_index)
+		print("ObjectMapLayer: 开始放置对象，名称: ", object_name)
 
 # 公共方法：停止放置对象
 func stop_placing_object():
 	is_placing = false
 	drawing_enabled = false
+	current_object_name = ""
 	print("ObjectMapLayer: 停止放置对象")
 
 # 将位置对齐到32x32网格
@@ -87,9 +88,26 @@ func is_grid_position_occupied(grid_position: Vector2) -> bool:
 			return true
 	return false
 
+# 通过对象名称查找对应的数据库条目
+func find_object_by_name(object_name: String) -> ObjectDatabaseEntry:
+	if not database_holder or not database_holder.object_database:
+		return null
+	
+	for entry in database_holder.object_database.object_database_entry:
+		if entry and entry.object_name == object_name:
+			return entry
+	
+	return null
+
 # 在指定位置放置对象
 func place_object_at_position(position: Vector2):
-	if not database_holder or not database_holder.object_database or current_object_index >= database_holder.object_database.object_database_entry.size():
+	if not database_holder or not database_holder.object_database or current_object_name == "":
+		return
+	
+	# 查找对应的对象条目
+	var entry = find_object_by_name(current_object_name)
+	if not entry or not entry.object_scene:
+		print("ObjectMapLayer: 未找到对象: ", current_object_name)
 		return
 	
 	# 将位置对齐到32x32网格
@@ -100,23 +118,21 @@ func place_object_at_position(position: Vector2):
 		print("ObjectMapLayer: 该网格位置已有对象，不进行绘制")
 		return
 	
-	var entry = database_holder.object_database.object_database_entry[current_object_index]
-	if entry and entry.object_scene:
-		var scene_instance = entry.object_scene.instantiate()
-		if scene_instance is Node2D:
-			scene_instance.global_position = grid_position
-			add_child(scene_instance)
-			
-			# 保存对象信息
-			var object_data = {
-				"object_name": entry.object_name,
-				"object_scene": entry.object_scene,
-				"position": grid_position,
-				"instance": scene_instance
-			}
-			objects.append(object_data)
-			
-			print("放置对象: ", entry.object_name, " 在网格位置: ", grid_position)
+	var scene_instance = entry.object_scene.instantiate()
+	if scene_instance is Node2D:
+		scene_instance.global_position = grid_position
+		add_child(scene_instance)
+		
+		# 保存对象信息
+		var object_data = {
+			"object_name": entry.object_name,
+			"object_scene": entry.object_scene,
+			"position": grid_position,
+			"instance": scene_instance
+		}
+		objects.append(object_data)
+		
+		print("放置对象: ", entry.object_name, " 在网格位置: ", grid_position)
 
 # 移除指定位置的对象
 func remove_object_at_position(position: Vector2):
@@ -177,9 +193,5 @@ func load_object_data(object_data: Array):
 		
 		# 在数据库中查找对应的对象
 		if database_holder and database_holder.object_database:
-			for i in range(database_holder.object_database.object_database_entry.size()):
-				var entry = database_holder.object_database.object_database_entry[i]
-				if entry.object_name == object_name:
-					current_object_index = i
-					place_object_at_position(position)
-					break
+			current_object_name = object_name
+			place_object_at_position(position)

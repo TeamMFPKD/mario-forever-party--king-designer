@@ -19,9 +19,9 @@ func setup_input_handler():
 		get_parent().call_deferred("add_child", input_handler)
 
 # 选择对象
-func select_object(object_index: int):
+func select_object(object_name: String):
 	if object_map_layer:
-		object_map_layer.start_placing_object(object_index)
+		object_map_layer.start_placing_object(object_name)
 
 # 停止绘制
 func stop_drawing():
