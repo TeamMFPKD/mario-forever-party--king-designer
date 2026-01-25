@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=47 format=3 uid="uid://bts1hfa763775"]
+[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=91 format=3 uid="uid://bts1hfa763775"]
 
 [ext_resource type="Script" uid="uid://dm2vri801p6qq" path="res://script/objectmap/object_database_entry.gd" id="1_id4ej"]
-[ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://scene/spawner/enemy/spawner_piranha_green_up.tscn" id="2_803y3"]
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://scene/spawner/pipe/spawner_pipe_vertical_up.tscn" id="3_11f4k"]
 [ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://scene/spawner/pipe/spawner_pipe_vertical_middle.tscn" id="4_1i5ur"]
 [ext_resource type="Script" uid="uid://caqq52ddr6o8s" path="res://script/objectmap/object_database.gd" id="4_olmxw"]
@@ -23,7 +22,30 @@
 [ext_resource type="PackedScene" uid="uid://4yfp5xnayqp7" path="res://scene/spawner/bonus/spawner_question_block_super_star_hidden.tscn" id="19_ddjbe"]
 [ext_resource type="PackedScene" uid="uid://cxyryskp5di4u" path="res://scene/spawner/bonus/spawner_coin.tscn" id="20_ybgbs"]
 [ext_resource type="PackedScene" uid="uid://jdihiuywa7ll" path="res://scene/spawner/bonus/spawner_brick.tscn" id="21_h4fec"]
-[ext_resource type="PackedScene" uid="uid://d0i8bjplv5aia" path="res://scene/spawner/enemy/spawner_piranha_green_down.tscn" id="23_7bxjl"]
+[ext_resource type="PackedScene" uid="uid://hqjrjs0gl7qu" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_green_up.tscn" id="22_gxscb"]
+[ext_resource type="PackedScene" uid="uid://d0i8bjplv5aia" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_green_down.tscn" id="23_bglkn"]
+[ext_resource type="PackedScene" uid="uid://c0gyo22heoa6k" path="res://scene/spawner/enemy/enemy_normal/spawner_goomba.tscn" id="24_klo0b"]
+[ext_resource type="PackedScene" uid="uid://fter4hqotpbj" path="res://scene/spawner/enemy/enemy_normal/spawner_troopa_green.tscn" id="25_1n1vf"]
+[ext_resource type="PackedScene" uid="uid://goldju30lnnt" path="res://scene/spawner/enemy/enemy_normal/spawner_spiny.tscn" id="25_6axbp"]
+[ext_resource type="PackedScene" uid="uid://5s6fte7o4wm" path="res://scene/spawner/enemy/enemy_normal/spawner_beetle.tscn" id="26_fyu1c"]
+[ext_resource type="PackedScene" uid="uid://c7dtim1h4vxmq" path="res://scene/spawner/enemy/enemy_normal/spawner_troopa_red.tscn" id="26_gq0mr"]
+[ext_resource type="PackedScene" uid="uid://c4uc5w66jwf3" path="res://scene/spawner/enemy/enemy_normal/spawner_hammer_bro.tscn" id="27_ddjbe"]
+[ext_resource type="PackedScene" uid="uid://34y8t6gil013" path="res://scene/spawner/enemy/enemy_normal/spawner_fire_bro.tscn" id="28_ybgbs"]
+[ext_resource type="PackedScene" uid="uid://bqsftrxcjy15h" path="res://scene/spawner/enemy/enemy_normal/spawner_cannon.tscn" id="29_h4fec"]
+[ext_resource type="PackedScene" uid="uid://4f7mparjd5th" path="res://scene/spawner/enemy/enemy_normal/spawner_boo.tscn" id="30_7bxjl"]
+[ext_resource type="PackedScene" uid="uid://b55qo4fpnskkv" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_fire_up.tscn" id="33_3xsoo"]
+[ext_resource type="PackedScene" uid="uid://d3xmy1i8dtq2" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_fire_down.tscn" id="34_mpeny"]
+[ext_resource type="PackedScene" uid="uid://gy3qgt27dc47" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_blue_up.tscn" id="35_82icq"]
+[ext_resource type="PackedScene" uid="uid://drohskhrqq5uc" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_blue_down.tscn" id="36_p6evc"]
+[ext_resource type="PackedScene" uid="uid://dsp5f8ndinjnh" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_stone_up.tscn" id="37_r6sa2"]
+[ext_resource type="PackedScene" uid="uid://b8twj3gx5hkia" path="res://scene/spawner/enemy/piranha_plant/spawner_piranha_stone_down.tscn" id="38_phgnu"]
+[ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://scene/spawner/mark/spawner_player.tscn" id="39_u1ck1"]
+[ext_resource type="PackedScene" uid="uid://c764kurejsl8c" path="res://scene/spawner/mark/spawner_goal_gate.tscn" id="40_6cl67"]
+[ext_resource type="PackedScene" uid="uid://fhes1h8uh5xv" path="res://scene/spawner/mark/spawner_spring.tscn" id="41_sq2xq"]
+[ext_resource type="PackedScene" uid="uid://b6cmnvfs4vvc2" path="res://scene/spawner/mark/spawner_moving_platform_horizontal.tscn" id="42_icrrq"]
+[ext_resource type="PackedScene" uid="uid://dgtxigsor834o" path="res://scene/spawner/mark/spawner_moving_platform_vertical_down.tscn" id="43_r0hk1"]
+[ext_resource type="PackedScene" uid="uid://lyec0qvo2652" path="res://scene/spawner/mark/spawner_moving_platform_vertical_up.tscn" id="44_06dfj"]
+[ext_resource type="PackedScene" uid="uid://du2jdlbpgk86y" path="res://scene/spawner/mark/spawner_platform_fall.tscn" id="45_2tyjb"]
 
 [sub_resource type="Resource" id="Resource_b7y0g"]
 script = ExtResource("1_id4ej")
@@ -145,19 +167,151 @@ object_name = "brick"
 object_scene = ExtResource("21_h4fec")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
+[sub_resource type="Resource" id="Resource_tcmxf"]
+script = ExtResource("1_id4ej")
+object_name = "goomba"
+object_scene = ExtResource("24_klo0b")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_6axbp"]
+script = ExtResource("1_id4ej")
+object_name = "troopa_green"
+object_scene = ExtResource("25_1n1vf")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_fyu1c"]
+script = ExtResource("1_id4ej")
+object_name = "troopa_red"
+object_scene = ExtResource("26_gq0mr")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_ddjbe"]
+script = ExtResource("1_id4ej")
+object_name = "spiny"
+object_scene = ExtResource("25_6axbp")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_mpeny"]
+script = ExtResource("1_id4ej")
+object_name = "beetle"
+object_scene = ExtResource("26_fyu1c")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_82icq"]
+script = ExtResource("1_id4ej")
+object_name = "hammer_bro"
+object_scene = ExtResource("27_ddjbe")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_p6evc"]
+script = ExtResource("1_id4ej")
+object_name = "fire_bro"
+object_scene = ExtResource("28_ybgbs")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_r6sa2"]
+script = ExtResource("1_id4ej")
+object_name = "cannon"
+object_scene = ExtResource("29_h4fec")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_phgnu"]
+script = ExtResource("1_id4ej")
+object_name = "boo"
+object_scene = ExtResource("30_7bxjl")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
 [sub_resource type="Resource" id="Resource_mhsst"]
 script = ExtResource("1_id4ej")
 object_name = "piranha_green_up"
-object_scene = ExtResource("2_803y3")
+object_scene = ExtResource("22_gxscb")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_3xsoo"]
 script = ExtResource("1_id4ej")
 object_name = "piranha_green_down"
-object_scene = ExtResource("23_7bxjl")
+object_scene = ExtResource("23_bglkn")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_c3d3a"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_fire_up"
+object_scene = ExtResource("33_3xsoo")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_u1ck1"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_fire_down"
+object_scene = ExtResource("34_mpeny")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_6cl67"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_blue_up"
+object_scene = ExtResource("35_82icq")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_sq2xq"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_blue_down"
+object_scene = ExtResource("36_p6evc")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_icrrq"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_stone_up"
+object_scene = ExtResource("37_r6sa2")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_r0hk1"]
+script = ExtResource("1_id4ej")
+object_name = "piranha_stone_down"
+object_scene = ExtResource("38_phgnu")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_it1vk"]
+script = ExtResource("1_id4ej")
+object_name = "player"
+object_scene = ExtResource("39_u1ck1")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_l7y3i"]
+script = ExtResource("1_id4ej")
+object_name = "goal_gate"
+object_scene = ExtResource("40_6cl67")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_wkie0"]
+script = ExtResource("1_id4ej")
+object_name = "spring"
+object_scene = ExtResource("41_sq2xq")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_bm6i1"]
+script = ExtResource("1_id4ej")
+object_name = "moving_platform_horizontal"
+object_scene = ExtResource("42_icrrq")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_gcwsj"]
+script = ExtResource("1_id4ej")
+object_name = "moving_platform_vertical_down"
+object_scene = ExtResource("43_r0hk1")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_6w2tk"]
+script = ExtResource("1_id4ej")
+object_name = "moving_platform_vertical_up"
+object_scene = ExtResource("44_06dfj")
+metadata/_custom_type_script = "uid://dm2vri801p6qq"
+
+[sub_resource type="Resource" id="Resource_d6v2g"]
+script = ExtResource("1_id4ej")
+object_name = "platform_fall"
+object_scene = ExtResource("45_2tyjb")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [resource]
 script = ExtResource("4_olmxw")
-object_database_entry = Array[ExtResource("1_id4ej")]([SubResource("Resource_b7y0g"), SubResource("Resource_j82gr"), SubResource("Resource_uoicw"), SubResource("Resource_hwqcn"), SubResource("Resource_mxc0p"), SubResource("Resource_57x2i"), SubResource("Resource_427p0"), SubResource("Resource_0x85g"), SubResource("Resource_11f4k"), SubResource("Resource_1i5ur"), SubResource("Resource_llym7"), SubResource("Resource_vdl7r"), SubResource("Resource_t2jpc"), SubResource("Resource_j65qk"), SubResource("Resource_obv1q"), SubResource("Resource_gxscb"), SubResource("Resource_bglkn"), SubResource("Resource_klo0b"), SubResource("Resource_t0bnu"), SubResource("Resource_wbnpj"), SubResource("Resource_mhsst"), SubResource("Resource_3xsoo"), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
+object_database_entry = Array[ExtResource("1_id4ej")]([SubResource("Resource_b7y0g"), SubResource("Resource_j82gr"), SubResource("Resource_uoicw"), SubResource("Resource_hwqcn"), SubResource("Resource_mxc0p"), SubResource("Resource_57x2i"), SubResource("Resource_427p0"), SubResource("Resource_0x85g"), SubResource("Resource_11f4k"), SubResource("Resource_1i5ur"), SubResource("Resource_llym7"), SubResource("Resource_vdl7r"), SubResource("Resource_t2jpc"), SubResource("Resource_j65qk"), SubResource("Resource_obv1q"), SubResource("Resource_gxscb"), SubResource("Resource_bglkn"), SubResource("Resource_klo0b"), SubResource("Resource_t0bnu"), SubResource("Resource_wbnpj"), SubResource("Resource_tcmxf"), SubResource("Resource_6axbp"), SubResource("Resource_fyu1c"), SubResource("Resource_ddjbe"), SubResource("Resource_mpeny"), SubResource("Resource_82icq"), SubResource("Resource_p6evc"), SubResource("Resource_r6sa2"), SubResource("Resource_phgnu"), SubResource("Resource_mhsst"), SubResource("Resource_3xsoo"), SubResource("Resource_c3d3a"), SubResource("Resource_u1ck1"), SubResource("Resource_6cl67"), SubResource("Resource_sq2xq"), SubResource("Resource_icrrq"), SubResource("Resource_r0hk1"), SubResource("Resource_it1vk"), SubResource("Resource_l7y3i"), SubResource("Resource_wkie0"), SubResource("Resource_bm6i1"), SubResource("Resource_gcwsj"), SubResource("Resource_6w2tk"), SubResource("Resource_d6v2g"), null])
 metadata/_custom_type_script = "uid://caqq52ddr6o8s"
