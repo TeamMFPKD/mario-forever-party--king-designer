@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene load_steps=59 format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap_draw.gd" id="1_ju58f"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/game_room_size.gd" id="1_pey40"]
@@ -33,6 +33,10 @@
 [ext_resource type="Texture2D" uid="uid://boa8ojba4ua7m" path="res://sprite/bonus/poisonous_mushroom.png" id="29_u817j"]
 [ext_resource type="Texture2D" uid="uid://bg7eb81h4ii2r" path="res://sprite/bonus/coin.png" id="31_x878y"]
 [ext_resource type="Texture2D" uid="uid://bc4d5afdplmyd" path="res://sprite/bonus/brick.png" id="32_pra1m"]
+[ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="34_ctfp2"]
+[ext_resource type="Texture2D" uid="uid://cvhrkx7nkaafo" path="res://sprite/enemy/bullet_bill_cannon.png" id="35_m0llv"]
+[ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/buzzy_beetle.png" id="36_56a7w"]
+[ext_resource type="Texture2D" uid="uid://4gmofwbo8lf4" path="res://sprite/enemy/fire_bro.png" id="37_qxym8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
 atlas = ExtResource("20_iovuq")
@@ -56,11 +60,11 @@ region = Rect2(0, 96, 448, 64)
 atlas = ExtResource("22_j8vv5")
 region = Rect2(0, 0, 64, 448)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_j8vv5"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qxym8"]
 load_path = "res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iovuq"]
-atlas = SubResource("CompressedTexture2D_j8vv5")
+[sub_resource type="AtlasTexture" id="AtlasTexture_360xo"]
+atlas = SubResource("CompressedTexture2D_qxym8")
 region = Rect2(64, 0, 32, 448)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4df1a"]
@@ -69,6 +73,10 @@ load_path = "res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d4293754
 [sub_resource type="AtlasTexture" id="AtlasTexture_pey40"]
 atlas = SubResource("CompressedTexture2D_4df1a")
 region = Rect2(96, 0, 64, 448)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
+atlas = ExtResource("31_x878y")
+region = Rect2(0, 0, 33, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("23_iovuq")
@@ -94,15 +102,34 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("29_rqu2a")
 region = Rect2(0, 96, 33, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
-atlas = ExtResource("31_x878y")
-region = Rect2(0, 0, 33, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_ttk4a"]
 atlas = ExtResource("20_j8vv5")
 region = Rect2(0, 48, 33, 50)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_m0llv"]
+atlas = ExtResource("34_ctfp2")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qxym8"]
+atlas = ExtResource("36_56a7w")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abu5c"]
+atlas = ExtResource("37_qxym8")
+region = Rect2(37, 49, 34, 51)
+
 [node name="Room" type="Node2D"]
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="."]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D"]
+texture = ExtResource("15_rcaub")
+metadata/_edit_lock_ = true
 
 [node name="GameRoomSize" type="Control" parent="."]
 layout_mode = 3
@@ -251,377 +278,413 @@ metadata/_edit_lock_ = true
 
 [node name="ItemButtonTile" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = -1136.0
-offset_top = -408.0
-offset_right = -983.0
-offset_bottom = -254.0
+offset_left = 544.0
+offset_top = -568.0
+offset_right = 697.0
+offset_bottom = -414.0
 item_type = 0
 
 [node name="ItemButtonEraser" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
 offset_left = 768.0
-offset_top = -424.0
+offset_top = -568.0
 offset_right = 921.0
-offset_bottom = -270.0
+offset_bottom = -414.0
 item_type = 2
 
 [node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonEraser/ButtonTexture" index="0"]
 scale = Vector2(7, 7)
 texture = ExtResource("20_1o17k")
 
-[node name="ItemButtonPipeVerticalUp" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="Pipe" type="VBoxContainer" parent="GameRoomSize/Items"]
 layout_mode = 0
-offset_left = -336.0
-offset_top = -328.0
-offset_right = -183.0
-offset_bottom = -174.0
-object_name = "pipe_vertical_up"
+offset_left = -160.0
+offset_top = -616.0
+offset_right = 320.0
+offset_bottom = -312.0
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPipeVerticalUp/ButtonTexture" index="0"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Pipe"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonPipeVerticalUp" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "pipe_vertical_up"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_r2ek7")
 hframes = 7
 
-[node name="ItemButtonPipeVerticalMiddle" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -176.0
-offset_top = -328.0
-offset_right = -23.0
-offset_bottom = -174.0
+[node name="ItemButtonPipeVerticalMiddle" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 object_name = "pipe_vertical_middle"
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPipeVerticalMiddle/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_j8vv5")
 hframes = 7
 
-[node name="ItemButtonPipeVerticalDown" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -16.0
-offset_top = -328.0
-offset_right = 137.0
-offset_bottom = -174.0
+[node name="ItemButtonPipeVerticalDown" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 object_name = "pipe_vertical_down"
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPipeVerticalDown/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalDown/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_edo08")
 hframes = 7
 
-[node name="ItemButtonPipeHorizontalLeft" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -336.0
-offset_top = -168.0
-offset_right = -183.0
-offset_bottom = -14.0
-object_name = "pipe_horizontal_left"
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Pipe"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPipeHorizontalLeft/ButtonTexture" index="0"]
+[node name="ItemButtonPipeHorizontalLeft" parent="GameRoomSize/Items/Pipe/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "pipe_horizontal_left"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalLeft/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_ud7lq")
 vframes = 7
 
-[node name="ItemButtonPipeHorizontalMiddle" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -176.0
-offset_top = -168.0
-offset_right = -23.0
-offset_bottom = -14.0
+[node name="ItemButtonPipeHorizontalMiddle" parent="GameRoomSize/Items/Pipe/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 object_name = "pipe_horizontal_middle"
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPipeHorizontalMiddle/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalMiddle/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
-texture = SubResource("AtlasTexture_iovuq")
+texture = SubResource("AtlasTexture_360xo")
 vframes = 7
 
-[node name="ItemButtonPipeHorizontalRight" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -16.0
-offset_top = -168.0
-offset_right = 137.0
-offset_bottom = -14.0
+[node name="ItemButtonPipeHorizontalRight" parent="GameRoomSize/Items/Pipe/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 object_name = "pipe_horizontal_right"
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPipeHorizontalRight/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_pey40")
 vframes = 7
 
-[node name="ItemButtonQuestionBlock" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="Bonus" type="VBoxContainer" parent="GameRoomSize/Items"]
 layout_mode = 0
-offset_left = -560.0
-offset_top = 24.0
-offset_right = -407.0
-offset_bottom = 178.0
-object_name = "question_block"
+offset_left = -1504.0
+offset_top = -920.0
+offset_right = -400.0
+offset_bottom = -592.0
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlock/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_1p3gc")
-
-[node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -560.0
-offset_top = 200.0
-offset_right = -407.0
-offset_bottom = 354.0
-object_name = "question_block_hidden"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockHidden/ButtonTexture" index="0"]
-texture = ExtResource("24_4df1a")
-
-[node name="ItemButtonQuestionBlockFireFlower" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -400.0
-offset_top = 24.0
-offset_right = -247.0
-offset_bottom = 178.0
-object_name = "question_block_fire_flower"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockFireFlower/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_1p3gc")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockFireFlower/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_4fasx")
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Bonus"]
+layout_mode = 2
+size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockFireFlowerHidden" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -400.0
-offset_top = 200.0
-offset_right = -247.0
-offset_bottom = 354.0
-object_name = "question_block_fire_flower_hidden"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture" index="0"]
-texture = ExtResource("24_4df1a")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_4fasx")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockBeetroot" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -240.0
-offset_top = 24.0
-offset_right = -87.0
-offset_bottom = 178.0
-object_name = "question_block_beetroot"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockBeetroot/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_1p3gc")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockBeetroot/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_3n6qb")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockBeetrootHidden" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -240.0
-offset_top = 200.0
-offset_right = -87.0
-offset_bottom = 354.0
-object_name = "question_block_beetroot_hidden"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture" index="0"]
-texture = ExtResource("24_4df1a")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_3n6qb")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockLui" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -80.0
-offset_top = 24.0
-offset_right = 73.0
-offset_bottom = 178.0
-object_name = "question_block_lui"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockLui/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_1p3gc")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockLui/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_f41ht")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockLuiHidden" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -80.0
-offset_top = 200.0
-offset_right = 73.0
-offset_bottom = 354.0
-object_name = "question_block_lui_hidden"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockLuiHidden/ButtonTexture" index="0"]
-texture = ExtResource("24_4df1a")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockLuiHidden/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_f41ht")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockPoisonousMushroom" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 24.0
-offset_right = 233.0
-offset_bottom = 178.0
-object_name = "question_block_poisonous_mushroom"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_1p3gc")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_8w043")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockPoisonousMushroomLuiHidden" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 80.0
-offset_top = 200.0
-offset_right = 233.0
-offset_bottom = 354.0
-object_name = "question_block_poisonous_mushroom_hidden"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture" index="0"]
-texture = ExtResource("24_4df1a")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_8w043")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockSuperStar" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 240.0
-offset_top = 24.0
-offset_right = 393.0
-offset_bottom = 178.0
-object_name = "question_block_super_star"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockSuperStar/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_1p3gc")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockSuperStar/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_tdf2a")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonQuestionBlockSuperStarHidden" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 240.0
-offset_top = 200.0
-offset_right = 393.0
-offset_bottom = 354.0
-object_name = "question_block_super_star_hidden"
-
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture" index="0"]
-texture = ExtResource("24_4df1a")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture/ItemPreview" index="0"]
-position = Vector2(8, 8)
-scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_tdf2a")
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonCoin" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -720.0
-offset_top = 24.0
-offset_right = -567.0
-offset_bottom = 178.0
+[node name="ItemButtonCoin" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 object_name = "coin"
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonCoin/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonCoin/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_mwnlh")
 
-[node name="ItemButtonBrick" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = -720.0
-offset_top = 200.0
-offset_right = -567.0
-offset_bottom = 354.0
-object_name = "brick"
+[node name="ItemButtonQuestionBlock" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block"
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonBrick/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlock/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="ItemButtonQuestionBlockFireFlower" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_fire_flower"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_4fasx")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockBeetroot" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_beetroot"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_3n6qb")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockLui" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_lui"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockLui/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockLui/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_f41ht")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockPoisonousMushroom" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_poisonous_mushroom"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_8w043")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockSuperStar" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_super_star"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_tdf2a")
+metadata/_edit_lock_ = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Bonus"]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonBrick" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "brick"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonBrick/ButtonTexture" index="0"]
 texture = ExtResource("32_pra1m")
 
-[node name="ItemButtonPiranhaGreenUp" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockHidden/ButtonTexture" index="0"]
+texture = ExtResource("24_4df1a")
+
+[node name="ItemButtonQuestionBlockFireFlowerHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_fire_flower_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture" index="0"]
+texture = ExtResource("24_4df1a")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_4fasx")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockBeetrootHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_beetroot_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture" index="0"]
+texture = ExtResource("24_4df1a")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_3n6qb")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockLuiHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_lui_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden/ButtonTexture" index="0"]
+texture = ExtResource("24_4df1a")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_f41ht")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockPoisonousMushroomLuiHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_poisonous_mushroom_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture" index="0"]
+texture = ExtResource("24_4df1a")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_8w043")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockSuperStarHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "question_block_super_star_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture" index="0"]
+texture = ExtResource("24_4df1a")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture/ItemPreview" index="0"]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_tdf2a")
+metadata/_edit_lock_ = true
+
+[node name="Enemy" type="Control" parent="GameRoomSize/Items"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ItemButtonPiranhaGreenUp" parent="GameRoomSize/Items/Enemy" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = -752.0
+offset_left = -1280.0
 offset_top = -424.0
-offset_right = -599.0
+offset_right = -1127.0
 offset_bottom = -270.0
 object_name = "piranha_green_up"
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPiranhaGreenUp/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/ItemButtonPiranhaGreenUp/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_ttk4a")
 
-[node name="ItemButtonPiranhaGreenDown" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPiranhaGreenDown" parent="GameRoomSize/Items/Enemy" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = -752.0
+offset_left = -1280.0
 offset_top = -264.0
-offset_right = -599.0
+offset_right = -1127.0
 offset_bottom = -110.0
 object_name = "piranha_green_down"
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonPiranhaGreenDown/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/ItemButtonPiranhaGreenDown/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_ttk4a")
 flip_v = true
 
-[node name="BackgroundParallax2D" type="Parallax2D" parent="."]
-z_index = -800
-repeat_size = Vector2(1920, 1080)
-autoscroll = Vector2(0, 150)
-repeat_times = 6
-metadata/_edit_lock_ = true
+[node name="ItemButtonBoo" parent="GameRoomSize/Items/Enemy" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = -1024.0
+offset_top = -376.0
+offset_right = -871.0
+offset_bottom = -222.0
+object_name = "boo"
 
-[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D"]
-texture = ExtResource("15_rcaub")
-metadata/_edit_lock_ = true
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/ItemButtonBoo/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_m0llv")
+flip_h = true
 
-[node name="UsedForScreenCentering" type="Camera2D" parent="."]
-process_mode = 4
+[node name="ItemButtonCannon" parent="GameRoomSize/Items/Enemy" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = -864.0
+offset_top = -376.0
+offset_right = -711.0
+offset_bottom = -222.0
+object_name = "cannon"
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/ItemButtonCannon/ButtonTexture" index="0"]
+texture = ExtResource("35_m0llv")
+
+[node name="ItemButtonBeetle" parent="GameRoomSize/Items/Enemy" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = -688.0
+offset_top = -376.0
+offset_right = -535.0
+offset_bottom = -222.0
+object_name = "beetle"
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/ItemButtonBeetle/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_qxym8")
+flip_h = true
+
+[node name="ItemButtonBeetle2" parent="GameRoomSize/Items/Enemy" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = -512.0
+offset_top = -376.0
+offset_right = -359.0
+offset_bottom = -222.0
+object_name = "beetle"
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/ItemButtonBeetle2/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_abu5c")
+flip_h = true
 
 [connection signal="pressed" from="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 
 [editable path="GameRoomSize/Items/ItemButtonTile"]
 [editable path="GameRoomSize/Items/ItemButtonEraser"]
-[editable path="GameRoomSize/Items/ItemButtonPipeVerticalUp"]
-[editable path="GameRoomSize/Items/ItemButtonPipeVerticalMiddle"]
-[editable path="GameRoomSize/Items/ItemButtonPipeVerticalDown"]
-[editable path="GameRoomSize/Items/ItemButtonPipeHorizontalLeft"]
-[editable path="GameRoomSize/Items/ItemButtonPipeHorizontalMiddle"]
-[editable path="GameRoomSize/Items/ItemButtonPipeHorizontalRight"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlock"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockHidden"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockFireFlower"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockFireFlowerHidden"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockBeetroot"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockBeetrootHidden"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockLui"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockLuiHidden"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockPoisonousMushroom"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockSuperStar"]
-[editable path="GameRoomSize/Items/ItemButtonQuestionBlockSuperStarHidden"]
-[editable path="GameRoomSize/Items/ItemButtonCoin"]
-[editable path="GameRoomSize/Items/ItemButtonBrick"]
-[editable path="GameRoomSize/Items/ItemButtonPiranhaGreenUp"]
-[editable path="GameRoomSize/Items/ItemButtonPiranhaGreenDown"]
+[editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp"]
+[editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle"]
+[editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalDown"]
+[editable path="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalLeft"]
+[editable path="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalMiddle"]
+[editable path="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonCoin"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlock"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockLui"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonBrick"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockHidden"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
+[editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
+[editable path="GameRoomSize/Items/Enemy/ItemButtonPiranhaGreenUp"]
+[editable path="GameRoomSize/Items/Enemy/ItemButtonPiranhaGreenDown"]
+[editable path="GameRoomSize/Items/Enemy/ItemButtonBoo"]
+[editable path="GameRoomSize/Items/Enemy/ItemButtonCannon"]
+[editable path="GameRoomSize/Items/Enemy/ItemButtonBeetle"]
+[editable path="GameRoomSize/Items/Enemy/ItemButtonBeetle2"]

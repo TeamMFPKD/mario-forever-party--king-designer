@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bb83c57feb5h2"
-path="res://.godot/imported/tile_volcano.png-e7ef93e03e9e373fbab47382790523ec.ctex"
+uid="uid://cpt58ywi635nk"
+path="res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/tile_volcano.png"
-dest_files=["res://.godot/imported/tile_volcano.png-e7ef93e03e9e373fbab47382790523ec.ctex"]
+source_file="res://sprite/tile/tile_overworld.png"
+dest_files=["res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"]
 
 [params]
 

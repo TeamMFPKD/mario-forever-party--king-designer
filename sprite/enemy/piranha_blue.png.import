@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5stdy61pmtog"
-path="res://.godot/imported/tile_cave.png-18f881dab27633b1d128b843ada22b0b.ctex"
+uid="uid://cy7osce3kxd36"
+path="res://.godot/imported/piranha_blue.png-a21a317ec1ea1d6cfdc5e77a391b3f66.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/tile_cave.png"
-dest_files=["res://.godot/imported/tile_cave.png-18f881dab27633b1d128b843ada22b0b.ctex"]
+source_file="res://sprite/enemy/piranha_blue.png"
+dest_files=["res://.godot/imported/piranha_blue.png-a21a317ec1ea1d6cfdc5e77a391b3f66.ctex"]
 
 [params]
 

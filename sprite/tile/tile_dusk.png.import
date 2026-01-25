@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpt58ywi635nk"
-path="res://.godot/imported/tile_overworld.png-d11121934cefb7e5a9ed32514fa2ea9f.ctex"
+uid="uid://ejbgmhyor4n6"
+path="res://.godot/imported/tile_dusk.png-2bee01c5d707ed6d2f64e388b10c0cad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/tile_overworld.png"
-dest_files=["res://.godot/imported/tile_overworld.png-d11121934cefb7e5a9ed32514fa2ea9f.ctex"]
+source_file="res://sprite/tile/tile_dusk.png"
+dest_files=["res://.godot/imported/tile_dusk.png-2bee01c5d707ed6d2f64e388b10c0cad.ctex"]
 
 [params]
 

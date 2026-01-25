@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c24qvkx0721j3"
-path="res://.godot/imported/tile_snow_b.png-ef338279f537b8c70f81c8fe325d7b3d.ctex"
+uid="uid://bhqhj5nhb12s"
+path="res://.godot/imported/missile_bill.png-0c1955cbf94617e07f8e172091c36217.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/tile_snow_b.png"
-dest_files=["res://.godot/imported/tile_snow_b.png-ef338279f537b8c70f81c8fe325d7b3d.ctex"]
+source_file="res://sprite/enemy/missile_bill.png"
+dest_files=["res://.godot/imported/missile_bill.png-0c1955cbf94617e07f8e172091c36217.ctex"]
 
 [params]
 

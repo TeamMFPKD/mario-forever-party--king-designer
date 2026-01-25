@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ejbgmhyor4n6"
-path="res://.godot/imported/tile_dusk.png-7f425e25d7761d45c46989e232d9644c.ctex"
+uid="uid://dagnbicl3nhg3"
+path="res://.godot/imported/tile_night.png-a81525743a58e94be0fc8298983a5229.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/tile_dusk.png"
-dest_files=["res://.godot/imported/tile_dusk.png-7f425e25d7761d45c46989e232d9644c.ctex"]
+source_file="res://sprite/tile/tile_night.png"
+dest_files=["res://.godot/imported/tile_night.png-a81525743a58e94be0fc8298983a5229.ctex"]
 
 [params]
 

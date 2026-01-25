@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dagnbicl3nhg3"
-path="res://.godot/imported/tile_night.png-a1a240489a5f4ae695d43ef348b4f820.ctex"
+uid="uid://che88fc21st5t"
+path="res://.godot/imported/spiny.png-6e58c3f4835c6d32dc92cd063d553e13.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tileset/tile_night.png"
-dest_files=["res://.godot/imported/tile_night.png-a1a240489a5f4ae695d43ef348b4f820.ctex"]
+source_file="res://sprite/enemy/spiny.png"
+dest_files=["res://.godot/imported/spiny.png-6e58c3f4835c6d32dc92cd063d553e13.ctex"]
 
 [params]
 
