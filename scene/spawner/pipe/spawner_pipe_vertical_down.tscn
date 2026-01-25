@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/pipe_color.gd" id="3_xw333"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://scene/spawner/offset_marker.tscn" id="4_sjjhn"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_biayx"]
-load_path = "res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_360xo"]
+load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_edo08"]
-atlas = SubResource("CompressedTexture2D_biayx")
+[sub_resource type="AtlasTexture" id="AtlasTexture_lh15n"]
+atlas = SubResource("CompressedTexture2D_360xo")
 region = Rect2(0, 96, 448, 64)
 
 [node name="SpawnerPipeVerticalDown" type="Node2D"]
@@ -17,7 +17,7 @@ metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(16, 16)
-texture = SubResource("AtlasTexture_edo08")
+texture = SubResource("AtlasTexture_lh15n")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="Sprite2D" node_paths=PackedStringArray("sprite")]

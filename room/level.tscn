@@ -65,7 +65,7 @@ load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_360xo"]
 atlas = SubResource("CompressedTexture2D_qxym8")
-region = Rect2(58, 0, 29, 448)
+region = Rect2(64, 0, 32, 448)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_uly8c"]
 load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7f8b6cdf.ctex"
