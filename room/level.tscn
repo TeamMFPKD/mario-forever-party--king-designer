@@ -42,18 +42,18 @@
 atlas = ExtResource("20_iovuq")
 region = Rect2(0, 0, 448, 64)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1o17k"]
-load_path = "res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_abu5c"]
+load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j8vv5"]
-atlas = SubResource("CompressedTexture2D_1o17k")
+[sub_resource type="AtlasTexture" id="AtlasTexture_uly8c"]
+atlas = SubResource("CompressedTexture2D_abu5c")
 region = Rect2(0, 64, 448, 32)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_biayx"]
-load_path = "res://.godot/imported/pipe_vertical.png-2edffe3603c215bf65b7f3de9c2c62d9.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_360xo"]
+load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_edo08"]
-atlas = SubResource("CompressedTexture2D_biayx")
+[sub_resource type="AtlasTexture" id="AtlasTexture_lh15n"]
+atlas = SubResource("CompressedTexture2D_360xo")
 region = Rect2(0, 96, 448, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ud7lq"]
@@ -61,17 +61,17 @@ atlas = ExtResource("22_j8vv5")
 region = Rect2(0, 0, 64, 448)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qxym8"]
-load_path = "res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"
+load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7f8b6cdf.ctex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_360xo"]
 atlas = SubResource("CompressedTexture2D_qxym8")
-region = Rect2(64, 0, 32, 448)
+region = Rect2(58, 0, 29, 448)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4df1a"]
-load_path = "res://.godot/imported/pipe_horizontal.png-4e61d368bc0c60d78d42937549337aac.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_uly8c"]
+load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7f8b6cdf.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pey40"]
-atlas = SubResource("CompressedTexture2D_4df1a")
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0dhw"]
+atlas = SubResource("CompressedTexture2D_uly8c")
 region = Rect2(96, 0, 64, 448)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
@@ -327,7 +327,7 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
-texture = SubResource("AtlasTexture_j8vv5")
+texture = SubResource("AtlasTexture_uly8c")
 hframes = 7
 
 [node name="ItemButtonPipeVerticalDown" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
@@ -338,7 +338,7 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalDown/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
-texture = SubResource("AtlasTexture_edo08")
+texture = SubResource("AtlasTexture_lh15n")
 hframes = 7
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Pipe"]
@@ -376,7 +376,7 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight/ButtonTexture" index="0"]
 scale = Vector2(15, 15)
-texture = SubResource("AtlasTexture_pey40")
+texture = SubResource("AtlasTexture_f0dhw")
 vframes = 7
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/Items"]
