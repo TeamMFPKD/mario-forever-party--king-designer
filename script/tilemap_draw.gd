@@ -7,6 +7,7 @@ class_name TileMapDraw
 var is_drawing = false
 var brush_mode = true # true for drawing, false for erasing
 var drawing_enabled = true
+var custom_atlas_coords: Vector2i = Vector2i(-1, -1) # 自定义图块坐标，默认为(-1,-1)表示使用默认
 
 func _ready():
 	# 延迟设置输入处理器，避免竞争条件
@@ -106,12 +107,15 @@ func place_tile_at_cursor(cursor_pos):
 
 	var cell_coords_array: Array = [cell_coords]
 	if brush_mode:
-		# 放置瓦片 - 使用正确的 Godot 4 API 参数顺序
+		# 放置瓦片 - 使用自定义图块坐标或默认设置
 		if tile_map.get_cell_source_id(cell_coords) == -1:
-			# Draw Enemy
-			#tile_map.set_cell(cell_coords, 1, Vector2i(0, 0), 2)
-			# Draw Terrain
-			tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
+			if custom_atlas_coords != Vector2i(-1, -1):
+				# 使用自定义图块坐标
+				tile_map.set_cell(cell_coords, 0, custom_atlas_coords)
+				print("TileMapDraw: 放置自定义图块，坐标: ", custom_atlas_coords)
+			else:
+				# Draw Terrain - 使用默认地形连接
+				tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
 	else:
 		# 擦除瓦片
 		tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
@@ -156,3 +160,13 @@ func erase_tile_at_position(position: Vector2):
 	var cell_coords_array: Array = [cell_coords]
 	# 擦除瓦片
 	tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
+
+# 设置自定义图块坐标
+func set_custom_atlas_coords(coords: Vector2i):
+	custom_atlas_coords = coords
+	print("TileMapDraw: 设置自定义图块坐标为: ", coords)
+
+# 清除自定义图块坐标，恢复默认行为
+func clear_custom_atlas_coords():
+	custom_atlas_coords = Vector2i(-1, -1)
+	print("TileMapDraw: 清除自定义图块坐标，恢复默认行为")

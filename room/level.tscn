@@ -1,4 +1,4 @@
-[gd_scene load_steps=98 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene load_steps=103 format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap_draw.gd" id="1_ju58f"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/game_room_size.gd" id="1_pey40"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/database_holder.gd" id="19_1fopa"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="20_1o17k"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="20_b64qb"]
+[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="20_c6bpw"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="20_iovuq"]
 [ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="20_j8vv5"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="21_b64qb"]
@@ -69,6 +70,20 @@ load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c
 [sub_resource type="AtlasTexture" id="AtlasTexture_5m21x"]
 atlas = SubResource("CompressedTexture2D_m4j1h")
 region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_c6bpw"]
+load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hpln"]
+atlas = SubResource("CompressedTexture2D_c6bpw")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xct0x"]
+load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6bpw"]
+atlas = SubResource("CompressedTexture2D_xct0x")
+region = Rect2(32, 128, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
 atlas = ExtResource("20_iovuq")
@@ -221,6 +236,28 @@ offset_bottom = 1504.0
 script = ExtResource("1_pey40")
 metadata/_edit_lock_ = true
 
+[node name="SaveLoadTest" type="VBoxContainer" parent="GameRoomSize"]
+layout_mode = 1
+offset_right = 176.0
+offset_bottom = 180.0
+
+[node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest"]
+layout_mode = 2
+size_flags_horizontal = 13
+size_flags_vertical = 15
+theme_override_font_sizes/font_size = 35
+text = "Save"
+script = ExtResource("7_8b0r0")
+metadata/_edit_lock_ = true
+
+[node name="LoadButton" type="Button" parent="GameRoomSize/SaveLoadTest"]
+layout_mode = 2
+size_flags_horizontal = 13
+size_flags_vertical = 15
+theme_override_font_sizes/font_size = 35
+text = "Load"
+metadata/_edit_lock_ = true
+
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize"]
 layout_mode = 1
 anchors_preset = 5
@@ -267,39 +304,6 @@ level_data_node = NodePath("../LevelManager")
 script = ExtResource("8_h6smj")
 level_data_node = NodePath("../LevelManager")
 
-[node name="SaveLoadTest" type="Control" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
-z_index = 1
-layout_mode = 3
-anchors_preset = 0
-offset_right = 162.0
-offset_bottom = 197.0
-
-[node name="SaveLoadTest2" type="VBoxContainer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -79.0
-offset_bottom = -123.0
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_lock_ = true
-
-[node name="SaveButton" type="Button" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2"]
-layout_mode = 2
-size_flags_horizontal = 13
-size_flags_vertical = 15
-text = "Save"
-script = ExtResource("7_8b0r0")
-metadata/_edit_lock_ = true
-
-[node name="LoadButton" type="Button" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2"]
-layout_mode = 2
-size_flags_horizontal = 13
-size_flags_vertical = 15
-text = "Load"
-metadata/_edit_lock_ = true
-
 [node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
 script = ExtResource("8_s5qn0")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
@@ -345,6 +349,17 @@ metadata/_custom_type_script = "uid://devgf5ccfvhwv"
 script = ExtResource("8_3vbl4")
 level_data_node = NodePath("../LevelManager")
 
+[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+position = Vector2(320, 240)
+limit_left = 0
+limit_top = 0
+limit_right = 2560
+limit_bottom = 960
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+script = ExtResource("20_c6bpw")
+
 [node name="Items" type="Control" parent="GameRoomSize"]
 layout_mode = 1
 anchors_preset = 7
@@ -359,10 +374,10 @@ metadata/_edit_lock_ = true
 
 [node name="ItemButtonTile" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 1208.0
-offset_top = -152.0
-offset_right = 1361.0
-offset_bottom = 2.0
+offset_left = 992.0
+offset_top = -544.0
+offset_right = 1145.0
+offset_bottom = -390.0
 item_type = 0
 
 [node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTile/ButtonTexture" index="0"]
@@ -385,11 +400,55 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 
 [node name="ItemButtonTileSingle" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 1384.0
-offset_top = -152.0
-offset_right = 1537.0
-offset_bottom = 2.0
+offset_left = 1136.0
+offset_top = -536.0
+offset_right = 1289.0
+offset_bottom = -382.0
 item_type = 0
+
+[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTileSingle/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_2hpln")
+
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0"]
+script = ExtResource("21_xct0x")
+theme_to_tile_preview = Dictionary[int, Texture2D]({
+0: ExtResource("22_c6bpw"),
+1: ExtResource("23_2hpln"),
+2: ExtResource("24_gc7qq"),
+3: ExtResource("25_3f3ja"),
+4: ExtResource("26_m8a77"),
+5: ExtResource("27_5yikb"),
+6: ExtResource("28_iytch"),
+7: ExtResource("29_mjqcm"),
+8: ExtResource("30_7cfpr"),
+9: ExtResource("31_qq7db")
+})
+
+[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 1288.0
+offset_top = -528.0
+offset_right = 1441.0
+offset_bottom = -374.0
+item_type = 0
+
+[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTileSemiSolid/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_c6bpw")
+
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0"]
+script = ExtResource("21_xct0x")
+theme_to_tile_preview = Dictionary[int, Texture2D]({
+0: ExtResource("22_c6bpw"),
+1: ExtResource("23_2hpln"),
+2: ExtResource("24_gc7qq"),
+3: ExtResource("25_3f3ja"),
+4: ExtResource("26_m8a77"),
+5: ExtResource("27_5yikb"),
+6: ExtResource("28_iytch"),
+7: ExtResource("29_mjqcm"),
+8: ExtResource("30_7cfpr"),
+9: ExtResource("31_qq7db")
+})
 
 [node name="ItemButtonEraser" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
@@ -1034,11 +1093,12 @@ scale = Vector2(0.6, 0.6)
 texture = SubResource("AtlasTexture_toeyn")
 metadata/_edit_lock_ = true
 
-[connection signal="pressed" from="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
-[connection signal="pressed" from="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
+[connection signal="pressed" from="GameRoomSize/SaveLoadTest/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
+[connection signal="pressed" from="GameRoomSize/SaveLoadTest/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 
 [editable path="GameRoomSize/Items/ItemButtonTile"]
 [editable path="GameRoomSize/Items/ItemButtonTileSingle"]
+[editable path="GameRoomSize/Items/ItemButtonTileSemiSolid"]
 [editable path="GameRoomSize/Items/ItemButtonEraser"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle"]

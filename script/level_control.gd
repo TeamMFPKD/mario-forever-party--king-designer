@@ -53,13 +53,14 @@ func switch_to_tilemap_mode():
 		tile_map_draw.set_drawing_enabled(true)
 		if tile_map_draw.has_method("set_brush_mode"):
 			tile_map_draw.set_brush_mode(true)  # 设置为绘制模式
+		
+		# 清除自定义图块坐标，恢复默认行为
+		if tile_map_draw.has_method("clear_custom_atlas_coords"):
+			tile_map_draw.clear_custom_atlas_coords()
 	
 	if object_map_layer and object_map_layer.has_method("stop_placing_object"):
 		object_map_layer.stop_placing_object()
 		object_map_layer.drawing_enabled = false
-	
-	# 更新按钮状态
-	update_button_states()
 	
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
@@ -78,9 +79,7 @@ func switch_to_objectmap_mode(object_name: String):
 	if object_map_layer and object_map_layer.has_method("start_placing_object"):
 		object_map_layer.start_placing_object(object_name)
 		object_map_layer.drawing_enabled = true
-	
-	# 更新按钮状态
-	update_button_states()
+
 	
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
@@ -101,27 +100,49 @@ func switch_to_eraser_mode():
 	if object_map_layer and object_map_layer.has_method("stop_placing_object"):
 		object_map_layer.stop_placing_object()
 		object_map_layer.drawing_enabled = false
-	
-	# 更新按钮状态
-	update_button_states()
+
 	
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
 	
 	print("切换到橡皮擦模式")
 
-func update_button_states():
-	if tile_button:
-		tile_button.disabled = (current_drawing_mode == DrawingMode.TILEMAP)
-	
-	if button_eraser:
-		button_eraser.disabled = (current_drawing_mode == DrawingMode.ERASER)
 
 func _on_tile_button_pressed():
 	switch_to_tilemap_mode()
 
 func _on_eraser_button_pressed():
 	switch_to_eraser_mode()
+
+# 切换到TileMap绘图模式（支持自定义图块坐标）
+func switch_to_tilemap_mode_with_coords(custom_atlas_coords: Vector2i = Vector2i(-1, -1)):
+	current_drawing_mode = DrawingMode.TILEMAP
+	current_object_name = ""
+	
+	# 启用TileMap绘制，禁用ObjectMap绘制和橡皮擦
+	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
+		tile_map_draw.set_drawing_enabled(true)
+		if tile_map_draw.has_method("set_brush_mode"):
+			tile_map_draw.set_brush_mode(true)  # 设置为绘制模式
+		
+		# 设置自定义图块坐标（如果提供）
+		if custom_atlas_coords != Vector2i(-1, -1) and tile_map_draw.has_method("set_custom_atlas_coords"):
+			tile_map_draw.set_custom_atlas_coords(custom_atlas_coords)
+		else:
+			# 清除自定义图块坐标
+			if tile_map_draw.has_method("clear_custom_atlas_coords"):
+				tile_map_draw.clear_custom_atlas_coords()
+	
+	if object_map_layer and object_map_layer.has_method("stop_placing_object"):
+		object_map_layer.stop_placing_object()
+		object_map_layer.drawing_enabled = false
+	
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	
+	print("切换到TileMap绘图模式", 
+		  " (自定义图块坐标: ", custom_atlas_coords, ")" if custom_atlas_coords != Vector2i(-1, -1) else "")
 
 # 获取当前绘图模式
 func get_current_drawing_mode() -> DrawingMode:
@@ -164,7 +185,16 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 	
 	match item_type:
 		ItemButton.ItemType.TILE:
-			switch_to_tilemap_mode()
+			# 检查按钮名称，为不同的Tile按钮设置不同的图块坐标
+			if "TileSingle" in button.name:
+				# ItemButtonTileSingle按钮，设置atlas_coords为(0, 4)
+				switch_to_tilemap_mode_with_coords(Vector2i(0, 4))
+			elif "TileSemiSolid" in button.name:
+				# ItemButtonTileSemiSolid按钮，设置atlas_coords为(1, 4)
+				switch_to_tilemap_mode_with_coords(Vector2i(1, 4))
+			else:
+				# 其他Tile按钮，使用默认行为
+				switch_to_tilemap_mode()
 		ItemButton.ItemType.OBJECT:
 			# 使用按钮的object_name属性
 			object_name = button.object_name
