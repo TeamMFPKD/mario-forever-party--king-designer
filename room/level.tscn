@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene load_steps=98 format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap_draw.gd" id="1_ju58f"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/game_room_size.gd" id="1_pey40"]
@@ -23,15 +23,26 @@
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="20_iovuq"]
 [ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="20_j8vv5"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="21_b64qb"]
+[ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/tilemap/tile_set_style.gd" id="21_xct0x"]
+[ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="22_c6bpw"]
 [ext_resource type="Texture2D" uid="uid://ciu4jkh28vrfr" path="res://sprite/pipe/pipe_horizontal.png" id="22_j8vv5"]
+[ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://sprite/tile/tile_castle_b.png" id="23_2hpln"]
 [ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="23_iovuq"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/pipe_color.gd" id="23_uuoyo"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="24_4df1a"]
+[ext_resource type="Texture2D" uid="uid://5stdy61pmtog" path="res://sprite/tile/tile_cave.png" id="24_gc7qq"]
+[ext_resource type="Texture2D" uid="uid://ejbgmhyor4n6" path="res://sprite/tile/tile_dusk.png" id="25_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="25_w152k"]
+[ext_resource type="Texture2D" uid="uid://dagnbicl3nhg3" path="res://sprite/tile/tile_night.png" id="26_m8a77"]
 [ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="27_4fasx"]
+[ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="27_5yikb"]
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="28_c2yf8"]
+[ext_resource type="Texture2D" uid="uid://dmab4gsr188r3" path="res://sprite/tile/tile_sand.png" id="28_iytch"]
+[ext_resource type="Texture2D" uid="uid://dt1kt8637l2yy" path="res://sprite/tile/tile_snow.png" id="29_mjqcm"]
 [ext_resource type="Texture2D" uid="uid://4lr60loieckk" path="res://sprite/bonus/super_star.png" id="29_rqu2a"]
 [ext_resource type="Texture2D" uid="uid://boa8ojba4ua7m" path="res://sprite/bonus/poisonous_mushroom.png" id="29_u817j"]
+[ext_resource type="Texture2D" uid="uid://c24qvkx0721j3" path="res://sprite/tile/tile_snow_b.png" id="30_7cfpr"]
+[ext_resource type="Texture2D" uid="uid://bb83c57feb5h2" path="res://sprite/tile/tile_volcano.png" id="31_qq7db"]
 [ext_resource type="Texture2D" uid="uid://bg7eb81h4ii2r" path="res://sprite/bonus/coin.png" id="31_x878y"]
 [ext_resource type="Texture2D" uid="uid://bc4d5afdplmyd" path="res://sprite/bonus/brick.png" id="32_pra1m"]
 [ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="34_ctfp2"]
@@ -51,6 +62,13 @@
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="48_uuoyo"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="49_meded"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="50_28a77"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m4j1h"]
+load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5m21x"]
+atlas = SubResource("CompressedTexture2D_m4j1h")
+region = Rect2(256, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
 atlas = ExtResource("20_iovuq")
@@ -341,10 +359,36 @@ metadata/_edit_lock_ = true
 
 [node name="ItemButtonTile" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 1360.0
-offset_top = -200.0
-offset_right = 1513.0
-offset_bottom = -46.0
+offset_left = 1208.0
+offset_top = -152.0
+offset_right = 1361.0
+offset_bottom = 2.0
+item_type = 0
+
+[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTile/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_5m21x")
+
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/ItemButtonTile/ButtonTexture/ItemPreview" index="0"]
+script = ExtResource("21_xct0x")
+theme_to_tile_preview = Dictionary[int, Texture2D]({
+0: ExtResource("22_c6bpw"),
+1: ExtResource("23_2hpln"),
+2: ExtResource("24_gc7qq"),
+3: ExtResource("25_3f3ja"),
+4: ExtResource("26_m8a77"),
+5: ExtResource("27_5yikb"),
+6: ExtResource("28_iytch"),
+7: ExtResource("29_mjqcm"),
+8: ExtResource("30_7cfpr"),
+9: ExtResource("31_qq7db")
+})
+
+[node name="ItemButtonTileSingle" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 1384.0
+offset_top = -152.0
+offset_right = 1537.0
+offset_bottom = 2.0
 item_type = 0
 
 [node name="ItemButtonEraser" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
@@ -994,6 +1038,7 @@ metadata/_edit_lock_ = true
 [connection signal="pressed" from="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLoadTest/SaveLoadTest2/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 
 [editable path="GameRoomSize/Items/ItemButtonTile"]
+[editable path="GameRoomSize/Items/ItemButtonTileSingle"]
 [editable path="GameRoomSize/Items/ItemButtonEraser"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle"]
