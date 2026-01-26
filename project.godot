@@ -21,7 +21,8 @@ config/icon="uid://bijlbaumcevx5"
 
 [autoload]
 
-InputHandlerSingleton="*res://scene/input_handler.tscn"
+InputHandlerSingleton="*res://scene/utils/input_handler.tscn"
+PlatformUtilsSingleton="*res://scene/utils/platform_utils.tscn"
 
 [display]
 
