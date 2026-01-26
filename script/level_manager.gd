@@ -34,6 +34,9 @@ enum LevelThemeEnum {
 
 var level_data_dict: Dictionary
 
+func _ready() -> void:
+	update_theme()
+
 func get_level_data_json() -> String:
 	tile_data = tile_map.tile_map_data
 
@@ -94,5 +97,11 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	
 func update_theme() -> void:
 	# Update TileMap and Background
-	tile_set_manager.update_tile_set(level_theme)
-	bgp_manager.update_bgp(level_theme)
+	if tile_set_manager != null:
+		tile_set_manager.update_tile_set(level_theme)
+	else:
+		push_warning("TileSetManager is null!")
+	if bgp_manager != null:
+		bgp_manager.update_bgp(level_theme)
+	else:
+		push_warning("BgpManager is null!")

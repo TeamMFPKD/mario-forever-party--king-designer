@@ -13,6 +13,8 @@ script = ExtResource("1_8t1g1")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_uuoyo")
 
 [node name="OffsetMarker" parent="." instance=ExtResource("3_irlhx")]
+position = Vector2(0, -8)

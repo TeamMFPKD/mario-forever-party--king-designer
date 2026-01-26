@@ -6,6 +6,7 @@ static var level_manager: LevelManager
 func _ready() -> void:
 	level_manager = get_tree().get_first_node_in_group("level_manager") as LevelManager
 	level_manager.level_theme_changed.connect(update_pipe_color)
+	update_pipe_color(level_manager.level_theme)
 
 func update_pipe_color(level_theme: LevelManager.LevelThemeEnum) -> void:
 	match level_theme:
