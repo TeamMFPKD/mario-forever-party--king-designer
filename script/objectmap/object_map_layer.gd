@@ -110,6 +110,11 @@ func place_object_at_position(position: Vector2):
 		print("ObjectMapLayer: 未找到对象: ", current_object_name)
 		return
 	
+	# 如果是player对象，先删除所有已存在的player对象
+	if current_object_name == "player":
+		remove_all_objects_of_type("player")
+		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
+	
 	# 将位置对齐到32x32网格
 	var grid_position = align_to_grid(position)
 	
@@ -168,6 +173,20 @@ func clear_all_objects():
 		if object_data.has("instance") and is_instance_valid(object_data["instance"]):
 			object_data["instance"].queue_free()
 	objects.clear()
+
+# 删除特定类型的所有对象
+func remove_all_objects_of_type(object_name: String):
+	var objects_to_remove = []
+	for object_data in objects:
+		if object_data.has("object_name") and object_data["object_name"] == object_name:
+			objects_to_remove.append(object_data)
+	
+	for object_data in objects_to_remove:
+		if object_data.has("instance") and is_instance_valid(object_data["instance"]):
+			object_data["instance"].queue_free()
+		objects.erase(object_data)
+	
+	print("已删除所有类型为 '", object_name, "' 的对象，共删除 ", objects_to_remove.size(), " 个")
 
 # 保存对象数据（用于关卡保存）
 func get_object_data() -> Array:
