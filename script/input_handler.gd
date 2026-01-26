@@ -1,3 +1,4 @@
+# 修改后的 input_handler.gd
 extends Node
 
 class_name InputHandler
@@ -20,23 +21,36 @@ func _input(event):
 	# 处理鼠标点击事件
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			handle_click_event(event.pressed, event.position)
+			var world_position = convert_screen_to_world(event.position)
+			handle_click_event(event.pressed, world_position)
 	
 	# 处理鼠标移动事件
 	elif event is InputEventMouseMotion:
+		var world_position = convert_screen_to_world(event.position)
 		if is_clicking:
-			handle_drag_event(event.position)
+			handle_drag_event(world_position)
 		else:
-			current_position = event.position
+			current_position = world_position
 	
 	# 处理触摸屏点击事件
 	elif event is InputEventScreenTouch:
-		handle_click_event(event.pressed, event.position)
+		var world_position = convert_screen_to_world(event.position)
+		handle_click_event(event.pressed, world_position)
 	
 	# 处理触摸屏拖拽事件
 	elif event is InputEventScreenDrag:
+		var world_position = convert_screen_to_world(event.position)
 		if is_clicking:
-			handle_drag_event(event.position)
+			handle_drag_event(world_position)
+
+func convert_screen_to_world(screen_position: Vector2) -> Vector2:
+	# 获取视口
+	var viewport = get_viewport()
+	if viewport:
+		# 使用视口的画布变换将屏幕坐标转换为世界坐标
+		var canvas_transform = viewport.get_canvas_transform()
+		return canvas_transform.affine_inverse() * screen_position
+	return screen_position
 
 func handle_click_event(pressed: bool, position: Vector2):
 	is_clicking = pressed
