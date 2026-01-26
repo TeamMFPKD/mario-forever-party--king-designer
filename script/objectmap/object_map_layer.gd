@@ -47,16 +47,68 @@ func setup_input_handler():
 			input_handler.input_clicked.connect(_on_input_clicked)
 		if not input_handler.input_released.is_connected(_on_input_released):
 			input_handler.input_released.connect(_on_input_released)
+		# 新增：连接拖拽信号
+		if not input_handler.input_dragged.is_connected(_on_input_dragged):
+			input_handler.input_dragged.connect(_on_input_dragged)
 		print("ObjectMapLayer: InputHandler signals connected successfully")
 	else:
 		print("ObjectMapLayer: Error: Failed to find or create InputHandler")
 
 func _on_input_clicked(position: Vector2):
 	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
-		place_object_at_position(position)
+		place_object_at_position(position, true)
+
+# 新增：处理拖拽事件
+func _on_input_dragged(position: Vector2):
+	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
+		# 将位置对齐到网格
+		var grid_position = align_to_grid(position)
+		# 检查该网格位置是否已有对象
+		if not is_grid_position_occupied(grid_position):
+			place_object_at_position(position, false)
 
 func _on_input_released(position: Vector2):
 	is_placing = false
+
+# 在指定位置放置对象
+func place_object_at_position(position: Vector2, check_duplicate: bool = true):
+	if not database_holder or not database_holder.object_database or current_object_name == "":
+		return
+	
+	# 查找对应的对象条目
+	var entry = find_object_by_name(current_object_name)
+	if not entry or not entry.object_scene:
+		print("ObjectMapLayer: 未找到对象: ", current_object_name)
+		return
+	
+	# 如果是player对象，先删除所有已存在的player对象
+	if current_object_name == "player":
+		remove_all_objects_of_type("player")
+		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
+	
+	# 将位置对齐到32x32网格
+	var grid_position = align_to_grid(position)
+	
+	# 检查该网格位置是否已有对象（仅在需要时检查）
+	if check_duplicate and is_grid_position_occupied(grid_position):
+		print("ObjectMapLayer: 该网格位置已有对象，不进行绘制")
+		return
+	
+	var scene_instance = entry.object_scene.instantiate()
+	if scene_instance is Node2D:
+		scene_instance.global_position = grid_position
+		add_child(scene_instance)
+		
+		# 保存对象信息
+		var object_data = {
+			"object_name": entry.object_name,
+			"object_scene": entry.object_scene,
+			"position": grid_position,
+			"instance": scene_instance
+		}
+		objects.append(object_data)
+		
+		print("放置对象: ", entry.object_name, " 在网格位置: ", grid_position)
 
 # 公共方法：开始放置对象（通过对象名称）
 func start_placing_object(object_name: String):
@@ -98,46 +150,6 @@ func find_object_by_name(object_name: String) -> ObjectDatabaseEntry:
 			return entry
 	
 	return null
-
-# 在指定位置放置对象
-func place_object_at_position(position: Vector2):
-	if not database_holder or not database_holder.object_database or current_object_name == "":
-		return
-	
-	# 查找对应的对象条目
-	var entry = find_object_by_name(current_object_name)
-	if not entry or not entry.object_scene:
-		print("ObjectMapLayer: 未找到对象: ", current_object_name)
-		return
-	
-	# 如果是player对象，先删除所有已存在的player对象
-	if current_object_name == "player":
-		remove_all_objects_of_type("player")
-		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
-	
-	# 将位置对齐到32x32网格
-	var grid_position = align_to_grid(position)
-	
-	# 检查该网格位置是否已有对象
-	if is_grid_position_occupied(grid_position):
-		print("ObjectMapLayer: 该网格位置已有对象，不进行绘制")
-		return
-	
-	var scene_instance = entry.object_scene.instantiate()
-	if scene_instance is Node2D:
-		scene_instance.global_position = grid_position
-		add_child(scene_instance)
-		
-		# 保存对象信息
-		var object_data = {
-			"object_name": entry.object_name,
-			"object_scene": entry.object_scene,
-			"position": grid_position,
-			"instance": scene_instance
-		}
-		objects.append(object_data)
-		
-		print("放置对象: ", entry.object_name, " 在网格位置: ", grid_position)
 
 # 移除指定位置的对象
 func remove_object_at_position(position: Vector2):
@@ -213,4 +225,4 @@ func load_object_data(object_data: Array):
 		# 在数据库中查找对应的对象
 		if database_holder and database_holder.object_database:
 			current_object_name = object_name
-			place_object_at_position(position)
+			place_object_at_position(position, true)
