@@ -121,7 +121,14 @@ func place_tile_at_cursor(cursor_pos):
 			emit_place_sound()
 	else:
 		# 擦除瓦片
-		tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
+		# 检查该位置是否有瓦片
+		var has_tile = tile_map.get_cell_source_id(cell_coords) != -1
+		
+		# 只有当存在瓦片时才擦除并播放音效
+		if has_tile:
+			tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
+			# 发射擦除音效信号
+			emit_erase_sound()
 		
 		# 在橡皮擦模式下，同时调用LevelControl的擦除功能来清除object
 		call_level_control_erase(cursor_pos)
@@ -134,6 +141,16 @@ func emit_place_sound():
 		for child in level_node.get_children():
 			if child is LevelControl:
 				child.emit_signal("play_sound_place")
+				break
+
+# 新增：发射擦除音效的函数
+func emit_erase_sound():
+	# 获取LevelControl节点并发射信号
+	var level_node = get_parent().get_parent()  # 获取Level节点
+	if level_node:
+		for child in level_node.get_children():
+			if child is LevelControl:
+				child.emit_signal("play_sound_erase")
 				break
 
 # 在橡皮擦模式下调用LevelControl的擦除功能
@@ -171,8 +188,16 @@ func erase_tile_at_position(position: Vector2):
 	)
 
 	var cell_coords_array: Array = [cell_coords]
-	# 擦除瓦片
-	tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
+	
+	# 检查该位置是否有瓦片
+	var has_tile = tile_map.get_cell_source_id(cell_coords) != -1
+	
+	# 只有当存在瓦片时才擦除并播放音效
+	if has_tile:
+		# 擦除瓦片
+		tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
+		# 发射擦除音效信号
+		emit_erase_sound()
 
 # 设置自定义图块坐标
 func set_custom_atlas_coords(coords: Vector2i):
