@@ -1,0 +1,301 @@
+[gd_scene format=3 uid="uid://cau4ehj6180du"]
+
+[ext_resource type="Texture2D" uid="uid://cja2ui8hrqfce" path="res://sprite/background/glassland.bg.png" id="1_fob6w"]
+[ext_resource type="Texture2D" uid="uid://d017d108uv42j" path="res://sprite/background/cave.bg.png" id="2_hupnc"]
+[ext_resource type="Texture2D" uid="uid://bylfcnl2fi3h2" path="res://sprite/background/underwater.bg.png" id="3_oht2i"]
+[ext_resource type="Texture2D" uid="uid://pdryhu0xyfyv" path="res://sprite/background/starland.bg.png" id="4_sb6lk"]
+[ext_resource type="Texture2D" uid="uid://b7mk81dvw74c" path="res://sprite/background/volcano_bottom.bg.png" id="5_tx6e5"]
+[ext_resource type="Texture2D" uid="uid://ln33jwb45rgj" path="res://sprite/background/volcano_sky.bg.png" id="6_8uqc2"]
+[ext_resource type="Texture2D" uid="uid://cupw5tcrylk5w" path="res://sprite/background/snow.bg.png" id="7_1lc6x"]
+[ext_resource type="Texture2D" uid="uid://jwpx88yx23r7" path="res://sprite/background/castle.bg.png" id="8_uhml1"]
+[ext_resource type="Texture2D" uid="uid://dx0jtouycgpl3" path="res://sprite/background/lava_castle_pattern_normal.bg.png" id="9_krtku"]
+[ext_resource type="Texture2D" uid="uid://5s4jmq2ypbel" path="res://sprite/background/lava_castle_pattern_bottom.bg.png" id="10_r68rq"]
+
+[sub_resource type="Gradient" id="Gradient_w3slq"]
+colors = PackedColorArray(0.56078434, 0.6784314, 1, 1, 0.92941177, 0.9490196, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nr17n"]
+gradient = SubResource("Gradient_w3slq")
+width = 640
+height = 480
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_0qndg"]
+colors = PackedColorArray(0, 0, 0.54509807, 1, 0.5137255, 0.5137255, 0.6862745, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_agxn0"]
+gradient = SubResource("Gradient_0qndg")
+width = 640
+height = 480
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_7pdba"]
+colors = PackedColorArray(0.2509804, 0.3137255, 0.21960784, 1, 0.2509804, 0.3137255, 0.21960784, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_i6eck"]
+gradient = SubResource("Gradient_7pdba")
+width = 640
+height = 480
+
+[sub_resource type="Gradient" id="Gradient_20bvq"]
+colors = PackedColorArray(0.7490196, 0.7490196, 0.7490196, 1, 0.88235295, 0.88235295, 0.88235295, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jvesi"]
+gradient = SubResource("Gradient_20bvq")
+width = 640
+height = 480
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_tyk2y"]
+colors = PackedColorArray(0, 0, 0, 1, 0.5411765, 0, 0.10980392, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0oh16"]
+gradient = SubResource("Gradient_tyk2y")
+width = 640
+height = 480
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_gn81o"]
+colors = PackedColorArray(1, 0.41568628, 0.19215687, 1, 1, 0.9764706, 0.5764706, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bgyin"]
+gradient = SubResource("Gradient_gn81o")
+width = 640
+height = 480
+fill_to = Vector2(0, 1)
+
+[node name="BgsForPreviewTest" type="HBoxContainer" unique_id=879581861]
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 1290.0
+offset_bottom = 151.0
+
+[node name="BgPreviewOverworld" type="Control" parent="." unique_id=753346438]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Gradient" type="Sprite2D" parent="BgPreviewOverworld" unique_id=63984931]
+use_parent_material = true
+position = Vector2(69.99999, 52)
+scale = Vector2(0.21874999, 0.21666667)
+texture = SubResource("GradientTexture2D_nr17n")
+metadata/_edit_lock_ = true
+
+[node name="Bgp3" type="Node2D" parent="BgPreviewOverworld" unique_id=1898850227]
+use_parent_material = true
+position = Vector2(3.8146973e-06, 103.99999)
+scale = Vector2(0.22, 0.22)
+metadata/_edit_lock_ = true
+
+[node name="Bottom" type="Sprite2D" parent="BgPreviewOverworld/Bgp3" unique_id=699374317]
+use_parent_material = true
+texture = ExtResource("1_fob6w")
+offset = Vector2(526, -70)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewCave" type="Control" parent="." unique_id=745010033]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Bgp5" type="Node2D" parent="BgPreviewCave" unique_id=1740051960]
+use_parent_material = true
+position = Vector2(8, 8)
+scale = Vector2(0.3, 0.3)
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D" type="Parallax2D" parent="BgPreviewCave/Bgp5" unique_id=175544401]
+use_parent_material = true
+scroll_offset = Vector2(-40, -13.333333)
+repeat_size = Vector2(511, 499)
+repeat_times = 3
+metadata/_edit_lock_ = true
+
+[node name="Normal" type="Sprite2D" parent="BgPreviewCave/Bgp5/Parallax2D" unique_id=897858583]
+use_parent_material = true
+position = Vector2(-13.333333, -66.666664)
+texture = ExtResource("2_hupnc")
+offset = Vector2(255, 224)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewSand" type="Control" parent="." unique_id=1834179775]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Gradient" type="Sprite2D" parent="BgPreviewSand" unique_id=61433303]
+use_parent_material = true
+position = Vector2(70, 52)
+scale = Vector2(0.21875001, 0.21666667)
+texture = SubResource("GradientTexture2D_nr17n")
+metadata/_edit_lock_ = true
+
+[node name="Bgp7" type="Node2D" parent="BgPreviewSand" unique_id=922830266]
+use_parent_material = true
+position = Vector2(-16, 104)
+scale = Vector2(0.3, 0.3)
+metadata/_edit_lock_ = true
+
+[node name="Parallax2DBottom" type="Parallax2D" parent="BgPreviewSand/Bgp7" unique_id=1958041959]
+use_parent_material = true
+repeat_size = Vector2(828, 0)
+repeat_times = 2
+metadata/_edit_lock_ = true
+
+[node name="Bottom" type="Sprite2D" parent="BgPreviewSand/Bgp7/Parallax2DBottom" unique_id=245656650]
+use_parent_material = true
+texture = ExtResource("3_oht2i")
+offset = Vector2(414, -81)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewStarland" type="Control" parent="." unique_id=853454876]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Gradient" type="Sprite2D" parent="BgPreviewStarland" unique_id=977194759]
+use_parent_material = true
+position = Vector2(70, 52)
+scale = Vector2(0.21874999, 0.21666667)
+texture = SubResource("GradientTexture2D_agxn0")
+metadata/_edit_lock_ = true
+
+[node name="Bgp12" type="Node2D" parent="BgPreviewStarland" unique_id=1318383886]
+use_parent_material = true
+position = Vector2(0, 120)
+scale = Vector2(0.3, 0.3)
+metadata/_edit_lock_ = true
+
+[node name="Parallax2DBottom" type="Parallax2D" parent="BgPreviewStarland/Bgp12" unique_id=1753373079]
+use_parent_material = true
+repeat_size = Vector2(512, 0)
+repeat_times = 3
+metadata/_edit_lock_ = true
+
+[node name="Bottom" type="Sprite2D" parent="BgPreviewStarland/Bgp12/Parallax2DBottom" unique_id=1467883799]
+use_parent_material = true
+texture = ExtResource("4_sb6lk")
+offset = Vector2(256, -89)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewVolcano" type="Control" parent="." unique_id=1731315525]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Bgp18" type="Node2D" parent="BgPreviewVolcano" unique_id=568842919]
+use_parent_material = true
+scale = Vector2(0.22, 0.22)
+metadata/_edit_lock_ = true
+
+[node name="Normal" type="Sprite2D" parent="BgPreviewVolcano/Bgp18" unique_id=1572345003]
+use_parent_material = true
+texture = SubResource("GradientTexture2D_i6eck")
+offset = Vector2(320, 240)
+metadata/_edit_lock_ = true
+
+[node name="Bottom" type="Sprite2D" parent="BgPreviewVolcano/Bgp18" unique_id=742755387]
+use_parent_material = true
+position = Vector2(0, 480)
+texture = ExtResource("5_tx6e5")
+offset = Vector2(320, -84)
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BgPreviewVolcano/Bgp18" unique_id=919467173]
+use_parent_material = true
+texture = ExtResource("6_8uqc2")
+offset = Vector2(320, 135)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewSnow" type="Control" parent="." unique_id=47360835]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Gradient" type="Sprite2D" parent="BgPreviewSnow" unique_id=968391495]
+use_parent_material = true
+position = Vector2(69.99999, 52)
+scale = Vector2(0.21874999, 0.21666667)
+texture = SubResource("GradientTexture2D_jvesi")
+metadata/_edit_lock_ = true
+
+[node name="Bgp3" type="Node2D" parent="BgPreviewSnow" unique_id=818361511]
+use_parent_material = true
+position = Vector2(3.8146973e-06, 103.99999)
+scale = Vector2(0.22, 0.22)
+metadata/_edit_lock_ = true
+
+[node name="Bottom" type="Sprite2D" parent="BgPreviewSnow/Bgp3" unique_id=541470198]
+use_parent_material = true
+texture = ExtResource("7_1lc6x")
+offset = Vector2(526, -70)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewCastle" type="Control" parent="." unique_id=491694292]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Bgp9" type="Node2D" parent="BgPreviewCastle" unique_id=1992575901]
+use_parent_material = true
+position = Vector2(-152, 228)
+scale = Vector2(0.5, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="Parallax2DNormal" type="Parallax2D" parent="BgPreviewCastle/Bgp9" unique_id=656346832]
+use_parent_material = true
+scroll_scale = Vector2(0, 1)
+repeat_size = Vector2(1022, 480)
+repeat_times = 3
+metadata/_edit_lock_ = true
+
+[node name="Normal" type="Sprite2D" parent="BgPreviewCastle/Bgp9/Parallax2DNormal" unique_id=1797309101]
+use_parent_material = true
+texture = ExtResource("8_uhml1")
+offset = Vector2(511, 240)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewCastleB" type="Control" parent="." unique_id=1631941233]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Gradient" type="Sprite2D" parent="BgPreviewCastleB" unique_id=1838723447]
+use_parent_material = true
+position = Vector2(70, 52)
+scale = Vector2(0.21875, 0.21666667)
+texture = SubResource("GradientTexture2D_0oh16")
+metadata/_edit_lock_ = true
+
+[node name="Bgp25" type="Node2D" parent="BgPreviewCastleB" unique_id=1507046782]
+use_parent_material = true
+scale = Vector2(0.2, 0.2)
+metadata/_edit_lock_ = true
+
+[node name="PatternNormal" type="Sprite2D" parent="BgPreviewCastleB/Bgp25" unique_id=1250328678]
+use_parent_material = true
+position = Vector2(-19.999985, 0)
+scale = Vector2(1, 480)
+texture = ExtResource("9_krtku")
+offset = Vector2(512, 0.5)
+metadata/_edit_lock_ = true
+
+[node name="Bottom" type="Sprite2D" parent="BgPreviewCastleB/Bgp25" unique_id=723661492]
+use_parent_material = true
+position = Vector2(-20.000015, 520)
+texture = ExtResource("10_r68rq")
+offset = Vector2(512, -65)
+metadata/_edit_lock_ = true
+
+[node name="BgPreviewDusk" type="Control" parent="." unique_id=779883465]
+clip_contents = true
+custom_minimum_size = Vector2(138, 103)
+layout_mode = 2
+
+[node name="Gradient" type="Sprite2D" parent="BgPreviewDusk" unique_id=616876703]
+use_parent_material = true
+position = Vector2(70, 52)
+scale = Vector2(0.21875, 0.21666667)
+texture = SubResource("GradientTexture2D_bgyin")
+metadata/_edit_lock_ = true

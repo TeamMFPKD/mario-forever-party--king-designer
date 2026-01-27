@@ -257,6 +257,8 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 	for node in item_groups:
 		if node is Control:
 			var control = node as Control
+			var timer = get_tree().create_timer(0.1)
+			await timer.timeout
 			control.visible = false
 
 	var object_name = ""  # 在函数开头定义object_name变量
