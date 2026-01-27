@@ -1,5 +1,9 @@
 extends Camera2D
 
+class_name LevelCamera
+
+signal limit_changed(top: int, left: int, right: int, bottom: int)
+
 @export var max_speed : float = 16.0
 
 var speed : float = 0.0
@@ -25,3 +29,19 @@ func _physics_process(delta: float) -> void:
 
 	position.x = clamp(position.x, limit_left + 320, limit_right - 320)
 	position.y = clamp(position.y, limit_top + 240, limit_bottom - 240)
+
+func set_limit_top(value):
+	limit_top = value
+	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
+
+func set_limit_left(value):
+	limit_left = value
+	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
+
+func set_limit_right(value):
+	limit_right = value
+	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
+
+func set_limit_bottom(value):
+	limit_bottom = value
+	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)

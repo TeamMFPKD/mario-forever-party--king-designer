@@ -1,4 +1,4 @@
-[gd_scene load_steps=103 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene load_steps=106 format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap_draw.gd" id="1_ju58f"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/game_room_size.gd" id="1_pey40"]
@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="20_c6bpw"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="20_iovuq"]
 [ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="20_j8vv5"]
+[ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/camera_edge.gd" id="21_2hpln"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="21_b64qb"]
 [ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/tilemap/tile_set_style.gd" id="21_xct0x"]
 [ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="22_c6bpw"]
@@ -46,9 +47,11 @@
 [ext_resource type="Texture2D" uid="uid://bb83c57feb5h2" path="res://sprite/tile/tile_volcano.png" id="31_qq7db"]
 [ext_resource type="Texture2D" uid="uid://bg7eb81h4ii2r" path="res://sprite/bonus/coin.png" id="31_x878y"]
 [ext_resource type="Texture2D" uid="uid://bc4d5afdplmyd" path="res://sprite/bonus/brick.png" id="32_pra1m"]
+[ext_resource type="Script" uid="uid://beibejtrilsxy" path="res://scene/item_button_eraser.gd" id="34_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="34_ctfp2"]
 [ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="34_uly8c"]
 [ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="35_f0dhw"]
+[ext_resource type="Texture2D" uid="uid://batjbminyc3b7" path="res://sprite/camare_edge_move.png" id="35_gc7qq"]
 [ext_resource type="Texture2D" uid="uid://cvhrkx7nkaafo" path="res://sprite/enemy/bullet_bill_cannon.png" id="35_m0llv"]
 [ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/buzzy_beetle.png" id="36_56a7w"]
 [ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_stone.png" id="36_tvrr0"]
@@ -287,9 +290,13 @@ background_database = ExtResource("21_b64qb")
 object_database = ExtResource("4_rgrya")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("7_f0xav")
+version = null
 level_theme = 5
+level_size = null
+tile_data = null
+level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
 object_map = NodePath("../ObjectMapLayer")
@@ -309,14 +316,14 @@ script = ExtResource("8_s5qn0")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
 object_map_layer = NodePath("../ObjectMapLayer")
 object_map_draw = NodePath("../ObjectMapLayer/ObjectMapDraw")
-tile_button = NodePath("../../../../Items/ItemButtonTile")
+tile_button = NodePath("../../../../Items/Block/ItemButtonTile")
 button_eraser = NodePath("../../../../Items/ItemButtonEraser")
 metadata/_custom_type_script = "uid://dl0jbge2cmsy8"
 
 [node name="Grid2d" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" instance=ExtResource("2_oqbmf")]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
-tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAA=")
+tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAADAA8AAAALAAMAAAADAA4AAAALAAIAAAADAA0AAAALAAAAAAACAA8AAAAJAAMAAAACAA4AAAAJAAIAAAACAA0AAAAKAAAAAAABAA8AAAAJAAMAAAABAA4AAAAJAAIAAAABAA0AAAAKAAAAAAAAAA8AAAAJAAMAAAAAAA4AAAAJAAIAAAAAAA0AAAAKAAAAAAD//w8AAAAIAAMAAAD//w4AAAAIAAEAAAD//w0AAAAIAAAAAAA=")
 tile_set = ExtResource("4_f0xav")
 
 [node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" node_paths=PackedStringArray("database_holder", "tile_map")]
@@ -349,7 +356,7 @@ metadata/_custom_type_script = "uid://devgf5ccfvhwv"
 script = ExtResource("8_3vbl4")
 level_data_node = NodePath("../LevelManager")
 
-[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" groups=["level_camera"]]
 position = Vector2(320, 240)
 limit_left = 0
 limit_top = 0
@@ -359,6 +366,10 @@ limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 script = ExtResource("20_c6bpw")
+
+[node name="CameraEdge" type="Line2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+closed = true
+script = ExtResource("21_2hpln")
 
 [node name="Items" type="Control" parent="GameRoomSize"]
 layout_mode = 1
@@ -372,18 +383,23 @@ grow_horizontal = 2
 grow_vertical = 0
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonTile" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="Block" type="HBoxContainer" parent="GameRoomSize/Items"]
 layout_mode = 0
-offset_left = 992.0
-offset_top = -544.0
-offset_right = 1145.0
-offset_bottom = -390.0
-item_type = 0
+offset_left = 768.0
+offset_top = -576.0
+offset_right = 1232.0
+offset_bottom = -408.0
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTile/ButtonTexture" index="0"]
+[node name="ItemButtonTile" parent="GameRoomSize/Items/Block" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+item_type = 0
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Block/ItemButtonTile/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_5m21x")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/ItemButtonTile/ButtonTexture/ItemPreview" index="0"]
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTile/ButtonTexture/ItemPreview" index="0"]
 script = ExtResource("21_xct0x")
 theme_to_tile_preview = Dictionary[int, Texture2D]({
 0: ExtResource("22_c6bpw"),
@@ -398,18 +414,16 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 9: ExtResource("31_qq7db")
 })
 
-[node name="ItemButtonTileSingle" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 1136.0
-offset_top = -536.0
-offset_right = 1289.0
-offset_bottom = -382.0
+[node name="ItemButtonTileSingle" parent="GameRoomSize/Items/Block" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 item_type = 0
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTileSingle/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Block/ItemButtonTileSingle/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_2hpln")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0"]
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0"]
 script = ExtResource("21_xct0x")
 theme_to_tile_preview = Dictionary[int, Texture2D]({
 0: ExtResource("22_c6bpw"),
@@ -424,18 +438,16 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 9: ExtResource("31_qq7db")
 })
 
-[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
-layout_mode = 0
-offset_left = 1288.0
-offset_top = -528.0
-offset_right = 1441.0
-offset_bottom = -374.0
+[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/Items/Block" instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
 item_type = 0
+metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonTileSemiSolid/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/Items/Block/ItemButtonTileSemiSolid/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_c6bpw")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0"]
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0"]
 script = ExtResource("21_xct0x")
 theme_to_tile_preview = Dictionary[int, Texture2D]({
 0: ExtResource("22_c6bpw"),
@@ -452,15 +464,27 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 
 [node name="ItemButtonEraser" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 1376.0
+offset_left = 1272.0
 offset_top = 0.0
-offset_right = 1529.0
+offset_right = 1425.0
 offset_bottom = 154.0
+script = ExtResource("34_3f3ja")
 item_type = 2
 
 [node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonEraser/ButtonTexture" index="0"]
 scale = Vector2(7, 7)
 texture = ExtResource("20_1o17k")
+
+[node name="ItemButtonCameraEdge" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+layout_mode = 0
+offset_left = 488.0
+offset_top = -368.0
+offset_right = 641.0
+offset_bottom = -214.0
+item_type = 3
+
+[node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonCameraEdge/ButtonTexture" index="0"]
+texture = ExtResource("35_gc7qq")
 
 [node name="Pipe" type="VBoxContainer" parent="GameRoomSize/Items"]
 layout_mode = 0
@@ -1096,10 +1120,11 @@ metadata/_edit_lock_ = true
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 
-[editable path="GameRoomSize/Items/ItemButtonTile"]
-[editable path="GameRoomSize/Items/ItemButtonTileSingle"]
-[editable path="GameRoomSize/Items/ItemButtonTileSemiSolid"]
+[editable path="GameRoomSize/Items/Block/ItemButtonTile"]
+[editable path="GameRoomSize/Items/Block/ItemButtonTileSingle"]
+[editable path="GameRoomSize/Items/Block/ItemButtonTileSemiSolid"]
 [editable path="GameRoomSize/Items/ItemButtonEraser"]
+[editable path="GameRoomSize/Items/ItemButtonCameraEdge"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle"]
 [editable path="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalDown"]

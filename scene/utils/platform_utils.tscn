@@ -6,6 +6,9 @@
 script/source = "extends Node
 
 func _ready() -> void:
+	if process_mode == ProcessMode.PROCESS_MODE_DISABLED:
+		return
+	
 	var parent = get_parent() as PlatformUtils
 	push_error(parent.is_desktop_platform())
 	push_error(parent.get_platform_info())

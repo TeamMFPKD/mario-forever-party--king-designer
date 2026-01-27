@@ -23,10 +23,13 @@ enum LevelThemeEnum {
 		level_theme = value
 		update_theme()
 		emit_signal("level_theme_changed", level_theme)
-		
+
+@export var level_size: Array = [0, 0, 0, 0] # top, left, right, bottom
+
 @export var tile_data: PackedByteArray
 
 @export_category("References")
+@export var level_camera: LevelCamera
 @export var tile_map : TileMapLayer
 @export var tile_set_manager : TileSetManager
 @export var object_map : ObjectMapLayer
@@ -38,6 +41,8 @@ func _ready() -> void:
 	update_theme()
 
 func get_level_data_json() -> String:
+	level_size = [level_camera.limit_top, level_camera.limit_left, level_camera.limit_right, level_camera.limit_bottom]
+
 	tile_data = tile_map.tile_map_data
 
 	# 使用ObjectMapLayer的get_object_data方法获取正确的保存格式
@@ -50,6 +55,7 @@ func get_level_data_json() -> String:
 	level_data_dict = {
 		"version": version,
 		"level_theme": level_theme,
+		"level_size": level_size,
 		"tilemap_data": tile_data as Array,
 		"object_data": object_data
 	}
@@ -68,6 +74,12 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	level_data_dict = json.data
 
 	version = level_data_dict.get("version", "1.0")
+
+	level_size = level_data_dict.get("level_size", [0, 0, 640, 480])
+	level_camera.set_limit_top(level_size[0])
+	level_camera.set_limit_left(level_size[1])
+	level_camera.set_limit_right(level_size[2])
+	level_camera.set_limit_bottom(level_size[3])
 
 	level_theme = level_data_dict.get("level_theme", LevelThemeEnum.OVERWORLD)
 	

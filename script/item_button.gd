@@ -5,7 +5,8 @@ class_name ItemButton
 enum ItemType {
 	TILE,
 	OBJECT,
-	ERASER
+	ERASER,
+	OTHER
 }
 
 @export var item_type: ItemType = ItemType.OBJECT

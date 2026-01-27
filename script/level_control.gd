@@ -164,7 +164,7 @@ func is_objectmap_mode() -> bool:
 func is_eraser_mode() -> bool:
 	return current_drawing_mode == DrawingMode.ERASER
 
-# 橡皮擦功能：在指定位置清除Tile和Object
+# 橡皮擦功能：在指定位置清除Tile和Object（受当前模式限制）
 func erase_at_position(position: Vector2):
 	if current_drawing_mode != DrawingMode.ERASER:
 		return
@@ -178,6 +178,19 @@ func erase_at_position(position: Vector2):
 		object_map_layer.remove_object_at_position(position)
 	
 	print("橡皮擦：清除位置 ", position)
+
+# 新增：不受模式限制的清除功能（用于右键点击）
+func erase_at_position_immediate(position: Vector2):
+	# 不检查当前模式，直接清除Tile和Object
+	# 清除Tile
+	if tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
+		tile_map_draw.erase_tile_at_position(position)
+	
+	# 清除Object
+	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
+		object_map_layer.remove_object_at_position(position)
+	
+	print("右键清除：清除位置 ", position)
 
 # 处理ItemButton的按下事件
 func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton):
