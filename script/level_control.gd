@@ -253,14 +253,6 @@ func erase_at_position_immediate(position: Vector2):
 
 # 处理ItemButton的按下事件
 func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton):
-	var item_groups = get_tree().get_nodes_in_group("item_group")
-	for node in item_groups:
-		if node is Control:
-			var control = node as Control
-			var timer = get_tree().create_timer(0.1)
-			await timer.timeout
-			control.visible = false
-
 	var object_name = ""  # 在函数开头定义object_name变量
 	
 	match item_type:
@@ -288,3 +280,12 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 			switch_to_eraser_mode()
 	
 	print("ItemButton按下: ", button.name, " 类型: ", item_type, " 对象名称: ", object_name)
+
+	var item_groups = get_tree().get_nodes_in_group("item_group")
+	for node in item_groups:
+		if node is Control:
+			var control = node as Control
+			var timer = get_tree().create_timer(0.1)
+			await timer.timeout
+			control.visible = false
+			
