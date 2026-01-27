@@ -178,7 +178,7 @@ func remove_object_at_position(position: Vector2):
 		print("橡皮擦：清除对象在位置 ", grid_position)
 		return true
 	
-	print("橡皮擦：位置 ", grid_position, " 没有对象")
+	#print("橡皮擦：位置 ", grid_position, " 没有对象")
 	return false
 
 # 获取指定位置的对象

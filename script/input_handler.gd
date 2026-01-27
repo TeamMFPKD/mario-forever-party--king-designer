@@ -26,64 +26,9 @@ func _ready():
 	set_process(true)
 
 func _process(delta):
-	# 获取当前鼠标屏幕位置并转换为世界坐标
-	var mouse_position = get_viewport().get_mouse_position()
-	var world_position = convert_screen_to_world(mouse_position)
-	
-	# 检查鼠标按键是否仍在按下状态，即使没有移动也持续执行操作
-	if is_clicking:
-		# 持续发送拖拽信号以保持绘制/删除操作
-		perform_operation_at_position(world_position)
-	
-	if is_right_clicking:
-		# 持续清除操作
-		perform_erase_at_position(world_position)
-
-func perform_operation_at_position(pos: Vector2):
-	# 计算当前网格位置
-	var viewport = get_viewport()
-	if not viewport:
-		return
-	
-	# 获取TileMapLayer节点以计算网格坐标
-	var level_node = get_parent()
-	if level_node:
-		var tile_map_draw = level_node.get_node_or_null("TileMapLayer/TileMapDraw")
-		if tile_map_draw and tile_map_draw.tile_map and tile_map_draw.tile_map.tile_set:
-			var cell_size = tile_map_draw.tile_map.tile_set.tile_size
-			var grid_pos = Vector2i(
-				floor(pos.x / cell_size.x),
-				floor(pos.y / cell_size.y)
-			)
-			
-			# 只有在网格位置发生变化时才执行操作，避免重复操作同一网格
-			if grid_pos != last_operation_grid_pos:
-				last_operation_grid_pos = grid_pos
-				input_dragged.emit(pos)
-
-func perform_erase_at_position(pos: Vector2):
-	# 计算当前网格位置
-	var viewport = get_viewport()
-	if not viewport:
-		return
-	
-	# 获取TileMapLayer节点以计算网格坐标
-	var level_node = get_parent()
-	if level_node:
-		var tile_map_draw = level_node.get_node_or_null("TileMapLayer/TileMapDraw")
-		if tile_map_draw and tile_map_draw.tile_map and tile_map_draw.tile_map.tile_set:
-			var cell_size = tile_map_draw.tile_map.tile_set.tile_size
-			var grid_pos = Vector2i(
-				floor(pos.x / cell_size.x),
-				floor(pos.y / cell_size.y)
-			)
-			
-			# 只有在网格位置发生变化时才执行操作，避免重复操作同一网格
-			if grid_pos != last_operation_grid_pos:
-				last_operation_grid_pos = grid_pos
-				var level_control = get_tree().get_first_node_in_group("level_control") as LevelControl
-				if level_control:
-					level_control.erase_at_position_immediate(pos)
+	# 注释掉_process函数中的鼠标事件处理，只让_input函数处理
+	# 这样可以避免重复处理鼠标事件
+	pass
 
 func _input(event):
 	# 重置上次操作网格位置，因为鼠标可能移动到了新的位置
@@ -125,9 +70,25 @@ func convert_screen_to_world(screen_position: Vector2) -> Vector2:
 	# 获取视口
 	var viewport = get_viewport()
 	if viewport:
-		# 使用视口的画Canvas变换将屏幕坐标转换为世界坐标
-		var canvas_transform = viewport.get_canvas_transform()
-		return canvas_transform.affine_inverse() * screen_position
+		# 获取视口大小
+		var viewport_size = viewport.get_visible_rect().size
+		
+		# 只处理游戏视口（640x480）的坐标转换
+		# 如果视口大小是640x480，说明这是游戏视口，应该处理
+		# 如果视口大小是1920x1080，说明是主视口，应该忽略
+		if viewport_size.x == 640 and viewport_size.y == 480:
+			# 应用视口的Canvas变换
+			var canvas_transform = viewport.get_canvas_transform()
+			var world_pos = canvas_transform.affine_inverse() * screen_position
+			
+			#print("游戏视口处理 - 屏幕坐标: ", screen_position, " 视口大小: ", viewport_size, " 世界坐标: ", world_pos)
+			
+			return world_pos
+		else:
+			# 主视口，返回无效坐标或原坐标
+			#print("主视口忽略 - 屏幕坐标: ", screen_position, " 视口大小: ", viewport_size)
+			return Vector2(-9999, -9999)  # 返回一个明显无效的坐标
+	
 	return screen_position
 
 func handle_click_event(pressed: bool, position: Vector2):

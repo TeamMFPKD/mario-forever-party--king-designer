@@ -216,6 +216,9 @@ func erase_at_position_immediate(position: Vector2):
 	var has_tile = false
 	var has_object = false
 	
+	# 调试输出（已注释掉）
+	# print("开始清除操作，世界坐标: ", position)
+	
 	# 检查TileMap
 	if tile_map_draw and tile_map_draw.tile_map:
 		# 将世界坐标转换为本地坐标
@@ -228,11 +231,15 @@ func erase_at_position_immediate(position: Vector2):
 		)
 		# 检查该位置是否有瓦片
 		has_tile = tile_map_draw.tile_map.get_cell_source_id(cell_coords) != -1
+		
+		# print("TileMap本地坐标: ", local_pos, " 单元格坐标: ", cell_coords, " 是否有瓦片: ", has_tile)
 	
 	# 检查ObjectMap
 	if object_map_layer:
 		var grid_position = object_map_layer.align_to_grid(position)
 		has_object = object_map_layer.is_grid_position_occupied(grid_position)
+		
+		# print("ObjectMap网格位置: ", grid_position, " 是否有对象: ", has_object)
 	
 	# 只有当存在tile或object时才播放音效
 	var should_emit_sound = has_tile || has_object
@@ -246,7 +253,7 @@ func erase_at_position_immediate(position: Vector2):
 	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
 		object_map_layer.remove_object_at_position(position)
 	
-	print("右键清除：清除位置 ", position)
+	# print("右键清除：清除位置 ", position)
 	
 	if should_emit_sound:
 		emit_signal("play_sound_erase")
@@ -288,4 +295,3 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 			var timer = get_tree().create_timer(0.1)
 			await timer.timeout
 			control.visible = false
-			
