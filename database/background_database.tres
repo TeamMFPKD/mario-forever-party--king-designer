@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BackgroundDatabase" load_steps=22 format=3 uid="uid://y6cupcof3uqw"]
+[gd_resource type="Resource" script_class="BackgroundDatabase" format=3 uid="uid://y6cupcof3uqw"]
 
 [ext_resource type="Script" uid="uid://cagoblqdkevb1" path="res://script/background/background_database_entry.gd" id="1_irw4x"]
 [ext_resource type="Script" uid="uid://dwcdlj86cjidb" path="res://script/background/background_database.gd" id="2_f6hl6"]

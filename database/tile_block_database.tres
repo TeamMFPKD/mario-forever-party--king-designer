@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TileMapBlockDatabase" load_steps=23 format=3 uid="uid://djxsjh4om7cvk"]
+[gd_resource type="Resource" script_class="TileMapBlockDatabase" format=3 uid="uid://djxsjh4om7cvk"]
 
 [ext_resource type="Script" uid="uid://6as1rookwmdm" path="res://script/tilemap/tile_map_block_database.gd" id="1_hyd7o"]
 [ext_resource type="Script" uid="uid://cyiibxigdwr06" path="res://script/tilemap/tile_map_block_database_entry.gd" id="2_vp2qs"]

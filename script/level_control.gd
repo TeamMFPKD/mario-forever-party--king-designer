@@ -11,6 +11,8 @@ enum DrawingMode {
 # 信号
 signal drawing_mode_changed(mode: DrawingMode)
 signal object_selected(object_name: String)
+signal play_sound_place()
+signal play_sound_erase()
 
 # 当前绘图模式
 var current_drawing_mode: DrawingMode = DrawingMode.TILEMAP
@@ -168,6 +170,31 @@ func is_eraser_mode() -> bool:
 func erase_at_position(position: Vector2):
 	if current_drawing_mode != DrawingMode.ERASER:
 		return
+
+	# 检查该位置是否存在tile或object
+	var has_tile = false
+	var has_object = false
+	
+	# 检查TileMap
+	if tile_map_draw and tile_map_draw.tile_map:
+		# 将世界坐标转换为本地坐标
+		var local_pos = tile_map_draw.to_local(position)
+		# 获取单元格坐标
+		var cell_size = tile_map_draw.tile_map.tile_set.tile_size
+		var cell_coords = Vector2i(
+			floor(local_pos.x / cell_size.x),
+			floor(local_pos.y / cell_size.y)
+		)
+		# 检查该位置是否有瓦片
+		has_tile = tile_map_draw.tile_map.get_cell_source_id(cell_coords) != -1
+	
+	# 检查ObjectMap
+	if object_map_layer:
+		var grid_position = object_map_layer.align_to_grid(position)
+		has_object = object_map_layer.is_grid_position_occupied(grid_position)
+	
+	# 只有当存在tile或object时才播放音效
+	var should_emit_sound = has_tile || has_object
 	
 	# 清除Tile
 	if tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
@@ -178,9 +205,38 @@ func erase_at_position(position: Vector2):
 		object_map_layer.remove_object_at_position(position)
 	
 	print("橡皮擦：清除位置 ", position)
+	
+	if should_emit_sound:
+		emit_signal("play_sound_erase")
+		print("峨峨")
 
 # 新增：不受模式限制的清除功能（用于右键点击）
 func erase_at_position_immediate(position: Vector2):
+	# 检查该位置是否存在tile或object
+	var has_tile = false
+	var has_object = false
+	
+	# 检查TileMap
+	if tile_map_draw and tile_map_draw.tile_map:
+		# 将世界坐标转换为本地坐标
+		var local_pos = tile_map_draw.to_local(position)
+		# 获取单元格坐标
+		var cell_size = tile_map_draw.tile_map.tile_set.tile_size
+		var cell_coords = Vector2i(
+			floor(local_pos.x / cell_size.x),
+			floor(local_pos.y / cell_size.y)
+		)
+		# 检查该位置是否有瓦片
+		has_tile = tile_map_draw.tile_map.get_cell_source_id(cell_coords) != -1
+	
+	# 检查ObjectMap
+	if object_map_layer:
+		var grid_position = object_map_layer.align_to_grid(position)
+		has_object = object_map_layer.is_grid_position_occupied(grid_position)
+	
+	# 只有当存在tile或object时才播放音效
+	var should_emit_sound = has_tile || has_object
+
 	# 不检查当前模式，直接清除Tile和Object
 	# 清除Tile
 	if tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
@@ -191,9 +247,18 @@ func erase_at_position_immediate(position: Vector2):
 		object_map_layer.remove_object_at_position(position)
 	
 	print("右键清除：清除位置 ", position)
+	
+	if should_emit_sound:
+		emit_signal("play_sound_erase")
 
 # 处理ItemButton的按下事件
 func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton):
+	var item_groups = get_tree().get_nodes_in_group("item_group")
+	for node in item_groups:
+		if node is Control:
+			var control = node as Control
+			control.visible = false
+
 	var object_name = ""  # 在函数开头定义object_name变量
 	
 	match item_type:

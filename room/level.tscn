@@ -1,4 +1,4 @@
-[gd_scene load_steps=106 format=4 uid="uid://bnx7r3slvtcdt"]
+[gd_scene format=4 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap_draw.gd" id="1_ju58f"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/game_room_size.gd" id="1_pey40"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" uid="uid://dl0jbge2cmsy8" path="res://script/level_control.gd" id="8_s5qn0"]
 [ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/tilemap/tile_set_manager.gd" id="10_agra6"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="11_1o17k"]
+[ext_resource type="AudioStream" uid="uid://dgfoymd0r2bxs" path="res://sound/yr_EraseMode_Erase_1.wav" id="11_m8a77"]
+[ext_resource type="AudioStream" uid="uid://btnrl14rbqxbg" path="res://sound/SE_touchObject.wav" id="12_5yikb"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/input_handler.gd" id="14_agra6"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="15_rcaub"]
 [ext_resource type="PackedScene" uid="uid://b41scgyg4lqe8" path="res://scene/item_button.tscn" id="16_rgrya"]
@@ -26,6 +28,7 @@
 [ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/camera_edge.gd" id="21_2hpln"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="21_b64qb"]
 [ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/tilemap/tile_set_style.gd" id="21_xct0x"]
+[ext_resource type="PackedScene" uid="uid://0xmx7bfg3xwu" path="res://scene/group_button.tscn" id="22_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="22_c6bpw"]
 [ext_resource type="Texture2D" uid="uid://ciu4jkh28vrfr" path="res://sprite/pipe/pipe_horizontal.png" id="22_j8vv5"]
 [ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://sprite/tile/tile_castle_b.png" id="23_2hpln"]
@@ -47,7 +50,6 @@
 [ext_resource type="Texture2D" uid="uid://bb83c57feb5h2" path="res://sprite/tile/tile_volcano.png" id="31_qq7db"]
 [ext_resource type="Texture2D" uid="uid://bg7eb81h4ii2r" path="res://sprite/bonus/coin.png" id="31_x878y"]
 [ext_resource type="Texture2D" uid="uid://bc4d5afdplmyd" path="res://sprite/bonus/brick.png" id="32_pra1m"]
-[ext_resource type="Script" uid="uid://beibejtrilsxy" path="res://scene/item_button_eraser.gd" id="34_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="34_ctfp2"]
 [ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="34_uly8c"]
 [ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="35_f0dhw"]
@@ -66,6 +68,42 @@
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="48_uuoyo"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="49_meded"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="50_28a77"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhxpi"]
+atlas = ExtResource("44_nar3m")
+region = Rect2(1, 47, 31, 45)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37ha4"]
+atlas = ExtResource("43_tvrr0")
+region = Rect2(0, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvrr0"]
+atlas = ExtResource("38_abu5c")
+region = Rect2(0, 0, 31, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
+atlas = ExtResource("23_iovuq")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
+atlas = ExtResource("31_x878y")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ybyx"]
+atlas = ExtResource("47_28a77")
+region = Rect2(64, 0, 31, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uuoyo"]
+atlas = ExtResource("50_28a77")
+region = Rect2(0, 0, 31, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_em6xi"]
+atlas = ExtResource("46_lhxpi")
+region = Rect2(5, 37, 23, 29)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
+atlas = ExtResource("20_iovuq")
+region = Rect2(0, 0, 448, 64)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m4j1h"]
 load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
@@ -87,10 +125,6 @@ load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c
 [sub_resource type="AtlasTexture" id="AtlasTexture_c6bpw"]
 atlas = SubResource("CompressedTexture2D_xct0x")
 region = Rect2(32, 128, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
-atlas = ExtResource("20_iovuq")
-region = Rect2(0, 0, 448, 64)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_abu5c"]
 load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
@@ -124,14 +158,6 @@ load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7
 atlas = SubResource("CompressedTexture2D_uly8c")
 region = Rect2(96, 0, 64, 448)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
-atlas = ExtResource("31_x878y")
-region = Rect2(0, 0, 33, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
-atlas = ExtResource("23_iovuq")
-region = Rect2(0, 32, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_4fasx"]
 atlas = ExtResource("25_w152k")
 region = Rect2(0, 0, 33, 32)
@@ -152,37 +178,9 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("29_rqu2a")
 region = Rect2(0, 96, 33, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ttk4a"]
-atlas = ExtResource("20_j8vv5")
-region = Rect2(0, 48, 33, 50)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nar3m"]
-atlas = ExtResource("34_uly8c")
-region = Rect2(0, 48, 33, 50)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gp0ro"]
-atlas = ExtResource("35_f0dhw")
-region = Rect2(0, 48, 33, 50)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_etydd"]
-atlas = ExtResource("36_tvrr0")
-region = Rect2(0, 48, 33, 50)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tvrr0"]
-atlas = ExtResource("38_abu5c")
-region = Rect2(0, 0, 31, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lhxpi"]
-atlas = ExtResource("44_nar3m")
-region = Rect2(1, 47, 31, 45)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_28a77"]
 atlas = ExtResource("45_gp0ro")
 region = Rect2(1, 47, 31, 45)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_37ha4"]
-atlas = ExtResource("43_tvrr0")
-region = Rect2(0, 0, 35, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qxym8"]
 atlas = ExtResource("36_56a7w")
@@ -200,36 +198,40 @@ region = Rect2(37, 49, 34, 51)
 atlas = ExtResource("34_ctfp2")
 region = Rect2(0, 0, 33, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_em6xi"]
-atlas = ExtResource("46_lhxpi")
-region = Rect2(5, 37, 23, 29)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttk4a"]
+atlas = ExtResource("20_j8vv5")
+region = Rect2(0, 48, 33, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3ybyx"]
-atlas = ExtResource("47_28a77")
-region = Rect2(64, 0, 31, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_nar3m"]
+atlas = ExtResource("34_uly8c")
+region = Rect2(0, 48, 33, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uuoyo"]
-atlas = ExtResource("50_28a77")
-region = Rect2(0, 0, 31, 48)
+[sub_resource type="AtlasTexture" id="AtlasTexture_gp0ro"]
+atlas = ExtResource("35_f0dhw")
+region = Rect2(0, 48, 33, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_etydd"]
+atlas = ExtResource("36_tvrr0")
+region = Rect2(0, 48, 33, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
 atlas = ExtResource("48_uuoyo")
 region = Rect2(33, 8, 95, 16)
 
-[node name="Room" type="Node2D"]
+[node name="Room" type="Node2D" unique_id=513281532]
 
-[node name="BackgroundParallax2D" type="Parallax2D" parent="."]
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=18426732]
 z_index = -800
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(0, 150)
 repeat_times = 6
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D"]
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=2038605631]
 texture = ExtResource("15_rcaub")
 metadata/_edit_lock_ = true
 
-[node name="GameRoomSize" type="Control" parent="."]
+[node name="GameRoomSize" type="Control" parent="." unique_id=294304425]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -960.0
@@ -239,12 +241,12 @@ offset_bottom = 1504.0
 script = ExtResource("1_pey40")
 metadata/_edit_lock_ = true
 
-[node name="SaveLoadTest" type="VBoxContainer" parent="GameRoomSize"]
+[node name="SaveLoadTest" type="VBoxContainer" parent="GameRoomSize" unique_id=1291501492]
 layout_mode = 1
 offset_right = 176.0
 offset_bottom = 180.0
 
-[node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest"]
+[node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest" unique_id=1483234204]
 layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 15
@@ -253,7 +255,7 @@ text = "Save"
 script = ExtResource("7_8b0r0")
 metadata/_edit_lock_ = true
 
-[node name="LoadButton" type="Button" parent="GameRoomSize/SaveLoadTest"]
+[node name="LoadButton" type="Button" parent="GameRoomSize/SaveLoadTest" unique_id=2104197841]
 layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 15
@@ -261,7 +263,7 @@ theme_override_font_sizes/font_size = 35
 text = "Load"
 metadata/_edit_lock_ = true
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1725420938]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -272,7 +274,7 @@ offset_bottom = 960.0
 grow_horizontal = 2
 metadata/_edit_lock_ = true
 
-[node name="SubViewport" type="SubViewport" parent="GameRoomSize/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="GameRoomSize/SubViewportContainer" unique_id=591046673]
 disable_3d = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
@@ -281,16 +283,16 @@ size_2d_override = Vector2i(640, 480)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="Level" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport"]
+[node name="Level" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=968429229]
 
-[node name="DatabaseHolder" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+[node name="DatabaseHolder" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=597880169]
 script = ExtResource("19_1fopa")
 tile_map_block_database = ExtResource("20_b64qb")
 background_database = ExtResource("21_b64qb")
 object_database = ExtResource("4_rgrya")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("7_f0xav")
 version = null
 level_theme = 5
@@ -303,15 +305,15 @@ object_map = NodePath("../ObjectMapLayer")
 bgp_manager = NodePath("../BgpManager")
 metadata/_custom_type_script = "uid://dcj1u3dweru3n"
 
-[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_data_node")]
+[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=578186261 node_paths=PackedStringArray("level_data_node")]
 script = ExtResource("7_8b0r0")
 level_data_node = NodePath("../LevelManager")
 
-[node name="LoadLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_data_node")]
+[node name="LoadLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=182172579 node_paths=PackedStringArray("level_data_node")]
 script = ExtResource("8_h6smj")
 level_data_node = NodePath("../LevelManager")
 
-[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
+[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
 script = ExtResource("8_s5qn0")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
 object_map_layer = NodePath("../ObjectMapLayer")
@@ -320,43 +322,50 @@ tile_button = NodePath("../../../../Items/Block/ItemButtonTile")
 button_eraser = NodePath("../../../../Items/ItemButtonEraser")
 metadata/_custom_type_script = "uid://dl0jbge2cmsy8"
 
-[node name="Grid2d" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" instance=ExtResource("2_oqbmf")]
+[node name="SoundErase" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=730524893]
+stream = ExtResource("11_m8a77")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+[node name="SoundPlaceObject" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=1146168323]
+stream = ExtResource("12_5yikb")
+volume_db = -15.0
+
+[node name="Grid2d" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1266480464 instance=ExtResource("2_oqbmf")]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1411860041]
 tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAADAA8AAAALAAMAAAADAA4AAAALAAIAAAADAA0AAAALAAAAAAACAA8AAAAJAAMAAAACAA4AAAAJAAIAAAACAA0AAAAKAAAAAAABAA8AAAAJAAMAAAABAA4AAAAJAAIAAAABAA0AAAAKAAAAAAAAAA8AAAAJAAMAAAAAAA4AAAAJAAIAAAAAAA0AAAAKAAAAAAD//w8AAAAIAAMAAAD//w4AAAAIAAEAAAD//w0AAAAIAAAAAAA=")
 tile_set = ExtResource("4_f0xav")
 
-[node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" node_paths=PackedStringArray("database_holder", "tile_map")]
+[node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=899878520 node_paths=PackedStringArray("database_holder", "tile_map")]
 script = ExtResource("10_agra6")
 database_holder = NodePath("../../DatabaseHolder")
 tile_map = NodePath("..")
 
-[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" node_paths=PackedStringArray("tile_map")]
+[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=866892443 node_paths=PackedStringArray("tile_map")]
 script = ExtResource("1_ju58f")
 tile_map = NodePath("..")
 
-[node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("database_holder")]
+[node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=295788680 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("17_1fopa")
 database_holder = NodePath("../DatabaseHolder")
 metadata/_custom_type_script = "uid://omfdsevbgrom"
 
-[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" node_paths=PackedStringArray("object_map_layer")]
+[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" unique_id=87589930 node_paths=PackedStringArray("object_map_layer")]
 script = ExtResource("18_b64qb")
 object_map_layer = NodePath("..")
 
-[node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("database_holder")]
+[node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1317430190 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("11_1o17k")
 database_holder = NodePath("../DatabaseHolder")
 
-[node name="InputHandler" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+[node name="InputHandler" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=2025085452]
 script = ExtResource("14_agra6")
 metadata/_custom_type_script = "uid://devgf5ccfvhwv"
 
-[node name="TestNode" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" node_paths=PackedStringArray("level_data_node")]
+[node name="TestNode" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1660118002 node_paths=PackedStringArray("level_data_node")]
 script = ExtResource("8_3vbl4")
 level_data_node = NodePath("../LevelManager")
 
-[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" groups=["level_camera"]]
+[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1326728474 groups=["level_camera"]]
 position = Vector2(320, 240)
 limit_left = 0
 limit_top = 0
@@ -367,11 +376,11 @@ position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 script = ExtResource("20_c6bpw")
 
-[node name="CameraEdge" type="Line2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
+[node name="CameraEdge" type="Line2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1610602791]
 closed = true
 script = ExtResource("21_2hpln")
 
-[node name="Items" type="Control" parent="GameRoomSize"]
+[node name="Items" type="Control" parent="GameRoomSize" unique_id=2052260363]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -383,14 +392,103 @@ grow_horizontal = 2
 grow_vertical = 0
 metadata/_edit_lock_ = true
 
-[node name="Block" type="HBoxContainer" parent="GameRoomSize/Items"]
+[node name="GroupButtonEnemy" parent="GameRoomSize/Items" unique_id=637023655 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
+layout_mode = 0
+offset_left = 264.0
+offset_top = 200.0
+offset_right = 417.0
+offset_bottom = 354.0
+item_group = NodePath("../Enemy")
+
+[node name="ItemPreview" parent="GameRoomSize/Items/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(637023655, 1856562228) index="0" unique_id=163007682]
+texture = SubResource("AtlasTexture_lhxpi")
+flip_h = true
+
+[node name="ItemPreview3" parent="GameRoomSize/Items/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(637023655, 1856562228) index="1" unique_id=1531866913]
+texture = SubResource("AtlasTexture_37ha4")
+
+[node name="ItemPreview2" parent="GameRoomSize/Items/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(637023655, 1856562228) index="2" unique_id=2057330280]
+texture = SubResource("AtlasTexture_tvrr0")
+flip_h = true
+
+[node name="GroupButtonBonus" parent="GameRoomSize/Items" unique_id=802795878 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
+layout_mode = 0
+offset_left = -416.0
+offset_top = 200.0
+offset_right = -263.0
+offset_bottom = 354.0
+item_group = NodePath("../Bonus")
+
+[node name="ItemPreview" parent="GameRoomSize/Items/GroupButtonBonus/ButtonTexture" parent_id_path=PackedInt32Array(802795878, 1856562228) index="0" unique_id=163007682]
+texture = ExtResource("32_pra1m")
+
+[node name="ItemPreview3" parent="GameRoomSize/Items/GroupButtonBonus/ButtonTexture" parent_id_path=PackedInt32Array(802795878, 1856562228) index="1" unique_id=1531866913]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="ItemPreview2" parent="GameRoomSize/Items/GroupButtonBonus/ButtonTexture" parent_id_path=PackedInt32Array(802795878, 1856562228) index="2" unique_id=2057330280]
+position = Vector2(20, -150)
+texture = SubResource("AtlasTexture_mwnlh")
+
+[node name="GroupButtonMark" parent="GameRoomSize/Items" unique_id=1978539704 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
 layout_mode = 0
 offset_left = 768.0
-offset_top = -576.0
-offset_right = 1232.0
-offset_bottom = -408.0
+offset_top = 16.0
+offset_right = 921.0
+offset_bottom = 170.0
+item_group = NodePath("../Mark")
 
-[node name="ItemButtonTile" parent="GameRoomSize/Items/Block" instance=ExtResource("16_rgrya")]
+[node name="ItemPreview" parent="GameRoomSize/Items/GroupButtonMark/ButtonTexture" parent_id_path=PackedInt32Array(1978539704, 1856562228) index="0" unique_id=163007682]
+texture = SubResource("AtlasTexture_3ybyx")
+
+[node name="ItemPreview3" parent="GameRoomSize/Items/GroupButtonMark/ButtonTexture" parent_id_path=PackedInt32Array(1978539704, 1856562228) index="1" unique_id=1531866913]
+texture = SubResource("AtlasTexture_uuoyo")
+
+[node name="ItemPreview2" parent="GameRoomSize/Items/GroupButtonMark/ButtonTexture" parent_id_path=PackedInt32Array(1978539704, 1856562228) index="2" unique_id=2057330280]
+texture = SubResource("AtlasTexture_em6xi")
+
+[node name="GroupButtonPipe" parent="GameRoomSize/Items" unique_id=1147622410 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
+layout_mode = 0
+offset_left = 424.0
+offset_top = 200.0
+offset_right = 577.0
+offset_bottom = 354.0
+item_group = NodePath("../Pipe")
+
+[node name="ItemPreview" parent="GameRoomSize/Items/GroupButtonPipe/ButtonTexture" parent_id_path=PackedInt32Array(1147622410, 1856562228) index="0" unique_id=163007682]
+scale = Vector2(8, 8)
+texture = SubResource("AtlasTexture_r2ek7")
+hframes = 7
+
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/GroupButtonPipe/ButtonTexture/ItemPreview" index="0" unique_id=1284621214 node_paths=PackedStringArray("sprite")]
+script = ExtResource("23_uuoyo")
+sprite = NodePath("..")
+
+[node name="ItemPreview3" parent="GameRoomSize/Items/GroupButtonPipe/ButtonTexture" parent_id_path=PackedInt32Array(1147622410, 1856562228) index="1" unique_id=1531866913]
+scale = Vector2(8, 8)
+texture = SubResource("AtlasTexture_r2ek7")
+hframes = 7
+
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/GroupButtonPipe/ButtonTexture/ItemPreview3" index="0" unique_id=1737320521 node_paths=PackedStringArray("sprite")]
+script = ExtResource("23_uuoyo")
+sprite = NodePath("..")
+
+[node name="ItemPreview2" parent="GameRoomSize/Items/GroupButtonPipe/ButtonTexture" parent_id_path=PackedInt32Array(1147622410, 1856562228) index="2" unique_id=2057330280]
+scale = Vector2(8, 8)
+texture = SubResource("AtlasTexture_r2ek7")
+hframes = 7
+
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/GroupButtonPipe/ButtonTexture/ItemPreview2" index="0" unique_id=1168821242 node_paths=PackedStringArray("sprite")]
+script = ExtResource("23_uuoyo")
+sprite = NodePath("..")
+
+[node name="Block" type="HBoxContainer" parent="GameRoomSize/Items" unique_id=2071634210]
+layout_mode = 0
+offset_left = -232.0
+offset_top = 200.0
+offset_right = 232.0
+offset_bottom = 368.0
+
+[node name="ItemButtonTile" parent="GameRoomSize/Items/Block" unique_id=476318096 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 item_type = 0
@@ -399,7 +497,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Block/ItemButtonTile/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_5m21x")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTile/ButtonTexture/ItemPreview" index="0"]
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTile/ButtonTexture/ItemPreview" index="0" unique_id=1695088988]
 script = ExtResource("21_xct0x")
 theme_to_tile_preview = Dictionary[int, Texture2D]({
 0: ExtResource("22_c6bpw"),
@@ -414,7 +512,7 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 9: ExtResource("31_qq7db")
 })
 
-[node name="ItemButtonTileSingle" parent="GameRoomSize/Items/Block" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonTileSingle" parent="GameRoomSize/Items/Block" unique_id=981797274 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 item_type = 0
@@ -423,7 +521,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Block/ItemButtonTileSingle/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_2hpln")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0"]
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0" unique_id=598942637]
 script = ExtResource("21_xct0x")
 theme_to_tile_preview = Dictionary[int, Texture2D]({
 0: ExtResource("22_c6bpw"),
@@ -438,7 +536,7 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 9: ExtResource("31_qq7db")
 })
 
-[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/Items/Block" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/Items/Block" unique_id=398093930 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 item_type = 0
@@ -447,7 +545,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Block/ItemButtonTileSemiSolid/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_c6bpw")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0"]
+[node name="TileSetStyle" type="Node" parent="GameRoomSize/Items/Block/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0" unique_id=1562132706]
 script = ExtResource("21_xct0x")
 theme_to_tile_preview = Dictionary[int, Texture2D]({
 0: ExtResource("22_c6bpw"),
@@ -462,43 +560,42 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 9: ExtResource("31_qq7db")
 })
 
-[node name="ItemButtonEraser" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonEraser" parent="GameRoomSize/Items" unique_id=1818552784 instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 1272.0
-offset_top = 0.0
-offset_right = 1425.0
-offset_bottom = 154.0
-script = ExtResource("34_3f3ja")
+offset_left = 768.0
+offset_top = 184.0
+offset_right = 921.0
+offset_bottom = 338.0
 item_type = 2
 
 [node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonEraser/ButtonTexture" index="0"]
 scale = Vector2(7, 7)
 texture = ExtResource("20_1o17k")
 
-[node name="ItemButtonCameraEdge" parent="GameRoomSize/Items" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonCameraEdge" parent="GameRoomSize/Items" unique_id=1755720437 instance=ExtResource("16_rgrya")]
 layout_mode = 0
-offset_left = 488.0
-offset_top = -368.0
-offset_right = 641.0
-offset_bottom = -214.0
+offset_left = 768.0
+offset_top = -160.0
+offset_right = 921.0
+offset_bottom = -6.0
 item_type = 3
 
 [node name="ItemPreview" parent="GameRoomSize/Items/ItemButtonCameraEdge/ButtonTexture" index="0"]
 texture = ExtResource("35_gc7qq")
 
-[node name="Pipe" type="VBoxContainer" parent="GameRoomSize/Items"]
+[node name="Pipe" type="VBoxContainer" parent="GameRoomSize/Items" unique_id=1994847249 groups=["item_group"]]
 layout_mode = 0
-offset_left = 752.0
-offset_top = -360.0
-offset_right = 1232.0
-offset_bottom = -56.0
+offset_left = -256.0
+offset_top = -216.0
+offset_right = 224.0
+offset_bottom = 88.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Pipe"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Pipe" unique_id=1984433401]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonPipeVerticalUp" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeVerticalUp" parent="GameRoomSize/Items/Pipe/HBoxContainer" unique_id=754059090 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "pipe_vertical_up"
@@ -509,11 +606,11 @@ scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_r2ek7")
 hframes = 7
 
-[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp/ButtonTexture/ItemPreview" index="0" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalUp/ButtonTexture/ItemPreview" index="0" unique_id=773894876 node_paths=PackedStringArray("sprite")]
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="ItemButtonPipeVerticalMiddle" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeVerticalMiddle" parent="GameRoomSize/Items/Pipe/HBoxContainer" unique_id=300573779 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "pipe_vertical_middle"
@@ -524,11 +621,11 @@ scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_uly8c")
 hframes = 7
 
-[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle/ButtonTexture/ItemPreview" index="0" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle/ButtonTexture/ItemPreview" index="0" unique_id=1175489177 node_paths=PackedStringArray("sprite")]
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="ItemButtonPipeVerticalDown" parent="GameRoomSize/Items/Pipe/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeVerticalDown" parent="GameRoomSize/Items/Pipe/HBoxContainer" unique_id=1842144618 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "pipe_vertical_down"
@@ -539,16 +636,16 @@ scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_lh15n")
 hframes = 7
 
-[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalDown/ButtonTexture/ItemPreview" index="0" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer/ItemButtonPipeVerticalDown/ButtonTexture/ItemPreview" index="0" unique_id=177672891 node_paths=PackedStringArray("sprite")]
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Pipe"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Pipe" unique_id=386644186]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonPipeHorizontalLeft" parent="GameRoomSize/Items/Pipe/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeHorizontalLeft" parent="GameRoomSize/Items/Pipe/HBoxContainer2" unique_id=1371049726 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "pipe_horizontal_left"
@@ -559,11 +656,11 @@ scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_ud7lq")
 vframes = 7
 
-[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalLeft/ButtonTexture/ItemPreview" index="0" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalLeft/ButtonTexture/ItemPreview" index="0" unique_id=1316994742 node_paths=PackedStringArray("sprite")]
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="ItemButtonPipeHorizontalMiddle" parent="GameRoomSize/Items/Pipe/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeHorizontalMiddle" parent="GameRoomSize/Items/Pipe/HBoxContainer2" unique_id=683360901 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "pipe_horizontal_middle"
@@ -574,11 +671,11 @@ scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_360xo")
 vframes = 7
 
-[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalMiddle/ButtonTexture/ItemPreview" index="0" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalMiddle/ButtonTexture/ItemPreview" index="0" unique_id=1811779966 node_paths=PackedStringArray("sprite")]
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="ItemButtonPipeHorizontalRight" parent="GameRoomSize/Items/Pipe/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPipeHorizontalRight" parent="GameRoomSize/Items/Pipe/HBoxContainer2" unique_id=1961523221 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "pipe_horizontal_right"
@@ -589,23 +686,23 @@ scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_f0dhw")
 vframes = 7
 
-[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight/ButtonTexture/ItemPreview" index="0" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="GameRoomSize/Items/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight/ButtonTexture/ItemPreview" index="0" unique_id=1764791648 node_paths=PackedStringArray("sprite")]
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="Bonus" type="VBoxContainer" parent="GameRoomSize/Items"]
+[node name="Bonus" type="VBoxContainer" parent="GameRoomSize/Items" unique_id=1299550030 groups=["item_group"]]
 layout_mode = 0
-offset_left = -1320.0
-offset_top = -632.0
-offset_right = -216.0
-offset_bottom = -304.0
+offset_left = -544.0
+offset_top = -240.0
+offset_right = 560.0
+offset_bottom = 88.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Bonus"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Bonus" unique_id=1445714692]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonCoin" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonCoin" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=918873883 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "coin"
@@ -614,7 +711,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonCoin/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_mwnlh")
 
-[node name="ItemButtonQuestionBlock" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlock" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=1975092214 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block"
@@ -623,7 +720,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlock/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="ItemButtonQuestionBlockFireFlower" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockFireFlower" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=2019905473 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_fire_flower"
@@ -632,13 +729,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower/ButtonTexture/ItemPreview" index="0" unique_id=444066430]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_4fasx")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockBeetroot" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockBeetroot" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=2111346889 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_beetroot"
@@ -647,13 +744,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot/ButtonTexture/ItemPreview" index="0" unique_id=466836397]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_3n6qb")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockLui" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockLui" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=1959775024 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_lui"
@@ -662,13 +759,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockLui/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockLui/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockLui/ButtonTexture/ItemPreview" index="0" unique_id=490110038]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_f41ht")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockPoisonousMushroom" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockPoisonousMushroom" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=398520902 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_poisonous_mushroom"
@@ -677,13 +774,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom/ButtonTexture/ItemPreview" index="0" unique_id=699328851]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_8w043")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockSuperStar" parent="GameRoomSize/Items/Bonus/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockSuperStar" parent="GameRoomSize/Items/Bonus/HBoxContainer" unique_id=1521461808 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_super_star"
@@ -692,18 +789,18 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar/ButtonTexture/ItemPreview" index="0" unique_id=245669493]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_tdf2a")
 metadata/_edit_lock_ = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Bonus"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Bonus" unique_id=1246934112]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonBrick" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonBrick" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=2047181197 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "brick"
@@ -712,7 +809,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonBrick/ButtonTexture" index="0"]
 texture = ExtResource("32_pra1m")
 
-[node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=1798484599 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_hidden"
@@ -721,7 +818,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockHidden/ButtonTexture" index="0"]
 texture = ExtResource("24_4df1a")
 
-[node name="ItemButtonQuestionBlockFireFlowerHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockFireFlowerHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=1591443830 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_fire_flower_hidden"
@@ -730,13 +827,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture" index="0"]
 texture = ExtResource("24_4df1a")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden/ButtonTexture/ItemPreview" index="0" unique_id=1948620253]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_4fasx")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockBeetrootHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockBeetrootHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=545522843 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_beetroot_hidden"
@@ -745,13 +842,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture" index="0"]
 texture = ExtResource("24_4df1a")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden/ButtonTexture/ItemPreview" index="0" unique_id=1614570828]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_3n6qb")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockLuiHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockLuiHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=1676451903 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_lui_hidden"
@@ -760,13 +857,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden/ButtonTexture" index="0"]
 texture = ExtResource("24_4df1a")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden/ButtonTexture/ItemPreview" index="0" unique_id=183961638]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_f41ht")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockPoisonousMushroomLuiHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockPoisonousMushroomLuiHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=1189222515 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_poisonous_mushroom_hidden"
@@ -775,13 +872,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture" index="0"]
 texture = ExtResource("24_4df1a")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden/ButtonTexture/ItemPreview" index="0" unique_id=347956558]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_8w043")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockSuperStarHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonQuestionBlockSuperStarHidden" parent="GameRoomSize/Items/Bonus/HBoxContainer2" unique_id=1781424821 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "question_block_super_star_hidden"
@@ -790,118 +887,27 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture" index="0"]
 texture = ExtResource("24_4df1a")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture/ItemPreview" index="0"]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden/ButtonTexture/ItemPreview" index="0" unique_id=423894430]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_tdf2a")
 metadata/_edit_lock_ = true
 
-[node name="Enemy" type="Control" parent="GameRoomSize/Items"]
+[node name="Enemy" type="Control" parent="GameRoomSize/Items" unique_id=598972343 groups=["item_group"]]
 anchors_preset = 0
-offset_right = 48.0
-offset_bottom = 40.0
+offset_left = -760.0
+offset_top = -336.0
+offset_right = 760.0
+offset_bottom = 176.0
 
-[node name="PiranhaPlant" type="VBoxContainer" parent="GameRoomSize/Items/Enemy"]
+[node name="EnemyNormal" type="HBoxContainer" parent="GameRoomSize/Items/Enemy" unique_id=937258346]
 layout_mode = 0
-offset_left = -1344.0
-offset_top = -216.0
-offset_right = -664.0
-offset_bottom = 144.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Enemy/PiranhaPlant"]
-layout_mode = 2
+offset_right = 1504.0
+offset_bottom = 226.0
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonPiranhaGreenUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_green_up"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaGreenUp/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_ttk4a")
-
-[node name="ItemButtonPiranhaFireUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_fire_up"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_nar3m")
-
-[node name="ItemButtonPiranhaBlueUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_blue_up"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaBlueUp/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_gp0ro")
-
-[node name="ItemButtonPiranhaStoneUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_stone_up"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaStoneUp/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_etydd")
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Enemy/PiranhaPlant"]
-layout_mode = 2
-size_flags_vertical = 3
-metadata/_edit_lock_ = true
-
-[node name="ItemButtonPiranhaGreenDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_green_down"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaGreenDown/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_ttk4a")
-flip_v = true
-
-[node name="ItemButtonPiranhaFireDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_fire_down"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_nar3m")
-flip_v = true
-
-[node name="ItemButtonPiranhaBlueDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_blue_down"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_gp0ro")
-flip_v = true
-
-[node name="ItemButtonPiranhaStoneDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" instance=ExtResource("16_rgrya")]
-layout_mode = 2
-size_flags_horizontal = 3
-object_name = "piranha_stone_down"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown/ButtonTexture" index="0"]
-texture = SubResource("AtlasTexture_etydd")
-flip_v = true
-
-[node name="EnemyNormal" type="HBoxContainer" parent="GameRoomSize/Items/Enemy"]
-layout_mode = 0
-offset_left = -1328.0
-offset_top = 168.0
-offset_right = 168.0
-offset_bottom = 328.0
-
-[node name="ItemButtonGoomba" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonGoomba" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=1907109709 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "goomba"
@@ -911,7 +917,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_tvrr0")
 flip_h = true
 
-[node name="ItemButtonTroopaGreen" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonTroopaGreen" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=48965240 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "troopa_green"
@@ -921,7 +927,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_lhxpi")
 flip_h = true
 
-[node name="ItemButtonTroopaRed" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonTroopaRed" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=1239992575 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "troopa_red"
@@ -931,7 +937,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_28a77")
 flip_h = true
 
-[node name="ItemButtonSpiny" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonSpiny" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=909401924 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "spiny"
@@ -941,7 +947,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_37ha4")
 flip_h = true
 
-[node name="ItemButtonBeetle" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonBeetle" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=610117443 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "beetle"
@@ -951,7 +957,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_qxym8")
 flip_h = true
 
-[node name="ItemButtonHammerBro" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonHammerBro" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=1197407364 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "hammer_bro"
@@ -961,7 +967,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_j60mq")
 flip_h = true
 
-[node name="ItemButtonFireBro" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonFireBro" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=1855109673 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "fire_bro"
@@ -971,7 +977,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_abu5c")
 flip_h = true
 
-[node name="ItemButtonCannon" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonCannon" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=874469854 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "cannon"
@@ -980,7 +986,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonCannon/ButtonTexture" index="0"]
 texture = ExtResource("35_m0llv")
 
-[node name="ItemButtonBoo" parent="GameRoomSize/Items/Enemy/EnemyNormal" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonBoo" parent="GameRoomSize/Items/Enemy/EnemyNormal" unique_id=1176871372 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "boo"
@@ -990,19 +996,113 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_m0llv")
 flip_h = true
 
-[node name="Mark" type="VBoxContainer" parent="GameRoomSize/Items"]
+[node name="PiranhaPlant" type="VBoxContainer" parent="GameRoomSize/Items/Enemy" unique_id=1815552802]
 layout_mode = 0
-offset_left = 568.0
-offset_top = 32.0
-offset_right = 1272.0
-offset_bottom = 368.0
+offset_top = 168.0
+offset_right = 664.0
+offset_bottom = 498.0
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Mark"]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Enemy/PiranhaPlant" unique_id=1668494136]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonPlayer" parent="GameRoomSize/Items/Mark/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPiranhaGreenUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" unique_id=1207167149 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_green_up"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaGreenUp/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_ttk4a")
+
+[node name="ItemButtonPiranhaFireUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" unique_id=1600286391 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_fire_up"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_nar3m")
+
+[node name="ItemButtonPiranhaBlueUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" unique_id=1793945893 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_blue_up"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaBlueUp/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_gp0ro")
+
+[node name="ItemButtonPiranhaStoneUp" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer" unique_id=363289629 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_stone_up"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaStoneUp/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_etydd")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Enemy/PiranhaPlant" unique_id=1468448691]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonPiranhaGreenDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" unique_id=2111707928 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_green_down"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaGreenDown/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_ttk4a")
+flip_v = true
+
+[node name="ItemButtonPiranhaFireDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" unique_id=1624120655 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_fire_down"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_nar3m")
+flip_v = true
+
+[node name="ItemButtonPiranhaBlueDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" unique_id=1879244926 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_blue_down"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_gp0ro")
+flip_v = true
+
+[node name="ItemButtonPiranhaStoneDown" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2" unique_id=1996935923 instance=ExtResource("16_rgrya")]
+layout_mode = 2
+size_flags_horizontal = 3
+object_name = "piranha_stone_down"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown/ButtonTexture" index="0"]
+texture = SubResource("AtlasTexture_etydd")
+flip_v = true
+
+[node name="Mark" type="VBoxContainer" parent="GameRoomSize/Items" unique_id=1761276002 groups=["item_group"]]
+layout_mode = 0
+offset_left = -360.0
+offset_top = -248.0
+offset_right = 344.0
+offset_bottom = 88.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Items/Mark" unique_id=2056440720]
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonPlayer" parent="GameRoomSize/Items/Mark/HBoxContainer" unique_id=142157797 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "player"
@@ -1011,7 +1111,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Mark/HBoxContainer/ItemButtonPlayer/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_em6xi")
 
-[node name="ItemButtonGoalGate" parent="GameRoomSize/Items/Mark/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonGoalGate" parent="GameRoomSize/Items/Mark/HBoxContainer" unique_id=692983323 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "goal_gate"
@@ -1020,7 +1120,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Mark/HBoxContainer/ItemButtonGoalGate/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_3ybyx")
 
-[node name="ItemButtonSpring" parent="GameRoomSize/Items/Mark/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonSpring" parent="GameRoomSize/Items/Mark/HBoxContainer" unique_id=219218855 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "spring"
@@ -1029,7 +1129,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Mark/HBoxContainer/ItemButtonSpring/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_uuoyo")
 
-[node name="Placeholder" parent="GameRoomSize/Items/Mark/HBoxContainer" instance=ExtResource("16_rgrya")]
+[node name="Placeholder" parent="GameRoomSize/Items/Mark/HBoxContainer" unique_id=1975917846 instance=ExtResource("16_rgrya")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -1040,12 +1140,12 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/Items/Mark/HBoxContainer/Placeholder/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_uuoyo")
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Mark"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/Items/Mark" unique_id=1014086319]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonMovingPlatformHorizontal" parent="GameRoomSize/Items/Mark/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonMovingPlatformHorizontal" parent="GameRoomSize/Items/Mark/HBoxContainer2" unique_id=736352240 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "moving_platform_horizontal"
@@ -1055,12 +1155,12 @@ metadata/_edit_lock_ = true
 scale = Vector2(12, 12)
 texture = SubResource("AtlasTexture_toeyn")
 
-[node name="UiArrow" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonMovingPlatformHorizontal/ButtonTexture" index="1"]
+[node name="UiArrow" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonMovingPlatformHorizontal/ButtonTexture" index="1" unique_id=1626421446]
 scale = Vector2(9.999999, 9.999999)
 texture = ExtResource("49_meded")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonMovingPlatformVerticalDown" parent="GameRoomSize/Items/Mark/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonMovingPlatformVerticalDown" parent="GameRoomSize/Items/Mark/HBoxContainer2" unique_id=1555604510 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "moving_platform_vertical_down"
@@ -1070,14 +1170,14 @@ metadata/_edit_lock_ = true
 scale = Vector2(12, 12)
 texture = SubResource("AtlasTexture_toeyn")
 
-[node name="UiArrow" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalDown/ButtonTexture" index="1"]
+[node name="UiArrow" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalDown/ButtonTexture" index="1" unique_id=1976783906]
 rotation = -1.5707964
 scale = Vector2(9.999999, 9.999999)
 texture = ExtResource("49_meded")
 flip_h = true
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonMovingPlatformVerticalUp" parent="GameRoomSize/Items/Mark/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonMovingPlatformVerticalUp" parent="GameRoomSize/Items/Mark/HBoxContainer2" unique_id=1361017568 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "moving_platform_vertical_up"
@@ -1087,13 +1187,13 @@ metadata/_edit_lock_ = true
 scale = Vector2(12, 12)
 texture = SubResource("AtlasTexture_toeyn")
 
-[node name="UiArrow" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalUp/ButtonTexture" index="1"]
+[node name="UiArrow" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalUp/ButtonTexture" index="1" unique_id=1508807590]
 rotation = -1.5707964
 scale = Vector2(9.999999, 9.999999)
 texture = ExtResource("49_meded")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonPlatformFall" parent="GameRoomSize/Items/Mark/HBoxContainer2" instance=ExtResource("16_rgrya")]
+[node name="ItemButtonPlatformFall" parent="GameRoomSize/Items/Mark/HBoxContainer2" unique_id=281232860 instance=ExtResource("16_rgrya")]
 layout_mode = 2
 size_flags_horizontal = 3
 object_name = "platform_fall"
@@ -1103,14 +1203,14 @@ metadata/_edit_lock_ = true
 scale = Vector2(12, 12)
 texture = SubResource("AtlasTexture_toeyn")
 
-[node name="ItemPreview" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonPlatformFall/ButtonTexture/ItemPreview" index="0"]
+[node name="ItemPreview" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonPlatformFall/ButtonTexture/ItemPreview" index="0" unique_id=1902798826]
 self_modulate = Color(1, 1, 1, 0.5019608)
 position = Vector2(0, -20)
 scale = Vector2(0.8, 0.8)
 texture = SubResource("AtlasTexture_toeyn")
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview2" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonPlatformFall/ButtonTexture/ItemPreview" index="1"]
+[node name="ItemPreview2" type="Sprite2D" parent="GameRoomSize/Items/Mark/HBoxContainer2/ItemButtonPlatformFall/ButtonTexture/ItemPreview" index="1" unique_id=2092417560]
 self_modulate = Color(1, 1, 1, 0.2509804)
 position = Vector2(0, -35)
 scale = Vector2(0.6, 0.6)
@@ -1119,7 +1219,13 @@ metadata/_edit_lock_ = true
 
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
+[connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
+[connection signal="play_sound_place" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundPlaceObject" method="play"]
 
+[editable path="GameRoomSize/Items/GroupButtonEnemy"]
+[editable path="GameRoomSize/Items/GroupButtonBonus"]
+[editable path="GameRoomSize/Items/GroupButtonMark"]
+[editable path="GameRoomSize/Items/GroupButtonPipe"]
 [editable path="GameRoomSize/Items/Block/ItemButtonTile"]
 [editable path="GameRoomSize/Items/Block/ItemButtonTileSingle"]
 [editable path="GameRoomSize/Items/Block/ItemButtonTileSemiSolid"]
@@ -1145,14 +1251,6 @@ metadata/_edit_lock_ = true
 [editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
 [editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
 [editable path="GameRoomSize/Items/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaGreenUp"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaBlueUp"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaStoneUp"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaGreenDown"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown"]
-[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
 [editable path="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonGoomba"]
 [editable path="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonTroopaGreen"]
 [editable path="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonTroopaRed"]
@@ -1162,6 +1260,14 @@ metadata/_edit_lock_ = true
 [editable path="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonFireBro"]
 [editable path="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonCannon"]
 [editable path="GameRoomSize/Items/Enemy/EnemyNormal/ItemButtonBoo"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaGreenUp"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaBlueUp"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaStoneUp"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaGreenDown"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown"]
+[editable path="GameRoomSize/Items/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
 [editable path="GameRoomSize/Items/Mark/HBoxContainer/ItemButtonPlayer"]
 [editable path="GameRoomSize/Items/Mark/HBoxContainer/ItemButtonGoalGate"]
 [editable path="GameRoomSize/Items/Mark/HBoxContainer/ItemButtonSpring"]

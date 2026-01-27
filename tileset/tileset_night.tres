@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://veua56o6gx5g"]
+[gd_resource type="TileSet" format=3 uid="uid://veua56o6gx5g"]
 
 [ext_resource type="Texture2D" uid="uid://dagnbicl3nhg3" path="res://sprite/tile/tile_night.png" id="1_qafpp"]
 

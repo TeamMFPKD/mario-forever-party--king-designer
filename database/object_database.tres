@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ObjectDatabase" load_steps=91 format=3 uid="uid://bts1hfa763775"]
+[gd_resource type="Resource" script_class="ObjectDatabase" format=3 uid="uid://bts1hfa763775"]
 
 [ext_resource type="Script" uid="uid://dm2vri801p6qq" path="res://script/objectmap/object_database_entry.gd" id="1_id4ej"]
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://scene/spawner/pipe/spawner_pipe_vertical_up.tscn" id="3_11f4k"]

@@ -116,12 +116,25 @@ func place_tile_at_cursor(cursor_pos):
 			else:
 				# Draw Terrain - 使用默认地形连接
 				tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
+			
+			# 发射放置音效信号
+			emit_place_sound()
 	else:
 		# 擦除瓦片
 		tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
 		
 		# 在橡皮擦模式下，同时调用LevelControl的擦除功能来清除object
 		call_level_control_erase(cursor_pos)
+
+# 新增：发射放置音效的函数
+func emit_place_sound():
+	# 获取LevelControl节点并发射信号
+	var level_node = get_parent().get_parent()  # 获取Level节点
+	if level_node:
+		for child in level_node.get_children():
+			if child is LevelControl:
+				child.emit_signal("play_sound_place")
+				break
 
 # 在橡皮擦模式下调用LevelControl的擦除功能
 func call_level_control_erase(position: Vector2):

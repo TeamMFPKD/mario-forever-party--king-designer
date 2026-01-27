@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://kipkw1ykiuq8"]
+[gd_resource type="TileSet" format=3 uid="uid://kipkw1ykiuq8"]
 
 [ext_resource type="Texture2D" uid="uid://dt1kt8637l2yy" path="res://sprite/tile/tile_snow.png" id="1_f4rgf"]
 

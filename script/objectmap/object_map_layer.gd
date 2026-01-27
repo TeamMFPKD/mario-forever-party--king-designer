@@ -109,6 +109,16 @@ func place_object_at_position(position: Vector2, check_duplicate: bool = true):
 		objects.append(object_data)
 		
 		print("放置对象: ", entry.object_name, " 在网格位置: ", grid_position)
+		
+		# 发射放置音效信号
+		emit_place_sound()
+
+# 新增：发射放置音效的函数
+func emit_place_sound():
+	# 获取LevelControl节点并发射信号
+	var level_node = get_tree().get_first_node_in_group("level_control") as LevelControl
+	level_node.emit_signal("play_sound_place")
+
 
 # 公共方法：开始放置对象（通过对象名称）
 func start_placing_object(object_name: String):
