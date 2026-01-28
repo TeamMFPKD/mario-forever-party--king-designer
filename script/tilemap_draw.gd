@@ -116,6 +116,9 @@ func place_tile_at_cursor(cursor_pos):
 			else:
 				# Draw Terrain - 使用默认地形连接
 				tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
+				
+				# 检查是否在Camera边界上，如果是则额外绘制terrain
+				check_and_draw_border_terrain(cell_coords)
 			
 			# 发射放置音效信号
 			emit_place_sound()
@@ -198,6 +201,75 @@ func erase_tile_at_position(position: Vector2):
 		tile_map.set_cells_terrain_connect(cell_coords_array, 0, -1)
 		# 发射擦除音效信号
 		emit_erase_sound()
+
+# 检查并绘制边界terrain
+func check_and_draw_border_terrain(cell_coords: Vector2i):
+	# 获取Camera2D
+	var level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
+	if not level_camera:
+		return
+	
+	# 获取Camera的边界限制
+	var camera_left = level_camera.limit_left
+	var camera_right = level_camera.limit_right
+	var camera_top = level_camera.limit_top
+	var camera_bottom = level_camera.limit_bottom
+	
+	# 获取单元格的世界坐标
+	var cell_size = tile_map.tile_set.tile_size
+	var cell_world_pos = Vector2(
+		cell_coords.x * cell_size.x,
+		cell_coords.y * cell_size.y
+	)
+	
+	# 检查是否在边界上
+	var is_on_left_border = abs(cell_world_pos.x - camera_left) < cell_size.x
+	var is_on_right_border = abs(cell_world_pos.x - camera_right) < cell_size.x
+	var is_on_top_border = abs(cell_world_pos.y - camera_top) < cell_size.y
+	var is_on_bottom_border = abs(cell_world_pos.y - camera_bottom) < cell_size.y
+	
+	# 存储需要额外绘制的单元格坐标
+	var extra_cells: Array[Vector2i] = []
+	
+	# 检查边界并添加对应的额外单元格
+	if is_on_left_border:
+		# 左侧边界：向左延伸一格
+		extra_cells.append(Vector2i(cell_coords.x - 1, cell_coords.y))
+		
+		# 检查角落
+		if is_on_top_border:
+			# 左上角：向左上延伸一格
+			extra_cells.append(Vector2i(cell_coords.x - 1, cell_coords.y - 1))
+		if is_on_bottom_border:
+			# 左下角：向左下延伸一格
+			extra_cells.append(Vector2i(cell_coords.x - 1, cell_coords.y + 1))
+	
+	if is_on_right_border:
+		# 右侧边界：向右延伸一格
+		extra_cells.append(Vector2i(cell_coords.x + 1, cell_coords.y))
+		
+		# 检查角落
+		if is_on_top_border:
+			# 右上角：向右上延伸一格
+			extra_cells.append(Vector2i(cell_coords.x + 1, cell_coords.y - 1))
+		if is_on_bottom_border:
+			# 右下角：向右下延伸一格
+			extra_cells.append(Vector2i(cell_coords.x + 1, cell_coords.y + 1))
+	
+	if is_on_top_border:
+		# 上侧边界：向上延伸一格
+		extra_cells.append(Vector2i(cell_coords.x, cell_coords.y - 1))
+	
+	if is_on_bottom_border:
+		# 下侧边界：向下延伸一格
+		extra_cells.append(Vector2i(cell_coords.x, cell_coords.y + 1))
+	
+	# 绘制额外的terrain单元格
+	for extra_cell in extra_cells:
+		# 检查该位置是否已经有瓦片，如果没有则绘制
+		if tile_map.get_cell_source_id(extra_cell) == -1:
+			tile_map.set_cells_terrain_connect([extra_cell], 0, 0)
+			print("TileMapDraw: 在边界额外绘制terrain，坐标: ", extra_cell)
 
 # 设置自定义图块坐标
 func set_custom_atlas_coords(coords: Vector2i):
