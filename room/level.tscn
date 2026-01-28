@@ -35,6 +35,7 @@
 [ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="23_iovuq"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/pipe_color.gd" id="23_uuoyo"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="24_4df1a"]
+[ext_resource type="PackedScene" uid="uid://ch2w5yfycdtlk" path="res://scene/level_size_button.tscn" id="24_cyeqs"]
 [ext_resource type="Texture2D" uid="uid://5stdy61pmtog" path="res://sprite/tile/tile_cave.png" id="24_gc7qq"]
 [ext_resource type="Texture2D" uid="uid://ejbgmhyor4n6" path="res://sprite/tile/tile_dusk.png" id="25_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="25_w152k"]
@@ -390,6 +391,175 @@ script = ExtResource("20_c6bpw")
 [node name="CameraEdge" type="Line2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1610602791]
 closed = true
 script = ExtResource("21_2hpln")
+
+[node name="LevelSizeGroup" type="Control" parent="GameRoomSize" unique_id=573696587 groups=["item_group"]]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_top = 32.0
+offset_right = 640.0
+offset_bottom = 960.0
+grow_horizontal = 2
+
+[node name="LevelSizeOut" type="Control" parent="GameRoomSize/LevelSizeGroup" unique_id=810732845]
+layout_mode = 1
+anchor_left = 0.2
+anchor_top = 0.2
+anchor_right = 0.8
+anchor_bottom = 0.8
+offset_top = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelSizeButtonLeft" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut" unique_id=637023655 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_top = -77.0
+offset_right = 153.0
+offset_bottom = 77.0
+grow_vertical = 2
+expand_mode = 1
+
+[node name="LevelSizeButtonRight" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut" unique_id=1932478643 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -153.0
+offset_top = -77.0
+offset_right = 0.0
+offset_bottom = 77.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_mode = 1
+expand_direction = 1
+
+[node name="ItemPreview" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight/ButtonTexture" parent_id_path=PackedInt32Array(1932478643, 1856562228) index="0" unique_id=2057330280]
+flip_h = true
+
+[node name="LevelSizeButtonUp" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut" unique_id=1148440495 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -76.5
+offset_top = 0.0
+offset_right = 76.5
+offset_bottom = 154.0
+grow_horizontal = 2
+expand_mode = 1
+expand_direction = 2
+
+[node name="ItemPreview" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonUp/ButtonTexture" parent_id_path=PackedInt32Array(1148440495, 1856562228) index="0" unique_id=2057330280]
+rotation = 1.5707964
+
+[node name="LevelSizeButtonDown" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut" unique_id=736926068 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -76.5
+offset_top = -154.0
+offset_right = 76.5
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+expand_mode = 1
+expand_direction = 3
+
+[node name="ItemPreview" parent="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonDown/ButtonTexture" parent_id_path=PackedInt32Array(736926068, 1856562228) index="0" unique_id=2057330280]
+rotation = 1.5707964
+flip_h = true
+
+[node name="LevelSizeIn" type="Control" parent="GameRoomSize/LevelSizeGroup" unique_id=1843273124]
+layout_mode = 1
+anchor_left = 0.3
+anchor_top = 0.3
+anchor_right = 0.7
+anchor_bottom = 0.7
+offset_top = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelSizeButtonLeft" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn" unique_id=1899761637 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 0.0
+offset_top = -77.0
+offset_right = 153.0
+offset_bottom = 77.0
+grow_vertical = 2
+
+[node name="ItemPreview" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonLeft/ButtonTexture" parent_id_path=PackedInt32Array(1899761637, 1856562228) index="0" unique_id=2057330280]
+flip_h = true
+
+[node name="LevelSizeButtonRight" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn" unique_id=1726547516 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -153.0
+offset_top = -77.0
+offset_right = 0.0
+offset_bottom = 77.0
+grow_horizontal = 0
+grow_vertical = 2
+expand_direction = 1
+
+[node name="LevelSizeButtonUp" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn" unique_id=640817798 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -76.5
+offset_top = 0.0
+offset_right = 76.5
+offset_bottom = 154.0
+grow_horizontal = 2
+expand_direction = 2
+
+[node name="ItemPreview" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonUp/ButtonTexture" parent_id_path=PackedInt32Array(640817798, 1856562228) index="0" unique_id=2057330280]
+rotation = 1.5707964
+flip_h = true
+
+[node name="LevelSizeButtonDown" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn" unique_id=969306259 instance=ExtResource("24_cyeqs")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -76.5
+offset_top = -154.0
+offset_right = 76.5
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+expand_direction = 3
+
+[node name="ItemPreview" parent="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonDown/ButtonTexture" parent_id_path=PackedInt32Array(969306259, 1856562228) index="0" unique_id=2057330280]
+rotation = 1.5707964
+
+[node name="HintLine2D" type="Line2D" parent="GameRoomSize/LevelSizeGroup" unique_id=1838935155]
+points = PackedVector2Array(400, 340, 875, 340, 875, 650, 400, 650)
+closed = true
+width = 5.0
+default_color = Color(0.5, 0.5, 0.5, 1)
 
 [node name="GroupButtonTheme" parent="GameRoomSize" unique_id=1805699780 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
 layout_mode = 1
@@ -946,19 +1116,19 @@ vframes = 7
 script = ExtResource("23_uuoyo")
 sprite = NodePath("..")
 
-[node name="GroupButtonEnemy" parent="GameRoomSize/BottomItemGroups" unique_id=637023655 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
+[node name="GroupButtonEnemy" parent="GameRoomSize/BottomItemGroups" unique_id=33528519 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
 layout_mode = 2
 size_flags_horizontal = 3
 item_group = NodePath("Enemy")
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(637023655, 1856562228) index="0" unique_id=163007682]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(33528519, 1856562228) index="0" unique_id=163007682]
 texture = SubResource("AtlasTexture_lhxpi")
 flip_h = true
 
-[node name="ItemPreview3" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(637023655, 1856562228) index="1" unique_id=1531866913]
+[node name="ItemPreview3" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(33528519, 1856562228) index="1" unique_id=1531866913]
 texture = SubResource("AtlasTexture_37ha4")
 
-[node name="ItemPreview2" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(637023655, 1856562228) index="2" unique_id=2057330280]
+[node name="ItemPreview2" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/ButtonTexture" parent_id_path=PackedInt32Array(33528519, 1856562228) index="2" unique_id=2057330280]
 texture = SubResource("AtlasTexture_tvrr0")
 flip_h = true
 
@@ -1171,12 +1341,18 @@ offset_top = -520.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="ItemButtonCameraEdge" parent="GameRoomSize/RightItemGroups" unique_id=1755720437 instance=ExtResource("16_rgrya")]
+[node name="GroupButtonCameraEdge" parent="GameRoomSize/RightItemGroups" unique_id=1921281194 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
 layout_mode = 2
 size_flags_vertical = 3
-item_type = 3
+item_group = NodePath("../../LevelSizeGroup")
 
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/ItemButtonCameraEdge/ButtonTexture" index="0"]
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonCameraEdge/ButtonTexture" parent_id_path=PackedInt32Array(1921281194, 1856562228) index="0" unique_id=163007682]
+visible = false
+
+[node name="ItemPreview3" parent="GameRoomSize/RightItemGroups/GroupButtonCameraEdge/ButtonTexture" parent_id_path=PackedInt32Array(1921281194, 1856562228) index="1" unique_id=1531866913]
+visible = false
+
+[node name="ItemPreview2" parent="GameRoomSize/RightItemGroups/GroupButtonCameraEdge/ButtonTexture" parent_id_path=PackedInt32Array(1921281194, 1856562228) index="2" unique_id=2057330280]
 texture = ExtResource("35_gc7qq")
 
 [node name="GroupButtonMark" parent="GameRoomSize/RightItemGroups" unique_id=1978539704 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]
@@ -1334,6 +1510,14 @@ texture = ExtResource("20_1o17k")
 [connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
 [connection signal="play_sound_place" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundPlaceObject" method="play"]
 
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonUp"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonDown"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonLeft"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonRight"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonUp"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonDown"]
 [editable path="GameRoomSize/GroupButtonTheme"]
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonCastle"]
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonCastleB"]
@@ -1388,7 +1572,7 @@ texture = ExtResource("20_1o17k")
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
-[editable path="GameRoomSize/RightItemGroups/ItemButtonCameraEdge"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonCameraEdge"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonPlayer"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate"]

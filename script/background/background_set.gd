@@ -18,6 +18,11 @@ func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as LevelCamera
 	level_camera.limit_changed.connect(_on_level_camera_limit_changed)
 
+	room_left = level_camera.limit_left
+	room_top = level_camera.limit_top
+	room_right = level_camera.limit_right
+	room_bottom = level_camera.limit_bottom
+		
 	background_set()
 	
 func _on_level_camera_limit_changed(top: int, left: int, right: int, bottom: int) -> void:
@@ -38,3 +43,7 @@ func background_set() -> void:
 	# 底部背景
 	if (background_bottom != null):
 		background_bottom.position.y = room_bottom
+
+	# 顶部背景
+	if (cloud_top != null):
+		cloud_top.position.y = room_top

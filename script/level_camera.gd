@@ -31,17 +31,17 @@ func _physics_process(delta: float) -> void:
 	position.y = clamp(position.y, limit_top + 240, limit_bottom - 240)
 
 func set_limit_top(value):
-	limit_top = value
+	limit_top = min(value, limit_bottom - 480)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
 func set_limit_left(value):
-	limit_left = value
+	limit_left = min(value, limit_right - 640)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
 func set_limit_right(value):
-	limit_right = value
+	limit_right = max(value, limit_left + 640)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
 func set_limit_bottom(value):
-	limit_bottom = value
+	limit_bottom = max(value, limit_top + 480)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
