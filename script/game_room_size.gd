@@ -1,37 +1,56 @@
 extends Control
 
-func _ready() -> void:
-    # 连接视口尺寸变化信号
-    get_viewport().size_changed.connect(_on_viewport_size_changed)
-    # 初始调用一次
+var viewport
+var visible_rect
+
+func _ready() -> void :
+
+    viewport = get_viewport()
+
+    visible_rect = viewport.get_visible_rect()
+
+
+    viewport.size_changed.connect(_on_viewport_size_changed)
+
     _on_viewport_size_changed()
 
-func _on_viewport_size_changed() -> void:
-    # 获取当前视口
-    var viewport = get_viewport()
-    
-    # 获取GameRoomSize相对于Room节点的变换
-    # Room是Node2D根节点，GameRoomSize是它的直接子节点
-    var room_node = get_parent()  # Room节点
+
+func _on_viewport_size_changed() -> void :
+
+    viewport = get_viewport()
+
+
+
+    var room_node = get_parent()
     var viewport_transform = viewport.get_canvas_transform()
-    
-    # 计算GameRoomSize在Room节点坐标系中的位置和尺寸
-    # 我们需要让GameRoomSize填充整个Room节点的可见区域
-    var visible_rect = viewport.get_visible_rect()
-    
-    # 将视口可见区域转换到Room节点的坐标系
+
+
+
+    visible_rect = viewport.get_visible_rect()
+
+
+    var window = get_window()
+
+    if visible_rect.size.x < 1920 or visible_rect.size.y < 1080:
+        position = Vector2(0, 0)
+        size = Vector2(1920, 1080)
+
+
+        window.content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+
+
+        window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+
+
+        window.content_scale_size = Vector2i(1920, 1080)
+        ProjectSettings.set_setting("display/window/strech/mode", "visible_rect")
+        print("stretch mode"+ProjectSettings.get_setting("display/window/strech/mode"))
+        return
+
+
     var room_position = viewport_transform.affine_inverse() * visible_rect.position
     var room_size = visible_rect.size / viewport_transform.get_scale()
-    
-    # 设置GameRoomSize的位置和尺寸
+
+
     position = room_position
     size = room_size
-    
-    # 调试输出
-    #print("Viewport size: ", viewport.size)
-    #print("Visible rect: ", visible_rect)
-    #print("Room position: ", room_position)
-    #print("Room size: ", room_size)
-    #print("Control position: ", position)
-    #print("Control size: ", size)
-	
