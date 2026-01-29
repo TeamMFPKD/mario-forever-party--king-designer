@@ -1,5 +1,7 @@
 extends Node
 
+class_name PlayerMovement
+
 @export var player : CharacterBody2D
 
 
@@ -10,7 +12,7 @@ extends Node
 
 @export var jump_speed : float = 600
 @export var jump_speed_factor : float = 1.1
-@export var max_speed_y : float = 600
+@export var max_speed_y : float = 650
 
 @export var gravity_normal = 2400
 @export var gravity_hold_jump = 1250
@@ -29,7 +31,12 @@ var jumpable : bool
 var jumpable_time : int = 15
 var jumpable_timer : int
 
+var langtiao : bool
+var langtiao_time : int = 5
+var langtiao_timer : int
+
 var speed_x : float
+var target_speed : float
 var speed_y : float
 
 func _physics_process(delta):
@@ -42,7 +49,7 @@ func _physics_process(delta):
 	move_jump = Input.is_action_pressed("move_jump")
 	
 	# 水平运动
-	var target_speed = 0.0
+	target_speed = 0.0
 	
 	if player.is_on_wall():
 		speed_x = 0.0
@@ -72,14 +79,18 @@ func _physics_process(delta):
 	# 垂直运动
 	if player.is_on_floor():
 		speed_y = 0.0
+		langtiao_timer = 0
 	if speed_y >= 0.0 and is_action_pressed(jump):
 		jumpable = true
+	if !player.is_on_floor():
+		langtiao_timer += 1
+		langtiao = langtiao_timer < langtiao_time
 	if jumpable:
 		jumpable_timer += 1
 		if jumpable_timer > jumpable_time:
 			jumpable = false
 			jumpable_timer = 0
-	if move_jump and jumpable and player.is_on_floor():
+	if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
 		speed_y = -jump_speed
 		if abs(speed_x) > max_speed_x * 0.3:
 			speed_y *= jump_speed_factor
@@ -89,7 +100,7 @@ func _physics_process(delta):
 		speed_y = 0.0
 	
 	speed_y += gravity_hold_jump * delta if move_jump else gravity_normal * delta
-	
+
 	# 限制垂直速度
 	speed_y = minf(speed_y, max_speed_y)
 

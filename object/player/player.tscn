@@ -2,9 +2,10 @@
 
 [ext_resource type="SpriteFrames" uid="uid://bs88b30blplhb" path="res://object/player/mario_small.tres" id="1_8csaa"]
 [ext_resource type="Script" uid="uid://7l3pjn0ykam3" path="res://script/player/player_movement.gd" id="2_d0xdx"]
+[ext_resource type="Script" uid="uid://dfmmex64hbhoh" path="res://script/player/player_animation.gd" id="3_d0xdx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gh87g"]
-radius = 15.0
+radius = 12.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1151748388]
 collision_layer = 8
@@ -15,11 +16,25 @@ animation = &"idle"
 offset = Vector2(0, -20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
+visible = false
 position = Vector2(0, -2)
 shape = SubResource("CapsuleShape2D_gh87g")
+
+[node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
+position = Vector2(0, -2)
+shape = SubResource("CapsuleShape2D_gh87g")
+target_position = Vector2(0, 0)
+max_results = 4
+collision_mask = 16
+collide_with_areas = true
 
 [node name="PlayerMediator" type="Node" parent="." unique_id=968252850]
 
 [node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player")]
 script = ExtResource("2_d0xdx")
 player = NodePath("../..")
+
+[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement")]
+script = ExtResource("3_d0xdx")
+ani = NodePath("../../AnimatedSprite2D")
+player_movement = NodePath("../PlayerMovement")
