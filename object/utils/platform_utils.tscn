@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dyiqj52bgf0by"]
+
+[ext_resource type="Script" uid="uid://byccxq6l4mjfb" path="res://script/utils/platform_utils.gd" id="1_7gfeg"]
+
+[sub_resource type="GDScript" id="GDScript_7gfeg"]
+script/source = "extends Node
+
+func _ready() -> void:
+	if process_mode == ProcessMode.PROCESS_MODE_DISABLED:
+		return
+	
+	var parent = get_parent() as PlatformUtils
+	push_error(parent.is_desktop_platform())
+	push_error(parent.get_platform_info())
+"
+
+[node name="PlatformUtils" type="Node"]
+script = ExtResource("1_7gfeg")
+
+[node name="PlatformTest" type="Node" parent="."]
+process_mode = 4
+script = SubResource("GDScript_7gfeg")

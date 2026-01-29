@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3btklffhmis3"]
-
-[ext_resource type="Script" uid="uid://b1f5wgmk074ou" path="res://grid/grid_2d.gd" id="1_3vx17"]
-
-[node name="Grid2d" type="Node2D"]
-script = ExtResource("1_3vx17")
-draw_interval = 0.015
-line_draw_speed = 1000.0
-metadata/_custom_type_script = "uid://b1f5wgmk074ou"

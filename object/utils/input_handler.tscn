@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b31rvjlq1cu4d"]
+
+[ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/utils/input_handler.gd" id="1_3070b"]
+
+[node name="InputHandler" type="Node"]
+script = ExtResource("1_3070b")
+metadata/_custom_type_script = "uid://devgf5ccfvhwv"

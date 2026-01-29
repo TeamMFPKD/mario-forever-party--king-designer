@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://0pxyeyw6pisu"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/spawner_set.gd" id="1_55up3"]
+[ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="2_4b1ug"]
+[ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/pipe_color.gd" id="3_nd50d"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/spawner/offset_marker.tscn" id="4_7r0hp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
+atlas = ExtResource("2_4b1ug")
+region = Rect2(0, 0, 448, 64)
+
+[node name="SpawnerPipeVerticalUp" type="Node2D"]
+script = ExtResource("1_55up3")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(16, 16)
+texture = SubResource("AtlasTexture_r2ek7")
+hframes = 7
+
+[node name="PipeColor" type="Node" parent="Sprite2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("3_nd50d")
+sprite = NodePath("..")
+
+[node name="OffsetMarker" parent="." instance=ExtResource("4_7r0hp")]
+position = Vector2(16, 16)

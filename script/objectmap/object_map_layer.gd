@@ -14,6 +14,39 @@ func _ready():
 	# 确保有输入处理器
 	setup_input_handler()
 
+	# 祖传玩家位置
+	current_object_name = "player"
+	if not database_holder or not database_holder.object_database or current_object_name == "":
+		return
+	
+	# 查找对应的对象条目
+	var entry = find_object_by_name(current_object_name)
+	if not entry or not entry.object_scene:
+		print("ObjectMapLayer: 未找到对象: ", current_object_name)
+		return
+	
+	# 如果是player对象，先删除所有已存在的player对象
+	if current_object_name == "player":
+		remove_all_objects_of_type("player")
+		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
+	
+	# 将位置对齐到32x32网格
+	var grid_position = align_to_grid(Vector2(112.0, 400.0))
+	
+	var scene_instance = entry.object_scene.instantiate()
+	if scene_instance is Node2D:
+		scene_instance.global_position = grid_position
+		add_child(scene_instance)
+		
+		# 保存对象信息
+		var object_data = {
+			"object_name": entry.object_name,
+			"object_scene": entry.object_scene,
+			"position": grid_position,
+			"instance": scene_instance
+		}
+		objects.append(object_data)
+
 func setup_input_handler():
 	# 检查是否已有输入处理器
 	var input_handler = null
@@ -26,7 +59,7 @@ func setup_input_handler():
 	
 	if not input_handler:
 		# 如果没有，创建并添加到当前节点的父节点中
-		var input_handler_script = preload("res://script/input_handler.gd")
+		var input_handler_script = preload("uid://devgf5ccfvhwv")
 		input_handler = input_handler_script.new()
 		input_handler.name = "InputHandler"
 		get_parent().call_deferred("add_child", input_handler)
@@ -172,6 +205,8 @@ func remove_object_at_position(position: Vector2):
 			break
 	
 	if object_to_remove:
+		if object_to_remove.has("object_name") and object_to_remove["object_name"] == "player":
+			return false
 		if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
 			object_to_remove["instance"].queue_free()
 		objects.erase(object_to_remove)

@@ -202,13 +202,12 @@ func erase_at_position(position: Vector2):
 	
 	# 清除Object
 	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
-		object_map_layer.remove_object_at_position(position)
+		should_emit_sound = object_map_layer.remove_object_at_position(position) && should_emit_sound
 	
 	print("橡皮擦：清除位置 ", position)
 	
 	if should_emit_sound:
 		emit_signal("play_sound_erase")
-		print("峨峨")
 
 # 新增：不受模式限制的清除功能（用于右键点击）
 func erase_at_position_immediate(position: Vector2):
@@ -251,7 +250,7 @@ func erase_at_position_immediate(position: Vector2):
 	
 	# 清除Object
 	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
-		object_map_layer.remove_object_at_position(position)
+		should_emit_sound = object_map_layer.remove_object_at_position(position) && should_emit_sound
 	
 	# print("右键清除：清除位置 ", position)
 	

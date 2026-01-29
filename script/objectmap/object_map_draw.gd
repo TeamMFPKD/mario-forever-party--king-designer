@@ -13,7 +13,7 @@ func setup_input_handler():
 	var input_handler = get_node("../../InputHandler")
 	if not input_handler:
 		# 如果没有，创建并添加
-		var input_handler_script = preload("res://script/input_handler.gd")
+		var input_handler_script = preload("uid://devgf5ccfvhwv")
 		input_handler = input_handler_script.new()
 		# 使用 call_deferred 避免父节点忙碌时添加子节点
 		get_parent().call_deferred("add_child", input_handler)
