@@ -2,6 +2,7 @@ extends Node
 
 @export var ani : AnimatedSprite2D
 @export var player_movement : PlayerMovement
+@export var player : CharacterBody2D
 
 var current_state : String = "idle"
 var last_direction : int = 1  # 1表示向右，-1表示向左
@@ -24,10 +25,9 @@ func update_animation():
 		current_state = new_state
 		last_direction = direction
 		
-		# 设置动画和方向
+		# 设置动画
 		if ani.sprite_frames.has_animation(current_state):
 			ani.animation = current_state
-			ani.flip_h = (direction == -1)
 			
 			# 如果是切换回walk动画，恢复之前的进度
 			if current_state == "walk" and ani.animation == "walk":
@@ -44,6 +44,15 @@ func update_animation():
 		# 持续记录walk动画的当前帧
 		if current_state == "walk" and ani.animation == "walk":
 			walk_animation_frame = ani.frame
+	
+	# 设置方向
+	if player.is_on_floor():
+		ani.flip_h = (direction == -1)
+	else:
+		if player_movement.move_left:
+			ani.flip_h = true
+		elif player_movement.move_right:
+			ani.flip_h = false
 
 # 根据角色状态和速度更新动画播放速度
 func update_animation_speed():
@@ -57,9 +66,7 @@ func update_animation_speed():
 			# 其他状态使用正常速度
 			ani.speed_scale = 1.0
 
-func determine_state() -> String:
-	var player = player_movement.player
-	
+func determine_state() -> String:	
 	# 检查是否在游泳状态
 	if is_in_water():
 		return "swim"
@@ -81,6 +88,7 @@ func determine_state() -> String:
 	if abs(player_movement.speed_x) > 0.0 and !player.is_on_wall():
 		if sign(player_movement.speed_x) != sign(player_movement.target_speed) \
 		and abs(player_movement.speed_x) > player_movement.max_speed_x * 0.5 \
+		and (player_movement.move_left or player_movement.move_right) \
 		or turn:
 			turn = true
 			return "turn"

@@ -34,7 +34,8 @@ collide_with_areas = true
 script = ExtResource("2_d0xdx")
 player = NodePath("../..")
 
-[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement")]
+[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement", "player")]
 script = ExtResource("3_d0xdx")
 ani = NodePath("../../AnimatedSprite2D")
 player_movement = NodePath("../PlayerMovement")
+player = NodePath("../..")
