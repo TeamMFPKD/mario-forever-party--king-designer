@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dgkew1nv882t7"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_n1bpi"]
+[ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="2_n1bpi"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_cdmt8"]
+
+[node name="SpawnerQuestionBlockHidden" type="Node2D"]
+script = ExtResource("1_n1bpi")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_n1bpi")
+
+[node name="OffsetMarker" parent="." instance=ExtResource("4_cdmt8")]

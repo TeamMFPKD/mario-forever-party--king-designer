@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://fhes1h8uh5xv"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_8t1g1"]
+[ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="2_8t1g1"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_irlhx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uuoyo"]
+atlas = ExtResource("2_8t1g1")
+region = Rect2(0, 0, 31, 48)
+
+[node name="SpawnerSpring" type="Node2D"]
+script = ExtResource("1_8t1g1")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_uuoyo")
+
+[node name="OffsetMarker" parent="." instance=ExtResource("3_irlhx")]
+position = Vector2(0, -8)

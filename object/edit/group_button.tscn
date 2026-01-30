@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://0xmx7bfg3xwu"]
+
+[ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_maxtu"]
+[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/item_box.png" id="1_src82"]
+[ext_resource type="Script" uid="uid://dh5jyddyk7vbq" path="res://script/edit/group_button.gd" id="2_0vreg"]
+[ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="2_maxtu"]
+[ext_resource type="AudioStream" uid="uid://d4chqh4mvx661" path="res://sound/edit/item_group_select.ogg" id="5_0vreg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kgkip"]
+atlas = ExtResource("2_maxtu")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="Animation" id="Animation_qh42o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ButtonTexture:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.1, 0.1)]
+}
+
+[sub_resource type="Animation" id="Animation_vvhug"]
+resource_name = "new_animation"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ButtonTexture:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.09, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.1, 0.1), Vector2(0.12, 0.12), Vector2(0.1, 0.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u4m4t"]
+_data = {
+&"RESET": SubResource("Animation_qh42o"),
+&"new_animation": SubResource("Animation_vvhug")
+}
+
+[node name="GroupButton" type="Button" unique_id=637023655]
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 160.0
+offset_bottom = 160.0
+theme = ExtResource("1_maxtu")
+script = ExtResource("2_0vreg")
+
+[node name="ButtonTexture" type="Sprite2D" parent="." unique_id=1856562228]
+self_modulate = Color(1, 1, 1, 0.5019608)
+position = Vector2(75.99999, 76.99999)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_src82")
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" type="Sprite2D" parent="ButtonTexture" unique_id=163007682]
+position = Vector2(-250, 30.00003)
+rotation = -0.2617994
+scale = Vector2(17, 17)
+texture = SubResource("AtlasTexture_kgkip")
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview3" type="Sprite2D" parent="ButtonTexture" unique_id=1531866913]
+position = Vector2(269.99994, 99.99997)
+rotation = 0.43633232
+scale = Vector2(17, 17)
+texture = SubResource("AtlasTexture_kgkip")
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview2" type="Sprite2D" parent="ButtonTexture" unique_id=2057330280]
+position = Vector2(20.000015, -50.00003)
+scale = Vector2(17, 17)
+texture = SubResource("AtlasTexture_kgkip")
+metadata/_edit_lock_ = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=188067364]
+stream = ExtResource("5_0vreg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1888260282]
+libraries/ = SubResource("AnimationLibrary_u4m4t")
+
+[connection signal="pressed" from="." to="AudioStreamPlayer" method="play"]
+[connection signal="pressed" from="." to="AnimationPlayer" method="play" binds= [&"new_animation"]]

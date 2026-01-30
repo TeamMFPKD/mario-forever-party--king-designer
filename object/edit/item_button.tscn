@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://b41scgyg4lqe8"]
+
+[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/item_box.png" id="1_072lp"]
+[ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_tw4dc"]
+[ext_resource type="Script" uid="uid://br4dgypxyxj4l" path="res://script/edit/item_button.gd" id="2_43re8"]
+[ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="3_qh42o"]
+[ext_resource type="AudioStream" uid="uid://dcglprempjllp" path="res://sound/edit/item_select.ogg" id="3_vvhug"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k5hgj"]
+atlas = ExtResource("3_qh42o")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="Animation" id="Animation_qh42o"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ButtonTexture:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.1, 0.1)]
+}
+
+[sub_resource type="Animation" id="Animation_vvhug"]
+resource_name = "new_animation"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ButtonTexture:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.09, 0.18),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.1, 0.1), Vector2(0.12, 0.12), Vector2(0.1, 0.1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k5hgj"]
+_data = {
+&"RESET": SubResource("Animation_qh42o"),
+&"new_animation": SubResource("Animation_vvhug")
+}
+
+[node name="ItemButton" type="Button"]
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 160.0
+offset_bottom = 160.0
+theme = ExtResource("1_tw4dc")
+script = ExtResource("2_43re8")
+metadata/_custom_type_script = "uid://br4dgypxyxj4l"
+
+[node name="ButtonTexture" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.5019608)
+position = Vector2(75.99999, 76.99999)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_072lp")
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" type="Sprite2D" parent="ButtonTexture"]
+scale = Vector2(19.999998, 19.999998)
+texture = SubResource("AtlasTexture_k5hgj")
+metadata/_edit_lock_ = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_vvhug")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_k5hgj")
+}
+
+[connection signal="pressed" from="." to="AudioStreamPlayer" method="play"]
+[connection signal="pressed" from="." to="AnimationPlayer" method="play" binds= [&"new_animation"]]

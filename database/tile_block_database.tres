@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="TileMapBlockDatabase" format=3 uid="uid://djxsjh4om7cvk"]
 
-[ext_resource type="Script" uid="uid://6as1rookwmdm" path="res://script/tilemap/tile_map_block_database.gd" id="1_hyd7o"]
-[ext_resource type="Script" uid="uid://cyiibxigdwr06" path="res://script/tilemap/tile_map_block_database_entry.gd" id="2_vp2qs"]
+[ext_resource type="Script" uid="uid://6as1rookwmdm" path="res://script/edit/tilemap/tile_map_block_database.gd" id="1_hyd7o"]
+[ext_resource type="Script" uid="uid://cyiibxigdwr06" path="res://script/edit/tilemap/tile_map_block_database_entry.gd" id="2_vp2qs"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="3_uvuqr"]
 [ext_resource type="TileSet" uid="uid://c5koerlaba07m" path="res://tileset/tileset_castle_b.tres" id="4_38pgq"]
 [ext_resource type="TileSet" uid="uid://dcao53javhom0" path="res://tileset/tileset_cave.tres" id="5_p7akc"]

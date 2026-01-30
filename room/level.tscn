@@ -1,49 +1,45 @@
 [gd_scene format=4 uid="uid://bnx7r3slvtcdt"]
 
-[ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/tilemap/tilemap_draw.gd" id="1_ju58f"]
-[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/game_room_size.gd" id="1_pey40"]
-[ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://object/grid/grid_2d.tscn" id="2_oqbmf"]
+[ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="1_ju58f"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="1_pey40"]
+[ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://object/edit/grid/grid_2d.tscn" id="2_oqbmf"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="4_f0xav"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="4_rgrya"]
-[ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/save_level.gd" id="7_8b0r0"]
-[ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/level_manager.gd" id="7_f0xav"]
-[ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/test_node.gd" id="8_3vbl4"]
-[ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/load_level.gd" id="8_h6smj"]
-[ext_resource type="Script" uid="uid://dl0jbge2cmsy8" path="res://script/level_control.gd" id="8_s5qn0"]
-[ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/tilemap/tile_set_manager.gd" id="10_agra6"]
+[ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="7_8b0r0"]
+[ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/edit/test_node.gd" id="8_3vbl4"]
+[ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="8_h6smj"]
+[ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="10_agra6"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="11_1o17k"]
-[ext_resource type="AudioStream" uid="uid://dgfoymd0r2bxs" path="res://sound/yr_EraseMode_Erase_1.wav" id="11_m8a77"]
-[ext_resource type="AudioStream" uid="uid://btnrl14rbqxbg" path="res://sound/SE_touchObject.wav" id="12_5yikb"]
+[ext_resource type="AudioStream" uid="uid://dgfoymd0r2bxs" path="res://sound/edit/yr_EraseMode_Erase_1.wav" id="11_m8a77"]
+[ext_resource type="AudioStream" uid="uid://btnrl14rbqxbg" path="res://sound/edit/SE_touchObject.wav" id="12_5yikb"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/utils/input_handler.gd" id="14_agra6"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="15_rcaub"]
-[ext_resource type="PackedScene" uid="uid://b41scgyg4lqe8" path="res://object/item_button.tscn" id="16_rgrya"]
-[ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/objectmap/object_map_layer.gd" id="17_1fopa"]
-[ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/objectmap/object_map_draw.gd" id="18_b64qb"]
-[ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/database_holder.gd" id="19_1fopa"]
-[ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/spawner/mark/spawner_player.tscn" id="19_1q74x"]
+[ext_resource type="PackedScene" uid="uid://b41scgyg4lqe8" path="res://object/edit/item_button.tscn" id="16_rgrya"]
+[ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="17_1fopa"]
+[ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="18_b64qb"]
+[ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="19_1fopa"]
+[ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="19_1q74x"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="20_1o17k"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="20_b64qb"]
-[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="20_c6bpw"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="20_iovuq"]
 [ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="20_j8vv5"]
-[ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/camera_edge.gd" id="21_2hpln"]
+[ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/edit/camera_edge.gd" id="21_2hpln"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="21_b64qb"]
-[ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/tilemap/tile_set_style.gd" id="21_xct0x"]
-[ext_resource type="PackedScene" uid="uid://0xmx7bfg3xwu" path="res://object/group_button.tscn" id="22_3f3ja"]
+[ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/edit/tilemap/tile_set_style.gd" id="21_xct0x"]
+[ext_resource type="PackedScene" uid="uid://0xmx7bfg3xwu" path="res://object/edit/group_button.tscn" id="22_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="22_c6bpw"]
 [ext_resource type="Texture2D" uid="uid://ciu4jkh28vrfr" path="res://sprite/pipe/pipe_horizontal.png" id="22_j8vv5"]
 [ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://sprite/tile/tile_castle_b.png" id="23_2hpln"]
 [ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="23_iovuq"]
-[ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/pipe_color.gd" id="23_uuoyo"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="24_4df1a"]
-[ext_resource type="PackedScene" uid="uid://ch2w5yfycdtlk" path="res://object/level_size_button.tscn" id="24_cyeqs"]
+[ext_resource type="PackedScene" uid="uid://ch2w5yfycdtlk" path="res://object/edit/level_size_button.tscn" id="24_cyeqs"]
 [ext_resource type="Texture2D" uid="uid://5stdy61pmtog" path="res://sprite/tile/tile_cave.png" id="24_gc7qq"]
 [ext_resource type="Texture2D" uid="uid://ejbgmhyor4n6" path="res://sprite/tile/tile_dusk.png" id="25_3f3ja"]
 [ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="25_w152k"]
 [ext_resource type="Texture2D" uid="uid://dagnbicl3nhg3" path="res://sprite/tile/tile_night.png" id="26_m8a77"]
 [ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="27_4fasx"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="27_5yikb"]
-[ext_resource type="AudioStream" uid="uid://12eiiaxfi3yr" path="res://sound/Opening Theme Menu.wav" id="27_d1ptk"]
+[ext_resource type="AudioStream" uid="uid://12eiiaxfi3yr" path="res://sound/edit/Opening Theme Menu.wav" id="27_d1ptk"]
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="28_c2yf8"]
 [ext_resource type="Texture2D" uid="uid://dmab4gsr188r3" path="res://sprite/tile/tile_sand.png" id="28_iytch"]
 [ext_resource type="Texture2D" uid="uid://dt1kt8637l2yy" path="res://sprite/tile/tile_snow.png" id="29_mjqcm"]
@@ -72,7 +68,7 @@
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="48_uuoyo"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="49_meded"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="50_28a77"]
-[ext_resource type="PackedScene" uid="uid://ccdwe4aun6qhw" path="res://object/theme_button.tscn" id="69_iytch"]
+[ext_resource type="PackedScene" uid="uid://ccdwe4aun6qhw" path="res://object/edit/theme_button.tscn" id="69_iytch"]
 [ext_resource type="Texture2D" uid="uid://det68trrrwcck" path="res://sprite/theme_preview/bg_preview_castle.png" id="70_06hbx"]
 [ext_resource type="Texture2D" uid="uid://b1sukktc65iri" path="res://sprite/theme_preview/bg_preview_castle_b.png" id="71_vidfw"]
 [ext_resource type="Texture2D" uid="uid://566f7q58vnma" path="res://sprite/theme_preview/bg_preview_cave.png" id="72_cyeqs"]
@@ -81,6 +77,476 @@
 [ext_resource type="Texture2D" uid="uid://do2r2vtxrv0r" path="res://sprite/theme_preview/bg_preview_sand.png" id="75_dxi2s"]
 [ext_resource type="Texture2D" uid="uid://36hej2aqjidd" path="res://sprite/theme_preview/bg_preview_snow.png" id="76_cynf6"]
 [ext_resource type="Texture2D" uid="uid://ddsje8cqntprf" path="res://sprite/theme_preview/bg_preview_volcano.png" id="77_locny"]
+
+[sub_resource type="GDScript" id="GDScript_06hbx"]
+script/source = "extends Node
+
+class_name LevelManager
+
+signal level_theme_changed(level_theme: LevelThemeEnum)
+
+@export_category(\"Level Data\")
+@export var version: String = \"1.0\"
+enum LevelThemeEnum {
+	CASTLE,
+	CASTLE_B,
+	CAVE,
+	DUSK,
+	NIGHT,
+	OVERWORLD,
+	SAND,
+	SNOW,
+	SNOW_B,
+	VOLCANO,
+}
+@export var level_theme: LevelThemeEnum:
+	set(value):
+		level_theme = value
+		update_theme()
+		emit_signal(\"level_theme_changed\", level_theme)
+
+@export var level_size: Array = [0, 0, 0, 0] # top, left, right, bottom
+
+@export var tile_data: PackedByteArray
+
+@export_category(\"References\")
+@export var level_camera: LevelCamera
+@export var tile_map : TileMapLayer
+@export var tile_set_manager : TileSetManager
+@export var object_map : ObjectMapLayer
+@export var bgp_manager : BgpManager
+
+var level_data_dict: Dictionary
+
+func _ready() -> void:
+	update_theme()
+
+func get_level_data_json() -> String:
+	level_size = [level_camera.limit_top, level_camera.limit_left, level_camera.limit_right, level_camera.limit_bottom]
+
+	tile_data = tile_map.tile_map_data
+
+	# 使用ObjectMapLayer的get_object_data方法获取正确的保存格式
+	var object_data = []
+	if object_map and object_map.has_method(\"get_object_data\"):
+		object_data = object_map.get_object_data()
+	else:
+		push_warning(\"ObjectMapLayer not found or missing get_object_data method\")
+
+	level_data_dict = {
+		\"version\": version,
+		\"level_theme\": level_theme,
+		\"level_size\": level_size,
+		\"tilemap_data\": tile_data as Array,
+		\"object_data\": object_data
+	}
+	
+	var level_data_json = JSON.stringify(level_data_dict, \"\")
+	return level_data_json
+
+func load_level_data_from_json(level_data_json: String) -> void:
+	var json = JSON.new()
+	var error = json.parse(level_data_json)
+	
+	if error != OK:
+		push_error(\"Failed to parse level data JSON.\")
+		return
+
+	level_data_dict = json.data
+
+	version = level_data_dict.get(\"version\", \"1.0\")
+
+	level_size = level_data_dict.get(\"level_size\", [0, 0, 640, 480])
+	level_camera.set_limit_top(level_size[0])
+	level_camera.set_limit_left(level_size[1])
+	level_camera.set_limit_right(level_size[2])
+	level_camera.set_limit_bottom(level_size[3])
+
+	level_theme = level_data_dict.get(\"level_theme\", LevelThemeEnum.OVERWORLD)
+	
+	# 加载瓦片数据
+	var tile_data_array = level_data_dict.get(\"tilemap_data\", [])
+	if tile_data_array is Array and tile_data_array != []:
+		var tile_data_bytes_array = PackedByteArray(tile_data_array)
+		tile_map.tile_map_data = tile_data_bytes_array
+		print(\"瓦片数据加载完成\")
+	else:
+		push_warning(\"No tile data found in level file\")
+	
+	# 加载对象数据
+	var object_data_array = level_data_dict.get(\"object_data\", [])
+	if object_data_array is Array:
+		if object_map and object_map.has_method(\"load_object_data\"):
+			object_map.load_object_data(object_data_array)
+			print(\"对象数据加载完成，共加载 \", object_data_array.size(), \" 个对象\")
+		else:
+			push_warning(\"ObjectMapLayer not found or missing load_object_data method\")
+	else:
+		push_warning(\"No object data found in level file\")
+
+	print(\"Level loaded.\")
+
+	
+	
+func update_theme() -> void:
+	# Update TileMap and Background
+	if tile_set_manager != null:
+		tile_set_manager.update_tile_set(level_theme)
+	else:
+		push_warning(\"TileSetManager is null!\")
+	if bgp_manager != null:
+		bgp_manager.update_bgp(level_theme)
+	else:
+		push_warning(\"BgpManager is null!\")
+"
+
+[sub_resource type="GDScript" id="GDScript_vidfw"]
+script/source = "extends Node
+
+class_name LevelControl
+
+enum DrawingMode {
+	TILEMAP,
+	OBJECTMAP,
+	ERASER
+}
+
+# 信号
+signal drawing_mode_changed(mode: DrawingMode)
+signal object_selected(object_name: String)
+signal play_sound_place()
+signal play_sound_erase()
+
+# 当前绘图模式
+var current_drawing_mode: DrawingMode = DrawingMode.TILEMAP
+var current_object_name: String = \"\"
+
+# 节点引用
+@export var tile_map_draw: Node
+@export var object_map_layer: ObjectMapLayer
+@export var object_map_draw: Node
+
+# 按钮引用（只保留非ItemButton的按钮）
+@export var tile_button: Button
+@export var button_eraser: Button
+
+func _ready():
+	# 连接按钮信号
+	if tile_button:
+		print(\"LevelControl: 找到tile_button，准备连接信号\")
+		tile_button.pressed.connect(_on_tile_button_pressed)
+		print(\"LevelControl: tile_button信号连接完成\")
+	else:
+		print(\"LevelControl: 错误：tile_button未找到\")
+	
+	if button_eraser:
+		print(\"LevelControl: 找到button_eraser，准备连接信号\")
+		button_eraser.pressed.connect(_on_eraser_button_pressed)
+		print(\"LevelControl: button_eraser信号连接完成\")
+	else:
+		print(\"LevelControl: 错误：button_eraser未找到\")
+	
+	# 初始化模式
+	switch_to_tilemap_mode()
+
+func switch_to_tilemap_mode():
+	current_drawing_mode = DrawingMode.TILEMAP
+	current_object_name = \"\"
+	
+	# 启用TileMap绘制，禁用ObjectMap绘制和橡皮擦
+	if tile_map_draw and tile_map_draw.has_method(\"set_drawing_enabled\"):
+		tile_map_draw.set_drawing_enabled(true)
+		if tile_map_draw.has_method(\"set_brush_mode\"):
+			tile_map_draw.set_brush_mode(true)  # 设置为绘制模式
+		
+		# 清除自定义图块坐标，恢复默认行为
+		if tile_map_draw.has_method(\"clear_custom_atlas_coords\"):
+			tile_map_draw.clear_custom_atlas_coords()
+	
+	if object_map_layer and object_map_layer.has_method(\"stop_placing_object\"):
+		object_map_layer.stop_placing_object()
+		object_map_layer.drawing_enabled = false
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	
+	print(\"切换到TileMap绘图模式\")
+
+# 切换到对象地图模式（通过对象名称）
+func switch_to_objectmap_mode(object_name: String):
+	current_drawing_mode = DrawingMode.OBJECTMAP
+	current_object_name = object_name
+	
+	# 禁用TileMap绘制，启用ObjectMap绘制
+	if tile_map_draw and tile_map_draw.has_method(\"set_drawing_enabled\"):
+		tile_map_draw.set_drawing_enabled(false)
+	
+	if object_map_layer and object_map_layer.has_method(\"start_placing_object\"):
+		object_map_layer.start_placing_object(object_name)
+		object_map_layer.drawing_enabled = true
+
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	object_selected.emit(object_name)
+	
+	print(\"切换到ObjectMap绘图模式，对象名称: \", object_name)
+
+func switch_to_eraser_mode():
+	current_drawing_mode = DrawingMode.ERASER
+	current_object_name = \"\"
+	
+	# 启用TileMap绘制但设置为擦除模式，禁用ObjectMap绘制
+	if tile_map_draw and tile_map_draw.has_method(\"set_drawing_enabled\"):
+		tile_map_draw.set_drawing_enabled(true)
+		if tile_map_draw.has_method(\"set_brush_mode\"):
+			tile_map_draw.set_brush_mode(false)  # 设置为擦除模式
+	
+	if object_map_layer and object_map_layer.has_method(\"stop_placing_object\"):
+		object_map_layer.stop_placing_object()
+		object_map_layer.drawing_enabled = false
+
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	
+	print(\"切换到橡皮擦模式\")
+
+
+func _on_tile_button_pressed():
+	switch_to_tilemap_mode()
+
+func _on_eraser_button_pressed():
+	switch_to_eraser_mode()
+
+# 切换到TileMap绘图模式（支持自定义图块坐标）
+func switch_to_tilemap_mode_with_coords(custom_atlas_coords: Vector2i = Vector2i(-1, -1)):
+	current_drawing_mode = DrawingMode.TILEMAP
+	current_object_name = \"\"
+	
+	# 启用TileMap绘制，禁用ObjectMap绘制和橡皮擦
+	if tile_map_draw and tile_map_draw.has_method(\"set_drawing_enabled\"):
+		tile_map_draw.set_drawing_enabled(true)
+		if tile_map_draw.has_method(\"set_brush_mode\"):
+			tile_map_draw.set_brush_mode(true)  # 设置为绘制模式
+		
+		# 设置自定义图块坐标（如果提供）
+		if custom_atlas_coords != Vector2i(-1, -1) and tile_map_draw.has_method(\"set_custom_atlas_coords\"):
+			tile_map_draw.set_custom_atlas_coords(custom_atlas_coords)
+		else:
+			# 清除自定义图块坐标
+			if tile_map_draw.has_method(\"clear_custom_atlas_coords\"):
+				tile_map_draw.clear_custom_atlas_coords()
+	
+	if object_map_layer and object_map_layer.has_method(\"stop_placing_object\"):
+		object_map_layer.stop_placing_object()
+		object_map_layer.drawing_enabled = false
+	
+	
+	# 发出信号
+	drawing_mode_changed.emit(current_drawing_mode)
+	
+	print(\"切换到TileMap绘图模式\", 
+		  \" (自定义图块坐标: \", custom_atlas_coords, \")\" if custom_atlas_coords != Vector2i(-1, -1) else \"\")
+
+# 获取当前绘图模式
+func get_current_drawing_mode() -> DrawingMode:
+	return current_drawing_mode
+
+# 获取当前选中的对象名称
+func get_current_object_name() -> String:
+	return current_object_name
+
+# 检查是否在TileMap模式
+func is_tilemap_mode() -> bool:
+	return current_drawing_mode == DrawingMode.TILEMAP
+
+# 检查是否在ObjectMap模式
+func is_objectmap_mode() -> bool:
+	return current_drawing_mode == DrawingMode.OBJECTMAP
+
+# 检查是否在橡皮擦模式
+func is_eraser_mode() -> bool:
+	return current_drawing_mode == DrawingMode.ERASER
+
+# 橡皮擦功能：在指定位置清除Tile和Object（受当前模式限制）
+func erase_at_position(position: Vector2):
+	if current_drawing_mode != DrawingMode.ERASER:
+		return
+
+	# 检查该位置是否存在tile或object
+	var has_tile = false
+	var has_object = false
+	
+	# 检查TileMap
+	if tile_map_draw and tile_map_draw.tile_map:
+		# 将世界坐标转换为本地坐标
+		var local_pos = tile_map_draw.to_local(position)
+		# 获取单元格坐标
+		var cell_size = tile_map_draw.tile_map.tile_set.tile_size
+		var cell_coords = Vector2i(
+			floor(local_pos.x / cell_size.x),
+			floor(local_pos.y / cell_size.y)
+		)
+		# 检查该位置是否有瓦片
+		has_tile = tile_map_draw.tile_map.get_cell_source_id(cell_coords) != -1
+	
+	# 检查ObjectMap
+	if object_map_layer:
+		var grid_position = object_map_layer.align_to_grid(position)
+		has_object = object_map_layer.is_grid_position_occupied(grid_position)
+	
+	# 只有当存在tile或object时才播放音效
+	var should_emit_sound = has_tile || has_object
+	
+	# 清除Tile
+	if tile_map_draw and tile_map_draw.has_method(\"erase_tile_at_position\"):
+		tile_map_draw.erase_tile_at_position(position)
+	
+	# 清除Object
+	if object_map_layer and object_map_layer.has_method(\"remove_object_at_position\"):
+		should_emit_sound = object_map_layer.remove_object_at_position(position) && should_emit_sound
+	
+	print(\"橡皮擦：清除位置 \", position)
+	
+	if should_emit_sound:
+		emit_signal(\"play_sound_erase\")
+
+# 新增：不受模式限制的清除功能（用于右键点击）
+func erase_at_position_immediate(position: Vector2):
+	# 检查该位置是否存在tile或object
+	var has_tile = false
+	var has_object = false
+	
+	# 调试输出（已注释掉）
+	# print(\"开始清除操作，世界坐标: \", position)
+	
+	# 检查TileMap
+	if tile_map_draw and tile_map_draw.tile_map:
+		# 将世界坐标转换为本地坐标
+		var local_pos = tile_map_draw.to_local(position)
+		# 获取单元格坐标
+		var cell_size = tile_map_draw.tile_map.tile_set.tile_size
+		var cell_coords = Vector2i(
+			floor(local_pos.x / cell_size.x),
+			floor(local_pos.y / cell_size.y)
+		)
+		# 检查该位置是否有瓦片
+		has_tile = tile_map_draw.tile_map.get_cell_source_id(cell_coords) != -1
+		
+		# print(\"TileMap本地坐标: \", local_pos, \" 单元格坐标: \", cell_coords, \" 是否有瓦片: \", has_tile)
+	
+	# 检查ObjectMap
+	if object_map_layer:
+		var grid_position = object_map_layer.align_to_grid(position)
+		has_object = object_map_layer.is_grid_position_occupied(grid_position)
+		
+		# print(\"ObjectMap网格位置: \", grid_position, \" 是否有对象: \", has_object)
+	
+	# 只有当存在tile或object时才播放音效
+	var should_emit_sound = has_tile || has_object
+
+	# 不检查当前模式，直接清除Tile和Object
+	# 清除Tile
+	if tile_map_draw and tile_map_draw.has_method(\"erase_tile_at_position\"):
+		tile_map_draw.erase_tile_at_position(position)
+	
+	# 清除Object
+	if object_map_layer and object_map_layer.has_method(\"remove_object_at_position\"):
+		should_emit_sound = object_map_layer.remove_object_at_position(position) && should_emit_sound
+	
+	# print(\"右键清除：清除位置 \", position)
+	
+	if should_emit_sound:
+		emit_signal(\"play_sound_erase\")
+
+# 处理ItemButton的按下事件
+func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton):
+	var object_name = \"\"  # 在函数开头定义object_name变量
+	
+	match item_type:
+		ItemButton.ItemType.TILE:
+			# 检查按钮名称，为不同的Tile按钮设置不同的图块坐标
+			if \"TileSingle\" in button.name:
+				# ItemButtonTileSingle按钮，设置atlas_coords为(0, 4)
+				switch_to_tilemap_mode_with_coords(Vector2i(0, 4))
+			elif \"TileSemiSolid\" in button.name:
+				# ItemButtonTileSemiSolid按钮，设置atlas_coords为(1, 4)
+				switch_to_tilemap_mode_with_coords(Vector2i(1, 4))
+			else:
+				# 其他Tile按钮，使用默认行为
+				switch_to_tilemap_mode()
+		ItemButton.ItemType.OBJECT:
+			# 使用按钮的object_name属性
+			object_name = button.object_name
+			if object_name == \"\":
+				# 如果object_name为空，使用按钮名称作为默认值
+				object_name = button.name.replace(\"ItemButton\", \"\").to_lower()
+				print(\"警告：ItemButton \", button.name, \" 的object_name为空，使用默认名称: \", object_name)
+			
+			switch_to_objectmap_mode(object_name)
+		ItemButton.ItemType.ERASER:
+			switch_to_eraser_mode()
+	
+	print(\"ItemButton按下: \", button.name, \" 类型: \", item_type, \" 对象名称: \", object_name)
+
+	var item_groups = get_tree().get_nodes_in_group(\"item_group\")
+	for node in item_groups:
+		if node is Control:
+			var control = node as Control
+			var timer = get_tree().create_timer(0.1)
+			await timer.timeout
+			control.visible = false"
+
+[sub_resource type="GDScript" id="GDScript_cyeqs"]
+script/source = "extends Camera2D
+
+class_name LevelCamera
+
+signal limit_changed(top: int, left: int, right: int, bottom: int)
+
+@export var max_speed : float = 16.0
+
+var speed : float = 0.0
+var direction := Vector2.ZERO
+
+func _physics_process(delta: float) -> void:
+	direction = Vector2.ZERO
+	if Input.is_action_pressed(\"move_up\"):
+		direction += Vector2.UP
+		speed = max_speed
+	if Input.is_action_pressed(\"move_down\"):
+		direction += Vector2.DOWN
+		speed = max_speed
+	if Input.is_action_pressed(\"move_left\"):
+		direction += Vector2.LEFT
+		speed = max_speed
+	if Input.is_action_pressed(\"move_right\"):
+		direction += Vector2.RIGHT
+		speed = max_speed
+	direction = direction.normalized()
+	position += direction * speed
+	speed = 0.0
+
+	position.x = clamp(position.x, limit_left + 320, limit_right - 320)
+	position.y = clamp(position.y, limit_top + 240, limit_bottom - 240)
+
+func set_limit_top(value):
+	limit_top = min(value, limit_bottom - 480)
+	emit_signal(\"limit_changed\", limit_top, limit_left, limit_right, limit_bottom)
+
+func set_limit_left(value):
+	limit_left = min(value, limit_right - 640)
+	emit_signal(\"limit_changed\", limit_top, limit_left, limit_right, limit_bottom)
+
+func set_limit_right(value):
+	limit_right = max(value, limit_left + 640)
+	emit_signal(\"limit_changed\", limit_top, limit_left, limit_right, limit_bottom)
+
+func set_limit_bottom(value):
+	limit_bottom = max(value, limit_top + 480)
+	emit_signal(\"limit_changed\", limit_top, limit_left, limit_right, limit_bottom)
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("23_iovuq")
@@ -134,6 +600,41 @@ region = Rect2(32, 128, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
 atlas = ExtResource("20_iovuq")
 region = Rect2(0, 0, 448, 64)
+
+[sub_resource type="GDScript" id="GDScript_d1ptk"]
+script/source = "extends Node
+
+@export var sprite: Sprite2D
+static var level_manager: LevelManager
+
+func _ready() -> void:
+	level_manager = get_tree().get_first_node_in_group(\"level_manager\") as LevelManager
+	level_manager.level_theme_changed.connect(update_pipe_color)
+	update_pipe_color(level_manager.level_theme)
+
+func update_pipe_color(level_theme: LevelManager.LevelThemeEnum) -> void:
+	match level_theme:
+		LevelManager.LevelThemeEnum.CASTLE:
+			sprite.frame = 5
+		LevelManager.LevelThemeEnum.CASTLE_B:
+			sprite.frame = 6
+		LevelManager.LevelThemeEnum.CAVE:
+			sprite.frame = 1
+		LevelManager.LevelThemeEnum.DUSK:
+			sprite.frame = 2
+		LevelManager.LevelThemeEnum.NIGHT:
+			sprite.frame = 1
+		LevelManager.LevelThemeEnum.OVERWORLD:
+			sprite.frame = 0
+		LevelManager.LevelThemeEnum.SAND:
+			sprite.frame = 3
+		LevelManager.LevelThemeEnum.SNOW:
+			sprite.frame = 4
+		LevelManager.LevelThemeEnum.SNOW_B:
+			sprite.frame = 4
+		LevelManager.LevelThemeEnum.VOLCANO:
+			sprite.frame = 5
+"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_abu5c"]
 load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
@@ -308,7 +809,7 @@ object_database = ExtResource("4_rgrya")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
 [node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
-script = ExtResource("7_f0xav")
+script = SubResource("GDScript_06hbx")
 version = null
 level_theme = 5
 level_size = null
@@ -329,7 +830,7 @@ script = ExtResource("8_h6smj")
 level_data_node = NodePath("../LevelManager")
 
 [node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
-script = ExtResource("8_s5qn0")
+script = SubResource("GDScript_vidfw")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
 object_map_layer = NodePath("../ObjectMapLayer")
 object_map_draw = NodePath("../ObjectMapLayer/ObjectMapDraw")
@@ -404,7 +905,7 @@ limit_bottom = 480
 limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 10.0
-script = ExtResource("20_c6bpw")
+script = SubResource("GDScript_cyeqs")
 
 [node name="CameraEdge" type="Line2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1610602791]
 closed = true
@@ -1011,7 +1512,7 @@ texture = SubResource("AtlasTexture_r2ek7")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/ButtonTexture/ItemPreview" index="0" unique_id=1284621214 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="ItemPreview3" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/ButtonTexture" parent_id_path=PackedInt32Array(1147622410, 1856562228) index="1" unique_id=1531866913]
@@ -1020,7 +1521,7 @@ texture = SubResource("AtlasTexture_r2ek7")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/ButtonTexture/ItemPreview3" index="0" unique_id=1737320521 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="ItemPreview2" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/ButtonTexture" parent_id_path=PackedInt32Array(1147622410, 1856562228) index="2" unique_id=2057330280]
@@ -1029,7 +1530,7 @@ texture = SubResource("AtlasTexture_r2ek7")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/ButtonTexture/ItemPreview2" index="0" unique_id=1168821242 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="Pipe" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe" unique_id=1994847249 groups=["item_group"]]
@@ -1055,7 +1556,7 @@ texture = SubResource("AtlasTexture_r2ek7")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalUp/ButtonTexture/ItemPreview" index="0" unique_id=773894876 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="ItemButtonPipeVerticalMiddle" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer" unique_id=300573779 instance=ExtResource("16_rgrya")]
@@ -1070,7 +1571,7 @@ texture = SubResource("AtlasTexture_uly8c")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle/ButtonTexture/ItemPreview" index="0" unique_id=1175489177 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="ItemButtonPipeVerticalDown" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer" unique_id=1842144618 instance=ExtResource("16_rgrya")]
@@ -1085,7 +1586,7 @@ texture = SubResource("AtlasTexture_lh15n")
 hframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalDown/ButtonTexture/ItemPreview" index="0" unique_id=177672891 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe" unique_id=386644186]
@@ -1105,7 +1606,7 @@ texture = SubResource("AtlasTexture_ud7lq")
 vframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2/ItemButtonPipeHorizontalLeft/ButtonTexture/ItemPreview" index="0" unique_id=1316994742 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="ItemButtonPipeHorizontalMiddle" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2" unique_id=683360901 instance=ExtResource("16_rgrya")]
@@ -1120,7 +1621,7 @@ texture = SubResource("AtlasTexture_360xo")
 vframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2/ItemButtonPipeHorizontalMiddle/ButtonTexture/ItemPreview" index="0" unique_id=1811779966 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="ItemButtonPipeHorizontalRight" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2" unique_id=1961523221 instance=ExtResource("16_rgrya")]
@@ -1135,7 +1636,7 @@ texture = SubResource("AtlasTexture_f0dhw")
 vframes = 7
 
 [node name="PipeColor" type="Node" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight/ButtonTexture/ItemPreview" index="0" unique_id=1764791648 node_paths=PackedStringArray("sprite")]
-script = ExtResource("23_uuoyo")
+script = SubResource("GDScript_d1ptk")
 sprite = NodePath("..")
 
 [node name="GroupButtonEnemy" parent="GameRoomSize/BottomItemGroups" unique_id=33528519 node_paths=PackedStringArray("item_group") instance=ExtResource("22_3f3ja")]

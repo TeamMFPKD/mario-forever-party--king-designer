@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bcfmfgm8jsnuo"]
+
+[ext_resource type="Script" uid="uid://c0b1at08nifg8" path="res://script/level/enemy/enemy_interaction.gd" id="1_d33ca"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="2_70xvh"]
+
+[node name="EnemyInteraction" type="Node" unique_id=1317140342]
+script = ExtResource("1_d33ca")
+enemy_interaction_component_meta = Array[StringName]([&"interaction_with_player"])
+metadata/_custom_type_script = "uid://c0b1at08nifg8"
+
+[node name="InteractionWithPlayer" type="Node" parent="." unique_id=707962705]
+script = ExtResource("2_70xvh")
+metadata/_custom_type_script = "uid://dy8q17c1owdph"

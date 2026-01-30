@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://cw30nlxu2qg8n"]
+
+[ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="1_ha5uy"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="1_u6sbr"]
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/enemy/basic_movement.gd" id="2_8q1ti"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="4_ndbwy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30183"]
+atlas = ExtResource("1_ha5uy")
+region = Rect2(0, 0, 31, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0cip"]
+atlas = ExtResource("1_ha5uy")
+region = Rect2(0, 32, 31, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_00uy1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30183")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0cip")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(32, 32)
+
+[node name="Goomba" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 16
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_00uy1")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+shape = SubResource("RectangleShape2D_gj0k3")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="BasicMovement" type="Node" parent="." unique_id=2103801211 node_paths=PackedStringArray("move_object")]
+script = ExtResource("2_8q1ti")
+move_object = NodePath("..")
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="InteractionWithPlayer" type="Node" parent="." unique_id=793609960]
+script = ExtResource("1_u6sbr")
+metadata/_custom_type_script = "uid://dy8q17c1owdph"
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("4_ndbwy")]

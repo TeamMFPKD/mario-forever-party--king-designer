@@ -1,7 +1,8 @@
 [gd_scene format=4 uid="uid://bijt3ar5fx2ad"]
 
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="1_0gg1k"]
-[ext_resource type="PackedScene" uid="uid://ckmp8d6mn8kmq" path="res://object/player/player.tscn" id="2_ds6h8"]
+[ext_resource type="PackedScene" uid="uid://ckmp8d6mn8kmq" path="res://object/level/player/player.tscn" id="2_ds6h8"]
+[ext_resource type="PackedScene" uid="uid://cw30nlxu2qg8n" path="res://object/level/enemy/goomba.tscn" id="3_isgoj"]
 
 [node name="PlayRoom" type="Node2D" unique_id=822465384]
 
@@ -16,3 +17,9 @@ position = Vector2(56, 168)
 zoom = Vector2(2, 2)
 process_callback = 0
 metadata/_edit_lock_ = true
+
+[node name="Goomba" parent="." unique_id=114751985 instance=ExtResource("3_isgoj")]
+position = Vector2(608, 392)
+
+[node name="Goomba2" parent="." unique_id=1458296091 instance=ExtResource("3_isgoj")]
+position = Vector2(672, 392)
