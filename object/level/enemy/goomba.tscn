@@ -1,9 +1,13 @@
 [gd_scene format=3 uid="uid://cw30nlxu2qg8n"]
 
 [ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="1_ha5uy"]
-[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="1_u6sbr"]
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/enemy/basic_movement.gd" id="2_8q1ti"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/enemy/basic_shape_cast_2d.tscn" id="3_p0ubx"]
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="4_ndbwy"]
+[ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/enemy/auto_sprite_flip_h.gd" id="4_vku51"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_vku51"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/enemy/general_visible_on_screen_enabler_2d.tscn" id="6_vhqn3"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="7_vku51"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_30183"]
 atlas = ExtResource("1_ha5uy")
@@ -38,6 +42,7 @@ sprite_frames = SubResource("SpriteFrames_00uy1")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+visible = false
 shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
@@ -46,8 +51,20 @@ script = ExtResource("2_8q1ti")
 move_object = NodePath("..")
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
-[node name="InteractionWithPlayer" type="Node" parent="." unique_id=793609960]
-script = ExtResource("1_u6sbr")
-metadata/_custom_type_script = "uid://dy8q17c1owdph"
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_p0ubx")]
+
+[node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
+script = ExtResource("4_vku51")
+metadata/_custom_type_script = "uid://chvbcq7uttlml"
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_vku51")]
 
 [node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("4_ndbwy")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("6_vhqn3")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("7_vku51")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[editable path="EnemyInteraction"]

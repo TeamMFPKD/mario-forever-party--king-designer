@@ -13,7 +13,7 @@ tile_set = ExtResource("1_0gg1k")
 [node name="Player" parent="." unique_id=1151748388 instance=ExtResource("2_ds6h8")]
 position = Vector2(56, 168)
 
-[node name="CameraPlayerForTest" type="Camera2D" parent="Player" unique_id=1777036543]
+[node name="CameraPlayerForTest" type="Camera2D" parent="Player" unique_id=1777036543 groups=["level_camera"]]
 zoom = Vector2(2, 2)
 process_callback = 0
 metadata/_edit_lock_ = true
@@ -23,3 +23,6 @@ position = Vector2(608, 392)
 
 [node name="Goomba2" parent="." unique_id=1458296091 instance=ExtResource("3_isgoj")]
 position = Vector2(672, 392)
+
+[node name="Goomba3" parent="." unique_id=41028732 instance=ExtResource("3_isgoj")]
+position = Vector2(296, 312)

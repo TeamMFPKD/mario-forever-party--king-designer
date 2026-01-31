@@ -19,7 +19,8 @@ func _on_parent_exiting() -> void:
 	if parent:
 		parent.remove_child(self)
 	var fn = func():
-		viewport.add_child(self)
+		if viewport:
+			viewport.add_child(self)
 		playing_detect = true
 	fn.call_deferred()
 	finished.connect(queue_free)
