@@ -4,6 +4,7 @@ var level_camera : Camera2D
 
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as LevelCamera
+	print(level_camera)
 	level_camera.limit_changed.connect(_on_camera_limit_changed)
 	_on_camera_limit_changed(level_camera.limit_top, level_camera.limit_left, level_camera.limit_right, level_camera.limit_bottom)
 

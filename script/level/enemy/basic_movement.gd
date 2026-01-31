@@ -11,18 +11,28 @@ class_name BasicMovement
 @export var jump_speed: float
 @export var edge_detect: bool = false
 
+@export var overlap_turn : bool = true
+@export var path_to_shape_cast: NodePath = "../BasicShapeCast2D"
+
+var shape_cast
+
 const FRAMERATE_ORIGIN: float = 50.0
 var player: CharacterBody2D
 var _not_in_wall: bool = false
+
+var overlap_turn_detect_objects: Array[Node2D] = []
 
 func _ready() -> void:
 	move_object = get_parent() as CharacterBody2D
 	player = get_tree().get_first_node_in_group("player") as CharacterBody2D
 	if initially_face_to_player:
 		set_movement_direction()
+	if overlap_turn:
+		shape_cast = get_node(path_to_shape_cast) as ShapeCast2D
 
 func _physics_process(delta: float) -> void:
 	turn_detect()
+	overlap_turn_detect()
 	speed_x_process()
 	speed_y_process()
 	apply_speed()
@@ -44,6 +54,22 @@ func turn_detect() -> void:
 			speed_x *= -1.0
 		move_object.position = origin_position
 		move_object.force_update_transform()
+
+func overlap_turn_detect() -> void:
+	if not overlap_turn_detect:
+		return
+	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
+	# exclude_parent 十大未解之谜
+	print(results.size())
+	if results.size() <= 1:
+		overlap_turn_detect_objects.clear()
+		return
+	for result in results:
+		if result == move_object:
+			continue
+		if !(result in overlap_turn_detect_objects):
+			overlap_turn_detect_objects.append(result)
+			speed_x *= -1.0
 
 func speed_x_process() -> void:
 	# x 速度

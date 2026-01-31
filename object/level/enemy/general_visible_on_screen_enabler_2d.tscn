@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://baq2ha1qr7oy0"]
+
+[ext_resource type="Script" uid="uid://caj7gfq4mrsgy" path="res://script/level/enemy/general_visible_on_screen_enabler_2d.gd" id="1_m6ya5"]
+
+[node name="GeneralVisibleOnScreenEnabler2d" type="VisibleOnScreenEnabler2D" unique_id=331215067]
+rect = Rect2(-100, -100, 200, 200)
+show_rect = false
+script = ExtResource("1_m6ya5")
+metadata/_edit_lock_ = true
+
+[connection signal="screen_entered" from="." to="." method="_on_screen_entered"]
