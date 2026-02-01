@@ -2,13 +2,25 @@ extends Node
 
 @export var ani : AnimatedSprite2D
 @export var player_movement : PlayerMovement
+@export var player_suit : PlayerSuit
 @export var player : CharacterBody2D
+
+@export_group("player_spritesframe")
+@export var player_small_spritesframe : SpriteFrames
+@export var player_super_spritesframe : SpriteFrames
+@export var player_fireball_spritesframe : SpriteFrames
+@export var player_beetroot_spritesframe : SpriteFrames
+@export var player_lui_spritesframe : SpriteFrames
 
 var current_state : String = "idle"
 var last_direction : int = 1  # 1表示向右，-1表示向左
 var walk_animation_frame : int = 0  # 记录walk动画的当前帧
 
 var turn : bool = false
+
+var is_appearing : bool = false
+@export var appear_time : int = 80
+var appear_timer : int = 0
 
 func _physics_process(delta):
 	update_animation()
@@ -66,7 +78,14 @@ func update_animation_speed():
 			# 其他状态使用正常速度
 			ani.speed_scale = 1.0
 
-func determine_state() -> String:	
+func determine_state() -> String:
+	if is_appearing:
+		appear_timer += 1
+		if appear_timer >= appear_time:
+			appear_timer = 0
+			is_appearing = false
+		return "appear"
+
 	# 检查是否在游泳状态
 	if is_in_water():
 		return "swim"
@@ -113,3 +132,19 @@ func is_in_water() -> bool:
 	# 这里需要根据游戏的实际逻辑来判断角色是否在水中
 	# 暂时返回false，需要根据游戏的水体检测逻辑来实现
 	return false
+
+func _on_player_suit_changed():
+	match player_suit.suit:
+		PlayerSuit.SuitType.SMALL:
+			ani.sprite_frames = player_small_spritesframe
+		PlayerSuit.SuitType.SUPER:
+			ani.sprite_frames = player_super_spritesframe
+		PlayerSuit.SuitType.POWERED:
+			match player_suit.power:
+				PlayerSuit.PowerupType.FIREBALL:
+					ani.sprite_frames = player_fireball_spritesframe
+				PlayerSuit.PowerupType.BEETROOT:
+					ani.sprite_frames = player_beetroot_spritesframe
+				PlayerSuit.PowerupType.LUI:
+					ani.sprite_frames = player_lui_spritesframe
+	is_appearing = true

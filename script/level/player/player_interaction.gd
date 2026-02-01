@@ -21,14 +21,12 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 			if player.position.y < result.position.y + interaction_with_player_node.stomp_offset \
 			and interaction_with_player_node.stompable:
 				# 踩踏成功
-				print("lolostep")
 				player_movement.speed_y = interaction_with_player_node.on_stomped(player)
 			else:
 				# 踩踏失败
 				match interaction_with_player_node.hurt_type:
 					InteractionWithPlayer.HurtType.HURT:
 						emit_signal("player_hurt")
-						print("fofohurt")
 					InteractionWithPlayer.HurtType.DIE:
 						emit_signal("player_die")
 					InteractionWithPlayer.HurtType.NOTHING:

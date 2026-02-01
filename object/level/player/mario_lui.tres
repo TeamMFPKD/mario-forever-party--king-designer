@@ -2,6 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://ykk63fwulmle" path="res://sprite/player/mario_lui.png" id="1_ew37k"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ww26i"]
+atlas = ExtResource("1_ew37k")
+region = Rect2(96, 0, 48, 66)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0swec"]
+atlas = ExtResource("1_ew37k")
+region = Rect2(144, 0, 48, 66)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_5h11f"]
 atlas = ExtResource("1_ew37k")
 region = Rect2(288, 0, 48, 66)
@@ -48,6 +56,17 @@ region = Rect2(48, 0, 48, 66)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ww26i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0swec")
+}],
+"loop": true,
+"name": &"appear",
+"speed": 20.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5h11f")
