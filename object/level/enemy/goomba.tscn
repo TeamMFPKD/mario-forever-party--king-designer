@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cw30nlxu2qg8n"]
 
 [ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="1_ha5uy"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/enemy/basic_movement.gd" id="2_8q1ti"]
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_8q1ti"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/enemy/basic_shape_cast_2d.tscn" id="3_p0ubx"]
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="4_ndbwy"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/enemy/auto_sprite_flip_h.gd" id="4_vku51"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/enemy/general_visible_on_screen_enabler_2d.tscn" id="6_vhqn3"]
 [ext_resource type="PackedScene" uid="uid://b4tdq2dr3cldf" path="res://object/level/enemy/goomba_dead_stomp.tscn" id="7_i1ya0"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="7_vku51"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_eqnlm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_30183"]
 atlas = ExtResource("1_ha5uy")
@@ -63,7 +64,7 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_0rfih")]
 dead_scene_stomp = ExtResource("7_i1ya0")
 
-[node name="AddScoreComponent" type="Node" parent="." unique_id=1263425837]
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_eqnlm")]
 
 [node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("4_ndbwy")]
 

@@ -2,6 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://dh5htj70wxsms" path="res://sprite/player/mario_beetroot.png" id="1_wci6o"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_5pkqv"]
+atlas = ExtResource("1_wci6o")
+region = Rect2(96, 0, 48, 66)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2wx2k"]
+atlas = ExtResource("1_wci6o")
+region = Rect2(144, 0, 48, 66)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_35kv6"]
 atlas = ExtResource("1_wci6o")
 region = Rect2(288, 0, 48, 66)
@@ -52,6 +60,17 @@ region = Rect2(96, 0, 48, 66)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5pkqv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2wx2k")
+}],
+"loop": true,
+"name": &"appear",
+"speed": 20.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_35kv6")

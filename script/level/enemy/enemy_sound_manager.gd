@@ -6,12 +6,39 @@ class_name EnemySoundManager
 @export var play_sound_kicked: bool = true
 @export var play_sound_bumped: bool = true
 
-var interaction_with_player: InteractionWithPlayer
-var interaction_with_fireball: InteractionWithFireball
-var interaction_with_beetroot: InteractionWithBeetroot
-var interaction_with_star: InteractionWithStar
-var interaction_with_shell: InteractionWithShell
-var interaction_with_bump: InteractionWithBump
+# 声音配置映射表
+const SOUND_CONFIG := {
+	"interaction_with_player": {
+		"signal": "stomped",
+		"sound_func": "play_stomped",
+		"enabled": "play_sound_stomped"
+	},
+	"interaction_with_fireball": {
+		"signal": "fireball_hitted",
+		"sound_func": "play_kicked",
+		"enabled": "play_sound_kicked"
+	},
+	"interaction_with_beetroot": {
+		"signal": "beetroot_hitted",
+		"sound_func": "play_kicked",
+		"enabled": "play_sound_kicked"
+	},
+	"interaction_with_star": {
+		"signal": "star_hitted",
+		"sound_func": "play_kicked",
+		"enabled": "play_sound_kicked"
+	},
+	"interaction_with_shell": {
+		"signal": "shell_hitted",
+		"sound_func": "play_kicked",
+		"enabled": "play_sound_kicked"
+	},
+	"interaction_with_bump": {
+		"signal": "bumped",
+		"sound_func": "play_bumped",
+		"enabled": "play_sound_bumped"
+	}
+}
 
 var sound_stomped: AudioStreamPlayer
 var sound_kicked: AudioStreamPlayer
@@ -23,18 +50,19 @@ func _ready() -> void:
 	sound_bumped = get_node("Bumped") as AudioStreamPlayer
 
 	var parent = get_parent()
-	interaction_with_player = parent.get_meta("interaction_with_player") as InteractionWithPlayer
-	interaction_with_fireball = parent.get_meta("interaction_with_fireball") as InteractionWithFireball
 	
-	if play_sound_stomped:
-		interaction_with_player.stomped.connect(play_stomped)
-	if play_sound_kicked:
-		interaction_with_fireball.fireball_hitted.connect(play_kicked)
-		interaction_with_beetroot.beetroot_hitted.connect(play_kicked)
-		interaction_with_star.star_hitted.connect(play_kicked)
-		interaction_with_shell.shell_hitted.connect(play_kicked)
-	if play_sound_bumped:
-		interaction_with_bump.bumped.connect(play_bumped)
+	# 自动连接所有声音组件信号
+	for meta_name in SOUND_CONFIG:
+		var config = SOUND_CONFIG[meta_name]
+		var enabled: bool = get(config["enabled"])
+		
+		if enabled and parent.has_meta(meta_name):
+			var interaction = parent.get_meta(meta_name)
+			var signal_name: String = config["signal"]
+			var sound_func: String = config["sound_func"]
+			
+			if interaction.has_signal(signal_name):
+				interaction.connect(signal_name, call.bind(sound_func))
 
 func play_stomped() -> void:
 	sound_stomped.play()

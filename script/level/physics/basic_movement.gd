@@ -6,9 +6,9 @@ class_name BasicMovement
 var move_object : CharacterBody2D
 
 @export var initially_face_to_player: bool = true
-@export var speed_x: float = 1.0
+@export var speed_x: float = 50.0
 @export var speed_y: float
-@export var gravity: float = 0.5
+@export var gravity: float = 500.0
 @export var max_fall_speed: float = 999.0
 @export var jump_speed: float
 @export var edge_detect: bool = false
@@ -36,7 +36,7 @@ func _physics_process(delta: float) -> void:
 	turn_detect()
 	overlap_turn_detect()
 	speed_x_process()
-	speed_y_process()
+	speed_y_process(delta)
 	apply_speed()
 	move()
 	set_jump_speed()
@@ -78,17 +78,13 @@ func speed_x_process() -> void:
 	if move_object.is_on_wall():
 		speed_x *= -1.0
 
-func speed_y_process() -> void:
-	# y 速度
-	# 重力微调
-	if speed_y == 0.0:
-		speed_y += gravity * 4
-	
+func speed_y_process(delta: float) -> void:
+	# y 速度	
 	if not move_object.is_on_floor():
-		speed_y = clamp(speed_y + gravity, -999.0, max_fall_speed)
+		speed_y = clamp(speed_y + gravity * delta, -max_fall_speed, max_fall_speed)
 
 func apply_speed() -> void:
-	move_object.velocity = Vector2(speed_x * FRAMERATE_ORIGIN, speed_y * FRAMERATE_ORIGIN)
+	move_object.velocity = Vector2(speed_x, speed_y)
 
 func move() -> void:
 	# 针对大部分敌人运动：卡墙处理

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b4tdq2dr3cldf"]
 
 [ext_resource type="Texture2D" uid="uid://djg5k4k7x4fnn" path="res://sprite/enemy/goomba_dead.png" id="1_fxcm7"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/enemy/basic_movement.gd" id="2_gfrlo"]
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_gfrlo"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/enemy/basic_shape_cast_2d.tscn" id="3_vw0lh"]
 [ext_resource type="Script" uid="uid://df0tb5wt7qtbt" path="res://script/level/enemy/goomba_dead_fade_out.gd" id="4_vah71"]
 
@@ -9,6 +9,7 @@
 size = Vector2(32, 16)
 
 [node name="GoombaDeadStomp" type="CharacterBody2D" unique_id=295751422]
+collision_layer = 16
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1937743111]
 position = Vector2(0, 8)

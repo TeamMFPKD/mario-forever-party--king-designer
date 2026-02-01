@@ -2,6 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://u46qg53gfodu" path="res://sprite/player/mario_fireball.png" id="1_5uru1"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8uf08"]
+atlas = ExtResource("1_5uru1")
+region = Rect2(96, 0, 48, 66)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jta2u"]
+atlas = ExtResource("1_5uru1")
+region = Rect2(144, 0, 48, 66)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_e6upb"]
 atlas = ExtResource("1_5uru1")
 region = Rect2(288, 0, 48, 66)
@@ -52,6 +60,17 @@ region = Rect2(48, 0, 48, 66)
 
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8uf08")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jta2u")
+}],
+"loop": true,
+"name": &"appear",
+"speed": 20.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e6upb")
