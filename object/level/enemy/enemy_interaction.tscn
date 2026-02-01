@@ -2,12 +2,37 @@
 
 [ext_resource type="Script" uid="uid://c0b1at08nifg8" path="res://script/level/enemy/enemy_interaction.gd" id="1_d33ca"]
 [ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="2_70xvh"]
+[ext_resource type="Script" uid="uid://0urmc6n2a25n" path="res://script/level/enemy/interaction_with_fireball.gd" id="3_70xvh"]
+[ext_resource type="Script" uid="uid://qj4h3hu57jtp" path="res://script/level/enemy/interaction_with_beetroot.gd" id="4_8kfjf"]
+[ext_resource type="Script" uid="uid://c0tnc3vqaqx0u" path="res://script/level/enemy/interaction_with_star.gd" id="5_1we2s"]
+[ext_resource type="Script" uid="uid://dvr7ebvtuygtk" path="res://script/level/enemy/interaction_with_bump.gd" id="6_dp632"]
+[ext_resource type="Script" uid="uid://bnhxalkgdtihw" path="res://script/level/enemy/interaction_with_shell.gd" id="6_yr1a7"]
 
 [node name="EnemyInteraction" type="Node" unique_id=1317140342]
 script = ExtResource("1_d33ca")
-enemy_interaction_component_meta = Array[StringName]([&"interaction_with_player"])
+enemy_interaction_component_meta = Array[StringName]([&"interaction_with_player", &"interaction_with_fireball", &"interaction_with_beetroot", &"interaction_with_star", &"interaction_with_shell", &"interaction_with_bump"])
 metadata/_custom_type_script = "uid://c0b1at08nifg8"
 
 [node name="InteractionWithPlayer" type="Node" parent="." unique_id=707962705]
 script = ExtResource("2_70xvh")
 metadata/_custom_type_script = "uid://dy8q17c1owdph"
+
+[node name="InteractionWithFireball" type="Node" parent="." unique_id=1266694774]
+script = ExtResource("3_70xvh")
+metadata/_custom_type_script = "uid://0urmc6n2a25n"
+
+[node name="InteractionWithBeetroot" type="Node" parent="." unique_id=92154285]
+script = ExtResource("4_8kfjf")
+metadata/_custom_type_script = "uid://qj4h3hu57jtp"
+
+[node name="InteractionWithStar" type="Node" parent="." unique_id=1406904534]
+script = ExtResource("5_1we2s")
+metadata/_custom_type_script = "uid://c0tnc3vqaqx0u"
+
+[node name="InteractionWithShell" type="Node" parent="." unique_id=1504211400]
+script = ExtResource("6_yr1a7")
+metadata/_custom_type_script = "uid://bnhxalkgdtihw"
+
+[node name="InteractionWithBump" type="Node" parent="." unique_id=1718256866]
+script = ExtResource("6_dp632")
+metadata/_custom_type_script = "uid://dvr7ebvtuygtk"

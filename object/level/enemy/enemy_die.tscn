@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dl0usoanifx8r"]
+
+[ext_resource type="Script" uid="uid://dqcqcx3f4tiil" path="res://script/level/enemy/enemy_die.gd" id="1_o6ija"]
+[ext_resource type="PackedScene" uid="uid://cllkdvixqmhrc" path="res://object/level/enemy/enemy_dead_default.tscn" id="2_bpvuo"]
+
+[node name="EnemyDie" type="Node" unique_id=20942104]
+script = ExtResource("1_o6ija")
+dead_scene_default = ExtResource("2_bpvuo")
+metadata/_custom_type_script = "uid://dqcqcx3f4tiil"
