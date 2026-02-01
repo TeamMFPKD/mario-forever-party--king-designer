@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bl3cfshm2ayw1"]
+
+[ext_resource type="Script" uid="uid://wyi47keuxx6d" path="res://script/level/add_score_component.gd" id="1_t7f82"]
+
+[node name="AddScoreComponent" type="Node" unique_id=2067097888]
+script = ExtResource("1_t7f82")
+metadata/_custom_type_script = "uid://wyi47keuxx6d"

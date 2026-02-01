@@ -3,8 +3,8 @@ extends Node
 class_name AutoSpriteFlipH
 
 # 支持两种类型的精灵
-@export var _sprite2d_path: NodePath = "../Sprite2D"
-@export var _animated_sprite2d_path: NodePath = "../AnimatedSprite2D"
+@export var _sprite2d_path: NodePath
+@export var _animated_sprite2d_path: NodePath
 @export var _always_face_to_player: bool = false
 
 var _detected_direction_x: int = 0

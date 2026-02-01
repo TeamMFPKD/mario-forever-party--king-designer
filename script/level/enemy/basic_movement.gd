@@ -2,7 +2,9 @@ extends Node
 
 class_name BasicMovement
 
-@export var move_object: CharacterBody2D
+@export var path_to_move_object: NodePath = ".."
+var move_object : CharacterBody2D
+
 @export var initially_face_to_player: bool = true
 @export var speed_x: float = 1.0
 @export var speed_y: float
@@ -23,7 +25,7 @@ var _not_in_wall: bool = false
 var overlap_turn_detect_objects: Array[Node2D] = []
 
 func _ready() -> void:
-	move_object = get_parent() as CharacterBody2D
+	move_object = get_node(path_to_move_object) as CharacterBody2D
 	player = get_tree().get_first_node_in_group("player") as CharacterBody2D
 	if initially_face_to_player:
 		set_movement_direction()
