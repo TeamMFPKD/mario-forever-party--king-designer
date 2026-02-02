@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="6_m6cu2"]
 [ext_resource type="Script" uid="uid://mf1xdfjv070w" path="res://script/level/player/player_shoot.gd" id="6_pi5xa"]
 [ext_resource type="AudioStream" uid="uid://cwe6ohs76tqso" path="res://sound/level/powerdown.se.wav" id="7_j3xer"]
+[ext_resource type="PackedScene" uid="uid://bochls0kedgiw" path="res://object/level/projectile/fireball_player.tscn" id="8_4q04d"]
 [ext_resource type="SpriteFrames" uid="uid://b85b6tckcoib1" path="res://object/level/player/mario_super.tres" id="8_64xor"]
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_j3xer"]
 [ext_resource type="SpriteFrames" uid="uid://d11sjnlbqehpu" path="res://object/level/player/mario_fireball.tres" id="9_3sfxm"]
@@ -19,6 +20,7 @@
 [ext_resource type="AudioStream" uid="uid://cqphd6kl5ua3c" path="res://sound/level/mario_jump.se.wav" id="16_3sfxm"]
 [ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
 [ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="18_xbm7l"]
+[ext_resource type="AudioStream" uid="uid://dwse0hneii3ml" path="res://sound/level/fireball.se.wav" id="21_pdrg5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gh87g"]
 radius = 12.0
@@ -73,10 +75,12 @@ script = ExtResource("5_5qxp0")
 suit = 2
 power = 2
 
-[node name="PlayerShoot" type="Node" parent="PlayerMediator" unique_id=1295931707 node_paths=PackedStringArray("player_suit", "player")]
+[node name="PlayerShoot" type="Node" parent="PlayerMediator" unique_id=1295931707 node_paths=PackedStringArray("player_suit", "player", "player_animation_sprite")]
 script = ExtResource("6_pi5xa")
 player_suit = NodePath("../PlayerSuit")
 player = NodePath("../..")
+player_animation_sprite = NodePath("../../AnimatedSprite2D")
+fireball_scene = ExtResource("8_4q04d")
 
 [node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement", "player_suit", "player")]
 script = ExtResource("3_d0xdx")
@@ -107,6 +111,11 @@ stream = ExtResource("17_qe8py")
 volume_db = 10.0
 script = ExtResource("18_xbm7l")
 
+[node name="Shoot" parent="." unique_id=1440101806 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("21_pdrg5")
+volume_db = 10.0
+script = ExtResource("18_xbm7l")
+
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
@@ -115,4 +124,5 @@ script = ExtResource("18_xbm7l")
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PowerDown" method="play"]
 [connection signal="play_sound_powerup" from="PlayerMediator/PlayerSuit" to="PowerUp" method="play"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
+[connection signal="play_sound_shoot" from="PlayerMediator/PlayerShoot" to="Shoot" method="play"]
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]

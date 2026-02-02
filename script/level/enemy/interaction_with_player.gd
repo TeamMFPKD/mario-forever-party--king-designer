@@ -2,7 +2,7 @@ extends Node
 
 class_name InteractionWithPlayer
 
-signal stomped
+signal stomped(hit_position: Vector2)
 
 enum HurtType {
 	HURT,
@@ -25,6 +25,6 @@ func metadata_inject() -> void:
 	get_parent().set_meta("interaction_with_player", self)
 	
 func on_stomped(stomper: CharacterBody2D) -> float:
-	emit_signal("stomped")
+	emit_signal("stomped", stomper.position)
 	return stomp_speed_y
 	

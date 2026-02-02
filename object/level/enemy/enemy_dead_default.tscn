@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://cllkdvixqmhrc"]
 
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="1_4uter"]
+[ext_resource type="Script" uid="uid://b541srjwt6tbi" path="res://script/level/enemy/enemy_dead_default_movement.gd" id="1_4uter"]
 [ext_resource type="Script" uid="uid://duuj7suir0hah" path="res://script/level/spin_component.gd" id="2_tkjcl"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="3_6h8p3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nllt7"]
 
 [node name="EnemyDeadDefault" type="CharacterBody2D" unique_id=1910222456]
+collision_layer = 0
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=34558900]
 visible = false
@@ -16,12 +18,17 @@ shape = SubResource("CircleShape2D_nllt7")
 
 [node name="BasicMovement" type="Node" parent="." unique_id=745282936]
 script = ExtResource("1_4uter")
+initially_face_to_player = false
+speed_x = 75.0
+speed_y = -400.0
+gravity = 2000.0
 overlap_turn = false
 path_to_shape_cast = NodePath("")
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="SpinComponent" type="Node" parent="." unique_id=1532188385]
 script = ExtResource("2_tkjcl")
+path_to_sprite = NodePath("../Sprite2D")
 
 [node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=1073388980]
 script = ExtResource("3_6h8p3")

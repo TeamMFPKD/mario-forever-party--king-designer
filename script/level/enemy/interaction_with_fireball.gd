@@ -2,7 +2,7 @@ extends Node
 
 class_name InteractionWithFireball
 
-signal fireball_hitted
+signal fireball_hitted(hit_position: Vector2)
 
 @export var is_hittable : bool = true
 @export var immune_to_fireball : bool = false
@@ -14,9 +14,9 @@ func _ready() -> void:
 func metadata_inject() -> void:
 	get_parent().set_meta("interaction_with_fireball", self)
 
-func on_fireball_hit() -> void:
+func on_fireball_hit(hit_position: Vector2) -> void:
 	if not is_hittable:
 		return
 	if immune_to_fireball:
 		return
-	emit_signal("fireball_hitted")
+	emit_signal("fireball_hitted", hit_position)

@@ -36,7 +36,7 @@ var dead_texture : Texture2D
 # 交互组件配置映射表
 const INTERACTION_CONFIG := {
 	"interaction_with_player": {"signal": "stomped", "death_type": DeathType.STOMP},
-	"interaction_with_fireball": {"signal": "hit", "death_type": DeathType.FIREBALL},
+	"interaction_with_fireball": {"signal": "fireball_hitted", "death_type": DeathType.FIREBALL},
 	"interaction_with_beetroot": {"signal": "beetroot_hitted", "death_type": DeathType.BEETROOT},
 	"interaction_with_star": {"signal": "star_hitted", "death_type": DeathType.STAR},
 	"interaction_with_shell": {"signal": "shell_hitted", "death_type": DeathType.SHELL},
@@ -60,14 +60,14 @@ func _ready() -> void:
 			if interaction.has_signal(signal_name):
 				interaction.connect(signal_name, _on_interaction_hit.bind(death_type))
 
-func die(death_type: DeathType = DeathType.DEFAULT) -> void:
-	dead_instantiate(death_type)
+func die(hit_position: Vector2, death_type: DeathType = DeathType.DEFAULT) -> void:
+	dead_instantiate(hit_position,death_type)
 	dead_instance.position = parent.position
 	parent.add_sibling(dead_instance)
 	parent.queue_free()
 	emit_signal("enemy_died")
 
-func dead_instantiate(death_type: DeathType = DeathType.DEFAULT) -> void:
+func dead_instantiate(hit_position: Vector2, death_type: DeathType = DeathType.DEFAULT) -> void:
 	var scene_map = {
 		DeathType.DEFAULT: dead_scene_default,
 		DeathType.STOMP: dead_scene_stomp,
@@ -84,12 +84,13 @@ func dead_instantiate(death_type: DeathType = DeathType.DEFAULT) -> void:
 	
 	dead_instance = scene.instantiate() as Node2D
 	if scene == dead_scene_default:
+		dead_instance.set_meta("enemy_dead_direction", 1 if hit_position.x < parent.position.x else -1)
 		var dead_sprite_2d = dead_instance.get_node("Sprite2D") as Sprite2D
 		dead_sprite_2d.texture = dead_texture
 		if dead_texture_override:
 			dead_sprite_2d.texture = dead_texture_override
 
 # 统一的交互命中处理函数
-func _on_interaction_hit(death_type: DeathType) -> void:
-	die(death_type)
+func _on_interaction_hit(hit_position: Vector2, death_type: DeathType) -> void:
+	die(hit_position,death_type)
 	

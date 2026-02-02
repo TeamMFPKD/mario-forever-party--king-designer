@@ -15,3 +15,4 @@ func _ready() -> void:
 	player.set_meta("player_suit", player_suit)
 	player.set_meta("player_shoot", player_shoot)
 	player.set_meta("player_animation", player_animation)
+	
