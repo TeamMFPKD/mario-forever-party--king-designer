@@ -62,7 +62,7 @@ func overlap_turn_detect() -> void:
 		return
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
 	# exclude_parent 十大未解之谜
-	print(results.size())
+	#print(results.size())
 	if results.size() <= 1:
 		overlap_turn_detect_objects.clear()
 		return

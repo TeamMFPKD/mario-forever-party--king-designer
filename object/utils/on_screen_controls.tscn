@@ -1,0 +1,199 @@
+[gd_scene format=3 uid="uid://dnm3ffgulmrea"]
+
+[ext_resource type="Script" uid="uid://b1a4mrgaf43un" path="res://script/utils/on_screen_controls.gd" id="1_ip5kh"]
+[ext_resource type="Texture2D" uid="uid://ckupv0u275c2y" path="res://sprite/on_screen_controls/Left.png" id="2_5pvun"]
+[ext_resource type="Texture2D" uid="uid://bxqmpl6b1nlby" path="res://sprite/on_screen_controls/Right.png" id="3_r1xaq"]
+[ext_resource type="Texture2D" uid="uid://sdhw4kbtkf5u" path="res://sprite/on_screen_controls/Up.png" id="4_ii8f2"]
+[ext_resource type="Texture2D" uid="uid://ct06twarujta1" path="res://sprite/on_screen_controls/Down.png" id="5_sr5us"]
+[ext_resource type="Texture2D" uid="uid://fwhe8wro661x" path="res://sprite/on_screen_controls/Select.png" id="6_wwdpl"]
+[ext_resource type="Texture2D" uid="uid://k2jbai4rq2tk" path="res://sprite/on_screen_controls/A.png" id="7_56r5v"]
+[ext_resource type="Texture2D" uid="uid://be7wl5kr5ek32" path="res://sprite/on_screen_controls/B.png" id="8_cpyrj"]
+[ext_resource type="Texture2D" uid="uid://buf2dyux8i617" path="res://sprite/on_screen_controls/RunLock.png" id="9_um5q1"]
+[ext_resource type="Texture2D" uid="uid://xnpmcmmj54sg" path="res://sprite/on_screen_controls/Start.png" id="10_rkg6h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wpx6y"]
+size = Vector2(54, 66)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jqpu6"]
+size = Vector2(54, 66)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y0fgl"]
+size = Vector2(28, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lds6l"]
+size = Vector2(28, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ycf5h"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_17p43"]
+size = Vector2(54, 54)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yhrc3"]
+size = Vector2(40, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h1250"]
+size = Vector2(54, 54)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puarm"]
+size = Vector2(44, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_twq5y"]
+size = Vector2(24, 24)
+
+[node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209]
+process_mode = 3
+script = ExtResource("1_ip5kh")
+
+[node name="Control" type="Control" parent="." unique_id=1293223226]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 150.0
+offset_top = -580.0
+offset_right = 714.0
+offset_bottom = -16.0
+grow_vertical = 0
+
+[node name="Node2D" type="Node2D" parent="Control" unique_id=330530679]
+scale = Vector2(4, 4)
+
+[node name="LeftSprite" type="Sprite2D" parent="Control/Node2D" unique_id=1020177048]
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(48, 61)
+texture = ExtResource("2_5pvun")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Control/Node2D" unique_id=360874647]
+position = Vector2(39, 61)
+shape = SubResource("RectangleShape2D_wpx6y")
+passby_press = true
+
+[node name="RightSprite" type="Sprite2D" parent="Control/Node2D" unique_id=1474280570]
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(112, 61)
+texture = ExtResource("3_r1xaq")
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="Control/Node2D" unique_id=470722507]
+position = Vector2(121, 61)
+shape = SubResource("RectangleShape2D_jqpu6")
+passby_press = true
+
+[node name="UpSprite" type="Sprite2D" parent="Control/Node2D" unique_id=1062183149]
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(80, 29)
+texture = ExtResource("4_ii8f2")
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="Control/Node2D" unique_id=748965302]
+position = Vector2(80, 26)
+shape = SubResource("RectangleShape2D_y0fgl")
+passby_press = true
+
+[node name="DownSprite" type="Sprite2D" parent="Control/Node2D" unique_id=838338426]
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(80, 93)
+texture = ExtResource("5_sr5us")
+
+[node name="TouchScreenButton4" type="TouchScreenButton" parent="Control/Node2D" unique_id=1008732955]
+position = Vector2(80, 96)
+shape = SubResource("RectangleShape2D_lds6l")
+passby_press = true
+
+[node name="SelectSprite" type="Sprite2D" parent="Control/Node2D" unique_id=258669356]
+visible = false
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(128, 94)
+texture = ExtResource("6_wwdpl")
+
+[node name="TouchScreenButton5" type="TouchScreenButton" parent="Control/Node2D" unique_id=493101823]
+visible = false
+position = Vector2(128, 94)
+shape = SubResource("RectangleShape2D_ycf5h")
+action = "drop_item"
+
+[node name="Control2" type="Control" parent="." unique_id=833129568]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -456.0
+offset_top = -568.0
+offset_right = 4.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Node2D" type="Node2D" parent="Control2" unique_id=779172288]
+scale = Vector2(4, 4)
+
+[node name="ASprite" type="Sprite2D" parent="Control2/Node2D" unique_id=598891464]
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(43, 71)
+texture = ExtResource("7_56r5v")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="Control2/Node2D" unique_id=1374425760]
+position = Vector2(50, 78)
+shape = SubResource("RectangleShape2D_17p43")
+passby_press = true
+
+[node name="TouchScreenButton3" type="TouchScreenButton" parent="Control2/Node2D" unique_id=1767977162]
+visible = false
+position = Vector2(23, 85)
+shape = SubResource("RectangleShape2D_yhrc3")
+passby_press = true
+action = "jump_0"
+
+[node name="BSprite" type="Sprite2D" parent="Control2/Node2D" unique_id=930238151]
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(3, 51)
+texture = ExtResource("8_cpyrj")
+
+[node name="TouchScreenButton2" type="TouchScreenButton" parent="Control2/Node2D" unique_id=1640903807]
+position = Vector2(-4, 58)
+shape = SubResource("RectangleShape2D_h1250")
+action = "action_0"
+
+[node name="RunLockSprite" type="Sprite2D" parent="Control2/Node2D" unique_id=488730933]
+visible = false
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(43, 32)
+texture = ExtResource("9_um5q1")
+
+[node name="TouchScreenButton4" type="TouchScreenButton" parent="Control2/Node2D" unique_id=1821289589]
+visible = false
+position = Vector2(45, 32)
+shape = SubResource("RectangleShape2D_puarm")
+
+[node name="StartSprite" type="Sprite2D" parent="Control2/Node2D" unique_id=533688083]
+visible = false
+modulate = Color(1, 1, 1, 0.7058824)
+position = Vector2(-5, 101)
+texture = ExtResource("10_rkg6h")
+
+[node name="TouchScreenButton5" type="TouchScreenButton" parent="Control2/Node2D" unique_id=807029574]
+visible = false
+position = Vector2(-5, 101)
+shape = SubResource("RectangleShape2D_twq5y")
+action = "pause"
+
+[connection signal="pressed" from="Control/Node2D/TouchScreenButton" to="." method="on_west_pressed"]
+[connection signal="released" from="Control/Node2D/TouchScreenButton" to="." method="on_west_released"]
+[connection signal="pressed" from="Control/Node2D/TouchScreenButton2" to="." method="on_east_pressed"]
+[connection signal="released" from="Control/Node2D/TouchScreenButton2" to="." method="on_east_released"]
+[connection signal="pressed" from="Control/Node2D/TouchScreenButton3" to="." method="on_north_pressed"]
+[connection signal="released" from="Control/Node2D/TouchScreenButton3" to="." method="on_north_released"]
+[connection signal="pressed" from="Control/Node2D/TouchScreenButton4" to="." method="on_south_pressed"]
+[connection signal="released" from="Control/Node2D/TouchScreenButton4" to="." method="on_south_released"]
+[connection signal="pressed" from="Control/Node2D/TouchScreenButton5" to="." method="on_select_pressed"]
+[connection signal="released" from="Control/Node2D/TouchScreenButton5" to="." method="on_select_released"]
+[connection signal="pressed" from="Control2/Node2D/TouchScreenButton" to="." method="on_a_pressed"]
+[connection signal="released" from="Control2/Node2D/TouchScreenButton" to="." method="on_a_released"]
+[connection signal="pressed" from="Control2/Node2D/TouchScreenButton3" to="." method="on_a_pressed"]
+[connection signal="released" from="Control2/Node2D/TouchScreenButton3" to="." method="on_a_released"]
+[connection signal="pressed" from="Control2/Node2D/TouchScreenButton2" to="." method="on_b_pressed"]
+[connection signal="released" from="Control2/Node2D/TouchScreenButton2" to="." method="on_b_released"]
+[connection signal="pressed" from="Control2/Node2D/TouchScreenButton4" to="." method="on_run_lock_pressed"]
+[connection signal="pressed" from="Control2/Node2D/TouchScreenButton5" to="." method="on_start_pressed"]
+[connection signal="released" from="Control2/Node2D/TouchScreenButton5" to="." method="on_start_released"]
