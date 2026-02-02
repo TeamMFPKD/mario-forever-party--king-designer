@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://bochls0kedgiw"]
+
+[ext_resource type="Texture2D" uid="uid://cedfngdjbn1ra" path="res://sprite/projectile/fireball.png" id="1_kc721"]
+[ext_resource type="Script" uid="uid://ckuyqjdj04out" path="res://script/level/projectile/fireball_movement.gd" id="2_kc721"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_eauwl"]
+[ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="4_ekdb8"]
+[ext_resource type="Script" uid="uid://cywvscwj6ue86" path="res://script/level/projectile/fireball_interaction.gd" id="4_ohsb2"]
+[ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/fireball_explode.gd" id="6_ohsb2"]
+[ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="7_yonpb"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_xwiod"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_00uy1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kc721")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekdb8"]
+size = Vector2(16, 16)
+
+[node name="FireballPlayer" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_00uy1")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+visible = false
+shape = SubResource("RectangleShape2D_ekdb8")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="FireballMovement" type="Node" parent="." unique_id=2103801211]
+script = ExtResource("2_kc721")
+initially_face_to_player = false
+speed_x = 500.0
+gravity = 2000.0
+jump_speed = -300.0
+overlap_turn = false
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_eauwl")]
+shape = SubResource("RectangleShape2D_ekdb8")
+
+[node name="FireballInteraction" type="Node" parent="." unique_id=1561435757 node_paths=PackedStringArray("fireball", "cast")]
+script = ExtResource("4_ohsb2")
+fireball = NodePath("..")
+cast = NodePath("../BasicShapeCast2D")
+
+[node name="FireballSpriteSpin" type="Node" parent="." unique_id=1249232420 node_paths=PackedStringArray("ani")]
+script = ExtResource("4_ekdb8")
+ani = NodePath("../AnimatedSprite2D")
+
+[node name="FireballExplode" type="Node" parent="." unique_id=1853297786 node_paths=PackedStringArray("fireball")]
+script = ExtResource("6_ohsb2")
+fireball = NodePath("..")
+fireball_explode_scene = ExtResource("7_yonpb")
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("11_xwiod")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[connection signal="explode" from="FireballMovement" to="FireballExplode" method="explode"]
+[connection signal="fireball_explode" from="FireballInteraction" to="FireballExplode" method="explode"]

@@ -33,6 +33,7 @@ var jumpable : bool
 var jumpable_time : int = 15
 var jumpable_timer : int
 
+# 狼跳
 var langtiao : bool
 var langtiao_time : int = 5
 var langtiao_timer : int

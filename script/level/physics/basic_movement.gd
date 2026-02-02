@@ -37,9 +37,9 @@ func _physics_process(delta: float) -> void:
 	overlap_turn_detect()
 	speed_x_process()
 	speed_y_process(delta)
+	set_jump_speed()
 	apply_speed()
 	move()
-	set_jump_speed()
 
 func on_screen_entered() -> void:
 	set_movement_direction()

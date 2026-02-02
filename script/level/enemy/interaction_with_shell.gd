@@ -13,10 +13,10 @@ func _ready() -> void:
 func metadata_inject() -> void:
 	get_parent().set_meta("interaction_with_shell", self)
 
-func on_shell_hit() -> void:
+func on_shell_hit(hit_position: Vector2) -> void:
 	if not is_shell_hittable:
 		return
 	if immune_to_shell:
 		return
-	emit_signal("shell_hitted")
+	emit_signal("shell_hitted", hit_position)
 	

@@ -62,13 +62,14 @@ func _ready() -> void:
 			var sound_func: String = config["sound_func"]
 			
 			if interaction.has_signal(signal_name):
-				interaction.connect(signal_name, call.bind(sound_func))
+				#interaction.connect(signal_name, call.bind(sound_func))
+				interaction.connect(signal_name, Callable(self, sound_func))
 
-func play_stomped() -> void:
+func play_stomped(hit_position : Vector2) -> void:
 	sound_stomped.play()
 
-func play_kicked() -> void:
+func play_kicked(hit_position : Vector2) -> void:
 	sound_kicked.play()
 
-func play_bumped() -> void:
+func play_bumped(hit_position : Vector2) -> void:
 	sound_bumped.play()

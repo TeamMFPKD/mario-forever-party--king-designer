@@ -40,13 +40,13 @@ position = Vector2(672, 392)
 position = Vector2(296, 312)
 
 [node name="PlatformHorizontal" parent="." unique_id=241376401 instance=ExtResource("4_572ui")]
-position = Vector2(112, 296)
+position = Vector2(184, 296)
 
 [node name="PlatformHorizontal2" parent="." unique_id=798024285 instance=ExtResource("4_572ui")]
 position = Vector2(336, 488)
 
 [node name="PlatformVerticalUp" parent="." unique_id=1074057519 instance=ExtResource("5_mgl3t")]
-position = Vector2(136, 384)
+position = Vector2(136, 248)
 
 [node name="PlatformVerticalDown" parent="." unique_id=1359139927 instance=ExtResource("3_kke3s")]
 position = Vector2(-88, 504)
@@ -70,4 +70,4 @@ position = Vector2(912, 784)
 position = Vector2(720, 312)
 
 [node name="Boo" parent="." unique_id=1024039925 instance=ExtResource("11_3hjsd")]
-position = Vector2(232, 352)
+position = Vector2(464, 464)
