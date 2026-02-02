@@ -1,5 +1,7 @@
 extends Node
 
+signal play_sound_skid
+
 @export var ani : AnimatedSprite2D
 @export var player_movement : PlayerMovement
 @export var player_suit : PlayerSuit
@@ -110,6 +112,7 @@ func determine_state() -> String:
 		and (player_movement.move_left or player_movement.move_right) \
 		or turn:
 			turn = true
+			emit_signal("play_sound_skid")
 			return "turn"
 		else:
 			return "walk"

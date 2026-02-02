@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bx5alipsrvqkc"]
+
+[ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="1_7afq7"]
+[ext_resource type="Script" uid="uid://bhggt8qo1srnw" path="res://script/level/facility/platform/platform_fall_movement.gd" id="2_7afq7"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_uk6la"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
+atlas = ExtResource("1_7afq7")
+region = Rect2(33, 8, 95, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbx44"]
+size = Vector2(96, 16)
+
+[node name="PlatformFall" type="CharacterBody2D" unique_id=1359139927]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=810962080]
+texture = SubResource("AtlasTexture_toeyn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1986874202]
+shape = SubResource("RectangleShape2D_sbx44")
+one_way_collision = true
+
+[node name="BasicMovement" type="Node" parent="." unique_id=406880572]
+script = ExtResource("2_7afq7")
+speed_x = 0.0
+gravity = 0.0
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_uk6la")]
+visible = false
+shape = SubResource("RectangleShape2D_sbx44")

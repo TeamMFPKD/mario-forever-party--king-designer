@@ -15,12 +15,16 @@
 [ext_resource type="AudioStream" uid="uid://bwubken5v7fu1" path="res://sound/level/mario_fast_retry.se.wav" id="9_gxamf"]
 [ext_resource type="SpriteFrames" uid="uid://dg3ftfs0smrbt" path="res://object/level/player/mario_beetroot.tres" id="10_qe8py"]
 [ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="11_xbm7l"]
+[ext_resource type="AudioStream" uid="uid://cqphd6kl5ua3c" path="res://sound/level/mario_jump.se.wav" id="16_3sfxm"]
+[ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
+[ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="18_xbm7l"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gh87g"]
 radius = 12.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1151748388 groups=["player"]]
 collision_layer = 8
+collision_mask = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
 sprite_frames = ExtResource("1_8csaa")
@@ -86,6 +90,15 @@ stream = ExtResource("8_j3xer")
 [node name="Die" parent="." unique_id=845460184 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("9_gxamf")
 
+[node name="Jump" parent="." unique_id=410178107 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("16_3sfxm")
+
+[node name="Skid" parent="." unique_id=373586307 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("17_qe8py")
+volume_db = 10.0
+script = ExtResource("18_xbm7l")
+
+[connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
 [connection signal="player_hurt" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_hurt"]
@@ -93,3 +106,4 @@ stream = ExtResource("9_gxamf")
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PowerDown" method="play"]
 [connection signal="play_sound_powerup" from="PlayerMediator/PlayerSuit" to="PowerUp" method="play"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
+[connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]

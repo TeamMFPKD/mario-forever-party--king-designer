@@ -2,6 +2,8 @@ extends Node
 
 class_name PlayerMovement
 
+signal play_sound_jump
+
 @export var player : CharacterBody2D
 
 
@@ -95,6 +97,7 @@ func _physics_process(delta):
 		if abs(speed_x) > max_speed_x * 0.3:
 			speed_y *= jump_speed_factor
 		jumpable = false
+		emit_signal("play_sound_jump")
 
 	if player.is_on_ceiling():
 		speed_y = 0.0
@@ -109,6 +112,21 @@ func _physics_process(delta):
 	player.velocity = Vector2(speed_x, speed_y)
 	player.move_and_slide()
 
+	# 掉落桥检测
+	platform_fall_detect()
+
 
 func is_action_pressed(action: String) -> bool:
 	return Input.is_action_just_pressed(action)
+
+func platform_fall_detect() -> void:
+	if !player.is_on_floor():
+		return
+	var result = player.move_and_collide(Vector2.DOWN, true)
+	print(result)
+	if not result:
+		return
+	if result.get_collider().has_meta("platform_fall_movement"):
+		var platform_fall_movement = result.get_collider().get_meta("platform_fall_movement") as PlatformFallMovement
+		print(platform_fall_movement)
+		platform_fall_movement.fall()
