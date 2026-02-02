@@ -123,7 +123,7 @@ func platform_fall_detect() -> void:
 	if !player.is_on_floor():
 		return
 	var result = player.move_and_collide(Vector2.DOWN, true)
-	print(result)
+	#print(result)
 	if not result:
 		return
 	if result.get_collider().has_meta("platform_fall_movement"):

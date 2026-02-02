@@ -6,7 +6,6 @@ signal star_hitted
 
 @export var is_hittable : bool = true
 @export var immune_to_star : bool = false
-@export var star_explode : bool = true
 
 func _ready() -> void:
 	metadata_inject()

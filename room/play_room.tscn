@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bx5alipsrvqkc" path="res://object/level/facility/platform_fall.tscn" id="8_ywous"]
 [ext_resource type="PackedScene" uid="uid://ch1btf0cnhd7x" path="res://object/level/facility/goal_gate.tscn" id="9_iqq3c"]
 [ext_resource type="PackedScene" uid="uid://cdkbk1qvvhip7" path="res://object/level/enemy/spiny.tscn" id="10_lu4ln"]
+[ext_resource type="PackedScene" uid="uid://coxmhdmrr3y5r" path="res://object/level/enemy/boo.tscn" id="11_3hjsd"]
 
 [node name="PlayRoom" type="Node2D" unique_id=822465384]
 
@@ -67,3 +68,6 @@ position = Vector2(912, 784)
 
 [node name="Spiny" parent="." unique_id=1201242862 instance=ExtResource("10_lu4ln")]
 position = Vector2(720, 312)
+
+[node name="Boo" parent="." unique_id=1024039925 instance=ExtResource("11_3hjsd")]
+position = Vector2(232, 352)

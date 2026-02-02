@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://coxmhdmrr3y5r"]
+
+[ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="1_koc6n"]
+[ext_resource type="Script" uid="uid://bcm2xnb56vhal" path="res://script/level/enemy/boo_movement.gd" id="3_wdbyc"]
+[ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/enemy/auto_sprite_flip_h.gd" id="4_8jubo"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_ryson"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_2qs51"]
+[ext_resource type="PackedScene" uid="uid://b4tdq2dr3cldf" path="res://object/level/enemy/goomba_dead_stomp.tscn" id="7_tif0r"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_43rbv"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_0s6xr"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_cpr46"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_npbmr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iymh1"]
+atlas = ExtResource("1_koc6n")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mgmo3"]
+atlas = ExtResource("1_koc6n")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8jubo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iymh1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mgmo3")
+}],
+"loop": true,
+"name": &"track",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(32, 32)
+
+[node name="Boo" type="Area2D" unique_id=1024039925]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_8jubo")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+shape = SubResource("RectangleShape2D_gj0k3")
+
+[node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
+script = ExtResource("4_8jubo")
+_animated_sprite2d_path = NodePath("../AnimatedSprite2D")
+metadata/_custom_type_script = "uid://chvbcq7uttlml"
+
+[node name="BooMovement" type="Node" parent="." unique_id=703693417 node_paths=PackedStringArray("_animated_sprite_2d")]
+script = ExtResource("3_wdbyc")
+_animated_sprite_2d = NodePath("../AnimatedSprite2D")
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_ryson")]
+
+[node name="InteractionWithPlayer" parent="EnemyInteraction" index="0" unique_id=707962705]
+stompable = false
+
+[node name="InteractionWithFireball" parent="EnemyInteraction" index="1" unique_id=1266694774]
+immune_to_fireball = true
+
+[node name="InteractionWithBeetroot" parent="EnemyInteraction" index="2" unique_id=92154285]
+immune_to_beetroot = true
+
+[node name="InteractionWithShell" parent="EnemyInteraction" index="4" unique_id=1504211400]
+is_shell_hittable = false
+
+[node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
+is_bumpable = false
+
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_2qs51")]
+dead_scene_stomp = ExtResource("7_tif0r")
+
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_43rbv")]
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("9_0s6xr")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_cpr46")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("11_npbmr")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[editable path="EnemyInteraction"]
