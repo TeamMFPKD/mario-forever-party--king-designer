@@ -12,6 +12,7 @@ func _physics_process(delta: float) -> void:
 	
 	# 踩踏
 	hurt_and_stompable_detect(results)
+	
 
 func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 	for result in results:

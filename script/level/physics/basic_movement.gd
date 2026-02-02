@@ -58,7 +58,7 @@ func turn_detect() -> void:
 		move_object.force_update_transform()
 
 func overlap_turn_detect() -> void:
-	if not overlap_turn_detect:
+	if not overlap_turn:
 		return
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
 	# exclude_parent 十大未解之谜
@@ -87,6 +87,22 @@ func apply_speed() -> void:
 	move_object.velocity = Vector2(speed_x, speed_y)
 
 func move() -> void:
+	move_object.move_and_slide()	
+
+func set_movement_direction() -> void:
+	if not initially_face_to_player:
+		return
+	if player != null:
+		if move_object.position.x < player.position.x:
+			speed_x = abs(speed_x)
+		elif move_object.position.x > player.position.x:
+			speed_x = -abs(speed_x)
+
+func set_jump_speed() -> void:
+	if move_object.is_on_floor():
+		speed_y = min(0.0, jump_speed)
+
+func in_wall_process() -> void:
 	# 针对大部分敌人运动：卡墙处理
 	if move_object.move_and_collide(Vector2.ZERO, true, 1.0) == null:
 		var origin_position = move_object.position
@@ -122,16 +138,3 @@ func move() -> void:
 				_not_in_wall = true
 		else:
 			move_object.move_and_slide()
-
-func set_movement_direction() -> void:
-	if not initially_face_to_player:
-		return
-	if player != null:
-		if move_object.position.x < player.position.x:
-			speed_x = abs(speed_x)
-		elif move_object.position.x > player.position.x:
-			speed_x = -abs(speed_x)
-
-func set_jump_speed() -> void:
-	if move_object.is_on_floor():
-		speed_y = min(0.0, jump_speed)

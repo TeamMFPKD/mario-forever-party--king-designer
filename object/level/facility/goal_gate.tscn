@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://ch1btf0cnhd7x"]
+
+[ext_resource type="Texture2D" uid="uid://b7x6hjrevd6jc" path="res://sprite/facility/giant_gate.png" id="1_ncbhu"]
+[ext_resource type="Script" uid="uid://4qtotlcqiahk" path="res://script/level/facility/goal_gate.gd" id="1_r5r6k"]
+[ext_resource type="PackedScene" uid="uid://c707h2fhiiirw" path="res://object/level/smoke.tscn" id="2_ahsaa"]
+[ext_resource type="Texture2D" uid="uid://duvxl6ouvgmx" path="res://sprite/facility/giant_gate_bar_on.png" id="2_r5r6k"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_y8sjh"]
+[ext_resource type="AudioStream" uid="uid://42mjq3sa42dg" path="res://sound/level/faster_level_pass.se.mp3" id="6_pempq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ahsaa"]
+size = Vector2(32, 288)
+
+[sub_resource type="Animation" id="Animation_rnpdt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bar:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-262.0]
+}
+
+[sub_resource type="Animation" id="Animation_y8sjh"]
+resource_name = "new_animation"
+length = 3.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bar:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.7, 3.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [-262.0, -8.0, -262.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pempq"]
+_data = {
+&"RESET": SubResource("Animation_rnpdt"),
+&"new_animation": SubResource("Animation_y8sjh")
+}
+
+[node name="GoalGate" type="Area2D" unique_id=1834739886 node_paths=PackedStringArray("bar")]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_r5r6k")
+bar = NodePath("Bar")
+smoke_scene = ExtResource("2_ahsaa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1307147698]
+position = Vector2(0, -144)
+shape = SubResource("RectangleShape2D_ahsaa")
+debug_color = Color(3.2247603e-06, 0.63652647, 0.40772307, 0.41960785)
+
+[node name="Gate" type="Sprite2D" parent="." unique_id=1835030729]
+position = Vector2(0, -143)
+texture = ExtResource("1_ncbhu")
+
+[node name="Bar" type="Sprite2D" parent="." unique_id=1972283849]
+position = Vector2(-5, -262)
+texture = ExtResource("2_r5r6k")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1519289187]
+libraries/ = SubResource("AnimationLibrary_pempq")
+autoplay = &"new_animation"
+
+[node name="LevelPass" parent="." unique_id=1715984441 instance=ExtResource("5_y8sjh")]
+stream = ExtResource("6_pempq")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="goal_reached" from="." to="LevelPass" method="play"]
+[connection signal="animation_finished" from="AnimationPlayer" to="AnimationPlayer" method="play"]
