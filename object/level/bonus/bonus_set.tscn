@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://d2l5k3dpnx8v0"]
+
+[ext_resource type="Script" uid="uid://dg3qjhq3cqju3" path="res://script/level/bonus/bonus_set.gd" id="1_ssiv5"]
+
+[node name="BonusSet" type="Node" unique_id=1977117179]
+script = ExtResource("1_ssiv5")
+metadata/_custom_type_script = "uid://dg3qjhq3cqju3"

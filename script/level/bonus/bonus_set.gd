@@ -1,0 +1,23 @@
+extends Node
+
+class_name BonusSet
+
+enum BonusType {
+	MUSHROOM,
+	FIRE_FLOWER,
+	BEETROOT,
+	LUI,
+	STAR,
+}
+
+@export var bonus_type : BonusType = BonusType.MUSHROOM
+@export var path_to_parent : NodePath = ".."
+
+var parent : Node2D
+
+func _ready():
+	parent = get_node(path_to_parent)
+	parent.set_meta("bonus_set", self)
+
+func on_bonus_get(player: Node2D):
+	parent.queue_free()

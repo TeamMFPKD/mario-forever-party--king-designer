@@ -1,6 +1,7 @@
 extends Node
 
-signal player_sound_powerdown
+signal play_sound_powerdown
+signal play_sound_die
 
 var is_hurting = false
 var is_dead = false
@@ -9,6 +10,9 @@ var is_dead = false
 var invincible_timer = 0
 
 @export var player_dead_scene: PackedScene = preload("uid://034w35iv6qfh")
+
+@export var player_suit : PlayerSuit
+@export var player: Node2D
 
 func _physics_process(delta: float) -> void:
 	if is_hurting:
@@ -25,9 +29,25 @@ func _on_player_hurt() -> void:
 	if is_hurting:
 		return
 	is_hurting = true
-	emit_signal("player_sound_powerdown")
+	match player_suit.suit:
+		PlayerSuit.SuitType.SMALL:
+			_on_player_die()
+			return
+		PlayerSuit.SuitType.SUPER:
+			player_suit.suit = PlayerSuit.SuitType.SMALL
+		PlayerSuit.SuitType.POWERED:
+			player_suit.suit = PlayerSuit.SuitType.SUPER
 
 func _on_player_die() -> void:
 	if is_dead:
 		return
 	is_dead = true
+
+	var dead = player_dead_scene.instantiate() as Node2D
+	dead.position = player.position
+	player.add_sibling(dead)
+
+	emit_signal("play_sound_die")
+	
+	player.visible = false
+	player.process_mode = ProcessMode.PROCESS_MODE_DISABLED
