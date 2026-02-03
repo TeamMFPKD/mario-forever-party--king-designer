@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_eauwl"]
 [ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="4_ekdb8"]
 [ext_resource type="Script" uid="uid://cywvscwj6ue86" path="res://script/level/projectile/fireball_interaction.gd" id="4_ohsb2"]
-[ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/fireball_explode.gd" id="6_ohsb2"]
+[ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="6_ohsb2"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="7_yonpb"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_xwiod"]
 
@@ -23,7 +23,7 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ekdb8"]
 size = Vector2(16, 16)
 
-[node name="FireballPlayer" type="CharacterBody2D" unique_id=114751985]
+[node name="FireballPlayer" type="CharacterBody2D" unique_id=114751985 groups=["fireball"]]
 collision_layer = 16
 collision_mask = 3
 
@@ -57,14 +57,13 @@ cast = NodePath("../BasicShapeCast2D")
 script = ExtResource("4_ekdb8")
 ani = NodePath("../AnimatedSprite2D")
 
-[node name="FireballExplode" type="Node" parent="." unique_id=1853297786 node_paths=PackedStringArray("fireball")]
+[node name="CreateExplodeEffect" type="Node" parent="." unique_id=1853297786]
 script = ExtResource("6_ohsb2")
-fireball = NodePath("..")
 fireball_explode_scene = ExtResource("7_yonpb")
 
 [node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
 script = ExtResource("11_xwiod")
 metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
-[connection signal="explode" from="FireballMovement" to="FireballExplode" method="explode"]
-[connection signal="fireball_explode" from="FireballInteraction" to="FireballExplode" method="explode"]
+[connection signal="explode" from="FireballMovement" to="CreateExplodeEffect" method="explode"]
+[connection signal="fireball_explode" from="FireballInteraction" to="CreateExplodeEffect" method="explode"]

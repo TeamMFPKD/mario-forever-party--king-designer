@@ -29,11 +29,10 @@ func create_fireball() -> void:
 	var fireball = fireball_scene.instantiate() as Node2D
 	fireball.position = player.position
 	fireball.set_meta("fireball_direction", -1 if player_animation_sprite.flip_h else 1)
-	print(fireball)
 	player.add_sibling(fireball)
 
 func create_beetroot() -> void:
 	var beetroot = beetroot_scene.instantiate() as Node2D
-	beetroot.position = get_parent().position
-	# TODO: 设置 Beetroot 初始方向
+	beetroot.position = player.position
+	beetroot.set_meta("beetroot_direction", -1 if player_animation_sprite.flip_h else 1)
 	player.add_sibling(beetroot)
