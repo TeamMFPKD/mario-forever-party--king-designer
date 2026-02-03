@@ -5,7 +5,7 @@ class_name PlayerMovement
 signal play_sound_jump
 
 @export var player : CharacterBody2D
-
+@export var player_suit : PlayerSuit
 
 @export var max_speed_x : float = 400.0
 @export var acceleration : float = 600.0
@@ -18,6 +18,9 @@ signal play_sound_jump
 
 @export var gravity_normal = 2400
 @export var gravity_hold_jump = 1250
+
+@export var gravity_normal_lui = 2300
+@export var gravity_hold_jump_lui = 1000
 
 var move_up : bool
 var move_down : bool
@@ -103,7 +106,10 @@ func _physics_process(delta):
 	if player.is_on_ceiling():
 		speed_y = 0.0
 	
-	speed_y += gravity_hold_jump * delta if move_jump else gravity_normal * delta
+	var current_gravity = gravity_hold_jump if move_jump else gravity_normal
+	if player_suit.power == PlayerSuit.PowerupType.LUI and player_suit.suit == PlayerSuit.SuitType.POWERED:
+		current_gravity = gravity_hold_jump_lui if move_jump else gravity_normal_lui
+	speed_y += current_gravity * delta
 
 	# 限制垂直速度
 	speed_y = minf(speed_y, max_speed_y)

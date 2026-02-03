@@ -7,6 +7,8 @@ signal play_sound_skid
 @export var player_suit : PlayerSuit
 @export var player : CharacterBody2D
 
+@export var player_lui_effect_scene : PackedScene
+
 @export_group("player_spritesframe")
 @export var player_small_spritesframe : SpriteFrames
 @export var player_super_spritesframe : SpriteFrames
@@ -30,6 +32,14 @@ func _physics_process(delta):
 func update_animation():
 	var new_state = determine_state()
 	var direction = determine_direction()
+
+	# WEEGEE effect
+	if new_state == "jump" and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.LUI:
+		var lui_effect = player_lui_effect_scene.instantiate() as Node2D
+		lui_effect.position = player.position
+		var lui_ani = lui_effect.get_node("AnimatedSprite2D")
+		lui_ani.flip_h = ani.flip_h
+		player.add_sibling(lui_effect)
 	
 	if new_state != current_state or direction != last_direction:
 		# 保存当前walk动画的进度
@@ -102,8 +112,10 @@ func determine_state() -> String:
 	
 	# 检查行走状态
 	if current_state != "turn" \
-	or (abs(player_movement.speed_x) <= player_movement.max_speed_x * 0.5 \
-	and sign(player_movement.speed_x) == sign(player_movement.target_speed)):
+	or (
+		#abs(player_movement.speed_x) <= player_movement.max_speed_x * 0.7 or \
+		sign(player_movement.speed_x) == sign(player_movement.target_speed)
+	):
 		turn = false
 
 	if abs(player_movement.speed_x) > 0.0 and !player.is_on_wall():

@@ -92,5 +92,5 @@ metadata/_custom_type_script = "uid://dy8q17c1owdph"
 [node name="Bounce" parent="." unique_id=1715984441 instance=ExtResource("4_awh24")]
 stream = ExtResource("5_ko16b")
 
-[connection signal="stomped" from="InteractionWithPlayer" to="Bounce" method="play"]
-[connection signal="stomped" from="InteractionWithPlayer" to="AnimatedSprite2D" method="play" binds= [&"bounce"]]
+[connection signal="stomped" from="InteractionWithPlayer" to="Bounce" method="play" unbinds=1]
+[connection signal="stomped" from="InteractionWithPlayer" to="AnimatedSprite2D" method="play" unbinds=1 binds= [&"bounce"]]

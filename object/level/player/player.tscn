@@ -15,7 +15,9 @@
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_j3xer"]
 [ext_resource type="SpriteFrames" uid="uid://d11sjnlbqehpu" path="res://object/level/player/mario_fireball.tres" id="9_3sfxm"]
 [ext_resource type="AudioStream" uid="uid://bwubken5v7fu1" path="res://sound/level/mario_fast_retry.se.wav" id="9_gxamf"]
+[ext_resource type="PackedScene" uid="uid://csnhhcb0k7mho" path="res://object/level/projectile/beetroot_player.tscn" id="9_pewnw"]
 [ext_resource type="SpriteFrames" uid="uid://dg3ftfs0smrbt" path="res://object/level/player/mario_beetroot.tres" id="10_qe8py"]
+[ext_resource type="PackedScene" uid="uid://c8k70uglbhl1b" path="res://object/level/player/player_lui_effect.tscn" id="11_4mpgj"]
 [ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="11_xbm7l"]
 [ext_resource type="AudioStream" uid="uid://cqphd6kl5ua3c" path="res://sound/level/mario_jump.se.wav" id="16_3sfxm"]
 [ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
@@ -26,6 +28,7 @@
 radius = 12.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1151748388 groups=["player"]]
+z_index = 10
 collision_layer = 8
 collision_mask = 3
 
@@ -57,9 +60,23 @@ player_suit = NodePath("PlayerSuit")
 player_shoot = NodePath("PlayerShoot")
 player_animation = NodePath("PlayerAnimation")
 
-[node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player")]
+[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement", "player_suit", "player")]
+script = ExtResource("3_d0xdx")
+ani = NodePath("../../AnimatedSprite2D")
+player_movement = NodePath("../PlayerMovement")
+player_suit = NodePath("../PlayerSuit")
+player = NodePath("../..")
+player_lui_effect_scene = ExtResource("11_4mpgj")
+player_small_spritesframe = ExtResource("1_8csaa")
+player_super_spritesframe = ExtResource("8_64xor")
+player_fireball_spritesframe = ExtResource("9_3sfxm")
+player_beetroot_spritesframe = ExtResource("10_qe8py")
+player_lui_spritesframe = ExtResource("11_xbm7l")
+
+[node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player", "player_suit")]
 script = ExtResource("2_d0xdx")
 player = NodePath("../..")
+player_suit = NodePath("../PlayerSuit")
 
 [node name="PlayerInteraction" type="Node" parent="PlayerMediator" unique_id=1627366199 node_paths=PackedStringArray("player_movement", "player", "cast")]
 script = ExtResource("4_3e465")
@@ -81,18 +98,7 @@ player_suit = NodePath("../PlayerSuit")
 player = NodePath("../..")
 player_animation_sprite = NodePath("../../AnimatedSprite2D")
 fireball_scene = ExtResource("8_4q04d")
-
-[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement", "player_suit", "player")]
-script = ExtResource("3_d0xdx")
-ani = NodePath("../../AnimatedSprite2D")
-player_movement = NodePath("../PlayerMovement")
-player_suit = NodePath("../PlayerSuit")
-player = NodePath("../..")
-player_small_spritesframe = ExtResource("1_8csaa")
-player_super_spritesframe = ExtResource("8_64xor")
-player_fireball_spritesframe = ExtResource("9_3sfxm")
-player_beetroot_spritesframe = ExtResource("10_qe8py")
-player_lui_spritesframe = ExtResource("11_xbm7l")
+beetroot_scene = ExtResource("9_pewnw")
 
 [node name="PowerDown" parent="." unique_id=1715984441 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("7_j3xer")
@@ -116,6 +122,7 @@ stream = ExtResource("21_pdrg5")
 volume_db = 10.0
 script = ExtResource("18_xbm7l")
 
+[connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
@@ -125,4 +132,3 @@ script = ExtResource("18_xbm7l")
 [connection signal="play_sound_powerup" from="PlayerMediator/PlayerSuit" to="PowerUp" method="play"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
 [connection signal="play_sound_shoot" from="PlayerMediator/PlayerShoot" to="Shoot" method="play"]
-[connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
