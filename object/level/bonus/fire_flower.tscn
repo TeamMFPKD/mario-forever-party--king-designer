@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cyee16r52cf3h"]
+
+[ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="1_p63fe"]
+[ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="2_jxj7q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxj7q"]
+atlas = ExtResource("1_p63fe")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hkgn"]
+atlas = ExtResource("1_p63fe")
+region = Rect2(0, 32, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7l5d8"]
+atlas = ExtResource("1_p63fe")
+region = Rect2(0, 64, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x6m6y"]
+atlas = ExtResource("1_p63fe")
+region = Rect2(0, 96, 33, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qb60a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxj7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hkgn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7l5d8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x6m6y")
+}],
+"loop": true,
+"name": &"default",
+"speed": 16.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n4gcf"]
+size = Vector2(32, 32)
+
+[node name="FireFlower" type="Area2D" unique_id=1398446257]
+collision_layer = 32
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1200168592]
+sprite_frames = SubResource("SpriteFrames_qb60a")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=729182592]
+shape = SubResource("RectangleShape2D_n4gcf")
+debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
+
+[node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_jxj7q")]
+bonus_type = 1

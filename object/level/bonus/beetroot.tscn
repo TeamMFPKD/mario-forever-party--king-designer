@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://bsg7epf24irr"]
+
+[ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="1_ykyso"]
+[ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="2_rfvjg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfvjg"]
+atlas = ExtResource("1_ykyso")
+region = Rect2(0, 0, 29, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_texes"]
+atlas = ExtResource("1_ykyso")
+region = Rect2(0, 35, 29, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujb5a"]
+atlas = ExtResource("1_ykyso")
+region = Rect2(0, 70, 29, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_76d0a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rfvjg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_texes")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujb5a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_texes")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n4gcf"]
+size = Vector2(32, 32)
+
+[node name="Beetroot" type="Area2D" unique_id=1398446257]
+collision_layer = 32
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1200168592]
+sprite_frames = SubResource("SpriteFrames_76d0a")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=729182592]
+shape = SubResource("RectangleShape2D_n4gcf")
+debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
+
+[node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_rfvjg")]
+bonus_type = 2

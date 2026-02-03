@@ -47,7 +47,7 @@ position = Vector2(0, -2)
 shape = SubResource("CapsuleShape2D_gh87g")
 target_position = Vector2(0, 0)
 max_results = 4
-collision_mask = 16
+collision_mask = 48
 collide_with_areas = true
 
 [node name="PlayerMediator" type="Node" parent="." unique_id=968252850 node_paths=PackedStringArray("player", "player_movement", "player_interaction", "player_hurt_and_die", "player_suit", "player_shoot", "player_animation")]
@@ -78,19 +78,20 @@ script = ExtResource("2_d0xdx")
 player = NodePath("../..")
 player_suit = NodePath("../PlayerSuit")
 
-[node name="PlayerInteraction" type="Node" parent="PlayerMediator" unique_id=1627366199 node_paths=PackedStringArray("player_movement", "player", "cast")]
+[node name="PlayerInteraction" type="Node" parent="PlayerMediator" unique_id=1627366199 node_paths=PackedStringArray("player_movement", "player_suit", "player", "cast")]
 script = ExtResource("4_3e465")
 player_movement = NodePath("../PlayerMovement")
+player_suit = NodePath("../PlayerSuit")
 player = NodePath("../..")
 cast = NodePath("../../InteractionShapeCast2D")
 
-[node name="PlayerHurtAndDie" type="Node" parent="PlayerMediator" unique_id=454760120]
+[node name="PlayerHurtAndDie" type="Node" parent="PlayerMediator" unique_id=454760120 node_paths=PackedStringArray("player_suit", "player")]
 script = ExtResource("5_quby0")
+player_suit = NodePath("../PlayerSuit")
+player = NodePath("../..")
 
 [node name="PlayerSuit" type="Node" parent="PlayerMediator" unique_id=808079872]
 script = ExtResource("5_5qxp0")
-suit = 2
-power = 2
 
 [node name="PlayerShoot" type="Node" parent="PlayerMediator" unique_id=1295931707 node_paths=PackedStringArray("player_suit", "player", "player_animation_sprite")]
 script = ExtResource("6_pi5xa")
@@ -107,6 +108,7 @@ stream = ExtResource("7_j3xer")
 stream = ExtResource("8_j3xer")
 
 [node name="Die" parent="." unique_id=845460184 instance=ExtResource("6_m6cu2")]
+process_mode = 3
 stream = ExtResource("9_gxamf")
 
 [node name="Jump" parent="." unique_id=410178107 instance=ExtResource("6_m6cu2")]
@@ -127,7 +129,8 @@ script = ExtResource("18_xbm7l")
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
 [connection signal="player_hurt" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_hurt"]
-[connection signal="player_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="PowerDown" method="play"]
+[connection signal="play_sound_die" from="PlayerMediator/PlayerHurtAndDie" to="Die" method="play"]
+[connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="PowerDown" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PowerDown" method="play"]
 [connection signal="play_sound_powerup" from="PlayerMediator/PlayerSuit" to="PowerUp" method="play"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
