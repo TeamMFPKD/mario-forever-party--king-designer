@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="7_yonpb"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="9_4lieb"]
 [ext_resource type="AudioStream" uid="uid://d2h4pb4ao20st" path="res://sound/level/bump.se.wav" id="10_n0uii"]
-[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_xwiod"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_xwiod"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_00uy1"]
 animations = [{

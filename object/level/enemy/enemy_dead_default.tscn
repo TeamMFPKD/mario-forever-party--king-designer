@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b541srjwt6tbi" path="res://script/level/enemy/enemy_dead_default_movement.gd" id="1_4uter"]
 [ext_resource type="Script" uid="uid://duuj7suir0hah" path="res://script/level/spin_component.gd" id="2_tkjcl"]
-[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="3_6h8p3"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="3_6h8p3"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nllt7"]
 

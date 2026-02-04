@@ -60,7 +60,7 @@ func _ready() -> void:
 			if interaction.has_signal(signal_name):
 				interaction.connect(signal_name, _on_interaction_hit.bind(death_type))
 
-func die(hit_position: Vector2, death_type: DeathType = DeathType.DEFAULT) -> void:
+func die(hit_position: Vector2 = Vector2.ZERO, death_type: DeathType = DeathType.DEFAULT) -> void:
 	dead_instantiate(hit_position,death_type)
 	dead_instance.position = parent.position
 	parent.add_sibling(dead_instance)

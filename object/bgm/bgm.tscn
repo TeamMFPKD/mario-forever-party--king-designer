@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://cwjqbk83qtebh"]
+
+[ext_resource type="AudioStream" uid="uid://bp40wte0n2qe2" path="res://sound/bgm/Apoplexy.ogg" id="1_yl062"]
+[ext_resource type="AudioStream" uid="uid://cbkjf84c1qwnk" path="res://sound/bgm/baobao.ogg" id="2_6h2um"]
+[ext_resource type="AudioStream" uid="uid://dkufcr7fxg0u0" path="res://sound/bgm/The Golden Ages.ogg" id="3_fc01q"]
+[ext_resource type="AudioStream" uid="uid://c4tfinit1bw0d" path="res://sound/bgm/The Holiday Anthem.ogg" id="4_hxbr2"]
+[ext_resource type="AudioStream" uid="uid://k6flhyje6fsv" path="res://sound/bgm/Trancoi.ogg" id="5_ho03g"]
+[ext_resource type="AudioStream" uid="uid://ctyyrnwk6tnc2" path="res://sound/bgm/Yet Another Bonus.ogg" id="6_8ec2p"]
+[ext_resource type="AudioStream" uid="uid://oi8nc8q8v8ki" path="res://sound/bgm/YKY.ogg" id="7_02ctm"]
+[ext_resource type="AudioStream" uid="uid://d11nicf7jg43s" path="res://sound/bgm/スピラー.ogg" id="8_5egbl"]
+[ext_resource type="AudioStream" uid="uid://dcmwfvyme45u0" path="res://sound/bgm/Dragon Roost Island.ogg" id="9_wn726"]
+[ext_resource type="AudioStream" uid="uid://druiuja3ea1xb" path="res://sound/bgm/Federation.ogg" id="10_vb0bm"]
+[ext_resource type="AudioStream" uid="uid://b4yoxhc7mi607" path="res://sound/bgm/Interference Ending.ogg" id="11_5aae3"]
+[ext_resource type="AudioStream" uid="uid://bujt77iqm5lkc" path="res://sound/bgm/One Fine Day.ogg" id="12_5qnja"]
+[ext_resource type="AudioStream" uid="uid://c3gcem6ht280y" path="res://sound/bgm/Riot-11.ogg" id="13_f7iox"]
+[ext_resource type="AudioStream" uid="uid://b181riwtwlidc" path="res://sound/bgm/Sirens.ogg" id="14_05y1c"]
+[ext_resource type="AudioStream" uid="uid://bjud6dilnmldy" path="res://sound/bgm/Syndrome Land.ogg" id="15_cxls7"]
+[ext_resource type="AudioStream" uid="uid://cehig68xst50y" path="res://sound/bgm/Technique.ogg" id="16_4jxnl"]
+[ext_resource type="Script" uid="uid://drlyvma4elabu" path="res://script/bgm.gd" id="17_yl062"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fkteh"]
+streams_count = 16
+stream_0/stream = ExtResource("1_yl062")
+stream_1/stream = ExtResource("2_6h2um")
+stream_2/stream = ExtResource("9_wn726")
+stream_3/stream = ExtResource("10_vb0bm")
+stream_4/stream = ExtResource("11_5aae3")
+stream_5/stream = ExtResource("12_5qnja")
+stream_6/stream = ExtResource("13_f7iox")
+stream_7/stream = ExtResource("14_05y1c")
+stream_8/stream = ExtResource("15_cxls7")
+stream_9/stream = ExtResource("16_4jxnl")
+stream_10/stream = ExtResource("3_fc01q")
+stream_11/stream = ExtResource("4_hxbr2")
+stream_12/stream = ExtResource("5_ho03g")
+stream_13/stream = ExtResource("6_8ec2p")
+stream_14/stream = ExtResource("7_02ctm")
+stream_15/stream = ExtResource("8_5egbl")
+
+[node name="Bgm" type="AudioStreamPlayer" unique_id=1026487401]
+stream = SubResource("AudioStreamRandomizer_fkteh")
+autoplay = true
+script = ExtResource("17_yl062")
+metadata/_custom_type_script = "uid://b7wv6e8w815uw"
+
+[connection signal="finished" from="." to="." method="play"]

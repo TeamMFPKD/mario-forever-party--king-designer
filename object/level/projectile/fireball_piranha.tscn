@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bdmb70v8ygg5c"]
 
 [ext_resource type="Texture2D" uid="uid://cedfngdjbn1ra" path="res://sprite/projectile/fireball.png" id="1_x74ou"]
-[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="2_537mg"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="2_537mg"]
 [ext_resource type="Script" uid="uid://cpf4pmi8lsjj5" path="res://script/level/projectile/fireball_piranha_movement.gd" id="3_ufkcc"]
 [ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="4_cf6cg"]
-[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="5_cf6cg"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="5_cf6cg"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ufkcc"]
 animations = [{

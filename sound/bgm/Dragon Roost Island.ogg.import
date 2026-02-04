@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dcmwfvyme45u0"
+path="res://.godot/imported/Dragon Roost Island.ogg-15af211d08e80902e948e31891212f52.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/bgm/Dragon Roost Island.ogg"
+dest_files=["res://.godot/imported/Dragon Roost Island.ogg-15af211d08e80902e948e31891212f52.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

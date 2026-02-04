@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://dt6ikdqwwgo2r"]
+
+[ext_resource type="Texture2D" uid="uid://cj6lfbhmvlnj4" path="res://sprite/enemy/shell_green.png" id="1_57orn"]
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_4or3i"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_k3c7n"]
+[ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_cbggm"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_3a75j"]
+[ext_resource type="Script" uid="uid://bref45xrjds3y" path="res://script/level/enemy/shell_interaction_moving.gd" id="5_05vun"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_3mma3"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_5pxp7"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_sh0ng"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_0jb06"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_x2jb8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0nlr7"]
+atlas = ExtResource("1_57orn")
+region = Rect2(0, 0, 36, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_06bww"]
+atlas = ExtResource("1_57orn")
+region = Rect2(0, 30, 36, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jtkl4"]
+atlas = ExtResource("1_57orn")
+region = Rect2(0, 60, 36, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fwlss"]
+atlas = ExtResource("1_57orn")
+region = Rect2(0, 90, 36, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i5pmg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0nlr7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_06bww")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jtkl4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fwlss")
+}],
+"loop": true,
+"name": &"default",
+"speed": 32.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(32, 32)
+
+[node name="ShellGreen" type="CharacterBody2D" unique_id=114751985 groups=["shell"]]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_i5pmg")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+visible = false
+shape = SubResource("RectangleShape2D_gj0k3")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
+script = ExtResource("2_4or3i")
+overlap_turn = false
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_k3c7n")]
+
+[node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
+script = ExtResource("4_cbggm")
+_animated_sprite2d_path = NodePath("../AnimatedSprite2D")
+metadata/_custom_type_script = "uid://chvbcq7uttlml"
+
+[node name="ShellInteractionMoving" type="Node" parent="." unique_id=1988555070]
+script = ExtResource("5_05vun")
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_3a75j")]
+
+[node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
+immune_to_bump = true
+
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_3mma3")]
+
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_5pxp7")]
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("9_sh0ng")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_0jb06")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("11_x2jb8")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[connection signal="shell_harded" from="ShellInteractionMoving" to="EnemyDie" method="die"]
+
+[editable path="EnemyInteraction"]

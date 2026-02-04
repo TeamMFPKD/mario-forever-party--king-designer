@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://b4mexma31ltxc"]
+
+[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="1_o6bmg"]
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_myf7u"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_2e8lh"]
+[ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_8sxvu"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_l6s0a"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_oenqx"]
+[ext_resource type="PackedScene" uid="uid://b4tdq2dr3cldf" path="res://object/level/enemy/goomba_dead_stomp.tscn" id="7_ek1eb"]
+[ext_resource type="Texture2D" uid="uid://cj6lfbhmvlnj4" path="res://sprite/enemy/shell_green.png" id="7_leciv"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_llt7f"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_cts3f"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_prph6"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_pt2kc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pp5kw"]
+atlas = ExtResource("1_o6bmg")
+region = Rect2(0, 47, 32, 47)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h2bx0"]
+atlas = ExtResource("1_o6bmg")
+region = Rect2(0, 0, 32, 47)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ted3t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pp5kw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h2bx0")
+}],
+"loop": true,
+"name": &"default",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7go61"]
+atlas = ExtResource("7_leciv")
+region = Rect2(1, 61, 35, 28)
+
+[node name="TroopaGreen" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+position = Vector2(0, -6)
+sprite_frames = SubResource("SpriteFrames_ted3t")
+autoplay = "default"
+frame_progress = 0.78155774
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+visible = false
+shape = SubResource("RectangleShape2D_gj0k3")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
+script = ExtResource("2_myf7u")
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_2e8lh")]
+
+[node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
+script = ExtResource("4_8sxvu")
+_animated_sprite2d_path = NodePath("../AnimatedSprite2D")
+metadata/_custom_type_script = "uid://chvbcq7uttlml"
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_l6s0a")]
+
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_oenqx")]
+dead_texture_override = SubResource("AtlasTexture_7go61")
+dead_scene_stomp = ExtResource("7_ek1eb")
+dead_scene_bump = ExtResource("7_ek1eb")
+
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_llt7f")]
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("9_cts3f")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_prph6")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("11_pt2kc")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[editable path="EnemyInteraction"]

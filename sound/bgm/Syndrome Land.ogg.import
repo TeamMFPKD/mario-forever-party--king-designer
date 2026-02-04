@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bjud6dilnmldy"
+path="res://.godot/imported/Syndrome Land.ogg-255860871466d6685c1f11145a9871fe.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/bgm/Syndrome Land.ogg"
+dest_files=["res://.godot/imported/Syndrome Land.ogg-255860871466d6685c1f11145a9871fe.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://cbmqhdfakug1d"]
+
+[ext_resource type="PackedScene" uid="uid://dt6ikdqwwgo2r" path="res://object/level/enemy/troopa/shell_green.tscn" id="1_ayybe"]
+[ext_resource type="Texture2D" uid="uid://bvvlsgqa6nkic" path="res://sprite/enemy/shell_red.png" id="2_yqujw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oeb4r"]
+atlas = ExtResource("2_yqujw")
+region = Rect2(0, 0, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_blu71"]
+atlas = ExtResource("2_yqujw")
+region = Rect2(0, 28, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cdjsr"]
+atlas = ExtResource("2_yqujw")
+region = Rect2(0, 56, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jho5s"]
+atlas = ExtResource("2_yqujw")
+region = Rect2(0, 84, 33, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ypqmv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oeb4r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_blu71")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cdjsr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jho5s")
+}],
+"loop": true,
+"name": &"default",
+"speed": 32.0
+}]
+
+[node name="ShellRed" unique_id=114751985 instance=ExtResource("1_ayybe")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_ypqmv")
+
+[editable path="EnemyInteraction"]

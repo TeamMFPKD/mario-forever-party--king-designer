@@ -8,7 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_r00uj"]
 [ext_resource type="AudioStream" uid="uid://bfei4klk2geni" path="res://sound/level/kick.se.wav" id="9_71hb1"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_o7m3i"]
-[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_5nwxo"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_5nwxo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0yun5"]
 atlas = ExtResource("1_r00uj")

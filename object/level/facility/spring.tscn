@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="1_ldtkb"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="2_5yd5n"]
-[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="3_5yd5n"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="3_5yd5n"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="4_awh24"]
 [ext_resource type="AudioStream" uid="uid://n218pjy788m8" path="res://sound/level/springboard.wav" id="5_ko16b"]
 

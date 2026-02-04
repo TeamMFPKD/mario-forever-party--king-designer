@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://bcfmfgm8jsnuo"]
 
 [ext_resource type="Script" uid="uid://c0b1at08nifg8" path="res://script/level/enemy/enemy_interaction.gd" id="1_d33ca"]
-[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="2_70xvh"]
-[ext_resource type="Script" uid="uid://0urmc6n2a25n" path="res://script/level/enemy/interaction_with_fireball.gd" id="3_70xvh"]
-[ext_resource type="Script" uid="uid://qj4h3hu57jtp" path="res://script/level/enemy/interaction_with_beetroot.gd" id="4_8kfjf"]
-[ext_resource type="Script" uid="uid://c0tnc3vqaqx0u" path="res://script/level/enemy/interaction_with_star.gd" id="5_1we2s"]
-[ext_resource type="Script" uid="uid://dvr7ebvtuygtk" path="res://script/level/enemy/interaction_with_bump.gd" id="6_dp632"]
-[ext_resource type="Script" uid="uid://bnhxalkgdtihw" path="res://script/level/enemy/interaction_with_shell.gd" id="6_yr1a7"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="2_70xvh"]
+[ext_resource type="Script" uid="uid://0urmc6n2a25n" path="res://script/level/component/interaction_with_fireball.gd" id="3_70xvh"]
+[ext_resource type="Script" uid="uid://qj4h3hu57jtp" path="res://script/level/component/interaction_with_beetroot.gd" id="4_8kfjf"]
+[ext_resource type="Script" uid="uid://c0tnc3vqaqx0u" path="res://script/level/component/interaction_with_star.gd" id="5_1we2s"]
+[ext_resource type="Script" uid="uid://dvr7ebvtuygtk" path="res://script/level/component/interaction_with_bump.gd" id="6_dp632"]
+[ext_resource type="Script" uid="uid://bnhxalkgdtihw" path="res://script/level/component/interaction_with_shell.gd" id="6_yr1a7"]
 
 [node name="EnemyInteraction" type="Node" unique_id=1317140342]
 script = ExtResource("1_d33ca")

@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://boa8ojba4ua7m" path="res://sprite/bonus/poisonous_mushroom.png" id="1_4tu3s"]
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_g6bpe"]
-[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="2_sg0mc"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="2_sg0mc"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_t01lc"]
 [ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="5_typ66"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="5_vgdcu"]
-[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="6_1oifq"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="6_1oifq"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="6_g6bpe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_typ66"]
