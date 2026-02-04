@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="7_rr8te"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="8_1xv8f"]
 [ext_resource type="Script" uid="uid://pb4en7tbsj11" path="res://script/level/projectile/bounce_count.gd" id="8_nfjjt"]
-[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="8_rqcp6"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="8_rqcp6"]
 [ext_resource type="AudioStream" uid="uid://27ewhxfwd0kl" path="res://sound/level/thwomp_grounded.se.wav" id="9_nfjjt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6sxee"]

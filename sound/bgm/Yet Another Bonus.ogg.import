@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://ctyyrnwk6tnc2"
+path="res://.godot/imported/Yet Another Bonus.ogg-161b07928c298866a39484d2d53ba78b.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/bgm/Yet Another Bonus.ogg"
+dest_files=["res://.godot/imported/Yet Another Bonus.ogg-161b07928c298866a39484d2d53ba78b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

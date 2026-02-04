@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bujt77iqm5lkc"
+path="res://.godot/imported/One Fine Day.ogg-a413384598445571fa0cf34ced09e5e3.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/bgm/One Fine Day.ogg"
+dest_files=["res://.godot/imported/One Fine Day.ogg-a413384598445571fa0cf34ced09e5e3.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

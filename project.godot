@@ -23,6 +23,10 @@ boot_splash/use_filter=false
 boot_splash/image="uid://bijlbaumcevx5"
 config/icon="uid://bijlbaumcevx5"
 
+[audio]
+
+buses/default_bus_layout="uid://c8eu6kekkwwe1"
+
 [autoload]
 
 InputHandlerSingleton="*res://object/utils/input_handler.tscn"
