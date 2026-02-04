@@ -26,6 +26,7 @@ animations = [{
 size = Vector2(16, 16)
 
 [node name="FireballPlayer" type="CharacterBody2D" unique_id=114751985 groups=["fireball"]]
+z_index = 15
 collision_layer = 16
 collision_mask = 3
 

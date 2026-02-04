@@ -22,6 +22,7 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 		if result.has_meta("interaction_with_player"):
 			var interaction_with_player_node = result.get_meta("interaction_with_player") as InteractionWithPlayer
 			# 在上方踩踏并且可以踩踏
+			interaction_with_player_node.on_overlap(player)
 			if player.position.y < result.position.y + interaction_with_player_node.stomp_offset \
 			and interaction_with_player_node.stompable:
 				# 踩踏成功
