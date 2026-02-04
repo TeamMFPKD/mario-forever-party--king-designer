@@ -6,6 +6,7 @@ signal play_sound_skid
 @export var player_movement : PlayerMovement
 @export var player_suit : PlayerSuit
 @export var player : CharacterBody2D
+@export var player_hurt_and_die : PlayerHurtAndDie
 
 @export var player_lui_effect_scene : PackedScene
 
@@ -22,6 +23,8 @@ var walk_animation_frame : int = 0  # 记录walk动画的当前帧
 
 var turn : bool = false
 
+var hurt_timer : int = 0
+
 var is_appearing : bool = false
 @export var appear_time : int = 80
 var appear_timer : int = 0
@@ -32,6 +35,14 @@ func _physics_process(delta):
 func update_animation():
 	var new_state = determine_state()
 	var direction = determine_direction()
+
+	# Hurt Effect
+	if player_hurt_and_die.is_hurting:
+		hurt_timer += 1
+		ani.visible = hurt_timer % 2 == 0
+	else:
+		ani.visible = true
+		hurt_timer = 0
 
 	# WEEGEE effect
 	if new_state == "jump" and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.LUI:
