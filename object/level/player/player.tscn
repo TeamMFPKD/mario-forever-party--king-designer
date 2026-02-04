@@ -60,12 +60,13 @@ player_suit = NodePath("PlayerSuit")
 player_shoot = NodePath("PlayerShoot")
 player_animation = NodePath("PlayerAnimation")
 
-[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement", "player_suit", "player")]
+[node name="PlayerAnimation" type="Node" parent="PlayerMediator" unique_id=590502322 node_paths=PackedStringArray("ani", "player_movement", "player_suit", "player", "player_hurt_and_die")]
 script = ExtResource("3_d0xdx")
 ani = NodePath("../../AnimatedSprite2D")
 player_movement = NodePath("../PlayerMovement")
 player_suit = NodePath("../PlayerSuit")
 player = NodePath("../..")
+player_hurt_and_die = NodePath("../PlayerHurtAndDie")
 player_lui_effect_scene = ExtResource("11_4mpgj")
 player_small_spritesframe = ExtResource("1_8csaa")
 player_super_spritesframe = ExtResource("8_64xor")

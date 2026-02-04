@@ -1,5 +1,7 @@
 extends Node
 
+class_name PlayerHurtAndDie
+
 signal play_sound_powerdown
 signal play_sound_die
 
