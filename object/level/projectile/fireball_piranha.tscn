@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bdmb70v8ygg5c"]
+
+[ext_resource type="Texture2D" uid="uid://cedfngdjbn1ra" path="res://sprite/projectile/fireball.png" id="1_x74ou"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/enemy/interaction_with_player.gd" id="2_537mg"]
+[ext_resource type="Script" uid="uid://cpf4pmi8lsjj5" path="res://script/level/projectile/fireball_piranha_movement.gd" id="3_ufkcc"]
+[ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="4_cf6cg"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="5_cf6cg"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ufkcc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_x74ou")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf6cg"]
+size = Vector2(16, 16)
+
+[node name="FireballPiranha" type="CharacterBody2D" unique_id=555740972]
+collision_layer = 16
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1874246590]
+sprite_frames = SubResource("SpriteFrames_ufkcc")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1997852764]
+shape = SubResource("RectangleShape2D_cf6cg")
+debug_color = Color(1, 0.25272575, 0.28933558, 0.41960785)
+
+[node name="InteractionWithPlayer" type="Node" parent="." unique_id=704078668]
+script = ExtResource("2_537mg")
+stompable = false
+metadata/_custom_type_script = "uid://dy8q17c1owdph"
+
+[node name="FireballPiranhaMovement" type="Node" parent="." unique_id=1364789502]
+script = ExtResource("3_ufkcc")
+overlap_turn = false
+
+[node name="FireballSpriteSpin" type="Node" parent="." unique_id=504235648 node_paths=PackedStringArray("ani")]
+script = ExtResource("4_cf6cg")
+ani = NodePath("../AnimatedSprite2D")
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=190194476]
+script = ExtResource("5_cf6cg")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"

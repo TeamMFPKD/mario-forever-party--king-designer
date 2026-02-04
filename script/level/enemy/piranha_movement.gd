@@ -1,5 +1,9 @@
 extends Node
 
+class_name PiranhaMovement
+
+signal shoot
+
 @export var path_to_piranha : NodePath = ".."
 var piranha : Node2D
 
@@ -22,6 +26,8 @@ var state : State = State.IN
 @export var speed : float = 60.0
 @export var shy_distance : float = 64.0
 @export var wait_time : int = 84
+
+@export var fire : bool
 
 var wait_timer : int = 0
 var player : Node2D
@@ -48,8 +54,7 @@ func _physics_process(delta: float) -> void:
 		is_shy = true
 	else:
 		is_shy = false
-
-	print(state)
+		
 	match state:
 		State.IN:
 			if not is_shy:
@@ -60,6 +65,8 @@ func _physics_process(delta: float) -> void:
 				state = State.OUT
 		State.OUT:
 			wait_timer += 1
+			if wait_timer == int(wait_time / 2.0) and fire:
+				emit_signal("shoot")
 			if wait_timer > wait_time:
 				wait_timer = 0
 				state = State.GOING_IN

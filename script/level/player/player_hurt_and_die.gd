@@ -17,6 +17,10 @@ var invincible_timer = 0
 @export var player: Node2D
 
 func _physics_process(delta: float) -> void:
+	var screen =  ScreenUtils.get_screen_rect(self)
+	if player.position.y > screen.position.y + screen.size.y + 32:
+		_on_player_die()
+
 	if is_hurting:
 		invincible_timer += 1
 		if invincible_timer >= invincible_time:

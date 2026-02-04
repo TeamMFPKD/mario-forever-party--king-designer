@@ -135,5 +135,5 @@ func platform_fall_detect() -> void:
 		return
 	if result.get_collider().has_meta("platform_fall_movement"):
 		var platform_fall_movement = result.get_collider().get_meta("platform_fall_movement") as PlatformFallMovement
-		print(platform_fall_movement)
+		#print(platform_fall_movement)
 		platform_fall_movement.fall()

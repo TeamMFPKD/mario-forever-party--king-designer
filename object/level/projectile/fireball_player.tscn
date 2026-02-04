@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://cywvscwj6ue86" path="res://script/level/projectile/fireball_interaction.gd" id="4_ohsb2"]
 [ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="6_ohsb2"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="7_yonpb"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="9_4lieb"]
+[ext_resource type="AudioStream" uid="uid://d2h4pb4ao20st" path="res://sound/level/bump.se.wav" id="10_n0uii"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_xwiod"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_00uy1"]
@@ -65,5 +67,9 @@ fireball_explode_scene = ExtResource("7_yonpb")
 script = ExtResource("11_xwiod")
 metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
+[node name="FireballExplode" parent="." unique_id=1715984441 instance=ExtResource("9_4lieb")]
+stream = ExtResource("10_n0uii")
+
 [connection signal="explode" from="FireballMovement" to="CreateExplodeEffect" method="explode"]
 [connection signal="fireball_explode" from="FireballInteraction" to="CreateExplodeEffect" method="explode"]
+[connection signal="play_sound_fireball_explode" from="FireballInteraction" to="FireballExplode" method="play"]

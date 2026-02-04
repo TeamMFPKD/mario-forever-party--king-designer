@@ -9,6 +9,8 @@ signal play_sound_shoot
 @export var fireball_scene : PackedScene
 @export var beetroot_scene : PackedScene
 
+@export var offset : Vector2 = Vector2(0, -32.0)
+
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("move_fire"):
 		if player_suit.suit != PlayerSuit.SuitType.POWERED:
@@ -27,12 +29,12 @@ func _physics_process(delta: float) -> void:
 
 func create_fireball() -> void:
 	var fireball = fireball_scene.instantiate() as Node2D
-	fireball.position = player.position
+	fireball.position = player.position + offset
 	fireball.set_meta("fireball_direction", -1 if player_animation_sprite.flip_h else 1)
 	player.add_sibling(fireball)
 
 func create_beetroot() -> void:
 	var beetroot = beetroot_scene.instantiate() as Node2D
-	beetroot.position = player.position
+	beetroot.position = player.position + offset
 	beetroot.set_meta("beetroot_direction", -1 if player_animation_sprite.flip_h else 1)
 	player.add_sibling(beetroot)
