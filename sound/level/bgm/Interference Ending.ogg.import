@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b4yoxhc7mi607"
+path="res://.godot/imported/Interference Ending.ogg-791bedad8b4f17c0eaa3e4612aa4e2c6.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/level/bgm/Interference Ending.ogg"
+dest_files=["res://.godot/imported/Interference Ending.ogg-791bedad8b4f17c0eaa3e4612aa4e2c6.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
