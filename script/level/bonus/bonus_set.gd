@@ -2,6 +2,8 @@ extends Node
 
 class_name BonusSet
 
+signal bonus_get
+
 enum BonusType {
 	MUSHROOM,
 	FIRE_FLOWER,
@@ -20,4 +22,5 @@ func _ready():
 	parent.set_meta("bonus_set", self)
 
 func on_bonus_get(player: Node2D):
+	emit_signal("bonus_get")
 	parent.queue_free()

@@ -6,18 +6,19 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nar3m"]
 atlas = ExtResource("2_inbu3")
-region = Rect2(0, 48, 33, 50)
+region = Rect2(11, 14, 41, 50)
 
-[node name="SpawnerPiranhaFireDown" type="Node2D"]
+[node name="SpawnerPiranhaFireDown" type="Node2D" unique_id=90305146]
 script = ExtResource("1_inbu3")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(16, 8)
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=994305099]
+position = Vector2(16, 9)
 texture = SubResource("AtlasTexture_nar3m")
+flip_h = true
 flip_v = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_8f1ok")]
+[node name="OffsetMarker" parent="." unique_id=1626985841 instance=ExtResource("3_8f1ok")]
 position = Vector2(16, 0)
 gizmo_extents = 8.0

@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bkjm2u4cn4r1p"]
+
+[ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="1_2dh1x"]
+[ext_resource type="Script" uid="uid://ceu284f7cfulc" path="res://script/level/enemy/piranha_movement.gd" id="2_0ohy1"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_gwe5a"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_8tkp4"]
+[ext_resource type="PackedScene" uid="uid://b4tdq2dr3cldf" path="res://object/level/enemy/goomba_dead_stomp.tscn" id="7_8humv"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_oi4a2"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_lkxxf"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_g1y48"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5tcj"]
+atlas = ExtResource("1_2dh1x")
+region = Rect2(0, 49, 33, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4mkg5"]
+atlas = ExtResource("1_2dh1x")
+region = Rect2(0, 0, 33, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_80dwe"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5tcj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4mkg5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(31, 47)
+
+[node name="PiranhaGreen" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+position = Vector2(0, -7)
+sprite_frames = SubResource("SpriteFrames_80dwe")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_gj0k3")
+debug_color = Color(0, 0.68660915, 0.36740685, 0.41960785)
+
+[node name="PiranhaMovement" type="Node" parent="." unique_id=653841748]
+script = ExtResource("2_0ohy1")
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_gwe5a")]
+
+[node name="InteractionWithPlayer" parent="EnemyInteraction" index="0" unique_id=707962705]
+stompable = false
+
+[node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
+is_bumpable = false
+
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_8tkp4")]
+dead_scene_stomp = ExtResource("7_8humv")
+
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_oi4a2")]
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("9_lkxxf")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_g1y48")]
+
+[editable path="EnemyInteraction"]

@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_qtu74"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="5_5kxqh"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="6_523s7"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="7_n37im"]
+[ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_24bk2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xe747"]
 atlas = ExtResource("1_rk7yl")
@@ -52,3 +54,8 @@ metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 [node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
 script = ExtResource("6_523s7")
 metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("7_n37im")]
+stream = ExtResource("8_24bk2")
+
+[connection signal="bonus_get" from="BonusSet" to="PowerUp" method="play"]

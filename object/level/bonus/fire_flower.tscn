@@ -2,6 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="1_p63fe"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="2_jxj7q"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_7l5d8"]
+[ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="4_x6m6y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jxj7q"]
 atlas = ExtResource("1_p63fe")
@@ -56,3 +58,8 @@ debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
 
 [node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_jxj7q")]
 bonus_type = 1
+
+[node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("3_7l5d8")]
+stream = ExtResource("4_x6m6y")
+
+[connection signal="bonus_get" from="BonusSet" to="PowerUp" method="play"]
