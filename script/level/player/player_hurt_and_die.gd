@@ -16,9 +16,17 @@ var invincible_timer = 0
 @export var player_suit : PlayerSuit
 @export var player: Node2D
 
+var level_camera: Camera2D
+
+func _ready() -> void:
+	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
+
 func _physics_process(delta: float) -> void:
-	var screen =  ScreenUtils.get_screen_rect(self)
-	if player.position.y > screen.position.y + screen.size.y + 32:
+	#var screen =  ScreenUtils.get_screen_rect(self)
+	#if player.position.y > screen.position.y + screen.size.y + 32:
+		#_on_player_die()
+
+	if player.position.y > level_camera.limit_bottom + 32:
 		_on_player_die()
 
 	if is_hurting:

@@ -3,6 +3,7 @@ extends Node
 class_name InteractionWithPlayer
 
 signal stomped(hit_position: Vector2)
+signal overlapped
 
 enum HurtType {
 	HURT,
@@ -27,4 +28,7 @@ func metadata_inject() -> void:
 func on_stomped(stomper: CharacterBody2D) -> float:
 	emit_signal("stomped", stomper.position)
 	return stomp_speed_y
+	
+func on_overlap(player: CharacterBody2D):
+	emit_signal("overlapped")
 	

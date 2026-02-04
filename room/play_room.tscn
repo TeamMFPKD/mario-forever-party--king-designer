@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://df4bar28tkrtr" path="res://object/level/enemy/piranha/piranha_blue_down.tscn" id="21_u2ari"]
 [ext_resource type="PackedScene" uid="uid://c2xxmqdwu8doi" path="res://object/level/enemy/piranha/piranha_fire_up.tscn" id="22_pp8vx"]
 [ext_resource type="PackedScene" uid="uid://b7qqcj3mgwcl6" path="res://object/level/enemy/piranha/piranha_fire_down.tscn" id="23_hljm7"]
+[ext_resource type="PackedScene" uid="uid://drhwhlid6l5wu" path="res://object/level/bonus/poisonous_mushroom.tscn" id="24_u2ari"]
 
 [node name="PlayRoom" type="Node2D" unique_id=822465384]
 
@@ -119,3 +120,6 @@ position = Vector2(288, 336)
 
 [node name="PiranhaFireDown" parent="." unique_id=476909128 instance=ExtResource("23_hljm7")]
 position = Vector2(192, 80)
+
+[node name="PoisonousMushroom" parent="." unique_id=93429378 instance=ExtResource("24_u2ari")]
+position = Vector2(632, 392)
