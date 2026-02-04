@@ -24,8 +24,8 @@
 [ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="18_xbm7l"]
 [ext_resource type="AudioStream" uid="uid://dwse0hneii3ml" path="res://sound/level/fireball.se.wav" id="21_pdrg5"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gh87g"]
-radius = 12.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4mpgj"]
+size = Vector2(24, 30)
 
 [node name="Player" type="CharacterBody2D" unique_id=1151748388 groups=["player"]]
 z_index = 10
@@ -40,11 +40,11 @@ offset = Vector2(0, -20)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
 visible = false
 position = Vector2(0, -2)
-shape = SubResource("CapsuleShape2D_gh87g")
+shape = SubResource("RectangleShape2D_4mpgj")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
 position = Vector2(0, -2)
-shape = SubResource("CapsuleShape2D_gh87g")
+shape = SubResource("RectangleShape2D_4mpgj")
 target_position = Vector2(0, 0)
 max_results = 4
 collision_mask = 48

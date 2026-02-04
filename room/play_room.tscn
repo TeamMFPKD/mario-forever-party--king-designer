@@ -15,7 +15,14 @@
 [ext_resource type="PackedScene" uid="uid://bsg7epf24irr" path="res://object/level/bonus/beetroot.tscn" id="13_ov274"]
 [ext_resource type="PackedScene" uid="uid://c7sn7qihq6t2o" path="res://object/level/bonus/lui.tscn" id="14_eyq6c"]
 [ext_resource type="PackedScene" uid="uid://b0b2g47apcdw3" path="res://object/level/bonus/mushroom.tscn" id="15_veurt"]
-[ext_resource type="PackedScene" uid="uid://bkjm2u4cn4r1p" path="res://object/level/enemy/piranha_green_up.tscn" id="16_jqvpb"]
+[ext_resource type="PackedScene" uid="uid://bkjm2u4cn4r1p" path="res://object/level/enemy/piranha/piranha_green_up.tscn" id="16_jqvpb"]
+[ext_resource type="PackedScene" uid="uid://xajr12mm2qaf" path="res://object/level/enemy/piranha/piranha_green_down.tscn" id="17_aybf2"]
+[ext_resource type="PackedScene" uid="uid://bhw2sm26f546v" path="res://object/level/enemy/piranha/piranha_grey_down.tscn" id="18_jbhld"]
+[ext_resource type="PackedScene" uid="uid://bqktcrlxlh8je" path="res://object/level/enemy/piranha/piranha_grey_up.tscn" id="19_5fmve"]
+[ext_resource type="PackedScene" uid="uid://crh5nm4u6d7he" path="res://object/level/enemy/piranha/piranha_blue_up.tscn" id="20_udrgm"]
+[ext_resource type="PackedScene" uid="uid://df4bar28tkrtr" path="res://object/level/enemy/piranha/piranha_blue_down.tscn" id="21_u2ari"]
+[ext_resource type="PackedScene" uid="uid://c2xxmqdwu8doi" path="res://object/level/enemy/piranha/piranha_fire_up.tscn" id="22_pp8vx"]
+[ext_resource type="PackedScene" uid="uid://b7qqcj3mgwcl6" path="res://object/level/enemy/piranha/piranha_fire_down.tscn" id="23_hljm7"]
 
 [node name="PlayRoom" type="Node2D" unique_id=822465384]
 
@@ -42,16 +49,16 @@ position = Vector2(608, 392)
 position = Vector2(672, 392)
 
 [node name="Goomba3" parent="." unique_id=41028732 instance=ExtResource("3_isgoj")]
-position = Vector2(296, 312)
+position = Vector2(328, 328)
 
 [node name="PlatformHorizontal" parent="." unique_id=241376401 instance=ExtResource("4_572ui")]
-position = Vector2(184, 296)
+position = Vector2(416, 312)
 
 [node name="PlatformHorizontal2" parent="." unique_id=798024285 instance=ExtResource("4_572ui")]
 position = Vector2(336, 488)
 
 [node name="PlatformVerticalUp" parent="." unique_id=1074057519 instance=ExtResource("5_mgl3t")]
-position = Vector2(136, 248)
+position = Vector2(128, 128)
 
 [node name="PlatformVerticalDown" parent="." unique_id=1359139927 instance=ExtResource("3_kke3s")]
 position = Vector2(-88, 504)
@@ -91,3 +98,24 @@ position = Vector2(992, 168)
 
 [node name="PiranhaGreen" parent="." unique_id=1816941222 instance=ExtResource("16_jqvpb")]
 position = Vector2(512, 240)
+
+[node name="PiranhaGreen2" parent="." unique_id=812568673 instance=ExtResource("17_aybf2")]
+position = Vector2(256, 208)
+
+[node name="PiranhaGreyDown" parent="." unique_id=404060298 instance=ExtResource("18_jbhld")]
+position = Vector2(800, 120)
+
+[node name="PiranhaGreyUp" parent="." unique_id=810222717 instance=ExtResource("19_5fmve")]
+position = Vector2(832, 144)
+
+[node name="PiranhaBlueUp" parent="." unique_id=29248866 instance=ExtResource("20_udrgm")]
+position = Vector2(344, 48)
+
+[node name="PiranhaBlueDown" parent="." unique_id=1560570381 instance=ExtResource("21_u2ari")]
+position = Vector2(328, -40)
+
+[node name="PiranhaFireUp" parent="." unique_id=1171608287 instance=ExtResource("22_pp8vx")]
+position = Vector2(288, 336)
+
+[node name="PiranhaFireDown" parent="." unique_id=476909128 instance=ExtResource("23_hljm7")]
+position = Vector2(192, 80)

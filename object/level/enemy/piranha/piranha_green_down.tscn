@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://xajr12mm2qaf"]
+
+[ext_resource type="PackedScene" uid="uid://bkjm2u4cn4r1p" path="res://object/level/enemy/piranha/piranha_green_up.tscn" id="1_b77a3"]
+
+[node name="PiranhaGreenDown" unique_id=114751985 instance=ExtResource("1_b77a3")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
+position = Vector2(0, 8)
+flip_v = true
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1893765268]
+position = Vector2(0, 8)
+
+[node name="PiranhaMovement" parent="." index="2" unique_id=653841748]
+move_direction = 1
+
+[node name="EnemyDie" parent="." index="4" unique_id=20942104]
+dead_scene_stomp = null
+
+[editable path="EnemyInteraction"]

@@ -1,5 +1,6 @@
 extends Node
 
+signal play_sound_fireball_explode
 signal fireball_explode
 
 @export var fireball : CharacterBody2D
@@ -15,6 +16,8 @@ func _physics_process(delta):
 		if !interaction_with_fireball_node.is_hittable:
 			continue
 		interaction_with_fireball_node.on_fireball_hit(fireball.position)
+		if interaction_with_fireball_node.immune_to_fireball:
+			emit_signal("play_sound_fireball_explode")
 		if interaction_with_fireball_node.fireball_explode:
 			emit_signal("fireball_explode")
 			fireball.queue_free()

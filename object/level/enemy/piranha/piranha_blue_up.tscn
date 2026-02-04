@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://crh5nm4u6d7he"]
+
+[ext_resource type="PackedScene" uid="uid://bkjm2u4cn4r1p" path="res://object/level/enemy/piranha/piranha_green_up.tscn" id="1_kjwc6"]
+[ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="2_cvylr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fogvu"]
+atlas = ExtResource("2_cvylr")
+region = Rect2(0, 49, 33, 49)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e4e3o"]
+atlas = ExtResource("2_cvylr")
+region = Rect2(0, 0, 33, 49)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tqo6j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fogvu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e4e3o")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PiranhaBlueUp" unique_id=114751985 instance=ExtResource("1_kjwc6")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_tqo6j")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1893765268]
+debug_color = Color(0.47426897, 0.51209265, 1, 0.41960785)
+
+[node name="PiranhaMovement" parent="." index="2" unique_id=653841748]
+shy_distance = 0.0
+
+[editable path="EnemyInteraction"]

@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://b7qqcj3mgwcl6"]
+
+[ext_resource type="PackedScene" uid="uid://xajr12mm2qaf" path="res://object/level/enemy/piranha/piranha_green_down.tscn" id="1_syun4"]
+[ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="2_hdjpj"]
+[ext_resource type="Script" uid="uid://bsbk7ccjs30bv" path="res://script/level/enemy/piranha_shoot.gd" id="3_xx7go"]
+[ext_resource type="Script" uid="uid://c2855303v4jng" path="res://script/level/enemy/piranha_fire_animation.gd" id="4_kif5r"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_s0tac"]
+[ext_resource type="AudioStream" uid="uid://dwse0hneii3ml" path="res://sound/level/fireball.se.wav" id="6_5sdgx"]
+[ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="7_n5k34"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xx7go"]
+atlas = ExtResource("2_hdjpj")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdjpj"]
+atlas = ExtResource("2_hdjpj")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kif5r"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xx7go")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdjpj")
+}],
+"loop": true,
+"name": &"look_up",
+"speed": 5.0
+}]
+
+[node name="PiranhaFireDown" unique_id=114751985 instance=ExtResource("1_syun4")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
+position = Vector2(0, 16)
+sprite_frames = SubResource("SpriteFrames_kif5r")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=1893765268]
+debug_color = Color(1, 0.24113542, 0.34466508, 0.41960785)
+
+[node name="PiranhaMovement" parent="." index="2" unique_id=653841748]
+fire = true
+
+[node name="PiranhaShoot" type="Node" parent="." index="8" unique_id=1130609087]
+script = ExtResource("3_xx7go")
+
+[node name="ShootMarker" type="Marker2D" parent="." index="9" unique_id=1700195643]
+position = Vector2(0, 16)
+gizmo_extents = 8.0
+metadata/_edit_lock_ = true
+
+[node name="PiranhaFireAnimation" type="Node" parent="." index="10" unique_id=302241042]
+script = ExtResource("4_kif5r")
+
+[node name="Shoot" parent="." index="11" unique_id=1715984441 instance=ExtResource("5_s0tac")]
+stream = ExtResource("6_5sdgx")
+script = ExtResource("7_n5k34")
+
+[connection signal="shoot" from="PiranhaMovement" to="PiranhaShoot" method="_on_shoot"]
+[connection signal="play_sound_shoot" from="PiranhaShoot" to="Shoot" method="play"]
+
+[editable path="EnemyInteraction"]
