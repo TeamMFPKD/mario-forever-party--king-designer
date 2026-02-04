@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_sk3bx"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_2ydvy"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="8_k5nvq"]
+[ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_r00uj"]
 [ext_resource type="AudioStream" uid="uid://bfei4klk2geni" path="res://sound/level/kick.se.wav" id="9_71hb1"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_o7m3i"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/enemy/out_of_bounds_queue_free.gd" id="11_5nwxo"]
@@ -114,7 +115,11 @@ disable_when_out_of_screen = true
 script = ExtResource("11_5nwxo")
 metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
-[node name="LuiJump" parent="." unique_id=1715984441 instance=ExtResource("8_k5nvq")]
+[node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("8_k5nvq")]
+stream = ExtResource("8_r00uj")
+
+[node name="LuiJump" parent="." unique_id=932415971 instance=ExtResource("8_k5nvq")]
 stream = ExtResource("9_71hb1")
 
 [connection signal="jump_speed_set" from="BasicMovement" to="LuiJump" method="play"]
+[connection signal="bonus_get" from="BonusSet" to="PowerUp" method="play"]

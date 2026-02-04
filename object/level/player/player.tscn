@@ -117,12 +117,11 @@ stream = ExtResource("16_3sfxm")
 
 [node name="Skid" parent="." unique_id=373586307 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("17_qe8py")
-volume_db = 10.0
+volume_db = 5.0
 script = ExtResource("18_xbm7l")
 
 [node name="Shoot" parent="." unique_id=1440101806 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("21_pdrg5")
-volume_db = 10.0
 script = ExtResource("18_xbm7l")
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
@@ -133,6 +132,5 @@ script = ExtResource("18_xbm7l")
 [connection signal="play_sound_die" from="PlayerMediator/PlayerHurtAndDie" to="Die" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="PowerDown" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PowerDown" method="play"]
-[connection signal="play_sound_powerup" from="PlayerMediator/PlayerSuit" to="PowerUp" method="play"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
 [connection signal="play_sound_shoot" from="PlayerMediator/PlayerShoot" to="Shoot" method="play"]

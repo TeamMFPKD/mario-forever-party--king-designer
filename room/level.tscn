@@ -205,7 +205,7 @@ region = Rect2(0, 48, 33, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nar3m"]
 atlas = ExtResource("34_uly8c")
-region = Rect2(0, 48, 33, 50)
+region = Rect2(11, 14, 41, 50)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gp0ro"]
 atlas = ExtResource("35_f0dhw")
@@ -1287,6 +1287,7 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_nar3m")
+flip_h = true
 
 [node name="ItemButtonPiranhaBlueUp" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer" unique_id=1793945893 instance=ExtResource("16_rgrya")]
 layout_mode = 2
@@ -1329,6 +1330,7 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown/ButtonTexture" index="0"]
 texture = SubResource("AtlasTexture_nar3m")
+flip_h = true
 flip_v = true
 
 [node name="ItemButtonPiranhaBlueDown" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2" unique_id=1879244926 instance=ExtResource("16_rgrya")]
