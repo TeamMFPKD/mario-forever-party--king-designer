@@ -43,14 +43,6 @@ func update_animation():
 	else:
 		ani.visible = true
 		hurt_timer = 0
-
-	# WEEGEE effect
-	if new_state == "jump" and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.LUI:
-		var lui_effect = player_lui_effect_scene.instantiate() as Node2D
-		lui_effect.position = player.position
-		var lui_ani = lui_effect.get_node("AnimatedSprite2D")
-		lui_ani.flip_h = ani.flip_h
-		player.add_sibling(lui_effect)
 	
 	if new_state != current_state or direction != last_direction:
 		# 保存当前walk动画的进度
@@ -89,6 +81,18 @@ func update_animation():
 		elif player_movement.move_right:
 			ani.flip_h = false
 
+	# WEEGEE effect
+	if (new_state == "jump" or new_state == "crouch") \
+	and !player.is_on_floor() \
+	and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.LUI:
+		var lui_effect = player_lui_effect_scene.instantiate() as Node2D
+		lui_effect.position = player.position
+		var lui_ani = lui_effect.get_node("AnimatedSprite2D")
+		lui_ani.animation = new_state
+		lui_ani.frame = ani.frame
+		lui_ani.flip_h = ani.flip_h
+		player.add_sibling(lui_effect)
+
 # 根据角色状态和速度更新动画播放速度
 func update_animation_speed():
 	match current_state:
@@ -114,7 +118,7 @@ func determine_state() -> String:
 		return "swim"
 	
 	# 检查是否在下蹲
-	if player_movement.move_down and player.is_on_floor():
+	if player_movement.crouch:
 		return "crouch"
 	
 	# 检查跳跃状态
@@ -153,10 +157,8 @@ func determine_direction() -> int:
 		# 如果没有水平移动，保持上次的方向
 		return last_direction
 
-# 检查角色是否在水中（需要根据实际游戏逻辑实现）
 func is_in_water() -> bool:
-	# 这里需要根据游戏的实际逻辑来判断角色是否在水中
-	# 暂时返回false，需要根据游戏的水体检测逻辑来实现
+	# 暂时返回false
 	return false
 
 func _on_player_suit_changed():

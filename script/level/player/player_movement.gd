@@ -7,6 +7,14 @@ signal play_sound_jump
 @export var player : CharacterBody2D
 @export var player_suit : PlayerSuit
 
+@export var collision_shape : CollisionShape2D
+@export var cast : ShapeCast2D
+
+@export var shape_small : Shape2D
+@export var shape_super : Shape2D
+
+@export var crouch_head_area : Area2D
+
 @export var max_speed_x : float = 400.0
 @export var acceleration : float = 600.0
 @export var deceleration_ground : float = 800.0
@@ -36,6 +44,8 @@ var jumpable : bool
 var jumpable_time : int = 15
 var jumpable_timer : int
 
+var crouch : bool
+
 # 狼跳
 var langtiao : bool
 var langtiao_time : int = 5
@@ -60,11 +70,21 @@ func _physics_process(delta):
 	if player.is_on_wall():
 		speed_x = 0.0
 
+	# 下蹲
+	if player.is_on_floor():
+		if move_down:
+			crouch = true
+
+	if !move_down and player.is_on_floor() \
+	and crouch_head_area.get_overlapping_bodies().size() == 0:
+		crouch = false
+
 	# 确定目标速度方向
-	if move_left:
-		target_speed = -max_speed_x
-	elif move_right:
-		target_speed = max_speed_x
+	if !crouch or !player.is_on_floor():
+		if move_left:
+			target_speed = -max_speed_x
+		elif move_right:
+			target_speed = max_speed_x
 	else:
 		target_speed = 0.0
 	
@@ -122,6 +142,9 @@ func _physics_process(delta):
 	# 掉落桥检测
 	platform_fall_detect()
 
+	# 更新碰撞箱
+	update_hit_box()
+
 
 func is_action_pressed(action: String) -> bool:
 	return Input.is_action_just_pressed(action)
@@ -137,3 +160,20 @@ func platform_fall_detect() -> void:
 		var platform_fall_movement = result.get_collider().get_meta("platform_fall_movement") as PlatformFallMovement
 		#print(platform_fall_movement)
 		platform_fall_movement.fall()
+
+func update_hit_box() -> void:
+	var is_super : bool
+	if crouch or player_suit.suit == PlayerSuit.SuitType.SMALL:
+		is_super = false
+	else:
+		is_super = true
+	if not is_super:
+		collision_shape.shape = shape_small
+		collision_shape.position = Vector2(0, -1.5)
+		cast.shape = shape_small
+		cast.position = Vector2(0, -1.5)
+	else:
+		collision_shape.shape = shape_super
+		collision_shape.position = Vector2(0, -16.5)
+		cast.shape = shape_super
+		cast.position = Vector2(0, -16.5)

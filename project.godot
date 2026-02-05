@@ -47,10 +47,23 @@ project/assembly_name="Mario Forever Party- King Designer"
 folder_colors={
 "res://database/": "gray",
 "res://object/background/": "green",
+"res://object/level/block/": "orange",
+"res://object/level/bonus/": "yellow",
+"res://object/level/enemy/": "orange",
+"res://object/level/facility/": "yellow",
+"res://object/level/player/": "pink",
+"res://object/level/projectile/": "red",
 "res://room/": "purple",
 "res://script/": "gray",
 "res://shader/": "gray",
-"res://sound/": "blue"
+"res://sound/": "blue",
+"res://sprite/background/": "green",
+"res://sprite/bonus/": "yellow",
+"res://sprite/enemy/": "orange",
+"res://sprite/facility/": "yellow",
+"res://sprite/player/": "pink",
+"res://sprite/projectile/": "red",
+"res://sprite/tile/": "gray"
 }
 
 [input]
