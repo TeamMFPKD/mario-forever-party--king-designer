@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bvb7dq1hsm4v4"]
+
+[ext_resource type="Script" uid="uid://ci0i1twe08ok2" path="res://script/level/enemy/cannon_launch.gd" id="1_r3n1t"]
+[ext_resource type="Texture2D" uid="uid://cvhrkx7nkaafo" path="res://sprite/enemy/bullet_bill_cannon.png" id="1_rxrbd"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="2_rxrbd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gngo4"]
+size = Vector2(32, 32)
+
+[node name="CannonBulletBill" type="StaticBody2D" unique_id=379049793]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1302685675]
+texture = ExtResource("1_rxrbd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1109455545]
+shape = SubResource("RectangleShape2D_gngo4")
+
+[node name="CannonLaunch" type="Node" parent="." unique_id=502895173]
+script = ExtResource("1_r3n1t")
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("2_rxrbd")]

@@ -14,6 +14,7 @@ var move_object : CharacterBody2D
 @export var edge_detect: bool = false
 
 @export var overlap_turn : bool = true
+@export var can_be_turn_overlap_detected : bool = true
 @export var path_to_shape_cast: NodePath = "../BasicShapeCast2D"
 
 var shape_cast
@@ -31,6 +32,8 @@ func _ready() -> void:
 		set_movement_direction()
 	if overlap_turn:
 		shape_cast = get_node(path_to_shape_cast) as ShapeCast2D
+
+	move_object.set_meta("basic_movement", self)
 
 func _physics_process(delta: float) -> void:
 	turn_detect()
@@ -61,14 +64,18 @@ func overlap_turn_detect() -> void:
 	if not overlap_turn:
 		return
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
-	# exclude_parent 十大未解之谜
-	#print(results.size())
+	# 因为是直接使用的物理空间查询，因此推测 exclude_parent 属性无效
+	# 需要手动排除自身
 	if results.size() <= 1:
 		overlap_turn_detect_objects.clear()
 		return
 	for result in results:
 		if result == move_object:
 			continue
+		if result.has_meta("basic_movement"):
+			var other_basic_movement_node = result.get_meta("basic_movement") as BasicMovement
+			if not other_basic_movement_node.can_be_turn_overlap_detected:
+				continue
 		if !(result in overlap_turn_detect_objects):
 			overlap_turn_detect_objects.append(result)
 			speed_x *= -1.0
