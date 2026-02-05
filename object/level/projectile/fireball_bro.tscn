@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dqdns5oydp44w"]
+
+[ext_resource type="Texture2D" uid="uid://cedfngdjbn1ra" path="res://sprite/projectile/fireball.png" id="1_y6g7c"]
+[ext_resource type="Script" uid="uid://ckuyqjdj04out" path="res://script/level/projectile/fireball_movement.gd" id="2_c6kwj"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_an8qw"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="4_y6g7c"]
+[ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="5_41ls0"]
+[ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="6_rq1xj"]
+[ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="7_s15ah"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="8_3xqmi"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="9_v255j"]
+[ext_resource type="AudioStream" uid="uid://d2h4pb4ao20st" path="res://sound/level/bump.se.wav" id="10_c558k"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_00uy1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_y6g7c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lwykp"]
+radius = 9.0
+
+[node name="FireballBro" type="CharacterBody2D" unique_id=114751985]
+z_index = 15
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_00uy1")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+shape = SubResource("CircleShape2D_lwykp")
+debug_color = Color(0.99999994, 0.2645593, 0.20245287, 0.41960785)
+
+[node name="FireballMovement" type="Node" parent="." unique_id=2103801211]
+script = ExtResource("2_c6kwj")
+initially_face_to_player = false
+speed_x = 500.0
+gravity = 2000.0
+jump_speed = -300.0
+overlap_turn = false
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_an8qw")]
+visible = false
+shape = SubResource("CircleShape2D_lwykp")
+
+[node name="InteractionWithPlayer" type="Node" parent="." unique_id=118770185]
+script = ExtResource("4_y6g7c")
+stompable = false
+metadata/_custom_type_script = "uid://dy8q17c1owdph"
+
+[node name="FireballSpriteSpin" type="Node" parent="." unique_id=1249232420 node_paths=PackedStringArray("ani")]
+script = ExtResource("5_41ls0")
+ani = NodePath("../AnimatedSprite2D")
+
+[node name="CreateExplodeEffect" type="Node" parent="." unique_id=1853297786]
+script = ExtResource("6_rq1xj")
+fireball_explode_scene = ExtResource("7_s15ah")
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("8_3xqmi")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[node name="FireballExplode" parent="." unique_id=1715984441 instance=ExtResource("9_v255j")]
+stream = ExtResource("10_c558k")
+
+[connection signal="explode" from="FireballMovement" to="CreateExplodeEffect" method="explode"]

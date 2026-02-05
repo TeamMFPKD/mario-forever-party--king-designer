@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://m4egjldduflh"]
+
+[ext_resource type="Texture2D" uid="uid://bq8cp4ab4udo7" path="res://sprite/enemy/hammer_bro.png" id="1_f2pd6"]
+[ext_resource type="Script" uid="uid://b6nra0f13l0l6" path="res://script/level/enemy/bro_movement.gd" id="2_f2pd6"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_pg1hx"]
+[ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_45x3v"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_280cw"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_dxtk8"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_37sdw"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_0gwgv"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_a1ydn"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_fusgp"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="12_pg1hx"]
+[ext_resource type="AudioStream" uid="uid://b84k3o8266rgs" path="res://sound/level/hammer.se.wav" id="13_45x3v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oyqy2"]
+atlas = ExtResource("1_f2pd6")
+region = Rect2(37, 0, 37, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg1hx"]
+atlas = ExtResource("1_f2pd6")
+region = Rect2(0, 0, 37, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_45x3v"]
+atlas = ExtResource("1_f2pd6")
+region = Rect2(37, 50, 37, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_280cw"]
+atlas = ExtResource("1_f2pd6")
+region = Rect2(0, 50, 37, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dxtk8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oyqy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pg1hx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_45x3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_280cw")
+}],
+"loop": true,
+"name": &"shoot",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(32, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pg1hx"]
+size = Vector2(30, 46)
+
+[node name="BroHammer" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_dxtk8")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+shape = SubResource("RectangleShape2D_gj0k3")
+debug_color = Color(0, 0.69204795, 0.26297605, 0.41960785)
+
+[node name="BroMovement" type="Node" parent="." unique_id=2103801211 node_paths=PackedStringArray("solid_area", "ani")]
+script = ExtResource("2_f2pd6")
+solid_area = NodePath("../SolidDetect")
+ani = NodePath("../AnimatedSprite2D")
+bro_jump_speed = -530.0
+bro_slight_jump_speed = -120.0
+speed_x = 80.0
+gravity = 1000.0
+overlap_turn = false
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_pg1hx")]
+visible = false
+shape = SubResource("RectangleShape2D_gj0k3")
+
+[node name="SolidDetect" type="Area2D" parent="." unique_id=612074235]
+visible = false
+collision_layer = 0
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SolidDetect" unique_id=1672631622]
+shape = SubResource("RectangleShape2D_pg1hx")
+debug_color = Color(0, 0.69204795, 0.26297605, 0.41960785)
+
+[node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
+script = ExtResource("4_45x3v")
+_animated_sprite2d_path = NodePath("../AnimatedSprite2D")
+_always_face_to_player = true
+metadata/_custom_type_script = "uid://chvbcq7uttlml"
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_280cw")]
+
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_dxtk8")]
+
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_37sdw")]
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("9_0gwgv")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_a1ydn")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("11_fusgp")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[node name="ShootSound" parent="." unique_id=1715984441 instance=ExtResource("12_pg1hx")]
+stream = ExtResource("13_45x3v")
+
+[connection signal="play_sound_shoot" from="BroMovement" to="ShootSound" method="play"]
+
+[editable path="EnemyInteraction"]

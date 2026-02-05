@@ -1,10 +1,12 @@
 extends Node
 
+signal play_sound_launch
+
 @export var path_to_cannon : NodePath = ".."
 @export var bullet_bill_scene : PackedScene = preload("uid://bak1mo1icnsxi")
 @export var explode_scene : PackedScene = preload("uid://bkp0cxcybg7s2")
 @export var shoot_time : int = 150
-@export var safe_distance : float = 96
+@export var safe_distance : float = 80.0
 
 var cannon : Node2D
 var player : Node2D
@@ -40,3 +42,5 @@ func launch() -> void:
 	var explode = explode_scene.instantiate() as Node2D
 	explode.position = bill.position + Vector2(-16.0 if left else 16.0, 0)
 	cannon.add_sibling(explode)
+
+	emit_signal("play_sound_launch")

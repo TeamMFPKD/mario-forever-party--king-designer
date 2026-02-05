@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://ci0i1twe08ok2" path="res://script/level/enemy/cannon_launch.gd" id="1_r3n1t"]
 [ext_resource type="Texture2D" uid="uid://cvhrkx7nkaafo" path="res://sprite/enemy/bullet_bill_cannon.png" id="1_rxrbd"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="2_rxrbd"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="4_hp2w2"]
+[ext_resource type="AudioStream" uid="uid://d2sipv1ph5cwf" path="res://sound/level/bullet_bill.se.wav" id="5_f48n2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gngo4"]
 size = Vector2(32, 32)
@@ -19,3 +21,9 @@ shape = SubResource("RectangleShape2D_gngo4")
 script = ExtResource("1_r3n1t")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("2_rxrbd")]
+disable_when_out_of_screen = true
+
+[node name="CannonLaunchSound" parent="." unique_id=1715984441 instance=ExtResource("4_hp2w2")]
+stream = ExtResource("5_f48n2")
+
+[connection signal="play_sound_launch" from="CannonLaunch" to="CannonLaunchSound" method="play"]
