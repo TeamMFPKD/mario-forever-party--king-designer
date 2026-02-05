@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://b0b2g47apcdw3" path="res://object/level/bonus/mushroom.tscn" id="15_veurt"]
 [ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="19_jbhld"]
 [ext_resource type="PackedScene" uid="uid://duj6uud1jhnqf" path="res://object/level/enemy/troopa/troopa_red.tscn" id="20_5fmve"]
+[ext_resource type="PackedScene" uid="uid://c57xyn84c4arm" path="res://object/level/bonus/star.tscn" id="21_rf86r"]
 [ext_resource type="PackedScene" uid="uid://drhwhlid6l5wu" path="res://object/level/bonus/poisonous_mushroom.tscn" id="24_u2ari"]
 [ext_resource type="PackedScene" uid="uid://cwjqbk83qtebh" path="res://object/bgm/bgm.tscn" id="26_hljm7"]
 
@@ -38,7 +39,7 @@ zoom = Vector2(2, 2)
 process_callback = 0
 limit_left = -233
 limit_top = -400
-limit_right = 672
+limit_right = 3800
 limit_bottom = 700
 metadata/_edit_lock_ = true
 
@@ -104,3 +105,6 @@ position = Vector2(720, 336)
 
 [node name="TroopaGreen2" parent="." unique_id=1850991936 instance=ExtResource("20_5fmve")]
 position = Vector2(800, 144)
+
+[node name="Star" parent="." unique_id=18289521 instance=ExtResource("21_rf86r")]
+position = Vector2(576, 328)

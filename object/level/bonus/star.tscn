@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://c57xyn84c4arm"]
+
+[ext_resource type="Texture2D" uid="uid://4lr60loieckk" path="res://sprite/bonus/super_star.png" id="1_w2hnx"]
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_up6tx"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_b1dgd"]
+[ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_4nlcc"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="5_lmxld"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="6_11yr3"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="7_fluhw"]
+[ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_nesiy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8xoj"]
+atlas = ExtResource("1_w2hnx")
+region = Rect2(0, 96, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b1dgd"]
+atlas = ExtResource("1_w2hnx")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4nlcc"]
+atlas = ExtResource("1_w2hnx")
+region = Rect2(0, 32, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lmxld"]
+atlas = ExtResource("1_w2hnx")
+region = Rect2(0, 64, 33, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_11yr3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o8xoj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b1dgd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4nlcc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lmxld")
+}],
+"loop": true,
+"name": &"default",
+"speed": 30.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(31, 31)
+
+[node name="Star" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 32
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_11yr3")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+visible = false
+shape = SubResource("RectangleShape2D_gj0k3")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
+script = ExtResource("2_up6tx")
+speed_x = 90.0
+jump_speed = -300.0
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_b1dgd")]
+collision_mask = 32
+
+[node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("4_4nlcc")]
+bonus_type = 4
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_lmxld")]
+disable_when_out_of_screen = true
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("6_11yr3")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("7_fluhw")]
+stream = ExtResource("8_nesiy")
+
+[connection signal="bonus_get" from="BonusSet" to="PowerUp" method="play"]
