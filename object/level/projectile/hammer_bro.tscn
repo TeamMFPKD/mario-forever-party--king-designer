@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://3ieotv447ssg"]
+
+[ext_resource type="Texture2D" uid="uid://fv66fb8pmnxu" path="res://sprite/projectile/hammer.png" id="1_jmgug"]
+[ext_resource type="Script" uid="uid://ckuyqjdj04out" path="res://script/level/projectile/fireball_movement.gd" id="2_8td6p"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_ujdcr"]
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="4_3al0f"]
+[ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="4_uu26y"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="7_xavag"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3al0f"]
+atlas = ExtResource("1_jmgug")
+region = Rect2(0, 0, 26, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nj5v8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3al0f")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_37p56"]
+radius = 12.0
+
+[node name="HammerBro" type="CharacterBody2D" unique_id=114751985]
+z_index = 15
+collision_layer = 16
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_nj5v8")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+shape = SubResource("CircleShape2D_37p56")
+debug_color = Color(0.65913457, 0.54113346, 0.5432109, 0.41960785)
+
+[node name="FireballMovement" type="Node" parent="." unique_id=2103801211]
+script = ExtResource("2_8td6p")
+initially_face_to_player = false
+speed_x = 175.0
+speed_y = -400.0
+gravity = 800.0
+overlap_turn = false
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_ujdcr")]
+visible = false
+shape = SubResource("CircleShape2D_37p56")
+
+[node name="InteractionWithPlayer" type="Node" parent="." unique_id=73212133]
+script = ExtResource("4_3al0f")
+stompable = false
+metadata/_custom_type_script = "uid://dy8q17c1owdph"
+
+[node name="FireballSpriteSpin" type="Node" parent="." unique_id=1249232420 node_paths=PackedStringArray("ani")]
+script = ExtResource("4_uu26y")
+ani = NodePath("../AnimatedSprite2D")
+rot_speed = 25.0
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("7_xavag")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
