@@ -87,6 +87,7 @@ script = ExtResource("5_05vun")
 [node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_3a75j")]
 
 [node name="InteractionWithPlayer" parent="EnemyInteraction" index="0" unique_id=707962705]
+interactable = false
 hurt_type = 2
 stomp_offset = 64.0
 

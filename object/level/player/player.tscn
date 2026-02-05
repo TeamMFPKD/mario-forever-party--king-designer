@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://cek5xovo24ojn" path="res://script/level/player/invincible_effect.gd" id="2_741uk"]
 [ext_resource type="Script" uid="uid://7l3pjn0ykam3" path="res://script/level/player/player_movement.gd" id="2_d0xdx"]
 [ext_resource type="Script" uid="uid://tag7wjib5k0y" path="res://script/level/player/player_mediator.gd" id="2_gq3kn"]
+[ext_resource type="Shape2D" uid="uid://ca4jxp44syflr" path="res://object/level/player/player_collision_shape_small.tres" id="3_0f3px"]
+[ext_resource type="Shape2D" uid="uid://1xg435m2mqxi" path="res://object/level/player/player_collision_shape_super.tres" id="3_8p21p"]
 [ext_resource type="Script" uid="uid://dfmmex64hbhoh" path="res://script/level/player/player_animation.gd" id="3_d0xdx"]
 [ext_resource type="Script" uid="uid://cfnlw3m1kj135" path="res://script/level/player/player_interaction.gd" id="4_3e465"]
 [ext_resource type="Script" uid="uid://cdxjpqs4et34d" path="res://script/level/player/player_suit.gd" id="5_5qxp0"]
@@ -30,8 +32,8 @@
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4mpgj"]
-size = Vector2(24, 30)
+[sub_resource type="CircleShape2D" id="CircleShape2D_8p21p"]
+radius = 7.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1151748388 groups=["player"]]
 z_index = 10
@@ -52,17 +54,26 @@ offset = Vector2(0, -20)
 script = ExtResource("2_741uk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
-visible = false
-position = Vector2(0, -2)
-shape = SubResource("RectangleShape2D_4mpgj")
+position = Vector2(0, -1.5)
+shape = ExtResource("3_0f3px")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
+visible = false
 position = Vector2(0, -2)
-shape = SubResource("RectangleShape2D_4mpgj")
+shape = ExtResource("3_0f3px")
 target_position = Vector2(0, 0)
 max_results = 4
 collision_mask = 48
 collide_with_areas = true
+
+[node name="CrouchHeadDetect" type="Area2D" parent="." unique_id=1726060209]
+visible = false
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrouchHeadDetect" unique_id=1147189126]
+position = Vector2(0, -27)
+shape = SubResource("CircleShape2D_8p21p")
 
 [node name="PlayerMediator" type="Node" parent="." unique_id=968252850 node_paths=PackedStringArray("player", "player_movement", "player_interaction", "player_hurt_and_die", "player_suit", "player_shoot", "player_animation")]
 script = ExtResource("2_gq3kn")
@@ -88,10 +99,15 @@ player_fireball_spritesframe = ExtResource("9_3sfxm")
 player_beetroot_spritesframe = ExtResource("10_qe8py")
 player_lui_spritesframe = ExtResource("11_xbm7l")
 
-[node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player", "player_suit")]
+[node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player", "player_suit", "collision_shape", "cast", "crouch_head_area")]
 script = ExtResource("2_d0xdx")
 player = NodePath("../..")
 player_suit = NodePath("../PlayerSuit")
+collision_shape = NodePath("../../CollisionShape2D")
+cast = NodePath("../../InteractionShapeCast2D")
+shape_small = ExtResource("3_0f3px")
+shape_super = ExtResource("3_8p21p")
+crouch_head_area = NodePath("../../CrouchHeadDetect")
 
 [node name="PlayerInteraction" type="Node" parent="PlayerMediator" unique_id=1627366199 node_paths=PackedStringArray("player_movement", "player_suit", "player", "cast")]
 script = ExtResource("4_3e465")

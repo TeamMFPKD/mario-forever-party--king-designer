@@ -21,6 +21,9 @@ func _physics_process(delta: float) -> void:
 
 	# 无敌星撞击敌人
 	starman_detect(results)
+
+	# 顶砖检测
+	block_hit_detect(results)
 	
 func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 	for result in results:
@@ -79,3 +82,7 @@ func starman_detect(results : Array[Node2D]) -> void:
 		
 func is_starman() -> bool:
 	return player_suit.is_starman
+
+func block_hit_detect(results : Array[Node2D]) -> void:
+	pass
+	# TODO:

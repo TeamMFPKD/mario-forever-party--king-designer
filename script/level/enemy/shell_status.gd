@@ -36,6 +36,7 @@ func _ready() -> void:
 	shell_movement = get_node(path_to_shell_movement)
 	interaction_with_player_node = get_node(path_to_interaction_with_player)
 	ani = get_node(path_to_animated_sprite)
+	set_interaction_delay()
 
 func _on_stomped(hit_position : Vector2) -> void:
 	if is_moving:
