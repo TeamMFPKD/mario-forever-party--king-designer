@@ -33,6 +33,14 @@ var dead_texture : Texture2D
 @export var dead_scene_shell : PackedScene
 @export var dead_scene_bump : PackedScene
 
+# 交互组件连接控制
+@export var enable_interaction_with_player: bool = true
+@export var enable_interaction_with_fireball: bool = true
+@export var enable_interaction_with_beetroot: bool = true
+@export var enable_interaction_with_star: bool = true
+@export var enable_interaction_with_shell: bool = true
+@export var enable_interaction_with_bump: bool = true
+
 # 交互组件配置映射表
 const INTERACTION_CONFIG := {
 	"interaction_with_player": {"signal": "stomped", "death_type": DeathType.STOMP},
@@ -57,8 +65,11 @@ func _ready() -> void:
 			var signal_name: String = config["signal"]
 			var death_type: DeathType = config["death_type"]
 			
-			if interaction.has_signal(signal_name):
-				interaction.connect(signal_name, _on_interaction_hit.bind(death_type))
+			# 检查是否启用该交互
+			var enable_property = "enable_" + meta_name
+			if has_method("get") and get(enable_property):
+				if interaction.has_signal(signal_name):
+					interaction.connect(signal_name, _on_interaction_hit.bind(death_type))
 
 func die(hit_position: Vector2 = Vector2.ZERO, death_type: DeathType = DeathType.DEFAULT) -> void:
 	dead_instantiate(hit_position,death_type)
@@ -93,4 +104,3 @@ func dead_instantiate(hit_position: Vector2, death_type: DeathType = DeathType.D
 # 统一的交互命中处理函数
 func _on_interaction_hit(hit_position: Vector2, death_type: DeathType) -> void:
 	die(hit_position,death_type)
-	

@@ -11,6 +11,8 @@ enum HurtType {
 	NOTHING
 }
 
+@export var interactable : bool = true
+
 @export_category("HurtType")
 @export var hurt_type : HurtType = HurtType.HURT
 

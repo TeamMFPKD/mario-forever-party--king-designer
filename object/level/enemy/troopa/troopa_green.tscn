@@ -6,9 +6,9 @@
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_8sxvu"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_l6s0a"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_oenqx"]
-[ext_resource type="PackedScene" uid="uid://b4tdq2dr3cldf" path="res://object/level/enemy/goomba_dead_stomp.tscn" id="7_ek1eb"]
 [ext_resource type="Texture2D" uid="uid://cj6lfbhmvlnj4" path="res://sprite/enemy/shell_green.png" id="7_leciv"]
 [ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_llt7f"]
+[ext_resource type="PackedScene" uid="uid://dt6ikdqwwgo2r" path="res://object/level/enemy/troopa/shell_green.tscn" id="8_o6bmg"]
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_cts3f"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_prph6"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_pt2kc"]
@@ -72,8 +72,8 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_oenqx")]
 dead_texture_override = SubResource("AtlasTexture_7go61")
-dead_scene_stomp = ExtResource("7_ek1eb")
-dead_scene_bump = ExtResource("7_ek1eb")
+dead_scene_stomp = ExtResource("8_o6bmg")
+dead_scene_bump = ExtResource("8_o6bmg")
 
 [node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_llt7f")]
 
