@@ -27,7 +27,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
-size = Vector2(32, 32)
+size = Vector2(34, 30)
 
 [node name="BulletBill" type="CharacterBody2D" unique_id=114751985]
 collision_layer = 16
@@ -38,9 +38,8 @@ sprite_frames = SubResource("SpriteFrames_am7a5")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
-visible = false
 shape = SubResource("RectangleShape2D_gj0k3")
-debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+debug_color = Color(0.6747229, 0.533051, 0.5441489, 0.41960785)
 
 [node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
 script = ExtResource("2_qiu1r")
@@ -50,6 +49,8 @@ overlap_turn = false
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_am7a5")]
+visible = false
+shape = SubResource("RectangleShape2D_gj0k3")
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
 script = ExtResource("4_txint")

@@ -22,7 +22,6 @@ func _physics_process(delta: float) -> void:
 	if (speed_y < 0.0 and move_object.position.y < limit_top - teleport_offset + 6.0) \
 	or (speed_y > 0.0 and move_object.position.y > limit_bottom + teleport_offset - 6.0):
 		move_object.collision_layer = 0
-		print(23333)
 
 	if speed_y < 0.0 and move_object.position.y < limit_top - teleport_offset:
 		move_object.position.y = limit_bottom + teleport_offset
