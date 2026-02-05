@@ -18,6 +18,9 @@ var invincible_timer = 0
 
 var level_camera: Camera2D
 
+var invincible : bool
+var invincible_starman : bool
+
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
 
@@ -25,6 +28,9 @@ func _physics_process(delta: float) -> void:
 	#var screen =  ScreenUtils.get_screen_rect(self)
 	#if player.position.y > screen.position.y + screen.size.y + 32:
 		#_on_player_die()
+
+	# Update invincible
+	invincible = invincible_starman or is_hurting
 
 	if player.position.y > level_camera.limit_bottom + 32:
 		_on_player_die()
@@ -40,7 +46,7 @@ func _physics_process(delta: float) -> void:
 		pass
 
 func _on_player_hurt() -> void:
-	if is_hurting:
+	if invincible:
 		return
 	is_hurting = true
 	match player_suit.suit:
@@ -65,3 +71,9 @@ func _on_player_die() -> void:
 	
 	player.visible = false
 	player.process_mode = ProcessMode.PROCESS_MODE_DISABLED
+
+func _on_starman_start() -> void:
+	invincible_starman = true
+
+func _on_starman_end() -> void:
+	invincible_starman = false

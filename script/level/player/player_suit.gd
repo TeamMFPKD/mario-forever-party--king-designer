@@ -6,6 +6,9 @@ signal suit_changed
 signal play_sound_powerup
 signal play_sound_powerdown
 
+signal starman_started
+signal starman_ended
+
 enum SuitType {
 	SMALL,
 	SUPER,
@@ -35,6 +38,24 @@ enum PowerupType {
 			emit_signal("suit_changed")
 			emit_signal("play_sound_powerup")
 
+var is_starman : bool = false:
+	set(value):
+		is_starman = value
+		starman_timer = 0
+		if is_starman:
+			emit_signal("starman_started")
+		else:
+			emit_signal("starman_ended")
+
+@export var starman_time : int = 500
+var starman_timer : int
+
+func _physics_process(delta: float) -> void:
+	if is_starman:
+		starman_timer += 1
+		if starman_timer >= starman_time:
+			is_starman = false
+
 func _on_player_powerdown():
 	if suit == SuitType.POWERED:
 		suit = SuitType.SUPER
@@ -42,3 +63,6 @@ func _on_player_powerdown():
 		suit = SuitType.SMALL
 	if suit == SuitType.SMALL:
 		power = PowerupType.FIREBALL
+
+func starman_start():
+	is_starman = true

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ckmp8d6mn8kmq"]
 
 [ext_resource type="SpriteFrames" uid="uid://bs88b30blplhb" path="res://object/level/player/mario_small.tres" id="1_8csaa"]
+[ext_resource type="Script" uid="uid://cek5xovo24ojn" path="res://script/level/player/invincible_effect.gd" id="2_741uk"]
 [ext_resource type="Script" uid="uid://7l3pjn0ykam3" path="res://script/level/player/player_movement.gd" id="2_d0xdx"]
 [ext_resource type="Script" uid="uid://tag7wjib5k0y" path="res://script/level/player/player_mediator.gd" id="2_gq3kn"]
 [ext_resource type="Script" uid="uid://dfmmex64hbhoh" path="res://script/level/player/player_animation.gd" id="3_d0xdx"]
@@ -26,6 +27,9 @@
 [ext_resource type="PackedScene" uid="uid://cfsc6irqbbw3u" path="res://object/level/facility/level_edge_left.tscn" id="24_wtbdq"]
 [ext_resource type="PackedScene" uid="uid://dv8xpx6li48si" path="res://object/level/facility/level_edge_right.tscn" id="25_741uk"]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
+blend_mode = 1
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4mpgj"]
 size = Vector2(24, 30)
 
@@ -38,6 +42,14 @@ collision_mask = 7
 sprite_frames = ExtResource("1_8csaa")
 animation = &"idle"
 offset = Vector2(0, -20)
+
+[node name="InvincibleEffect" type="AnimatedSprite2D" parent="." unique_id=913106306]
+visible = false
+material = SubResource("CanvasItemMaterial_741uk")
+sprite_frames = ExtResource("1_8csaa")
+animation = &"appear"
+offset = Vector2(0, -20)
+script = ExtResource("2_741uk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
 visible = false
@@ -140,5 +152,9 @@ position = Vector2(640, 0)
 [connection signal="play_sound_die" from="PlayerMediator/PlayerHurtAndDie" to="Die" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="PowerDown" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PowerDown" method="play"]
+[connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_end"]
+[connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="InvincibleEffect" method="_on_starman_end"]
+[connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_start"]
+[connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="InvincibleEffect" method="_on_starman_start"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
 [connection signal="play_sound_shoot" from="PlayerMediator/PlayerShoot" to="Shoot" method="play"]

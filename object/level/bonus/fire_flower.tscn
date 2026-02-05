@@ -41,8 +41,8 @@ animations = [{
 "speed": 16.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_n4gcf"]
-size = Vector2(32, 32)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
+size = Vector2(31, 31)
 
 [node name="FireFlower" type="Area2D" unique_id=1398446257]
 collision_layer = 32
@@ -53,7 +53,7 @@ sprite_frames = SubResource("SpriteFrames_qb60a")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=729182592]
-shape = SubResource("RectangleShape2D_n4gcf")
+shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
 
 [node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_jxj7q")]
