@@ -19,4 +19,6 @@ func set_jump_speed() -> void:
 	if move_object.is_on_floor():
 		speed_y = min(0.0, jump_speed)
 		emit_signal("beetroot_bounce")
-		
+
+func _on_beetroot_bounce() -> void:
+	speed_y = jump_speed

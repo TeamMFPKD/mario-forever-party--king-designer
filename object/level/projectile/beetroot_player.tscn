@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://pb4en7tbsj11" path="res://script/level/projectile/bounce_count.gd" id="8_nfjjt"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="8_rqcp6"]
 [ext_resource type="AudioStream" uid="uid://27ewhxfwd0kl" path="res://sound/level/thwomp_grounded.se.wav" id="9_nfjjt"]
+[ext_resource type="AudioStream" uid="uid://d2h4pb4ao20st" path="res://sound/level/bump.se.wav" id="11_fedn2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6sxee"]
 atlas = ExtResource("1_evbps")
@@ -79,9 +80,13 @@ move_object = NodePath("..")
 [node name="Bounce" parent="." unique_id=1715984441 instance=ExtResource("8_1xv8f")]
 stream = ExtResource("9_nfjjt")
 
+[node name="Bump" parent="." unique_id=1917228787 instance=ExtResource("8_1xv8f")]
+stream = ExtResource("11_fedn2")
+
 [connection signal="beetroot_bounce" from="BeetrootMovement" to="CreateExplodeEffect" method="explode"]
 [connection signal="beetroot_bounce" from="BeetrootMovement" to="BounceCount" method="_bounce_count_add"]
 [connection signal="beetroot_bounce" from="BeetrootMovement" to="Bounce" method="play"]
-[connection signal="beetroot_bounce" from="BeetrootInteraction" to="BeetrootMovement" method="set_jump_speed"]
+[connection signal="beetroot_bounce" from="BeetrootInteraction" to="BeetrootMovement" method="_on_beetroot_bounce"]
 [connection signal="beetroot_bounce" from="BeetrootInteraction" to="CreateExplodeEffect" method="explode"]
 [connection signal="beetroot_bounce" from="BeetrootInteraction" to="BounceCount" method="_bounce_count_add"]
+[connection signal="player_sound_bump" from="BeetrootInteraction" to="Bump" method="play"]
