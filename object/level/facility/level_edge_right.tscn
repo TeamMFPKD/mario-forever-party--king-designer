@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dv8xpx6li48si"]
+
+[ext_resource type="PackedScene" uid="uid://cfsc6irqbbw3u" path="res://object/level/facility/level_edge_left.tscn" id="1_n65aa"]
+[ext_resource type="Shape2D" uid="uid://dia0apwqxvmgd" path="res://object/level/facility/level_edge_shape_right.tres" id="2_j1brf"]
+
+[node name="LevelEdgeRight" unique_id=1748762059 instance=ExtResource("1_n65aa")]
+edge_type = 1
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=226615438]
+shape = ExtResource("2_j1brf")

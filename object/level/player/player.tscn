@@ -23,6 +23,8 @@
 [ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
 [ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="18_xbm7l"]
 [ext_resource type="AudioStream" uid="uid://dwse0hneii3ml" path="res://sound/level/fireball.se.wav" id="21_pdrg5"]
+[ext_resource type="PackedScene" uid="uid://cfsc6irqbbw3u" path="res://object/level/facility/level_edge_left.tscn" id="24_wtbdq"]
+[ext_resource type="PackedScene" uid="uid://dv8xpx6li48si" path="res://object/level/facility/level_edge_right.tscn" id="25_741uk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4mpgj"]
 size = Vector2(24, 30)
@@ -30,7 +32,7 @@ size = Vector2(24, 30)
 [node name="Player" type="CharacterBody2D" unique_id=1151748388 groups=["player"]]
 z_index = 10
 collision_layer = 8
-collision_mask = 3
+collision_mask = 7
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
 sprite_frames = ExtResource("1_8csaa")
@@ -123,6 +125,12 @@ script = ExtResource("18_xbm7l")
 [node name="Shoot" parent="." unique_id=1440101806 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("21_pdrg5")
 script = ExtResource("18_xbm7l")
+
+[node name="LevelEdgeLeft" parent="." unique_id=1748762059 instance=ExtResource("24_wtbdq")]
+position = Vector2(-640, 0)
+
+[node name="LevelEdgeRight" parent="." unique_id=1828755264 instance=ExtResource("25_741uk")]
+position = Vector2(640, 0)
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
