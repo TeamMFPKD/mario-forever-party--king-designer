@@ -18,7 +18,8 @@ signal play_sound_shoot
 enum BroState {
 	WALK,
 	SLIGHT_JUMP,
-	JUMP,
+	JUMP_UP,
+	JUMP_DOWN,
 	SHOOT,
 	WAIT_AFTER_SHOOT,
 }
@@ -37,6 +38,9 @@ var direction : int = -1
 var slight_jumped : bool
 var jumped : bool
 
+var previous_position_y : float
+var jump_level : int
+
 var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
@@ -50,6 +54,7 @@ func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 
 	print(self.name, bro_state)
+	print(jump_level)
 
 	# Movement
 	var move_x : bool = bro_state == BroState.WALK or bro_state == BroState.SLIGHT_JUMP
@@ -78,17 +83,35 @@ func _physics_process(delta: float) -> void:
 				speed_y = bro_slight_jump_speed
 				slight_jumped = true
 				move_object.collision_mask = 0
-		BroState.JUMP:
-			# TODO: Jump down
+		BroState.JUMP_UP:
 			if speed_y >= 0.0 and solid_area.get_overlapping_bodies().size() == 0 and jumped:
 				move_object.collision_mask = origin_collision_mask
 				if move_object.is_on_floor():
+					if previous_position_y - move_object.position.y > 48:
+						jump_level += 1
 					select_state()
 					return
 			if move_object.is_on_floor() and not jumped:
 				speed_y = bro_jump_speed
 				move_object.collision_mask = 0
 				jumped = true
+				previous_position_y = move_object.position.y
+		BroState.JUMP_DOWN:
+			if jump_level <= 0:
+				select_state()
+				return
+			if speed_y >= abs(bro_slight_jump_speed) * 2 \
+			and solid_area.get_overlapping_bodies().size() == 0 and jumped:
+				move_object.collision_mask = origin_collision_mask
+				if move_object.is_on_floor():
+					jump_level -= 1
+					select_state()
+					return
+			if move_object.is_on_floor() and not jumped:
+				speed_y = bro_slight_jump_speed
+				move_object.collision_mask = 0
+				jumped = true
+				previous_position_y = move_object.position.y
 		BroState.SHOOT:
 			shoot_timer += 1
 			ani.play("shoot")
