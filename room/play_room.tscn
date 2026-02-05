@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="19_jbhld"]
 [ext_resource type="PackedScene" uid="uid://duj6uud1jhnqf" path="res://object/level/enemy/troopa/troopa_red.tscn" id="20_5fmve"]
 [ext_resource type="PackedScene" uid="uid://c57xyn84c4arm" path="res://object/level/bonus/star.tscn" id="21_rf86r"]
+[ext_resource type="PackedScene" uid="uid://bak1mo1icnsxi" path="res://object/level/enemy/bullet_bill.tscn" id="22_kwda6"]
 [ext_resource type="PackedScene" uid="uid://drhwhlid6l5wu" path="res://object/level/bonus/poisonous_mushroom.tscn" id="24_u2ari"]
 [ext_resource type="PackedScene" uid="uid://cwjqbk83qtebh" path="res://object/bgm/bgm.tscn" id="26_hljm7"]
 
@@ -38,10 +39,14 @@ position = Vector2(56, 168)
 zoom = Vector2(2, 2)
 process_callback = 0
 limit_left = -233
-limit_top = -400
+limit_top = -64
 limit_right = 3800
 limit_bottom = 700
 metadata/_edit_lock_ = true
+
+[node name="Bgm" parent="." unique_id=1026487401 instance=ExtResource("26_hljm7")]
+autoplay = false
+bus = &"Edit"
 
 [node name="Goomba" parent="." unique_id=114751985 instance=ExtResource("3_isgoj")]
 position = Vector2(608, 400)
@@ -97,9 +102,6 @@ position = Vector2(984, 176)
 [node name="PoisonousMushroom" parent="." unique_id=93429378 instance=ExtResource("24_u2ari")]
 position = Vector2(992, 304)
 
-[node name="Bgm" parent="." unique_id=1026487401 instance=ExtResource("26_hljm7")]
-bus = &"Edit"
-
 [node name="TroopaGreen" parent="." unique_id=1828582225 instance=ExtResource("19_jbhld")]
 position = Vector2(720, 336)
 
@@ -108,3 +110,6 @@ position = Vector2(800, 144)
 
 [node name="Star" parent="." unique_id=18289521 instance=ExtResource("21_rf86r")]
 position = Vector2(576, 328)
+
+[node name="BulletBill" parent="." unique_id=110122974 instance=ExtResource("22_kwda6")]
+position = Vector2(448, 368)

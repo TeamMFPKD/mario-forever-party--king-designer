@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_txint"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_p50n5"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_d8xrg"]
-[ext_resource type="PackedScene" uid="uid://b4tdq2dr3cldf" path="res://object/level/enemy/goomba_dead_stomp.tscn" id="7_slcs8"]
 [ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_ujam0"]
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_hw86p"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_78100"]
@@ -45,8 +44,9 @@ debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
 [node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
 script = ExtResource("2_qiu1r")
-speed_x = 240.0
+speed_x = 200.0
 gravity = 0.0
+overlap_turn = false
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_am7a5")]
@@ -68,7 +68,6 @@ immune_to_beetroot = true
 is_bumpable = false
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_d8xrg")]
-dead_scene_stomp = ExtResource("7_slcs8")
 
 [node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_ujam0")]
 
