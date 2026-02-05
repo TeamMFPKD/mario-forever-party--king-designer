@@ -1,6 +1,7 @@
 extends Node
 
 signal beetroot_bounce
+signal player_sound_bump
 
 @export var beetroot : CharacterBody2D
 @export var cast : ShapeCast2D
@@ -14,5 +15,7 @@ func _physics_process(delta):
 		if !interaction_with_beetroot_node.is_hittable:
 			continue
 		interaction_with_beetroot_node.on_beetroot_hit(beetroot.position)
+		if interaction_with_beetroot_node.immune_to_beetroot:
+			emit_signal("player_sound_bump")
 		if interaction_with_beetroot_node.beetroot_bounce:
 			emit_signal("beetroot_bounce")
