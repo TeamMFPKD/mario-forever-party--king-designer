@@ -38,7 +38,7 @@ zoom = Vector2(2, 2)
 process_callback = 0
 limit_left = -233
 limit_top = -400
-limit_right = 6000
+limit_right = 672
 limit_bottom = 700
 metadata/_edit_lock_ = true
 
