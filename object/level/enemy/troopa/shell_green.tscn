@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_4or3i"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_k3c7n"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_cbggm"]
+[ext_resource type="Script" uid="uid://b0hkvm25vo0l0" path="res://script/level/enemy/shell_status.gd" id="5_0nlr7"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_3a75j"]
 [ext_resource type="Script" uid="uid://bref45xrjds3y" path="res://script/level/enemy/shell_interaction_moving.gd" id="5_05vun"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_3mma3"]
@@ -57,7 +58,6 @@ collision_mask = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
 sprite_frames = SubResource("SpriteFrames_i5pmg")
-autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
 visible = false
@@ -66,6 +66,8 @@ debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
 [node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
 script = ExtResource("2_4or3i")
+initially_face_to_player = false
+speed_x = 0.0
 overlap_turn = false
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
@@ -76,15 +78,24 @@ script = ExtResource("4_cbggm")
 _animated_sprite2d_path = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
+[node name="ShellStatus" type="Node" parent="." unique_id=1050551384]
+script = ExtResource("5_0nlr7")
+
 [node name="ShellInteractionMoving" type="Node" parent="." unique_id=1988555070]
 script = ExtResource("5_05vun")
 
 [node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_3a75j")]
 
+[node name="InteractionWithPlayer" parent="EnemyInteraction" index="0" unique_id=707962705]
+hurt_type = 2
+stomp_offset = 64.0
+
 [node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
 immune_to_bump = true
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_3mma3")]
+enable_interaction_with_player = false
+enable_interaction_with_bump = false
 
 [node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_5pxp7")]
 
@@ -97,5 +108,6 @@ script = ExtResource("11_x2jb8")
 metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
 [connection signal="shell_harded" from="ShellInteractionMoving" to="EnemyDie" method="die"]
+[connection signal="stomped" from="EnemyInteraction/InteractionWithPlayer" to="ShellStatus" method="_on_stomped"]
 
 [editable path="EnemyInteraction"]
