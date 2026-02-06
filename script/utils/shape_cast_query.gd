@@ -1,6 +1,6 @@
 class_name ShapeCastQuery
 
-static func shape_query(body: CharacterBody2D, cast: ShapeCast2D) -> Array[Node2D]:
+static func shape_query(body: Node2D, cast: ShapeCast2D) -> Array[Node2D]:
 	var space_state = body.get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = cast.shape

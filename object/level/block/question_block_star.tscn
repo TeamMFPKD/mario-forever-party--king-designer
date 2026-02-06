@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dt57n1wnqw5a7"]
+
+[ext_resource type="PackedScene" uid="uid://cjnlmm0q1yk72" path="res://object/level/block/question_block_poisonous_mushroom.tscn" id="1_s8g4h"]
+[ext_resource type="PackedScene" uid="uid://c57xyn84c4arm" path="res://object/level/bonus/star.tscn" id="2_qy55x"]
+
+[node name="QuestionBlockStar" unique_id=2059396481 instance=ExtResource("1_s8g4h")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+sprout_item_scene = ExtResource("2_qy55x")

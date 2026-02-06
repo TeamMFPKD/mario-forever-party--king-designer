@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://p05n5rqqxgeq"]
+
+[ext_resource type="PackedScene" uid="uid://dpg8u6db7qtmc" path="res://object/level/block/question_block.tscn" id="1_6cc36"]
+[ext_resource type="PackedScene" uid="uid://b0b2g47apcdw3" path="res://object/level/bonus/mushroom.tscn" id="2_cuehh"]
+[ext_resource type="PackedScene" uid="uid://cyee16r52cf3h" path="res://object/level/bonus/fire_flower.tscn" id="3_sycvd"]
+[ext_resource type="AudioStream" uid="uid://drmow7wwcjasw" path="res://sound/level/item_sprout.se.wav" id="4_sycvd"]
+
+[node name="QuestionBlockFireFlower" unique_id=2059396481 instance=ExtResource("1_6cc36")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+sprout_item_scene = ExtResource("2_cuehh")
+adv_sprout_item_scene = ExtResource("3_sycvd")
+
+[node name="BumpSound" parent="." index="5" unique_id=547067653]
+stream = ExtResource("4_sycvd")

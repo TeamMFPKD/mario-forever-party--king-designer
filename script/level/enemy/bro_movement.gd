@@ -53,9 +53,6 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 
-	print(self.name, bro_state)
-	print(jump_level)
-
 	# Movement
 	var move_x : bool = bro_state == BroState.WALK or bro_state == BroState.SLIGHT_JUMP
 	speed_x = origin_speed_x * direction if move_x else 0.0

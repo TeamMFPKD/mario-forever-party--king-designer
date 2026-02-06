@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_h4rsw"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_qtu74"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="5_5kxqh"]
+[ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="5_24bk2"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="6_523s7"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="7_n37im"]
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_24bk2"]
@@ -48,6 +49,8 @@ metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_h4rsw")]
 
 [node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("4_qtu74")]
+
+[node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_24bk2")]
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_5kxqh")]
 

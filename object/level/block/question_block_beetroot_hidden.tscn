@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bjvh73wmnhtf"]
+
+[ext_resource type="PackedScene" uid="uid://ejtahj77f1d" path="res://object/level/block/question_block_beetroot.tscn" id="1_sgpt8"]
+
+[node name="QuestionBlockBeetrootHidden" unique_id=2059396481 instance=ExtResource("1_sgpt8")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+hidden = true

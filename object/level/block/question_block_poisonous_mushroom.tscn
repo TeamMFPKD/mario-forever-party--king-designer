@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cjnlmm0q1yk72"]
+
+[ext_resource type="PackedScene" uid="uid://dpg8u6db7qtmc" path="res://object/level/block/question_block.tscn" id="1_aslr0"]
+[ext_resource type="PackedScene" uid="uid://drhwhlid6l5wu" path="res://object/level/bonus/poisonous_mushroom.tscn" id="2_rv66s"]
+[ext_resource type="AudioStream" uid="uid://drmow7wwcjasw" path="res://sound/level/item_sprout.se.wav" id="3_pry8f"]
+
+[node name="QuestionBlockPoisonousMushroom" unique_id=2059396481 instance=ExtResource("1_aslr0")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+sprout_item_scene = ExtResource("2_rv66s")
+
+[node name="BumpSound" parent="." index="5" unique_id=547067653]
+stream = ExtResource("3_pry8f")

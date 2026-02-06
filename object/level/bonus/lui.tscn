@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bvc3m4l3r4108" path="res://script/level/bonus/lui_movement.gd" id="2_ewvm1"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_sk3bx"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_2ydvy"]
+[ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="5_ewvm1"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="8_k5nvq"]
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="8_r00uj"]
 [ext_resource type="AudioStream" uid="uid://bfei4klk2geni" path="res://sound/level/kick.se.wav" id="9_71hb1"]
@@ -107,6 +108,8 @@ metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("4_2ydvy")]
 bonus_type = 3
+
+[node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_ewvm1")]
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_o7m3i")]
 disable_when_out_of_screen = true

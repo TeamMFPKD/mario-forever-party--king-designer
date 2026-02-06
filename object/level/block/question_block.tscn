@@ -1,0 +1,148 @@
+[gd_scene format=3 uid="uid://dpg8u6db7qtmc"]
+
+[ext_resource type="Texture2D" uid="uid://dpvm862ku2mw4" path="res://sprite/bonus/block_hit.png" id="1_dnips"]
+[ext_resource type="Script" uid="uid://0kceldqbdgin" path="res://script/level/block/block_hit.gd" id="1_k7tg0"]
+[ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="1_msds3"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_q144o"]
+[ext_resource type="PackedScene" uid="uid://d2eqnyy2qd0mg" path="res://object/level/block/coin_effect.tscn" id="4_alh4b"]
+[ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="4_uotgv"]
+[ext_resource type="AudioStream" uid="uid://dx5w7ruc3j6sd" path="res://sound/level/coin.se.wav" id="5_dnips"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_alh4b"]
+atlas = ExtResource("1_dnips")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q144o"]
+atlas = ExtResource("1_msds3")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htnv8"]
+atlas = ExtResource("1_msds3")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uotgv"]
+atlas = ExtResource("1_msds3")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnips"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_alh4b")
+}],
+"loop": true,
+"name": &"bumped",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q144o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htnv8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uotgv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jwfjt"]
+size = Vector2(32, 32)
+
+[sub_resource type="Animation" id="Animation_alh4b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_f4uak"]
+resource_name = "bump"
+length = 0.26667002
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -8.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w07n4"]
+_data = {
+&"RESET": SubResource("Animation_alh4b"),
+&"bump": SubResource("Animation_f4uak")
+}
+
+[node name="QuestionBlock" type="StaticBody2D" unique_id=2059396481]
+collision_layer = 131
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1794288055]
+sprite_frames = SubResource("SpriteFrames_dnips")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=277944784]
+rotation = 3.1415927
+shape = SubResource("RectangleShape2D_jwfjt")
+
+[node name="BlockHit" type="Node" parent="." unique_id=2040390214 node_paths=PackedStringArray("sprite", "_collision_shape_2d")]
+script = ExtResource("1_k7tg0")
+bumpable = true
+bumpable_one_shot = true
+sprite = NodePath("../AnimatedSprite2D")
+sprout_item_scene = ExtResource("4_alh4b")
+_collision_shape_2d = NodePath("../CollisionShape2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=973614777]
+libraries/ = SubResource("AnimationLibrary_w07n4")
+
+[node name="BreakSound" parent="." unique_id=1715984441 instance=ExtResource("3_q144o")]
+stream = ExtResource("4_uotgv")
+
+[node name="BumpSound" parent="." unique_id=547067653 instance=ExtResource("3_q144o")]
+stream = ExtResource("5_dnips")
+
+[connection signal="block_break" from="BlockHit" to="BreakSound" method="play"]
+[connection signal="block_bump" from="BlockHit" to="BumpSound" method="play"]
+[connection signal="block_bump" from="BlockHit" to="AnimationPlayer" method="play" binds= [&"bump"]]
+[connection signal="animation_finished" from="AnimationPlayer" to="BlockHit" method="on_bumped" unbinds=1]

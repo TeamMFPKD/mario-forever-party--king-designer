@@ -59,12 +59,11 @@ position = Vector2(0, -1.5)
 shape = ExtResource("3_0f3px")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
-visible = false
 position = Vector2(0, -2)
 shape = ExtResource("3_0f3px")
 target_position = Vector2(0, 0)
 max_results = 4
-collision_mask = 48
+collision_mask = 176
 collide_with_areas = true
 
 [node name="CrouchHeadDetect" type="Area2D" parent="." unique_id=1726060209]
@@ -169,9 +168,9 @@ position = Vector2(640, 0)
 [connection signal="play_sound_die" from="PlayerMediator/PlayerHurtAndDie" to="Die" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="PowerDown" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PowerDown" method="play"]
-[connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_end"]
 [connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="InvincibleEffect" method="_on_starman_end"]
-[connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_start"]
+[connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_end"]
 [connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="InvincibleEffect" method="_on_starman_start"]
+[connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_start"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
 [connection signal="play_sound_shoot" from="PlayerMediator/PlayerShoot" to="Shoot" method="play"]

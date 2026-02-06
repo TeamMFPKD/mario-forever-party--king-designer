@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="5_vgdcu"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="6_1oifq"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="6_g6bpe"]
+[ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="7_g6bpe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_typ66"]
 atlas = ExtResource("1_4tu3s")
@@ -63,6 +64,8 @@ visible = false
 [node name="CreateExplodeEffect" type="Node" parent="." unique_id=1326068134]
 script = ExtResource("5_typ66")
 fireball_explode_scene = ExtResource("6_g6bpe")
+
+[node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("7_g6bpe")]
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_vgdcu")]
 
