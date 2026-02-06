@@ -6,9 +6,9 @@ class_name BasicMovement
 var move_object : CharacterBody2D
 
 @export var initially_face_to_player: bool = true
-@export var speed_x: float = 50.0
+@export var speed_x: float = 60.0
 @export var speed_y: float
-@export var gravity: float = 500.0
+@export var gravity: float = 550.0
 @export var max_fall_speed: float = 999.0
 @export var jump_speed: float
 @export var edge_detect: bool = false
