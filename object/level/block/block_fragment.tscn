@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ct006nlnmf8dg"]
+
+[ext_resource type="Script" uid="uid://ckm0pqscypy8" path="res://script/level/block/block_fragment.gd" id="1_kvfbw"]
+[ext_resource type="Texture2D" uid="uid://dbwbqa0hpfgda" path="res://sprite/bonus/brick_fragment.png" id="2_466jb"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="3_ksxgn"]
+
+[node name="BlockFragment" type="Node2D" unique_id=981833549 node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_kvfbw")
+sprite = NodePath("Sprite2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=819216669]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_466jb")
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=499062004]
+script = ExtResource("3_ksxgn")
+out_of_screen_detection = true

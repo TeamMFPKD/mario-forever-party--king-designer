@@ -13,17 +13,21 @@ var starman : bool
 func _physics_process(delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
 	
-	# 踩踏
-	hurt_and_stompable_detect(results)
-
 	# 获得道具
 	bonus_detect(results)
 
 	# 无敌星撞击敌人
 	starman_detect(results)
+		
+	# 踩踏
+	hurt_and_stompable_detect(results)
 
 	# 顶砖检测
+	var origin_pos_y = cast.position.y
+	cast.position.y -= 1.0
+	results = ShapeCastQuery.shape_query(player, cast)
 	block_hit_detect(results)
+	cast.position.y = origin_pos_y
 	
 func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 	for result in results:
@@ -37,7 +41,8 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 		if player.position.y < result.position.y + interaction_with_player_node.stomp_offset \
 		and interaction_with_player_node.stompable:
 			# 踩踏成功
-			player_movement.speed_y = interaction_with_player_node.on_stomped(player)
+			if not is_starman():
+				player_movement.speed_y = interaction_with_player_node.on_stomped(player)
 		else:
 			# 踩踏失败
 			match interaction_with_player_node.hurt_type:
@@ -68,10 +73,10 @@ func bonus_detect(results : Array[Node2D]) -> void:
 		if bonus_set_node.bonus_type == BonusSet.BonusType.STAR:
 			player_suit.starman_start()
 
-func starman_detect(results : Array[Node2D]) -> void:
+func starman_detect(results : Array[Node2D]) -> bool:
 	starman = is_starman()
 	if not starman:
-		return
+		return false
 	for result in results:
 		if not result.has_meta("interaction_with_star"):
 			continue
@@ -79,10 +84,17 @@ func starman_detect(results : Array[Node2D]) -> void:
 		if not interaction_with_star_node.is_hittable:
 			continue
 		interaction_with_star_node.on_star_hit(player.position)
+	return true
 		
 func is_starman() -> bool:
 	return player_suit.is_starman
 
 func block_hit_detect(results : Array[Node2D]) -> void:
-	pass
-	# TODO:
+	if not player.is_on_ceiling():
+		return
+	#print("block_hit_detect reuslts: ", results)
+	for result in results:
+		if not result.has_meta("interaction_with_block"):
+			continue
+		var block_hit_node = result.get_meta("interaction_with_block") as BlockHit
+		block_hit_node.on_block_hit(player)

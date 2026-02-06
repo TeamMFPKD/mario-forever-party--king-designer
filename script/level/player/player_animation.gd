@@ -100,7 +100,7 @@ func update_animation_speed():
 			# 行走动画速度与水平速度挂钩
 			var speed_factor = abs(player_movement.speed_x) / player_movement.max_speed_x
 			# 基础速度 + 速度比例，确保最小播放速度
-			ani.speed_scale = 1.0 + speed_factor * 3.0
+			ani.speed_scale = 1.0 + speed_factor * 5.0
 		_:
 			# 其他状态使用正常速度
 			ani.speed_scale = 1.0

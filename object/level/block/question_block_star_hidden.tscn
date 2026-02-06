@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://6sc5xdrubdyf"]
+
+[ext_resource type="PackedScene" uid="uid://dt57n1wnqw5a7" path="res://object/level/block/question_block_star.tscn" id="1_5m765"]
+
+[node name="QuestionBlockStarHidden" unique_id=2059396481 instance=ExtResource("1_5m765")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+hidden = true

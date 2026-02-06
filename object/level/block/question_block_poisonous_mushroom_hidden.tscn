@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bj4cd774e5ssd"]
+
+[ext_resource type="PackedScene" uid="uid://cjnlmm0q1yk72" path="res://object/level/block/question_block_poisonous_mushroom.tscn" id="1_004bk"]
+
+[node name="QuestionBlockPoisonousMushroomHidden" unique_id=2059396481 instance=ExtResource("1_004bk")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+hidden = true

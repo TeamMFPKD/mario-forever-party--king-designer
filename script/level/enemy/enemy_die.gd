@@ -51,6 +51,9 @@ const INTERACTION_CONFIG := {
 	"interaction_with_bump": {"signal": "bumped", "death_type": DeathType.BUMP}
 }
 
+# 防止多次触发
+var is_dead: bool = false
+
 func _ready() -> void:
 	parent = get_parent() as Node2D
 	ani = get_node(path_to_animated_sprite) as AnimatedSprite2D
@@ -72,6 +75,9 @@ func _ready() -> void:
 					interaction.connect(signal_name, _on_interaction_hit.bind(death_type))
 
 func die(hit_position: Vector2 = Vector2.ZERO, death_type: DeathType = DeathType.DEFAULT) -> void:
+	if is_dead:
+		return
+	is_dead = true
 	dead_instantiate(hit_position,death_type)
 	dead_instance.position = parent.position
 	parent.add_sibling(dead_instance)

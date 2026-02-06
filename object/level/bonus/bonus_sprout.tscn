@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://by4n1wyhrfm7s"]
+
+[ext_resource type="Script" uid="uid://ceeg48r5enftc" path="res://script/level/bonus/bonus_sprout.gd" id="1_1i06t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1i06t"]
+size = Vector2(16, 16)
+
+[node name="BonusSprout" type="CharacterBody2D" unique_id=1553361891]
+process_mode = 3
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_1i06t")
+metadata/_custom_type_script = "uid://ceeg48r5enftc"
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="." unique_id=378750926]
+shape = SubResource("RectangleShape2D_1i06t")
+target_position = Vector2(0, 0)
+max_results = 4
+collision_mask = 3
+collide_with_areas = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1935070293]
+shape = SubResource("RectangleShape2D_1i06t")

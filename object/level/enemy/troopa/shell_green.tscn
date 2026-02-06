@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dt6ikdqwwgo2r"]
 
 [ext_resource type="Texture2D" uid="uid://cj6lfbhmvlnj4" path="res://sprite/enemy/shell_green.png" id="1_57orn"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_4or3i"]
+[ext_resource type="Script" uid="uid://frw2hge25ijg" path="res://script/level/enemy/shell_movement.gd" id="2_05vun"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_k3c7n"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_cbggm"]
 [ext_resource type="Script" uid="uid://b0hkvm25vo0l0" path="res://script/level/enemy/shell_status.gd" id="5_0nlr7"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="8_5pxp7"]
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_sh0ng"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_0jb06"]
+[ext_resource type="AudioStream" uid="uid://bfei4klk2geni" path="res://sound/level/kick.se.wav" id="11_0nlr7"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_x2jb8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0nlr7"]
@@ -50,7 +51,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
-size = Vector2(32, 32)
+size = Vector2(31, 31)
 
 [node name="ShellGreen" type="CharacterBody2D" unique_id=114751985 groups=["shell"]]
 collision_layer = 16
@@ -65,9 +66,10 @@ shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
 [node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_4or3i")
+script = ExtResource("2_05vun")
 initially_face_to_player = false
 speed_x = 0.0
+jump_speed = -250.0
 overlap_turn = false
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
@@ -80,6 +82,7 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="ShellStatus" type="Node" parent="." unique_id=1050551384]
 script = ExtResource("5_0nlr7")
+shell_move_speed_x = 240.0
 
 [node name="ShellInteractionMoving" type="Node" parent="." unique_id=1988555070]
 script = ExtResource("5_05vun")
@@ -91,9 +94,6 @@ interactable = false
 hurt_type = 2
 stomp_offset = 64.0
 
-[node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
-immune_to_bump = true
-
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_3mma3")]
 enable_interaction_with_player = false
 enable_interaction_with_bump = false
@@ -101,6 +101,9 @@ enable_interaction_with_bump = false
 [node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_5pxp7")]
 
 [node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("9_sh0ng")]
+
+[node name="Bumped" parent="EnemySoundManager" index="2" unique_id=1317498791]
+stream = ExtResource("11_0nlr7")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_0jb06")]
 
@@ -110,5 +113,7 @@ metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
 [connection signal="shell_harded" from="ShellInteractionMoving" to="EnemyDie" method="die"]
 [connection signal="stomped" from="EnemyInteraction/InteractionWithPlayer" to="ShellStatus" method="_on_stomped"]
+[connection signal="bumped" from="EnemyInteraction/InteractionWithBump" to="BasicMovement" method="_on_bumped"]
 
 [editable path="EnemyInteraction"]
+[editable path="EnemySoundManager"]

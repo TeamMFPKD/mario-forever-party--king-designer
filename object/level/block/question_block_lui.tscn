@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c2yba5lqp31je"]
+
+[ext_resource type="PackedScene" uid="uid://ejtahj77f1d" path="res://object/level/block/question_block_beetroot.tscn" id="1_e28tv"]
+[ext_resource type="PackedScene" uid="uid://c7sn7qihq6t2o" path="res://object/level/bonus/lui.tscn" id="2_5bjk5"]
+
+[node name="QuestionBlockLui" unique_id=2059396481 instance=ExtResource("1_e28tv")]
+
+[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+adv_sprout_item_scene = ExtResource("2_5bjk5")

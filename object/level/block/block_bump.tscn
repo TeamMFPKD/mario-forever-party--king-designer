@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://8nv6va42xrsg"]
+
+[ext_resource type="Script" uid="uid://dmrs5ukltmd2x" path="res://script/level/block/block_bump.gd" id="1_vynmg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ulwp3"]
+size = Vector2(32, 8)
+
+[node name="BlockBump" type="Area2D" unique_id=1879704169]
+collision_layer = 0
+collision_mask = 16
+script = ExtResource("1_vynmg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1051094419]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_ulwp3")
+debug_color = Color(0.64817387, 0.5211922, 7.70092e-07, 0.41960785)
