@@ -99,10 +99,10 @@ position = Vector2(648, 400)
 position = Vector2(464, 464)
 
 [node name="FireFlower" parent="." unique_id=1398446257 instance=ExtResource("12_o3smk")]
-position = Vector2(1264, 368)
+position = Vector2(216, 384)
 
 [node name="Beetroot" parent="." unique_id=1097911844 instance=ExtResource("13_ov274")]
-position = Vector2(456, 408)
+position = Vector2(1288, 352)
 
 [node name="Lui" parent="." unique_id=1871635370 instance=ExtResource("14_eyq6c")]
 position = Vector2(112, 400)
@@ -117,7 +117,7 @@ position = Vector2(992, 304)
 position = Vector2(1344, 160)
 
 [node name="TroopaGreen2" parent="." unique_id=1850991936 instance=ExtResource("20_5fmve")]
-position = Vector2(800, 144)
+position = Vector2(1536, 368)
 
 [node name="Star" parent="." unique_id=18289521 instance=ExtResource("21_rf86r")]
 position = Vector2(576, 328)
@@ -129,7 +129,7 @@ position = Vector2(448, 368)
 position = Vector2(336, 368)
 
 [node name="BroFireball" parent="." unique_id=1702742415 instance=ExtResource("24_pp8vx")]
-position = Vector2(1600, 360)
+position = Vector2(1552, 104)
 
 [node name="BroHammer" parent="." unique_id=1369059324 instance=ExtResource("25_hljm7")]
 position = Vector2(1512, 232)
@@ -138,7 +138,7 @@ position = Vector2(1512, 232)
 position = Vector2(1296, 272)
 
 [node name="QuestionBlock2" parent="." unique_id=1563173293 instance=ExtResource("26_e7j0m")]
-position = Vector2(1328, 272)
+position = Vector2(1672, 368)
 
 [node name="QuestionBlock3" parent="." unique_id=1394644179 instance=ExtResource("27_e7j0m")]
 position = Vector2(1680, 144)
@@ -162,7 +162,7 @@ position = Vector2(1200, 496)
 position = Vector2(1200, 272)
 
 [node name="BrickBlock2" parent="." unique_id=294098533 instance=ExtResource("32_7pp8u")]
-position = Vector2(1392, 272)
+position = Vector2(1376, 368)
 
 [node name="Coin" parent="." unique_id=1355309146 instance=ExtResource("33_u5mwt")]
 position = Vector2(1440, 336)

@@ -58,6 +58,7 @@ metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_nfjjt")]
 shape = SubResource("RectangleShape2D_fedn2")
+collision_mask = 144
 
 [node name="BeetrootInteraction" type="Node" parent="." unique_id=1561435757 node_paths=PackedStringArray("beetroot", "cast")]
 script = ExtResource("4_1xv8f")

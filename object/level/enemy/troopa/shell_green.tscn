@@ -74,6 +74,7 @@ overlap_turn = false
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_k3c7n")]
+collision_mask = 144
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
 script = ExtResource("4_cbggm")
