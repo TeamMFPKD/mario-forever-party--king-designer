@@ -125,13 +125,14 @@ autoplay = "default"
 rotation = 3.1415927
 shape = SubResource("RectangleShape2D_jwfjt")
 
-[node name="BlockHit" type="Node" parent="." unique_id=2040390214 node_paths=PackedStringArray("sprite", "_collision_shape_2d")]
+[node name="BlockHit" type="Node" parent="." unique_id=1771154776 node_paths=PackedStringArray("sprite", "_collision_shape_2d")]
 script = ExtResource("1_k7tg0")
 bumpable = true
 bumpable_one_shot = true
 sprite = NodePath("../AnimatedSprite2D")
 sprout_item_scene = ExtResource("4_alh4b")
 _collision_shape_2d = NodePath("../CollisionShape2D")
+metadata/_custom_type_script = "uid://0kceldqbdgin"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=973614777]
 libraries/ = SubResource("AnimationLibrary_w07n4")

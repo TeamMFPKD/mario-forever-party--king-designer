@@ -124,10 +124,11 @@ player = NodePath("../..")
 [node name="PlayerSuit" type="Node" parent="PlayerMediator" unique_id=808079872]
 script = ExtResource("5_5qxp0")
 
-[node name="PlayerShoot" type="Node" parent="PlayerMediator" unique_id=1295931707 node_paths=PackedStringArray("player_suit", "player", "player_animation_sprite")]
+[node name="PlayerShoot" type="Node" parent="PlayerMediator" unique_id=1295931707 node_paths=PackedStringArray("player_suit", "player", "player_movement", "player_animation_sprite")]
 script = ExtResource("6_pi5xa")
 player_suit = NodePath("../PlayerSuit")
 player = NodePath("../..")
+player_movement = NodePath("../PlayerMovement")
 player_animation_sprite = NodePath("../../AnimatedSprite2D")
 fireball_scene = ExtResource("8_4q04d")
 beetroot_scene = ExtResource("9_pewnw")

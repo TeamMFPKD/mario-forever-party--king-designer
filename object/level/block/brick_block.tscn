@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dhfuivon485xt"]
+
+[ext_resource type="PackedScene" uid="uid://dpg8u6db7qtmc" path="res://object/level/block/question_block.tscn" id="1_cdbes"]
+[ext_resource type="Texture2D" uid="uid://bc4d5afdplmyd" path="res://sprite/bonus/brick.png" id="2_0t6ot"]
+[ext_resource type="Script" uid="uid://bxt0pborx7ord" path="res://script/level/block/brick_hit.gd" id="3_ar0vg"]
+[ext_resource type="AudioStream" uid="uid://d2h4pb4ao20st" path="res://sound/level/bump.se.wav" id="4_uq4rh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fxwrt"]
+atlas = ExtResource("2_0t6ot")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ar0vg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fxwrt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="BrickBlock" unique_id=2059396481 instance=ExtResource("1_cdbes")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1794288055]
+sprite_frames = SubResource("SpriteFrames_ar0vg")
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+script = ExtResource("3_ar0vg")
+bumpable_one_shot = false
+sprout_item_scene = null
+
+[node name="BumpSound" parent="." index="5" unique_id=547067653]
+stream = ExtResource("4_uq4rh")
