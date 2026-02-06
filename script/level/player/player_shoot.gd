@@ -4,6 +4,7 @@ signal play_sound_shoot
 
 @export var player_suit : PlayerSuit
 @export var player : Node2D
+@export var player_movement : PlayerMovement
 @export var player_animation_sprite : AnimatedSprite2D
 
 @export var fireball_scene : PackedScene
@@ -12,6 +13,8 @@ signal play_sound_shoot
 @export var offset : Vector2 = Vector2(0, -32.0)
 
 func _physics_process(delta: float) -> void:
+	if is_crouching():
+		return
 	if Input.is_action_just_pressed("move_fire"):
 		if player_suit.suit != PlayerSuit.SuitType.POWERED:
 			return
@@ -38,3 +41,7 @@ func create_beetroot() -> void:
 	beetroot.position = player.position + offset
 	beetroot.set_meta("beetroot_direction", -1 if player_animation_sprite.flip_h else 1)
 	player.add_sibling(beetroot)
+
+func is_crouching() -> bool:
+	return player_movement.crouch
+	

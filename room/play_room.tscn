@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://bj4cd774e5ssd" path="res://object/level/block/question_block_poisonous_mushroom_hidden.tscn" id="29_fgh7x"]
 [ext_resource type="PackedScene" uid="uid://83pa6qqvbdqh" path="res://object/level/block/question_block_lui_hidden.tscn" id="30_7pp8u"]
 [ext_resource type="PackedScene" uid="uid://vu2bj7eso75k" path="res://object/level/block/question_block_fire_flower_hidden.tscn" id="31_fgh7x"]
+[ext_resource type="PackedScene" uid="uid://dhfuivon485xt" path="res://object/level/block/brick_block.tscn" id="32_7pp8u"]
 
 [node name="PlayRoom" type="Node2D" unique_id=822465384]
 
@@ -42,7 +43,7 @@ tile_set = ExtResource("1_0gg1k")
 script = ExtResource("2_pp8vx")
 
 [node name="Player" parent="." unique_id=1151748388 instance=ExtResource("2_ds6h8")]
-position = Vector2(1224, 272)
+position = Vector2(1232, 336)
 
 [node name="CameraPlayerForTest" type="Camera2D" parent="Player" unique_id=1777036543 groups=["level_camera"]]
 zoom = Vector2(2, 2)
@@ -155,3 +156,9 @@ position = Vector2(1136, 496)
 
 [node name="QuestionBlockFireFlowerHidden" parent="." unique_id=449632148 instance=ExtResource("31_fgh7x")]
 position = Vector2(1200, 496)
+
+[node name="BrickBlock" parent="." unique_id=1066219167 instance=ExtResource("32_7pp8u")]
+position = Vector2(1200, 272)
+
+[node name="BrickBlock2" parent="." unique_id=294098533 instance=ExtResource("32_7pp8u")]
+position = Vector2(1392, 272)

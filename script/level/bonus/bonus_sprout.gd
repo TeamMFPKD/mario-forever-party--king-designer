@@ -33,7 +33,6 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not is_sprout and is_overlap():
-		print("woc tai")
 		bonus.position.y -= sprout_speed * delta
 	else:
 		bonus.process_mode = ProcessMode.PROCESS_MODE_INHERIT

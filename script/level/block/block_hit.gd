@@ -31,10 +31,10 @@ var player_suit : PlayerSuit
 @export var _block_fragment_scene: PackedScene = preload("uid://ct006nlnmf8dg")
 const FRAMERATE_ORIGIN: float = 60.0
 var _fragment_create_position: Array[Vector2] = [
-	Vector2(-8.0, -8.0) * FRAMERATE_ORIGIN,
-	Vector2(8.0, 8.0) * FRAMERATE_ORIGIN,
-	Vector2(-8.0, 8.0) * FRAMERATE_ORIGIN,
-	Vector2(8.0, -8.0) * FRAMERATE_ORIGIN,
+	Vector2(-8.0, -8.0),
+	Vector2(8.0, 8.0),
+	Vector2(-8.0, 8.0),
+	Vector2(8.0, -8.0),
 ]
 var _fragment_velocity_data: Array[Vector2] = [
 	Vector2(-3.0, -6.0) * FRAMERATE_ORIGIN,
@@ -100,8 +100,8 @@ func on_block_bump() -> void:
 		set_visible()
 
 	# 生成物品
-	if sprout_item_scene != null and player_suit.suit == PlayerSuit.SuitType.SMALL \
-	or adv_sprout_item_scene == null:
+	if sprout_item_scene != null and \
+	(player_suit.suit == PlayerSuit.SuitType.SMALL or adv_sprout_item_scene == null):
 		var sprout_item: Node2D = sprout_item_scene.instantiate()
 		sprout_item.position = parent.position
 		parent.add_sibling(sprout_item)
