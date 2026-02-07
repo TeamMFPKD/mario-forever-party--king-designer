@@ -12,8 +12,10 @@ var _phase: float
 func _ready():
     _parent = get_parent() as Node2D
     _origin_position_y = _parent.position.y
-    _player = get_tree().get_first_node_in_group("player") as Node2D
-    _player_animation_sprite = _player.get_node("AnimatedSprite2D") as AnimatedSprite2D
+    var fc = func():
+        _player = get_tree().get_first_node_in_group("player") as Node2D
+        _player_animation_sprite = _player.get_node("AnimatedSprite2D") as AnimatedSprite2D
+    fc.call_deferred()
 
 func _physics_process(delta):
     if _parent == null or _player == null:
