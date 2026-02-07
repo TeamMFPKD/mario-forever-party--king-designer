@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://1acweyfku8s4"]
+
+[ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="1_wxdki"]
+[ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="2_yqr2y"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_etebd"]
+atlas = ExtResource("1_wxdki")
+region = Rect2(0, 0, 448, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5p0h5"]
+size = Vector2(64, 64)
+
+[node name="PipeVerticalUp" type="StaticBody2D" unique_id=1712484775]
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=715546289]
+texture = SubResource("AtlasTexture_etebd")
+hframes = 7
+
+[node name="PipeColor" type="Node" parent="Sprite2D" unique_id=749737591 node_paths=PackedStringArray("sprite")]
+script = ExtResource("2_yqr2y")
+sprite = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1313298748]
+shape = SubResource("RectangleShape2D_5p0h5")

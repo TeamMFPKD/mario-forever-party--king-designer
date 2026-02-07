@@ -17,8 +17,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if move_object.is_on_floor() and bumping:
-		speed_x = 0.0
 		bumping = false
+		if not shell_status.is_moving:
+			speed_x = 0.0
 
 func set_jump_speed() -> void:
 	pass

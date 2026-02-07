@@ -2,19 +2,21 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_1c0jl"]
 [ext_resource type="Texture2D" uid="uid://bq8cp4ab4udo7" path="res://sprite/enemy/hammer_bro.png" id="2_1c0jl"]
+[ext_resource type="PackedScene" uid="uid://m4egjldduflh" path="res://object/level/enemy/bro_hammer.tscn" id="2_idt1a"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_kia3i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j60mq"]
 atlas = ExtResource("2_1c0jl")
 region = Rect2(37, 49, 37, 51)
 
-[node name="SpawnerHammerBro" type="Node2D"]
+[node name="SpawnerHammerBro" type="Node2D" unique_id=1800668226]
 script = ExtResource("1_1c0jl")
+spawn_object_scene = ExtResource("2_idt1a")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=439118010]
 position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_j60mq")
 flip_h = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_kia3i")]
+[node name="OffsetMarker" parent="." unique_id=1149829167 instance=ExtResource("3_kia3i")]

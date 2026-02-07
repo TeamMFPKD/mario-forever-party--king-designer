@@ -114,6 +114,7 @@ _data = {
 }
 
 [node name="QuestionBlock" type="StaticBody2D" unique_id=2059396481]
+z_index = 5
 collision_layer = 131
 collision_mask = 0
 
@@ -136,6 +137,7 @@ metadata/_custom_type_script = "uid://0kceldqbdgin"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=973614777]
 libraries/ = SubResource("AnimationLibrary_w07n4")
+speed_scale = 1.2
 
 [node name="BreakSound" parent="." unique_id=1715984441 instance=ExtResource("3_q144o")]
 stream = ExtResource("4_uotgv")

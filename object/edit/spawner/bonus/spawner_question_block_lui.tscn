@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b3rsqouk671qg"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_pje3t"]
+[ext_resource type="PackedScene" uid="uid://c2yba5lqp31je" path="res://object/level/block/question_block_lui.tscn" id="2_cjb65"]
 [ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="2_f41ht"]
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="3_pje3t"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_7panf"]
@@ -13,16 +14,17 @@ region = Rect2(0, 32, 32, 32)
 atlas = ExtResource("3_pje3t")
 region = Rect2(0, 0, 33, 32)
 
-[node name="SpawnerQuestionBlockLui" type="Node2D"]
+[node name="SpawnerQuestionBlockLui" type="Node2D" unique_id=1610535409]
 script = ExtResource("1_pje3t")
+spawn_object_scene = ExtResource("2_cjb65")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=604749053]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="Sprite2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D" unique_id=468326809]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_f41ht")
 
-[node name="OffsetMarker" parent="." instance=ExtResource("4_7panf")]
+[node name="OffsetMarker" parent="." unique_id=1456019387 instance=ExtResource("4_7panf")]

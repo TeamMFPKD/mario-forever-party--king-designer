@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://fter4hqotpbj"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_ksfdm"]
+[ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="2_0cdcb"]
 [ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="2_ksfdm"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_w6c43"]
 
@@ -8,13 +9,14 @@
 atlas = ExtResource("2_ksfdm")
 region = Rect2(1, 47, 31, 45)
 
-[node name="SpawnerTroopaGreen" type="Node2D"]
+[node name="SpawnerTroopaGreen" type="Node2D" unique_id=1183608834]
 script = ExtResource("1_ksfdm")
+spawn_object_scene = ExtResource("2_0cdcb")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=864821167]
 position = Vector2(0, -7)
 texture = SubResource("AtlasTexture_lhxpi")
 flip_h = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_w6c43")]
+[node name="OffsetMarker" parent="." unique_id=1734699467 instance=ExtResource("3_w6c43")]

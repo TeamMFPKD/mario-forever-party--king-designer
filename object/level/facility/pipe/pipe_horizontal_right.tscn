@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://briopcudjttn5"]
+
+[ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="2_7vvr2"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_uly8c"]
+load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7f8b6cdf.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0dhw"]
+atlas = SubResource("CompressedTexture2D_uly8c")
+region = Rect2(96, 0, 64, 448)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5p0h5"]
+size = Vector2(64, 64)
+
+[node name="PipeHorizontalRight" type="StaticBody2D" unique_id=1712484775]
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=715546289]
+texture = SubResource("AtlasTexture_f0dhw")
+vframes = 7
+
+[node name="PipeColor" type="Node" parent="Sprite2D" unique_id=749737591 node_paths=PackedStringArray("sprite")]
+script = ExtResource("2_7vvr2")
+sprite = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1313298748]
+shape = SubResource("RectangleShape2D_5p0h5")

@@ -41,14 +41,14 @@ var fire : String = "move_fire"
 var jump : String = "move_jump"
 
 var jumpable : bool
-var jumpable_time : int = 15
+var jumpable_time : int = 20
 var jumpable_timer : int
 
 var crouch : bool
 
 # 狼跳
 var langtiao : bool
-var langtiao_time : int = 5
+var langtiao_time : int = 10
 var langtiao_timer : int
 
 var speed_x : float

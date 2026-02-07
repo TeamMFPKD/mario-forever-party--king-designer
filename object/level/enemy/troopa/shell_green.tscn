@@ -83,7 +83,7 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="ShellStatus" type="Node" parent="." unique_id=1050551384]
 script = ExtResource("5_0nlr7")
-shell_move_speed_x = 240.0
+shell_move_speed_x = 300.0
 
 [node name="ShellInteractionMoving" type="Node" parent="." unique_id=1988555070]
 script = ExtResource("5_05vun")

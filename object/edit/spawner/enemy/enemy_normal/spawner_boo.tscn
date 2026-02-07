@@ -2,18 +2,20 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_in2l8"]
 [ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="2_in2l8"]
+[ext_resource type="PackedScene" uid="uid://coxmhdmrr3y5r" path="res://object/level/enemy/boo.tscn" id="2_jtlsw"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_18v7e"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m0llv"]
 atlas = ExtResource("2_in2l8")
 region = Rect2(0, 0, 33, 32)
 
-[node name="SpawnerBoo" type="Node2D"]
+[node name="SpawnerBoo" type="Node2D" unique_id=1564936320]
 script = ExtResource("1_in2l8")
+spawn_object_scene = ExtResource("2_jtlsw")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=579435034]
 texture = SubResource("AtlasTexture_m0llv")
 flip_h = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_18v7e")]
+[node name="OffsetMarker" parent="." unique_id=711275955 instance=ExtResource("3_18v7e")]

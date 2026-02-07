@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://dypcy1al6fwtc"]
+
+[ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="1_iltu3"]
+[ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/buzzy_beetle.png" id="2_thuh4"]
+[ext_resource type="Texture2D" uid="uid://dx7xsb68laq22" path="res://sprite/enemy/shell_beetle.png" id="3_im28w"]
+[ext_resource type="PackedScene" uid="uid://cfj5u3sg3tmux" path="res://object/level/enemy/troopa/shell_beetle.tscn" id="4_wb6r3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_im28w"]
+atlas = ExtResource("2_thuh4")
+region = Rect2(0, 0, 31, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wb6r3"]
+atlas = ExtResource("2_thuh4")
+region = Rect2(0, 32, 31, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w8kma"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_im28w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wb6r3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w8kma"]
+atlas = ExtResource("3_im28w")
+region = Rect2(0, 56, 32, 28)
+
+[node name="TroopaGreen" unique_id=114751985 instance=ExtResource("1_iltu3")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
+position = Vector2(0, -0.5)
+sprite_frames = SubResource("SpriteFrames_w8kma")
+frame_progress = 0.0
+
+[node name="InteractionWithFireball" parent="EnemyInteraction" parent_id_path=PackedInt32Array(1317140342) index="1" unique_id=1266694774]
+immune_to_fireball = true
+
+[node name="InteractionWithBeetroot" parent="EnemyInteraction" parent_id_path=PackedInt32Array(1317140342) index="2" unique_id=92154285]
+immune_to_beetroot = true
+
+[node name="EnemyDie" parent="." index="6" unique_id=20942104]
+dead_texture_override = SubResource("AtlasTexture_w8kma")
+dead_scene_stomp = ExtResource("4_wb6r3")
+dead_scene_bump = ExtResource("4_wb6r3")
+
+[editable path="EnemyInteraction"]

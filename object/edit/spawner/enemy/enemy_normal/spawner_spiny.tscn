@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://goldju30lnnt"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_vs3pp"]
+[ext_resource type="PackedScene" uid="uid://cdkbk1qvvhip7" path="res://object/level/enemy/spiny.tscn" id="2_8qyja"]
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="2_vs3pp"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_j46rk"]
 
@@ -8,12 +9,13 @@
 atlas = ExtResource("2_vs3pp")
 region = Rect2(0, 0, 35, 32)
 
-[node name="SpawnerSpiny" type="Node2D"]
+[node name="SpawnerSpiny" type="Node2D" unique_id=929337500]
 script = ExtResource("1_vs3pp")
+spawn_object_scene = ExtResource("2_8qyja")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1582712599]
 texture = SubResource("AtlasTexture_37ha4")
 flip_h = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_j46rk")]
+[node name="OffsetMarker" parent="." unique_id=1364515649 instance=ExtResource("3_j46rk")]

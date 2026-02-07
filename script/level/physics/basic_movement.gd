@@ -8,7 +8,7 @@ var move_object : CharacterBody2D
 @export var initially_face_to_player: bool = true
 @export var speed_x: float = 60.0
 @export var speed_y: float
-@export var gravity: float = 550.0
+@export var gravity: float = 650.0
 @export var max_fall_speed: float = 999.0
 @export var jump_speed: float
 @export var edge_detect: bool = false
@@ -89,6 +89,8 @@ func speed_y_process(delta: float) -> void:
 	# y 速度	
 	if not move_object.is_on_floor():
 		speed_y = clamp(speed_y + gravity * delta, -max_fall_speed, max_fall_speed)
+	else:
+		speed_y = 0.0
 
 func apply_speed() -> void:
 	move_object.velocity = Vector2(speed_x, speed_y)
