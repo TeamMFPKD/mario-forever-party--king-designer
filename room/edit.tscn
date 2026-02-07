@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pxk7y"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_2mwga"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="3_s2wk4"]
+[ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="4_2mwga"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="4_e6mtu"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="5_iq0jw"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="6_0b6sj"]
@@ -290,6 +291,8 @@ size_flags_horizontal = 13
 size_flags_vertical = 15
 theme_override_font_sizes/font_size = 35
 text = "Play"
+script = ExtResource("4_2mwga")
+play_room_scene_uid = "uid://cxvueju65b3qv"
 metadata/_edit_lock_ = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1725420938]
@@ -324,10 +327,7 @@ metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
 [node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("8_amsrr")
-version = null
 level_theme = 5
-level_size = null
-tile_data = null
 level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
@@ -372,7 +372,7 @@ width = 1.0
 default_color = Color(0.5, 0.5, 0.5, 0.2509804)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1411860041]
-tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAADAA8AAAALAAMAAAADAA4AAAALAAIAAAADAA0AAAALAAAAAAACAA8AAAAJAAMAAAACAA4AAAAJAAIAAAACAA0AAAAKAAAAAAABAA8AAAAJAAMAAAABAA4AAAAJAAIAAAABAA0AAAAKAAAAAAAAAA8AAAAJAAMAAAAAAA4AAAAJAAIAAAAAAA0AAAAKAAAAAAD//w8AAAAIAAMAAAD//w4AAAAIAAEAAAD//w0AAAAIAAAAAAA=")
+tile_map_data = PackedByteArray("AAADAA8AAAALAAMAAAADAA4AAAALAAIAAAADAA0AAAALAAAAAAACAA8AAAAJAAMAAAACAA4AAAAJAAIAAAACAA0AAAAKAAAAAAABAA8AAAAJAAMAAAABAA4AAAAJAAIAAAABAA0AAAAKAAAAAAAAAA8AAAAJAAMAAAAAAA4AAAAJAAIAAAAAAA0AAAAKAAAAAAD//w8AAAAIAAMAAAD//w4AAAAIAAEAAAD//w0AAAAIAAAAAAA=")
 tile_set = ExtResource("14_qjgk7")
 
 [node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=899878520 node_paths=PackedStringArray("database_holder", "tile_map")]
@@ -1546,6 +1546,7 @@ texture = ExtResource("81_cfmm2")
 
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
+[connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" to="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" method="_on_button_pressed"]
 [connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
 [connection signal="play_sound_place" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundPlaceObject" method="play"]
 

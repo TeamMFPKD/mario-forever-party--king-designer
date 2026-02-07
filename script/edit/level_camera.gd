@@ -10,6 +10,9 @@ var speed : float = 0.0
 var direction := Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
+	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
+		return
+
 	direction = Vector2.ZERO
 	if Input.is_action_pressed("move_up"):
 		direction += Vector2.UP

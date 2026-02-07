@@ -4,6 +4,8 @@ class_name LevelManager
 
 signal level_theme_changed(level_theme: LevelThemeEnum)
 
+signal load_level
+
 @export_category("Level Data")
 @export var version: String = "1.0"
 enum LevelThemeEnum {
@@ -38,6 +40,8 @@ enum LevelThemeEnum {
 var level_data_dict: Dictionary
 
 func _ready() -> void:
+	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
+		emit_signal("load_level")
 	update_theme()
 
 func get_level_data_json() -> String:

@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="14_snsbp"]
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="15_ala55"]
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="16_aot2p"]
+[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="17_dywku"]
 [ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="17_jpn7p"]
 [ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="18_6r670"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
@@ -71,8 +72,9 @@ background_database = ExtResource("5_dhd6j")
 object_database = ExtResource("6_2q1y6")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("7_orh2l")
+level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
 object_map = NodePath("../ObjectMapLayer")
@@ -119,12 +121,8 @@ script = ExtResource("19_w44qo")
 database_holder = NodePath("../DatabaseHolder")
 
 [node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=487963708 groups=["level_camera"]]
-zoom = Vector2(2, 2)
 process_callback = 0
-limit_left = -233
-limit_top = -64
-limit_right = 3800
-limit_bottom = 700
+script = ExtResource("17_dywku")
 metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
@@ -140,3 +138,5 @@ theme_override_constants/margin_bottom = 30
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Return to edit"
+
+[connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
