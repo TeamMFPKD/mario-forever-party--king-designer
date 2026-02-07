@@ -19,6 +19,8 @@ enum HurtType {
 @export_category("Stompable")
 @export var stompable : bool = true
 @export var stomp_offset : float = -4.0
+
+@export var return_stomp_speed_y : bool = true
 @export var stomp_speed_y : float = -600.0
 
 func _ready() -> void:

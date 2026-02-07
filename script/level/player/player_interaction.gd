@@ -42,7 +42,10 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 		and interaction_with_player_node.stompable:
 			# 踩踏成功
 			if not is_starman():
-				player_movement.speed_y = interaction_with_player_node.on_stomped(player)
+				if interaction_with_player_node.return_stomp_speed_y:
+					player_movement.speed_y = interaction_with_player_node.on_stomped(player)
+				else:
+					interaction_with_player_node.on_stomped(player)
 		else:
 			# 踩踏失败
 			match interaction_with_player_node.hurt_type:
