@@ -9,8 +9,16 @@ signal limit_changed(top: int, left: int, right: int, bottom: int)
 var speed : float = 0.0
 var direction := Vector2.ZERO
 
+var player
+
 func _physics_process(delta: float) -> void:
-	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
+	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT:
+		if not player:
+			player = get_tree().get_first_node_in_group("player")
+			position = player.position
+			reset_physics_interpolation()
+			return
+		position = player.position
 		return
 
 	direction = Vector2.ZERO

@@ -11,15 +11,21 @@ const LEVEL_EDGE_SHAPE_LEFT = preload("uid://qfpghfu13sn1")
 const LEVEL_EDGE_SHAPE_RIGHT = preload("uid://dia0apwqxvmgd")
 
 var level_camera : Camera2D
+var origin_collision_layer
 
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
+	origin_collision_layer = collision_layer
+	collision_layer = 0
 	var collision_shape = $CollisionShape2D
 	match edge_type:
 		EgdeType.LEFT:
 			collision_shape.shape = LEVEL_EDGE_SHAPE_LEFT
 		EgdeType.RIGHT:
 			collision_shape.shape = LEVEL_EDGE_SHAPE_RIGHT
+	var fc = func():
+		collision_layer = origin_collision_layer
+	fc.call_deferred()
 
 func _physics_process(delta: float) -> void:
 	match edge_type:

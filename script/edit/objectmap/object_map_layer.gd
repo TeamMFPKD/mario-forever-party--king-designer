@@ -15,6 +15,8 @@ func _ready():
 	setup_input_handler()
 
 	# 祖传玩家位置
+	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT:
+		return
 	current_object_name = "player"
 	if not database_holder or not database_holder.object_database or current_object_name == "":
 		return

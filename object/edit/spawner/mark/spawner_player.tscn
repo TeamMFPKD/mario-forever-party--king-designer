@@ -15,6 +15,8 @@ spawn_object_scene = ExtResource("2_1s4ka")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1643151116]
+position = Vector2(0, 2)
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="OffsetMarker" parent="." unique_id=281171625 instance=ExtResource("3_atetu")]
+position = Vector2(0, 16)
