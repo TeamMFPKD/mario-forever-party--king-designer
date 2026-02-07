@@ -1,0 +1,142 @@
+[gd_scene format=4 uid="uid://cxvueju65b3qv"]
+
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pleqj"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_pei5v"]
+[ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="3_aqvbr"]
+[ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="4_d6wjp"]
+[ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="5_dhd6j"]
+[ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="6_2q1y6"]
+[ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="7_orh2l"]
+[ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="8_pt5fk"]
+[ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="9_27ofe"]
+[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="13_3lia6"]
+[ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="14_snsbp"]
+[ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="15_ala55"]
+[ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="16_aot2p"]
+[ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="17_jpn7p"]
+[ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="18_6r670"]
+[ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
+
+[node name="Play" type="Node2D" unique_id=1958081526]
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=1193585656]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=2000367316]
+self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
+texture = ExtResource("1_pleqj")
+metadata/_edit_lock_ = true
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=1663788830]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 1504.0
+script = ExtResource("2_pei5v")
+metadata/_edit_lock_ = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1823801948]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_top = 32.0
+offset_right = 640.0
+offset_bottom = 960.0
+grow_horizontal = 2
+metadata/_edit_lock_ = true
+
+[node name="SubViewport" type="SubViewport" parent="GameRoomSize/SubViewportContainer" unique_id=1425804192]
+disable_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1280, 960)
+size_2d_override = Vector2i(640, 480)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Level" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=448209138]
+
+[node name="DatabaseHolder" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1895931798]
+script = ExtResource("3_aqvbr")
+tile_map_block_database = ExtResource("4_d6wjp")
+background_database = ExtResource("5_dhd6j")
+object_database = ExtResource("6_2q1y6")
+metadata/_custom_type_script = "uid://324h4vpgb0rx"
+
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+script = ExtResource("7_orh2l")
+tile_map = NodePath("../TileMapLayer")
+tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
+object_map = NodePath("../ObjectMapLayer")
+bgp_manager = NodePath("../BgpManager")
+metadata/_custom_type_script = "uid://dcj1u3dweru3n"
+
+[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1922304214 node_paths=PackedStringArray("level_data_node")]
+script = ExtResource("8_pt5fk")
+level_data_node = NodePath("../LevelManager")
+
+[node name="LoadLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1104087247 node_paths=PackedStringArray("level_data_node")]
+script = ExtResource("9_27ofe")
+level_data_node = NodePath("../LevelManager")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1149645205]
+tile_map_data = PackedByteArray("AAAEAP//AAAIAAAAAAAEAAAAAAAIAAEAAAAFAAAAAAAJAAIAAAAGAAAAAAALAAIAAAAGAP//AAALAAAAAAAGAAEAAAALAAMAAAAFAAEAAAAJAAMAAAAFAP//AAAKAAAAAAAEAAEAAAAIAAMAAAAOAAMAAAALAAIAAAAOAAIAAAALAAAAAAANAAMAAAAJAAIAAAANAAIAAAAKAAAAAAAMAAMAAAAJAAIAAAAMAAIAAAAKAAAAAAALAAMAAAAJAAIAAAALAAIAAAAKAAAAAAANAAUAAAAJAAMAAAANAAQAAAAJAAIAAAAMAAUAAAAJAAMAAAAMAAQAAAAJAAIAAAALAAUAAAAJAAMAAAALAAQAAAAJAAIAAAAKAAUAAAAJAAMAAAAKAAQAAAAJAAIAAAAKAAMAAAAJAAIAAAAKAAIAAAAKAAAAAAAJAAUAAAAJAAMAAAAJAAQAAAAJAAIAAAAJAAMAAAAJAAIAAAAJAAIAAAAKAAAAAAAIAAUAAAAJAAMAAAAIAAQAAAAJAAIAAAAIAAMAAAAJAAIAAAAIAAIAAAAKAAAAAAAHAAUAAAAIAAMAAAAHAAQAAAAIAAEAAAAHAAMAAAAIAAEAAAAHAAIAAAAIAAAAAAAOAAUAAAALAAMAAAAOAAQAAAALAAIAAAADAA8AAAALAAMAAAADAA4AAAALAAIAAAADAA0AAAALAAAAAAACAA8AAAAJAAMAAAACAA4AAAAJAAIAAAACAA0AAAAKAAAAAAABAA8AAAAJAAMAAAABAA4AAAAJAAIAAAABAA0AAAAKAAAAAAAAAA8AAAAJAAMAAAAAAA4AAAAJAAIAAAAAAA0AAAAKAAAAAAD//w8AAAAIAAMAAAD//w4AAAAIAAEAAAD//w0AAAAIAAAAAAA=")
+tile_set = ExtResource("13_3lia6")
+
+[node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=9746541 node_paths=PackedStringArray("database_holder", "tile_map")]
+script = ExtResource("14_snsbp")
+database_holder = NodePath("../../DatabaseHolder")
+tile_map = NodePath("..")
+
+[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=315803961 node_paths=PackedStringArray("tile_map")]
+script = ExtResource("15_ala55")
+tile_map = NodePath("..")
+
+[node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=97720409 node_paths=PackedStringArray("database_holder")]
+script = ExtResource("16_aot2p")
+objects = [{
+"object_name": "player",
+"object_scene": ExtResource("17_jpn7p"),
+"position": Vector2(112, 400)
+}]
+database_holder = NodePath("../DatabaseHolder")
+metadata/_custom_type_script = "uid://omfdsevbgrom"
+
+[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" unique_id=1800973672 node_paths=PackedStringArray("object_map_layer")]
+script = ExtResource("18_6r670")
+object_map_layer = NodePath("..")
+
+[node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1560694673 node_paths=PackedStringArray("database_holder")]
+script = ExtResource("19_w44qo")
+database_holder = NodePath("../DatabaseHolder")
+
+[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=487963708 groups=["level_camera"]]
+zoom = Vector2(2, 2)
+process_callback = 0
+limit_left = -233
+limit_top = -64
+limit_right = 3800
+limit_bottom = 700
+metadata/_edit_lock_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 196.0
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="Button" type="Button" parent="GameRoomSize/MarginContainer" unique_id=998423911]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Return to edit"
