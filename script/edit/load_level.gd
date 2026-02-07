@@ -11,10 +11,16 @@ func _ready() -> void:
 	print("User data path: ", OS.get_user_data_dir())
 
 func _on_load_button_pressed() -> void:
-	level_data_node.load_level_data_from_json(load_from_level())
+	var content = load_from_level()
+	if content == "":
+		return
+	level_data_node.load_level_data_from_json(content)
 
 func load_from_level() -> String:
 	var file = FileAccess.open(file_name, FileAccess.READ)
+	if not file:
+		print("Failed to open file or this is a new file.")
+		return ""
 	var content = file.get_as_text()
 	file.close()
 	return content
