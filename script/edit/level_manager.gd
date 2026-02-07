@@ -40,8 +40,9 @@ enum LevelThemeEnum {
 var level_data_dict: Dictionary
 
 func _ready() -> void:
-	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
-		emit_signal("load_level")
+	#if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
+	#or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.EDIT:
+	emit_signal("load_level")
 	update_theme()
 
 func get_level_data_json() -> String:

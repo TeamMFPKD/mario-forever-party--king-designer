@@ -4,6 +4,7 @@ class_name GameMode
 
 enum GameModeType {
 	EDIT,
+	TEST,
 	PLAY,
 }
 

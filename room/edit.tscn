@@ -292,7 +292,7 @@ size_flags_vertical = 15
 theme_override_font_sizes/font_size = 35
 text = "Play"
 script = ExtResource("4_2mwga")
-play_room_scene_uid = "uid://cxvueju65b3qv"
+room_scene_uid = "uid://cxvueju65b3qv"
 metadata/_edit_lock_ = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1725420938]
@@ -1546,7 +1546,8 @@ texture = ExtResource("81_cfmm2")
 
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
-[connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" to="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" method="_on_button_pressed"]
+[connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
+[connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
 [connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
 [connection signal="play_sound_place" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundPlaceObject" method="play"]
 

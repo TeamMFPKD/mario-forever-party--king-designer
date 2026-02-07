@@ -14,8 +14,8 @@
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="15_ala55"]
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="16_aot2p"]
 [ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="17_dywku"]
-[ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="17_jpn7p"]
 [ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="18_6r670"]
+[ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="18_e5c0k"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
@@ -104,11 +104,6 @@ tile_map = NodePath("..")
 
 [node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=97720409 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("16_aot2p")
-objects = [{
-"object_name": "player",
-"object_scene": ExtResource("17_jpn7p"),
-"position": Vector2(112, 400)
-}]
 database_holder = NodePath("../DatabaseHolder")
 metadata/_custom_type_script = "uid://omfdsevbgrom"
 
@@ -138,5 +133,8 @@ theme_override_constants/margin_bottom = 30
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "Return to edit"
+script = ExtResource("18_e5c0k")
+room_scene_uid = "uid://bnx7r3slvtcdt"
+target_mode = 0
 
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
