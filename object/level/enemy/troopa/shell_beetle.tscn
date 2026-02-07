@@ -44,5 +44,11 @@ animations = [{
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
 sprite_frames = SubResource("SpriteFrames_ubicc")
 
+[node name="InteractionWithFireball" parent="EnemyInteraction" parent_id_path=PackedInt32Array(1317140342) index="1" unique_id=1266694774]
+immune_to_fireball = true
+
+[node name="InteractionWithBeetroot" parent="EnemyInteraction" parent_id_path=PackedInt32Array(1317140342) index="2" unique_id=92154285]
+immune_to_beetroot = true
+
 [editable path="EnemyInteraction"]
 [editable path="EnemySoundManager"]
