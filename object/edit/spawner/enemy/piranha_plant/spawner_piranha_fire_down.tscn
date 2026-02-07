@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d3xmy1i8dtq2"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_inbu3"]
+[ext_resource type="PackedScene" uid="uid://b7qqcj3mgwcl6" path="res://object/level/enemy/piranha/piranha_fire_down.tscn" id="2_281rt"]
 [ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="2_inbu3"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_8f1ok"]
 
@@ -10,6 +11,7 @@ region = Rect2(11, 14, 41, 50)
 
 [node name="SpawnerPiranhaFireDown" type="Node2D" unique_id=90305146]
 script = ExtResource("1_inbu3")
+spawn_object_scene = ExtResource("2_281rt")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 metadata/_edit_lock_ = true
 

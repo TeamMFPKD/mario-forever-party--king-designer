@@ -2,19 +2,21 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_qjvwf"]
 [ext_resource type="Texture2D" uid="uid://4gmofwbo8lf4" path="res://sprite/enemy/fire_bro.png" id="2_qjvwf"]
+[ext_resource type="PackedScene" uid="uid://kfoyxqkejyl4" path="res://object/level/enemy/bro_fireball.tscn" id="2_v27or"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_mg7jc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_abu5c"]
 atlas = ExtResource("2_qjvwf")
 region = Rect2(37, 49, 34, 51)
 
-[node name="SpawnerFireBro" type="Node2D"]
+[node name="SpawnerFireBro" type="Node2D" unique_id=90210317]
 script = ExtResource("1_qjvwf")
+spawn_object_scene = ExtResource("2_v27or")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2002357332]
 position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_abu5c")
 flip_h = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_mg7jc")]
+[node name="OffsetMarker" parent="." unique_id=1001169341 instance=ExtResource("3_mg7jc")]

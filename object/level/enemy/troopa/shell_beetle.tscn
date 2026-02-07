@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://cfj5u3sg3tmux"]
+
+[ext_resource type="PackedScene" uid="uid://dt6ikdqwwgo2r" path="res://object/level/enemy/troopa/shell_green.tscn" id="1_ubicc"]
+[ext_resource type="Texture2D" uid="uid://dx7xsb68laq22" path="res://sprite/enemy/shell_beetle.png" id="2_in6gk"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3c4f"]
+atlas = ExtResource("2_in6gk")
+region = Rect2(0, 0, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u1x5k"]
+atlas = ExtResource("2_in6gk")
+region = Rect2(0, 28, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cjdpn"]
+atlas = ExtResource("2_in6gk")
+region = Rect2(0, 56, 33, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4t3vb"]
+atlas = ExtResource("2_in6gk")
+region = Rect2(0, 84, 33, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ubicc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3c4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1x5k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cjdpn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4t3vb")
+}],
+"loop": true,
+"name": &"default",
+"speed": 32.0
+}]
+
+[node name="ShellGreen" unique_id=114751985 instance=ExtResource("1_ubicc")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_ubicc")
+
+[editable path="EnemyInteraction"]
+[editable path="EnemySoundManager"]

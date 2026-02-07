@@ -2,17 +2,19 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_etxif"]
 [ext_resource type="Texture2D" uid="uid://bg7eb81h4ii2r" path="res://sprite/bonus/coin.png" id="2_etxif"]
+[ext_resource type="PackedScene" uid="uid://dconcybw15y5b" path="res://object/level/block/coin.tscn" id="2_qurs2"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_4syic"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
 atlas = ExtResource("2_etxif")
 region = Rect2(0, 0, 33, 32)
 
-[node name="SpawnerCoin" type="Node2D"]
+[node name="SpawnerCoin" type="Node2D" unique_id=2066940420]
 script = ExtResource("1_etxif")
+spawn_object_scene = ExtResource("2_qurs2")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=698192262]
 texture = SubResource("AtlasTexture_mwnlh")
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_4syic")]
+[node name="OffsetMarker" parent="." unique_id=636497433 instance=ExtResource("3_4syic")]

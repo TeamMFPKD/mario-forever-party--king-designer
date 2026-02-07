@@ -26,7 +26,7 @@ func _physics_process(delta):
 		return
 
 	var original_position = cast.position
-	cast.position += Vector2(sign(movement.speed_x), sign(movement.speed_y))
+	cast.position += Vector2(sign(movement.speed_x), 0.0)
 	var results = ShapeCastQuery.shape_query(shell, cast)
 	cast.position = original_position
 
@@ -55,6 +55,8 @@ func detect_block(results):
 		if !result.has_meta("interaction_with_block"):
 			continue
 		var block_hit_node = result.get_meta("interaction_with_block") as BlockHit
+		if block_hit_node.hidden:
+			continue
 		block_hit_node.on_block_hit(shell)
 		if not turned and not shell.is_on_wall():
 			turned = true

@@ -2,22 +2,24 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_ltecv"]
 [ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_stone.png" id="2_byyr5"]
+[ext_resource type="PackedScene" uid="uid://bhw2sm26f546v" path="res://object/level/enemy/piranha/piranha_grey_down.tscn" id="2_hbau3"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_0hasm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_etydd"]
 atlas = ExtResource("2_byyr5")
 region = Rect2(0, 48, 33, 50)
 
-[node name="SpawnerPiranhaStoneDown" type="Node2D"]
+[node name="SpawnerPiranhaStoneDown" type="Node2D" unique_id=324800575]
 script = ExtResource("1_ltecv")
+spawn_object_scene = ExtResource("2_hbau3")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=596037324]
 position = Vector2(16, 8)
 texture = SubResource("AtlasTexture_etydd")
 flip_v = true
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_0hasm")]
+[node name="OffsetMarker" parent="." unique_id=226678514 instance=ExtResource("3_0hasm")]
 position = Vector2(16, 0)
 gizmo_extents = 8.0

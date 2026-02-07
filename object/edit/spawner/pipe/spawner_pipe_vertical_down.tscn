@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b5q0xo0c7h8ss"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_edo08"]
+[ext_resource type="PackedScene" uid="uid://t3sik4xb6qdw" path="res://object/level/facility/pipe/pipe_vertical_down.tscn" id="2_m87r0"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="3_xw333"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_sjjhn"]
 
@@ -11,18 +12,19 @@ load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f
 atlas = SubResource("CompressedTexture2D_360xo")
 region = Rect2(0, 96, 448, 64)
 
-[node name="SpawnerPipeVerticalDown" type="Node2D"]
+[node name="SpawnerPipeVerticalDown" type="Node2D" unique_id=2026573883]
 script = ExtResource("1_edo08")
+spawn_object_scene = ExtResource("2_m87r0")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=235928625]
 position = Vector2(16, 16)
 texture = SubResource("AtlasTexture_lh15n")
 hframes = 7
 
-[node name="PipeColor" type="Node" parent="Sprite2D" node_paths=PackedStringArray("sprite")]
+[node name="PipeColor" type="Node" parent="Sprite2D" unique_id=1308102656 node_paths=PackedStringArray("sprite")]
 script = ExtResource("3_xw333")
 sprite = NodePath("..")
 
-[node name="OffsetMarker" parent="." instance=ExtResource("4_sjjhn")]
+[node name="OffsetMarker" parent="." unique_id=806384243 instance=ExtResource("4_sjjhn")]
 position = Vector2(16, 16)

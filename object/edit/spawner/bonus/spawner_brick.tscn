@@ -2,13 +2,15 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_codry"]
 [ext_resource type="Texture2D" uid="uid://bc4d5afdplmyd" path="res://sprite/bonus/brick.png" id="2_codry"]
+[ext_resource type="PackedScene" uid="uid://dhfuivon485xt" path="res://object/level/block/brick_block.tscn" id="2_x3xlp"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_n5xu2"]
 
-[node name="SpawnerBrick" type="Node2D"]
+[node name="SpawnerBrick" type="Node2D" unique_id=478894648]
 script = ExtResource("1_codry")
+spawn_object_scene = ExtResource("2_x3xlp")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1743093180]
 texture = ExtResource("2_codry")
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_n5xu2")]
+[node name="OffsetMarker" parent="." unique_id=599407706 instance=ExtResource("3_n5xu2")]

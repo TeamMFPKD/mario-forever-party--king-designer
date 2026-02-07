@@ -2,19 +2,21 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_8t1g1"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="2_8t1g1"]
+[ext_resource type="PackedScene" uid="uid://enusggu4pi7w" path="res://object/level/facility/spring.tscn" id="2_hxoj0"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_irlhx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_uuoyo"]
 atlas = ExtResource("2_8t1g1")
 region = Rect2(0, 0, 31, 48)
 
-[node name="SpawnerSpring" type="Node2D"]
+[node name="SpawnerSpring" type="Node2D" unique_id=2021423520]
 script = ExtResource("1_8t1g1")
+spawn_object_scene = ExtResource("2_hxoj0")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1379036339]
 position = Vector2(0, -8)
 texture = SubResource("AtlasTexture_uuoyo")
 
-[node name="OffsetMarker" parent="." instance=ExtResource("3_irlhx")]
+[node name="OffsetMarker" parent="." unique_id=143398822 instance=ExtResource("3_irlhx")]
 position = Vector2(0, -8)

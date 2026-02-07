@@ -33,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://vu2bj7eso75k" path="res://object/level/block/question_block_fire_flower_hidden.tscn" id="31_fgh7x"]
 [ext_resource type="PackedScene" uid="uid://dhfuivon485xt" path="res://object/level/block/brick_block.tscn" id="32_7pp8u"]
 [ext_resource type="PackedScene" uid="uid://dconcybw15y5b" path="res://object/level/block/coin.tscn" id="33_u5mwt"]
+[ext_resource type="PackedScene" uid="uid://dypcy1al6fwtc" path="res://object/level/enemy/troopa/beetle.tscn" id="34_akljd"]
 
 [node name="PlayRoom" type="Node2D" unique_id=822465384]
 
@@ -169,3 +170,6 @@ position = Vector2(1440, 336)
 
 [node name="Coin2" parent="." unique_id=1464606445 instance=ExtResource("33_u5mwt")]
 position = Vector2(1624, 320)
+
+[node name="TroopaGreen3" parent="." unique_id=60712139 instance=ExtResource("34_akljd")]
+position = Vector2(1480, 376)

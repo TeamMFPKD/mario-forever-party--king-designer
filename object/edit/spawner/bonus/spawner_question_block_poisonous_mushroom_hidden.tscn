@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dehkdwlyvw5t0"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_pojrd"]
+[ext_resource type="PackedScene" uid="uid://bj4cd774e5ssd" path="res://object/level/block/question_block_poisonous_mushroom_hidden.tscn" id="2_0q1lk"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="2_i7h0k"]
 [ext_resource type="Texture2D" uid="uid://boa8ojba4ua7m" path="res://sprite/bonus/poisonous_mushroom.png" id="3_pojrd"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_4klsc"]
@@ -9,16 +10,17 @@
 atlas = ExtResource("3_pojrd")
 region = Rect2(0, 0, 32, 32)
 
-[node name="SpawnerQuestionBlockPoisonousMushroomHidden" type="Node2D"]
+[node name="SpawnerQuestionBlockPoisonousMushroomHidden" type="Node2D" unique_id=1971566722]
 script = ExtResource("1_pojrd")
+spawn_object_scene = ExtResource("2_0q1lk")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1861488117]
 texture = ExtResource("2_i7h0k")
 
-[node name="Sprite2D" type="Sprite2D" parent="Sprite2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D" unique_id=849700704]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_8w043")
 
-[node name="OffsetMarker" parent="." instance=ExtResource("4_4klsc")]
+[node name="OffsetMarker" parent="." unique_id=10124690 instance=ExtResource("4_4klsc")]
