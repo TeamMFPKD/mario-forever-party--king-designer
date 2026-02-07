@@ -9,6 +9,10 @@ var smoke : Node2D
 
 var is_passed : bool = false
 
+func _ready() -> void:
+	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST:
+		goal_reached.connect(GameModeSingleton.go_to_edit)
+
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and !is_passed:
 		is_passed = true

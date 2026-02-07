@@ -1,13 +1,16 @@
 [gd_scene format=3 uid="uid://034w35iv6qfh"]
 
 [ext_resource type="Texture2D" uid="uid://bh4q2qvjkqdjk" path="res://sprite/player/mario_dead.png" id="1_vnmf5"]
+[ext_resource type="Script" uid="uid://dja2mygfksko5" path="res://script/level/player/player_dead.gd" id="1_vnqbt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vnqbt"]
 
 [node name="PlayerDead" type="CharacterBody2D" unique_id=635025369]
+process_mode = 3
 z_index = 30
 collision_layer = 0
 collision_mask = 0
+script = ExtResource("1_vnqbt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1966528190]
 visible = false

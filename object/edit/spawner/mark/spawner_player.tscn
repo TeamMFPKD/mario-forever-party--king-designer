@@ -19,4 +19,4 @@ position = Vector2(0, 2)
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="OffsetMarker" parent="." unique_id=281171625 instance=ExtResource("3_atetu")]
-position = Vector2(0, 16)
+position = Vector2(0, 2)
