@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="7_orh2l"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="8_pt5fk"]
 [ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="9_27ofe"]
+[ext_resource type="Script" uid="uid://cjkkhvnw3nf3g" path="res://script/level/tile_map_layer_semi_solid_creator.gd" id="12_e5c0k"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="13_3lia6"]
 [ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="14_snsbp"]
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="15_ala55"]
@@ -97,6 +98,9 @@ tile_set = ExtResource("13_3lia6")
 script = ExtResource("14_snsbp")
 database_holder = NodePath("../../DatabaseHolder")
 tile_map = NodePath("..")
+
+[node name="TileMapLayerSemiSolidCreator" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=1412037727]
+script = ExtResource("12_e5c0k")
 
 [node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=315803961 node_paths=PackedStringArray("tile_map")]
 script = ExtResource("15_ala55")

@@ -40,6 +40,7 @@ z_index = 10
 collision_layer = 8
 collision_mask = 7
 floor_block_on_wall = false
+floor_max_angle = 1.3962634
 platform_on_leave = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
@@ -56,7 +57,7 @@ offset = Vector2(0, -20)
 script = ExtResource("2_741uk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
-position = Vector2(0, -1.5)
+position = Vector2(0, -2)
 shape = ExtResource("3_0f3px")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
