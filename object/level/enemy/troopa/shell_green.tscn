@@ -94,6 +94,7 @@ script = ExtResource("5_05vun")
 interactable = false
 hurt_type = 2
 stomp_offset = 64.0
+return_stomp_speed_y = false
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_3mma3")]
 enable_interaction_with_player = false

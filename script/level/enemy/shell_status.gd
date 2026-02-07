@@ -11,6 +11,7 @@ class_name ShellStatus
 		if value:
 			interaction_with_player_node.stomp_offset = -4.0
 			interaction_with_player_node.interactable = false
+			interaction_with_player_node.return_stomp_speed_y = true
 			ani.play("default")
 			if shell_movement.speed_x == 0.0:
 				shell_movement.speed_x = 0.0 - shell_move_speed_x
@@ -18,6 +19,7 @@ class_name ShellStatus
 		else:
 			interaction_with_player_node.stomp_offset = 64.0
 			interaction_with_player_node.interactable = false
+			interaction_with_player_node.return_stomp_speed_y = false
 			shell_movement.speed_x = 0.0
 			ani.frame = 0
 			ani.stop()
