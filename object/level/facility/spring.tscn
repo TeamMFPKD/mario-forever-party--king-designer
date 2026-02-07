@@ -61,7 +61,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x7gga"]
-size = Vector2(32, 48)
+size = Vector2(31, 48)
 
 [node name="Spring" type="CharacterBody2D" unique_id=1337536715]
 collision_layer = 16
