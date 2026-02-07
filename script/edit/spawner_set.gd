@@ -25,7 +25,7 @@ func _ready() -> void:
 	
 func spawn_object() -> void:
 	var spawn_object = spawn_object_scene.instantiate() as Node2D
-	spawn_object.position = offset
+	spawn_object.position = position + offset
 	add_sibling(spawn_object)
 	visible = false
 

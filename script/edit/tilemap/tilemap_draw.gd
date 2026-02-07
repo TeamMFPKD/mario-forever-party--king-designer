@@ -224,9 +224,9 @@ func check_and_draw_border_terrain(cell_coords: Vector2i):
 	
 	# 检查是否在边界上
 	var is_on_left_border = abs(cell_world_pos.x - camera_left) < cell_size.x
-	var is_on_right_border = abs(cell_world_pos.x - camera_right) < cell_size.x
+	var is_on_right_border = abs((cell_world_pos.x + cell_size.x) - camera_right) < cell_size.x
 	var is_on_top_border = abs(cell_world_pos.y - camera_top) < cell_size.y
-	var is_on_bottom_border = abs(cell_world_pos.y - camera_bottom) < cell_size.y
+	var is_on_bottom_border = abs((cell_world_pos.y + cell_size.y) - camera_bottom) < cell_size.x
 	
 	# 存储需要额外绘制的单元格坐标
 	var extra_cells: Array[Vector2i] = []

@@ -150,7 +150,8 @@ func place_object_at_position(position: Vector2, check_duplicate: bool = true):
 func emit_place_sound():
 	# 获取LevelControl节点并发射信号
 	var level_node = get_tree().get_first_node_in_group("level_control") as LevelControl
-	level_node.emit_signal("play_sound_place")
+	if is_instance_valid(level_node):
+		level_node.emit_signal("play_sound_place")
 
 
 # 公共方法：开始放置对象（通过对象名称）
