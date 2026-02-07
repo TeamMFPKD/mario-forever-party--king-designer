@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MFP: KD"
-run/main_scene="uid://bijt3ar5fx2ad"
+run/main_scene="uid://bnx7r3slvtcdt"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/stretch_mode=0
@@ -32,6 +32,7 @@ buses/default_bus_layout="uid://c8eu6kekkwwe1"
 InputHandlerSingleton="*res://object/utils/input_handler.tscn"
 PlatformUtilsSingleton="*res://object/utils/platform_utils.tscn"
 OnScreenControls="*uid://dnm3ffgulmrea"
+GameModeSingleton="*uid://upwad5v53gmk"
 
 [display]
 
