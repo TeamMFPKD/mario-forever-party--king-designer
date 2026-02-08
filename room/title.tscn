@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://dcqf1c3m14b1f"]
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_n3h5q"]
-[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://object/mfpkd_button.tscn" id="2_w52fc"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_w52fc"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_xb41j"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
+[ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/edit/title/user_notice.gd" id="4_ytxtj"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_qon3s"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
-
-[node name="UsedForScreenCentering" type="Camera2D" parent="." unique_id=1534311354]
 
 [node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=960181253]
 z_index = -800
@@ -30,7 +31,7 @@ offset_bottom = 540.0
 script = ExtResource("3_xb41j")
 metadata/_edit_lock_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1269811525]
+[node name="Title" type="MarginContainer" parent="GameRoomSize" unique_id=1269811525]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -40,14 +41,14 @@ offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
-[node name="TitlePlaceholder" type="Label" parent="GameRoomSize/MarginContainer" unique_id=1197774217]
+[node name="TitlePlaceholder" type="Label" parent="GameRoomSize/Title" unique_id=1197774217]
 layout_mode = 2
 theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 180
 text = "为啥要
   标题"
 
-[node name="MarginContainer2" type="MarginContainer" parent="GameRoomSize" unique_id=683295364]
+[node name="ChooseMode" type="MarginContainer" parent="GameRoomSize" unique_id=683295364]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -62,17 +63,108 @@ grow_vertical = 0
 theme_override_constants/margin_top = 64
 theme_override_constants/margin_bottom = 64
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/MarginContainer2" unique_id=847404174]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ChooseMode" unique_id=847404174]
 layout_mode = 2
 size_flags_vertical = 13
 theme_override_constants/separation = 32
 
-[node name="HostButton" parent="GameRoomSize/MarginContainer2/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
+[node name="HostButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Host"
 
-[node name="JoinButton" parent="GameRoomSize/MarginContainer2/VBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+[node name="JoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Join"
+
+[node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+script = ExtResource("4_ytxtj")
+refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
+accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
+
+[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer" unique_id=1242804199]
+layout_mode = 2
+
+[node name="UiLabel2" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "使用须知"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="UiLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(233, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "
+欢迎游玩 Mario Forever Party: King Designer！
+
+Mario Forever Party: King Designer 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：
+· 创作的关卡内容符合公序良俗，不得包含暴力、色情、低俗、歧视、恐怖等不良及违法违规内容
+· 遵守当地法律法规
+· 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡
+
+关卡存储说明：
+· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。"
+autowrap_mode = 3
+
+[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -536.5
+offset_top = -38.5
+offset_right = 536.5
+offset_bottom = 38.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 128
+
+[node name="RefuseButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "拒绝并退出"
+
+[node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+text = "同意"
