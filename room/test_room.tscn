@@ -3,7 +3,6 @@
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="1_iaqfx"]
 [ext_resource type="Script" uid="uid://cjkkhvnw3nf3g" path="res://script/level/tile_map_layer_semi_solid_creator.gd" id="2_vbo8m"]
 [ext_resource type="PackedScene" uid="uid://ckmp8d6mn8kmq" path="res://object/level/player/player.tscn" id="3_whgqe"]
-[ext_resource type="PackedScene" uid="uid://cwjqbk83qtebh" path="res://object/bgm/bgm.tscn" id="4_qldoc"]
 [ext_resource type="PackedScene" uid="uid://cw30nlxu2qg8n" path="res://object/level/enemy/goomba.tscn" id="5_mvtm3"]
 [ext_resource type="PackedScene" uid="uid://bbl8lvnjtvifa" path="res://object/level/facility/platform_horizontal.tscn" id="6_jiyx1"]
 [ext_resource type="PackedScene" uid="uid://b2oexkna3nnjq" path="res://object/level/facility/platform_vertical_up.tscn" id="7_ue3ck"]
@@ -55,10 +54,6 @@ limit_top = -64
 limit_right = 3800
 limit_bottom = 700
 metadata/_edit_lock_ = true
-
-[node name="Bgm" parent="." unique_id=1026487401 instance=ExtResource("4_qldoc")]
-autoplay = false
-bus = &"Edit"
 
 [node name="Goomba" parent="." unique_id=114751985 instance=ExtResource("5_mvtm3")]
 position = Vector2(608, 400)
