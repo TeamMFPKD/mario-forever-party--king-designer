@@ -40,7 +40,7 @@ z_index = 10
 collision_layer = 8
 collision_mask = 7
 floor_block_on_wall = false
-floor_max_angle = 1.3962634
+floor_max_angle = 1.0471976
 platform_on_leave = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
