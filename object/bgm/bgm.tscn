@@ -37,10 +37,11 @@ stream_13/stream = ExtResource("6_8ec2p")
 stream_14/stream = ExtResource("7_02ctm")
 stream_15/stream = ExtResource("8_5egbl")
 
-[node name="Bgm" type="AudioStreamPlayer" unique_id=1026487401]
+[node name="Bgm" type="AudioStreamPlayer" unique_id=1026487401 groups=["bgm"]]
 stream = SubResource("AudioStreamRandomizer_fkteh")
-autoplay = true
+bus = &"Edit"
 script = ExtResource("17_yl062")
+sound_effect = true
 metadata/_custom_type_script = "uid://b7wv6e8w815uw"
 
 [connection signal="finished" from="." to="." method="play"]

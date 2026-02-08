@@ -34,6 +34,7 @@ PlatformUtilsSingleton="*res://object/utils/platform_utils.tscn"
 OnScreenControls="*uid://dnm3ffgulmrea"
 GameModeSingleton="*uid://upwad5v53gmk"
 GameConfig="*uid://b6yskt8kgoy66"
+Bgm="*uid://cwjqbk83qtebh"
 
 [display]
 
@@ -67,6 +68,10 @@ folder_colors={
 "res://sprite/projectile/": "red",
 "res://sprite/tile/": "gray"
 }
+
+[global_group]
+
+bgm=""
 
 [input]
 
