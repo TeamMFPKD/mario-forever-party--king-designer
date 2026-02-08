@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pxk7y"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_2mwga"]
+[ext_resource type="Script" uid="uid://c2i4x8ily25ki" path="res://script/bgm_start_play.gd" id="2_s2wk4"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="3_s2wk4"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="4_2mwga"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="4_e6mtu"]
@@ -245,6 +246,9 @@ metadata/_edit_lock_ = true
 self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
 texture = ExtResource("1_pxk7y")
 metadata/_edit_lock_ = true
+
+[node name="BgmStartPlay" type="Node" parent="." unique_id=2015665986]
+script = ExtResource("2_s2wk4")
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=294304425]
 layout_mode = 3

@@ -6,6 +6,7 @@ extends MarginContainer
 var config : ConfigFile
 
 func _ready():
+	visible = true
 	config = GameConfig.config
 	var accept = config.get_value("user_notice", "accept", false)
 	if accept:
