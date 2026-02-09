@@ -10,6 +10,10 @@ var frp_domain = ""
 
 func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	
+	multiplayer.connected_to_server.connect(func(): print("✅ 连接成功"))
+	multiplayer.connection_failed.connect(func(): print("❌ 连接失败"))
+	multiplayer.server_disconnected.connect(func(): print("⚠️ 服务器断开"))
 
 func _on_host_button_pressed():
 	# 主机端代码通常不需要修改，仍监听本地端口
