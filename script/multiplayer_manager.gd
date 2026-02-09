@@ -29,7 +29,7 @@ func _on_join_button_pressed():
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
 		print("正在连接到服务器: ", connection_string)
-		connected()
+		connected.rpc_id(1)
 	else:
 		print("连接失败，错误代码: ", error)
 
