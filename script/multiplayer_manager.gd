@@ -11,27 +11,25 @@ var frp_domain = ""
 func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	
-	multiplayer.connected_to_server.connect(func(): print("✅ 连接成功"))
-	multiplayer.connection_failed.connect(func(): print("❌ 连接失败"))
-	multiplayer.server_disconnected.connect(func(): print("⚠️ 服务器断开"))
+	multiplayer.connected_to_server.connect(func(): print("连接成功"))
+	multiplayer.connection_failed.connect(func(): print("连接失败"))
+	multiplayer.server_disconnected.connect(func(): print("服务器断开"))
 
 func _on_host_button_pressed():
 	# 主机端代码通常不需要修改，仍监听本地端口
-	var peer = WebSocketMultiplayerPeer.new()
+	var peer = ENetMultiplayerPeer.new()
 	# 注意：这里监听的端口是本地端口，需要与FRP隧道配置的“本地端口”一致
-	peer.create_server(local_port, "*")
+	peer.create_server(local_port, 20)
 	multiplayer.multiplayer_peer = peer
-	print("主机已启动，等待FRP隧道连接...")
+	print("主机已启动")
 
 func _on_join_button_pressed():
-	var peer = WebSocketMultiplayerPeer.new()
+	var peer = ENetMultiplayerPeer.new()
 	
-	# 使用 connect_to_url 并构建正确的 WebSocket URL
-	# 格式：wss://域名:端口
 	var connection_string = "wss://%s:%s" % [frp_domain, remote_port]
-	print("连接域名：", frp_domain)
+	print("连接IP：", frp_domain)
 	print("连接端口：", remote_port)
-	var error = peer.create_client(connection_string, TLSOptions.client_unsafe())
+	var error = peer.create_client(frp_domain, remote_port)
 	
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
@@ -40,8 +38,10 @@ func _on_join_button_pressed():
 		print("连接失败，错误代码: ", error)
 
 func _on_connected_to_server():
+	print("如果看见这条消息，那么应该还额外 print 一行消息表示 @rpc 函数被调用")
 	connected.rpc_id(1)
 
 @rpc("any_peer", "call_local", "reliable")
 func connected():
-	print("已连接")
+	print("已连接。这是远程调用的 @rpc 注解函数。你胜利了！")
+	
