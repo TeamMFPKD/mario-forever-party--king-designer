@@ -26,14 +26,13 @@ func _on_host_button_pressed():
 func _on_join_button_pressed():
 	var peer = ENetMultiplayerPeer.new()
 	
-	var connection_string = "wss://%s:%s" % [frp_domain, remote_port]
 	print("连接IP：", frp_domain)
 	print("连接端口：", remote_port)
 	var error = peer.create_client(frp_domain, remote_port)
 	
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
-		print("正在连接到服务器: ", connection_string)
+		print("正在连接到服务器: ", frp_domain)
 	else:
 		print("连接失败，错误代码: ", error)
 
@@ -41,7 +40,7 @@ func _on_connected_to_server():
 	print("如果看见这条消息，那么应该还额外 print 一行消息表示 @rpc 函数被调用")
 	connected.rpc()
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("any_peer")
 func connected():
 	print("已连接。这是远程调用的 @rpc 注解函数。你胜利了！")
 	
