@@ -8,6 +8,9 @@ var remote_port = 18857
 # Sakura Frp提供的域名
 var frp_domain = ""
 
+func _ready():
+	multiplayer.connected_to_server.connect(_on_connected_to_server)
+
 func _on_host_button_pressed():
 	# 主机端代码通常不需要修改，仍监听本地端口
 	var peer = WebSocketMultiplayerPeer.new()
@@ -29,9 +32,11 @@ func _on_join_button_pressed():
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
 		print("正在连接到服务器: ", connection_string)
-		connected.rpc_id(1)
 	else:
 		print("连接失败，错误代码: ", error)
+
+func _on_connected_to_server():
+	connected.rpc_id(1)
 
 @rpc("any_peer", "call_local", "reliable")
 func connected():
