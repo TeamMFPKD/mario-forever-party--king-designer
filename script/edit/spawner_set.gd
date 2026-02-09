@@ -20,10 +20,10 @@ func _ready() -> void:
 		if spawn_object_scene == null:
 			push_error("%s: Spawn object scene is null!" % self.name)
 		else:
-			spawn_object()
+			spawn()
 	create.call_deferred()
 	
-func spawn_object() -> void:
+func spawn() -> void:
 	var spawn_object = spawn_object_scene.instantiate() as Node2D
 	spawn_object.position = position + offset
 	add_sibling(spawn_object)

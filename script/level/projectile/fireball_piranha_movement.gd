@@ -10,7 +10,6 @@ func _ready() -> void:
 	super._ready()
 	
 	# 获取玩家位置
-	var player = get_tree().get_first_node_in_group("player") as Node2D
 	if player == null:
 		return
 	

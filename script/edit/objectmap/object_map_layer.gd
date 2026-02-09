@@ -89,24 +89,24 @@ func setup_input_handler():
 	else:
 		print("ObjectMapLayer: Error: Failed to find or create InputHandler")
 
-func _on_input_clicked(position: Vector2):
+func _on_input_clicked(input_pos: Vector2):
 	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
-		place_object_at_position(position, true)
+		place_object_at_position(input_pos, true)
 
 # 新增：处理拖拽事件
-func _on_input_dragged(position: Vector2):
+func _on_input_dragged(input_pos: Vector2):
 	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
 		# 将位置对齐到网格
-		var grid_position = align_to_grid(position)
+		var grid_position = align_to_grid(input_pos)
 		# 检查该网格位置是否已有对象
 		if not is_grid_position_occupied(grid_position):
-			place_object_at_position(position, false)
+			place_object_at_position(input_pos, false)
 
-func _on_input_released(position: Vector2):
+func _on_input_released(_input_pos: Vector2):
 	is_placing = false
 
 # 在指定位置放置对象
-func place_object_at_position(position: Vector2, check_duplicate: bool = true):
+func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 	if not database_holder or not database_holder.object_database or current_object_name == "":
 		return
 	
@@ -122,7 +122,7 @@ func place_object_at_position(position: Vector2, check_duplicate: bool = true):
 		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
 	
 	# 将位置对齐到32x32网格
-	var grid_position = align_to_grid(position)
+	var grid_position = align_to_grid(input_pos)
 	
 	# 检查该网格位置是否已有对象（仅在需要时检查）
 	if check_duplicate and is_grid_position_occupied(grid_position):
@@ -172,11 +172,11 @@ func stop_placing_object():
 	print("ObjectMapLayer: 停止放置对象")
 
 # 将位置对齐到32x32网格
-func align_to_grid(position: Vector2) -> Vector2:
+func align_to_grid(input_pos: Vector2) -> Vector2:
 	var grid_size = 32
 	return Vector2(
-		floor(position.x / grid_size) * grid_size + grid_size / 2,
-		floor(position.y / grid_size) * grid_size + grid_size / 2
+		floor(input_pos.x / grid_size) * grid_size + grid_size / 2,
+		floor(input_pos.y / grid_size) * grid_size + grid_size / 2
 	)
 
 # 检查网格位置是否已有对象
@@ -198,8 +198,8 @@ func find_object_by_name(object_name: String) -> ObjectDatabaseEntry:
 	return null
 
 # 移除指定位置的对象
-func remove_object_at_position(position: Vector2):
-	var grid_position = align_to_grid(position)
+func remove_object_at_position(input_pos: Vector2):
+	var grid_position = align_to_grid(input_pos)
 	var object_to_remove = null
 	
 	for object_data in objects:
@@ -220,8 +220,8 @@ func remove_object_at_position(position: Vector2):
 	return false
 
 # 获取指定位置的对象
-func get_object_at_position(position: Vector2) -> Dictionary:
-	var grid_position = align_to_grid(position)
+func get_object_at_position(input_pos: Vector2) -> Dictionary:
+	var grid_position = align_to_grid(input_pos)
 	for object_data in objects:
 		if object_data.has("position") and object_data["position"] == grid_position:
 			return object_data
@@ -268,9 +268,9 @@ func load_object_data(object_data: Array):
 	
 	for save_object in object_data:
 		var object_name = save_object["object_name"]
-		var position = Vector2(save_object["position"]["x"], save_object["position"]["y"])
+		var obj_position = Vector2(save_object["position"]["x"], save_object["position"]["y"])
 		
 		# 在数据库中查找对应的对象
 		if database_holder and database_holder.object_database:
 			current_object_name = object_name
-			place_object_at_position(position, true)
+			place_object_at_position(obj_position, true)

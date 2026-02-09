@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dcqf1c3m14b1f"]
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_n3h5q"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_rfq10"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_w52fc"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_xb41j"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
@@ -20,6 +21,8 @@ metadata/_edit_lock_ = true
 self_modulate = Color(0.9699662, 0.9699662, 0.9699662, 1)
 texture = ExtResource("1_n3h5q")
 metadata/_edit_lock_ = true
+
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_rfq10")]
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=907476062]
 layout_mode = 3

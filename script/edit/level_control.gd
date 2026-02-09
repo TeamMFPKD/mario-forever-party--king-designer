@@ -11,8 +11,8 @@ enum DrawingMode {
 # 信号
 signal drawing_mode_changed(mode: DrawingMode)
 signal object_selected(object_name: String)
-signal play_sound_place()
-signal play_sound_erase()
+signal play_sound_place
+signal play_sound_erase
 
 # 当前绘图模式
 var current_drawing_mode: DrawingMode = DrawingMode.TILEMAP

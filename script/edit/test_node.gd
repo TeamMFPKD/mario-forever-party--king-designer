@@ -15,7 +15,7 @@ enum TileSetNames {
 
 @export var level_data_node : LevelManager
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if (Input.is_key_pressed(KEY_1)):
 		level_data_node.level_theme = LevelManager.LevelThemeEnum.CASTLE
 	elif (Input.is_key_pressed(KEY_2)):

@@ -27,7 +27,7 @@ func _ready() -> void:
 		collision_layer = origin_collision_layer
 	fc.call_deferred()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	match edge_type:
 		EgdeType.LEFT:
 			global_position.x = level_camera.limit_left

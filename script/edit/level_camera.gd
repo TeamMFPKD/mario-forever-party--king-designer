@@ -4,7 +4,7 @@ class_name LevelCamera
 
 signal limit_changed(top: int, left: int, right: int, bottom: int)
 
-@export var max_speed : float = 16.0
+@export var max_speed : float = 960.0
 
 var speed : float = 0.0
 var direction := Vector2.ZERO
@@ -35,7 +35,7 @@ func _physics_process(delta: float) -> void:
 		direction += Vector2.RIGHT
 		speed = max_speed
 	direction = direction.normalized()
-	position += direction * speed
+	position += direction * speed * delta
 	speed = 0.0
 
 	position.x = clamp(position.x, limit_left + 320, limit_right - 320)
