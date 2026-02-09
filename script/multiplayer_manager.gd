@@ -21,7 +21,7 @@ func _on_host_button_pressed():
 	# 注意：这里监听的端口是本地端口，需要与FRP隧道配置的“本地端口”一致
 	peer.create_server(local_port, 20)
 	multiplayer.multiplayer_peer = peer
-	print("主机已启动")
+	print("主机已启动。")
 
 func _on_join_button_pressed():
 	var peer = ENetMultiplayerPeer.new()
@@ -40,7 +40,7 @@ func _on_connected_to_server():
 	print("如果看见这条消息，那么应该还额外 print 一行消息表示 @rpc 函数被调用")
 	connected.rpc()
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func connected():
 	print("已连接。这是远程调用的 @rpc 注解函数。你胜利了！")
 	
