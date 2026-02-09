@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dblna8s3hifnj"]
+
+[ext_resource type="Script" uid="uid://dsa414d2i5koe" path="res://script/control_visibie_set.gd" id="1_5y6f7"]
+
+[node name="ControlVisibieSet" type="Node" unique_id=1005411227]
+script = ExtResource("1_5y6f7")

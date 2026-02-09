@@ -7,6 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
 [ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/edit/title/user_notice.gd" id="4_ytxtj"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_qon3s"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="8_c2fru"]
+[ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="9_qon3g"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="9_ty11l"]
+[ext_resource type="Script" uid="uid://bt2b120wk6vxy" path="res://script/multiplayer/host_button.gd" id="10_qon3g"]
+[ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/join_button.gd" id="12_10dtl"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -71,12 +76,12 @@ layout_mode = 2
 size_flags_vertical = 13
 theme_override_constants/separation = 32
 
-[node name="HostButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
+[node name="ChooseHostButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Host"
 
-[node name="JoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+[node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Join"
@@ -172,3 +177,99 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
 text = "同意"
+
+[node name="HostPage" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("8_c2fru")]
+visible = false
+custom_minimum_size = Vector2(233, 233)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlVisibieSet" parent="GameRoomSize/HostPage" unique_id=1005411227 instance=ExtResource("9_ty11l")]
+
+[node name="MfpkdPanel" parent="GameRoomSize/HostPage" unique_id=404383076 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel" unique_id=1066164301]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UiLabel" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1390167794 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Local Port"
+
+[node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port") instance=ExtResource("2_w52fc")]
+layout_mode = 2
+text = "Host"
+script = ExtResource("10_qon3g")
+line_edit_local_port = NodePath("../UiLineEdit")
+
+[node name="JoinPage" parent="GameRoomSize" unique_id=1961076983 instance=ExtResource("8_c2fru")]
+visible = false
+custom_minimum_size = Vector2(300, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlVisibieSet" parent="GameRoomSize/JoinPage" unique_id=514177840 instance=ExtResource("9_ty11l")]
+
+[node name="MfpkdPanel" parent="GameRoomSize/JoinPage" unique_id=1427548671 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel" unique_id=429359202]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UiLabel" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1380680250 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "frp_domain"
+
+[node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Remote Port"
+
+[node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port") instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Join"
+script = ExtResource("12_10dtl")
+line_edit_frp_domain = NodePath("../UiLineEdit")
+line_edit_remote_port = NodePath("../UiLineEdit2")
+
+[connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
