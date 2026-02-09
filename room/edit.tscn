@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pxk7y"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_2mwga"]
-[ext_resource type="Script" uid="uid://c2i4x8ily25ki" path="res://script/bgm_start_play.gd" id="2_s2wk4"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_s2wk4"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="3_s2wk4"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="4_2mwga"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="4_e6mtu"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://object/edit/grid/grid_2d.tscn" id="13_nkg8u"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="14_qjgk7"]
 [ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="15_aiw0b"]
+[ext_resource type="Script" uid="uid://dp7m3qq26cs4g" path="res://script/edit/objectmap/sound_place_object.gd" id="15_e6mtu"]
 [ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="16_ifctp"]
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="17_kt6na"]
 [ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="18_4a1yi"]
@@ -247,8 +248,9 @@ self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
 texture = ExtResource("1_pxk7y")
 metadata/_edit_lock_ = true
 
-[node name="BgmStartPlay" type="Node" parent="." unique_id=2015665986]
-script = ExtResource("2_s2wk4")
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_s2wk4")]
+play = true
+sound_effect = true
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=294304425]
 layout_mode = 3
@@ -362,6 +364,7 @@ stream = ExtResource("11_3l15o")
 [node name="SoundPlaceObject" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=1146168323]
 stream = ExtResource("12_8ebhj")
 volume_db = -15.0
+script = ExtResource("15_e6mtu")
 
 [node name="Grid2d" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1266480464 instance=ExtResource("13_nkg8u")]
 process_mode = 4
@@ -1553,7 +1556,6 @@ texture = ExtResource("81_cfmm2")
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
 [connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
-[connection signal="play_sound_place" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundPlaceObject" method="play"]
 
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight"]

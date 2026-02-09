@@ -11,6 +11,7 @@ region = Rect2(0, 64, 448, 32)
 size = Vector2(64, 32)
 
 [node name="PipeVerticalMiddle" type="StaticBody2D" unique_id=1712484775]
+z_index = 5
 collision_mask = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=715546289]

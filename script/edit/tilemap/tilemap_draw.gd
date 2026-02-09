@@ -60,18 +60,18 @@ func setup_input_handler():
 	else:
 		print("TileMapDraw: Error: Failed to find or create InputHandler")
 
-func _on_input_clicked(position: Vector2):
+func _on_input_clicked(input_pos: Vector2):
 	if drawing_enabled and tile_map:
 		# 点击时开始绘图
 		is_drawing = true
-		place_tile_at_cursor(position)
+		place_tile_at_cursor(input_pos)
 
-func _on_input_released(position: Vector2):
+func _on_input_released(_input_pos: Vector2):
 	is_drawing = false
 
-func _on_input_dragged(position: Vector2):
+func _on_input_dragged(input_pos: Vector2):
 	if drawing_enabled and is_drawing and tile_map:
-		place_tile_at_cursor(position)
+		place_tile_at_cursor(input_pos)
 
 # 设置绘图启用状态
 func set_drawing_enabled(enabled: bool):
@@ -157,14 +157,14 @@ func emit_erase_sound():
 				break
 
 # 在橡皮擦模式下调用LevelControl的擦除功能
-func call_level_control_erase(position: Vector2):
+func call_level_control_erase(input_pos: Vector2):
 	# 获取LevelControl节点
 	var level_node = get_parent().get_parent()  # 获取Level节点
 	if level_node:
 		for child in level_node.get_children():
 			if child is LevelControl:
 				# 调用LevelControl的擦除方法
-				child.erase_at_position(position)
+				child.erase_at_position(input_pos)
 				break
 
 # 设置画笔模式（true为绘制，false为擦除）
@@ -176,12 +176,12 @@ func get_brush_mode() -> bool:
 	return brush_mode
 
 # 橡皮擦功能：在指定位置擦除瓦片
-func erase_tile_at_position(position: Vector2):
+func erase_tile_at_position(input_pos: Vector2):
 	if not tile_map:
 		return
 	
 	# 将世界坐标转换为本地坐标
-	var local_pos = to_local(position)
+	var local_pos = to_local(input_pos)
 	
 	# 获取单元格坐标
 	var cell_size = tile_map.tile_set.tile_size
