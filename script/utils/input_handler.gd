@@ -25,7 +25,7 @@ func _ready():
 	# 启用_process函数
 	set_process(true)
 
-func _process(delta):
+func _process(_delta):
 	# 注释掉_process函数中的鼠标事件处理，只让_input函数处理
 	# 这样可以避免重复处理鼠标事件
 	pass
