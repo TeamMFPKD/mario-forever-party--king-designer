@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvu45nym5l6oi"]
 
-[node name="MfpkdButton" type="Button" unique_id=1210628054]
+[node name="UiButton" type="Button" unique_id=1210628054]
 offset_right = 300.0
 offset_bottom = 140.0
 theme_override_font_sizes/font_size = 50
