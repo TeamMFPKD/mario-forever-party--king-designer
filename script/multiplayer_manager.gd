@@ -39,7 +39,7 @@ func _on_join_button_pressed():
 
 func _on_connected_to_server():
 	print("如果看见这条消息，那么应该还额外 print 一行消息表示 @rpc 函数被调用")
-	connected.rpc_id(1)
+	connected.rpc()
 
 @rpc("any_peer", "call_local", "reliable")
 func connected():
