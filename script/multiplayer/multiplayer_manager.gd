@@ -4,6 +4,8 @@ class_name MultiplayerManager
 
 signal players_updated
 
+signal timeout_save
+
 var local_port
 # 端口使用Sakura Frp隧道配置的远程端口
 var remote_port
@@ -15,6 +17,7 @@ var game_start_time : String
 
 # 玩家列表，仅由主机(host)保持权威
 var players = []
+
 
 func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
@@ -158,3 +161,7 @@ func disconnect_and_cleanup():
 		players = []
 		emit_signal("players_updated")
 		multiplayer.multiplayer_peer = null
+
+@rpc("authority")
+func edit_time_out():
+	emit_signal("timeout_save")
