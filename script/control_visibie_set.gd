@@ -1,5 +1,7 @@
 extends Node
 
+class_name ControlVisibieSet
+
 @export var path_to_control: NodePath = ".."
 
 var control : Control
