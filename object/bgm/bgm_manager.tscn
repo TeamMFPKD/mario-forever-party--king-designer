@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0q6mkcb2qes6"]
 
-[ext_resource type="Script" uid="uid://c2i4x8ily25ki" path="res://script/bgm_manager.gd" id="1_arp2s"]
+[ext_resource type="Script" uid="uid://c2i4x8ily25ki" path="res://script/bgm/bgm_manager.gd" id="1_arp2s"]
 
 [node name="BgmManager" type="Node" unique_id=1532458801]
 script = ExtResource("1_arp2s")

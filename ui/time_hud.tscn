@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://c3rvw6a2ucku8"]
+
+[ext_resource type="Script" uid="uid://beswresvmlchb" path="res://script/multiplayer/time_manager.gd" id="1_tlac8"]
+
+[node name="TimeHUD" type="MarginContainer" unique_id=277085813]
+custom_minimum_size = Vector2(233, 233)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="TimeManager" type="Node" parent="." unique_id=2060332455 node_paths=PackedStringArray("left_time_label")]
+script = ExtResource("1_tlac8")
+left_time_label = NodePath("../EditTimeLabel")
+
+[node name="EditTimeLabel" type="Label" parent="." unique_id=1584602101]
+layout_mode = 2
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 120
+text = "20"
+horizontal_alignment = 1

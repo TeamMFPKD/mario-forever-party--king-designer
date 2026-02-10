@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_aqvbr"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_pei5v"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="3_aqvbr"]
+[ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="4_aqvbr"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="4_d6wjp"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="5_dhd6j"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="6_2q1y6"]
@@ -46,6 +47,11 @@ offset_right = 960.0
 offset_bottom = 1504.0
 script = ExtResource("2_pei5v")
 metadata/_edit_lock_ = true
+
+[node name="TimeHUD" parent="GameRoomSize" unique_id=277085813 instance=ExtResource("4_aqvbr")]
+layout_mode = 1
+offset_left = -233.0
+offset_bottom = 233.0
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1823801948]
 layout_mode = 1
