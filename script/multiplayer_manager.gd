@@ -112,10 +112,14 @@ func _on_peer_disconnected(id: int):
 		if players.size() > 0:
 			sync_players_list.rpc(players)
 
-# 服务器通知所有客户端服务器即将关闭
+# 服务器通知所有客户端退出房间
 @rpc("authority", "call_local")
 func server_closing():
 	print("服务器即将关闭")
+	# 隐藏 PlayerPage
+	var player_page = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
+	if player_page:
+		player_page.visible = false
 	players = []
 	emit_signal("players_updated")
 	# 断开连接
@@ -145,6 +149,10 @@ func disconnect_and_cleanup():
 		server_closing.rpc()
 	else:
 		# 客户端：直接断开连接，服务器会通过 peer_disconnected 信号检测
+		# 隐藏 PlayerPage
+		var player_page = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
+		if player_page:
+			player_page.visible = false
 		players = []
 		emit_signal("players_updated")
 		multiplayer.multiplayer_peer = null
