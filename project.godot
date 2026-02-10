@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="MFP: KD"
+config/name="MF: MP"
 run/main_scene="uid://dcqf1c3m14b1f"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(1, 1, 1, 1)
@@ -36,11 +36,14 @@ GameModeSingleton="*uid://upwad5v53gmk"
 GameConfig="*uid://b6yskt8kgoy66"
 Bgm="*uid://cwjqbk83qtebh"
 MPManager="*uid://ia0dcltb3dx"
+TimerSingleton="*uid://brm0gqby8wbjk"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+mouse_cursor/custom_image="uid://4t4j1ek037hr"
+mouse_cursor/custom_image_hotspot=Vector2(25, 25)
 
 [dotnet]
 

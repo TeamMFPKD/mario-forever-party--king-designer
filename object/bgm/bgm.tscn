@@ -16,7 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://b181riwtwlidc" path="res://sound/bgm/Sirens.ogg" id="14_05y1c"]
 [ext_resource type="AudioStream" uid="uid://bjud6dilnmldy" path="res://sound/bgm/Syndrome Land.ogg" id="15_cxls7"]
 [ext_resource type="AudioStream" uid="uid://cehig68xst50y" path="res://sound/bgm/Technique.ogg" id="16_4jxnl"]
-[ext_resource type="Script" uid="uid://drlyvma4elabu" path="res://script/bgm.gd" id="17_yl062"]
+[ext_resource type="Script" uid="uid://drlyvma4elabu" path="res://script/bgm/bgm.gd" id="17_yl062"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fkteh"]
 streams_count = 16
@@ -38,6 +38,7 @@ stream_14/stream = ExtResource("7_02ctm")
 stream_15/stream = ExtResource("8_5egbl")
 
 [node name="Bgm" type="AudioStreamPlayer" unique_id=1026487401 groups=["bgm"]]
+process_mode = 3
 stream = SubResource("AudioStreamRandomizer_fkteh")
 bus = &"Edit"
 script = ExtResource("17_yl062")

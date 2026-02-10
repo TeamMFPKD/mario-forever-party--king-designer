@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="3_s2wk4"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="4_2mwga"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="4_e6mtu"]
+[ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="4_iq0jw"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="5_iq0jw"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="6_0b6sj"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="7_io5w1"]
@@ -261,6 +262,11 @@ offset_right = 960.0
 offset_bottom = 1504.0
 script = ExtResource("2_2mwga")
 metadata/_edit_lock_ = true
+
+[node name="TimeHUD" parent="GameRoomSize" unique_id=277085813 instance=ExtResource("4_iq0jw")]
+layout_mode = 1
+offset_left = -233.0
+offset_bottom = 233.0
 
 [node name="SaveLoadTest" type="MarginContainer" parent="GameRoomSize" unique_id=773497609]
 layout_mode = 0

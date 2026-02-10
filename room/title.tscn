@@ -6,7 +6,9 @@
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_xb41j"]
 [ext_resource type="AudioStream" uid="uid://dk6rr4yflbxpu" path="res://sound/bgm/title/ktkm-smm_title_screen.wav" id="3_yt56b"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
-[ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/edit/title/user_notice.gd" id="4_ytxtj"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_ikv4w"]
+[ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/title/user_notice.gd" id="4_ytxtj"]
+[ext_resource type="Script" uid="uid://62e2gryab40o" path="res://script/title/game_start.gd" id="5_estsl"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_qon3s"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="8_c2fru"]
 [ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="9_qon3g"]
@@ -35,6 +37,13 @@ metadata/_edit_lock_ = true
 
 [node name="TitleScreenBGM" type="AudioStreamPlayer" parent="." unique_id=1820936535]
 stream = ExtResource("3_yt56b")
+
+[node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
+script = ExtResource("4_ikv4w")
+scene_uid = &"uid://bnx7r3slvtcdt"
+
+[node name="GameStart" type="Node" parent="." unique_id=2019232837]
+script = ExtResource("5_estsl")
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=907476062]
 layout_mode = 3
