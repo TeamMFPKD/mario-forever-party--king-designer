@@ -2,5 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dsa414d2i5koe" path="res://script/control_visibie_set.gd" id="1_5y6f7"]
 
-[node name="ControlVisibieSet" type="Node" unique_id=1005411227]
+[node name="ControlVisibieSet" type="Node" unique_id=416177451]
 script = ExtResource("1_5y6f7")
+metadata/_custom_type_script = "uid://dsa414d2i5koe"
