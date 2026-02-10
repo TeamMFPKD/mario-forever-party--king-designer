@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/join_button.gd" id="12_10dtl"]
 [ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/player_list.tscn" id="14_w38mm"]
 [ext_resource type="Script" uid="uid://jhsrnvitnnhq" path="res://script/multiplayer/player_list.gd" id="14_wpraw"]
+[ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -301,6 +302,7 @@ line_edit_player_name = NodePath("../UiLineEdit3")
 player_page = NodePath("../../../../PlayerPage")
 
 [node name="PlayerPage" parent="GameRoomSize" unique_id=697609342 instance=ExtResource("8_c2fru")]
+visible = false
 custom_minimum_size = Vector2(1000, 800)
 layout_mode = 1
 anchors_preset = 8
@@ -356,6 +358,7 @@ theme_override_constants/separation = 48
 layout_mode = 2
 size_flags_horizontal = 3
 text = "退出"
+script = ExtResource("16_jc0wi")
 
 [node name="StartButton" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=336795668 instance=ExtResource("2_w52fc")]
 layout_mode = 2
