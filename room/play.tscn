@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_aqvbr"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_pei5v"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="3_aqvbr"]
+[ext_resource type="Script" uid="uid://bbclvf51lqvk3" path="res://script/multiplayer/timeout_manager.gd" id="3_d6wjp"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="4_aqvbr"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="4_d6wjp"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="5_dhd6j"]
@@ -37,6 +38,9 @@ metadata/_edit_lock_ = true
 
 [node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_aqvbr")]
 play = true
+
+[node name="TimeoutManager" type="Node" parent="." unique_id=39996069]
+script = ExtResource("3_d6wjp")
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=1663788830]
 layout_mode = 3
@@ -151,4 +155,5 @@ script = ExtResource("18_e5c0k")
 room_scene_uid = "uid://bnx7r3slvtcdt"
 target_mode = 0
 
+[connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]

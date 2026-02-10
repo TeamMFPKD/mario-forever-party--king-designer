@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pxk7y"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_2mwga"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_s2wk4"]
+[ext_resource type="Script" uid="uid://bbclvf51lqvk3" path="res://script/multiplayer/timeout_manager.gd" id="3_0b6sj"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="3_s2wk4"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="4_2mwga"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="4_e6mtu"]
@@ -252,6 +253,9 @@ metadata/_edit_lock_ = true
 [node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_s2wk4")]
 play = true
 sound_effect = true
+
+[node name="TimeoutManager" type="Node" parent="." unique_id=963214289]
+script = ExtResource("3_0b6sj")
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=294304425]
 layout_mode = 3
@@ -1559,6 +1563,7 @@ item_type = 2
 scale = Vector2(7, 7)
 texture = ExtResource("81_cfmm2")
 
+[connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]

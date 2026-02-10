@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://brg4yepawdra3"]
+
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_jsr1u"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_hyiui"]
+
+[node name="LevelTransferRoom" type="Node2D" unique_id=574478413]
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=770956218]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=1631019384]
+self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
+texture = ExtResource("1_jsr1u")
+metadata/_edit_lock_ = true
+
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_hyiui")]
+play = true
+sound_effect = true
