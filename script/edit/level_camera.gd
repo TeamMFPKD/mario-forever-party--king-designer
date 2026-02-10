@@ -15,6 +15,8 @@ func _physics_process(delta: float) -> void:
 	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT:
 		if not player:
 			player = get_tree().get_first_node_in_group("player")
+			if not player:
+				return
 			position = player.position
 			reset_physics_interpolation()
 			return

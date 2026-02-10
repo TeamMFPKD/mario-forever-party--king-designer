@@ -11,6 +11,8 @@ var remote_port
 var frp_domain = ""
 var player_name = ""
 
+var game_start_time : String
+
 # 玩家列表，仅由主机(host)保持权威
 var players = []
 
