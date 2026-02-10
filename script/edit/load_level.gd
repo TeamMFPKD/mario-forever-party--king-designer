@@ -2,13 +2,18 @@ extends Node
 
 @export var level_data_node: LevelManager
 
-var file_name: String = "user://mfp_kd_"
+var file_name: String = "user://mfmp_"
 var date_time: String = "datetime"
 var author: String = "author"
 
 func _ready() -> void:
+	if MPManager:
+		date_time = MPManager.game_start_time
+		var unique_id = OS.get_unique_id()
+		unique_id = unique_id.replace("{", "")
+		unique_id = unique_id.substr(0, 5)
+		author = MPManager.player_name + "_" + unique_id
 	file_name += date_time + "_" + author + ".lvl"
-	print("User data path: ", OS.get_user_data_dir())
 
 func _on_load_button_pressed() -> void:
 	var content = load_from_level()
@@ -19,7 +24,7 @@ func _on_load_button_pressed() -> void:
 func load_from_level() -> String:
 	var file = FileAccess.open(file_name, FileAccess.READ)
 	if not file:
-		print("Failed to open file or this is a new file.")
+		push_error("Failed to open file or this is a new file.")
 		return ""
 	var content = file.get_as_text()
 	file.close()
