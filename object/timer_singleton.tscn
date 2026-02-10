@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://brm0gqby8wbjk"]
 
 [node name="TimerSingleton" type="Timer" unique_id=804940795]
-wait_time = 10.0
+wait_time = 6.0
 one_shot = true
 ignore_time_scale = true

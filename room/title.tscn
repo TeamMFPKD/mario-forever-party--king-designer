@@ -375,8 +375,10 @@ size_flags_horizontal = 3
 text = "开始"
 
 [connection signal="finished" from="TitleScreenBGM" to="TitleScreenBGM" method="play"]
+[connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
