@@ -17,6 +17,7 @@ var players = []
 func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.peer_connected.connect(_on_peer_connected)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
 	multiplayer.connected_to_server.connect(func(): print("连接成功"))
 	multiplayer.connection_failed.connect(func(): print("连接失败"))
@@ -95,3 +96,55 @@ func _on_peer_connected(id: int):
 	# 当有新对等体连接时，如果是主机，不需要额外处理
 	# 因为 register_player_on_host 已经处理了逻辑
 	pass
+
+func _on_peer_disconnected(id: int):
+	# 当对等体断开连接时
+	if multiplayer.is_server():
+		# 服务器：从 players 列表中移除离开的玩家
+		for i in range(players.size()):
+			if players[i].id == id:
+				players.remove_at(i)
+				break
+		
+		emit_signal("players_updated")
+		print("玩家 ", id, " 已离开")
+		# 通知其他客户端更新玩家列表
+		if players.size() > 0:
+			sync_players_list.rpc(players)
+
+# 服务器通知所有客户端服务器即将关闭
+@rpc("authority", "call_local")
+func server_closing():
+	print("服务器即将关闭")
+	players = []
+	emit_signal("players_updated")
+	# 断开连接
+	multiplayer.multiplayer_peer = null
+
+# 客户端通知服务器自己即将离开
+@rpc("any_peer", "call_remote")
+func client_leaving(player_id: int):
+	if not multiplayer.is_server():
+		return
+	
+	# 从 players 列表中移除离开的玩家
+	for i in range(players.size()):
+		if players[i].id == player_id:
+			players.remove_at(i)
+			break
+	
+	emit_signal("players_updated")
+	print("玩家 ", player_id, " 已离开")
+	# 通知其他客户端更新玩家列表
+	sync_players_list.rpc(players)
+
+# 断开连接并清理
+func disconnect_and_cleanup():
+	if multiplayer.is_server():
+		# 服务器：通知所有客户端（包括自己）
+		server_closing.rpc()
+	else:
+		# 客户端：直接断开连接，服务器会通过 peer_disconnected 信号检测
+		players = []
+		emit_signal("players_updated")
+		multiplayer.multiplayer_peer = null
