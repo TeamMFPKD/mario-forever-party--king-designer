@@ -265,7 +265,7 @@ metadata/_edit_lock_ = true
 [node name="SaveLoadTest" type="MarginContainer" parent="GameRoomSize" unique_id=773497609]
 layout_mode = 0
 offset_right = 216.0
-offset_bottom = 316.0
+offset_bottom = 116.0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -275,6 +275,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" unique_id=1483234204]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 15
@@ -284,6 +285,7 @@ script = ExtResource("3_s2wk4")
 metadata/_edit_lock_ = true
 
 [node name="LoadButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" unique_id=2104197841]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 15

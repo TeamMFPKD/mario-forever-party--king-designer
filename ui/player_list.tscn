@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dljhnfo0n1vo4"]
+
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
+
+[node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
+custom_minimum_size = Vector2(1000, 0)
+
+[node name="PlayerIdLabel" parent="." unique_id=1008498644 instance=ExtResource("1_nfru4")]
+layout_mode = 2
+
+[node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_nfru4")]
+layout_mode = 2
