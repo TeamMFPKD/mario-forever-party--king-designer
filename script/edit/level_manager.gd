@@ -31,7 +31,8 @@ enum LevelThemeEnum {
 
 @export var tile_data: PackedByteArray
 
-@export var clear_rate: float = -1
+@export var pass_count: int = 0
+@export var death_count: int = 0
 
 @export_category("References")
 @export var level_camera: LevelCamera
@@ -69,7 +70,8 @@ func get_level_data_json() -> String:
 		"level_size": level_size,
 		"tilemap_data": tile_data as Array,
 		"object_data": object_data,
-		"clear_rate": clear_rate,
+		"pass_count": pass_count,
+		"death_count": death_count,
 	}
 	
 	var level_data_json = JSON.stringify(level_data_dict, "")
@@ -96,7 +98,8 @@ func load_level_data_from_json(level_data_json: String) -> void:
 
 	level_theme = level_data_dict.get("level_theme", LevelThemeEnum.OVERWORLD)
 
-	clear_rate = level_data_dict.get("clear_rate", -1)
+	pass_count = level_data_dict.get("pass_count", 0)
+	death_count = level_data_dict.get("death_count", 0)
 	
 	# 加载瓦片数据
 	var tile_data_array = level_data_dict.get("tilemap_data", [])

@@ -73,7 +73,8 @@ func _on_player_die() -> void:
 	dead.position = player.position
 	player.add_sibling(dead)
 
-	emit_signal("play_sound_die")
+	if is_inside_tree():
+		emit_signal("play_sound_die")
 	
 	player.visible = false
 	player.process_mode = ProcessMode.PROCESS_MODE_DISABLED

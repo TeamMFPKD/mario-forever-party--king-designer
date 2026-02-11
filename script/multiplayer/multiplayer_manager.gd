@@ -23,6 +23,7 @@ var current_level_count : int = 0
 
 var total_levels : int = 0
 
+var level_results
 
 
 # 自己的玩家信息
@@ -32,7 +33,9 @@ var player = {
 	"level_file_name": "invalid",
 	"level_data": "invalid",
 	"ready": false,
-	"score": 0,
+	"reach_end": false,
+	"level_cause_pass": 0,
+	"level_cause_death": 0,
 }
 
 
@@ -204,6 +207,14 @@ func my_players_data_are_ready(player_id: int) -> void:
 @rpc("authority", "call_local")
 func lets_play_together(rnd_levels: Array) -> void:
 	self.random_levels = rnd_levels
+	if multiplayer.is_server():
+		level_results = []
+		for level in rnd_levels:
+			level_results.append({
+				"level": level,
+				"pass_count": 0,
+				"death_count": 0,
+			})
 	current_level_count = 0
 	total_levels = rnd_levels.size()
 	var game_mode = GameModeSingleton
@@ -211,3 +222,33 @@ func lets_play_together(rnd_levels: Array) -> void:
 	var fc = func():
 		get_tree().change_scene_to_file("uid://cxvueju65b3qv")
 	fc.call_deferred()
+
+@rpc("any_peer", "call_local")
+func level_add_pass_count(level, passed : bool) -> void:
+	if not multiplayer.is_server():
+		return
+	for level_result in level_results:
+		if level_result["level"] != level:
+			continue
+		if passed:
+			level_result["pass_count"] += 1
+		else:
+			level_result["death_count"] += 1
+
+		for p in players:
+			if p["level_file_name"] == level:
+				p["level_cause_pass"] = level_result["pass_count"]
+				p["level_cause_death"] = level_result["death_count"]
+				return
+		push_error("关卡不存在：", level)
+
+@rpc("any_peer", "call_local")
+func reach_end(player_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	for p in players:
+		if p.id == player_id:
+			p.reach_end = true
+			print("玩家 ", player_id, " 已经玩过了所有关卡！")
+			break
+	
