@@ -25,7 +25,10 @@ func load_from_level() -> String:
 	var file = FileAccess.open(file_name, FileAccess.READ)
 	if not file:
 		push_error("Failed to open file or this is a new file.")
-		return ""
+		var err = FileAccess.get_open_error()
+		if err != OK:
+			print("Error loading file:", err)
+			return ""
 	var content = file.get_as_text()
 	file.close()
 	return content

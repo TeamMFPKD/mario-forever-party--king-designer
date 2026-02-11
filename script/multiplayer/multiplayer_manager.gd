@@ -15,8 +15,18 @@ var player_name = ""
 
 var game_start_time : String
 
-# 玩家列表，仅由主机(host)保持权威
+# 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []
+
+# 自己的玩家信息
+var player = {
+	"id": "invalid",
+	"name": "invalid",
+	"level_file_name": "invalid",
+	"level_data": "invalid",
+	"ready": false,
+	"score": 0,
+}
 
 
 func _ready():
@@ -34,10 +44,10 @@ func _on_host_button_pressed():
 	# 注意：这里监听的端口是本地端口，需要与FRP隧道配置的"本地端口"一致
 	peer.create_server(local_port, 20)
 	multiplayer.multiplayer_peer = peer
-	var player = {
-		"id": multiplayer.get_unique_id(),
-		"name": player_name
-	}
+
+	player.id = multiplayer.get_unique_id()
+	player.name = player_name
+
 	players.append(player)
 	emit_signal("players_updated")
 	print("主机已启动。")
@@ -62,10 +72,8 @@ func _on_join_button_pressed():
 
 func _on_connected_to_server():
 	# 客户端连接成功后，向主机发送自己的玩家信息
-	var player = {
-		"id": multiplayer.get_unique_id(),
-		"name": player_name
-	}
+	player.id = multiplayer.get_unique_id()
+	player.name = player_name
 	# 仅向主机发送加入请求
 	register_player_on_host.rpc_id(1, player)
 
@@ -165,3 +173,23 @@ func disconnect_and_cleanup():
 @rpc("authority")
 func edit_time_out():
 	emit_signal("timeout_save")
+
+@rpc("any_peer", "call_local")
+func transfer_level_data(player_id: int, level_file_name: String, level_data: String) -> void:
+	for p in players:
+		if p.id == player_id:
+			p.level_file_name = level_file_name
+			p.level_data = level_data
+			if p.id == player.id:
+				print("已将自己的关卡数据加入玩家列表数据")
+			else:
+				print("已接收玩家 ", player_id, " 的关卡数据")
+			break
+
+@rpc("any_peer", "call_local")
+func my_players_data_are_ready(player_id: int) -> void:
+	for p in players:
+		if p.id == player_id:
+			p.ready = true
+			print("玩家 ", player_id, " 已准备就绪")
+			break
