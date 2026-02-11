@@ -7,5 +7,18 @@ func _ready():
 
 func lets_play_together():
 	print("Lets play together")
+	var levels = []
+	for player in multiplayer_manager.players:
+		levels.append(player.level_file_name)
 	
-	multiplayer_manager.lets_play_together.rpc()
+	# 随机选择功能
+	var random_levels = levels.duplicate()
+	random_levels.shuffle()
+	
+	# 显示编号结果
+	print("随机选择结果：")
+	for i in range(random_levels.size()):
+		print(str(i) + " " + random_levels[i])
+	
+	multiplayer_manager.lets_play_together.rpc(random_levels)
+	

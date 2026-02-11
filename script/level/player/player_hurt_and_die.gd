@@ -21,10 +21,15 @@ var level_camera: Camera2D
 var invincible : bool
 var invincible_starman : bool
 
+var game_timer : Timer
+
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
+	game_timer = get_tree().get_first_node_in_group("game_timer") as Timer
+	if game_timer:
+		game_timer.timeout.connect(_on_player_die)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	#var screen =  ScreenUtils.get_screen_rect(self)
 	#if player.position.y > screen.position.y + screen.size.y + 32:
 		#_on_player_die()
@@ -42,7 +47,8 @@ func _physics_process(delta: float) -> void:
 			is_hurting = false
 
 	if is_dead:
-		# TODO: 死亡 => 下一关
+		# 死亡 => 返回 Edit / 下一关
+		# 见玩家尸体
 		pass
 
 func _on_player_hurt() -> void:

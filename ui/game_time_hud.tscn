@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://ctl8t18mclmft"]
+
+[ext_resource type="Script" uid="uid://drp4bg6no30k1" path="res://script/level/game_time_manager.gd" id="1_5vd2n"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="1_pxo1b"]
+
+[node name="GameTimeHUD" type="MarginContainer" unique_id=277085813]
+visible = false
+custom_minimum_size = Vector2(233, 233)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="ControlVisibieSet" parent="." unique_id=416177451 instance=ExtResource("1_pxo1b")]
+
+[node name="GameTimeManager" type="Node" parent="." unique_id=2060332455 node_paths=PackedStringArray("game_timer", "game_time_label")]
+script = ExtResource("1_5vd2n")
+game_timer = NodePath("../GameTimer")
+game_time_label = NodePath("../EditTimeLabel")
+
+[node name="EditTimeLabel" type="Label" parent="." unique_id=1584602101]
+layout_mode = 2
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 120
+text = "30"
+horizontal_alignment = 1
+
+[node name="GameTimer" type="Timer" parent="." unique_id=1795664682 groups=["game_timer"]]
+wait_time = 30.0
+one_shot = true
+ignore_time_scale = true
+
+[connection signal="game_time_hud_visible" from="GameTimeManager" to="ControlVisibieSet" method="_set_visible"]
