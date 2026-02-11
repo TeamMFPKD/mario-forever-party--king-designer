@@ -18,6 +18,19 @@
 [ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/player_list.tscn" id="14_w38mm"]
 [ext_resource type="Script" uid="uid://jhsrnvitnnhq" path="res://script/multiplayer/player_list.gd" id="14_wpraw"]
 [ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]
+[ext_resource type="Texture2D" uid="uid://dyhmu8daj54iy" path="res://mf_cn_community.png" id="19_rm4w4"]
+
+[sub_resource type="GDScript" id="GDScript_rm4w4"]
+script/source = "extends TextureButton
+
+func _ready() -> void:
+	pressed.connect(_on_button_pressed)
+	
+func _on_button_pressed():
+	# Mario Forever 社区
+	OS.shell_open(\"https://www.marioforever.net/\")
+	
+"
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -52,6 +65,7 @@ offset_left = -960.0
 offset_top = -540.0
 offset_right = 960.0
 offset_bottom = 540.0
+mouse_filter = 1
 script = ExtResource("3_xb41j")
 metadata/_edit_lock_ = true
 
@@ -376,6 +390,29 @@ script = ExtResource("16_jc0wi")
 layout_mode = 2
 size_flags_horizontal = 3
 text = "开始"
+
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1334669133 instance=ExtResource("8_c2fru")]
+custom_minimum_size = Vector2(300, 200)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="TextureButton" type="TextureButton" parent="GameRoomSize/UiMarginContainer" unique_id=846202464]
+layout_mode = 2
+size_flags_vertical = 8
+texture_normal = ExtResource("19_rm4w4")
+script = SubResource("GDScript_rm4w4")
 
 [connection signal="finished" from="TitleScreenBGM" to="TitleScreenBGM" method="play"]
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]

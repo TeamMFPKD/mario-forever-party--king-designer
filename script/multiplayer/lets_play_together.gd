@@ -7,5 +7,5 @@ func _ready():
 
 func lets_play_together():
 	print("Lets play together")
-	# TODO: Implement
-	pass
+	
+	multiplayer_manager.lets_play_together.rpc()

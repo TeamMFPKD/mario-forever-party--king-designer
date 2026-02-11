@@ -193,3 +193,11 @@ func my_players_data_are_ready(player_id: int) -> void:
 			p.ready = true
 			print("玩家 ", player_id, " 已准备就绪")
 			break
+
+@rpc("authority", "call_local")
+func lets_play_together() -> void:
+	var game_mode = GameModeSingleton
+	game_mode.game_mode = GameModeSingleton.GameModeType.PLAY
+	var fc = func():
+		get_tree().change_scene_to_file("uid://cxvueju65b3qv")
+	fc.call_deferred()
