@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://d2gdfdrdu0t5e" path="res://script/multiplayer/lets_play_together.gd" id="5_u7vct"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="6_4tcn6"]
 [ext_resource type="Script" uid="uid://qpl1v6jjqf6e" path="res://script/multiplayer/force_continue_timer.gd" id="7_f0tgy"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="7_xgwxn"]
 
 [node name="LevelTransferRoom" type="Node2D" unique_id=574478413]
 
@@ -47,6 +48,22 @@ offset_right = 960.0
 offset_bottom = 540.0
 script = ExtResource("3_1m5ex")
 metadata/_edit_lock_ = true
+
+[node name="UiLabel" parent="GameRoomSize" unique_id=1008498644 instance=ExtResource("7_xgwxn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -259.5
+offset_top = -31.5
+offset_right = 259.5
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "传输 / 接收关卡数据中……"
+horizontal_alignment = 1
 
 [node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("4_4tcn6")]
 visible = false
