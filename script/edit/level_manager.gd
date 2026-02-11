@@ -46,7 +46,7 @@ func _ready() -> void:
 	#if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
 	#or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.EDIT:
 	var timer_singleton = get_tree().get_first_node_in_group("timer_singleton") as Timer
-	time_used = timer_singleton.wait_time
+	time_used = int(timer_singleton.wait_time)
 	emit_signal("load_level")
 	update_theme()
 

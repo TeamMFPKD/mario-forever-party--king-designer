@@ -8,11 +8,15 @@ var author: String = "author"
 
 func _ready() -> void:
 	if MPManager:
-		date_time = MPManager.game_start_time
-		var unique_id = OS.get_unique_id()
-		unique_id = unique_id.replace("{", "")
-		unique_id = unique_id.substr(0, 5)
-		author = MPManager.player_name + "_" + unique_id
+		if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:
+			date_time = MPManager.game_start_time
+			var unique_id = OS.get_unique_id()
+			unique_id = unique_id.replace("{", "")
+			unique_id = unique_id.substr(0, 5)
+			author = MPManager.player_name + "_" + unique_id
+		else:
+			file_name = MPManager.random_levels[MPManager.current_level_count]
+			return
 	file_name += date_time + "_" + author + ".lvl"
 
 func _on_load_button_pressed() -> void:

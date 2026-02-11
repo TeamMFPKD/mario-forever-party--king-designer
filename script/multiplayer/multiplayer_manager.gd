@@ -18,6 +18,13 @@ var game_start_time : String
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []
 
+var random_levels = []
+var current_level_count : int = 0
+
+var total_levels : int = 0
+
+
+
 # 自己的玩家信息
 var player = {
 	"id": "invalid",
@@ -195,7 +202,10 @@ func my_players_data_are_ready(player_id: int) -> void:
 			break
 
 @rpc("authority", "call_local")
-func lets_play_together() -> void:
+func lets_play_together(rnd_levels: Array) -> void:
+	self.random_levels = rnd_levels
+	current_level_count = 0
+	total_levels = rnd_levels.size()
 	var game_mode = GameModeSingleton
 	game_mode.game_mode = GameModeSingleton.GameModeType.PLAY
 	var fc = func():
