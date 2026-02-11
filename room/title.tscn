@@ -71,6 +71,7 @@ metadata/_edit_lock_ = true
 
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
 visible = false
+z_index = 500
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
