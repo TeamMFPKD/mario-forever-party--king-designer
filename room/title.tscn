@@ -227,6 +227,7 @@ text = "Local Port"
 [node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
+text = "5555"
 
 [node name="UiLabel2" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1760568754 instance=ExtResource("5_qon3s")]
 layout_mode = 2
@@ -280,6 +281,7 @@ text = "Host IP"
 [node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
+text = "localhost"
 
 [node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
 layout_mode = 2
@@ -289,6 +291,7 @@ text = "Port"
 [node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
+text = "5555"
 
 [node name="UiLabel3" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=676152860 instance=ExtResource("5_qon3s")]
 layout_mode = 2
@@ -298,7 +301,7 @@ text = "Name"
 [node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Mario"
+text = "Luigi"
 
 [node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
 layout_mode = 2

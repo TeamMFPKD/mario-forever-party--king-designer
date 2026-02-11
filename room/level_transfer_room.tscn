@@ -2,6 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_jsr1u"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_hyiui"]
+[ext_resource type="Script" uid="uid://d32afrnh4ybhe" path="res://script/multiplayer/level_sender_node.gd" id="3_1lisc"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_1m5ex"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_4tcn6"]
+[ext_resource type="Script" uid="uid://3kcdlygevs20" path="res://script/multiplayer/level_receiver_node.gd" id="4_xgwxn"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_f0tgy"]
+[ext_resource type="Script" uid="uid://d2gdfdrdu0t5e" path="res://script/multiplayer/lets_play_together.gd" id="5_u7vct"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="6_4tcn6"]
+[ext_resource type="Script" uid="uid://qpl1v6jjqf6e" path="res://script/multiplayer/force_continue_timer.gd" id="7_f0tgy"]
 
 [node name="LevelTransferRoom" type="Node2D" unique_id=574478413]
 
@@ -20,3 +28,57 @@ metadata/_edit_lock_ = true
 [node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_hyiui")]
 play = true
 sound_effect = true
+
+[node name="LevelSenderNode" type="Node" parent="." unique_id=1828939401]
+script = ExtResource("3_1lisc")
+
+[node name="LevelReceiverNode" type="Node" parent="." unique_id=2063183727]
+script = ExtResource("4_xgwxn")
+
+[node name="LetsPlayTogether" type="Node" parent="." unique_id=927302995]
+script = ExtResource("5_u7vct")
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=933167431]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+script = ExtResource("3_1m5ex")
+metadata/_edit_lock_ = true
+
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("4_4tcn6")]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -258.0
+offset_top = -77.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="UiButton" parent="GameRoomSize/UiMarginContainer" unique_id=1210628054 instance=ExtResource("5_f0tgy")]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+text = "强制继续"
+
+[node name="ControlVisibieSet" parent="GameRoomSize/UiMarginContainer" unique_id=416177451 instance=ExtResource("6_4tcn6")]
+
+[node name="ForceContinueTimer" type="Timer" parent="GameRoomSize/UiMarginContainer" unique_id=880434581]
+wait_time = 10.0
+one_shot = true
+autostart = true
+ignore_time_scale = true
+script = ExtResource("7_f0tgy")
+
+[connection signal="lets_play_together" from="LevelSenderNode" to="LetsPlayTogether" method="lets_play_together"]
+[connection signal="pressed" from="GameRoomSize/UiMarginContainer/UiButton" to="LetsPlayTogether" method="lets_play_together"]
+[connection signal="force_continue" from="GameRoomSize/UiMarginContainer/ForceContinueTimer" to="GameRoomSize/UiMarginContainer/ControlVisibieSet" method="_set_visible"]
