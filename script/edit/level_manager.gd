@@ -8,6 +8,7 @@ signal load_level
 
 @export_category("Level Data")
 @export var version: String = "1.0"
+@export var time_used: int = -1
 enum LevelThemeEnum {
 	CASTLE,
 	CASTLE_B,
@@ -30,6 +31,8 @@ enum LevelThemeEnum {
 
 @export var tile_data: PackedByteArray
 
+@export var clear_rate: float = -1
+
 @export_category("References")
 @export var level_camera: LevelCamera
 @export var tile_map : TileMapLayer
@@ -42,6 +45,8 @@ var level_data_dict: Dictionary
 func _ready() -> void:
 	#if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
 	#or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.EDIT:
+	var timer_singleton = get_tree().get_first_node_in_group("timer_singleton") as Timer
+	time_used = timer_singleton.wait_time
 	emit_signal("load_level")
 	update_theme()
 
@@ -59,10 +64,12 @@ func get_level_data_json() -> String:
 
 	level_data_dict = {
 		"version": version,
+		"time_used": time_used,
 		"level_theme": level_theme,
 		"level_size": level_size,
 		"tilemap_data": tile_data as Array,
-		"object_data": object_data
+		"object_data": object_data,
+		"clear_rate": clear_rate,
 	}
 	
 	var level_data_json = JSON.stringify(level_data_dict, "")
@@ -79,6 +86,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	level_data_dict = json.data
 
 	version = level_data_dict.get("version", "1.0")
+	time_used = level_data_dict.get("time_used", -1)
 
 	level_size = level_data_dict.get("level_size", [0, 0, 640, 480])
 	level_camera.set_limit_top(level_size[0])
@@ -87,6 +95,8 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	level_camera.set_limit_bottom(level_size[3])
 
 	level_theme = level_data_dict.get("level_theme", LevelThemeEnum.OVERWORLD)
+
+	clear_rate = level_data_dict.get("clear_rate", -1)
 	
 	# 加载瓦片数据
 	var tile_data_array = level_data_dict.get("tilemap_data", [])
