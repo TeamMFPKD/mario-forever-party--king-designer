@@ -255,25 +255,26 @@ func reach_end(player_id: int) -> void:
 @rpc("authority", "call_local")
 func store_level_results(players) -> void:
 	for p in players:
-		var level_file_path = p.level_file_name
-		var pass_count = p.level_cause_pass
-		var death_count = p.level_cause_death
-		var file = FileAccess.open(level_file_path, FileAccess.WRITE)
+		var level_file_path = p["level_file_name"]
+		var pass_count = p["level_cause_pass"]
+		var death_count = p["level_cause_death"]
+		var file = FileAccess.open(level_file_path, FileAccess.READ_WRITE)
 		var content = file.get_as_text()
 		var json = JSON.new()
 		var error = json.parse(content)
 		
 		if error != OK:
 			push_error("Failed to parse level data JSON.")
+			var err = FileAccess.get_open_error()
+			if err != OK:
+				print("Error loading file:", err)
 			return
 		
-		var data = json.data
+		var level_data_dict = json.data
 
-		data["pass_count"] = pass_count
-		data["death_count"] = death_count
+		level_data_dict["pass_count"] = pass_count
+		level_data_dict["death_count"] = death_count
 
-		FileAccess.open(level_file_path, FileAccess.WRITE)
-
-		var level_data_json = JSON.stringify(data, "")
+		var level_data_json = JSON.stringify(level_data_dict, "")
 		file.store_string(level_data_json)
 		file.close()
