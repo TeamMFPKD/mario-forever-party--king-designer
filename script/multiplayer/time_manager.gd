@@ -9,7 +9,7 @@ func _ready() -> void:
 	timer.timeout.connect(_on_timer_timeout)
 
 func _process(_delta) -> void:
-	left_time_label.text = str(ceil(timer.time_left))
+	left_time_label.text = str(int(ceil(timer.time_left)))
 
 func _on_timer_timeout() -> void:
 	print("Timeout!")

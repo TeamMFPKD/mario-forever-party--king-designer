@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_fryyp"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_e0n13"]
+[ext_resource type="Script" uid="uid://d0sh1salu5y4m" path="res://script/multiplayer/reach_end_notifier.gd" id="3_5xr61"]
 
 [node name="ResultRoom" type="Node2D" unique_id=609637802]
 
@@ -26,3 +27,6 @@ offset_right = 960.0
 offset_bottom = 1504.0
 script = ExtResource("2_e0n13")
 metadata/_edit_lock_ = true
+
+[node name="ReachEndNotifier" type="Node" parent="." unique_id=2139696678]
+script = ExtResource("3_5xr61")

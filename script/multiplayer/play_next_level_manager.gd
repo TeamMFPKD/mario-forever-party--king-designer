@@ -6,13 +6,15 @@ func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 
 func next_level_die():
+	# 向host发送 关卡名 - 死亡 数据
+	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], false)
 	next_level()
-	# TODO: 向host发送 关卡名 - 死亡 数据
 	pass
 
 func next_level_pass():
+	# 向host发送 关卡名 - 通过 数据
+	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], true)
 	next_level()
-	# TODO: 向host发送 关卡名 - 通过 数据
 	pass
 
 func next_level():
