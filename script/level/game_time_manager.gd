@@ -11,4 +11,4 @@ func _ready() -> void:
 		emit_signal("game_time_hud_visible")
 
 func _process(_delta: float) -> void:
-	game_time_label.text = str(int(game_timer.time_left))
+	game_time_label.text = str(ceil(game_timer.time_left))
