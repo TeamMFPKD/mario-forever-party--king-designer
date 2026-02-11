@@ -252,3 +252,28 @@ func reach_end(player_id: int) -> void:
 			print("玩家 ", player_id, " 已经玩过了所有关卡！")
 			break
 	
+@rpc("authority", "call_local")
+func store_level_results(players) -> void:
+	for p in players:
+		var level_file_path = p.level_file_name
+		var pass_count = p.level_cause_pass
+		var death_count = p.level_cause_death
+		var file = FileAccess.open(level_file_path, FileAccess.WRITE)
+		var content = file.get_as_text()
+		var json = JSON.new()
+		var error = json.parse(content)
+		
+		if error != OK:
+			push_error("Failed to parse level data JSON.")
+			return
+		
+		var data = json.data
+
+		data["pass_count"] = pass_count
+		data["death_count"] = death_count
+
+		FileAccess.open(level_file_path, FileAccess.WRITE)
+
+		var level_data_json = JSON.stringify(data, "")
+		file.store_string(level_data_json)
+		file.close()

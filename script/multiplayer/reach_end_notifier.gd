@@ -27,3 +27,7 @@ func _ready():
 		print("玩家 ", player["name"], " ：关卡通过率：", \
 		(float)(player["level_cause_pass"]) / (float)(player["level_cause_pass"] + player["level_cause_death"]) * 100.0, "%"
 		)
+
+	multiplayer_manager.store_level_results.rpc(multiplayer_manager.players)
+	print("关卡游玩数据已广播")
+	
