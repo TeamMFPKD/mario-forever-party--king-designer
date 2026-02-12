@@ -1,6 +1,16 @@
 [gd_scene format=3 uid="uid://ia0dcltb3dx"]
 
 [ext_resource type="Script" uid="uid://cq6fxh4ye1q1u" path="res://script/multiplayer/multiplayer_manager.gd" id="1_gx2pa"]
+[ext_resource type="SpriteFrames" uid="uid://bs88b30blplhb" path="res://object/level/player/mario_small.tres" id="2_imvt4"]
+[ext_resource type="SpriteFrames" uid="uid://b85b6tckcoib1" path="res://object/level/player/mario_super.tres" id="3_5abiu"]
+[ext_resource type="SpriteFrames" uid="uid://d11sjnlbqehpu" path="res://object/level/player/mario_fireball.tres" id="4_1brco"]
+[ext_resource type="SpriteFrames" uid="uid://dg3ftfs0smrbt" path="res://object/level/player/mario_beetroot.tres" id="5_mdd72"]
+[ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="6_hd2b7"]
 
 [node name="MultiplayerManager" type="Node" unique_id=1158865210 groups=["multiplayer_manager"]]
 script = ExtResource("1_gx2pa")
+player_small_spritesframe = ExtResource("2_imvt4")
+player_super_spritesframe = ExtResource("3_5abiu")
+player_fireball_spritesframe = ExtResource("4_1brco")
+player_beetroot_spritesframe = ExtResource("5_mdd72")
+player_lui_spritesframe = ExtResource("6_hd2b7")
