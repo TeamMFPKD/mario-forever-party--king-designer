@@ -12,6 +12,6 @@ func _ready() -> void:
 		player_dead.connect(GameModeSingleton.go_to_edit)
 		print("player dead and should go to edit")
 	elif GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(1.2).timeout
 		emit_signal("next_level")
 	emit_signal("player_dead")

@@ -20,6 +20,9 @@ self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
 texture = ExtResource("1_fryyp")
 metadata/_edit_lock_ = true
 
+[node name="ReachEndNotifier" type="Node" parent="." unique_id=2139696678]
+script = ExtResource("3_5xr61")
+
 [node name="GameRoomSize" type="Control" parent="." unique_id=1072927293]
 layout_mode = 3
 anchors_preset = 0
@@ -49,5 +52,5 @@ layout_mode = 2
 text = "结果"
 horizontal_alignment = 1
 
-[node name="ReachEndNotifier" type="Node" parent="." unique_id=2139696678]
-script = ExtResource("3_5xr61")
+[node name="UiMarginContainer2" parent="GameRoomSize" unique_id=1481888568 instance=ExtResource("3_42ewt")]
+layout_mode = 0

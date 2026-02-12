@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c3rvw6a2ucku8"]
 
 [ext_resource type="Script" uid="uid://beswresvmlchb" path="res://script/multiplayer/time_manager.gd" id="1_tlac8"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_65p34"]
 
 [node name="TimeHUD" type="MarginContainer" unique_id=277085813]
 custom_minimum_size = Vector2(233, 233)
@@ -21,6 +22,8 @@ left_time_label = NodePath("../EditTimeLabel")
 
 [node name="EditTimeLabel" type="Label" parent="." unique_id=1584602101]
 layout_mode = 2
+theme = ExtResource("2_65p34")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 120
 text = "20"
