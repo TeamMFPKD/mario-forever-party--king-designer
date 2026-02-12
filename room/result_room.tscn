@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_fryyp"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_e0n13"]
 [ext_resource type="Script" uid="uid://d0sh1salu5y4m" path="res://script/multiplayer/reach_end_notifier.gd" id="3_5xr61"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_42ewt"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_bnb7s"]
 
 [node name="ResultRoom" type="Node2D" unique_id=609637802]
 
@@ -27,6 +29,25 @@ offset_right = 960.0
 offset_bottom = 1504.0
 script = ExtResource("2_e0n13")
 metadata/_edit_lock_ = true
+
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("3_42ewt")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -45.0
+offset_right = 45.0
+offset_bottom = 63.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="UiLabel" parent="GameRoomSize/UiMarginContainer" unique_id=1008498644 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+text = "结果"
+horizontal_alignment = 1
 
 [node name="ReachEndNotifier" type="Node" parent="." unique_id=2139696678]
 script = ExtResource("3_5xr61")
