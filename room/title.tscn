@@ -232,7 +232,7 @@ text = "Join"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(300, 400)
+custom_minimum_size = Vector2(340, 440)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -247,48 +247,55 @@ grow_vertical = 2
 [node name="MfpkdPanel" parent="GameRoomSize/HostPage" unique_id=404383076 instance=ExtResource("4_i3lsm")]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel" unique_id=1066164301]
+[node name="UiMarginContainer" parent="GameRoomSize/HostPage/MfpkdPanel" unique_id=160409407 instance=ExtResource("8_c2fru")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="UiLabel" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1390167794 instance=ExtResource("5_qon3s")]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer" unique_id=1066164301]
+layout_mode = 2
+
+[node name="UiLabel" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1390167794 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Local Port"
 
-[node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
+[node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "5555"
 
-[node name="UiLabel2" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1760568754 instance=ExtResource("5_qon3s")]
+[node name="UiLabel2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1760568754 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Name"
 
-[node name="UiLineEdit2" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=160237167 instance=ExtResource("9_qon3g")]
+[node name="UiLineEdit2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=160237167 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Mario"
 
-[node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
+[node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Host"
 script = ExtResource("10_qon3g")
 line_edit_local_port = NodePath("../UiLineEdit")
 line_edit_player_name = NodePath("../UiLineEdit2")
-player_page = NodePath("../../../../PlayerPage")
+player_page = NodePath("../../../../../PlayerPage")
 
 [node name="JoinPage" parent="GameRoomSize" unique_id=1961076983 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(300, 600)
+custom_minimum_size = Vector2(340, 640)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -303,48 +310,55 @@ grow_vertical = 2
 [node name="MfpkdPanel" parent="GameRoomSize/JoinPage" unique_id=1427548671 instance=ExtResource("4_i3lsm")]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel" unique_id=429359202]
+[node name="UiMarginContainer" parent="GameRoomSize/JoinPage/MfpkdPanel" unique_id=240504123 instance=ExtResource("8_c2fru")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
-[node name="UiLabel" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1380680250 instance=ExtResource("5_qon3s")]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer" unique_id=429359202]
+layout_mode = 2
+
+[node name="UiLabel" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1380680250 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Host IP"
 
-[node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
+[node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "localhost"
 
-[node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
+[node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Port"
 
-[node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
+[node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "5555"
 
-[node name="UiLabel3" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=676152860 instance=ExtResource("5_qon3s")]
+[node name="UiLabel3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=676152860 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Name"
 
-[node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
+[node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Luigi"
 
-[node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
+[node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Join"
@@ -352,7 +366,7 @@ script = ExtResource("12_10dtl")
 line_edit_frp_domain = NodePath("../UiLineEdit")
 line_edit_remote_port = NodePath("../UiLineEdit2")
 line_edit_player_name = NodePath("../UiLineEdit3")
-player_page = NodePath("../../../../PlayerPage")
+player_page = NodePath("../../../../../PlayerPage")
 
 [node name="PlayerPage" parent="GameRoomSize" unique_id=697609342 instance=ExtResource("8_c2fru")]
 visible = false
@@ -449,7 +463,7 @@ script = SubResource("GDScript_rm4w4")
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
