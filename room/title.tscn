@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="8_c2fru"]
 [ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="9_qon3g"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="9_ty11l"]
+[ext_resource type="FontFile" uid="uid://cxcewjtggv0hi" path="res://font/OpenSansSemiBoldFont.res" id="10_bvmdg"]
 [ext_resource type="Script" uid="uid://bt2b120wk6vxy" path="res://script/multiplayer/host_button.gd" id="10_qon3g"]
 [ext_resource type="FontFile" uid="uid://dvb6feu20686g" path="res://font/Super-Mario-Maker-2.ttf" id="11_gcvh4"]
 [ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/join_button.gd" id="12_10dtl"]
@@ -71,7 +72,6 @@ script = ExtResource("3_xb41j")
 metadata/_edit_lock_ = true
 
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
-visible = false
 z_index = 500
 layout_mode = 1
 anchors_preset = 15
@@ -107,6 +107,8 @@ layout_mode = 2
 
 [node name="UiLabel2" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
 theme_override_font_sizes/font_size = 80
 text = "使用须知"
 horizontal_alignment = 1
@@ -120,10 +122,12 @@ custom_minimum_size = Vector2(233, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "
-欢迎游玩 Mario Forever Party: King Designer！
+欢迎游玩 Mario Forever: Maker Party！
 
-Mario Forever Party: King Designer 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：
+Mario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：
 · 创作的关卡内容符合公序良俗，不得包含暴力、色情、低俗、歧视、恐怖等不良及违法违规内容
 · 遵守当地法律法规
 · 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡
@@ -155,12 +159,16 @@ theme_override_constants/separation = 128
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "拒绝并退出"
 
 [node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "同意"
 
 [node name="Title" type="MarginContainer" parent="GameRoomSize" unique_id=1269811525]

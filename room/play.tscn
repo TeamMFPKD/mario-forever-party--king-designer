@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="24_pt5fk"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="26_cpu0x"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
 
@@ -169,6 +170,7 @@ theme_override_constants/margin_bottom = 30
 
 [node name="Button" type="Button" parent="GameRoomSize/MarginContainer" unique_id=998423911]
 layout_mode = 2
+theme = ExtResource("26_cpu0x")
 theme_override_font_sizes/font_size = 30
 text = "Return to edit"
 script = ExtResource("18_e5c0k")

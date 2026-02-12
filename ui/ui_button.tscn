@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://dvu45nym5l6oi"]
 
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="1_3tkkc"]
+
 [node name="UiButton" type="Button" unique_id=1210628054]
 offset_right = 300.0
 offset_bottom = 140.0
+theme = ExtResource("1_3tkkc")
 theme_override_font_sizes/font_size = 50
 text = "请输入文本"

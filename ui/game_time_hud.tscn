@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://drp4bg6no30k1" path="res://script/level/game_time_manager.gd" id="1_5vd2n"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="1_pxo1b"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="3_kn437"]
 
 [node name="GameTimeHUD" type="MarginContainer" unique_id=277085813]
 visible = false
@@ -26,6 +27,8 @@ game_time_label = NodePath("../EditTimeLabel")
 
 [node name="EditTimeLabel" type="Label" parent="." unique_id=1584602101]
 layout_mode = 2
+theme = ExtResource("3_kn437")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 120
 text = "30"
