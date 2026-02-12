@@ -25,6 +25,7 @@ func game_start(game_edit_time: int) -> void:
 	current_time = current_time.replace(":", "-")
 	current_time = current_time.replace(" ", "_")
 	MPManager.game_start_time = current_time
+	MPManager.is_in_game = true
 	TimerSingleton.wait_time = game_edit_time
 	TimerSingleton.start()
 	on_game_start()
