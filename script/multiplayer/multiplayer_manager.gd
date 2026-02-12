@@ -6,6 +6,8 @@ signal players_updated
 
 signal timeout_save
 
+signal result_updated
+
 var local_port
 # 端口使用Sakura Frp隧道配置的远程端口
 var remote_port
@@ -17,6 +19,7 @@ var game_start_time : String
 
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []
+var origin_players = []
 
 var random_levels = []
 var current_level_count : int = 0
@@ -25,6 +28,7 @@ var total_levels : int = 0
 
 var level_results
 
+var back_to_title
 
 @export var player_small_spritesframe : SpriteFrames
 @export var player_super_spritesframe : SpriteFrames
@@ -271,6 +275,7 @@ func store_level_results(players) -> void:
 	for p in players:
 		print(p["name"], "的关卡通过率：", round(p["clear_rate"] * 100000.0) / 1000.0, "%",
 		" 关卡通过数：", p["level_pass_count"], " 总积分：", p["score"])
+	emit_signal("result_updated", players)
 	for p in players:
 		var level_file_path = p["level_file_name"]
 		var pass_count = p["level_cause_pass"]
@@ -334,3 +339,15 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			var label = ani.get_node("UiLabel") as Label
 			label.text = player_name
 			print("来自玩家 ", player_id, " 的动画坐标数据：", ani_pos)
+
+func store_origin_player_data() -> void:
+	origin_players = players.duplicate()
+
+@rpc("authority", "call_local")
+func return_origin_player_data() -> void:
+	if back_to_title:
+		# 同步完整的玩家列表给所有客户端
+		sync_players_list.rpc(players)
+		emit_signal("players_updated")
+		back_to_title = false
+		print("已返回标题界面，并重新同步玩家列表数据")
