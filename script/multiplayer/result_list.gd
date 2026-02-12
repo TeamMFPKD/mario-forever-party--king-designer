@@ -5,15 +5,15 @@ signal result_list_updated
 @export var result_list_scene : PackedScene
 
 var multiplayer_manager : MultiplayerManager
-var players
+#var players
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	multiplayer_manager.result_updated.connect(_on_result_list_updated)
 
-func _on_result_list_updated() -> void:
+func _on_result_list_updated(players) -> void:
 	# Refresh list
-	players = multiplayer_manager.players
+	#players = multiplayer_manager.players
 
 	# Clear
 	for child in get_children():
