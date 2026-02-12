@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://cg0l8wpjkutri"]
 
-[ext_resource type="FontFile" uid="uid://y78uwvpcsie2" path="res://font/IMPACT.TTF" id="1_jlb3d"]
+[ext_resource type="FontFile" uid="uid://dvb6feu20686g" path="res://font/Super-Mario-Maker-2.ttf" id="1_jlb3d"]
 
 [sub_resource type="FontVariation" id="FontVariation_a8n6i"]
 base_font = ExtResource("1_jlb3d")
