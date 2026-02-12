@@ -26,6 +26,14 @@ var total_levels : int = 0
 var level_results
 
 
+@export var player_small_spritesframe : SpriteFrames
+@export var player_super_spritesframe : SpriteFrames
+@export var player_fireball_spritesframe : SpriteFrames
+@export var player_beetroot_spritesframe : SpriteFrames
+@export var player_lui_spritesframe : SpriteFrames
+
+var mp_ani_manager
+
 # 自己的玩家信息
 var player = {
 	"id": "invalid",
@@ -278,3 +286,42 @@ func store_level_results(players) -> void:
 		var level_data_json = JSON.stringify(level_data_dict, "")
 		file.store_string(level_data_json)
 		file.close()
+
+@rpc("any_peer", "call_remote", "unreliable_ordered", 1)
+func send_ani_sprite_data(player_id: int, player_name: String, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h) -> void:
+	if current_level_count != current_level:
+		return
+	if not mp_ani_manager:
+		print("mp_ani_manager is null")
+		return
+	if not is_instance_valid(mp_ani_manager):
+		print("mp_ani_manager is not valid")
+		return
+	for ani in mp_ani_manager.anis:
+		if not ani.has_meta("player_id"):
+			ani.set_meta("player_id", player_id)
+		else:
+			if ani.get_meta("player_id") != player_id:
+				continue
+			ani.global_position = ani_pos
+			match suit:
+				PlayerSuit.SuitType.SMALL:
+					ani.sprite_frames = player_small_spritesframe
+				PlayerSuit.SuitType.SUPER:
+					ani.sprite_frames = player_super_spritesframe
+				PlayerSuit.SuitType.POWERED:
+					match power:
+						PlayerSuit.PowerupType.FIREBALL:
+							ani.sprite_frames = player_fireball_spritesframe
+						PlayerSuit.PowerupType.BEETROOT:
+							ani.sprite_frames = player_beetroot_spritesframe
+						PlayerSuit.PowerupType.LUI:
+							ani.sprite_frames = player_lui_spritesframe
+			#print("来自玩家 ", player_id, " 的动画套装数据：", suit, power)
+			#print("当前玩家 ", player_id, " 的动画资源：", ani.sprite_frames)
+			ani.animation = animation
+			ani.frame = frame
+			ani.flip_h = flip_h
+			var label = ani.get_node("UiLabel") as Label
+			label.text = player_name
+			print("来自玩家 ", player_id, " 的动画坐标数据：", ani_pos)

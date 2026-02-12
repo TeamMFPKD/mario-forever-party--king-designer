@@ -8,9 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="4_aqvbr"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="4_d6wjp"]
 [ext_resource type="Script" uid="uid://c0c51hxssdln3" path="res://script/multiplayer/play_next_level_manager.gd" id="4_orh2l"]
+[ext_resource type="Script" uid="uid://cw836hlngytf1" path="res://script/multiplayer/multiplayer_ani_sprite_manager.gd" id="5_27ofe"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="5_dhd6j"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="6_2q1y6"]
 [ext_resource type="PackedScene" uid="uid://ctl8t18mclmft" path="res://ui/game_time_hud.tscn" id="6_dhd6j"]
+[ext_resource type="PackedScene" uid="uid://bb3rl8fd2qhlq" path="res://object/multiplayer_player_shadow.tscn" id="6_uf5c5"]
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="7_orh2l"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="8_pt5fk"]
 [ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="9_27ofe"]
@@ -149,6 +151,10 @@ database_holder = NodePath("../DatabaseHolder")
 process_callback = 0
 script = ExtResource("17_dywku")
 metadata/_edit_lock_ = true
+
+[node name="MultiplayerAniSpriteManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1918431650]
+script = ExtResource("5_27ofe")
+mp_ani_shadow_scene = ExtResource("6_uf5c5")
 
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
 layout_mode = 0
