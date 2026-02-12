@@ -28,6 +28,8 @@ var total_levels : int = 0
 
 var level_results
 
+var is_in_game : bool = false
+
 var back_to_title
 
 @export var player_small_spritesframe : SpriteFrames
@@ -108,6 +110,11 @@ func register_player_on_host(player_info):
 	if not multiplayer.is_server():
 		return
 	
+	if is_in_game:
+		print(player_info.id, player_info.name, "试图加入游戏，但是游戏开始了——")
+		inform_late_player.rpc_id(player_info.id)
+		return
+
 	# 更新主机本地的玩家列表
 	players.append(player_info)
 	
@@ -116,6 +123,11 @@ func register_player_on_host(player_info):
 	
 	# 同步完整的玩家列表给所有客户端
 	sync_players_list.rpc(players)
+
+@rpc("authority", "call_remote")
+func inform_late_player() -> void:
+	print("已连接主机。但该房间游戏已经开始。即将断开连接。")
+	disconnect_and_cleanup()
 
 @rpc("authority", "call_local")
 func player_joined(player_info):
@@ -161,7 +173,7 @@ func server_closing():
 	players = []
 	emit_signal("players_updated")
 	# 断开连接
-	multiplayer.multiplayer_peer = null
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 # 客户端通知服务器自己即将离开
 @rpc("any_peer", "call_remote")
@@ -169,19 +181,17 @@ func client_leaving(player_id: int):
 	if not multiplayer.is_server():
 		return
 	
-	# 从 players 列表中移除离开的玩家
-	for i in range(players.size()):
-		if players[i].id == player_id:
-			players.remove_at(i)
-			break
-	
+	players = []
 	emit_signal("players_updated")
+	
 	print("玩家 ", player_id, " 已离开")
 	# 通知其他客户端更新玩家列表
 	sync_players_list.rpc(players)
 
 # 断开连接并清理
 func disconnect_and_cleanup():
+	players = []
+	emit_signal("players_updated")
 	if multiplayer.is_server():
 		# 服务器：通知所有客户端（包括自己）
 		server_closing.rpc()
@@ -191,9 +201,7 @@ func disconnect_and_cleanup():
 		var player_page = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
 		if player_page:
 			player_page.visible = false
-		players = []
-		emit_signal("players_updated")
-		multiplayer.multiplayer_peer = null
+		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 @rpc("authority")
 func edit_time_out():
@@ -350,4 +358,5 @@ func return_origin_player_data() -> void:
 		sync_players_list.rpc(players)
 		emit_signal("players_updated")
 		back_to_title = false
+		is_in_game = false
 		print("已返回标题界面，并重新同步玩家列表数据")
