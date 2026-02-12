@@ -5,6 +5,7 @@ var multiplayer_manager : MultiplayerManager
 var all_players_reach_end : bool = false
 var wait_time : float = 1.5
 
+@export_category("Final Score Calculation")
 @export var a : float = 0.7
 @export var k : float = 5.0
 

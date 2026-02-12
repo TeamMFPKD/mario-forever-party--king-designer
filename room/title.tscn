@@ -52,6 +52,7 @@ metadata/_edit_lock_ = true
 
 [node name="TitleScreenBGM" type="AudioStreamPlayer" parent="." unique_id=1820936535]
 stream = ExtResource("3_yt56b")
+autoplay = true
 
 [node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
 script = ExtResource("4_ikv4w")
@@ -72,6 +73,7 @@ script = ExtResource("3_xb41j")
 metadata/_edit_lock_ = true
 
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
+visible = false
 z_index = 500
 layout_mode = 1
 anchors_preset = 15
@@ -180,10 +182,10 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_left = 96
+theme_override_constants/margin_top = 96
+theme_override_constants/margin_right = 96
+theme_override_constants/margin_bottom = 96
 
 [node name="Title" type="Label" parent="GameRoomSize/Title" unique_id=1197774217]
 layout_mode = 2
@@ -194,7 +196,7 @@ theme_override_constants/shadow_offset_y = 15
 theme_override_constants/outline_size = 20
 theme_override_constants/shadow_outline_size = 20
 theme_override_fonts/font = ExtResource("11_gcvh4")
-theme_override_font_sizes/font_size = 180
+theme_override_font_sizes/font_size = 160
 text = "MARIO FOREVER
 MAKER PARTY"
 
@@ -256,6 +258,7 @@ grow_vertical = 2
 [node name="UiLabel" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1390167794 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Local Port"
 
 [node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
@@ -266,6 +269,7 @@ text = "5555"
 [node name="UiLabel2" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=1760568754 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Name"
 
 [node name="UiLineEdit2" parent="GameRoomSize/HostPage/MfpkdPanel/VBoxContainer" unique_id=160237167 instance=ExtResource("9_qon3g")]
@@ -310,6 +314,7 @@ grow_vertical = 2
 [node name="UiLabel" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1380680250 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Host IP"
 
 [node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
@@ -320,6 +325,7 @@ text = "localhost"
 [node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Port"
 
 [node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
@@ -330,6 +336,7 @@ text = "5555"
 [node name="UiLabel3" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=676152860 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "Name"
 
 [node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
@@ -381,6 +388,8 @@ layout_mode = 2
 
 [node name="UiLabel" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=987480611 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "玩家列表"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=332855756]
@@ -403,15 +412,17 @@ theme_override_constants/separation = 48
 [node name="QuitButton" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=635472117 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "退出"
 script = ExtResource("16_jc0wi")
 
 [node name="StartButton" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=336795668 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "开始"
 
-[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1334669133 instance=ExtResource("8_c2fru")]
+[node name="Ad" parent="GameRoomSize" unique_id=1334669133 instance=ExtResource("8_c2fru")]
 custom_minimum_size = Vector2(300, 200)
 layout_mode = 1
 anchors_preset = 3
@@ -428,7 +439,7 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="TextureButton" type="TextureButton" parent="GameRoomSize/UiMarginContainer" unique_id=846202464]
+[node name="TextureButton" type="TextureButton" parent="GameRoomSize/Ad" unique_id=846202464]
 layout_mode = 2
 size_flags_vertical = 8
 texture_normal = ExtResource("19_rm4w4")
