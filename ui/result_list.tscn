@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dryy3w7a58217"]
+
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_qgqhr"]
+
+[node name="ResultListLine" type="HBoxContainer" unique_id=723223620]
+custom_minimum_size = Vector2(1000, 0)
+
+[node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_qgqhr")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "俊贵"
+horizontal_alignment = 1
+
+[node name="LevelCausePassLabel" parent="." unique_id=1008498644 instance=ExtResource("1_qgqhr")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "68"
+horizontal_alignment = 1
+
+[node name="LevelCauseDeathLabel" parent="." unique_id=774496428 instance=ExtResource("1_qgqhr")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "68"
+horizontal_alignment = 1
+
+[node name="ClearRateLabel" parent="." unique_id=29299613 instance=ExtResource("1_qgqhr")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "23.33%"
+horizontal_alignment = 1
+
+[node name="LevelPassCountLabel" parent="." unique_id=1860106672 instance=ExtResource("1_qgqhr")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "68"
+horizontal_alignment = 1
+
+[node name="ScoreLabel" parent="." unique_id=696943671 instance=ExtResource("1_qgqhr")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "250"
+horizontal_alignment = 1

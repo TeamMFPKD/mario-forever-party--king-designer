@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_42ewt"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_bnb7s"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="6_mcq6y"]
+[ext_resource type="Script" uid="uid://cobk7od0sgfjn" path="res://script/multiplayer/result_list.gd" id="7_msipt"]
+[ext_resource type="PackedScene" uid="uid://dryy3w7a58217" path="res://ui/result_list.tscn" id="8_cur0g"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_cur0g"]
 
 [node name="ResultRoom" type="Node2D" unique_id=609637802]
 
@@ -50,19 +53,24 @@ theme_override_constants/margin_bottom = 32
 
 [node name="UiLabel" parent="GameRoomSize/UiMarginContainer" unique_id=1008498644 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
 text = "结果"
 horizontal_alignment = 1
 
 [node name="UiMarginContainer2" parent="GameRoomSize" unique_id=1481888568 instance=ExtResource("3_42ewt")]
-custom_minimum_size = Vector2(1700, 1000)
+custom_minimum_size = Vector2(1700, 950)
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_left = -850.0
+offset_top = -400.0
+offset_right = 850.0
+offset_bottom = 400.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 64
@@ -85,3 +93,75 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer" unique_id=1267106918]
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1956302117]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="UiLabel" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=2098214567 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "名称"
+horizontal_alignment = 1
+
+[node name="UiLabel2" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=614084913 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "关卡被通过数"
+horizontal_alignment = 1
+
+[node name="UiLabel3" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=774263130 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "关卡死亡数"
+horizontal_alignment = 1
+
+[node name="UiLabel4" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=20125485 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "通过率"
+horizontal_alignment = 1
+
+[node name="UiLabel5" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1262809204 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "个人通关总数"
+horizontal_alignment = 1
+
+[node name="UiLabel6" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1509420169 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "总积分"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1674169748]
+custom_minimum_size = Vector2(600, 650)
+layout_mode = 2
+
+[node name="ResultList" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=215842139]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("7_msipt")
+result_list_scene = ExtResource("8_cur0g")
+
+[node name="TestResultListLine" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" unique_id=723223620 instance=ExtResource("8_cur0g")]
+layout_mode = 2
+
+[node name="UiMarginContainer3" parent="GameRoomSize" unique_id=1701813297 instance=ExtResource("3_42ewt")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="UiButton" parent="GameRoomSize/UiMarginContainer3" unique_id=1210628054 instance=ExtResource("9_cur0g")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Back to title"

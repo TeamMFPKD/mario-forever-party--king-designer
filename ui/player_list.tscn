@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://dljhnfo0n1vo4"]
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
-[ext_resource type="FontFile" uid="uid://cxcewjtggv0hi" path="res://font/OpenSansSemiBoldFont.res" id="2_bt8iu"]
 
 [node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
 custom_minimum_size = Vector2(1000, 0)
 
 [node name="PlayerIdLabel" parent="." unique_id=1008498644 instance=ExtResource("1_nfru4")]
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_bt8iu")
+text = "1"
 
 [node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_nfru4")]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_bt8iu")
+text = "可口可乐了了"

@@ -403,7 +403,6 @@ layout_mode = 2
 [node name="UiLabel" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=987480611 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "玩家列表"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=332855756]
@@ -426,14 +425,12 @@ theme_override_constants/separation = 48
 [node name="QuitButton" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=635472117 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "退出"
 script = ExtResource("16_jc0wi")
 
 [node name="StartButton" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=336795668 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "开始"
 
 [node name="Ad" parent="GameRoomSize" unique_id=1334669133 instance=ExtResource("8_c2fru")]

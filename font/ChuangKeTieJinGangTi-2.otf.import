@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://gqgt4jsx41mn"
-path="res://.godot/imported/dinglieciweifont20250217.ttf-e198dfdfde6932197175cb47b4af6414.fontdata"
+uid="uid://didkgmqbcelko"
+path="res://.godot/imported/ChuangKeTieJinGangTi-2.otf-3465111384a48a49eb0c8fc3fedbcce1.fontdata"
 
 [deps]
 
-source_file="res://font/dinglieciweifont20250217.ttf"
-dest_files=["res://.godot/imported/dinglieciweifont20250217.ttf-e198dfdfde6932197175cb47b4af6414.fontdata"]
+source_file="res://font/ChuangKeTieJinGangTi-2.otf"
+dest_files=["res://.godot/imported/ChuangKeTieJinGangTi-2.otf-3465111384a48a49eb0c8fc3fedbcce1.fontdata"]
 
 [params]
 

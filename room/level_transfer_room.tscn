@@ -62,6 +62,7 @@ offset_right = 259.5
 offset_bottom = 31.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
 text = "传输 / 接收关卡数据中……"
 horizontal_alignment = 1
 
