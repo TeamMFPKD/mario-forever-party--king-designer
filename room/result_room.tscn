@@ -2,11 +2,13 @@
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_fryyp"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_e0n13"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="3_2ft17"]
 [ext_resource type="Script" uid="uid://d0sh1salu5y4m" path="res://script/multiplayer/reach_end_notifier.gd" id="3_5xr61"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_42ewt"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_bnb7s"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="6_mcq6y"]
 [ext_resource type="Script" uid="uid://cobk7od0sgfjn" path="res://script/multiplayer/result_list.gd" id="7_msipt"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="7_tw1oo"]
 [ext_resource type="PackedScene" uid="uid://dryy3w7a58217" path="res://ui/result_list.tscn" id="8_cur0g"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_cur0g"]
 
@@ -26,6 +28,10 @@ metadata/_edit_lock_ = true
 
 [node name="ReachEndNotifier" type="Node" parent="." unique_id=2139696678]
 script = ExtResource("3_5xr61")
+
+[node name="JumpToScene" type="Node" parent="." unique_id=682804939]
+script = ExtResource("3_2ft17")
+scene_uid = &"uid://dcqf1c3m14b1f"
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=1072927293]
 layout_mode = 3
@@ -138,6 +144,9 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(600, 650)
 layout_mode = 2
 
+[node name="ControlVisibieSet" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=416177451 instance=ExtResource("7_tw1oo")]
+path_to_control = NodePath("../../../../..")
+
 [node name="ResultList" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=215842139]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -145,6 +154,7 @@ script = ExtResource("7_msipt")
 result_list_scene = ExtResource("8_cur0g")
 
 [node name="TestResultListLine" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" unique_id=723223620 instance=ExtResource("8_cur0g")]
+visible = false
 layout_mode = 2
 
 [node name="UiMarginContainer3" parent="GameRoomSize" unique_id=1701813297 instance=ExtResource("3_42ewt")]
@@ -165,3 +175,6 @@ theme_override_constants/margin_bottom = 16
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "Back to title"
+
+[connection signal="result_list_updated" from="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/UiMarginContainer3/UiButton" to="JumpToScene" method="jump_to_scene"]

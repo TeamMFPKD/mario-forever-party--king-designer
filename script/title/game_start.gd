@@ -2,6 +2,8 @@ extends Node
 
 signal game_started
 
+@export var bar : HScrollBar
+
 var multiplayer_manager : MultiplayerManager
 
 func _ready() -> void:
@@ -10,10 +12,10 @@ func _ready() -> void:
 func _on_start_button_pressed() -> void:
 	if not multiplayer_manager.multiplayer.is_server():
 		return
+	multiplayer_manager.store_origin_player_data()
 	game_start.rpc()
 	
 func on_game_start() -> void:
-	TimerSingleton.start()
 	emit_signal("game_started")
 
 @rpc("authority", "call_local")
@@ -23,4 +25,6 @@ func game_start() -> void:
 	current_time = current_time.replace(":", "-")
 	current_time = current_time.replace(" ", "_")
 	MPManager.game_start_time = current_time
+	TimerSingleton.wait_time = int(bar.value)
+	TimerSingleton.start()
 	on_game_start()
