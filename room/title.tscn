@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="9_qon3g"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="9_ty11l"]
 [ext_resource type="Script" uid="uid://bt2b120wk6vxy" path="res://script/multiplayer/host_button.gd" id="10_qon3g"]
+[ext_resource type="FontFile" uid="uid://dvb6feu20686g" path="res://font/Super-Mario-Maker-2.ttf" id="11_gcvh4"]
 [ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/join_button.gd" id="12_10dtl"]
 [ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/player_list.tscn" id="14_w38mm"]
 [ext_resource type="Script" uid="uid://jhsrnvitnnhq" path="res://script/multiplayer/player_list.gd" id="14_wpraw"]
@@ -171,13 +172,23 @@ offset_left = -20.0
 offset_right = 20.0
 offset_bottom = 40.0
 grow_horizontal = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
 
-[node name="TitlePlaceholder" type="Label" parent="GameRoomSize/Title" unique_id=1197774217]
+[node name="Title" type="Label" parent="GameRoomSize/Title" unique_id=1197774217]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 15
+theme_override_constants/shadow_offset_y = 15
 theme_override_constants/outline_size = 20
+theme_override_constants/shadow_outline_size = 20
+theme_override_fonts/font = ExtResource("11_gcvh4")
 theme_override_font_sizes/font_size = 180
-text = "为啥要
-  标题"
+text = "MARIO FOREVER
+MAKER PARTY"
 
 [node name="ChooseMode" type="MarginContainer" parent="GameRoomSize" unique_id=683295364]
 layout_mode = 1

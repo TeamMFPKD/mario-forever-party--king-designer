@@ -3,7 +3,10 @@ extends Node
 var multiplayer_manager : MultiplayerManager
 
 var all_players_reach_end : bool = false
-var wait_time : float = 3.0
+var wait_time : float = 1.5
+
+@export var a : float = 0.7
+@export var k : float = 5.0
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
@@ -16,18 +19,24 @@ func _ready():
 		all_players_reach_end = true
 		for player in multiplayer_manager.players:
 			if not player["reach_end"]:
-				print("玩家", player["id"], "未到达终点")
+				print("玩家", player["name"], "未到达终点")
 				all_players_reach_end = false
 		print("等待 ", wait_time, "秒")
 		await get_tree().create_timer(wait_time).timeout
 
-	print("所有玩家已到达终点")
-	print("结果是：")
+	print("所有玩家已到达终点。")
+	print("计算结果中……")
 	for player in multiplayer_manager.players:
-		print("玩家 ", player["name"], " ：关卡通过率：", \
-		(float)(player["level_cause_pass"]) / (float)(player["level_cause_pass"] + player["level_cause_death"]) * 100.0, "%"
-		)
+		var level_pass_count = player["level_pass_count"]
+		var level_cause_pass = player["level_cause_pass"]
+		var level_cause_death = player["level_cause_death"]
+		var clear_rate = (float)(level_cause_pass) / (float)(level_cause_pass + level_cause_death)
+		var score = int(100 * ( (clear_rate/a)**(k*a) ) * ( ((1-clear_rate)/(1-a))**(k*(1-a)) )) + level_pass_count
+		player["clear_rate"] = clear_rate
+		player["score"] = score
 
+		# 清空所有玩家的关卡数据内容，减少数据传输量
+		player["level_data"] = ""
 	multiplayer_manager.store_level_results.rpc(multiplayer_manager.players)
 	print("关卡游玩数据已广播")
 	

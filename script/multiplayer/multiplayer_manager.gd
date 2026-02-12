@@ -44,6 +44,9 @@ var player = {
 	"reach_end": false,
 	"level_cause_pass": 0,
 	"level_cause_death": 0,
+	"level_pass_count": 0,
+	"clear_rate": 0.0,
+	"score": 0,
 }
 
 
@@ -232,7 +235,7 @@ func lets_play_together(rnd_levels: Array) -> void:
 	fc.call_deferred()
 
 @rpc("any_peer", "call_local")
-func level_add_pass_count(level, passed : bool) -> void:
+func level_add_pass_count(level, passed : bool, player_id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	for level_result in level_results:
@@ -240,9 +243,11 @@ func level_add_pass_count(level, passed : bool) -> void:
 			continue
 		if passed:
 			level_result["pass_count"] += 1
+			for p in players:
+				if p.id == player_id:
+					p["level_pass_count"] += 1
 		else:
 			level_result["death_count"] += 1
-
 		for p in players:
 			if p["level_file_name"] == level:
 				p["level_cause_pass"] = level_result["pass_count"]
@@ -262,6 +267,10 @@ func reach_end(player_id: int) -> void:
 	
 @rpc("authority", "call_local")
 func store_level_results(players) -> void:
+	print("开始展示结果！！")
+	for p in players:
+		print(p["name"], "的关卡通过率：", round(p["clear_rate"] * 100000.0) / 1000.0, "%",
+		" 关卡通过数：", p["level_pass_count"], " 总积分：", p["score"])
 	for p in players:
 		var level_file_path = p["level_file_name"]
 		var pass_count = p["level_cause_pass"]
