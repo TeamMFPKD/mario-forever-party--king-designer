@@ -19,8 +19,11 @@
 [ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/join_button.gd" id="12_10dtl"]
 [ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/player_list.tscn" id="14_w38mm"]
 [ext_resource type="Script" uid="uid://jhsrnvitnnhq" path="res://script/multiplayer/player_list.gd" id="14_wpraw"]
+[ext_resource type="Script" uid="uid://b7nbmn0x7xyxx" path="res://script/title/edit_time_limit_show_label.gd" id="16_eahkk"]
 [ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]
 [ext_resource type="Texture2D" uid="uid://dyhmu8daj54iy" path="res://mf_cn_community.png" id="19_rm4w4"]
+[ext_resource type="Script" uid="uid://cu20fwl7rsl7b" path="res://script/multiplayer/back_to_title_process.gd" id="22_p5b6p"]
+[ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
 
 [sub_resource type="GDScript" id="GDScript_rm4w4"]
 script/source = "extends TextureButton
@@ -58,8 +61,9 @@ autoplay = true
 script = ExtResource("4_ikv4w")
 scene_uid = &"uid://bnx7r3slvtcdt"
 
-[node name="GameStart" type="Node" parent="." unique_id=2019232837]
+[node name="GameStart" type="Node" parent="." unique_id=2019232837 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_estsl")
+bar = NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HScrollBar")
 
 [node name="GameRoomSize" type="Control" parent="." unique_id=907476062]
 layout_mode = 3
@@ -370,7 +374,7 @@ player_page = NodePath("../../../../../PlayerPage")
 
 [node name="PlayerPage" parent="GameRoomSize" unique_id=697609342 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(1000, 800)
+custom_minimum_size = Vector2(1000, 1000)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -418,6 +422,30 @@ player_list_scene = ExtResource("14_w38mm")
 custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 
+[node name="UiLabel3" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1357540786 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Edit Time Limit"
+
+[node name="EditTimeLimitShowLabel" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1493819396 node_paths=PackedStringArray("bar") instance=ExtResource("5_qon3s")]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "%d"
+script = ExtResource("16_eahkk")
+bar = NodePath("../HScrollBar")
+
+[node name="HScrollBar" type="HScrollBar" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=579952721]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+min_value = 10.0
+max_value = 600.0
+step = 10.0
+value = 90.0
+rounded = true
+
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=251228024]
 layout_mode = 2
 theme_override_constants/separation = 48
@@ -456,11 +484,21 @@ size_flags_vertical = 8
 texture_normal = ExtResource("19_rm4w4")
 script = SubResource("GDScript_rm4w4")
 
+[node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
+script = ExtResource("22_p5b6p")
+
+[node name="ClientInvisibleNodeSet" type="Node" parent="." unique_id=2001440291 node_paths=PackedStringArray("invisible_node_set")]
+script = ExtResource("24_if31c")
+invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton"), NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/UiLabel3"), NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/EditTimeLimitShowLabel"), NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HScrollBar")]
+
 [connection signal="finished" from="TitleScreenBGM" to="TitleScreenBGM" method="play"]
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HostButton" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
 [connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/JoinButton" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
+[connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]

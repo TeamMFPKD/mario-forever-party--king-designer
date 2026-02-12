@@ -23,7 +23,9 @@ func _on_players_updated() -> void:
 		var player_list_line = player_list_scene.instantiate()
 		var player_id_label = player_list_line.get_node("PlayerIdLabel") as Label
 		player_id_label.text = str(player_number)
+
 		player_number += 1
+
 		var player_name_label = player_list_line.get_node("PlayerNameLabel") as Label
 		player_name_label.text = player["name"]
 		add_child(player_list_line)

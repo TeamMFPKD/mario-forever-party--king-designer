@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+signal result_list_updated
+
 @export var result_list_scene : PackedScene
 
 var multiplayer_manager : MultiplayerManager
@@ -7,9 +9,9 @@ var players
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
-	multiplayer_manager.players_updated.connect(_on_players_updated)
+	multiplayer_manager.result_updated.connect(_on_result_list_updated)
 
-func _on_players_updated() -> void:
+func _on_result_list_updated() -> void:
 	# Refresh list
 	players = multiplayer_manager.players
 
@@ -19,28 +21,25 @@ func _on_players_updated() -> void:
 
 	# Re-add
 	for player in players:
-		var player_list_line = result_list_scene.instantiate()
+		var result_list_line = result_list_scene.instantiate()
 		
-		var player_name_label = player_list_line.get_node("PlayerNameLabel") as Label
+		var player_name_label = result_list_line.get_node("PlayerNameLabel") as Label
 		player_name_label.text = player["name"]
-		add_child(player_list_line)
 
-		var level_cause_pass_label = player_list_line.get_node("LevelCausePassLabel") as Label
-		level_cause_pass_label.text = player["level_cause_pass"]
-		add_child(player_list_line)
+		var level_cause_pass_label = result_list_line.get_node("LevelCausePassLabel") as Label
+		level_cause_pass_label.text = str(player["level_cause_pass"])
 
-		var level_cause_death_label = player_list_line.get_node("LevelCauseDeathLabel") as Label
-		level_cause_death_label.text = player["level_cause_death"]
-		add_child(player_list_line)
+		var level_cause_death_label = result_list_line.get_node("LevelCauseDeathLabel") as Label
+		level_cause_death_label.text = str(player["level_cause_death"])
 
-		var clear_rate_label = player_list_line.get_node("ClearRateLabel") as Label
-		clear_rate_label.text = player["clear_rate"]
-		add_child(player_list_line)
+		var clear_rate_label = result_list_line.get_node("ClearRateLabel") as Label
+		clear_rate_label.text = str(round(player["clear_rate"] * 100000.0) / 1000.0) + "%"
 
-		var level_pass_count_label = player_list_line.get_node("LevelPassCountLabel") as Label
-		level_pass_count_label.text = player["level_pass_count"]
-		add_child(player_list_line)
+		var level_pass_count_label = result_list_line.get_node("LevelPassCountLabel") as Label
+		level_pass_count_label.text = str(player["level_pass_count"])
 
-		var score_label = player_list_line.get_node("ScoreLabel") as Label
-		score_label.text = player["score"]
-		add_child(player_list_line)
+		var score_label = result_list_line.get_node("ScoreLabel") as Label
+		score_label.text = str(player["score"])
+		add_child(result_list_line)
+
+	emit_signal("result_list_updated")
