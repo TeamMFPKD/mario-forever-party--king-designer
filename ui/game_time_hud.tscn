@@ -37,3 +37,4 @@ one_shot = true
 ignore_time_scale = true
 
 [connection signal="game_time_hud_visible" from="GameTimeManager" to="ControlVisibieSet" method="_set_visible"]
+[connection signal="game_time_hud_visible" from="GameTimeManager" to="GameTimer" method="start"]

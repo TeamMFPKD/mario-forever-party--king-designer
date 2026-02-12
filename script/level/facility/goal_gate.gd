@@ -20,7 +20,10 @@ func _ready() -> void:
 	next_level.connect(play_next_level_node.next_level_pass)
 
 func _on_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player") and !is_passed:
+	if body.is_in_group("player") and !is_passed and not body.has_meta("level_passed"):
+		# 防止同时触发两个终点导致卡死
+		body.set_meta("level_passed", true)
+
 		is_passed = true
 
 		smoke = smoke_scene.instantiate() as Node2D

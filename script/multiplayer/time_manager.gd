@@ -6,6 +6,10 @@ var timer : Timer
 
 func _ready() -> void:
 	timer = TimerSingleton
+	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
+		left_time_label.visible = false
+		return
+	left_time_label.visible = true
 	timer.timeout.connect(_on_timer_timeout)
 
 func _process(_delta) -> void:
