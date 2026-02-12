@@ -7,13 +7,13 @@ func _ready() -> void:
 
 func next_level_die():
 	# 向host发送 关卡名 - 死亡 数据
-	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], false)
+	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], false, MPManager.player.id)
 	next_level()
 	pass
 
 func next_level_pass():
 	# 向host发送 关卡名 - 通过 数据
-	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], true)
+	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], true, MPManager.player.id)
 	next_level()
 	pass
 

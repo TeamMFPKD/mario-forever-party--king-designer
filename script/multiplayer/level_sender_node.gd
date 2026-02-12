@@ -6,7 +6,8 @@ var multiplayer_manager : MultiplayerManager
 
 var local_players_level_data_ready : bool = false
 var all_players_data_ready : bool = false
-var wait_time_local = 2.0
+var wait_time_initial = 1.0
+var wait_time_local = 1.0
 var wait_time_sever = 1.0
 
 func _ready():
@@ -18,8 +19,8 @@ func _ready():
 	)
 	print("Level data sent.")
 
-	# 先等三秒
-	await get_tree().create_timer(3.0).timeout
+	# 先等 wait_time_initial 秒
+	await get_tree().create_timer(wait_time_initial).timeout
 
 	while not local_players_level_data_ready:
 		local_players_level_data_ready = true
