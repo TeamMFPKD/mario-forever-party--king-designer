@@ -408,6 +408,7 @@ forum_international_texture = ExtResource("21_0r6on")
 forum_cn_texture = ExtResource("19_rm4w4")
 
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
+visible = false
 z_index = 500
 layout_mode = 1
 anchors_preset = 15
