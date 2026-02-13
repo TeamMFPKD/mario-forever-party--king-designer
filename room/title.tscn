@@ -503,3 +503,5 @@ invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginConta
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
+[connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
