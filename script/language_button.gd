@@ -17,6 +17,9 @@ func _ready():
 		"zh":
 			TranslationServer.set_locale("zh")
 
+	# 更新按钮文字
+	update_button_text()
+
 
 func _on_pressed():
 	# 获取当前语言
@@ -30,7 +33,7 @@ func _on_pressed():
 		TranslationServer.set_locale("zh")
 		config.set_value("options", "language", "zh")
 	
-	# 更新按钮上的文字
+	# 更新按钮文字
 	update_button_text()
 
 	GameConfig.save()

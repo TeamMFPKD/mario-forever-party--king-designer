@@ -3,10 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_n3h5q"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_rfq10"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_w52fc"]
+[ext_resource type="AudioStream" uid="uid://dfee8buxtsm0y" path="res://sound/bgm/title/ktkm-smm_title_screen_intro.wav" id="3_bj3by"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_xb41j"]
-[ext_resource type="AudioStream" uid="uid://dk6rr4yflbxpu" path="res://sound/bgm/title/ktkm-smm_title_screen.wav" id="3_yt56b"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_ikv4w"]
+[ext_resource type="AudioStream" uid="uid://b4uqeh2ldoc3w" path="res://sound/bgm/title/ktkm-smm_title_screen_main.wav" id="4_mavin"]
 [ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/title/user_notice.gd" id="4_ytxtj"]
 [ext_resource type="Script" uid="uid://62e2gryab40o" path="res://script/title/game_start.gd" id="5_estsl"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_qon3s"]
@@ -74,9 +75,12 @@ metadata/_edit_lock_ = true
 
 [node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_rfq10")]
 
-[node name="TitleScreenBGM" type="AudioStreamPlayer" parent="." unique_id=1820936535]
-stream = ExtResource("3_yt56b")
+[node name="TitleScreenBGMP1" type="AudioStreamPlayer" parent="." unique_id=1820936535]
+stream = ExtResource("3_bj3by")
 autoplay = true
+
+[node name="TitleScreenBGMP2" type="AudioStreamPlayer" parent="." unique_id=1418492999]
+stream = ExtResource("4_mavin")
 
 [node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
 script = ExtResource("4_ikv4w")
@@ -364,7 +368,7 @@ layout_mode = 2
 min_value = 10.0
 max_value = 600.0
 step = 10.0
-value = 90.0
+value = 120.0
 rounded = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=251228024]
@@ -531,7 +535,8 @@ invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginConta
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("25_ssvsf")]
 show_mode = 0
 
-[connection signal="finished" from="TitleScreenBGM" to="TitleScreenBGM" method="play"]
+[connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
+[connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
