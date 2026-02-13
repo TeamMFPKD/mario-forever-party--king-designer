@@ -412,6 +412,7 @@ text = "玩家列表"
 [node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=332855756]
 custom_minimum_size = Vector2(600, 600)
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="PlayerList" type="VBoxContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=1921585503]
 layout_mode = 2
@@ -419,7 +420,7 @@ script = ExtResource("14_wpraw")
 player_list_scene = ExtResource("14_w38mm")
 
 [node name="TestPlayerListLine" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/PlayerList" unique_id=723223620 instance=ExtResource("14_w38mm")]
-custom_minimum_size = Vector2(600, 0)
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 
 [node name="UiLabel3" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1357540786 instance=ExtResource("5_qon3s")]
