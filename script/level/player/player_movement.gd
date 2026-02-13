@@ -76,7 +76,7 @@ func _physics_process(delta):
 			crouch = true
 
 	if !move_down and player.is_on_floor() \
-	and crouch_head_area.get_overlapping_bodies().size() == 0:
+	and (crouch_head_area.get_overlapping_bodies().size() == 0 or player_suit.suit == PlayerSuit.SuitType.SMALL):
 		crouch = false
 
 	# 确定目标速度方向
