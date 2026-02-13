@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://b7nbmn0x7xyxx" path="res://script/title/edit_time_limit_show_label.gd" id="16_eahkk"]
 [ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]
 [ext_resource type="Texture2D" uid="uid://dyhmu8daj54iy" path="res://mf_cn_community.png" id="19_rm4w4"]
+[ext_resource type="Texture2D" uid="uid://be8w71lkggf7h" path="res://mf_community.png" id="21_0r6on"]
 [ext_resource type="Script" uid="uid://cu20fwl7rsl7b" path="res://script/multiplayer/back_to_title_process.gd" id="22_p5b6p"]
 [ext_resource type="Script" uid="uid://bisaxylwbeu48" path="res://script/language_button.gd" id="23_e6ipe"]
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
@@ -30,12 +31,30 @@
 [sub_resource type="GDScript" id="GDScript_rm4w4"]
 script/source = "extends TextureButton
 
+@export var forum_international_texture : Texture2D
+@export var forum_cn_texture : Texture2D
+
+var language
+
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)
 	
+func _process(_delta) -> void:
+	language = TranslationServer.get_locale()
+	if language == \"zh\":
+		texture_normal = forum_cn_texture
+	else:
+		texture_normal = forum_international_texture
+	
+	
 func _on_button_pressed():
-	# Mario Forever 社区
-	OS.shell_open(\"https://www.marioforever.net/\")
+	match language:
+		\"en\":
+			# Mario Forever Space
+			OS.shell_open(\"https://marioforever.space/\")
+		\"zh\":
+			# Mario Forever 社区
+			OS.shell_open(\"https://www.marioforever.net/\")
 	
 "
 
@@ -385,6 +404,8 @@ layout_mode = 2
 size_flags_vertical = 8
 texture_normal = ExtResource("19_rm4w4")
 script = SubResource("GDScript_rm4w4")
+forum_international_texture = ExtResource("21_0r6on")
+forum_cn_texture = ExtResource("19_rm4w4")
 
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
 z_index = 500
