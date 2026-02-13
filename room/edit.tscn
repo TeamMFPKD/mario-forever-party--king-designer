@@ -88,6 +88,7 @@
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="80_h441a"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="81_cfmm2"]
 [ext_resource type="Script" uid="uid://0c86f8ap20h5" path="res://script/edit/debug_load.gd" id="88_amsrr"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="89_b0qgs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -1570,6 +1571,9 @@ texture = ExtResource("81_cfmm2")
 
 [node name="DebugLoad" type="Node" parent="GameRoomSize" unique_id=1259708372]
 script = ExtResource("88_amsrr")
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("89_b0qgs")]
+show_mode = 2
 
 [connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]

@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+class_name MobileControl
+
 const LEFT = preload("res://sprite/on_screen_controls/Left.png")
 const LEFT_HELD = preload("res://sprite/on_screen_controls/LeftHeld.png")
 const RIGHT = preload("res://sprite/on_screen_controls/Right.png")
@@ -24,6 +26,28 @@ const RUN_LOCK_ON = preload("res://sprite/on_screen_controls/RunLockOn.png")
 # array of known fake controller name prefixes
 # contains uinput, to catch: uinput-goodix, uinput-silead, uinput_nav, ...
 const BLACKLIST := ["uinput"]
+
+enum ShowModeType {
+	HIDE,
+	SHOW,
+	DPADS,
+}
+@export var show_mode := ShowModeType.SHOW:
+	set(value):
+		show_mode = value
+		match value:
+			ShowModeType.HIDE:
+				control_d_pad.visible = false
+				control_button.visible = false
+			ShowModeType.SHOW:
+				control_d_pad.visible = true
+				control_button.visible = true
+			ShowModeType.DPADS:
+				control_d_pad.visible = true
+				control_button.visible = false
+
+@export var control_d_pad : Control
+@export var control_button : Control
 
 @onready var left = $Control/Node2D/LeftSprite
 @onready var right = $Control/Node2D/RightSprite

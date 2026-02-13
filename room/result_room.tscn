@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="3_2ft17"]
 [ext_resource type="Script" uid="uid://d0sh1salu5y4m" path="res://script/multiplayer/reach_end_notifier.gd" id="3_5xr61"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_42ewt"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="3_ac8bd"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_bnb7s"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="6_mcq6y"]
 [ext_resource type="Script" uid="uid://cobk7od0sgfjn" path="res://script/multiplayer/result_list.gd" id="7_msipt"]
@@ -12,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://dryy3w7a58217" path="res://ui/result_list.tscn" id="8_cur0g"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_cur0g"]
 [ext_resource type="Script" uid="uid://c0vbph4q7bq5s" path="res://script/multiplayer/back_to_title_together_button.gd" id="12_jjhps"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="13_noirq"]
 
 [node name="ResultRoom" type="Node2D" unique_id=609637802]
 
@@ -29,6 +31,10 @@ metadata/_edit_lock_ = true
 
 [node name="ReachEndNotifier" type="Node" parent="." unique_id=2139696678]
 script = ExtResource("3_5xr61")
+
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("3_ac8bd")]
+play = true
+sound_effect = true
 
 [node name="JumpToScene" type="Node" parent="." unique_id=682804939]
 script = ExtResource("3_2ft17")
@@ -177,6 +183,9 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "Back to title"
 script = ExtResource("12_jjhps")
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("13_noirq")]
+show_mode = 0
 
 [connection signal="result_list_updated" from="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ControlVisibieSet" method="_set_visible"]
 [connection signal="back_to_title" from="GameRoomSize/UiMarginContainer3/ToTitleButton" to="JumpToScene" method="jump_to_scene"]

@@ -78,6 +78,7 @@ folder_colors={
 bgm=""
 multiplayer_manager=""
 timer_singleton=""
+mobile_control=""
 
 [input]
 
