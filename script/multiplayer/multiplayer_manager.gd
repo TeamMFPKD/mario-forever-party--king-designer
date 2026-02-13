@@ -116,7 +116,7 @@ func register_player_on_host(player_info):
 		return
 	
 	if is_in_game:
-		print(player_info.id, player_info.name, "试图加入游戏，但是游戏开始了——")
+		push_warning(player_info.id, player_info.name, "试图加入游戏，但是游戏开始了——")
 		inform_late_player.rpc_id(player_info.id)
 		return
 
@@ -131,7 +131,7 @@ func register_player_on_host(player_info):
 
 @rpc("authority", "call_remote")
 func inform_late_player() -> void:
-	print("已连接主机。但该房间游戏已经开始。即将断开连接。")
+	push_warning("已连接主机。但该房间游戏已经开始。即将断开连接。")
 	disconnect_and_cleanup()
 
 @rpc("authority", "call_local")
@@ -319,7 +319,7 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 	if current_level_count != current_level:
 		return
 	if not mp_ani_manager:
-		print("mp_ani_manager is null")
+		#print("mp_ani_manager is null")
 		return
 	if not is_instance_valid(mp_ani_manager):
 		print("mp_ani_manager is not valid")
@@ -327,6 +327,7 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 	for ani in mp_ani_manager.anis:
 		if not ani.has_meta("player_id"):
 			ani.set_meta("player_id", player_id)
+			break
 		else:
 			if ani.get_meta("player_id") != player_id:
 				continue
@@ -345,7 +346,6 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 						PlayerSuit.PowerupType.LUI:
 							ani.sprite_frames = player_lui_spritesframe
 			#print("来自玩家 ", player_id, " 的动画套装数据：", suit, power)
-			#print("当前玩家 ", player_id, " 的动画资源：", ani.sprite_frames)
 			ani.animation = animation
 			ani.frame = frame
 			ani.flip_h = flip_h

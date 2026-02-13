@@ -41,11 +41,20 @@ size = Vector2(44, 24)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_twq5y"]
 size = Vector2(24, 24)
 
-[node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209 node_paths=PackedStringArray("control_d_pad", "control_button") groups=["mobile_control"]]
+[node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209 node_paths=PackedStringArray("control_d_pad", "control_button", "left", "right", "up", "down", "a", "b", "start", "select", "run_lock") groups=["mobile_control"]]
 process_mode = 3
 script = ExtResource("1_ip5kh")
 control_d_pad = NodePath("ControlDPad")
 control_button = NodePath("ControlButton")
+left = NodePath("ControlDPad/ControlDPad/LeftSprite")
+right = NodePath("ControlDPad/ControlDPad/RightSprite")
+up = NodePath("ControlDPad/ControlDPad/UpSprite")
+down = NodePath("ControlDPad/ControlDPad/DownSprite")
+a = NodePath("ControlButton/ControlButton/ASprite")
+b = NodePath("ControlButton/ControlButton/BSprite")
+start = NodePath("ControlButton/ControlButton/StartSprite")
+select = NodePath("ControlDPad/ControlDPad/SelectSprite")
+run_lock = NodePath("ControlButton/ControlButton/RunLockSprite")
 
 [node name="ControlDPad" type="Control" parent="." unique_id=1293223226]
 layout_mode = 3

@@ -49,17 +49,17 @@ enum ShowModeType {
 @export var control_d_pad : Control
 @export var control_button : Control
 
-@onready var left = $Control/Node2D/LeftSprite
-@onready var right = $Control/Node2D/RightSprite
-@onready var up = $Control/Node2D/UpSprite
-@onready var down = $Control/Node2D/DownSprite
+@export var left : Sprite2D
+@export var right : Sprite2D
+@export var up : Sprite2D
+@export var down : Sprite2D
 
-@onready var a = $Control2/Node2D/ASprite
-@onready var b = $Control2/Node2D/BSprite
+@export var a : Sprite2D
+@export var b : Sprite2D
 
-@onready var start = $Control2/Node2D/StartSprite
-@onready var select = $Control/Node2D/SelectSprite
-@onready var run_lock = $Control2/Node2D/RunLockSprite
+@export var start : Sprite2D
+@export var select : Sprite2D
+@export var run_lock : Sprite2D
 
 var run_lock_on := false
 var vibration_thread: Thread
