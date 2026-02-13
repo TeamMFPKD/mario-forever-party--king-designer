@@ -11,6 +11,7 @@ speed_scale = 0.0
 offset = Vector2(0, -20)
 
 [node name="UiLabel" parent="." unique_id=1008498644 instance=ExtResource("2_vox5s")]
+auto_translate_mode = 2
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

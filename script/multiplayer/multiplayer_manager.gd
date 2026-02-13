@@ -351,7 +351,7 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			ani.flip_h = flip_h
 			var label = ani.get_node("UiLabel") as Label
 			label.text = player_name
-			print("来自玩家 ", player_id, " 的动画坐标数据：", ani_pos)
+			#print("来自玩家 ", player_id, " 的动画坐标数据：", ani_pos)
 
 func store_origin_player_data() -> void:
 	origin_players.clear()

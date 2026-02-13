@@ -1,0 +1,45 @@
+﻿keys,en,zh
+使用须知,User Notice,
+使用须知文本,"Welcome to Mario Forever: Maker Party!
+
+Mario Forever: Maker Party is a game with DIY features. Please ensure the following during gameplay:
+· The levels you create shall comply with public order and good morals, and must not contain inappropriate, illegal or non-compliant content such as violence, pornography, vulgarity, discrimination or horror.
+· Abide by local laws and regulations.
+· Do not use the level creation function to produce or spread malicious code, viruses, or design malicious levels that may induce device malfunctions or information leakage for players.
+
+Level Storage Notice
+For level reuse purposes, the levels you create will be automatically cached to other players’ local devices during online gameplay; similarly, levels created by other players will also be automatically cached to your local device.","欢迎游玩 Mario Forever: Maker Party！
+
+Mario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：
+· 创作的关卡内容符合公序良俗，不得包含暴力、色情、低俗、歧视、恐怖等不良及违法违规内容
+· 遵守当地法律法规
+· 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡
+
+关卡存储说明：
+· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。"
+拒绝并退出,Decline,拒绝并退出
+同意,Accept,同意
+组织游戏,Host,组织游戏
+加入游戏,Join,加入游戏
+本地端口,Local Port,本地端口
+玩家名称,Name,玩家名称
+组织,Host,组织
+组织方 IP,Host IP,组织方 IP
+端口,Port,端口
+加入,Join,加入
+玩家列表,Players,玩家列表
+退出,Quit,退出
+开始,Start,开始
+设定编辑时限,Edit Time Limit,设定编辑时限
+游玩,Play,游玩
+编辑,Edit,编辑
+传输 / 接收关卡数据中……,Transferring / Receiving level data...,传输 / 接收关卡数据中……
+强制继续,Force Continue,强制继续
+结果,Results,结果
+返回标题画面,Back to title,返回标题画面
+名称,Name,名称
+关卡被通过数,Times Completed,关卡被通过数
+关卡死亡数,Times Died,关卡死亡数
+通过率,Clear Rate,通过率
+个人通关总数,Your Completions,个人通关总数
+总积分,Score,总积分

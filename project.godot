@@ -129,6 +129,11 @@ move_jump={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://mfmp_translation.en.translation", "res://mfmp_translation.zh.translation")
+locale/test="en"
+
 [layer_names]
 
 2d_physics/layer_1="Block"

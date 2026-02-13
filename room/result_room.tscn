@@ -181,7 +181,7 @@ theme_override_constants/margin_bottom = 16
 [node name="ToTitleButton" parent="GameRoomSize/UiMarginContainer3" unique_id=1210628054 instance=ExtResource("9_cur0g")]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
-text = "Back to title"
+text = "返回标题画面"
 script = ExtResource("12_jjhps")
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("13_noirq")]
