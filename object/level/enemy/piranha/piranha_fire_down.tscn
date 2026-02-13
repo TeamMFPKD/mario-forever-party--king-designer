@@ -44,8 +44,11 @@ sprite_frames = SubResource("SpriteFrames_kif5r")
 [node name="CollisionShape2D" parent="." index="1" unique_id=1893765268]
 debug_color = Color(1, 0.24113542, 0.34466508, 0.41960785)
 
-[node name="PiranhaMovement" parent="." index="2" unique_id=653841748]
+[node name="PiranhaMovement" parent="." index="2" unique_id=759128387]
 fire = true
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." index="7" unique_id=331215067]
+disable_when_out_of_screen = true
 
 [node name="PiranhaShoot" type="Node" parent="." index="8" unique_id=1130609087]
 script = ExtResource("3_xx7go")
