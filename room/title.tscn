@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://dyhmu8daj54iy" path="res://mf_cn_community.png" id="19_rm4w4"]
 [ext_resource type="Script" uid="uid://cu20fwl7rsl7b" path="res://script/multiplayer/back_to_title_process.gd" id="22_p5b6p"]
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="25_ssvsf"]
 
 [sub_resource type="GDScript" id="GDScript_rm4w4"]
 script/source = "extends TextureButton
@@ -491,6 +492,9 @@ script = ExtResource("22_p5b6p")
 [node name="ClientInvisibleNodeSet" type="Node" parent="." unique_id=2001440291 node_paths=PackedStringArray("invisible_node_set")]
 script = ExtResource("24_if31c")
 invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton"), NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/UiLabel3"), NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/EditTimeLimitShowLabel"), NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HScrollBar")]
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("25_ssvsf")]
+show_mode = 0
 
 [connection signal="finished" from="TitleScreenBGM" to="TitleScreenBGM" method="play"]
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]

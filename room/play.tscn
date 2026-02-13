@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="24_pt5fk"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="26_cpu0x"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="29_chuop"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
 
@@ -179,6 +180,8 @@ target_mode = 0
 
 [node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" unique_id=1790741609]
 script = ExtResource("25_pt5fk")
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("29_chuop")]
 
 [connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
