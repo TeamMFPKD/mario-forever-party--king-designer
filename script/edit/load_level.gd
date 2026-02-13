@@ -22,6 +22,7 @@ func _ready() -> void:
 func _on_load_button_pressed() -> void:
 	var content = load_from_level()
 	if content == "":
+		push_error("Level has no content.")
 		return
 	level_data_node.load_level_data_from_json(content)
 
@@ -36,3 +37,11 @@ func load_from_level() -> String:
 	var content = file.get_as_text()
 	file.close()
 	return content
+
+func _on_debug_load(path: String) -> void:
+	file_name = path
+	var content = load_from_level()
+	if content == "":
+		push_error("Level has no content.")
+		return
+	level_data_node.load_level_data_from_json(content)
