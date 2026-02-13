@@ -3,9 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_qgqhr"]
 
 [node name="ResultListLine" type="HBoxContainer" unique_id=723223620]
+auto_translate_mode = 2
 custom_minimum_size = Vector2(1000, 0)
 
 [node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_qgqhr")]
+auto_translate_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)

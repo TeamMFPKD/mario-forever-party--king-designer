@@ -68,7 +68,6 @@ text = "传输 / 接收关卡数据中……"
 horizontal_alignment = 1
 
 [node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("4_4tcn6")]
-visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

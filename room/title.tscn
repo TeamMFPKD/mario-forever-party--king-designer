@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]
 [ext_resource type="Texture2D" uid="uid://dyhmu8daj54iy" path="res://mf_cn_community.png" id="19_rm4w4"]
 [ext_resource type="Script" uid="uid://cu20fwl7rsl7b" path="res://script/multiplayer/back_to_title_process.gd" id="22_p5b6p"]
+[ext_resource type="Script" uid="uid://bisaxylwbeu48" path="res://script/language_button.gd" id="23_e6ipe"]
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="25_ssvsf"]
 
@@ -77,107 +78,6 @@ mouse_filter = 1
 script = ExtResource("3_xb41j")
 metadata/_edit_lock_ = true
 
-[node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
-visible = false
-z_index = 500
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 64
-script = ExtResource("4_ytxtj")
-refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
-accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
-
-[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer" unique_id=1242804199]
-layout_mode = 2
-
-[node name="UiLabel2" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-theme_override_font_sizes/font_size = 80
-text = "使用须知"
-horizontal_alignment = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="UiLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
-custom_minimum_size = Vector2(233, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-text = "
-欢迎游玩 Mario Forever: Maker Party！
-
-Mario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：
-· 创作的关卡内容符合公序良俗，不得包含暴力、色情、低俗、歧视、恐怖等不良及违法违规内容
-· 遵守当地法律法规
-· 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡
-
-关卡存储说明：
-· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。"
-autowrap_mode = 3
-
-[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
-custom_minimum_size = Vector2(0, 128)
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -536.5
-offset_top = -38.5
-offset_right = 536.5
-offset_bottom = 38.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 128
-
-[node name="RefuseButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 5
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-text = "拒绝并退出"
-
-[node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 5
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-text = "同意"
-
 [node name="Title" type="MarginContainer" parent="GameRoomSize" unique_id=1269811525]
 layout_mode = 1
 anchors_preset = 5
@@ -228,14 +128,14 @@ theme_override_constants/separation = 32
 [node name="ChooseHostButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Host"
+text = "组织游戏"
 
-[node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+[node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Join"
+text = "加入游戏"
 
-[node name="HostPage" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("8_c2fru")]
+[node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
 custom_minimum_size = Vector2(340, 440)
 layout_mode = 1
@@ -271,7 +171,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Local Port"
+text = "本地端口"
 
 [node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -282,7 +182,7 @@ text = "5555"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Name"
+text = "玩家名称"
 
 [node name="UiLineEdit2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=160237167 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -292,7 +192,7 @@ text = "Mario"
 [node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Host"
+text = "组织"
 script = ExtResource("10_qon3g")
 line_edit_local_port = NodePath("../UiLineEdit")
 line_edit_player_name = NodePath("../UiLineEdit2")
@@ -334,7 +234,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Host IP"
+text = "组织方 IP"
 
 [node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -345,7 +245,7 @@ text = "localhost"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Port"
+text = "端口"
 
 [node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -356,7 +256,7 @@ text = "5555"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Name"
+text = "玩家名称"
 
 [node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -366,7 +266,7 @@ text = "Luigi"
 [node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Join"
+text = "加入"
 script = ExtResource("12_10dtl")
 line_edit_frp_domain = NodePath("../UiLineEdit")
 line_edit_remote_port = NodePath("../UiLineEdit2")
@@ -428,7 +328,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "Edit Time Limit"
+text = "设定编辑时限"
 
 [node name="EditTimeLimitShowLabel" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1493819396 node_paths=PackedStringArray("bar") instance=ExtResource("5_qon3s")]
 layout_mode = 2
@@ -471,7 +371,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -300.0
+offset_left = -385.0
 offset_top = -200.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -485,6 +385,119 @@ layout_mode = 2
 size_flags_vertical = 8
 texture_normal = ExtResource("19_rm4w4")
 script = SubResource("GDScript_rm4w4")
+
+[node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
+z_index = 500
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 64
+script = ExtResource("4_ytxtj")
+refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
+accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
+
+[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer" unique_id=1242804199]
+layout_mode = 2
+
+[node name="UiLabel2" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+theme_override_font_sizes/font_size = 80
+text = "使用须知"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="UiLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(233, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+text = "使用须知文本"
+autowrap_mode = 3
+
+[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -536.5
+offset_top = -38.5
+offset_right = 536.5
+offset_bottom = 38.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 128
+
+[node name="RefuseButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+text = "拒绝并退出"
+
+[node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+text = "同意"
+
+[node name="Language" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("8_c2fru")]
+z_index = 600
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -302.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+text = "EN / 中文"
+script = ExtResource("23_e6ipe")
 
 [node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
 script = ExtResource("22_p5b6p")

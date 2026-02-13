@@ -12,6 +12,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "1"
 
 [node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_nfru4")]
+auto_translate_mode = 2
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "可口可乐了了"
