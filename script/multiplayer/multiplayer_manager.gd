@@ -26,11 +26,16 @@ var current_level_count : int = 0
 
 var total_levels : int = 0
 
-var level_results
+var level_results = []
 
-var is_in_game : bool = false
-
-var back_to_title
+var is_in_game : bool = false:
+	set(value):
+		is_in_game = value
+		random_levels.clear()
+		current_level_count = 0
+		total_levels = 0
+		level_results.clear()
+		GameModeSingleton.game_mode = GameModeSingleton.GameModeType.EDIT
 
 @export var player_small_spritesframe : SpriteFrames
 @export var player_super_spritesframe : SpriteFrames
@@ -349,14 +354,21 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			print("来自玩家 ", player_id, " 的动画坐标数据：", ani_pos)
 
 func store_origin_player_data() -> void:
-	origin_players = players.duplicate()
+	origin_players.clear()
+	for p in players:
+		var duplicated_player = p.duplicate()
+		origin_players.append(duplicated_player)
+
+func restore_origin_player_data() -> void:
+	players.clear()
+	for p in origin_players:
+		var duplicated_player = p.duplicate()
+		players.append(duplicated_player)
 
 @rpc("authority", "call_local")
-func return_origin_player_data() -> void:
-	if back_to_title:
-		# 同步完整的玩家列表给所有客户端
-		sync_players_list.rpc(players)
-		emit_signal("players_updated")
-		back_to_title = false
-		is_in_game = false
-		print("已返回标题界面，并重新同步玩家列表数据")
+func sync_origin_player_data() -> void:
+	# 同步完整的玩家列表给所有客户端
+	sync_players_list.rpc(players)
+	emit_signal("players_updated")
+	print("已返回标题界面，并重新同步玩家列表数据：")
+	print(players)

@@ -21,6 +21,7 @@ func on_game_start() -> void:
 @rpc("authority", "call_local")
 func game_start(game_edit_time: int) -> void:
 	print("要开始了哟~")
+	print("本局游戏时长：", game_edit_time)
 	var current_time = Time.get_datetime_string_from_system(false, true)
 	current_time = current_time.replace(":", "-")
 	current_time = current_time.replace(" ", "_")
