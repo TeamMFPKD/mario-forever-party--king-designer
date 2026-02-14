@@ -319,6 +319,7 @@ func store_level_results(players) -> void:
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
 func send_ani_sprite_data(player_id: int, player_name: String, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h) -> void:
+	print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 	if current_level_count != current_level:
 		return
 	if not mp_ani_manager:
@@ -328,10 +329,7 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 		print("mp_ani_manager is not valid")
 		return
 	for ani in mp_ani_manager.anis:
-		if not ani.has_meta("player_id"):
-			ani.set_meta("player_id", player_id)
-			break
-		else:
+		if ani.has_meta("player_id"):
 			if ani.get_meta("player_id") != player_id:
 				continue
 			ani.global_position = ani_pos
@@ -354,7 +352,12 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			ani.flip_h = flip_h
 			var label = ani.get_node("UiLabel") as Label
 			label.text = player_name
-			#print("来自玩家 ", player_id, " 的动画坐标数据：", ani_pos)
+			print("[显示] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
+			break
+		else:
+			ani.set_meta("player_id", player_id)
+			break
+			
 
 func store_origin_player_data() -> void:
 	origin_players.clear()
