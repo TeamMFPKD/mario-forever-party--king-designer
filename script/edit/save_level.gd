@@ -15,7 +15,7 @@ func _ready() -> void:
 		var unique_id = OS.get_unique_id()
 		unique_id = unique_id.replace("{", "")
 		unique_id = unique_id.substr(0, 5)
-		author = multiplayer_manager.player_name + "_" + unique_id
+		author = multiplayer_manager.player_name.validate_filename() + "_" + unique_id
 	file_name += date_time + "_" + author + ".lvl"
 
 func _on_save_button_pressed() -> void:
