@@ -40,4 +40,4 @@ func _physics_process(_delta: float) -> void:
 		multiplayer_manager.player.id, multiplayer_manager.player.name,multiplayer_manager.current_level_count, 
 		local_ani.global_position, player_suit.suit, player_suit.power, local_ani.animation, local_ani.frame, local_ani.flip_h
 		)
-	print("Player ", multiplayer_manager.player.name, " send ani sprite data 终了")
+	#print("Player ", multiplayer_manager.player.name, " send ani sprite data 终了")

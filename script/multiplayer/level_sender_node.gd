@@ -46,10 +46,10 @@ func _ready():
 		print("[确认所有玩家就绪]")
 		for p in multiplayer_manager.players:
 			if not p.ready:
-				print("玩家 ", p.id, " 未就绪。")
+				print("玩家 ", p.name, " 未就绪。")
 				all_players_data_ready = false
 			else:
-				print("玩家 ", p.id, " 已就绪。")
+				print("玩家 ", p.name, " 已就绪。")
 		print("等待 ", wait_time_sever, " 秒")
 		await get_tree().create_timer(wait_time_sever).timeout
 
