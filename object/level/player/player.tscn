@@ -52,7 +52,9 @@ offset = Vector2(0, -20)
 visible = false
 material = SubResource("CanvasItemMaterial_741uk")
 sprite_frames = ExtResource("1_8csaa")
-animation = &"appear"
+animation = &"idle"
+autoplay = "idle"
+speed_scale = 0.0
 offset = Vector2(0, -20)
 script = ExtResource("2_741uk")
 

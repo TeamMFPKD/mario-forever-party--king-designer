@@ -16,6 +16,7 @@ func _ready() -> void:
 	var multiplayer_count = multiplayer_manager.players.size() - 1
 	for i in range(multiplayer_count):
 		var ani = mp_ani_shadow_scene.instantiate() as AnimatedSprite2D
+		ani.position = Vector2(-999999, -999999)
 		anis.append(ani)
 		add_child(ani)
 
