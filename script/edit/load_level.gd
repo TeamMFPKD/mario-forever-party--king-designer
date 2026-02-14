@@ -13,7 +13,7 @@ func _ready() -> void:
 			var unique_id = OS.get_unique_id()
 			unique_id = unique_id.replace("{", "")
 			unique_id = unique_id.substr(0, 5)
-			author = MPManager.player_name + "_" + unique_id
+			author = MPManager.player_name.validate_filename() + "_" + unique_id
 		else:
 			file_name = MPManager.random_levels[MPManager.current_level_count]
 			return
