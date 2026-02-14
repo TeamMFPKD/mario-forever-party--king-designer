@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://b7nbmn0x7xyxx" path="res://script/title/edit_time_limit_show_label.gd" id="16_eahkk"]
 [ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]
 [ext_resource type="Texture2D" uid="uid://dyhmu8daj54iy" path="res://mf_cn_community.png" id="19_rm4w4"]
+[ext_resource type="Script" uid="uid://csw3tgckpyfah" path="res://script/title/load_edit_time_set.gd" id="20_qpsvf"]
 [ext_resource type="Texture2D" uid="uid://be8w71lkggf7h" path="res://mf_community.png" id="21_0r6on"]
 [ext_resource type="Script" uid="uid://cu20fwl7rsl7b" path="res://script/multiplayer/back_to_title_process.gd" id="22_p5b6p"]
 [ext_resource type="Script" uid="uid://bisaxylwbeu48" path="res://script/language_button.gd" id="23_e6ipe"]
@@ -371,6 +372,9 @@ max_value = 600.0
 step = 10.0
 value = 120.0
 rounded = true
+
+[node name="LoadEditTimeSet" type="Node" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HScrollBar" unique_id=1158615323]
+script = ExtResource("20_qpsvf")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=251228024]
 layout_mode = 2
