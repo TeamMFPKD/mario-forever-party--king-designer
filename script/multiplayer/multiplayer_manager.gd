@@ -224,7 +224,7 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data: St
 			if p.id == player.id:
 				print("已将自己的关卡数据加入玩家列表数据")
 			else:
-				print("已接收玩家 ", player_id, " 的关卡数据")
+				print("已接收玩家 ", p.name, " 的关卡数据")
 			break
 
 @rpc("any_peer", "call_local")
@@ -319,7 +319,7 @@ func store_level_results(players) -> void:
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
 func send_ani_sprite_data(player_id: int, player_name: String, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h) -> void:
-	print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
+	#print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 	if current_level_count != current_level:
 		return
 	if not mp_ani_manager:
@@ -352,7 +352,7 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			ani.flip_h = flip_h
 			var label = ani.get_node("UiLabel") as Label
 			label.text = player_name
-			print("[显示] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
+			#print("[显示] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 			break
 		else:
 			ani.set_meta("player_id", player_id)
