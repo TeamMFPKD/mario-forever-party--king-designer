@@ -4,6 +4,8 @@ class_name MultiplayerManager
 
 signal players_updated
 
+signal game_in_progress_hint
+
 signal timeout_save
 
 signal result_updated
@@ -132,6 +134,7 @@ func register_player_on_host(player_info):
 @rpc("authority", "call_remote")
 func inform_late_player() -> void:
 	push_warning("已连接主机。但该房间游戏已经开始。即将断开连接。")
+	emit_signal("game_in_progress_hint")
 	disconnect_and_cleanup()
 
 @rpc("authority", "call_local")

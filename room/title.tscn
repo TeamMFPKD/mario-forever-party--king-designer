@@ -28,6 +28,7 @@
 [ext_resource type="Script" uid="uid://bisaxylwbeu48" path="res://script/language_button.gd" id="23_e6ipe"]
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="25_ssvsf"]
+[ext_resource type="Script" uid="uid://b8mprwnkj4i8m" path="res://script/multiplayer/game_in_progress_hint.gd" id="26_mavin"]
 
 [sub_resource type="GDScript" id="GDScript_rm4w4"]
 script/source = "extends TextureButton
@@ -525,6 +526,50 @@ layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
 
+[node name="GameInProgressHint" parent="GameRoomSize" unique_id=1416073500 instance=ExtResource("8_c2fru")]
+visible = false
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("26_mavin")
+
+[node name="ControlVisibieSet" parent="GameRoomSize/GameInProgressHint" unique_id=2041069413 instance=ExtResource("9_ty11l")]
+
+[node name="UiPanel" parent="GameRoomSize/GameInProgressHint" unique_id=1241605765 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="GameRoomSize/GameInProgressHint/UiPanel" unique_id=1965576362 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer" unique_id=600986031]
+layout_mode = 2
+
+[node name="UiLabel" parent="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer" unique_id=360610769 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+size_flags_vertical = 6
+text = "游戏进行中"
+horizontal_alignment = 1
+
+[node name="UiButton" parent="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1807592712 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_vertical = 6
+text = "确认"
+
 [node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
 script = ExtResource("22_p5b6p")
 
@@ -546,6 +591,7 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/JoinButton" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
+[connection signal="pressed" from="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="GameRoomSize/GameInProgressHint/ControlVisibieSet" method="_set_invisible"]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
