@@ -21,7 +21,7 @@ enum HurtType {
 @export var stomp_offset : float = -4.0
 
 @export var return_stomp_speed_y : bool = true
-@export var stomp_speed_y : float = -600.0
+@export var stomp_speed_y : float = -550.0
 
 func _ready() -> void:
 	metadata_inject()
