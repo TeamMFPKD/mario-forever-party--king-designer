@@ -17,7 +17,10 @@ func _ready() -> void:
 		goal_reached.connect(GameModeSingleton.go_to_edit)
 	
 	play_next_level_node = get_tree().get_first_node_in_group("play_next_level_manager")
-	next_level.connect(play_next_level_node.next_level_pass)
+	if play_next_level_node:
+		next_level.connect(play_next_level_node.next_level_pass)
+	else:
+		push_warning("play_next_level_manager is not assigned in GoalGate")
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and !is_passed and not body.has_meta("level_passed"):
