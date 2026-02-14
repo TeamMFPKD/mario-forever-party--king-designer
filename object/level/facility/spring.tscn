@@ -88,6 +88,7 @@ metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 script = ExtResource("3_5yd5n")
 hurt_type = 2
 stomp_speed_y = -800.0
+starman_stompable = true
 metadata/_custom_type_script = "uid://dy8q17c1owdph"
 
 [node name="Bounce" parent="." unique_id=1715984441 instance=ExtResource("4_awh24")]

@@ -41,7 +41,7 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 		if player.position.y < result.position.y + interaction_with_player_node.stomp_offset \
 		and interaction_with_player_node.stompable:
 			# 踩踏成功
-			if not is_starman():
+			if (not is_starman()) or (is_starman() and interaction_with_player_node.starman_stompable):
 				if interaction_with_player_node.return_stomp_speed_y:
 					player_movement.speed_y = interaction_with_player_node.on_stomped(player)
 					if player_movement.move_jump:

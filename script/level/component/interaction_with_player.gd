@@ -23,6 +23,8 @@ enum HurtType {
 @export var return_stomp_speed_y : bool = true
 @export var stomp_speed_y : float = -550.0
 
+@export var starman_stompable : bool = false
+
 func _ready() -> void:
 	metadata_inject()
 
