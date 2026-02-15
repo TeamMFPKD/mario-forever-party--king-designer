@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://co2s507tevqw7"]
+
+[ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="1_8j16m"]
+[ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="1_sahxg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lnuw1"]
+size = Vector2(30, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnuw1"]
+atlas = ExtResource("1_sahxg")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56rat"]
+atlas = ExtResource("1_sahxg")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yiade"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnuw1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56rat")
+}],
+"loop": true,
+"name": &"default",
+"speed": 0.9
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sahxg"]
+size = Vector2(31, 31)
+
+[node name="SolidSpike" type="StaticBody2D" unique_id=60817178]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1220439072]
+shape = SubResource("RectangleShape2D_lnuw1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2124741579]
+sprite_frames = SubResource("SpriteFrames_yiade")
+autoplay = "default"
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1048833046]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=231649360]
+shape = SubResource("RectangleShape2D_sahxg")
+
+[node name="InteractionWithPlayer" type="Node" parent="CharacterBody2D" unique_id=650042338]
+script = ExtResource("1_8j16m")
+stompable = false
+metadata/_custom_type_script = "uid://dy8q17c1owdph"

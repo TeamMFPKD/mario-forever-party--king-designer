@@ -104,10 +104,14 @@ func on_block_bump() -> void:
 	(player_suit.suit == PlayerSuit.SuitType.SMALL or adv_sprout_item_scene == null):
 		var sprout_item: Node2D = sprout_item_scene.instantiate()
 		sprout_item.position = parent.position
+		if has_meta("sprout_down"):
+			sprout_item.set_meta("sprout_down", true)
 		parent.add_sibling(sprout_item)
 	if adv_sprout_item_scene != null and player_suit.suit != PlayerSuit.SuitType.SMALL:
 		var adv_sprout_item: Node2D = adv_sprout_item_scene.instantiate()
 		adv_sprout_item.position = parent.position
+		if has_meta("sprout_down"):
+			adv_sprout_item.set_meta("sprout_down", true)
 		parent.add_sibling(adv_sprout_item)
 	
 	# 顶砖判定生成

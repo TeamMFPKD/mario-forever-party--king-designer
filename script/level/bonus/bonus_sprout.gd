@@ -19,6 +19,9 @@ func _ready() -> void:
 	collision_shape = get_node(path_to_collision_shape)
 	in_wall_cast = get_node("ShapeCast2D")
 	in_wall_cast.shape = collision_shape.shape
+	if bonus.has_meta("sprout_down"):
+		print("Sprout down")
+		sprout_speed = -sprout_speed
 	if not is_overlap():
 		is_sprout = true
 		return
