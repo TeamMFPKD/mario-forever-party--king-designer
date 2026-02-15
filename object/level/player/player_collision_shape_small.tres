@@ -1,5 +1,4 @@
-[gd_resource type="CapsuleShape2D" format=3 uid="uid://ca4jxp44syflr"]
+[gd_resource type="ConvexPolygonShape2D" format=3 uid="uid://ca4jxp44syflr"]
 
 [resource]
-radius = 12.0
-height = 29.0
+points = PackedVector2Array(-6, -14, 6, -14, 12, -3, 12, 7, 5, 14, -5, 14, -12, 7, -12, -3)
