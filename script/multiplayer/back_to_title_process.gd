@@ -12,7 +12,6 @@ func _ready():
 	if multiplayer_manager.is_in_game:
 		if multiplayer_manager.multiplayer.is_server():
 			multiplayer_manager.restore_origin_player_data()
-			multiplayer_manager.players = multiplayer_manager.origin_players.duplicate()
 			print("已还原本局开始前玩家列表：")
 			print(multiplayer_manager.players)
 			emit_signal("sever_back_to_title")

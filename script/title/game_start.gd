@@ -15,7 +15,6 @@ func _ready() -> void:
 func _on_start_button_pressed() -> void:
 	if not multiplayer_manager.multiplayer.is_server():
 		return
-	multiplayer_manager.store_origin_player_data()
 	game_start.rpc(int(bar.value))
 	
 func on_game_start() -> void:

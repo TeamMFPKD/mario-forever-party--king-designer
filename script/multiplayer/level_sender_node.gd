@@ -27,9 +27,9 @@ func _ready():
 		print("[确认玩家关卡数据]")
 		for p in multiplayer_manager.players:
 			if p.level_data != "invalid":
-				print("已接收玩家 ", p.id, " 的关卡数据")
+				print("已接收玩家 ", p.name, " 的关卡数据")
 			else:
-				print("玩家 ", p.id, " 的关卡数据无效。")
+				print("玩家 ", p.name, " 的关卡数据无效。")
 				local_players_level_data_ready = false
 		if not local_players_level_data_ready:
 			# 失败了！再等 wait_time_local 秒
