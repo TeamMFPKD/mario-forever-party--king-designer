@@ -55,6 +55,7 @@ shape = SubResource("RectangleShape2D_gj0k3")
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
 script = ExtResource("4_8jubo")
 _animated_sprite2d_path = NodePath("../AnimatedSprite2D")
+_always_face_to_player = true
 metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="BooMovement" type="Node" parent="." unique_id=703693417 node_paths=PackedStringArray("_animated_sprite_2d")]

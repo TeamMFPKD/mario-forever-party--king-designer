@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b4mexma31ltxc"]
 
 [ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="1_o6bmg"]
+[ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_leciv"]
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_myf7u"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_2e8lh"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_8sxvu"]
@@ -35,9 +36,6 @@ animations = [{
 "speed": 7.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
-size = Vector2(32, 31)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_7go61"]
 atlas = ExtResource("7_leciv")
 region = Rect2(1, 61, 35, 28)
@@ -54,7 +52,7 @@ frame_progress = 0.78155774
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
 visible = false
-shape = SubResource("RectangleShape2D_gj0k3")
+shape = ExtResource("2_leciv")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
 [node name="BasicMovement" type="Node" parent="." unique_id=2103801211]

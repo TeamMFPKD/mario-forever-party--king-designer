@@ -54,11 +54,11 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_oyqy2"]
+points = PackedVector2Array(-14, -24, 14, -24, 16, -22, 16, 22, 14, 24, -14, 24, -16, 22, -16, -22)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
 size = Vector2(32, 48)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pg1hx"]
-size = Vector2(30, 46)
 
 [node name="BroHammer" type="CharacterBody2D" unique_id=114751985]
 collision_layer = 16
@@ -69,7 +69,7 @@ sprite_frames = SubResource("SpriteFrames_dxtk8")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
-shape = SubResource("RectangleShape2D_gj0k3")
+shape = SubResource("ConvexPolygonShape2D_oyqy2")
 debug_color = Color(0, 0.69204795, 0.26297605, 0.41960785)
 
 [node name="BroMovement" type="Node" parent="." unique_id=2103801211 node_paths=PackedStringArray("solid_area", "ani")]
@@ -93,7 +93,7 @@ collision_layer = 0
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SolidDetect" unique_id=1672631622]
-shape = SubResource("RectangleShape2D_pg1hx")
+shape = SubResource("ConvexPolygonShape2D_oyqy2")
 debug_color = Color(0, 0.69204795, 0.26297605, 0.41960785)
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]

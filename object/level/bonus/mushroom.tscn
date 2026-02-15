@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b0b2g47apcdw3"]
 
 [ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="1_rk7yl"]
+[ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_h4rsw"]
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_rk7yl"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_h4rsw"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_qtu74"]
@@ -25,9 +26,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
-size = Vector2(31, 31)
-
 [node name="Mushroom" type="CharacterBody2D" unique_id=114751985]
 collision_layer = 32
 collision_mask = 3
@@ -37,8 +35,7 @@ sprite_frames = SubResource("SpriteFrames_n37im")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
-visible = false
-shape = SubResource("RectangleShape2D_gj0k3")
+shape = ExtResource("2_h4rsw")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
 [node name="BasicMovement" type="Node" parent="." unique_id=2103801211]

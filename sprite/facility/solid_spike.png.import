@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5dcx7bwtt"
-path="res://.godot/imported/thwomp.png-46475d9741872571703f70ab5b8779ac.ctex"
+uid="uid://cacrbfcjex40m"
+path="res://.godot/imported/solid_spike.png-87230fc5650b03b5f4bfd71b16694e40.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/thwomp.png"
-dest_files=["res://.godot/imported/thwomp.png-46475d9741872571703f70ab5b8779ac.ctex"]
+source_file="res://sprite/facility/solid_spike.png"
+dest_files=["res://.godot/imported/solid_spike.png-87230fc5650b03b5f4bfd71b16694e40.ctex"]
 
 [params]
 

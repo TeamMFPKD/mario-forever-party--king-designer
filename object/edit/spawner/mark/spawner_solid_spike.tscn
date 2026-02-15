@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://eqkdfq7iu6qd"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_tjlr0"]
+[ext_resource type="PackedScene" uid="uid://co2s507tevqw7" path="res://object/level/facility/solid_spike.tscn" id="2_4ejpo"]
+[ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="3_tq6l4"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_ydcfb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1nixq"]
+atlas = ExtResource("3_tq6l4")
+region = Rect2(0, 0, 32, 32)
+
+[node name="SpawnerSolidSpike" type="Node2D" unique_id=2066940420]
+script = ExtResource("1_tjlr0")
+spawn_object_scene = ExtResource("2_4ejpo")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=698192262]
+texture = SubResource("AtlasTexture_1nixq")
+
+[node name="OffsetMarker" parent="." unique_id=636497433 instance=ExtResource("4_ydcfb")]
