@@ -9,7 +9,11 @@ func lets_play_together():
 	print("Lets play together")
 	var levels = []
 	for player in multiplayer_manager.players:
-		levels.append(player.level_file_name)
+		if player.level_data == "invalid":
+			push_error("Player " + str(player.name) + " has no level data")
+			multiplayer_manager._on_peer_disconnected(player.id)
+		else:
+			levels.append(player.level_file_name)
 	
 	# 随机选择功能
 	var random_levels = levels.duplicate()

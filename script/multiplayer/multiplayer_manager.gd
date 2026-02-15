@@ -21,7 +21,6 @@ var game_start_time : String
 
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []
-var origin_players = []
 
 var random_levels = []
 var current_level_count : int = 0
@@ -183,19 +182,6 @@ func server_closing():
 	# 断开连接
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
-# 客户端通知服务器自己即将离开
-@rpc("any_peer", "call_remote")
-func client_leaving(player_id: int):
-	if not multiplayer.is_server():
-		return
-	
-	players = []
-	emit_signal("players_updated")
-	
-	print("玩家 ", player_id, " 已离开")
-	# 通知其他客户端更新玩家列表
-	sync_players_list.rpc(players)
-
 # 断开连接并清理
 func disconnect_and_cleanup():
 	players = []
@@ -258,22 +244,21 @@ func lets_play_together(rnd_levels: Array) -> void:
 func level_add_pass_count(level, passed : bool, player_id: int) -> void:
 	if not multiplayer.is_server():
 		return
-	for level_result in level_results:
-		if level_result["level"] != level:
+	for p_author in players:
+		if p_author["level_file_name"] != level:
 			continue
 		if passed:
-			level_result["pass_count"] += 1
-			for p in players:
-				if p.id == player_id:
-					p["level_pass_count"] += 1
+			p_author["level_cause_pass"] += 1
+			for p_player in players:
+				if p_player.id == player_id:
+					p_player["level_pass_count"] += 1
+					print("Player ", p_player.name, " passed ", p_author["name"], "'s level.")
 		else:
-			level_result["death_count"] += 1
-		for p in players:
-			if p["level_file_name"] == level:
-				p["level_cause_pass"] = level_result["pass_count"]
-				p["level_cause_death"] = level_result["death_count"]
-				return
-		push_error("关卡不存在：", level)
+			p_author["level_cause_death"] += 1
+			for p_player in players:
+				if p_player.id == player_id:
+					print("Player ", p_player.name, " died in ", p_author["name"], "'s level.")
+
 
 @rpc("any_peer", "call_local")
 func reach_end(player_id: int) -> void:
@@ -282,7 +267,7 @@ func reach_end(player_id: int) -> void:
 	for p in players:
 		if p.id == player_id:
 			p.reach_end = true
-			print("玩家 ", player_id, " 已经玩过了所有关卡！")
+			print("玩家 ", p.name, " 已经玩过了所有关卡！")
 			break
 	
 @rpc("authority", "call_local")
@@ -357,19 +342,18 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 		else:
 			ani.set_meta("player_id", player_id)
 			break
-			
-
-func store_origin_player_data() -> void:
-	origin_players.clear()
-	for p in players:
-		var duplicated_player = p.duplicate()
-		origin_players.append(duplicated_player)
 
 func restore_origin_player_data() -> void:
-	players.clear()
-	for p in origin_players:
-		var duplicated_player = p.duplicate()
-		players.append(duplicated_player)
+	for p in players:
+		p.level_file_name = "invalid"
+		p.level_data = "invalid"
+		p.ready = false
+		p.reach_end = false
+		p.level_cause_pass = 0
+		p.level_cause_death = 0
+		p.level_pass_count = 0
+		p.clear_rate = 0.0
+		p.score = 0
 
 @rpc("authority", "call_local")
 func sync_origin_player_data() -> void:
