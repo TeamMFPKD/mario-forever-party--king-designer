@@ -162,17 +162,17 @@ text = "加入游戏"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(540, 440)
+custom_minimum_size = Vector2(700, 480)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -300.0
-offset_right = 300.0
-offset_bottom = 300.0
+offset_left = -270.0
+offset_top = -240.0
+offset_right = 270.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -201,6 +201,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "本地端口"
+vertical_alignment = 1
 
 [node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -212,6 +213,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名称"
+vertical_alignment = 1
 
 [node name="UiLineEdit2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=160237167 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -278,6 +280,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "组织方 IP"
+vertical_alignment = 1
 
 [node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -289,6 +292,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "端口"
+vertical_alignment = 1
 
 [node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
 layout_mode = 2
@@ -300,6 +304,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名称"
+vertical_alignment = 1
 
 [node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
 layout_mode = 2
