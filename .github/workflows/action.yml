@@ -1,0 +1,30 @@
+name: "Build iOS app"
+
+on: [workflow_dispatch]
+
+jobs:
+  build_ios:
+    runs-on: macos-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+
+      - name: build archive and ipaify
+        run: |
+          wget -O archive.zip "https://www.dropbox.com/scl/fi/l3pb87ap9lp7y3778tsh2/mfmp.zip?rlkey=iqbet9y5cu4wgyubdkl4cprn2&st=tw87piys&dl=0"
+          unzip archive.zip -d .
+
+          xcodebuild archive -project mfmp.xcodeproj -scheme 'mfmp' -archivePath mfmp.xcarchive -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+
+          mkdir Payload
+          mv mfmp.xcarchive/Products/Applications/mfmp.app Payload/
+
+          zip -r "mfmp.ipa" "Payload"
+          mv mfmp.ipa ${{ runner.temp }}/mfmp.ipa
+
+      - name: Upload application
+        uses: actions/upload-artifact@v4
+        with:
+          name: mfmp
+          path: ${{ runner.temp }}/mfmp.ipa
+          retention-days: 3
