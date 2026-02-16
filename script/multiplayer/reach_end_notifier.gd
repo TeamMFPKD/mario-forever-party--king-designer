@@ -22,7 +22,7 @@ func _ready():
 			if not player["reach_end"]:
 				print("玩家", player["name"], "未到达终点")
 				all_players_reach_end = false
-		print("等待 ", wait_time, "秒")
+		print("等待 ", wait_time, " 秒")
 		await get_tree().create_timer(wait_time).timeout
 
 	print("所有玩家已到达终点。")
@@ -32,7 +32,9 @@ func _ready():
 		var level_cause_pass = player["level_cause_pass"]
 		var level_cause_death = player["level_cause_death"]
 		var clear_rate = (float)(level_cause_pass) / (float)(level_cause_pass + level_cause_death)
-		var score = int(100 * ( (clear_rate/a)**(k*a) ) * ( ((1-clear_rate)/(1-a))**(k*(1-a)) )) + level_pass_count
+		var score_clear_rate = 100 * ( (clear_rate/a)**(k*a) ) * ( ((1-clear_rate)/(1-a))**(k*(1-a)) )
+		var score_level_pass = 100 * (level_pass_count / multiplayer_manager.players.size())
+		var score = round(score_clear_rate * 0.6 + score_level_pass * 0.4)
 		player["clear_rate"] = clear_rate
 		player["score"] = score
 

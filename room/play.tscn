@@ -26,6 +26,7 @@
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="18_e5c0k"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="24_pt5fk"]
+[ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture.gd" id="25_3lia6"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="26_cpu0x"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="29_chuop"]
@@ -158,6 +159,13 @@ metadata/_edit_lock_ = true
 script = ExtResource("5_27ofe")
 mp_ani_shadow_scene = ExtResource("6_uf5c5")
 
+[node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=1870457232]
+script = ExtResource("25_3lia6")
+
+[node name="Timer" type="Timer" parent="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" unique_id=2061231054]
+wait_time = 0.5
+autostart = true
+
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
 layout_mode = 0
 offset_right = 320.0
@@ -185,4 +193,5 @@ script = ExtResource("25_pt5fk")
 
 [connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
+[connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
 [connection signal="game_time_hud_invisible" from="GameRoomSize/MarginContainer/GameModeDetect" to="GameRoomSize/MarginContainer/ControlVisibieSet" method="_set_invisible"]

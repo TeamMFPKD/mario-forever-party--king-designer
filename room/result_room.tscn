@@ -73,21 +73,15 @@ horizontal_alignment = 1
 [node name="UiMarginContainer2" parent="GameRoomSize" unique_id=1481888568 instance=ExtResource("3_42ewt")]
 custom_minimum_size = Vector2(1700, 950)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -850.0
-offset_top = -400.0
-offset_right = 850.0
-offset_bottom = 400.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 64
+theme_override_constants/margin_top = 128
 theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 64
+theme_override_constants/margin_bottom = 128
 
 [node name="UiPanel" parent="GameRoomSize/UiMarginContainer2" unique_id=1563157272 instance=ExtResource("6_mcq6y")]
 layout_mode = 2
@@ -111,44 +105,50 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
+[node name="UiLabel7" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1614436358 instance=ExtResource("3_bnb7s")]
+layout_mode = 2
+size_flags_horizontal = 7
+text = "关卡回顾"
+horizontal_alignment = 1
+
 [node name="UiLabel" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=2098214567 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 7
 text = "名称"
 horizontal_alignment = 1
 
 [node name="UiLabel2" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=614084913 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 7
 text = "关卡被通过数"
 horizontal_alignment = 1
 
 [node name="UiLabel3" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=774263130 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 7
 text = "关卡死亡数"
 horizontal_alignment = 1
 
 [node name="UiLabel4" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=20125485 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 7
 text = "通过率"
 horizontal_alignment = 1
 
 [node name="UiLabel5" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1262809204 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 7
 text = "个人通关总数"
 horizontal_alignment = 1
 
 [node name="UiLabel6" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1509420169 instance=ExtResource("3_bnb7s")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 7
 text = "总积分"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1674169748]
-custom_minimum_size = Vector2(600, 650)
+custom_minimum_size = Vector2(650, 650)
 layout_mode = 2
 
 [node name="ControlVisibieSet" parent="GameRoomSize/UiMarginContainer2/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=416177451 instance=ExtResource("7_tw1oo")]

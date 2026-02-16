@@ -37,6 +37,7 @@ GameConfig="*uid://b6yskt8kgoy66"
 Bgm="*uid://cwjqbk83qtebh"
 MPManager="*uid://ia0dcltb3dx"
 TimerSingleton="*uid://brm0gqby8wbjk"
+RandomCaptureManager="*uid://ba3qikd1k4jig"
 
 [display]
 
@@ -79,6 +80,7 @@ bgm=""
 multiplayer_manager=""
 timer_singleton=""
 mobile_control=""
+random_capture_manager=""
 
 [input]
 
