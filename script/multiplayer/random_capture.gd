@@ -14,7 +14,6 @@ func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	viewport = get_viewport()
 	random_capture_manager = get_tree().get_first_node_in_group("random_capture_manager")
-	call_deferred(&"capture")
 	
 # Capture test
 func _physics_process(_delta: float) -> void:
