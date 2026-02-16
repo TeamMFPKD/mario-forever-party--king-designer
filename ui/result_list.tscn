@@ -4,7 +4,7 @@
 
 [node name="ResultListLine" type="HBoxContainer" unique_id=723223620]
 auto_translate_mode = 2
-custom_minimum_size = Vector2(1000, 0)
+custom_minimum_size = Vector2(1000, 135)
 
 [node name="CaptureTextureRect" type="TextureRect" parent="." unique_id=928163762]
 custom_minimum_size = Vector2(160, 120)
