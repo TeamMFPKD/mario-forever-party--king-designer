@@ -162,7 +162,7 @@ text = "加入游戏"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(340, 440)
+custom_minimum_size = Vector2(540, 440)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -218,18 +218,28 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Mario"
 
-[node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1021602914]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="QuitButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 7
+text = "退出"
+
+[node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 7
 size_flags_vertical = 3
 text = "组织"
 script = ExtResource("10_qon3g")
-line_edit_local_port = NodePath("../UiLineEdit")
-line_edit_player_name = NodePath("../UiLineEdit2")
-player_page = NodePath("../../../../../PlayerPage")
+line_edit_local_port = NodePath("../../UiLineEdit")
+line_edit_player_name = NodePath("../../UiLineEdit2")
+player_page = NodePath("../../../../../../PlayerPage")
 
 [node name="JoinPage" parent="GameRoomSize" unique_id=1961076983 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(340, 640)
+custom_minimum_size = Vector2(540, 640)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -296,15 +306,23 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Luigi"
 
-[node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=46304367]
 layout_mode = 2
-size_flags_vertical = 3
+
+[node name="QuitButton" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1551607097 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 7
+text = "退出"
+
+[node name="JoinButton" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=2038892007 node_paths=PackedStringArray("line_edit_frp_domain", "line_edit_remote_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 7
 text = "加入"
 script = ExtResource("12_10dtl")
-line_edit_frp_domain = NodePath("../UiLineEdit")
-line_edit_remote_port = NodePath("../UiLineEdit2")
-line_edit_player_name = NodePath("../UiLineEdit3")
-player_page = NodePath("../../../../../PlayerPage")
+line_edit_frp_domain = NodePath("../../UiLineEdit")
+line_edit_remote_port = NodePath("../../UiLineEdit2")
+line_edit_player_name = NodePath("../../UiLineEdit3")
+player_page = NodePath("../../../../../../PlayerPage")
 
 [node name="PlayerPage" parent="GameRoomSize" unique_id=697609342 instance=ExtResource("8_c2fru")]
 visible = false
@@ -531,7 +549,7 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
 auto_translate_mode = 2
 custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
@@ -597,10 +615,12 @@ show_mode = 0
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HostButton" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
-[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/JoinButton" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
+[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
+[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/JoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/JoinButton" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="GameRoomSize/GameInProgressHint/ControlVisibieSet" method="_set_invisible"]
