@@ -5,11 +5,13 @@ signal result_list_updated
 @export var result_list_scene : PackedScene
 
 var multiplayer_manager : MultiplayerManager
+var random_capture_manager
 #var players
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	multiplayer_manager.result_updated.connect(_on_result_list_updated)
+	random_capture_manager = RandomCaptureManager
 
 func _on_result_list_updated(players) -> void:
 	# Refresh list
@@ -22,6 +24,9 @@ func _on_result_list_updated(players) -> void:
 	# Re-add
 	for player in players:
 		var result_list_line = result_list_scene.instantiate()
+
+		var capture_rect = result_list_line.get_node("CaptureTextureRect")
+		capture_rect.texture = random_capture_manager.get_capture(player["id"])
 		
 		var player_name_label = result_list_line.get_node("PlayerNameLabel") as Label
 		player_name_label.text = player["name"]
@@ -41,5 +46,7 @@ func _on_result_list_updated(players) -> void:
 		var score_label = result_list_line.get_node("ScoreLabel") as Label
 		score_label.text = str(player["score"])
 		add_child(result_list_line)
+
+	random_capture_manager.clear_captures()
 
 	emit_signal("result_list_updated")
