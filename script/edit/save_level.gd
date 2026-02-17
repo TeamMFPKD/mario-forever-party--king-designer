@@ -1,6 +1,7 @@
 extends Node
 
 @export var level_data_node: LevelManager
+@export var emulate_bad_level : bool
 
 var file_name: String = "user://mfmp_"
 var date_time: String = "datetime"
@@ -26,6 +27,8 @@ func _on_save_button_pressed() -> void:
 	if multiplayer_manager:
 		multiplayer_manager.player.level_file_name = file_name
 		multiplayer_manager.player.level_data = level_data_json
+		if Input.is_key_pressed(KEY_Q) and emulate_bad_level:
+			multiplayer_manager.player.level_data = ""
 
 func save_to_level(content):
 	var file = FileAccess.open(file_name, FileAccess.WRITE)
