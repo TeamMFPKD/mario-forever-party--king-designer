@@ -203,7 +203,7 @@ position = Vector2(2800, 368)
 position = Vector2(2864, 368)
 
 [node name="Thwomp" parent="." unique_id=521980540 instance=ExtResource("36_whgqe")]
-position = Vector2(2432, 232)
+position = Vector2(2400, 232)
 
 [node name="BrickBlock3" parent="." unique_id=1094345267 instance=ExtResource("32_udf3v")]
 position = Vector2(2416, 400)
@@ -212,4 +212,4 @@ position = Vector2(2416, 400)
 position = Vector2(2544, 360)
 
 [node name="QuestionBlockFireFlower2" parent="." unique_id=1919376033 instance=ExtResource("27_n7erb")]
-position = Vector2(2416, 368)
+position = Vector2(2384, 368)

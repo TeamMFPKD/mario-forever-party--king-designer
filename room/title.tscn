@@ -162,7 +162,7 @@ text = "加入游戏"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(650, 480)
+custom_minimum_size = Vector2(680, 480)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -223,6 +223,7 @@ text = "Mario"
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1021602914]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 32
 
 [node name="QuitButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
 layout_mode = 2
@@ -241,7 +242,7 @@ player_page = NodePath("../../../../../../PlayerPage")
 
 [node name="JoinPage" parent="GameRoomSize" unique_id=1961076983 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(540, 640)
+custom_minimum_size = Vector2(680, 640)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -313,6 +314,7 @@ text = "Luigi"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=46304367]
 layout_mode = 2
+theme_override_constants/separation = 32
 
 [node name="QuitButton" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1551607097 instance=ExtResource("2_w52fc")]
 layout_mode = 2
