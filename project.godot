@@ -43,6 +43,7 @@ RandomCaptureManager="*uid://ba3qikd1k4jig"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/handheld/orientation=4
 mouse_cursor/custom_image="uid://4t4j1ek037hr"
 mouse_cursor/custom_image_hotspot=Vector2(25, 25)
 
