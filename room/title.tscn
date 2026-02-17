@@ -161,6 +161,7 @@ size_flags_vertical = 3
 text = "加入游戏"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
+visible = false
 custom_minimum_size = Vector2(700, 480)
 layout_mode = 1
 anchors_preset = 8
