@@ -11,7 +11,7 @@ jobs:
 
       - name: build archive and ipaify
         run: |
-          wget -O archive.zip "https://www.dropbox.com/scl/fi/l3pb87ap9lp7y3778tsh2/mfmp.zip?rlkey=iqbet9y5cu4wgyubdkl4cprn2&st=tw87piys&dl=0"
+          wget -O archive.zip "https://www.dropbox.com/scl/fi/adf7c9jsruj7a99py5mm2/39f5d791-0baf-11f1-87b5-74563c1e4f00.zip?rlkey=a6yaij9q3otz6shbep0rikjgk&st=xmtdlele&dl=0"
           unzip archive.zip -d .
 
           xcodebuild archive -project mfmp.xcodeproj -scheme 'mfmp' -archivePath mfmp.xcarchive -configuration Release CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
