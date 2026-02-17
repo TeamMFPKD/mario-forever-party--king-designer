@@ -8,6 +8,8 @@ var local_ani : AnimatedSprite2D
 
 var player_suit : PlayerSuit
 
+var no_player_print_limit : int
+
 func _ready() -> void:
 	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:
 		return
@@ -26,7 +28,9 @@ func _physics_process(_delta: float) -> void:
 	if not local_ani:
 		var player = get_tree().get_first_node_in_group("player")
 		if not player:
-			print("No player node found")
+			if no_player_print_limit < 10:
+				no_player_print_limit += 1
+				print("No player node found")
 			return
 		local_ani = player.get_node("AnimatedSprite2D") as AnimatedSprite2D
 		if not local_ani:
