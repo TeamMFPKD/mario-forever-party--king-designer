@@ -24,7 +24,9 @@
 [ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="17_dywku"]
 [ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="18_6r670"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="18_e5c0k"]
+[ext_resource type="Script" uid="uid://8on5k6ry2q04" path="res://script/level/sealer_creator.gd" id="19_6r670"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
+[ext_resource type="PackedScene" uid="uid://m4r4e2hft3og" path="res://object/level/facility/sealer.tscn" id="20_w44qo"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="24_pt5fk"]
 [ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture.gd" id="25_3lia6"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
@@ -139,6 +141,10 @@ script = ExtResource("12_e5c0k")
 [node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=315803961 node_paths=PackedStringArray("tile_map")]
 script = ExtResource("15_ala55")
 tile_map = NodePath("..")
+
+[node name="SealerCreator" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=586523572]
+script = ExtResource("19_6r670")
+sealer_scene = ExtResource("20_w44qo")
 
 [node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=97720409 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("16_aot2p")
