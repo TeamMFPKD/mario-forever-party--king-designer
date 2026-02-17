@@ -11,11 +11,12 @@ var hit : bool
 func _physics_process(_delta: float) -> void:
 	var origin_cast_pos_y = cast.position.y
 	cast.position.y += 1.0
+	cast.force_update_transform()
 	var results = ShapeCastQuery.shape_query(thwomp, cast)
 	cast.position.y = origin_cast_pos_y
 
 	#print("thwomp interaction results: ", results)
-	if results.size() < 2:
+	if results.size() < 1:
 		hit = false
 		return
 	if hit:
