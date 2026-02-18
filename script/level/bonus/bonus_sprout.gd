@@ -45,6 +45,7 @@ func _physics_process(delta: float) -> void:
 			#child.process_mode = ProcessMode.PROCESS_MODE_INHERIT
 		if basic_movement:
 			basic_movement.process_mode = ProcessMode.PROCESS_MODE_INHERIT
+			basic_movement.set_movement_direction()
 		is_sprout = true
 	
 func is_overlap() -> bool:
