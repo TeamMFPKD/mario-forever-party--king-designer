@@ -212,4 +212,7 @@ position = Vector2(2416, 400)
 position = Vector2(2544, 360)
 
 [node name="QuestionBlockFireFlower2" parent="." unique_id=1919376033 instance=ExtResource("27_n7erb")]
-position = Vector2(2320, 336)
+position = Vector2(2384, 304)
+
+[node name="QuestionBlockFireFlower3" parent="." unique_id=739860222 instance=ExtResource("27_n7erb")]
+position = Vector2(2288, 304)
