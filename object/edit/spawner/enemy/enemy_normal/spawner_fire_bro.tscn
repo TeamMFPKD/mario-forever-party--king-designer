@@ -20,3 +20,4 @@ texture = SubResource("AtlasTexture_abu5c")
 flip_h = true
 
 [node name="OffsetMarker" parent="." unique_id=1001169341 instance=ExtResource("3_mg7jc")]
+position = Vector2(0, -8)
