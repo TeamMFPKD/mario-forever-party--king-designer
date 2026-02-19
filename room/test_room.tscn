@@ -47,7 +47,7 @@ tile_set = ExtResource("1_iaqfx")
 script = ExtResource("2_vbo8m")
 
 [node name="Player" parent="." unique_id=1151748388 instance=ExtResource("3_whgqe")]
-position = Vector2(2904, 400)
+position = Vector2(1600, 368)
 
 [node name="CameraPlayerForTest" type="Camera2D" parent="Player" unique_id=1777036543 groups=["level_camera"]]
 zoom = Vector2(2, 2)
