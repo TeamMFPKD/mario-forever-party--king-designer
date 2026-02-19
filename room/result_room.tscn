@@ -102,7 +102,7 @@ grow_vertical = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 48
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ResultTable/UiPanel/UiMarginContainer" unique_id=1267106918]
 layout_mode = 2
@@ -156,6 +156,7 @@ horizontal_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1674169748]
 custom_minimum_size = Vector2(650, 650)
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="ControlVisibieSet" parent="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=260165034 instance=ExtResource("7_tw1oo")]
 path_to_control = NodePath("../../../../..")
@@ -167,7 +168,6 @@ script = ExtResource("7_msipt")
 result_list_scene = ExtResource("8_cur0g")
 
 [node name="TestResultListLine" parent="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" unique_id=723223620 instance=ExtResource("8_cur0g")]
-visible = false
 layout_mode = 2
 
 [node name="WaitingLabel" parent="GameRoomSize" unique_id=391265891 instance=ExtResource("3_bnb7s")]
@@ -212,8 +212,8 @@ script = ExtResource("12_jjhps")
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("13_noirq")]
 show_mode = 0
 
-[connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTitle/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTable/ControlVisibieSet" method="_set_visible"]
+[connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/WaitingLabel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="back_to_title" from="GameRoomSize/Back/ToTitleButton" to="JumpToScene" method="jump_to_scene"]
