@@ -5,5 +5,8 @@
 
 [node name="QuestionBlockBeetroot" unique_id=2059396481 instance=ExtResource("1_qebyv")]
 
-[node name="BlockHit" parent="." index="2" unique_id=2040390214]
+[node name="CollisionShape2D" parent="." index="1" unique_id=277944784]
+rotation = 3.1415927
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
 adv_sprout_item_scene = ExtResource("2_kwrw0")

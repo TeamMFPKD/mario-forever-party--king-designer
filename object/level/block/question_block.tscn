@@ -49,7 +49,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jwfjt"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_alh4b"]
 size = Vector2(32, 32)
 
 [sub_resource type="Animation" id="Animation_alh4b"]
@@ -114,17 +114,17 @@ _data = {
 }
 
 [node name="QuestionBlock" type="StaticBody2D" unique_id=2059396481]
+z_index = 5
 collision_layer = 131
 collision_mask = 0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1794288055]
-z_index = 5
 sprite_frames = SubResource("SpriteFrames_dnips")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=277944784]
-rotation = 3.1415927
-shape = SubResource("RectangleShape2D_jwfjt")
+rotation = -3.1415925
+shape = SubResource("RectangleShape2D_alh4b")
 
 [node name="BlockHit" type="Node" parent="." unique_id=1771154776 node_paths=PackedStringArray("sprite", "_collision_shape_2d")]
 script = ExtResource("1_k7tg0")
