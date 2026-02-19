@@ -57,6 +57,10 @@ func _physics_process(delta: float) -> void:
 	var move_x : bool = bro_state == BroState.WALK or bro_state == BroState.SLIGHT_JUMP
 	speed_x = origin_speed_x * direction if move_x else 0.0
 
+	# Debug
+	#print("Bro State: ", bro_state)
+	#print("Bro speed y: ", speed_y)
+
 	# 越你爷爷
 	# ——梗取自 SMBX
 	if move_object.position.x > origin_position_x + walking_distance:
@@ -80,7 +84,9 @@ func _physics_process(delta: float) -> void:
 				speed_y = bro_slight_jump_speed
 				slight_jumped = true
 				move_object.collision_mask = 0
+				move()
 		BroState.JUMP_UP:
+			#print("why still on floor! 1")
 			if speed_y >= 0.0 and solid_area.get_overlapping_bodies().size() == 0 and jumped:
 				move_object.collision_mask = origin_collision_mask
 				if move_object.is_on_floor():
@@ -88,11 +94,14 @@ func _physics_process(delta: float) -> void:
 						jump_level += 1
 					select_state()
 					return
+			#print("why still on floor! 2")
 			if move_object.is_on_floor() and not jumped:
 				speed_y = bro_jump_speed
 				move_object.collision_mask = 0
 				jumped = true
 				previous_position_y = move_object.position.y
+				move()
+				#print("why still on floor! 3 bro jump speed: ", speed_y)
 		BroState.JUMP_DOWN:
 			if jump_level <= 0:
 				select_state()
@@ -109,6 +118,7 @@ func _physics_process(delta: float) -> void:
 				move_object.collision_mask = 0
 				jumped = true
 				previous_position_y = move_object.position.y
+				move()
 		BroState.SHOOT:
 			shoot_timer += 1
 			ani.play("shoot")
