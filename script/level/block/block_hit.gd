@@ -62,8 +62,10 @@ func _ready() -> void:
 	if hidden:
 		set_hidden()
 
-	player = get_tree().get_first_node_in_group("player")
-	player_suit = player.get_meta("player_suit") as PlayerSuit
+	var fc = func():
+		player = get_tree().get_first_node_in_group("player")
+		player_suit = player.get_meta("player_suit") as PlayerSuit
+	fc.call_deferred()
 
 func _metadata_inject(p_parent: Node2D) -> void:
 	p_parent.set_meta("interaction_with_block", self)

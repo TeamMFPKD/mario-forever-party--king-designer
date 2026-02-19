@@ -13,10 +13,12 @@ var player : Node2D
 var shoot_timer : int
 
 func _ready() -> void:
-	player = get_tree().get_first_node_in_group("player") as Node2D
+	var fc = func():
+		player = get_tree().get_first_node_in_group("player") as Node2D
+	fc.call_deferred()
 	cannon = get_node(path_to_cannon)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var is_safe : bool
 	if player.position.x > cannon.position.x - safe_distance \
 	and player.position.x < cannon.position.x + safe_distance:

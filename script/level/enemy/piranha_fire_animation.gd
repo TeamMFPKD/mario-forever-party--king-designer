@@ -10,9 +10,11 @@ var player : Node2D
 func _ready():
 	parent = get_node(path_to_parent)
 	ani = get_node(path_to_ani)
-	player = get_tree().get_first_node_in_group("player") as Node2D
+	var fc = func():
+		player = get_tree().get_first_node_in_group("player") as Node2D
+	fc.call_deferred()
 	
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	var look_up : bool = player.position.y > parent.position.y
 	if ani.flip_v:
 		look_up = not look_up
