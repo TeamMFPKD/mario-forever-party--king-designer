@@ -10,7 +10,7 @@ signal player_die
 
 var starman : bool
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
 	
 	# 获得道具
@@ -95,11 +95,21 @@ func is_starman() -> bool:
 	return player_suit.is_starman
 
 func block_hit_detect(results : Array[Node2D]) -> void:
-	if not player.is_on_ceiling():
-		return
+	#if not player.is_on_ceiling():
+	#	return
 	#print("block_hit_detect reuslts: ", results)
 	for result in results:
 		if not result.has_meta("interaction_with_block"):
 			continue
 		var block_hit_node = result.get_meta("interaction_with_block") as BlockHit
+		if not block_hit_node.hidden and not player.is_on_ceiling():
+			continue
+		if block_hit_node.hidden:
+			if player_movement.speed_y >= 0.0:
+				continue
+			if not player.is_on_wall() and not player.is_on_ceiling():
+				continue
+		# 服了这神秘物理引擎隐藏砖单向碰撞只能这样特殊处理
+		if block_hit_node.hidden and player.is_on_wall():
+			player_movement.speed_y = 0.0
 		block_hit_node.on_block_hit(player)

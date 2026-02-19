@@ -79,13 +79,13 @@ func on_block_hit(collider: Node2D) -> void:
 		block_break.emit()
 		on_block_break()
 
-func is_hittable(collider: Node2D) -> bool:
+func is_hittable(_collider: Node2D) -> bool:
 	return true
 
-func is_bumpable(collider: Node2D) -> bool:
+func is_bumpable(_collider: Node2D) -> bool:
 	return bumpable
 
-func is_breakable(collider: Node2D) -> bool:
+func is_breakable(_collider: Node2D) -> bool:
 	return _breakable
 
 func on_block_bump() -> void:
