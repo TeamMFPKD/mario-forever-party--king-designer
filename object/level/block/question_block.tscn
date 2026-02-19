@@ -49,8 +49,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_alh4b"]
-size = Vector2(32, 32)
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_alh4b"]
+points = PackedVector2Array(-16, -16, 16, -16, 16.000002, 15.999997, 12.000003, 15.999998, 9.000002, 13.999999, -9.999998, 14.000002, -12.999997, 16.000002, -15.999997, 16.000002)
 
 [sub_resource type="Animation" id="Animation_alh4b"]
 length = 0.001
@@ -124,7 +124,7 @@ autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=277944784]
 rotation = -3.1415925
-shape = SubResource("RectangleShape2D_alh4b")
+shape = SubResource("ConvexPolygonShape2D_alh4b")
 
 [node name="BlockHit" type="Node" parent="." unique_id=1771154776 node_paths=PackedStringArray("sprite", "_collision_shape_2d")]
 script = ExtResource("1_k7tg0")
@@ -144,6 +144,11 @@ stream = ExtResource("4_uotgv")
 
 [node name="BumpSound" parent="." unique_id=547067653 instance=ExtResource("3_q144o")]
 stream = ExtResource("5_dnips")
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="." unique_id=209649764]
+visible = false
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 9, 14, 16, 12, 9, -12, 9, -14, 16, -16, 9)
+disabled = true
 
 [connection signal="block_break" from="BlockHit" to="BreakSound" method="play"]
 [connection signal="block_bump" from="BlockHit" to="BumpSound" method="play"]
