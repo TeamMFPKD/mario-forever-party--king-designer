@@ -27,9 +27,11 @@ var overlap_turn_detect_objects: Array[Node2D] = []
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
-	player = get_tree().get_first_node_in_group("player") as CharacterBody2D
-	if initially_face_to_player:
-		set_movement_direction()
+	var fc = func():
+		player = get_tree().get_first_node_in_group("player") as Node2D
+		if initially_face_to_player:
+			set_movement_direction()
+	fc.call_deferred()
 	if overlap_turn:
 		shape_cast = get_node(path_to_shape_cast) as ShapeCast2D
 
