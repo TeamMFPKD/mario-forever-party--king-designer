@@ -4,6 +4,7 @@ class_name PlayerHurtAndDie
 
 signal play_sound_powerdown
 signal play_sound_die
+signal player_suicided
 
 var is_hurting = false
 var is_dead = false
@@ -33,6 +34,11 @@ func _physics_process(_delta: float) -> void:
 	#var screen =  ScreenUtils.get_screen_rect(self)
 	#if player.position.y > screen.position.y + screen.size.y + 32:
 		#_on_player_die()
+
+	# Suicide
+	if Input.is_action_just_pressed("suicide"):
+		emit_signal("player_suicided")
+		_on_player_die()
 
 	# Update invincible
 	invincible = invincible_starman or is_hurting
