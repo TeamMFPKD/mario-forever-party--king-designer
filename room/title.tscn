@@ -156,6 +156,7 @@ theme_override_constants/separation = 32
 layout_mode = 2
 size_flags_vertical = 3
 text = "组织游戏"
+icon_alignment = 1
 
 [node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
 layout_mode = 2

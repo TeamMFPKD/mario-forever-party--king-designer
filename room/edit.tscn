@@ -13,8 +13,10 @@
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="6_io5w1"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="7_io5w1"]
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="8_amsrr"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_8ebhj"]
 [ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="9_b0qgs"]
 [ext_resource type="Script" uid="uid://dl0jbge2cmsy8" path="res://script/edit/level_control.gd" id="10_g7up7"]
+[ext_resource type="Script" uid="uid://cx3wpfh1e5nl2" path="res://script/mobile_control_button.gd" id="10_nkg8u"]
 [ext_resource type="AudioStream" uid="uid://dgfoymd0r2bxs" path="res://sound/edit/yr_EraseMode_Erase_1.wav" id="11_3l15o"]
 [ext_resource type="AudioStream" uid="uid://btnrl14rbqxbg" path="res://sound/edit/SE_touchObject.wav" id="12_8ebhj"]
 [ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://object/edit/grid/grid_2d.tscn" id="13_nkg8u"]
@@ -328,6 +330,10 @@ text = "游玩"
 script = ExtResource("4_2mwga")
 room_scene_uid = "uid://cxvueju65b3qv"
 metadata/_edit_lock_ = true
+
+[node name="MobileControlButton" parent="GameRoomSize/SaveLoadTest/VBoxContainer" unique_id=1210628054 instance=ExtResource("9_8ebhj")]
+layout_mode = 2
+script = ExtResource("10_nkg8u")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1725420938]
 layout_mode = 1
