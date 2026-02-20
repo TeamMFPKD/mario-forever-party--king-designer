@@ -80,9 +80,11 @@ metadata/_edit_lock_ = true
 [node name="TitleScreenBGMP1" type="AudioStreamPlayer" parent="." unique_id=1820936535]
 stream = ExtResource("3_bj3by")
 autoplay = true
+bus = &"BGM"
 
 [node name="TitleScreenBGMP2" type="AudioStreamPlayer" parent="." unique_id=1418492999]
 stream = ExtResource("4_mavin")
+bus = &"BGM"
 
 [node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
 script = ExtResource("4_ikv4w")
