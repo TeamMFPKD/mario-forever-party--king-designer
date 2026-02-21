@@ -31,6 +31,6 @@ func update_button_text():
 		return
 	
 	if mobile_control.show_mode == MobileControl.ShowModeType.SHOW:
-		text = "隐藏触控"
+		text = tr("隐藏触控")
 	else:
-		text = "显示触控"
+		text = tr("显示触控")
