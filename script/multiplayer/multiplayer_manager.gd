@@ -10,6 +10,9 @@ signal timeout_save
 
 signal result_updated
 
+signal play_sound_joined
+signal play_sound_exited
+
 var local_port
 # 端口使用Sakura Frp隧道配置的远程端口
 var remote_port
@@ -20,7 +23,21 @@ var player_name = ""
 var game_start_time : String
 
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
-var players = []
+var players = []:
+	set(value):
+		print("players set player size: ", players.size())
+		for p in players:
+			print("players set player name: ", p.name)
+		print("players set value size: ", value.size())
+		for v in value:
+			print("players set value player name: ", v.name)
+		if players.size() < value.size():
+			emit_signal("play_sound_joined")
+			print("play sound joined")
+		if players.size() > value.size():
+			emit_signal("play_sound_exited")
+			print("play sound exited")
+		players = value
 
 var random_levels = []
 var current_level_count : int = 0
@@ -122,13 +139,15 @@ func register_player_on_host(player_info):
 		return
 
 	# 更新主机本地的玩家列表
-	players.append(player_info)
+	# 这样写是为了触发 players 的 set 方法，因为 Array.append() 不会触发 set 方法
+	var p_list = players.duplicate()
+	p_list.append(player_info)
 	
 	# 通知所有对等体有新玩家加入
 	player_joined.rpc(player_info)
 	
 	# 同步完整的玩家列表给所有客户端
-	sync_players_list.rpc(players)
+	sync_players_list.rpc(p_list)
 
 @rpc("authority", "call_remote")
 func inform_late_player() -> void:
@@ -158,9 +177,12 @@ func _on_peer_disconnected(id: int):
 	# 当对等体断开连接时
 	if multiplayer.is_server():
 		# 服务器：从 players 列表中移除离开的玩家
-		for i in range(players.size()):
-			if players[i].id == id:
-				players.remove_at(i)
+		# 这样写是为了触发 players 的 set 方法，因为 Array.append() 不会触发 set 方法
+		var p_list = players.duplicate()
+		for i in range(p_list.size()):
+			if p_list[i].id == id:
+				p_list.remove_at(i)
+				players = p_list
 				break
 		
 		emit_signal("players_updated")
@@ -191,10 +213,6 @@ func disconnect_and_cleanup():
 		server_closing.rpc()
 	else:
 		# 客户端：直接断开连接，服务器会通过 peer_disconnected 信号检测
-		# 隐藏 PlayerPage
-		var player_page = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
-		if player_page:
-			player_page.visible = false
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 @rpc("authority")
