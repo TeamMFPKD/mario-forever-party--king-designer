@@ -32,6 +32,7 @@
 [ext_resource type="Script" uid="uid://b8mprwnkj4i8m" path="res://script/multiplayer/game_in_progress_hint.gd" id="26_mavin"]
 [ext_resource type="Script" uid="uid://b863abvb5xbma" path="res://script/option/volume.gd" id="26_nl766"]
 [ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]
+[ext_resource type="PackedScene" uid="uid://b05l8y21x0q11" path="res://object/input_map_set.tscn" id="28_wphsk"]
 
 [sub_resource type="GDScript" id="GDScript_rm4w4"]
 script/source = "extends TextureButton
@@ -530,7 +531,6 @@ size_flags_vertical = 6
 text = "确认"
 
 [node name="Options" parent="GameRoomSize" unique_id=1212935464 instance=ExtResource("8_c2fru")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -544,10 +544,12 @@ theme_override_constants/margin_bottom = 32
 
 [node name="ControlVisibieSet" parent="GameRoomSize/Options" unique_id=1148446466 instance=ExtResource("9_ty11l")]
 
-[node name="UiPanel" parent="GameRoomSize/Options" unique_id=1051373583 instance=ExtResource("4_i3lsm")]
+[node name="BasicPanel" parent="GameRoomSize/Options" unique_id=1051373583 instance=ExtResource("4_i3lsm")]
 layout_mode = 2
 
-[node name="BasicSettings" parent="GameRoomSize/Options/UiPanel" unique_id=1151200309 instance=ExtResource("8_c2fru")]
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel" unique_id=1623395007 instance=ExtResource("9_ty11l")]
+
+[node name="BasicSettings" parent="GameRoomSize/Options/BasicPanel" unique_id=1151200309 instance=ExtResource("8_c2fru")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -559,12 +561,12 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 192
 theme_override_constants/margin_bottom = 32
 
-[node name="ControlVisibieSet" parent="GameRoomSize/Options/UiPanel/BasicSettings" unique_id=100550489 instance=ExtResource("9_ty11l")]
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel/BasicSettings" unique_id=100550489 instance=ExtResource("9_ty11l")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/UiPanel/BasicSettings" unique_id=1601812653]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings" unique_id=1601812653]
 layout_mode = 2
 
-[node name="OptionLabel" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer" unique_id=655682543 instance=ExtResource("5_qon3s")]
+[node name="OptionLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=655682543 instance=ExtResource("5_qon3s")]
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
@@ -572,30 +574,30 @@ text = "设置界面"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MasterVolume" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer" unique_id=774405673]
+[node name="MasterVolume" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=774405673]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="MasterVolumeLabel" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/MasterVolume" unique_id=131215776 instance=ExtResource("5_qon3s")]
+[node name="MasterVolumeLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/MasterVolume" unique_id=131215776 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 text = "全局音量"
 
-[node name="MasterVolumeHSlider" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/MasterVolume" unique_id=962424427 instance=ExtResource("28_nmdgl")]
+[node name="MasterVolumeHSlider" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/MasterVolume" unique_id=962424427 instance=ExtResource("28_nmdgl")]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 1
 script = ExtResource("26_nl766")
 
-[node name="MusicVolume" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer" unique_id=1607967798]
+[node name="MusicVolume" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=1607967798]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="MusicVolumeLabel" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/MusicVolume" unique_id=1077191224 instance=ExtResource("5_qon3s")]
+[node name="MusicVolumeLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/MusicVolume" unique_id=1077191224 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 text = "背景音乐"
 
-[node name="MusicVolumeHSlider" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/MusicVolume" unique_id=1652124816 instance=ExtResource("28_nmdgl")]
+[node name="MusicVolumeHSlider" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/MusicVolume" unique_id=1652124816 instance=ExtResource("28_nmdgl")]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -603,15 +605,15 @@ size_flags_vertical = 1
 script = ExtResource("26_nl766")
 volume_type = 1
 
-[node name="SoundVolume" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer" unique_id=2146636932]
+[node name="SoundVolume" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=2146636932]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="SoundVolumeLabel" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/SoundVolume" unique_id=1372898515 instance=ExtResource("5_qon3s")]
+[node name="SoundVolumeLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/SoundVolume" unique_id=1372898515 instance=ExtResource("5_qon3s")]
 layout_mode = 2
 text = "音效音量"
 
-[node name="SoundVolumeHSlider" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/SoundVolume" unique_id=137919434 instance=ExtResource("28_nmdgl")]
+[node name="SoundVolumeHSlider" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/SoundVolume" unique_id=137919434 instance=ExtResource("28_nmdgl")]
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 size_flags_horizontal = 10
@@ -619,24 +621,38 @@ size_flags_vertical = 1
 script = ExtResource("26_nl766")
 volume_type = 2
 
-[node name="Language" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer" unique_id=976672169]
+[node name="Language" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=976672169]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="LanguageLabel" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/Language" unique_id=656301114 instance=ExtResource("5_qon3s")]
+[node name="LanguageLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Language" unique_id=656301114 instance=ExtResource("5_qon3s")]
 auto_translate_mode = 2
 layout_mode = 2
 text = "Language / 语言"
 
-[node name="LanguageButton" parent="GameRoomSize/Options/UiPanel/BasicSettings/VBoxContainer/Language" unique_id=862145675 instance=ExtResource("2_w52fc")]
+[node name="LanguageButton" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Language" unique_id=862145675 instance=ExtResource("2_w52fc")]
 auto_translate_mode = 2
-custom_minimum_size = Vector2(270, 0)
+custom_minimum_size = Vector2(270, 96)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
 
-[node name="Staff" parent="GameRoomSize/Options/UiPanel" unique_id=1510288836 instance=ExtResource("8_c2fru")]
+[node name="Controls" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=300071702]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="ControlsLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls" unique_id=1008498644 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "输入映射"
+
+[node name="ControlsButton" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls" unique_id=660038383 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "设置按键"
+
+[node name="Staff" parent="GameRoomSize/Options/BasicPanel" unique_id=1510288836 instance=ExtResource("8_c2fru")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -649,12 +665,12 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 192
 theme_override_constants/margin_bottom = 160
 
-[node name="ControlVisibieSet" parent="GameRoomSize/Options/UiPanel/Staff" unique_id=769449142 instance=ExtResource("9_ty11l")]
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel/Staff" unique_id=769449142 instance=ExtResource("9_ty11l")]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/UiPanel/Staff" unique_id=106894761]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/BasicPanel/Staff" unique_id=106894761]
 layout_mode = 2
 
-[node name="StaffLabel" parent="GameRoomSize/Options/UiPanel/Staff/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
+[node name="StaffLabel" parent="GameRoomSize/Options/BasicPanel/Staff/VBoxContainer" unique_id=1987656228 instance=ExtResource("5_qon3s")]
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
@@ -662,17 +678,18 @@ text = "Staff"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/Options/UiPanel/Staff/VBoxContainer" unique_id=1122033076]
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/Options/BasicPanel/Staff/VBoxContainer" unique_id=1122033076]
 layout_mode = 2
 size_flags_horizontal = 9
 size_flags_vertical = 3
 
-[node name="StaffContentLabel" parent="GameRoomSize/Options/UiPanel/Staff/VBoxContainer/ScrollContainer" unique_id=1267255343 instance=ExtResource("5_qon3s")]
+[node name="StaffContentLabel" parent="GameRoomSize/Options/BasicPanel/Staff/VBoxContainer/ScrollContainer" unique_id=1267255343 instance=ExtResource("5_qon3s")]
 auto_translate_mode = 2
 custom_minimum_size = Vector2(233, 233)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_font_sizes/font_size = 35
 text = "- Producer:
 绿色的糖果 (Green Sweet)
 
@@ -730,7 +747,7 @@ Other Beta Testers...
 "
 autowrap_mode = 3
 
-[node name="Back" parent="GameRoomSize/Options/UiPanel" unique_id=606693197 instance=ExtResource("8_c2fru")]
+[node name="Back" parent="GameRoomSize/Options/BasicPanel" unique_id=606693197 instance=ExtResource("8_c2fru")]
 custom_minimum_size = Vector2(288, 120)
 layout_mode = 1
 anchors_preset = 3
@@ -747,19 +764,19 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/Back" unique_id=2116516305]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/Back" unique_id=2116516305]
 layout_mode = 2
 
-[node name="StaffButton" parent="GameRoomSize/Options/UiPanel/Back/HBoxContainer" unique_id=1478466946 instance=ExtResource("2_w52fc")]
+[node name="StaffButton" parent="GameRoomSize/Options/BasicPanel/Back/HBoxContainer" unique_id=1478466946 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(288, 96)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 text = "制作人员"
 
-[node name="ControlVisibieSet" parent="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton" unique_id=667462265 instance=ExtResource("9_ty11l")]
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" unique_id=667462265 instance=ExtResource("9_ty11l")]
 
-[node name="MainOptionButton" parent="GameRoomSize/Options/UiPanel/Back/HBoxContainer" unique_id=2012187499 instance=ExtResource("2_w52fc")]
+[node name="MainOptionButton" parent="GameRoomSize/Options/BasicPanel/Back/HBoxContainer" unique_id=2012187499 instance=ExtResource("2_w52fc")]
 visible = false
 custom_minimum_size = Vector2(288, 96)
 layout_mode = 2
@@ -767,14 +784,109 @@ size_flags_horizontal = 6
 size_flags_vertical = 4
 text = "设置界面"
 
-[node name="ControlVisibieSet" parent="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton" unique_id=1585383874 instance=ExtResource("9_ty11l")]
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" unique_id=1585383874 instance=ExtResource("9_ty11l")]
 
-[node name="BackButton" parent="GameRoomSize/Options/UiPanel/Back/HBoxContainer" unique_id=1782384688 instance=ExtResource("2_w52fc")]
+[node name="BackButton" parent="GameRoomSize/Options/BasicPanel/Back/HBoxContainer" unique_id=1782384688 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(288, 96)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 text = "返回"
+
+[node name="ControlsPanel" parent="GameRoomSize/Options" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+visible = false
+layout_mode = 2
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanel" unique_id=1864099051 instance=ExtResource("9_ty11l")]
+
+[node name="InputMapSet" parent="GameRoomSize/Options/ControlsPanel" unique_id=1291638666 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 192
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 192
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet" unique_id=486418179]
+layout_mode = 2
+
+[node name="InputMapSetLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=1965089512 instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "输入映射"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InputMapSet" type="HBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=1934483335]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/separation = 256
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet" unique_id=2103144237]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Up" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=210196764 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="Down" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=645636120 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down" index="0" unique_id=1008498644]
+text = "下"
+
+[node name="Left" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=1537228468 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Left" index="0" unique_id=1008498644]
+text = "左"
+
+[node name="Right" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=1021476370 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Right" index="0" unique_id=1008498644]
+text = "右"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet" unique_id=142408050]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Jump" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=1472246312 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Jump" index="0" unique_id=1008498644]
+text = "跳跃"
+
+[node name="Shoot" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=952260302 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Shoot" index="0" unique_id=1008498644]
+text = "射击"
+
+[node name="Restart" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=1834576795 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Restart" index="0" unique_id=1008498644]
+text = "快速重开"
+
+[node name="Photo" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=1260038626 instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Photo" index="0" unique_id=1008498644]
+text = "拍摄"
+
+[node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=26128048 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+text = "返回主设置"
 
 [node name="Language" parent="GameRoomSize" unique_id=1581453593 instance=ExtResource("8_c2fru")]
 z_index = 600
@@ -817,7 +929,7 @@ script = ExtResource("4_ytxtj")
 refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
 accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
 
-[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1506734047 instance=ExtResource("4_i3lsm")]
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
@@ -917,16 +1029,29 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="GameRoomSize/GameInProgressHint/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/UiPanel/BasicSettings/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/UiPanel/Staff/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/UiPanel/BasicSettings/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/UiPanel/Staff/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/UiPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/UiPanel/Back/HBoxContainer/MainOptionButton/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/HBoxContainer/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/BasicSettings/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Staff/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/BasicSettings/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/Staff/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/Language/ControlVisibieSet" method="_set_invisible" flags=3]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
+
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Up"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Left"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Right"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Jump"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Shoot"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Restart"]
+[editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Photo"]
