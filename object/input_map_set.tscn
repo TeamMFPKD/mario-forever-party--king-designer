@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b05l8y21x0q11"]
+
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_lbe55"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_3jbc4"]
+
+[node name="InputMapSet" type="HBoxContainer" unique_id=210196764]
+
+[node name="InputNameLabel" parent="." unique_id=1008498644 instance=ExtResource("1_lbe55")]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+text = "上"
+
+[node name="InputSetButton" parent="." unique_id=1210628054 instance=ExtResource("2_3jbc4")]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(233, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "设置按键"
