@@ -1,37 +1,43 @@
 extends Button
 
+enum LanguageType {
+	EN,
+	ZH,
+	ja,
+}
+
 var config : ConfigFile
+var current_language : String
 
 func _ready():
-	# 设置按钮初始文本
-	update_button_text()
 	# 连接按钮点击信号
 	pressed.connect(_on_pressed)
 
 	config = GameConfig.config
 
-	var language = config.get_value("options", "language", "en")
-	match language:
+	current_language = config.get_value("options", "language", "en")
+	match current_language:
 		"en":
 			TranslationServer.set_locale("en")
 		"zh":
 			TranslationServer.set_locale("zh")
+		"ja":
+			TranslationServer.set_locale("ja")
 
 	# 更新按钮文字
 	update_button_text()
 
-
-func _on_pressed():
-	# 获取当前语言
-	var current = TranslationServer.get_locale()
-	
+func _on_pressed():	
 	# 切换语言
-	if current == "zh":
-		TranslationServer.set_locale("en")
-		config.set_value("options", "language", "en")
-	else:
-		TranslationServer.set_locale("zh")
-		config.set_value("options", "language", "zh")
+	if current_language == "en":
+		current_language = "zh"
+	elif current_language == "zh":
+		#current_language = "ja"
+	#elif current_language == "ja":
+		current_language = "en"
+		
+	TranslationServer.set_locale(current_language)
+	config.set_value("options", "language", current_language)
 	
 	# 更新按钮文字
 	update_button_text()
@@ -39,8 +45,11 @@ func _on_pressed():
 	GameConfig.save()
 
 func update_button_text():
-	# 按钮上显示当前语言的另一选项
-	if TranslationServer.get_locale() == "zh":
-		text = "English"  # 当前是中文，按钮显示English
-	else:
-		text = "中文"      # 当前是英文，按钮显示中文
+	#var current_language = TranslationServer.get_locale()
+	match current_language:
+		"en":
+			text = "English"
+		"zh":
+			text = "中文"
+		"ja":
+			text = "日本語"
