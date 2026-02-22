@@ -13,6 +13,7 @@ texture_margin_bottom = 9.0
 
 [sub_resource type="FontVariation" id="FontVariation_t6afm"]
 base_font = ExtResource("3_t6qpq")
+variation_embolden = -0.5
 baseline_offset = -0.05
 
 [sub_resource type="FontVariation" id="FontVariation_a8n6i"]
