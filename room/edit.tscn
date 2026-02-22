@@ -399,10 +399,12 @@ metadata/_custom_type_script = "uid://dl0jbge2cmsy8"
 [node name="SoundErase" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=730524893]
 stream = ExtResource("11_3l15o")
 volume_db = -5.0
+bus = &"Sound"
 
 [node name="SoundPlaceObject" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=1146168323]
 stream = ExtResource("12_8ebhj")
-volume_db = -15.0
+volume_db = -5.0
+bus = &"Sound"
 script = ExtResource("15_e6mtu")
 
 [node name="Grid2d" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1266480464 instance=ExtResource("13_nkg8u")]

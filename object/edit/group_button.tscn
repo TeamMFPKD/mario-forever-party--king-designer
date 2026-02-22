@@ -84,6 +84,7 @@ metadata/_edit_lock_ = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=188067364]
 stream = ExtResource("5_0vreg")
+bus = &"Sound"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1888260282]
 libraries/ = SubResource("AnimationLibrary_u4m4t")
