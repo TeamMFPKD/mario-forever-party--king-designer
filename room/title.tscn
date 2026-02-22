@@ -531,6 +531,7 @@ size_flags_vertical = 6
 text = "确认"
 
 [node name="Options" parent="GameRoomSize" unique_id=1212935464 instance=ExtResource("8_c2fru")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -545,7 +546,6 @@ theme_override_constants/margin_bottom = 32
 [node name="ControlVisibieSet" parent="GameRoomSize/Options" unique_id=1148446466 instance=ExtResource("9_ty11l")]
 
 [node name="BasicPanel" parent="GameRoomSize/Options" unique_id=1051373583 instance=ExtResource("4_i3lsm")]
-visible = false
 layout_mode = 2
 
 [node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel" unique_id=1623395007 instance=ExtResource("9_ty11l")]
@@ -795,6 +795,7 @@ size_flags_vertical = 4
 text = "返回"
 
 [node name="ControlsPanel" parent="GameRoomSize/Options" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+visible = false
 layout_mode = 2
 
 [node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanel" unique_id=1864099051 instance=ExtResource("9_ty11l")]

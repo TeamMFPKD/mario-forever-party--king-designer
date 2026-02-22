@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dumkfbr3vy2a6" path="res://script/option/input_map_set_button.gd" id="3_3jbc4"]
 
 [node name="InputMapSet" type="HBoxContainer" unique_id=210196764]
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 112)
 
 [node name="InputNameLabel" parent="." unique_id=1008498644 instance=ExtResource("1_lbe55")]
 custom_minimum_size = Vector2(350, 0)
@@ -15,8 +15,10 @@ text = "上"
 
 [node name="InputSetButton" parent="." unique_id=1210628054 instance=ExtResource("2_3jbc4")]
 auto_translate_mode = 2
-custom_minimum_size = Vector2(300, 0)
+custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 40
 text = "设置按键"
+autowrap_mode = 3
 script = ExtResource("3_3jbc4")
