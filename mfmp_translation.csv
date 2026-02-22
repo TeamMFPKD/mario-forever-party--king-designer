@@ -1,5 +1,5 @@
-﻿keys,en,zh
-使用须知,User Notice,使用须知
+﻿keys,en,zh,ja
+使用须知,User Notice,使用须知,利用上の注意
 使用须知文本,"Welcome to Mario Forever: Maker Party!
 
 Mario Forever: Maker Party is a game with DIY features. Please ensure the following during gameplay:
@@ -16,54 +16,62 @@ Mario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程
 · 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡
 
 关卡存储说明：
-· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。"
-拒绝并退出,Decline,拒绝并退出
-同意,Accept,同意
-组织游戏,Host,组织游戏
-加入游戏,Join,加入游戏
-本地端口,Local Port,本地端口
-玩家名称,Name,玩家名称
-组织,Host,组织
-组织方 IP,Host IP,组织方 IP
-端口,Port,端口
-加入,Join,加入
-玩家列表,Players,玩家列表
-退出,Quit,退出
-开始,Start,开始
-设定编辑时限,Edit Time Limit,设定编辑时限
-游玩,Play,游玩
-编辑,Edit,编辑
-传输 / 接收关卡数据中……,Transferring / Receiving level data...,传输 / 接收关卡数据中……
-强制继续,Force Continue,强制继续
-结果,Results,结果
-返回标题画面,Back to title,返回标题画面
-名称,Name,名称
-关卡被通过数,Times Completed,关卡被通过数
-关卡死亡数,Times Died,关卡死亡数
-通过率,Clear Rate,通过率
-个人通关总数,Your Completions,个人通关总数
-总积分,Score,总积分
-游戏进行中,Game in progress,游戏进行中
-确认,OK,确认
-关卡回顾,Capture,关卡回顾
-等待其他玩家游玩所有关卡……,Waiting for others to finish...,等待其他玩家游玩所有关卡……
-隐藏触控,Show Touch,隐藏触控
-显示触控,Hide Touch,显示触控
-游玩记录,History,游玩记录
-设置界面,Options,设置界面
-全局音量,Master Volume,全局音量
-背景音乐,Music Volume,背景音乐
-音效音量,Sound Volume,音效音量
-返回,Back,返回
-制作人员,Staff,制作人员
-输入映射,Input Map,输入映射
-设置按键,Set,设置按键
-返回主设置,Main Option,返回主设置
-上,Move Up,上
-下,Move Down,下
-左,Move Left,左
-右,Move Right,右
-跳跃,Jump,跳跃
-射击,Shoot,射击
-快速重开,Restart,快速重开
-拍摄,Photo,拍摄
+· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。","Mario Forever: Maker Party へようこそ！
+
+Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中は、以下の点を守ってください：
+· 作成するコースの内容は公序良俗に反せず、暴力的、わいせつ、低俗、差別的、ホラーなどの不適切、違法、または規約違反の内容を含まないこと。
+· 現地の法律と規制を遵守すること。
+· コース作成機能を悪用して、悪意のあるコードやウイルスを作成・拡散したり、プレイヤーの端末の誤作動や情報漏洩を誘発するような悪質なコースを設計しないこと。
+
+コース保存に関する説明：
+· コース再利用のため、オンラインプレイ中にあなたが作成したコースは他のプレイヤーのローカルデバイスに自動的にキャッシュされます。同様に、他のプレイヤーが作成したコースもあなたのローカルデバイスに自動的にキャッシュされます。"
+拒绝并退出,Decline,拒绝并退出,拒否して終了
+同意,Accept,同意,同意する
+组织游戏,Host,组织游戏,ゲームを主催
+加入游戏,Join,加入游戏,ゲームに参加
+本地端口,Local Port,本地端口,ローカルポート
+玩家名称,Name,玩家名称,プレイヤー名
+组织,Host,组织,主催
+组织方 IP,Host IP,组织方 IP,ホストIP
+端口,Port,端口,ポート
+加入,Join,加入,参加
+玩家列表,Players,玩家列表,プレイヤー一覧
+退出,Quit,退出,退出
+开始,Start,开始,開始
+设定编辑时限,Edit Time Limit,设定编辑时限,編集制限時間設定
+游玩,Play,游玩,プレイ
+编辑,Edit,编辑,編集
+传输 / 接收关卡数据中……,Transferring / Receiving level data...,传输 / 接收关卡数据中……,コースデータ転送/受信中……
+强制继续,Force Continue,强制继续,強制続行
+结果,Results,结果,結果
+返回标题画面,Back to title,返回标题画面,タイトルに戻る
+名称,Name,名称,コース名
+关卡被通过数,Times Completed,关卡被通过数,クリア回数
+关卡死亡数,Times Died,关卡死亡数,死亡回数
+通过率,Clear Rate,通过率,クリア率
+个人通关总数,Your Completions,个人通关总数,自分のクリア数
+总积分,Score,总积分,合計スコア
+游戏进行中,Game in progress,游戏进行中,ゲーム進行中
+确认,OK,确认,確認
+关卡回顾,Capture,关卡回顾,コースレビュー
+等待其他玩家游玩所有关卡……,Waiting for others to finish...,等待其他玩家游玩所有关卡……,他のプレイヤーが全コースをプレイするのを待っています……
+隐藏触控,Show Touch,隐藏触控,タッチ操作を隠す
+显示触控,Hide Touch,显示触控,タッチ操作を表示
+游玩记录,History,游玩记录,プレイ履歴
+设置界面,Options,设置界面,設定画面
+全局音量,Master Volume,全局音量,マスターボリューム
+背景音乐,Music Volume,背景音乐,BGM音量
+音效音量,Sound Volume,音效音量,効果音音量
+返回,Back,返回,戻る
+制作人员,Staff,制作人员,スタッフ
+输入映射,Input Map,输入映射,入力設定
+设置按键,Set,设置按键,キー設定
+返回主设置,Main Option,返回主设置,メイン設定に戻る
+上,Move Up,上,上
+下,Move Down,下,下
+左,Move Left,左,左
+右,Move Right,右,右
+跳跃,Jump,跳跃,ジャンプ
+射击,Shoot,射击,攻撃
+快速重开,Restart,快速重开,クイックリスタート
+拍摄,Photo,拍摄,撮影

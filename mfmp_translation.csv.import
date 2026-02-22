@@ -6,10 +6,10 @@ uid="uid://bpi1nf6yrbwhl"
 
 [deps]
 
-files=["res://mfmp_translation.en.translation", "res://mfmp_translation.zh.translation"]
+files=["res://mfmp_translation.en.translation", "res://mfmp_translation.zh.translation", "res://mfmp_translation.ja.translation"]
 
 source_file="res://mfmp_translation.csv"
-dest_files=["res://mfmp_translation.en.translation", "res://mfmp_translation.zh.translation"]
+dest_files=["res://mfmp_translation.en.translation", "res://mfmp_translation.zh.translation", "res://mfmp_translation.ja.translation"]
 
 [params]
 
