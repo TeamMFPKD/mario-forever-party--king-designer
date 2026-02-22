@@ -12,7 +12,7 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	is_waiting_for_input = true
-	text = "请按下一个键"
+	text = tr("请按下一个键")
 
 func _input(event: InputEvent) -> void:
 	if not is_waiting_for_input:
@@ -21,27 +21,23 @@ func _input(event: InputEvent) -> void:
 		InputMap.action_erase_events(input_map_name)
 		InputMap.action_add_event(input_map_name, event)
 		
-		# 修复：用 var_to_str 序列化完整 InputEvent，存到 input_event section
 		config.set_value("input_event", input_map_name, var_to_str(event))
-		# 同时存可读文本用于显示
-		config.set_value("input_display", input_map_name, event.as_text().replace(" - Physical", ""))
 		GameConfig.save()
 		
 		_update_button_text()
 		is_waiting_for_input = false
 
 func _update_button_text() -> void:
-	# 从 input_display section 读取显示用的文本
-	var saved_text = config.get_value("input_display", input_map_name, "")
-	if saved_text != "":
-		text = saved_text
+	var saved_event_str = config.get_value("input_event", input_map_name, "")
+	if saved_event_str != "":
+		var saved_event = str_to_var(saved_event_str)
+		if saved_event is InputEvent:
+			text = saved_event.as_text().replace(" - Physical", "")
+			return
+	
+	# 配置里没有，从 InputMap 读取默认值
+	var events = InputMap.action_get_events(input_map_name)
+	if events.size() > 0:
+		text = events[0].as_text().replace(" - Physical", "")
 	else:
-		var events = InputMap.action_get_events(input_map_name)
-		if events.size() > 0:
-			var display = events[0].as_text().replace(" - Physical", "")
-			text = display
-			config.set_value("input_event", input_map_name, var_to_str(events[0]))
-			config.set_value("input_display", input_map_name, display)
-			GameConfig.save()
-		else:
-			text = "未设置"
+		text = tr("未设置")
