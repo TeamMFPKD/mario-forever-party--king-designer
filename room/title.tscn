@@ -545,6 +545,7 @@ theme_override_constants/margin_bottom = 32
 [node name="ControlVisibieSet" parent="GameRoomSize/Options" unique_id=1148446466 instance=ExtResource("9_ty11l")]
 
 [node name="BasicPanel" parent="GameRoomSize/Options" unique_id=1051373583 instance=ExtResource("4_i3lsm")]
+visible = false
 layout_mode = 2
 
 [node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel" unique_id=1623395007 instance=ExtResource("9_ty11l")]
@@ -794,7 +795,6 @@ size_flags_vertical = 4
 text = "返回"
 
 [node name="ControlsPanel" parent="GameRoomSize/Options" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
-visible = false
 layout_mode = 2
 
 [node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanel" unique_id=1864099051 instance=ExtResource("9_ty11l")]
@@ -835,11 +835,17 @@ size_flags_horizontal = 3
 [node name="Up" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=210196764 instance=ExtResource("28_wphsk")]
 layout_mode = 2
 
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Up" index="1" unique_id=1210628054]
+input_map_name = "move_up"
+
 [node name="Down" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=645636120 instance=ExtResource("28_wphsk")]
 layout_mode = 2
 
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down" index="0" unique_id=1008498644]
 text = "下"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down" index="1" unique_id=1210628054]
+input_map_name = "move_down"
 
 [node name="Left" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=1537228468 instance=ExtResource("28_wphsk")]
 layout_mode = 2
@@ -847,11 +853,17 @@ layout_mode = 2
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Left" index="0" unique_id=1008498644]
 text = "左"
 
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Left" index="1" unique_id=1210628054]
+input_map_name = "move_left"
+
 [node name="Right" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2" unique_id=1021476370 instance=ExtResource("28_wphsk")]
 layout_mode = 2
 
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Right" index="0" unique_id=1008498644]
 text = "右"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Right" index="1" unique_id=1210628054]
+input_map_name = "move_right"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet" unique_id=142408050]
 layout_mode = 2
@@ -863,11 +875,17 @@ layout_mode = 2
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Jump" index="0" unique_id=1008498644]
 text = "跳跃"
 
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Jump" index="1" unique_id=1210628054]
+input_map_name = "move_jump"
+
 [node name="Shoot" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=952260302 instance=ExtResource("28_wphsk")]
 layout_mode = 2
 
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Shoot" index="0" unique_id=1008498644]
 text = "射击"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Shoot" index="1" unique_id=1210628054]
+input_map_name = "move_fire"
 
 [node name="Restart" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=1834576795 instance=ExtResource("28_wphsk")]
 layout_mode = 2
@@ -875,11 +893,17 @@ layout_mode = 2
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Restart" index="0" unique_id=1008498644]
 text = "快速重开"
 
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Restart" index="1" unique_id=1210628054]
+input_map_name = "restart"
+
 [node name="Photo" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" unique_id=1260038626 instance=ExtResource("28_wphsk")]
 layout_mode = 2
 
 [node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Photo" index="0" unique_id=1008498644]
 text = "拍摄"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Photo" index="1" unique_id=1210628054]
+input_map_name = "photo"
 
 [node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=26128048 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(450, 0)

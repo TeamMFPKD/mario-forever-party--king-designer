@@ -36,7 +36,7 @@ func _physics_process(_delta: float) -> void:
 		#_on_player_die()
 
 	# Suicide
-	if Input.is_action_just_pressed("suicide"):
+	if Input.is_action_just_pressed("restart"):
 		emit_signal("player_suicided")
 		_on_player_die()
 

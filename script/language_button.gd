@@ -32,8 +32,8 @@ func _on_pressed():
 	if current_language == "en":
 		current_language = "zh"
 	elif current_language == "zh":
-		current_language = "ja"
-	elif current_language == "ja":
+		#current_language = "ja"
+	#elif current_language == "ja":
 		current_language = "en"
 		
 	TranslationServer.set_locale(current_language)
