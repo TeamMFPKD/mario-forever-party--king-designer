@@ -4,7 +4,7 @@
 resource_name = "LowPassFilter"
 
 [resource]
-bus/1/name = &"BGM"
+bus/1/name = &"Music"
 bus/1/solo = false
 bus/1/mute = false
 bus/1/bypass_fx = false
@@ -15,10 +15,10 @@ bus/2/solo = false
 bus/2/mute = false
 bus/2/bypass_fx = false
 bus/2/volume_db = 0.0
-bus/2/send = &"BGM"
+bus/2/send = &"Music"
 bus/2/effect/0/effect = SubResource("AudioEffectLowPassFilter_j3pel")
 bus/2/effect/0/enabled = true
-bus/3/name = &"SoundEffect"
+bus/3/name = &"Sound"
 bus/3/solo = false
 bus/3/mute = false
 bus/3/bypass_fx = false

@@ -3,6 +3,6 @@
 [ext_resource type="Script" uid="uid://b7wv6e8w815uw" path="res://script/level/sound/continuous_audio_stream.gd" id="1_83kfe"]
 
 [node name="ContinuousAudioStream" type="AudioStreamPlayer" unique_id=1715984441]
-bus = &"SoundEffect"
+bus = &"Sound"
 script = ExtResource("1_83kfe")
 metadata/_custom_type_script = "uid://b7wv6e8w815uw"

@@ -30,6 +30,8 @@
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="25_ssvsf"]
 [ext_resource type="Script" uid="uid://b8mprwnkj4i8m" path="res://script/multiplayer/game_in_progress_hint.gd" id="26_mavin"]
+[ext_resource type="Script" uid="uid://b863abvb5xbma" path="res://script/option/volume.gd" id="26_nl766"]
+[ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]
 
 [sub_resource type="GDScript" id="GDScript_rm4w4"]
 script/source = "extends TextureButton
@@ -80,11 +82,11 @@ metadata/_edit_lock_ = true
 [node name="TitleScreenBGMP1" type="AudioStreamPlayer" parent="." unique_id=1820936535]
 stream = ExtResource("3_bj3by")
 autoplay = true
-bus = &"BGM"
+bus = &"Music"
 
 [node name="TitleScreenBGMP2" type="AudioStreamPlayer" parent="." unique_id=1418492999]
 stream = ExtResource("4_mavin")
-bus = &"BGM"
+bus = &"Music"
 
 [node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
 script = ExtResource("4_ikv4w")
@@ -139,29 +141,52 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -203.0
-offset_top = -429.0
-offset_right = 203.0
+offset_left = -401.0
+offset_top = -472.0
+offset_right = 401.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 64
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ChooseMode" unique_id=847404174]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/ChooseMode" unique_id=758802449]
 layout_mode = 2
+theme_override_constants/separation = 128
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ChooseMode/HBoxContainer" unique_id=847404174]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 13
 theme_override_constants/separation = 32
 
-[node name="ChooseHostButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
+[node name="ChooseHostButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "组织游戏"
 icon_alignment = 1
 
-[node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
+[node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "加入游戏"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="GameRoomSize/ChooseMode/HBoxContainer" unique_id=2012226893]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 13
+theme_override_constants/separation = 32
+
+[node name="HistoryButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "游玩记录"
+
+[node name="OptionsButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1658739772 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "设置界面"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
@@ -228,7 +253,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 32
 
-[node name="QuitButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+[node name="QuitButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=222617188 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 7
 text = "退出"
@@ -452,120 +477,6 @@ script = SubResource("GDScript_rm4w4")
 forum_international_texture = ExtResource("21_0r6on")
 forum_cn_texture = ExtResource("19_rm4w4")
 
-[node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
-visible = false
-z_index = 500
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 0
-theme_override_constants/margin_left = 128
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 128
-theme_override_constants/margin_bottom = 64
-script = ExtResource("4_ytxtj")
-refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
-accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
-
-[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 16
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer" unique_id=1242804199]
-layout_mode = 2
-
-[node name="UiLabel2" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-theme_override_font_sizes/font_size = 80
-text = "使用须知"
-horizontal_alignment = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="UiLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
-custom_minimum_size = Vector2(233, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-text = "使用须知文本"
-autowrap_mode = 3
-
-[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
-custom_minimum_size = Vector2(0, 128)
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -536.5
-offset_top = -38.5
-offset_right = 536.5
-offset_bottom = 38.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 128
-
-[node name="RefuseButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 5
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-text = "拒绝并退出"
-
-[node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 5
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-text = "同意"
-
-[node name="Language" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("8_c2fru")]
-z_index = 600
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -302.0
-offset_bottom = 120.0
-grow_horizontal = 0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
-auto_translate_mode = 2
-custom_minimum_size = Vector2(270, 0)
-layout_mode = 2
-text = "EN / 中文"
-script = ExtResource("23_e6ipe")
-
 [node name="GameInProgressHint" parent="GameRoomSize" unique_id=1416073500 instance=ExtResource("8_c2fru")]
 visible = false
 custom_minimum_size = Vector2(400, 300)
@@ -610,6 +521,249 @@ layout_mode = 2
 size_flags_vertical = 6
 text = "确认"
 
+[node name="Options" parent="GameRoomSize" unique_id=1212935464 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Options" unique_id=1148446466 instance=ExtResource("9_ty11l")]
+
+[node name="UiPanel" parent="GameRoomSize/Options" unique_id=1051373583 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="GameRoomSize/Options/UiPanel" unique_id=1151200309 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 192
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 192
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/UiPanel/UiMarginContainer" unique_id=1601812653]
+layout_mode = 2
+
+[node name="OptionLabel" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer" unique_id=655682543 instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "设置界面"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MasterVolume" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer" unique_id=774405673]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="MasterVolumeLabel" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/MasterVolume" unique_id=131215776 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "全局音量"
+
+[node name="MasterVolumeHSlider" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/MasterVolume" unique_id=962424427 instance=ExtResource("28_nmdgl")]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 1
+script = ExtResource("26_nl766")
+
+[node name="MusicVolume" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1607967798]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="MusicVolumeLabel" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/MusicVolume" unique_id=1077191224 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "背景音乐"
+
+[node name="MusicVolumeHSlider" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/MusicVolume" unique_id=1652124816 instance=ExtResource("28_nmdgl")]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 1
+script = ExtResource("26_nl766")
+volume_type = 1
+
+[node name="SoundVolume" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer" unique_id=2146636932]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="SoundVolumeLabel" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/SoundVolume" unique_id=1372898515 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "音效音量"
+
+[node name="SoundVolumeHSlider" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/SoundVolume" unique_id=137919434 instance=ExtResource("28_nmdgl")]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 1
+script = ExtResource("26_nl766")
+volume_type = 2
+
+[node name="Language" type="HBoxContainer" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer" unique_id=976672169]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="LanguageLabel" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/Language" unique_id=656301114 instance=ExtResource("5_qon3s")]
+auto_translate_mode = 2
+layout_mode = 2
+text = "Language / 语言"
+
+[node name="LanguageButton" parent="GameRoomSize/Options/UiPanel/UiMarginContainer/VBoxContainer/Language" unique_id=862145675 instance=ExtResource("2_w52fc")]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "EN / 中文"
+script = ExtResource("23_e6ipe")
+
+[node name="Back" parent="GameRoomSize/Options/UiPanel" unique_id=1510288836 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -288.0
+offset_top = -120.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="BackButton" parent="GameRoomSize/Options/UiPanel/Back" unique_id=1782384688 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "返回"
+
+[node name="Language" parent="GameRoomSize" unique_id=1581453593 instance=ExtResource("8_c2fru")]
+z_index = 600
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -302.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Language" unique_id=1896652691 instance=ExtResource("9_ty11l")]
+
+[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+text = "EN / 中文"
+script = ExtResource("23_e6ipe")
+
+[node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
+visible = false
+z_index = 500
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 64
+script = ExtResource("4_ytxtj")
+refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
+accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
+
+[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer" unique_id=1242804199]
+layout_mode = 2
+
+[node name="UserNoticeLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+theme_override_font_sizes/font_size = 80
+text = "使用须知"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NoticeLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(233, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+text = "使用须知文本"
+autowrap_mode = 3
+
+[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -536.5
+offset_top = -38.5
+offset_right = 536.5
+offset_bottom = 38.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 128
+
+[node name="RefuseButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+text = "拒绝并退出"
+
+[node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 5
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("10_bvmdg")
+text = "同意"
+
 [node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
 script = ExtResource("22_p5b6p")
 
@@ -623,8 +777,9 @@ show_mode = 0
 [connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
 [connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
-[connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/ChooseMode/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2/OptionsButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
@@ -634,6 +789,8 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/StartButton" to="GameStart" method="_on_start_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="GameRoomSize/GameInProgressHint/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/UiPanel/Back/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
+[connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/Language/ControlVisibieSet" method="_set_invisible" flags=3]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
