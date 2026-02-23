@@ -16,17 +16,11 @@
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="14_0qlom"]
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="15_eshj6"]
 [ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="16_u4pfm"]
-[ext_resource type="Script" uid="uid://dl0jbge2cmsy8" path="res://script/edit/level_control.gd" id="17_3oivx"]
-[ext_resource type="AudioStream" uid="uid://dgfoymd0r2bxs" path="res://sound/edit/yr_EraseMode_Erase_1.wav" id="18_prsmy"]
-[ext_resource type="AudioStream" uid="uid://btnrl14rbqxbg" path="res://sound/edit/SE_touchObject.wav" id="19_in7wb"]
-[ext_resource type="Script" uid="uid://dp7m3qq26cs4g" path="res://script/edit/objectmap/sound_place_object.gd" id="20_7xdke"]
 [ext_resource type="PackedScene" uid="uid://d3btklffhmis3" path="res://object/edit/grid/grid_2d.tscn" id="21_6b2gj"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="22_mw8ew"]
 [ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="23_g1vq0"]
-[ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="24_0p0tn"]
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="25_njeha"]
 [ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="26_ul880"]
-[ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="27_c0e2e"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="28_27nso"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/utils/input_handler.gd" id="29_apndl"]
 [ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/edit/test_node.gd" id="30_imagh"]
@@ -309,7 +303,7 @@ theme = ExtResource("6_mwyf7")
 theme_override_font_sizes/font_size = 50
 text = "游玩"
 script = ExtResource("7_14kb1")
-room_scene_uid = "uid://cxvueju65b3qv"
+room_scene_uid = "uid://b3uujgk5upbfj"
 metadata/_edit_lock_ = true
 
 [node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" unique_id=1483234204]
@@ -380,33 +374,9 @@ object_map = NodePath("../ObjectMapLayer")
 bgp_manager = NodePath("../BgpManager")
 metadata/_custom_type_script = "uid://dcj1u3dweru3n"
 
-[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=578186261 node_paths=PackedStringArray("level_data_node")]
-script = ExtResource("8_w1k87")
-level_data_node = NodePath("../LevelManager")
-
 [node name="LoadLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=182172579 node_paths=PackedStringArray("level_data_node")]
 script = ExtResource("16_u4pfm")
 level_data_node = NodePath("../LevelManager")
-
-[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
-script = ExtResource("17_3oivx")
-tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
-object_map_layer = NodePath("../ObjectMapLayer")
-object_map_draw = NodePath("../ObjectMapLayer/ObjectMapDraw")
-tile_button = NodePath("../../../../BottomItemGroups/ItemButtonTile")
-button_eraser = NodePath("../../../../RightItemGroups/ItemButtonEraser")
-metadata/_custom_type_script = "uid://dl0jbge2cmsy8"
-
-[node name="SoundErase" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=730524893]
-stream = ExtResource("18_prsmy")
-volume_db = -3.0
-bus = &"Sound"
-
-[node name="SoundPlaceObject" type="AudioStreamPlayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" unique_id=1146168323]
-stream = ExtResource("19_in7wb")
-volume_db = -5.0
-bus = &"Sound"
-script = ExtResource("20_7xdke")
 
 [node name="Grid2d" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1266480464 instance=ExtResource("21_6b2gj")]
 process_mode = 4
@@ -429,10 +399,6 @@ script = ExtResource("23_g1vq0")
 database_holder = NodePath("../../DatabaseHolder")
 tile_map = NodePath("..")
 
-[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=866892443 node_paths=PackedStringArray("tile_map")]
-script = ExtResource("24_0p0tn")
-tile_map = NodePath("..")
-
 [node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=295788680 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("25_njeha")
 objects = [{
@@ -442,10 +408,6 @@ objects = [{
 }]
 database_holder = NodePath("../DatabaseHolder")
 metadata/_custom_type_script = "uid://omfdsevbgrom"
-
-[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" unique_id=87589930 node_paths=PackedStringArray("object_map_layer")]
-script = ExtResource("27_c0e2e")
-object_map_layer = NodePath("..")
 
 [node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1317430190 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("28_27nso")
@@ -1573,12 +1535,8 @@ script = ExtResource("92_o5be7")
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("93_bska7")]
 show_mode = 2
 
-[connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
-[connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/PlayButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
-[connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/SaveButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
-[connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
 [connection signal="load_level" from="GameRoomSize/DebugLoad" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_debug_load"]
 
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]

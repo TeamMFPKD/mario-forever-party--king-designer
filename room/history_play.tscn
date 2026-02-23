@@ -31,9 +31,6 @@
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="29_28d7q"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="30_jm5fm"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="31_pt7ut"]
-[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="32_utvcj"]
-[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="33_vdtx1"]
-[ext_resource type="Script" uid="uid://bspetuap5iapy" path="res://script/multiplayer/bad_level_detect.gd" id="34_nv8no"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="35_fb74i"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
@@ -198,41 +195,11 @@ theme = ExtResource("29_28d7q")
 theme_override_font_sizes/font_size = 50
 text = "编辑"
 script = ExtResource("30_jm5fm")
-room_scene_uid = "uid://bnx7r3slvtcdt"
+room_scene_uid = "uid://b2f2av134cwap"
 target_mode = 0
 
 [node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" unique_id=1790741609]
 script = ExtResource("31_pt7ut")
-
-[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("32_utvcj")]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -258.0
-offset_top = -77.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
-
-[node name="ForceContinueButton" parent="GameRoomSize/UiMarginContainer" unique_id=1210628054 instance=ExtResource("33_vdtx1")]
-custom_minimum_size = Vector2(300, 100)
-layout_mode = 2
-text = "强制继续"
-
-[node name="ControlVisibieSet" parent="GameRoomSize/UiMarginContainer" unique_id=223236009 instance=ExtResource("28_ysgyl")]
-
-[node name="ForceContinueTimer" type="Timer" parent="GameRoomSize/UiMarginContainer" unique_id=2136301686]
-autostart = true
-ignore_time_scale = true
-
-[node name="BadLevelDetect" type="Node" parent="GameRoomSize/UiMarginContainer" unique_id=1137221623]
-script = ExtResource("34_nv8no")
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("35_fb74i")]
 
@@ -241,8 +208,3 @@ script = ExtResource("34_nv8no")
 [connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
 [connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer2" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
 [connection signal="game_time_hud_invisible" from="GameRoomSize/MarginContainer/GameModeDetect" to="GameRoomSize/MarginContainer/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/UiMarginContainer/ForceContinueButton" to="GameRoomSize/UiMarginContainer/BadLevelDetect" method="_on_force_continue_button_pressed"]
-[connection signal="ready" from="GameRoomSize/UiMarginContainer/ControlVisibieSet" to="GameRoomSize/UiMarginContainer/ControlVisibieSet" method="_set_invisible"]
-[connection signal="timeout" from="GameRoomSize/UiMarginContainer/ForceContinueTimer" to="GameRoomSize/UiMarginContainer/BadLevelDetect" method="_on_timeout"]
-[connection signal="skip_bad_level" from="GameRoomSize/UiMarginContainer/BadLevelDetect" to="PlayNextLevelManager" method="next_level"]
-[connection signal="trigger_bad_level" from="GameRoomSize/UiMarginContainer/BadLevelDetect" to="GameRoomSize/UiMarginContainer/ControlVisibieSet" method="_set_visible"]
