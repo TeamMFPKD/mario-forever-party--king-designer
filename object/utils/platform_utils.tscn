@@ -9,14 +9,13 @@ func _ready() -> void:
 	if process_mode == ProcessMode.PROCESS_MODE_DISABLED:
 		return
 	
-	var parent = get_parent() as PlatformUtils
-	push_error(parent.is_desktop_platform())
-	push_error(parent.get_platform_info())
+	push_error(PlatformUtils.is_desktop_platform())
+	push_error(PlatformUtils.get_platform_info())
 "
 
-[node name="PlatformUtils" type="Node"]
+[node name="PlatformUtils" type="Node" unique_id=1434016548]
 script = ExtResource("1_7gfeg")
 
-[node name="PlatformTest" type="Node" parent="."]
+[node name="PlatformTest" type="Node" parent="." unique_id=546726952]
 process_mode = 4
 script = SubResource("GDScript_7gfeg")

@@ -12,7 +12,7 @@ signal play_sound_shoot
 
 @export var offset : Vector2 = Vector2(0, -32.0)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if is_crouching():
 		return
 	if Input.is_action_just_pressed("move_fire"):

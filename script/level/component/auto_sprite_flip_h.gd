@@ -26,7 +26,7 @@ func _ready():
 	if sprite != null:
 		_last_position_x = sprite.global_position.x
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	if sprite == null:
 		return
 

@@ -6,7 +6,7 @@ signal fireball_explode
 @export var fireball : CharacterBody2D
 @export var cast : ShapeCast2D
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	var results = ShapeCastQuery.shape_query(fireball, cast)
 
 	for result in results:

@@ -14,7 +14,7 @@ var interacting_blocks : Array[Node]
 func _ready():
 	movement = get_node(path_to_movement)
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	var original_position = cast.position
 	cast.position += Vector2(sign(movement.speed_x), sign(movement.speed_y))
 	var results = ShapeCastQuery.shape_query(beetroot, cast)

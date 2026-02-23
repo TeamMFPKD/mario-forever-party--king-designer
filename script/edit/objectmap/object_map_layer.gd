@@ -175,8 +175,8 @@ func stop_placing_object():
 func align_to_grid(input_pos: Vector2) -> Vector2:
 	var grid_size = 32
 	return Vector2(
-		floor(input_pos.x / grid_size) * grid_size + grid_size / 2,
-		floor(input_pos.y / grid_size) * grid_size + grid_size / 2
+		floor(input_pos.x / grid_size) * grid_size + grid_size / 2.0,
+		floor(input_pos.y / grid_size) * grid_size + grid_size / 2.0
 	)
 
 # 检查网格位置是否已有对象
