@@ -14,11 +14,13 @@ stretch_mode = 2
 
 [node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_qgqhr")]
 auto_translate_mode = 2
+custom_minimum_size = Vector2(128, 64)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 35
 text = "俊贵"
 horizontal_alignment = 1
+autowrap_mode = 1
 
 [node name="LevelCausePassLabel" parent="." unique_id=1008498644 instance=ExtResource("1_qgqhr")]
 layout_mode = 2
