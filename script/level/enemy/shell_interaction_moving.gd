@@ -19,7 +19,7 @@ func _ready() -> void:
 	shell_status = get_node(path_to_shell_status) as ShellStatus
 	movement = get_node(path_to_movement) as BasicMovement
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	is_moving = moving_check()
 
 	if not is_moving:

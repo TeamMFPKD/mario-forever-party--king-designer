@@ -104,14 +104,14 @@ func _draw_next_line() -> void:
 		# 同时为垂直线和水平线创建绘制任务
 		# 当前是奇数次时添加垂直线，偶数次时添加水平线
 		var line_index = current_line
-		if line_index % 2 == 0 and line_index / 2 < vertical_lines:
+		if line_index % 2 == 0 and line_index / 2.0 < vertical_lines:
 			# 添加垂直线
-			var v_line_idx = line_index / 2
+			var v_line_idx = line_index / 2.0
 			var line_key = "v_%d" % int(v_line_idx)
 			line_progress[line_key] = 0.0
-		elif (line_index % 2 == 1) and ((line_index - 1) / 2 < int(grid_size.y + 1)):
+		elif (line_index % 2 == 1) and ((line_index - 1) / 2.0 < int(grid_size.y + 1)):
 			# 添加水平线
-			var h_line_idx = (line_index - 1) / 2
+			var h_line_idx = (line_index - 1) / 2.0
 			var line_key = "h_%d" % int(h_line_idx)
 			line_progress[line_key] = 0.0
 		

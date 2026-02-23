@@ -40,7 +40,12 @@ metadata/_custom_type_script = "uid://dy8q17c1owdph"
 
 [node name="FireballPiranhaMovement" type="Node" parent="." unique_id=1364789502]
 script = ExtResource("3_ufkcc")
+initially_face_to_player = false
+speed_x = 0.0
+gravity = 0.0
 overlap_turn = false
+can_be_turn_overlap_detected = false
+path_to_shape_cast = NodePath("")
 
 [node name="FireballSpriteSpin" type="Node" parent="." unique_id=504235648 node_paths=PackedStringArray("ani")]
 script = ExtResource("4_cf6cg")

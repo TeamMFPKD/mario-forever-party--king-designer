@@ -27,13 +27,18 @@ var overlap_turn_detect_objects: Array[Node2D] = []
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
+	# 这里获取一次玩家是因为有的继承 BasicMovement 的类会在 _ready 中用到 player
+	player = get_tree().get_first_node_in_group("player") as Node2D
 	var fc = func():
+		# 帧末再获取一次玩家是因为由于 Edit 物品摆放顺序玩家可能晚于部分物品进入场景树
 		player = get_tree().get_first_node_in_group("player") as Node2D
 		if initially_face_to_player:
 			set_movement_direction()
 	fc.call_deferred()
 	if overlap_turn:
-		shape_cast = get_node(path_to_shape_cast) as ShapeCast2D
+		shape_cast = get_node_or_null(path_to_shape_cast) as ShapeCast2D
+		if not shape_cast:
+			push_error("BasicMovement: ShapeCast2D not found.")
 
 	move_object.set_meta("basic_movement", self)
 

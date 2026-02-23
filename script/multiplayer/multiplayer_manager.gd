@@ -168,7 +168,7 @@ func sync_players_list(players_list):
 	print("玩家列表：")
 	print(players)
 
-func _on_peer_connected(id: int):
+func _on_peer_connected(_id: int):
 	# 当有新对等体连接时，如果是主机，不需要额外处理
 	# 因为 register_player_on_host 已经处理了逻辑
 	pass

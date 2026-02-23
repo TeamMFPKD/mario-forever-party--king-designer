@@ -35,6 +35,6 @@ func on_stomped(stomper: CharacterBody2D) -> float:
 	emit_signal("stomped", stomper.position)
 	return stomp_speed_y
 	
-func on_overlap(player: CharacterBody2D):
+func on_overlap(_player: CharacterBody2D):
 	emit_signal("overlapped")
 	

@@ -21,6 +21,6 @@ func _ready():
 	parent = get_node(path_to_parent)
 	parent.set_meta("bonus_set", self)
 
-func on_bonus_get(player: Node2D):
+func on_bonus_get(_player: Node2D):
 	emit_signal("bonus_get")
 	parent.queue_free()

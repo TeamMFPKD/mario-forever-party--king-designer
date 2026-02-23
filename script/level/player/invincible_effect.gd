@@ -6,7 +6,7 @@ var _rng = RandomNumberGenerator.new()
 func _ready():
 	_animated_sprite_2d = get_parent().get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	if _animated_sprite_2d == null:
 		return
 	if not visible:

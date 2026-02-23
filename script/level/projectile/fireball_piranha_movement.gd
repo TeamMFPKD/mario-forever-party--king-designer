@@ -9,10 +9,6 @@ var ALLOWED_ANGLES = [45.0, 67.5, 112.5, 135.0, -45.0, -67.5, -112.5, -135.0]
 func _ready() -> void:
 	super._ready()
 	
-	# 获取玩家位置
-	if player == null:
-		return
-	
 	# 计算火球到玩家的方向向量
 	var direction_to_player = player.position - move_object.position
 	
@@ -59,6 +55,7 @@ func set_fireball_velocity(angle_deg: float) -> void:
 	# 计算速度分量（注意坐标系：x向右，y向下）
 	var velocity_x = fireball_speed * sin(angle_rad)
 	var velocity_y = fireball_speed * cos(angle_rad)
+	print(velocity_x, velocity_y)
 	
 	# 设置速度
 	speed_x = velocity_x
@@ -68,7 +65,6 @@ func set_fireball_velocity(angle_deg: float) -> void:
 	gravity = 0.0
 
 func _physics_process(delta: float) -> void:
-	# 调用父类的物理处理，但禁用转向检测等逻辑
 	speed_y_process(delta)
 	apply_speed()
 	move()

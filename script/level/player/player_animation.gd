@@ -29,7 +29,7 @@ var is_appearing : bool = false
 @export var appear_time : int = 80
 var appear_timer : int = 0
 
-func _physics_process(delta):
+func _physics_process(_delta: float):
 	update_animation()
 
 func update_animation():

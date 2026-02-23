@@ -50,7 +50,7 @@ var is_starman : bool = false:
 @export var starman_time : int = 500
 var starman_timer : int
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if is_starman:
 		starman_timer += 1
 		if starman_timer >= starman_time:

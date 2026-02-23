@@ -11,7 +11,7 @@ func _ready() -> void:
 	viewport = parent.get_viewport()
 	parent.connect("tree_exiting", _on_parent_exiting)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if playing_detect and !playing:
 		queue_free()
 
