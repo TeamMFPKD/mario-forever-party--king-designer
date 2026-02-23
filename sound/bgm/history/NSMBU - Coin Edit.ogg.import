@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bdbunuf7yi8yp"
+path="res://.godot/imported/NSMBU - Coin Edit.ogg-19f6f16c21d57ab8d6d660af0142673f.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/bgm/history/NSMBU - Coin Edit.ogg"
+dest_files=["res://.godot/imported/NSMBU - Coin Edit.ogg-19f6f16c21d57ab8d6d660af0142673f.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

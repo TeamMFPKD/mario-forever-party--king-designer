@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://d2rufjgoofc74"]
+
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_53eyj"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_80agp"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_niv0i"]
+
+[node name="HistoryLevelInfo" type="HBoxContainer" unique_id=1814649642]
+offset_right = 1658.0
+offset_bottom = 88.0
+size_flags_horizontal = 3
+
+[node name="CountLabel" parent="." unique_id=1008498644 instance=ExtResource("1_53eyj")]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelFileNameLabel" parent="." unique_id=1337229199 instance=ExtResource("1_53eyj")]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "mfmp_2026-02-22_21-50-50_若f(x)在[a,b]上连续，则f(x)在[a,b]上一致连续。_1aaad.lvl"
+autowrap_mode = 3
+
+[node name="UiMarginContainer" parent="." unique_id=1510288836 instance=ExtResource("2_niv0i")]
+custom_minimum_size = Vector2(210, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UiMarginContainer" unique_id=1377506170]
+layout_mode = 2
+
+[node name="PlayButton" parent="UiMarginContainer/HBoxContainer" unique_id=1210628054 instance=ExtResource("2_80agp")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "游玩"
+
+[node name="ViewButton" parent="UiMarginContainer/HBoxContainer" unique_id=166272240 instance=ExtResource("2_80agp")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "查看"
