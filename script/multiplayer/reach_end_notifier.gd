@@ -32,8 +32,8 @@ func _ready():
 		var level_cause_pass = player["level_cause_pass"]
 		var level_cause_death = player["level_cause_death"]
 		var clear_rate = (float)(level_cause_pass) / (float)(level_cause_pass + level_cause_death)
-		var score_clear_rate = 100 * ( (clear_rate/a)**(k*a) ) * ( ((1-clear_rate)/(1-a))**(k*(1-a)) )
-		var score_level_pass = 100 * (level_pass_count / multiplayer_manager.players.size())
+		var score_clear_rate = 100.0 * ( (clear_rate/a)**(k*a) ) * ( ((1-clear_rate)/(1-a))**(k*(1-a)) )
+		var score_level_pass = 100.0 * (float(level_pass_count) / float(multiplayer_manager.players.size()))
 		var score = round(score_clear_rate * 0.6 + score_level_pass * 0.4)
 		player["clear_rate"] = clear_rate
 		player["score"] = score
