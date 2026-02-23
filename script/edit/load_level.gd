@@ -1,5 +1,7 @@
 extends Node
 
+class_name LoadLevel
+
 @export var level_data_node: LevelManager
 
 var file_name: String = "user://mfmp_"
