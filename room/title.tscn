@@ -93,6 +93,10 @@ bus = &"Music"
 script = ExtResource("4_ikv4w")
 scene_uid = &"uid://bnx7r3slvtcdt"
 
+[node name="JumpToSceneHistory" type="Node" parent="." unique_id=611137458]
+script = ExtResource("4_ikv4w")
+scene_uid = &"uid://de64xnukpa0re"
+
 [node name="GameStart" type="Node" parent="." unique_id=2019232837 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_estsl")
 bar = NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer/HScrollBar")
@@ -1044,6 +1048,7 @@ show_mode = 0
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2/OptionsButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
