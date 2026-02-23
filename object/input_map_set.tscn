@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dumkfbr3vy2a6" path="res://script/option/input_map_set_button.gd" id="3_3jbc4"]
 
 [node name="InputMapSet" type="HBoxContainer" unique_id=210196764]
-custom_minimum_size = Vector2(0, 200)
+custom_minimum_size = Vector2(0, 160)
 
 [node name="InputNameLabel" parent="." unique_id=1008498644 instance=ExtResource("1_lbe55")]
 custom_minimum_size = Vector2(350, 0)
