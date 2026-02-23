@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://cmua4qyp7khya"]
+
+[node name="LevelPathSet" type="Node" unique_id=1698690191 groups=["level_path_set"]]

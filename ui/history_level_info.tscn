@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_53eyj"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_80agp"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_niv0i"]
+[ext_resource type="Script" uid="uid://djpf3lsntxfdt" path="res://script/history/history_level_file_path_set_button.gd" id="4_70hlu"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_niv0i"]
 
 [node name="HistoryLevelInfo" type="HBoxContainer" unique_id=1814649642]
 offset_right = 1658.0
@@ -33,18 +35,33 @@ theme_override_constants/margin_right = 16
 [node name="HBoxContainer" type="HBoxContainer" parent="UiMarginContainer" unique_id=1377506170]
 layout_mode = 2
 
-[node name="PlayButton" parent="UiMarginContainer/HBoxContainer" unique_id=1210628054 instance=ExtResource("2_80agp")]
+[node name="PlayButton" parent="UiMarginContainer/HBoxContainer" unique_id=1210628054 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("2_80agp")]
 custom_minimum_size = Vector2(190, 48)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "游玩"
+script = ExtResource("4_70hlu")
+level_file_name_label = NodePath("../../../LevelFileNameLabel")
 
-[node name="ViewButton" parent="UiMarginContainer/HBoxContainer" unique_id=166272240 instance=ExtResource("2_80agp")]
+[node name="ViewButton" parent="UiMarginContainer/HBoxContainer" unique_id=166272240 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("2_80agp")]
 custom_minimum_size = Vector2(190, 48)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "查看"
+script = ExtResource("4_70hlu")
+level_file_name_label = NodePath("../../../LevelFileNameLabel")
+
+[node name="JumpToSceneHistoryPlay" type="Node" parent="." unique_id=1812634004]
+script = ExtResource("4_niv0i")
+scene_uid = &"uid://b3uujgk5upbfj"
+
+[node name="JumpToSceneHistoryEdit" type="Node" parent="." unique_id=1771168516]
+script = ExtResource("4_niv0i")
+scene_uid = &"uid://b2f2av134cwap"
+
+[connection signal="pressed" from="UiMarginContainer/HBoxContainer/PlayButton" to="JumpToSceneHistoryPlay" method="jump_to_scene" flags=3]
+[connection signal="pressed" from="UiMarginContainer/HBoxContainer/ViewButton" to="JumpToSceneHistoryEdit" method="jump_to_scene" flags=3]
