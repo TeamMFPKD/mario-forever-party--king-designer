@@ -10,6 +10,8 @@ enum GameModeType {
 	EDIT,
 	TEST,
 	PLAY,
+	HISTORY_EDIT,
+	HISTORY_PLAY,
 }
 
 @export var game_mode : GameModeType = GameModeType.EDIT:

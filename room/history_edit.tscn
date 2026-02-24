@@ -81,9 +81,11 @@
 [ext_resource type="Texture2D" uid="uid://b7x6hjrevd6jc" path="res://sprite/facility/giant_gate.png" id="85_f7jkv"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="86_ffpbo"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="87_7nem6"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="87_dpbuj"]
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="88_8guam"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="88_iekbx"]
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="89_0n2s4"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="89_mm131"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="90_xucsr"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="91_yjwau"]
 [ext_resource type="Script" uid="uid://0c86f8ap20h5" path="res://script/edit/debug_load.gd" id="92_o5be7"]
@@ -305,6 +307,7 @@ theme_override_font_sizes/font_size = 50
 text = "游玩"
 script = ExtResource("7_14kb1")
 room_scene_uid = "uid://b3uujgk5upbfj"
+target_mode = 4
 metadata/_edit_lock_ = true
 
 [node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" unique_id=1483234204]
@@ -1534,6 +1537,27 @@ texture = ExtResource("91_yjwau")
 [node name="DebugLoad" type="Node" parent="GameRoomSize" unique_id=1259708372]
 script = ExtResource("92_o5be7")
 
+[node name="BackToHistory" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("87_dpbuj")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -317.0
+offset_top = -88.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="BackToHistoryButton" parent="GameRoomSize/BackToHistory" unique_id=552975185 instance=ExtResource("9_mgrj7")]
+layout_mode = 2
+text = "返回"
+autowrap_mode = 3
+
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("93_bska7")]
 show_mode = 2
 
@@ -1541,10 +1565,16 @@ show_mode = 2
 script = ExtResource("88_8guam")
 load_level_node = NodePath("../GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel")
 
+[node name="JumpToSceneHistory" type="Node" parent="." unique_id=721313969]
+script = ExtResource("89_mm131")
+scene_uid = &"uid://de64xnukpa0re"
+
 [connection signal="pressed" from="GameRoomSize/SaveLoadTest/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
 [connection signal="load_level" from="GameRoomSize/DebugLoad" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_debug_load"]
+[connection signal="pressed" from="GameRoomSize/BackToHistory/BackToHistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
 
+[editable path="GameRoomSize/TimeHUD"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonUp"]

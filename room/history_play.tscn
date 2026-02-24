@@ -3,7 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_sbo3u"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_jgnbe"]
 [ext_resource type="Script" uid="uid://bbclvf51lqvk3" path="res://script/multiplayer/timeout_manager.gd" id="3_cxniv"]
-[ext_resource type="Script" uid="uid://c0c51hxssdln3" path="res://script/multiplayer/play_next_level_manager.gd" id="4_ghhtv"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="5_2ia67"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="6_oqxpu"]
 [ext_resource type="PackedScene" uid="uid://ctl8t18mclmft" path="res://ui/game_time_hud.tscn" id="7_8ux2l"]
@@ -31,7 +30,10 @@
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="29_28d7q"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="30_jm5fm"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="31_pt7ut"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="31_sbo3u"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="32_jgnbe"]
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="33_o1hfa"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="34_me11v"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="35_fb74i"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
@@ -54,9 +56,6 @@ play = true
 [node name="TimeoutManager" type="Node" parent="." unique_id=39996069]
 script = ExtResource("3_cxniv")
 
-[node name="PlayNextLevelManager" type="Node" parent="." unique_id=1033946254 groups=["play_next_level_manager"]]
-script = ExtResource("4_ghhtv")
-
 [node name="GameRoomSize" type="Control" parent="." unique_id=1663788830]
 layout_mode = 3
 anchors_preset = 0
@@ -68,14 +67,19 @@ script = ExtResource("5_2ia67")
 metadata/_edit_lock_ = true
 
 [node name="TimeHUD" parent="GameRoomSize" unique_id=277085813 instance=ExtResource("6_oqxpu")]
+visible = false
 layout_mode = 1
 offset_left = -233.0
 offset_bottom = 233.0
 
 [node name="GameTimeHUD" parent="GameRoomSize" unique_id=912064384 instance=ExtResource("7_8ux2l")]
+visible = true
 layout_mode = 1
 offset_left = -233.0
 offset_bottom = 233.0
+
+[node name="GameTimer" parent="GameRoomSize/GameTimeHUD" index="3" unique_id=1795664682]
+autostart = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1823801948]
 layout_mode = 1
@@ -194,13 +198,34 @@ theme_override_constants/margin_bottom = 30
 layout_mode = 2
 theme = ExtResource("29_28d7q")
 theme_override_font_sizes/font_size = 50
-text = "编辑"
+text = "查看"
 script = ExtResource("30_jm5fm")
 room_scene_uid = "uid://b2f2av134cwap"
-target_mode = 0
+target_mode = 3
 
 [node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" unique_id=1790741609]
 script = ExtResource("31_pt7ut")
+
+[node name="BackToHistory" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("31_sbo3u")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -317.0
+offset_top = -88.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="BackToHistoryButton" parent="GameRoomSize/BackToHistory" unique_id=1210628054 instance=ExtResource("32_jgnbe")]
+layout_mode = 2
+text = "返回"
+autowrap_mode = 3
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("35_fb74i")]
 
@@ -208,8 +233,20 @@ script = ExtResource("31_pt7ut")
 script = ExtResource("33_o1hfa")
 load_level_node = NodePath("../GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel")
 
+[node name="JumpToSceneHistoryEdit" type="Node" parent="." unique_id=113406390 groups=["jump_to_scene_history_edit"]]
+script = ExtResource("34_me11v")
+scene_uid = &"uid://b2f2av134cwap"
+
+[node name="JumpToSceneHistory" type="Node" parent="." unique_id=464088894]
+script = ExtResource("34_me11v")
+scene_uid = &"uid://de64xnukpa0re"
+
 [connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
 [connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
 [connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer2" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
 [connection signal="game_time_hud_invisible" from="GameRoomSize/MarginContainer/GameModeDetect" to="GameRoomSize/MarginContainer/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/BackToHistory/BackToHistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
+
+[editable path="GameRoomSize/TimeHUD"]
+[editable path="GameRoomSize/GameTimeHUD"]

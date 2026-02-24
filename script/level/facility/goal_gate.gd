@@ -12,9 +12,20 @@ var is_passed : bool = false
 
 var play_next_level_node : Node
 
+var jump_to_scene_history_edit_node : Node
+
 func _ready() -> void:
 	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST:
 		goal_reached.connect(GameModeSingleton.go_to_edit)
+	
+	jump_to_scene_history_edit_node = get_tree().get_first_node_in_group("jump_to_scene_history_edit")
+	if jump_to_scene_history_edit_node:
+		print("返回历史记录查看模式")
+		var fc = func() -> void:
+			var game_mode = GameModeSingleton
+			game_mode.game_mode = game_mode.GameModeType.HISTORY_EDIT
+		next_level.connect(fc)
+		next_level.connect(jump_to_scene_history_edit_node.jump_to_scene)
 	
 	play_next_level_node = get_tree().get_first_node_in_group("play_next_level_manager")
 	if play_next_level_node:
@@ -41,7 +52,8 @@ func _on_body_entered(body: Node2D) -> void:
 		print("goal reached")
 		emit_signal("goal_reached")
 
-		await get_tree().create_timer(1.0).timeout
+		if is_instance_valid(self) and is_inside_tree():
+			await get_tree().create_timer(1.0).timeout
 		
 		get_tree().paused = false
 		emit_signal("next_level")

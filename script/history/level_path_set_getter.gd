@@ -15,5 +15,5 @@ func _ready() -> void:
 		return
 	level_path_name = level_path_set.get_meta("level_path_name") as String
 	load_level_node.file_name = level_path_name
-	load_level_node._on_load_button_pressed()
-	
+	# 不再直接调用加载方法，而是等待LevelManager的信号
+	# 这样可以避免重复加载

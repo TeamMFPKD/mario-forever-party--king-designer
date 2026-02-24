@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="1_k6bla"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_tkg4x"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_csr0q"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="2_titf2"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_1d24y"]
 [ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="3_b0n03"]
@@ -38,6 +39,8 @@ metadata/_edit_lock_ = true
 self_modulate = Color(0.74, 0.3848, 0.71632004, 1)
 texture = ExtResource("1_tkg4x")
 metadata/_edit_lock_ = true
+
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_csr0q")]
 
 [node name="JumpToScene" type="Node" parent="." unique_id=1305321794]
 script = ExtResource("2_titf2")
