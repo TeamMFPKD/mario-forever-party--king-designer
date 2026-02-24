@@ -30,4 +30,6 @@ func spawn() -> void:
 	visible = false
 
 func in_level_check() -> bool:
-	return GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT
+	return GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST \
+	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
+	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_PLAY

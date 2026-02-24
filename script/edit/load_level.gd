@@ -9,6 +9,10 @@ var date_time: String = "datetime"
 var author: String = "author"
 
 func _ready() -> void:
+	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_EDIT \
+	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_PLAY:
+		# 在历史模式下，文件路径由LevelPathSetGetter设置
+		return
 	if MPManager:
 		if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:
 			date_time = MPManager.game_start_time

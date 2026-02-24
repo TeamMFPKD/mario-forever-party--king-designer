@@ -43,6 +43,7 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "游玩"
 script = ExtResource("4_70hlu")
+target_game_mode = 4
 level_file_name_label = NodePath("../../../LevelFileNameLabel")
 
 [node name="ViewButton" parent="UiMarginContainer/HBoxContainer" unique_id=166272240 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("2_80agp")]
@@ -53,6 +54,7 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 40
 text = "查看"
 script = ExtResource("4_70hlu")
+target_game_mode = 3
 level_file_name_label = NodePath("../../../LevelFileNameLabel")
 
 [node name="JumpToSceneHistoryPlay" type="Node" parent="." unique_id=1812634004]

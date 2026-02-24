@@ -12,7 +12,8 @@ var direction := Vector2.ZERO
 var player
 
 func _physics_process(delta: float) -> void:
-	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT:
+	var is_in_level = in_level_check()
+	if is_in_level:
 		if not player:
 			player = get_tree().get_first_node_in_group("player")
 			if not player:
@@ -58,3 +59,8 @@ func set_limit_right(value):
 func set_limit_bottom(value):
 	limit_bottom = max(value, limit_top + 480)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
+
+func in_level_check() -> bool:
+	return GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST \
+	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
+	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_PLAY

@@ -1,5 +1,6 @@
 extends Button
 
+@export var target_game_mode : GameModeSingleton.GameModeType
 @export var level_file_name_label : Label
 
 var basic_path_name : String = "user://"
@@ -16,3 +17,6 @@ func _on_button_pressed() -> void:
 		push_error("Level path set node not found")
 		return
 	level_path_set.set_meta("level_path_name", level_path_name)
+	GameModeSingleton.game_mode = target_game_mode
+	if target_game_mode != GameModeSingleton.GameModeType.EDIT:
+		TimerSingleton.start()
