@@ -20,5 +20,6 @@ func _process(_delta):
 			# 缓存非空关卡数据
 			var file = FileAccess.open(player.level_file_name, FileAccess.WRITE)
 			file.store_string(player.level_data)
+			print("玩家 ", player.name, " 的关卡 ", player.level_file_name, " 的数据：", player.level_data)
 			file.close()
-			print("玩家", player.name, "的关卡数据已缓存到本地")
+			print("玩家 ", player.name, " 的关卡数据已缓存到本地")
