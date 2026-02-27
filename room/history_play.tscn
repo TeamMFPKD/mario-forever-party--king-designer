@@ -196,6 +196,7 @@ theme_override_constants/margin_bottom = 30
 
 [node name="Button" type="Button" parent="GameRoomSize/MarginContainer" unique_id=998423911]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("29_28d7q")
 theme_override_font_sizes/font_size = 50
 text = "查看"
@@ -224,6 +225,7 @@ theme_override_constants/margin_bottom = 16
 
 [node name="BackToHistoryButton" parent="GameRoomSize/BackToHistory" unique_id=1210628054 instance=ExtResource("32_jgnbe")]
 layout_mode = 2
+focus_mode = 0
 text = "返回"
 autowrap_mode = 3
 

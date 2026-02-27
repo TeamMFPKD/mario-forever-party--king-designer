@@ -304,6 +304,7 @@ custom_minimum_size = Vector2(260, 136)
 layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 13
+focus_mode = 0
 theme = ExtResource("6_io5w1")
 theme_override_font_sizes/font_size = 50
 text = "游玩"
@@ -335,6 +336,7 @@ metadata/_edit_lock_ = true
 [node name="MobileControlButton" parent="GameRoomSize/SaveLoadTest/VBoxContainer" unique_id=1210628054 instance=ExtResource("9_8ebhj")]
 custom_minimum_size = Vector2(260, 136)
 layout_mode = 2
+focus_mode = 0
 text = "移动端触控"
 autowrap_mode = 3
 script = ExtResource("10_nkg8u")
