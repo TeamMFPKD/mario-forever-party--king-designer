@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://ctyyrnwk6tnc2" path="res://sound/bgm/Yet Another Bonus.ogg" id="6_8ec2p"]
 [ext_resource type="AudioStream" uid="uid://oi8nc8q8v8ki" path="res://sound/bgm/YKY.ogg" id="7_02ctm"]
 [ext_resource type="AudioStream" uid="uid://d11nicf7jg43s" path="res://sound/bgm/スピラー.ogg" id="8_5egbl"]
+[ext_resource type="AudioStream" uid="uid://b8cxuql7u0jvn" path="res://sound/bgm/Cyn - A Cyn-etic Life.ogg" id="9_6h2um"]
 [ext_resource type="AudioStream" uid="uid://dcmwfvyme45u0" path="res://sound/bgm/Dragon Roost Island.ogg" id="9_wn726"]
 [ext_resource type="AudioStream" uid="uid://druiuja3ea1xb" path="res://sound/bgm/Federation.ogg" id="10_vb0bm"]
 [ext_resource type="AudioStream" uid="uid://b4yoxhc7mi607" path="res://sound/bgm/Interference Ending.ogg" id="11_5aae3"]
@@ -19,7 +20,7 @@
 [ext_resource type="Script" uid="uid://drlyvma4elabu" path="res://script/bgm/bgm.gd" id="17_yl062"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_fkteh"]
-streams_count = 16
+streams_count = 17
 stream_0/stream = ExtResource("1_yl062")
 stream_1/stream = ExtResource("2_6h2um")
 stream_2/stream = ExtResource("9_wn726")
@@ -36,6 +37,7 @@ stream_12/stream = ExtResource("5_ho03g")
 stream_13/stream = ExtResource("6_8ec2p")
 stream_14/stream = ExtResource("7_02ctm")
 stream_15/stream = ExtResource("8_5egbl")
+stream_16/stream = ExtResource("9_6h2um")
 
 [node name="Bgm" type="AudioStreamPlayer" unique_id=1026487401 groups=["bgm"]]
 process_mode = 3
