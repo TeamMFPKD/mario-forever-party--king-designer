@@ -91,7 +91,7 @@ bus = &"Music"
 
 [node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
 script = ExtResource("4_ikv4w")
-scene_uid = &"uid://bnx7r3slvtcdt"
+scene_uid = &"uid://ci7x1alix6g2"
 
 [node name="JumpToSceneHistory" type="Node" parent="." unique_id=611137458]
 script = ExtResource("4_ikv4w")
