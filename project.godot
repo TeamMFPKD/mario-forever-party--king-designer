@@ -84,6 +84,7 @@ timer_singleton=""
 mobile_control=""
 random_capture_manager=""
 level_path_set=""
+game_config=""
 
 [input]
 
