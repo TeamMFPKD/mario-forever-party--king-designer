@@ -194,6 +194,7 @@ theme_override_constants/margin_bottom = 30
 
 [node name="Button" type="Button" parent="GameRoomSize/MarginContainer" unique_id=998423911]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("26_cpu0x")
 theme_override_font_sizes/font_size = 50
 text = "编辑"
