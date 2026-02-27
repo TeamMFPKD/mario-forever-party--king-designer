@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://ci7x1alix6g2"]
+
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_2mukr"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_isefn"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="3_2mukr"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_isefn"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_w62s4"]
+[ext_resource type="AudioStream" uid="uid://bgvsg83v0obgn" path="res://sound/SE_BaloonAppear.wav" id="6_kov3k"]
+[ext_resource type="AudioStream" uid="uid://cco0shdym7ank" path="res://sound/daikettefinal.wav" id="7_enrps"]
+
+[sub_resource type="GDScript" id="GDScript_2mukr"]
+script/source = "extends Label
+
+@export var path_to_timer : NodePath
+
+var timer : Timer
+
+func _ready() -> void:
+	timer = get_node(path_to_timer)
+
+func _process(delta: float) -> void:
+	if not timer:
+		return
+	text = str(int(ceil(timer.time_left)))
+	if int(ceil(timer.time_left)) == 0:
+		text = \"GO!\"
+"
+
+[sub_resource type="Animation" id="Animation_w62s4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CountDownSE:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StartSE:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_2mukr"]
+resource_name = "new_animation"
+length = 5.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CountDownSE:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [true, true, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StartSE:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_isefn"]
+_data = {
+&"RESET": SubResource("Animation_w62s4"),
+&"new_animation": SubResource("Animation_2mukr")
+}
+
+[sub_resource type="GDScript" id="GDScript_w62s4"]
+script/source = "extends Node
+
+var edit_timer : Timer
+
+func _start_edit_timer() -> void:
+	edit_timer = get_tree().get_first_node_in_group(\"timer_singleton\") as Timer
+	edit_timer.start()
+"
+
+[node name="ReadyRoom" type="Node2D" unique_id=380607679]
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=1776135916]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=426013899]
+self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
+texture = ExtResource("1_2mukr")
+metadata/_edit_lock_ = true
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=1392978586]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+script = ExtResource("2_isefn")
+metadata/_edit_lock_ = true
+
+[node name="CountDownLabel" type="Label" parent="GameRoomSize" unique_id=986455338]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.5
+offset_top = -82.5
+offset_right = 72.5
+offset_bottom = 82.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_2mukr")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_font_sizes/font_size = 180
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = SubResource("GDScript_2mukr")
+path_to_timer = NodePath("../Timer")
+
+[node name="Timer" type="Timer" parent="GameRoomSize" unique_id=299424619]
+wait_time = 3.0
+one_shot = true
+autostart = true
+ignore_time_scale = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GameRoomSize" unique_id=773689435]
+libraries/ = SubResource("AnimationLibrary_isefn")
+autoplay = &"new_animation"
+
+[node name="JumpToScene" type="Node" parent="GameRoomSize" unique_id=1834824796]
+script = ExtResource("4_isefn")
+scene_uid = &"uid://bnx7r3slvtcdt"
+
+[node name="CountDownSE" parent="GameRoomSize" unique_id=1715984441 instance=ExtResource("5_w62s4")]
+stream = ExtResource("6_kov3k")
+volume_db = 8.0
+
+[node name="StartSE" parent="GameRoomSize" unique_id=1325224352 instance=ExtResource("5_w62s4")]
+stream = ExtResource("7_enrps")
+
+[node name="EditTimerStarter" type="Node" parent="GameRoomSize" unique_id=439436424]
+script = SubResource("GDScript_w62s4")
+
+[connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3 unbinds=1]
+[connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/EditTimerStarter" method="_start_edit_timer" unbinds=1]
