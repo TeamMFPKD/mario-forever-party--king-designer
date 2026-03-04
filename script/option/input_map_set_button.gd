@@ -12,7 +12,7 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
     is_waiting_for_input = true
-    text = tr("请按下一个键...")
+    text = tr("请按下一个键")
 
 func _input(event: InputEvent) -> void:
     if not is_waiting_for_input:
