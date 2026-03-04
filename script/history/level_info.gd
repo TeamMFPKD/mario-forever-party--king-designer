@@ -88,7 +88,7 @@ func _calculate_clear_rate() -> void:
 		clear_rate = float(pass_count) / float(total_attempts) * 100.0
 		clear_rate_label.text = "%.1f%%" % clear_rate
 	else:
-		clear_rate_label.text = "暂无数据"
+		clear_rate_label.text = "0.0% *"
 
 # 加载关卡数据
 func _load_level_data() -> String:
