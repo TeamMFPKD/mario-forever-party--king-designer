@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ia0dcltb3dx"]
 
 [ext_resource type="Script" uid="uid://cq6fxh4ye1q1u" path="res://script/multiplayer/multiplayer_manager.gd" id="1_gx2pa"]
+[ext_resource type="Texture2D" uid="uid://bh4q2qvjkqdjk" path="res://sprite/player/mario_dead.png" id="2_hd2b7"]
 [ext_resource type="SpriteFrames" uid="uid://bs88b30blplhb" path="res://object/level/player/mario_small.tres" id="2_imvt4"]
 [ext_resource type="SpriteFrames" uid="uid://b85b6tckcoib1" path="res://object/level/player/mario_super.tres" id="3_5abiu"]
 [ext_resource type="SpriteFrames" uid="uid://d11sjnlbqehpu" path="res://object/level/player/mario_fireball.tres" id="4_1brco"]
@@ -10,8 +11,24 @@
 [ext_resource type="AudioStream" uid="uid://cxqyd026s46gt" path="res://sound/SE_NetworkOK.wav" id="8_hd2b7"]
 [ext_resource type="AudioStream" uid="uid://cpit5g3mvi7s8" path="res://sound/SE_NetworkLeft.wav" id="9_x8ny5"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_x8ny5"]
+atlas = ExtResource("2_hd2b7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q2fjb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x8ny5")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="MultiplayerManager" type="Node" unique_id=1158865210 groups=["multiplayer_manager"]]
 script = ExtResource("1_gx2pa")
+player_dead_spritesframe = SubResource("SpriteFrames_q2fjb")
 player_small_spritesframe = ExtResource("2_imvt4")
 player_super_spritesframe = ExtResource("3_5abiu")
 player_fireball_spritesframe = ExtResource("4_1brco")

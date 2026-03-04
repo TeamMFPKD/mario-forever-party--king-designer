@@ -13,6 +13,8 @@ signal result_updated
 signal play_sound_joined
 signal play_sound_exited
 
+@export var player_dead_spritesframe : SpriteFrames
+
 var local_port
 # 端口使用Sakura Frp隧道配置的远程端口
 var remote_port
@@ -321,7 +323,7 @@ func store_level_results(players) -> void:
 		file.close()
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
-func send_ani_sprite_data(player_id: int, player_name: String, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h) -> void:
+func send_ani_sprite_data(player_id: int, player_name: String, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool) -> void:
 	#print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 	if current_level_count != current_level:
 		return
@@ -336,6 +338,10 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			if ani.get_meta("player_id") != player_id:
 				continue
 			ani.global_position = ani_pos
+			if is_dead:
+				ani.sprite_frames = player_dead_spritesframe
+				ani.position.y += 20.0
+				continue
 			match suit:
 				PlayerSuit.SuitType.SMALL:
 					ani.sprite_frames = player_small_spritesframe
