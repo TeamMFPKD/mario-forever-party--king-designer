@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://cl38mekged58i"]
+
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="1_b01lt"]
+[ext_resource type="Script" uid="uid://bvhglce6xfxiv" path="res://script/history/level_info.gd" id="2_l4l3e"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_7ni65"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="3_l4l3e"]
+
+[node name="LevelInfo" type="Control" unique_id=1694047089]
+layout_mode = 3
+anchor_left = 0.895
+anchor_top = 0.474
+anchor_right = 0.93
+anchor_bottom = 0.474
+grow_horizontal = 0
+
+[node name="LevelInfo" parent="." unique_id=1510288836 node_paths=PackedStringArray("date_label", "author_label", "clear_rate_label") instance=ExtResource("1_b01lt")]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+script = ExtResource("2_l4l3e")
+date_label = NodePath("UiMarginContainer/VBoxContainer/DateLabel2")
+author_label = NodePath("UiMarginContainer/VBoxContainer/AuthorLabel2")
+clear_rate_label = NodePath("UiMarginContainer/VBoxContainer/ClearRateLabel2")
+
+[node name="UiPanel" parent="LevelInfo" unique_id=1563157272 instance=ExtResource("3_l4l3e")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="LevelInfo" unique_id=230699848 instance=ExtResource("1_b01lt")]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LevelInfo/UiMarginContainer" unique_id=1743939693]
+layout_mode = 2
+metadata/_edit_lock_ = true
+
+[node name="DateLabel" parent="LevelInfo/UiMarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("3_7ni65")]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "日期"
+metadata/_edit_lock_ = true
+
+[node name="DateLabel2" parent="LevelInfo/UiMarginContainer/VBoxContainer" unique_id=2043707230 instance=ExtResource("3_7ni65")]
+custom_minimum_size = Vector2(124, 128)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Invalid Date"
+autowrap_mode = 3
+metadata/_edit_lock_ = true
+
+[node name="AuthorLabel" parent="LevelInfo/UiMarginContainer/VBoxContainer" unique_id=684793088 instance=ExtResource("3_7ni65")]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "作者"
+metadata/_edit_lock_ = true
+
+[node name="AuthorLabel2" parent="LevelInfo/UiMarginContainer/VBoxContainer" unique_id=1167342713 instance=ExtResource("3_7ni65")]
+custom_minimum_size = Vector2(240, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Invalid Author Name"
+autowrap_mode = 1
+metadata/_edit_lock_ = true
+
+[node name="ClearRateLabel" parent="LevelInfo/UiMarginContainer/VBoxContainer" unique_id=1759497137 instance=ExtResource("3_7ni65")]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "通过率"
+metadata/_edit_lock_ = true
+
+[node name="ClearRateLabel2" parent="LevelInfo/UiMarginContainer/VBoxContainer" unique_id=347178121 instance=ExtResource("3_7ni65")]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Invalid Rate"
+metadata/_edit_lock_ = true
