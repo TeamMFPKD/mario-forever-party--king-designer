@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="5_2ia67"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="6_oqxpu"]
 [ext_resource type="PackedScene" uid="uid://ctl8t18mclmft" path="res://ui/game_time_hud.tscn" id="7_8ux2l"]
+[ext_resource type="PackedScene" uid="uid://cl38mekged58i" path="res://ui/level_info.tscn" id="7_jgnbe"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="8_pgm75"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="9_a3c6e"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="10_ue3jg"]
@@ -80,6 +81,17 @@ offset_bottom = 233.0
 
 [node name="GameTimer" parent="GameRoomSize/GameTimeHUD" index="3" unique_id=1795664682]
 autostart = true
+
+[node name="LevelInfo" parent="GameRoomSize" unique_id=1694047089 instance=ExtResource("7_jgnbe")]
+layout_mode = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -201.6001
+offset_top = 511.92
+offset_right = -134.40002
+offset_bottom = 511.92
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1823801948]
 layout_mode = 1
@@ -207,7 +219,7 @@ target_mode = 3
 [node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" unique_id=1790741609]
 script = ExtResource("31_pt7ut")
 
-[node name="BackToHistory" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("31_sbo3u")]
+[node name="BackToHistory" parent="GameRoomSize" unique_id=1285012441 instance=ExtResource("31_sbo3u")]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
