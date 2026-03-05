@@ -18,5 +18,3 @@ func _on_button_pressed() -> void:
 		return
 	level_path_set.set_meta("level_path_name", level_path_name)
 	GameModeSingleton.game_mode = target_game_mode
-	if target_game_mode != GameModeSingleton.GameModeType.EDIT:
-		TimerSingleton.start()
