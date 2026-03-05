@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bj18bxgmuatpn"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_ktcc1"]
+[ext_resource type="PackedScene" uid="uid://bsg7epf24irr" path="res://object/level/bonus/beetroot.tscn" id="2_ktcc1"]
+[ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="3_qecar"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_edlk1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3n6qb"]
+atlas = ExtResource("3_qecar")
+region = Rect2(0, 0, 29, 34)
+
+[node name="SpawnerBeetroot" type="Node2D" unique_id=398784866]
+script = ExtResource("1_ktcc1")
+spawn_object_scene = ExtResource("2_ktcc1")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2123271352]
+texture = SubResource("AtlasTexture_3n6qb")
+
+[node name="OffsetMarker" parent="." unique_id=2101789563 instance=ExtResource("4_edlk1")]

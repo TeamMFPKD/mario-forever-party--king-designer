@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cbbx1krhhvfor"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_pa214"]
+[ext_resource type="PackedScene" uid="uid://cyee16r52cf3h" path="res://object/level/bonus/fire_flower.tscn" id="2_f7ffe"]
+[ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="4_gvq64"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="5_6na02"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cq2lm"]
+atlas = ExtResource("4_gvq64")
+region = Rect2(0, 0, 33, 32)
+
+[node name="SpawnerFireFlower" type="Node2D" unique_id=398784866]
+script = ExtResource("1_pa214")
+spawn_object_scene = ExtResource("2_f7ffe")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2123271352]
+texture = SubResource("AtlasTexture_cq2lm")
+
+[node name="OffsetMarker" parent="." unique_id=2101789563 instance=ExtResource("5_6na02")]

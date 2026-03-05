@@ -7,23 +7,41 @@ class_name BonusSprout
 @export var sprout_speed = 50.0
 @export var path_to_basic_movement : NodePath = "../BasicMovement"
 
-var bonus : Node2D
+var bonus : CharacterBody2D
 var collision_shape : CollisionShape2D
 var in_wall_cast : ShapeCast2D
 var basic_movement : BasicMovement
 
 var is_sprout : bool = false
+var origin_bonus_collision_layer : int
+var origin_bonus_collision_mask : int
+
+var initialize : bool = false
 
 func _ready() -> void:
 	bonus = get_node(path_to_bonus)
+	origin_bonus_collision_layer = bonus.collision_layer
+	origin_bonus_collision_mask = bonus.collision_mask
+	bonus.collision_layer = 0
+	bonus.collision_mask = 0
+	bonus.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 	collision_shape = get_node(path_to_collision_shape)
 	in_wall_cast = get_node("ShapeCast2D")
 	in_wall_cast.shape = collision_shape.shape
 	if bonus.has_meta("sprout_down"):
 		print("Sprout down")
 		sprout_speed = -sprout_speed
+
+	# 神神秘秘 CharacterBody2D
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	initialize = true
+	bonus.process_mode = ProcessMode.PROCESS_MODE_INHERIT
+	collision_recover()
+
 	if not is_overlap():
 		is_sprout = true
+		bonus.collision_layer = origin_bonus_collision_layer
 		return
 	bonus.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 	#for child in bonus.get_children():
@@ -35,6 +53,8 @@ func _ready() -> void:
 		basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 
 func _physics_process(delta: float) -> void:
+	if not initialize:
+		return
 	if not is_sprout and is_overlap():
 		bonus.position.y -= sprout_speed * delta
 	else:
@@ -48,7 +68,15 @@ func _physics_process(delta: float) -> void:
 			if not is_sprout:
 				basic_movement.set_movement_direction()
 		is_sprout = true
+		bonus.collision_layer = origin_bonus_collision_layer
 	
 func is_overlap() -> bool:
 	#print(ShapeCastQuery.shape_query(bonus, in_wall_cast))
 	return ShapeCastQuery.shape_query(bonus, in_wall_cast).size() > 0
+
+func collision_recover() -> void:
+	for i in range(5):
+		push_warning("bonus waiting: %s frame" % i)
+		await get_tree().physics_frame
+	bonus.collision_layer = origin_bonus_collision_layer
+	bonus.collision_mask = origin_bonus_collision_mask
