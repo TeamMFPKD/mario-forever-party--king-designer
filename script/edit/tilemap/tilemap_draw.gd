@@ -56,9 +56,9 @@ func setup_input_handler():
 			input_handler.input_released.connect(_on_input_released)
 		if not input_handler.input_dragged.is_connected(_on_input_dragged):
 			input_handler.input_dragged.connect(_on_input_dragged)
-		print("TileMapDraw: InputHandler signals connected successfully")
+		print("[%s] TileMapDraw: InputHandler signals connected successfully" % Time.get_time_string_from_system())
 	else:
-		print("TileMapDraw: Error: Failed to find or create InputHandler")
+		print("[%s] TileMapDraw: Error: Failed to find or create InputHandler" % Time.get_time_string_from_system())
 
 func _on_input_clicked(input_pos: Vector2):
 	if drawing_enabled and tile_map:
@@ -112,7 +112,7 @@ func place_tile_at_cursor(cursor_pos):
 			if custom_atlas_coords != Vector2i(-1, -1):
 				# 使用自定义图块坐标
 				tile_map.set_cell(cell_coords, 0, custom_atlas_coords)
-				print("TileMapDraw: 放置自定义图块，坐标: ", custom_atlas_coords)
+				print("[%s] TileMapDraw: 放置自定义图块，坐标: " % Time.get_time_string_from_system(), custom_atlas_coords)
 			else:
 				# Draw Terrain - 使用默认地形连接
 				tile_map.set_cells_terrain_connect(cell_coords_array, 0, 0)
@@ -275,7 +275,7 @@ func check_and_erase_border_terrain(cell_coords: Vector2i):
 		# 检查该位置是否有瓦片，如果有则擦除
 		if tile_map.get_cell_source_id(extra_cell) != -1:
 			tile_map.set_cells_terrain_connect([extra_cell], 0, -1)
-			print("TileMapDraw: 在边界额外擦除terrain，坐标: ", extra_cell)
+			print("[%s] TileMapDraw: 在边界额外擦除terrain，坐标: " % Time.get_time_string_from_system(), extra_cell)
 
 # 检查并绘制边界terrain
 func check_and_draw_border_terrain(cell_coords: Vector2i):
@@ -344,7 +344,7 @@ func check_and_draw_border_terrain(cell_coords: Vector2i):
 		# 检查该位置是否已经有瓦片，如果没有则绘制
 		if tile_map.get_cell_source_id(extra_cell) == -1:
 			tile_map.set_cells_terrain_connect([extra_cell], 0, 0)
-			print("TileMapDraw: 在边界额外绘制terrain，坐标: ", extra_cell)
+			print("[%s] TileMapDraw: 在边界额外绘制terrain，坐标: " % Time.get_time_string_from_system(), extra_cell)
 
 # 设置自定义图块坐标
 func set_custom_atlas_coords(coords: Vector2i):

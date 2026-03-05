@@ -67,7 +67,7 @@ func switch_to_tilemap_mode():
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
 	
-	print("切换到TileMap绘图模式")
+	print("[%s] 切换到TileMap绘图模式" % Time.get_time_string_from_system())
 
 # 切换到对象地图模式（通过对象名称）
 func switch_to_objectmap_mode(object_name: String):
@@ -87,7 +87,7 @@ func switch_to_objectmap_mode(object_name: String):
 	drawing_mode_changed.emit(current_drawing_mode)
 	object_selected.emit(object_name)
 	
-	print("切换到ObjectMap绘图模式，对象名称: ", object_name)
+	print("[%s] 切换到ObjectMap绘图模式，对象名称: " % Time.get_time_string_from_system(), object_name)
 
 func switch_to_eraser_mode():
 	current_drawing_mode = DrawingMode.ERASER
@@ -107,7 +107,7 @@ func switch_to_eraser_mode():
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
 	
-	print("切换到橡皮擦模式")
+	print("[%s] 切换到橡皮擦模式" % Time.get_time_string_from_system())
 
 
 func _on_tile_button_pressed():
@@ -143,7 +143,7 @@ func switch_to_tilemap_mode_with_coords(custom_atlas_coords: Vector2i = Vector2i
 	# 发出信号
 	drawing_mode_changed.emit(current_drawing_mode)
 	
-	print("切换到TileMap绘图模式", 
+	print("[%s] 切换到TileMap绘图模式" % Time.get_time_string_from_system(), 
 		  " (自定义图块坐标: ", custom_atlas_coords, ")" if custom_atlas_coords != Vector2i(-1, -1) else "")
 
 # 获取当前绘图模式
@@ -204,7 +204,7 @@ func erase_at_position(position: Vector2):
 	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
 		should_emit_sound = object_map_layer.remove_object_at_position(position) && should_emit_sound
 	
-	print("橡皮擦：清除位置 ", position)
+	print("[%s] 橡皮擦：清除位置 " % Time.get_time_string_from_system(), position)
 	
 	if should_emit_sound:
 		emit_signal("play_sound_erase")
@@ -279,13 +279,13 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 			if object_name == "":
 				# 如果object_name为空，使用按钮名称作为默认值
 				object_name = button.name.replace("ItemButton", "").to_lower()
-				print("警告：ItemButton ", button.name, " 的object_name为空，使用默认名称: ", object_name)
+				print("[%s] 警告：ItemButton " % Time.get_time_string_from_system(), button.name, " 的object_name为空，使用默认名称: ", object_name)
 			
 			switch_to_objectmap_mode(object_name)
 		ItemButton.ItemType.ERASER:
 			switch_to_eraser_mode()
 	
-	print("ItemButton按下: ", button.name, " 类型: ", item_type, " 对象名称: ", object_name)
+	print("[%s] ItemButton按下: " % Time.get_time_string_from_system(), button.name, " 类型: ", item_type, " 对象名称: ", object_name)
 
 	var item_groups = get_tree().get_nodes_in_group("item_group")
 	for node in item_groups:

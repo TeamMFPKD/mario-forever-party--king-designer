@@ -67,7 +67,7 @@ func setup_input_handler():
 		get_parent().call_deferred("add_child", input_handler)
 		# 等待一帧让InputHandler完全初始化
 		await get_tree().process_frame
-		print("ObjectMapLayer: InputHandler created and added to parent")
+		print("[%s] ObjectMapLayer: InputHandler created and added to parent" % Time.get_time_string_from_system())
 	
 	# 重新获取InputHandler引用
 	input_handler = null
@@ -85,9 +85,9 @@ func setup_input_handler():
 		# 新增：连接拖拽信号
 		if not input_handler.input_dragged.is_connected(_on_input_dragged):
 			input_handler.input_dragged.connect(_on_input_dragged)
-		print("ObjectMapLayer: InputHandler signals connected successfully")
+		print("[%s] ObjectMapLayer: InputHandler signals connected successfully" % Time.get_time_string_from_system())
 	else:
-		print("ObjectMapLayer: Error: Failed to find or create InputHandler")
+		print("[%s] ObjectMapLayer: Error: Failed to find or create InputHandler" % Time.get_time_string_from_system())
 
 func _on_input_clicked(input_pos: Vector2):
 	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
@@ -126,7 +126,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 	
 	# 检查该网格位置是否已有对象（仅在需要时检查）
 	if check_duplicate and is_grid_position_occupied(grid_position):
-		print("ObjectMapLayer: 该网格位置已有对象，不进行绘制")
+		print("[%s] ObjectMapLayer: 该网格位置已有对象，不进行绘制" % Time.get_time_string_from_system())
 		return
 	
 	var scene_instance = entry.object_scene.instantiate()
@@ -143,7 +143,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		}
 		objects.append(object_data)
 		
-		print("放置对象: ", entry.object_name, " 在网格位置: ", grid_position)
+		print("[%s] 放置对象: " % Time.get_time_string_from_system(), entry.object_name, " 在网格位置: ", grid_position)
 		
 		# 发射放置音效信号
 		emit_place_sound()
@@ -213,7 +213,7 @@ func remove_object_at_position(input_pos: Vector2):
 		if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
 			object_to_remove["instance"].queue_free()
 		objects.erase(object_to_remove)
-		print("橡皮擦：清除对象在位置 ", grid_position)
+		print("[%s] 橡皮擦：清除对象在位置 " % Time.get_time_string_from_system(), grid_position)
 		return true
 	
 	#print("橡皮擦：位置 ", grid_position, " 没有对象")
@@ -246,7 +246,7 @@ func remove_all_objects_of_type(object_name: String):
 			object_data["instance"].queue_free()
 		objects.erase(object_data)
 	
-	print("已删除所有类型为 '", object_name, "' 的对象，共删除 ", objects_to_remove.size(), " 个")
+	print("[%s] 已删除所有类型为 '" % Time.get_time_string_from_system(), object_name, "' 的对象，共删除 ", objects_to_remove.size(), " 个")
 
 # 保存对象数据（用于关卡保存）
 func get_object_data() -> Array:

@@ -36,6 +36,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	initialize = true
+	
 	bonus.process_mode = ProcessMode.PROCESS_MODE_INHERIT
 	collision_recover()
 
