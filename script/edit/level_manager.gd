@@ -106,7 +106,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	if tile_data_array is Array and tile_data_array != []:
 		var tile_data_bytes_array = PackedByteArray(tile_data_array)
 		tile_map.tile_map_data = tile_data_bytes_array
-		print("瓦片数据加载完成")
+		print("[%s] 瓦片数据加载完成" % Time.get_time_string_from_system())
 	else:
 		push_warning("No tile data found in level file")
 	
@@ -115,13 +115,13 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	if object_data_array is Array:
 		if object_map and object_map.has_method("load_object_data"):
 			object_map.load_object_data(object_data_array)
-			print("对象数据加载完成，共加载 ", object_data_array.size(), " 个对象")
+			print("[%s] 对象数据加载完成，共加载 " % Time.get_time_string_from_system(), object_data_array.size(), " 个对象")
 		else:
 			push_warning("ObjectMapLayer not found or missing load_object_data method")
 	else:
 		push_warning("No object data found in level file")
 
-	print("Level loaded.")
+	print("[%s] Level loaded." % Time.get_time_string_from_system())
 
 	
 	

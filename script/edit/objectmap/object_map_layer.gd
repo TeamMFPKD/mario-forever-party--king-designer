@@ -24,13 +24,13 @@ func _ready():
 	# 查找对应的对象条目
 	var entry = find_object_by_name(current_object_name)
 	if not entry or not entry.object_scene:
-		print("ObjectMapLayer: 未找到对象: ", current_object_name)
+		print("[%s] ObjectMapLayer: 未找到对象: " % Time.get_time_string_from_system(), current_object_name)
 		return
 	
 	# 如果是player对象，先删除所有已存在的player对象
 	if current_object_name == "player":
 		remove_all_objects_of_type("player")
-		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
+		print("[%s] ObjectMapLayer: 放置player前已清除所有已存在的player对象" % Time.get_time_string_from_system())
 	
 	# 将位置对齐到32x32网格
 	var grid_position = align_to_grid(Vector2(112.0, 400.0))
