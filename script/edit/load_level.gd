@@ -38,7 +38,7 @@ func load_from_level() -> String:
 		push_error("Failed to open file or this is a new file.")
 		var err = FileAccess.get_open_error()
 		if err != OK:
-			print("Error loading file:", err)
+			print("[%s] Error loading file:" % Time.get_time_string_from_system(), err)
 			return ""
 	var content = file.get_as_text()
 	file.close()

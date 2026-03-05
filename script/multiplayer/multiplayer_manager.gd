@@ -27,18 +27,18 @@ var game_start_time : String
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []:
 	set(value):
-		print("players set player size: ", players.size())
+		print("[%s] players set player size: " % Time.get_time_string_from_system(), players.size())
 		for p in players:
-			print("players set player name: ", p.name)
-		print("players set value size: ", value.size())
+			print("[%s] players set player name: " % Time.get_time_string_from_system(), p.name)
+		print("[%s] players set value size: " % Time.get_time_string_from_system(), value.size())
 		for v in value:
-			print("players set value player name: ", v.name)
+			print("[%s] players set value player name: " % Time.get_time_string_from_system(), v.name)
 		if players.size() < value.size():
 			emit_signal("play_sound_joined")
-			print("play sound joined")
+			print("[%s] play sound joined" % Time.get_time_string_from_system())
 		if players.size() > value.size():
 			emit_signal("play_sound_exited")
-			print("play sound exited")
+			print("[%s] play sound exited" % Time.get_time_string_from_system())
 		players = value
 
 var random_levels = []
@@ -86,9 +86,9 @@ func _ready():
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
-	multiplayer.connected_to_server.connect(func(): print("连接成功"))
-	multiplayer.connection_failed.connect(func(): print("连接失败"))
-	multiplayer.server_disconnected.connect(func(): print("服务器断开"))
+	multiplayer.connected_to_server.connect(func(): print("[%s] 连接成功" % Time.get_time_string_from_system()))
+	multiplayer.connection_failed.connect(func(): print("[%s] 连接失败" % Time.get_time_string_from_system()))
+	multiplayer.server_disconnected.connect(func(): print("[%s] 服务器断开" % Time.get_time_string_from_system()))
 
 func _on_host_button_pressed():
 	# 主机端代码通常不需要修改，仍监听本地端口
@@ -102,25 +102,25 @@ func _on_host_button_pressed():
 
 	players.append(player)
 	emit_signal("players_updated")
-	print("主机已启动。")
-	print("玩家ID：", multiplayer.get_unique_id())
-	print("玩家名称：", player_name)
+	print("[%s] 主机已启动。" % Time.get_time_string_from_system())
+	print("[%s] 玩家ID：" % Time.get_time_string_from_system(), multiplayer.get_unique_id())
+	print("[%s] 玩家名称：" % Time.get_time_string_from_system(), player_name)
 
 func _on_join_button_pressed():
 	var peer = ENetMultiplayerPeer.new()
 	
-	print("连接IP：", frp_domain)
-	print("连接端口：", remote_port)
-	print("玩家ID：", multiplayer.get_unique_id())
-	print("玩家名称：", player_name)
+	print("[%s] 连接IP：" % Time.get_time_string_from_system(), frp_domain)
+	print("[%s] 连接端口：" % Time.get_time_string_from_system(), remote_port)
+	print("[%s] 玩家ID：" % Time.get_time_string_from_system(), multiplayer.get_unique_id())
+	print("[%s] 玩家名称：" % Time.get_time_string_from_system(), player_name)
 
 	var error = peer.create_client(frp_domain, remote_port)
 	
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
-		print("正在连接到服务器: ", frp_domain)
+		print("[%s] 正在连接到服务器: " % Time.get_time_string_from_system(), frp_domain)
 	else:
-		print("连接失败，错误信息: ", error)
+		print("[%s] 连接失败，错误信息: " % Time.get_time_string_from_system(), error)
 
 func _on_connected_to_server():
 	# 客户端连接成功后，向主机发送自己的玩家信息

@@ -43,9 +43,9 @@ func setup_input_handler():
 			level_node.call_deferred("add_child", input_handler)
 			# 等待一帧让InputHandler完全初始化
 			await get_tree().process_frame
-			print("TileMapDraw: InputHandler created and added to Level node")
+			print("[%s] TileMapDraw: InputHandler created and added to Level node" % Time.get_time_string_from_system())
 		else:
-			print("TileMapDraw: Error: Cannot find Level node to add InputHandler")
+			print("[%s] TileMapDraw: Error: Cannot find Level node to add InputHandler" % Time.get_time_string_from_system())
 			return
 	
 	if input_handler:

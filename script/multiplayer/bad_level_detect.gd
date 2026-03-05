@@ -20,4 +20,5 @@ func _on_force_continue_button_pressed():
 	bad_level_process()
 
 func bad_level_process():
+	print("[%s] 手动跳过坏关" % Time.get_time_string_from_system())
 	emit_signal("skip_bad_level")
