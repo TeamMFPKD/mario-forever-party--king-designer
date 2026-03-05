@@ -48,7 +48,7 @@ _data = {
 }
 
 [node name="ItemButton" type="Button" unique_id=1174583370]
-custom_minimum_size = Vector2(160, 160)
+custom_minimum_size = Vector2(170, 170)
 offset_left = 7.0
 offset_top = 6.0
 offset_right = 160.0

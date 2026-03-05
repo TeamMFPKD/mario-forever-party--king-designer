@@ -48,6 +48,7 @@ _data = {
 }
 
 [node name="GroupButton" type="Button" unique_id=637023655]
+custom_minimum_size = Vector2(170, 170)
 offset_left = 7.0
 offset_top = 6.0
 offset_right = 160.0
