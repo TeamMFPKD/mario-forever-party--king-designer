@@ -341,7 +341,7 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 			if is_dead:
 				ani.sprite_frames = player_dead_spritesframe
 				ani.position.y += 20.0
-				continue
+				break
 			match suit:
 				PlayerSuit.SuitType.SMALL:
 					ani.sprite_frames = player_small_spritesframe

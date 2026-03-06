@@ -104,14 +104,12 @@ func _update_button_text() -> void:
         text = "  /  ".join(labels)
 
 func _simplify_event_text(raw: String) -> String:
-    var text := raw.replace(" (Physical)", "").replace(" - Physical", "")
+    var simplified := raw.replace(" (Physical)", "").replace(" - Physical", "")
     
-    # 手柄摇杆：只保留轴号和方向
-    # "Joypad Motion on Axis 0 (Left Stick X-Axis, Joystick 0 X-Axis) with Value -1.00"
-    # → "L-Stick ←"
+    # 手柄摇杆
     var axis_regex := RegEx.new()
     axis_regex.compile(r"Joypad Motion on Axis (\d+).*?Value ([-\d.]+)")
-    var axis_match := axis_regex.search(text)
+    var axis_match := axis_regex.search(simplified)
     if axis_match:
         var axis := axis_match.get_string(1).to_int()
         var value := axis_match.get_string(2).to_float()
@@ -127,26 +125,24 @@ func _simplify_event_text(raw: String) -> String:
             return axis_names[axis][0 if value < 0 else 1]
         return "Axis%d %s" % [axis, "−" if value < 0 else "+"]
     
-    # 手柄按钮：去掉括号内的冗长别名
-    # "Joypad Button 0 (Bottom Action, Sony Cross, Xbox A, Nintendo B)" → "JBtn 0 (A/Cross)"
+    # 手柄按钮
     var btn_regex := RegEx.new()
     btn_regex.compile(r"Joypad Button (\d+).*")
-    var btn_match := btn_regex.search(text)
+    var btn_match := btn_regex.search(simplified)
     if btn_match:
         var idx := btn_match.get_string(1).to_int()
-        # 常见按钮简写映射
         var btn_names := {
-            0:  "A / Cross",
-            1:  "B / Circle",
-            2:  "X / Square",
-            3:  "Y / Triangle",
+            0:  "A / ✕",
+            1:  "B / ○",
+            2:  "X / □",
+            3:  "Y / ▲",
             4:  "L1",
             5:  "R1",
             6:  "L2",
             7:  "R2",
             8:  "Select",
             9:  "Start",
-            10: "R1",       # 部分手柄布局不同，按需调整
+            10: "R1",
             11: "D-Up",
             12: "D-Down",
             13: "D-Left",
@@ -155,4 +151,4 @@ func _simplify_event_text(raw: String) -> String:
         }
         return btn_names.get(idx, "JBtn %d" % idx)
     
-    return text
+    return simplified  # 返回简化后的字符串
