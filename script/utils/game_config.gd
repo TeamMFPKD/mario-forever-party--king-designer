@@ -48,7 +48,7 @@ func _load_input_mappings() -> void:
 		for ev in slots:
 			if ev != null:
 				InputMap.action_add_event(base_action, ev)
-				print("加载输入映射: ", base_action, " -> ", ev.as_text())
+				print("[设置] 加载输入映射: ", base_action, " -> ", ev.as_text())
 
 func save() -> void:
 	config.save("user://game_settings.cfg")
