@@ -209,7 +209,7 @@ func erase_at_position(position: Vector2):
 	if should_emit_sound:
 		emit_signal("play_sound_erase")
 
-# 新增：不受模式限制的清除功能（用于右键点击）
+# 新增：根据当前绘制模式进行清除的功能（用于右键点击）
 func erase_at_position_immediate(position: Vector2):
 	# 检查该位置是否存在tile或object
 	var has_tile = false
@@ -240,19 +240,34 @@ func erase_at_position_immediate(position: Vector2):
 		
 		# print("ObjectMap网格位置: ", grid_position, " 是否有对象: ", has_object)
 	
-	# 只有当存在tile或object时才播放音效
-	var should_emit_sound = has_tile || has_object
-
-	# 不检查当前模式，直接清除Tile和Object
-	# 清除Tile
-	if tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
-		tile_map_draw.erase_tile_at_position(position)
+	# 根据当前绘制模式决定清除逻辑
+	var should_emit_sound = false
 	
-	# 清除Object
-	if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
-		should_emit_sound = object_map_layer.remove_object_at_position(position) && should_emit_sound
+	match current_drawing_mode:
+		DrawingMode.TILEMAP:
+			# Tile绘制模式下：只能擦除Tile
+			if has_tile and tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
+				tile_map_draw.erase_tile_at_position(position)
+				should_emit_sound = has_tile
+			
+		DrawingMode.OBJECTMAP:
+			# Object绘制模式下：只能擦除Object
+			if has_object and object_map_layer and object_map_layer.has_method("remove_object_at_position"):
+				should_emit_sound = object_map_layer.remove_object_at_position(position)
+			
+		_:
+			# 其他模式（橡皮擦模式等）：可以擦除所有物品
+			# 清除Tile
+			if tile_map_draw and tile_map_draw.has_method("erase_tile_at_position"):
+				tile_map_draw.erase_tile_at_position(position)
+			
+			# 清除Object
+			if object_map_layer and object_map_layer.has_method("remove_object_at_position"):
+				should_emit_sound = object_map_layer.remove_object_at_position(position) || has_tile
+			else:
+				should_emit_sound = has_tile
 	
-	# print("右键清除：清除位置 ", position)
+	# print("右键清除：清除位置 ", position, " 模式: ", current_drawing_mode)
 	
 	if should_emit_sound:
 		emit_signal("play_sound_erase")
