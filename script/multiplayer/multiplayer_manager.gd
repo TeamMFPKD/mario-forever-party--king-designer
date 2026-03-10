@@ -323,7 +323,7 @@ func store_level_results(players) -> void:
 		file.close()
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
-func send_ani_sprite_data(player_id: int, player_name: String, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool) -> void:
+func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool) -> void:
 	#print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 	if current_level_count != current_level:
 		return
@@ -337,11 +337,20 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 		if ani.has_meta("player_id"):
 			if ani.get_meta("player_id") != player_id:
 				continue
+			# 位置
 			ani.global_position = ani_pos
+			# 名称
+			var label = ani.get_node("UiLabel") as Label
+			for p in players:
+				if p.id == player_id:
+					label.text = p.name
+					break
+			# 死亡
 			if is_dead:
 				ani.sprite_frames = player_dead_spritesframe
 				ani.position.y += 20.0
 				break
+			# 套装
 			match suit:
 				PlayerSuit.SuitType.SMALL:
 					ani.sprite_frames = player_small_spritesframe
@@ -356,11 +365,10 @@ func send_ani_sprite_data(player_id: int, player_name: String, current_level: in
 						PlayerSuit.PowerupType.LUI:
 							ani.sprite_frames = player_lui_spritesframe
 			#print("来自玩家 ", player_id, " 的动画套装数据：", suit, power)
+			# 动画序列、帧、方向
 			ani.animation = animation
 			ani.frame = frame
 			ani.flip_h = flip_h
-			var label = ani.get_node("UiLabel") as Label
-			label.text = player_name
 			#print("[显示] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 			break
 		else:
@@ -386,3 +394,4 @@ func sync_origin_player_data() -> void:
 	emit_signal("players_updated")
 	print("已返回标题界面，并重新同步玩家列表数据：")
 	print(players)
+	
