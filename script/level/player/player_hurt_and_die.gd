@@ -41,7 +41,7 @@ func _physics_process(_delta: float) -> void:
 		_on_player_die()
 
 	# Update invincible
-	invincible = invincible_starman or is_hurting
+	update_invincible()
 
 	if player.position.y > level_camera.limit_bottom + 32:
 		_on_player_die()
@@ -61,6 +61,7 @@ func _on_player_hurt() -> void:
 	if invincible:
 		return
 	is_hurting = true
+	update_invincible()
 	match player_suit.suit:
 		PlayerSuit.SuitType.SMALL:
 			_on_player_die()
@@ -87,6 +88,10 @@ func _on_player_die() -> void:
 
 func _on_starman_start() -> void:
 	invincible_starman = true
+	update_invincible()
 
 func _on_starman_end() -> void:
 	invincible_starman = false
+
+func update_invincible() -> void:
+	invincible = invincible_starman or is_hurting
