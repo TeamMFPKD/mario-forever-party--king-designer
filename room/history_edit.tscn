@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cl38mekged58i" path="res://ui/level_info.tscn" id="11_rhsux"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="11_y2kr0"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="12_tvq20"]
+[ext_resource type="PackedScene" uid="uid://0dbmhxo1wyy3" path="res://object/history/liked_course_preview.tscn" id="12_vrujf"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="13_hdnkf"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="14_0qlom"]
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="15_eshj6"]
@@ -277,7 +278,7 @@ anchors_preset = 0
 offset_left = -960.0
 offset_top = -540.0
 offset_right = 960.0
-offset_bottom = 1504.0
+offset_bottom = 540.0
 script = ExtResource("4_u4oqv")
 metadata/_edit_lock_ = true
 
@@ -354,6 +355,9 @@ offset_left = -201.6001
 offset_top = 511.92
 offset_right = -134.40002
 offset_bottom = 511.92
+
+[node name="LikedCoursePreview" parent="GameRoomSize" unique_id=735878133 instance=ExtResource("12_vrujf")]
+layout_mode = 1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1725420938]
 layout_mode = 1
@@ -1594,6 +1598,7 @@ scene_uid = &"uid://de64xnukpa0re"
 [connection signal="pressed" from="GameRoomSize/BackToHistory/BackToHistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
 
 [editable path="GameRoomSize/TimeHUD"]
+[editable path="GameRoomSize/LikedCoursePreview"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonUp"]
