@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="25_njeha"]
 [ext_resource type="PackedScene" uid="uid://tsq4sty5ypr" path="res://object/edit/spawner/mark/spawner_player.tscn" id="26_ul880"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="28_27nso"]
+[ext_resource type="PackedScene" uid="uid://b487gtilcxsuk" path="res://object/history/take_photo.tscn" id="28_d41mo"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/utils/input_handler.gd" id="29_apndl"]
 [ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/edit/test_node.gd" id="30_imagh"]
 [ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="31_n3y3y"]
@@ -344,6 +345,7 @@ script = ExtResource("10_imchv")
 
 [node name="LevelInfo" parent="GameRoomSize" unique_id=1694047089 instance=ExtResource("11_rhsux")]
 layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -456,6 +458,8 @@ visible = false
 closed = true
 default_color = Color(0, 0.63333344, 1, 0.7529412)
 script = ExtResource("32_xmqcf")
+
+[node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=606104598 instance=ExtResource("28_d41mo")]
 
 [node name="LevelSizeGroup" type="Control" parent="GameRoomSize" unique_id=573696587 groups=["item_group"]]
 visible = false
