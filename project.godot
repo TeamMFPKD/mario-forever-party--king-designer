@@ -85,6 +85,8 @@ mobile_control=""
 random_capture_manager=""
 level_path_set=""
 game_config=""
+capture_texture_rect=""
+game_room=""
 
 [input]
 

@@ -59,7 +59,7 @@ play = true
 [node name="TimeoutManager" type="Node" parent="." unique_id=39996069]
 script = ExtResource("3_cxniv")
 
-[node name="GameRoomSize" type="Control" parent="." unique_id=1663788830]
+[node name="GameRoomSize" type="Control" parent="." unique_id=1663788830 groups=["game_room"]]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -960.0

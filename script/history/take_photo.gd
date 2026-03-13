@@ -2,6 +2,7 @@ extends Node
 
 var viewport
 var level_path_node : Node
+var image : Image
 
 const LIKED_COURSE_FOLDER_NAME = "liked courses"
 
@@ -45,7 +46,7 @@ func capture() -> void:
 	
 	# 截图处理
 	var viewport_texture = viewport.get_texture()
-	var image = viewport_texture.get_image()
+	image = viewport_texture.get_image()
 	var tmp_texture = ImageTexture.create_from_image(image)
 	var sav_texture = tmp_texture.duplicate()
 	
@@ -79,3 +80,73 @@ func capture() -> void:
 			print("Level file copied using FileAccess fallback")
 		else:
 			print("Fallback copy also failed")
+
+	_create_capture_preview()
+
+func _create_capture_preview() -> void:
+	var sprite = Sprite2D.new()
+	var game_room_node = get_tree().get_first_node_in_group("game_room") as Control
+	if not game_room_node:
+		push_error("Game room node not found")
+		return
+	game_room_node.add_child(sprite)
+	sprite.texture = ImageTexture.create_from_image(image)
+	var texture_rect = get_tree().get_first_node_in_group("capture_texture_rect") as Control
+	if not texture_rect:
+		push_error("Texture rect node not found")
+		return
+	
+	# 计算起始和结束位置
+	var start_pos = game_room_node.get_global_position() + game_room_node.get_size() / 2.0
+	var end_pos = texture_rect.get_global_position() + texture_rect.get_size() / 2.0
+	
+	# 计算起始和结束缩放
+	# 起始缩放：根据 game_room_node 的大小调整
+	var game_room_size = game_room_node.get_size()
+	var texture_size = image.get_size()
+	
+	# 让 sprite 在起始位置时适配 game_room_node 的大小
+	var start_scale = Vector2(
+		game_room_size.x / texture_size.x,
+		game_room_size.y / texture_size.y
+	)
+	
+	# 让 sprite 在结束位置时适配 texture_rect 的大小
+	var end_scale = Vector2(
+		texture_rect.get_size().x / texture_size.x,
+		texture_rect.get_size().y / texture_size.y
+	)
+	
+	# 设置初始状态
+	sprite.global_position = start_pos
+	sprite.scale = start_scale
+	sprite.rotation = 0
+	
+	# 创建并配置 Tween
+	var tween = create_tween()
+	var ani_time = 0.5
+	tween.set_parallel(true)  # 让所有属性同时变化
+	
+	# 位置插值（线性）
+	tween.tween_property(sprite, "global_position", end_pos, ani_time)\
+		.set_ease(Tween.EASE_IN_OUT)\
+		.set_trans(Tween.TRANS_LINEAR)
+	
+	# 缩放插值（线性）
+	tween.tween_property(sprite, "scale", end_scale, ani_time)\
+		.set_ease(Tween.EASE_IN_OUT)\
+		.set_trans(Tween.TRANS_LINEAR)
+	
+	# 旋转插值（从0到360度）
+	tween.tween_property(sprite, "rotation", deg_to_rad(360.0), ani_time)\
+		.set_ease(Tween.EASE_IN_OUT)\
+		.set_trans(Tween.TRANS_LINEAR)
+	
+	# 动画结束后处理
+	tween.finished.connect(func():
+		print("动画完成")
+		# 可以选择不移除，让 sprite 留在 texture_rect 上
+		# 或者延迟移除：
+		# await get_tree().create_timer(0.5).timeout
+		# sprite.queue_free()
+	)

@@ -272,7 +272,7 @@ sound_effect = true
 [node name="TimeoutManager" type="Node" parent="." unique_id=963214289]
 script = ExtResource("3_duhqd")
 
-[node name="GameRoomSize" type="Control" parent="." unique_id=294304425]
+[node name="GameRoomSize" type="Control" parent="." unique_id=294304425 groups=["game_room"]]
 layout_mode = 3
 anchors_preset = 0
 offset_left = -960.0
