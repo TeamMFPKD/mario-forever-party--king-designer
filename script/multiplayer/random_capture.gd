@@ -16,10 +16,10 @@ func _ready():
 	random_capture_manager = get_tree().get_first_node_in_group("random_capture_manager")
 	
 # Capture test
-func _physics_process(_delta: float) -> void:
-	if not Input.is_key_pressed(KEY_0):
-		return
-	capture()
+#func _physics_process(_delta: float) -> void:
+#	if not Input.is_key_pressed(KEY_0):
+#		return
+#	capture()
 
 func capture() -> void:
 	var viewport_texture = viewport.get_texture()

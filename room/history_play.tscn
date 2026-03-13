@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://cw836hlngytf1" path="res://script/multiplayer/multiplayer_ani_sprite_manager.gd" id="25_vtonu"]
 [ext_resource type="PackedScene" uid="uid://bb3rl8fd2qhlq" path="res://object/multiplayer_player_shadow.tscn" id="26_m4oc0"]
 [ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture.gd" id="27_rul26"]
+[ext_resource type="PackedScene" uid="uid://b487gtilcxsuk" path="res://object/history/take_photo.tscn" id="28_cxniv"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="28_ysgyl"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="29_28d7q"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="30_jm5fm"]
@@ -84,6 +85,7 @@ autostart = true
 
 [node name="LevelInfo" parent="GameRoomSize" unique_id=1694047089 instance=ExtResource("7_jgnbe")]
 layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_top = 0.0
 anchor_right = 1.0
@@ -194,6 +196,8 @@ autostart = true
 wait_time = 0.1
 one_shot = true
 autostart = true
+
+[node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=606104598 instance=ExtResource("28_cxniv")]
 
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
 layout_mode = 0

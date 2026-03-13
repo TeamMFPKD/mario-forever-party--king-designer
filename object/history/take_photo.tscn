@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b487gtilcxsuk"]
+
+[ext_resource type="Script" uid="uid://dg4bg4qfofnwc" path="res://script/history/take_photo.gd" id="1_fbocc"]
+
+[node name="TakePhoto" type="Node" unique_id=606104598]
+script = ExtResource("1_fbocc")
