@@ -1,5 +1,9 @@
 extends Node
 
+signal photo_taken
+
+@export var take_photo_ani_spd = 0.2
+
 var viewport
 var level_path_node : Node
 var image : Image
@@ -83,6 +87,8 @@ func capture() -> void:
 
 	_create_capture_preview()
 
+	emit_signal("photo_taken")
+
 func _create_capture_preview() -> void:
 	var sprite = Sprite2D.new()
 	var game_room_node = get_tree().get_first_node_in_group("game_room") as Control
@@ -124,7 +130,7 @@ func _create_capture_preview() -> void:
 	
 	# 创建并配置 Tween
 	var tween = create_tween()
-	var ani_time = 0.5
+	var ani_time = take_photo_ani_spd
 	tween.set_parallel(true)  # 让所有属性同时变化
 	
 	# 位置插值（线性）
