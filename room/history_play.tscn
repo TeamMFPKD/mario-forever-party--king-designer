@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/time_hud.tscn" id="6_oqxpu"]
 [ext_resource type="PackedScene" uid="uid://ctl8t18mclmft" path="res://ui/game_time_hud.tscn" id="7_8ux2l"]
 [ext_resource type="PackedScene" uid="uid://cl38mekged58i" path="res://ui/level_info.tscn" id="7_jgnbe"]
+[ext_resource type="PackedScene" uid="uid://0dbmhxo1wyy3" path="res://object/history/liked_course_preview.tscn" id="8_ghhtv"]
 [ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="8_pgm75"]
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="9_a3c6e"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="10_ue3jg"]
@@ -94,6 +95,9 @@ offset_left = -201.6001
 offset_top = 511.92
 offset_right = -134.40002
 offset_bottom = 511.92
+
+[node name="LikedCoursePreview" parent="GameRoomSize" unique_id=735878133 instance=ExtResource("8_ghhtv")]
+layout_mode = 1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1823801948]
 layout_mode = 1
@@ -268,3 +272,4 @@ scene_uid = &"uid://de64xnukpa0re"
 
 [editable path="GameRoomSize/TimeHUD"]
 [editable path="GameRoomSize/GameTimeHUD"]
+[editable path="GameRoomSize/LikedCoursePreview"]

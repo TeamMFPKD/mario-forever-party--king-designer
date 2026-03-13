@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://0dbmhxo1wyy3"]
+
+[ext_resource type="Script" uid="uid://b85sxwa4q1qbw" path="res://script/liked_course_preview.gd" id="1_64crn"]
+
+[node name="LikedCoursePreview" type="Control" unique_id=735878133]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_vertical = 2
+script = ExtResource("1_64crn")
+path_to_texture_rect = NodePath("CaptureTextureRect")
+
+[node name="CaptureTextureRect" type="TextureRect" parent="." unique_id=359709765]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = -270.0
+offset_right = 60.0
+offset_bottom = -270.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+stretch_mode = 2
