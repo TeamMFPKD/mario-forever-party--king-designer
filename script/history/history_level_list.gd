@@ -10,7 +10,10 @@ var thread_done: bool = false
 var mutex: Mutex
 var should_exit: bool = false
 
+var scene_tree : SceneTree
+
 func _ready() -> void:
+	scene_tree = get_tree()
 	mutex = Mutex.new()
 	start_loading()
 
@@ -57,7 +60,6 @@ func _on_files_scanned(names: Array[String]):
 	file_names = names
 	thread_done = true
 	load_thread.wait_to_finish()  # 清理线程资源
-
 	# 分批创建 UI 避免卡顿
 	for i in range(file_names.size()):
 		var level_list_line = level_list_line_scene.instantiate()
@@ -67,7 +69,6 @@ func _on_files_scanned(names: Array[String]):
 		level_file_name_label.text = file_names[i]
 		add_child(level_list_line)
 
-		var scene_tree = get_tree()
 		if i % 10 == 9 and scene_tree:
 			await scene_tree.process_frame
 
@@ -79,4 +80,3 @@ func _exit_tree():
 
 	if load_thread and load_thread.is_started():
 		load_thread.wait_to_finish()
-		

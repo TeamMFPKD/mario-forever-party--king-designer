@@ -15,7 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_64crn")
 path_to_texture_rect = NodePath("CaptureTextureRect")
 
-[node name="CaptureTextureRect" type="TextureRect" parent="." unique_id=359709765]
+[node name="CaptureTextureRect" type="TextureRect" parent="." unique_id=359709765 groups=["capture_texture_rect"]]
 custom_minimum_size = Vector2(200, 150)
 layout_mode = 1
 anchors_preset = 15
