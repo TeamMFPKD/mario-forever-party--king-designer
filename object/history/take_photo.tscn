@@ -1,6 +1,14 @@
 [gd_scene format=3 uid="uid://b487gtilcxsuk"]
 
 [ext_resource type="Script" uid="uid://dg4bg4qfofnwc" path="res://script/history/take_photo.gd" id="1_fbocc"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="2_3f3iy"]
+[ext_resource type="AudioStream" uid="uid://lpa4c1w6jd70" path="res://sound/take_photo.mp3" id="3_mlyp6"]
 
 [node name="TakePhoto" type="Node" unique_id=606104598]
 script = ExtResource("1_fbocc")
+take_photo_ani_spd = 0.35
+
+[node name="PhotoSE" parent="." unique_id=1715984441 instance=ExtResource("2_3f3iy")]
+stream = ExtResource("3_mlyp6")
+
+[connection signal="photo_taken" from="." to="PhotoSE" method="play"]
