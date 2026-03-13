@@ -144,7 +144,7 @@ func _create_capture_preview() -> void:
 		.set_trans(Tween.TRANS_LINEAR)
 	
 	# 旋转插值（从0到360度）
-	tween.tween_property(sprite, "rotation", deg_to_rad(360.0), ani_time)\
+	tween.tween_property(sprite, "rotation", deg_to_rad(-360.0), ani_time)\
 		.set_ease(Tween.EASE_IN_OUT)\
 		.set_trans(Tween.TRANS_LINEAR)
 	
