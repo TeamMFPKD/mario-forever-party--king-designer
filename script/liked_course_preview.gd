@@ -6,7 +6,7 @@ var texture_rect : TextureRect
 var level_path_node : Node
 var level_file_path : String
 
-const LIKED_COURSE_FOLDER = "liked courses"
+const LIKED_COURSE_FOLDER_NAME = "liked courses"
 
 func _ready() -> void:
 	# 获取 TextureRect 节点
@@ -34,7 +34,7 @@ func load_screenshots() -> void:
 		return
 	
 	# 打开 liked courses 文件夹
-	var target_folder = "user://" + LIKED_COURSE_FOLDER + "/"
+	var target_folder = "user://" + LIKED_COURSE_FOLDER_NAME + "/"
 	var liked_dir = DirAccess.open(target_folder)
 	if not liked_dir:
 		print("Cannot open liked courses folder")
