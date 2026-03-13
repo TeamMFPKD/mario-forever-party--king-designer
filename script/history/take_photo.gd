@@ -3,7 +3,7 @@ extends Node
 var viewport
 var level_path_node : Node
 
-const LIKED_COURSE_FOLDER = "liked courses"
+const LIKED_COURSE_FOLDER_NAME = "liked courses"
 
 func _ready() -> void:
 	viewport = get_viewport()
@@ -15,8 +15,8 @@ func _physics_process(_delta: float) -> void:
 func capture() -> void:
 	# 创建目录
 	var dir = DirAccess.open("user://")
-	if not dir.dir_exists(LIKED_COURSE_FOLDER):
-		var error = dir.make_dir(LIKED_COURSE_FOLDER)
+	if not dir.dir_exists(LIKED_COURSE_FOLDER_NAME):
+		var error = dir.make_dir(LIKED_COURSE_FOLDER_NAME)
 		if error != OK:
 			print("Failed to create directory: ", error)
 			return
@@ -39,7 +39,7 @@ func capture() -> void:
 	
 	# 构建目标路径
 	var base_name = path.get_file().get_basename()
-	var target_folder = "user://" + LIKED_COURSE_FOLDER + "/"
+	var target_folder = "user://" + LIKED_COURSE_FOLDER_NAME + "/"
 	var target_png = target_folder + base_name + ".png"
 	var target_lvl = target_folder + path.get_file()
 	
