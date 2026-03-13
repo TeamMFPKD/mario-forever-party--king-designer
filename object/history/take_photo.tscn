@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://lpa4c1w6jd70" path="res://sound/take_photo.mp3" id="3_mlyp6"]
 
 [node name="TakePhoto" type="Node" unique_id=606104598]
+process_mode = 3
 script = ExtResource("1_fbocc")
 take_photo_ani_spd = 0.35
 
