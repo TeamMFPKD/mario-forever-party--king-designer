@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://cxjpbtj4jnctf"]
+
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_74vcm"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="1_vr7n2"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_cdbaa"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="3_deglc"]
+[ext_resource type="Script" uid="uid://cpg24f471475s" path="res://script/history/load_liked_courses.gd" id="4_8xdir"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_hfxq8"]
+[ext_resource type="PackedScene" uid="uid://boi7abyxcv36r" path="res://ui/liked_course_info.tscn" id="5_7vfps"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="5_eahqk"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="6_deglc"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="12_c1gew"]
+[ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="13_c1gew"]
+
+[sub_resource type="GDScript" id="GDScript_2f6ie"]
+script/source = "extends Button
+
+var user_path : String = \"user://\"
+var absolute_path : String
+
+func _ready() -> void:
+	pressed.connect(_on_button_pressed)
+	absolute_path = ProjectSettings.globalize_path(user_path)
+	
+func _on_button_pressed() -> void:
+	OS.shell_open(absolute_path)
+"
+
+[node name="LikedCourseRoom" type="Node2D" unique_id=395487414]
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=166349155]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=1390580791]
+self_modulate = Color(0.74, 0.3848, 0.71632004, 1)
+texture = ExtResource("1_74vcm")
+metadata/_edit_lock_ = true
+
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("1_vr7n2")]
+
+[node name="JumpToScene" type="Node" parent="." unique_id=694691588]
+script = ExtResource("3_deglc")
+scene_uid = &"uid://dcqf1c3m14b1f"
+
+[node name="JumpToSceneHistory" type="Node" parent="." unique_id=353427827]
+script = ExtResource("3_deglc")
+scene_uid = &"uid://de64xnukpa0re"
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=472593890 groups=["game_room"]]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+script = ExtResource("2_cdbaa")
+metadata/_edit_lock_ = true
+
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("4_hfxq8")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 128
+
+[node name="UiPanel" parent="GameRoomSize/UiMarginContainer" unique_id=1563157272 instance=ExtResource("5_eahqk")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="GameRoomSize/UiMarginContainer" unique_id=471310691 instance=ExtResource("4_hfxq8")]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=485836609]
+layout_mode = 2
+
+[node name="UiLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("6_deglc")]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "喜欢的关卡"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=1953369225]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HistoryLevelList" type="GridContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=1997500068]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 4
+
+[node name="LoadLikedCourses" type="Node" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/HistoryLevelList" unique_id=339807070]
+script = ExtResource("4_8xdir")
+level_list_line_scene = ExtResource("5_7vfps")
+
+[node name="Back" parent="GameRoomSize" unique_id=2085501668 instance=ExtResource("4_hfxq8")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -120.0
+offset_right = 620.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Back" unique_id=82180442]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="OpenLevelFolderButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1210628054 instance=ExtResource("12_c1gew")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 7
+text = "打开关卡目录"
+script = SubResource("GDScript_2f6ie")
+
+[node name="HistoryButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1621428215 instance=ExtResource("12_c1gew")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 7
+text = "历史记录"
+
+[node name="ToTitleButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=37814384 instance=ExtResource("12_c1gew")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 7
+text = "返回标题画面"
+
+[node name="HistoryRoomBGM" type="AudioStreamPlayer" parent="." unique_id=1149334741]
+stream = ExtResource("13_c1gew")
+autoplay = true
+bus = &"Music"
+
+[connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
+[connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/ToTitleButton" to="JumpToScene" method="jump_to_scene" flags=3]
+[connection signal="finished" from="HistoryRoomBGM" to="HistoryRoomBGM" method="play"]

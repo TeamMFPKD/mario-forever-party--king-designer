@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://boi7abyxcv36r"]
+
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_f2jc8"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_tvc7b"]
+[ext_resource type="Script" uid="uid://bkxvwb21gvnao" path="res://script/history/capture_texture_setter.gd" id="3_7cyto"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="3_7x4md"]
+[ext_resource type="Script" uid="uid://djpf3lsntxfdt" path="res://script/history/history_level_file_path_set_button.gd" id="4_7cyto"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="5_sg5bp"]
+[ext_resource type="Script" uid="uid://d34oa5sqso6ht" path="res://script/history/unlike_button.gd" id="5_tvc7b"]
+
+[node name="LikedCourseInfo" type="HBoxContainer" unique_id=1814649642]
+offset_right = 448.0
+offset_bottom = 456.0
+size_flags_horizontal = 3
+
+[node name="LevelFileNameLabel" parent="." unique_id=1337229199 instance=ExtResource("1_f2jc8")]
+visible = false
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "mfmp_2026-02-22_21-50-50_若f(x)在[a,b]上连续，则f(x)在[a,b]上一致连续。_1aaad.lvl"
+autowrap_mode = 3
+
+[node name="UiMarginContainer" parent="." unique_id=1510288836 instance=ExtResource("2_tvc7b")]
+custom_minimum_size = Vector2(210, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UiMarginContainer" unique_id=810555653]
+layout_mode = 2
+
+[node name="CaptureTextureRect" type="TextureRect" parent="UiMarginContainer/VBoxContainer" unique_id=1513224033 groups=["capture_texture_rect"]]
+custom_minimum_size = Vector2(320, 240)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+stretch_mode = 4
+
+[node name="CaptureTextureSetter" type="Node" parent="UiMarginContainer/VBoxContainer/CaptureTextureRect" unique_id=1658399226]
+script = ExtResource("3_7cyto")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UiMarginContainer/VBoxContainer" unique_id=1377506170]
+layout_mode = 2
+
+[node name="PlayButton" parent="UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1210628054 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "游玩"
+script = ExtResource("4_7cyto")
+target_game_mode = 4
+level_file_name_label = NodePath("../../../../LevelFileNameLabel")
+
+[node name="ViewButton" parent="UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=166272240 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "查看"
+script = ExtResource("4_7cyto")
+target_game_mode = 3
+level_file_name_label = NodePath("../../../../LevelFileNameLabel")
+
+[node name="UnlikeButton" parent="UiMarginContainer/VBoxContainer" unique_id=102181435 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "取消收藏"
+script = ExtResource("5_tvc7b")
+level_file_name_label = NodePath("../../../LevelFileNameLabel")
+
+[node name="JumpToSceneHistoryPlay" type="Node" parent="." unique_id=1812634004]
+script = ExtResource("5_sg5bp")
+scene_uid = &"uid://b3uujgk5upbfj"
+
+[node name="JumpToSceneHistoryEdit" type="Node" parent="." unique_id=1771168516]
+script = ExtResource("5_sg5bp")
+scene_uid = &"uid://b2f2av134cwap"
+
+[connection signal="pressed" from="UiMarginContainer/VBoxContainer/HBoxContainer/PlayButton" to="JumpToSceneHistoryPlay" method="jump_to_scene" flags=3]
+[connection signal="pressed" from="UiMarginContainer/VBoxContainer/HBoxContainer/ViewButton" to="JumpToSceneHistoryEdit" method="jump_to_scene" flags=3]

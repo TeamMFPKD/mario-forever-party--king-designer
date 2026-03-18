@@ -46,6 +46,10 @@ metadata/_edit_lock_ = true
 script = ExtResource("2_titf2")
 scene_uid = &"uid://dcqf1c3m14b1f"
 
+[node name="JumpToSceneLikedCourses" type="Node" parent="." unique_id=314447668]
+script = ExtResource("2_titf2")
+scene_uid = &"uid://cxjpbtj4jnctf"
+
 [node name="GameRoomSize" type="Control" parent="." unique_id=500375008]
 layout_mode = 3
 anchors_preset = 0
@@ -102,12 +106,15 @@ level_list_line_scene = ExtResource("7_5mpa1")
 
 [node name="Back" parent="GameRoomSize" unique_id=1688126696 instance=ExtResource("3_1d24y")]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 7
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-grow_horizontal = 0
+offset_left = -620.0
+offset_top = -120.0
+offset_right = 620.0
+grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
@@ -116,16 +123,26 @@ theme_override_constants/margin_bottom = 16
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Back" unique_id=980480145]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="OpenLevelFolderButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1210628054 instance=ExtResource("5_1x7xw")]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 7
 text = "打开关卡目录"
 script = SubResource("GDScript_5mpa1")
+
+[node name="LikedCourseButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1887453095 instance=ExtResource("5_1x7xw")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 7
+text = "喜欢的关卡"
 
 [node name="ToTitleButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=469456600 instance=ExtResource("5_1x7xw")]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
+size_flags_horizontal = 7
 text = "返回标题画面"
 
 [node name="HistoryRoomBGM" type="AudioStreamPlayer" parent="." unique_id=134026921]
@@ -133,5 +150,6 @@ stream = ExtResource("3_b0n03")
 autoplay = true
 bus = &"Music"
 
+[connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/LikedCourseButton" to="JumpToSceneLikedCourses" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/ToTitleButton" to="JumpToScene" method="jump_to_scene"]
 [connection signal="finished" from="HistoryRoomBGM" to="HistoryRoomBGM" method="play"]
