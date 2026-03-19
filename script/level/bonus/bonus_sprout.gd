@@ -78,7 +78,7 @@ func is_overlap() -> bool:
 
 func collision_recover() -> void:
 	for i in range(5):
-		push_warning("bonus waiting: %s frame" % i)
+		#print("bonus waiting: %s frame" % i)
 		await get_tree().physics_frame
 	bonus.collision_layer = origin_bonus_collision_layer
 	bonus.collision_mask = origin_bonus_collision_mask
