@@ -28,6 +28,8 @@ func _ready() -> void:
 	collision_shape = get_node(path_to_collision_shape)
 	in_wall_cast = get_node("ShapeCast2D")
 	in_wall_cast.shape = collision_shape.shape
+	basic_movement = get_node(path_to_basic_movement)
+	basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 	if bonus.has_meta("sprout_down"):
 		print("Sprout down")
 		sprout_speed = -sprout_speed
@@ -38,6 +40,7 @@ func _ready() -> void:
 	initialize = true
 	
 	bonus.process_mode = ProcessMode.PROCESS_MODE_INHERIT
+	basic_movement.process_mode = ProcessMode.PROCESS_MODE_INHERIT
 	collision_recover()
 
 	if not is_overlap():
@@ -49,9 +52,7 @@ func _ready() -> void:
 		#if child == self:
 			#continue
 		#child.process_mode = ProcessMode.PROCESS_MODE_DISABLED
-	basic_movement = get_node_or_null(path_to_basic_movement)
-	if basic_movement:
-		basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
+	basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 
 func _physics_process(delta: float) -> void:
 	if not initialize:
