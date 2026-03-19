@@ -12,8 +12,7 @@ var should_exit: bool = false
 
 var scene_tree: SceneTree
 
-const SCROLL_SAVE_PATH = "user://history_scroll.cfg"
-const SCROLL_SECTION = "scroll"
+const SCROLL_SECTION = "history_scroll"
 const SCROLL_KEY = "v_scroll"
 
 func _ready() -> void:
@@ -83,17 +82,15 @@ func _on_files_scanned(names: Array[String]):
 func _save_scroll() -> void:
     if scroll_container == null:
         return
-    var cfg = ConfigFile.new()
-    cfg.set_value(SCROLL_SECTION, SCROLL_KEY, scroll_container.scroll_vertical)
-    cfg.save(SCROLL_SAVE_PATH)
+    GameConfig.config.set_value(SCROLL_SECTION, SCROLL_KEY, scroll_container.scroll_vertical)
+    GameConfig.save()
 
 func _restore_scroll() -> void:
     if scroll_container == null:
         return
-    var cfg = ConfigFile.new()
-    if cfg.load(SCROLL_SAVE_PATH) != OK:
+    if not GameConfig.config.has_section_key(SCROLL_SECTION, SCROLL_KEY):
         return
-    var saved = cfg.get_value(SCROLL_SECTION, SCROLL_KEY, 0)
+    var saved = GameConfig.config.get_value(SCROLL_SECTION, SCROLL_KEY, 0)
     scroll_container.scroll_vertical = saved
 
 func _exit_tree():
