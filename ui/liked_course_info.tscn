@@ -58,6 +58,7 @@ text = "游玩"
 script = ExtResource("4_7cyto")
 target_game_mode = 4
 level_file_name_label = NodePath("../../../../LevelFileNameLabel")
+is_liked_course = true
 
 [node name="ViewButton" parent="UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=166272240 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
 custom_minimum_size = Vector2(170, 48)
@@ -69,6 +70,7 @@ text = "查看"
 script = ExtResource("4_7cyto")
 target_game_mode = 3
 level_file_name_label = NodePath("../../../../LevelFileNameLabel")
+is_liked_course = true
 
 [node name="UnlikeButton" parent="UiMarginContainer/VBoxContainer" unique_id=102181435 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
 custom_minimum_size = Vector2(170, 48)
