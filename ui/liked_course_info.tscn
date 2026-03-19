@@ -28,9 +28,9 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 32
+theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UiMarginContainer" unique_id=810555653]
 layout_mode = 2
@@ -49,33 +49,33 @@ script = ExtResource("3_7cyto")
 layout_mode = 2
 
 [node name="PlayButton" parent="UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1210628054 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
-custom_minimum_size = Vector2(190, 48)
+custom_minimum_size = Vector2(170, 48)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "游玩"
 script = ExtResource("4_7cyto")
 target_game_mode = 4
 level_file_name_label = NodePath("../../../../LevelFileNameLabel")
 
 [node name="ViewButton" parent="UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=166272240 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
-custom_minimum_size = Vector2(190, 48)
+custom_minimum_size = Vector2(170, 48)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "查看"
 script = ExtResource("4_7cyto")
 target_game_mode = 3
 level_file_name_label = NodePath("../../../../LevelFileNameLabel")
 
 [node name="UnlikeButton" parent="UiMarginContainer/VBoxContainer" unique_id=102181435 node_paths=PackedStringArray("level_file_name_label") instance=ExtResource("3_7x4md")]
-custom_minimum_size = Vector2(190, 48)
+custom_minimum_size = Vector2(170, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "取消收藏"
 script = ExtResource("5_tvc7b")
 level_file_name_label = NodePath("../../../LevelFileNameLabel")

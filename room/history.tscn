@@ -97,12 +97,13 @@ custom_minimum_size = Vector2(800, 600)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HistoryLevelList" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=342048458]
+[node name="HistoryLevelList" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=342048458 node_paths=PackedStringArray("scroll_container")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("6_1g7ts")
 level_list_line_scene = ExtResource("7_5mpa1")
+scroll_container = NodePath("..")
 
 [node name="Back" parent="GameRoomSize" unique_id=1688126696 instance=ExtResource("3_1d24y")]
 layout_mode = 1
