@@ -1,5 +1,7 @@
 extends Node
 
+signal all_files_loaded
+
 @export var level_list_line_scene: PackedScene
 @export var scroll_container: ScrollContainer
 
@@ -88,6 +90,7 @@ func _on_files_scanned(names: Array[String]):
 		scroll_container.visible = true
 	await scene_tree.process_frame
 	_restore_scroll()
+	emit_signal("all_files_loaded")
 
 func _save_scroll() -> void:
 	if scroll_container == null:

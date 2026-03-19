@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://boi7abyxcv36r" path="res://ui/liked_course_info.tscn" id="5_7vfps"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="5_eahqk"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="6_deglc"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_c1gew"]
 [ext_resource type="Script" uid="uid://cjr4pmd6jrl52" path="res://script/history/liked_courses_list.gd" id="8_deglc"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="12_c1gew"]
 [ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="13_c1gew"]
@@ -83,10 +84,19 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
+[node name="LoadingLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=1008498644 instance=ExtResource("6_deglc")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0.67058825, 0.36078432, 0.69411767, 1)
+text = "读取中……"
+
+[node name="ControlVisibieSet" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/LoadingLabel" unique_id=416177451 instance=ExtResource("8_c1gew")]
+
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=485836609]
 layout_mode = 2
 
-[node name="UiLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("6_deglc")]
+[node name="UiLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=281511820 instance=ExtResource("6_deglc")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "喜欢的关卡"
@@ -156,6 +166,7 @@ stream = ExtResource("13_c1gew")
 autoplay = true
 bus = &"Music"
 
+[connection signal="all_files_loaded" from="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/LikedCoursesList/LoadLikedCourses" to="GameRoomSize/UiMarginContainer/UiMarginContainer/LoadingLabel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/ToTitleButton" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="finished" from="HistoryRoomBGM" to="HistoryRoomBGM" method="play"]

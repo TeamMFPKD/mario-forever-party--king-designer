@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_keeci"]
 [ext_resource type="Script" uid="uid://cn2k8r20yglip" path="res://script/history/history_level_list.gd" id="6_1g7ts"]
 [ext_resource type="PackedScene" uid="uid://d2rufjgoofc74" path="res://ui/history_level_info.tscn" id="7_5mpa1"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_or7ga"]
 
 [sub_resource type="GDScript" id="GDScript_5mpa1"]
 script/source = "extends Button
@@ -82,10 +83,19 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
+[node name="LoadingLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=1008498644 instance=ExtResource("5_keeci")]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0.67058825, 0.36078432, 0.69411767, 1)
+text = "读取中……"
+
+[node name="ControlVisibieSet" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/LoadingLabel" unique_id=416177451 instance=ExtResource("8_or7ga")]
+
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=497943316]
 layout_mode = 2
 
-[node name="UiLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("5_keeci")]
+[node name="UiLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=1693597618 instance=ExtResource("5_keeci")]
 layout_mode = 2
 theme_override_font_sizes/font_size = 60
 text = "游玩记录"
@@ -151,6 +161,7 @@ stream = ExtResource("3_b0n03")
 autoplay = true
 bus = &"Music"
 
+[connection signal="all_files_loaded" from="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/HistoryLevelList" to="GameRoomSize/UiMarginContainer/UiMarginContainer/LoadingLabel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/LikedCourseButton" to="JumpToSceneLikedCourses" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/ToTitleButton" to="JumpToScene" method="jump_to_scene"]
 [connection signal="finished" from="HistoryRoomBGM" to="HistoryRoomBGM" method="play"]
