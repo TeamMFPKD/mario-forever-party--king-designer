@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://boi7abyxcv36r" path="res://ui/liked_course_info.tscn" id="5_7vfps"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="5_eahqk"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="6_deglc"]
+[ext_resource type="Script" uid="uid://cjr4pmd6jrl52" path="res://script/history/liked_courses_list.gd" id="8_deglc"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="12_c1gew"]
 [ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="13_c1gew"]
 
@@ -97,15 +98,17 @@ custom_minimum_size = Vector2(800, 600)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HistoryLevelList" type="GridContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=1997500068]
+[node name="LikedCoursesList" type="GridContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=1997500068]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
+script = ExtResource("8_deglc")
 
-[node name="LoadLikedCourses" type="Node" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/HistoryLevelList" unique_id=339807070]
+[node name="LoadLikedCourses" type="Node" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/LikedCoursesList" unique_id=339807070 node_paths=PackedStringArray("scroll_container")]
 script = ExtResource("4_8xdir")
 level_list_line_scene = ExtResource("5_7vfps")
+scroll_container = NodePath("../..")
 
 [node name="Back" parent="GameRoomSize" unique_id=2085501668 instance=ExtResource("4_hfxq8")]
 layout_mode = 1
@@ -140,7 +143,7 @@ script = SubResource("GDScript_2f6ie")
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
-text = "历史记录"
+text = "游玩记录"
 
 [node name="ToTitleButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=37814384 instance=ExtResource("12_c1gew")]
 custom_minimum_size = Vector2(400, 0)

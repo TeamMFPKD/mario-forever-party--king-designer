@@ -1,82 +1,107 @@
 extends VBoxContainer
 
 @export var level_list_line_scene: PackedScene
+@export var scroll_container: ScrollContainer  # 在场景里把ScrollContainer拖进来
 
 var file_names: Array[String] = []
 var load_thread: Thread
 var thread_done: bool = false
 
-# 线程控制
 var mutex: Mutex
 var should_exit: bool = false
 
-var scene_tree : SceneTree
+var scene_tree: SceneTree
+
+const SCROLL_SAVE_PATH = "user://history_scroll.cfg"
+const SCROLL_SECTION = "scroll"
+const SCROLL_KEY = "v_scroll"
 
 func _ready() -> void:
-	scene_tree = get_tree()
-	mutex = Mutex.new()
-	start_loading()
+    scene_tree = get_tree()
+    mutex = Mutex.new()
+    if scroll_container:
+        scroll_container.visible = false  # 读取完成前隐藏
+    start_loading()
 
 func start_loading() -> void:
-	load_thread = Thread.new()
-	load_thread.start(_scan_files_thread)
+    load_thread = Thread.new()
+    load_thread.start(_scan_files_thread)
 
 func _scan_files_thread():
-	var dir = DirAccess.open("user://")
-	if dir == null:
-		push_error("无法打开 user:// 目录")
-		return
+    var dir = DirAccess.open("user://")
+    if dir == null:
+        push_error("无法打开 user:// 目录")
+        return
 
-	dir.list_dir_begin()
-	var file_name = dir.get_next()
-	var temp_names: Array[String] = []
+    dir.list_dir_begin()
+    var file_name = dir.get_next()
+    var temp_names: Array[String] = []
 
-	var exit = false
-	while file_name != "":
-		# 检查是否需要提前退出
-		mutex.lock()
-		exit = should_exit
-		mutex.unlock()
-		if exit:
-			dir.list_dir_end()
-			return
+    while file_name != "":
+        mutex.lock()
+        var exit = should_exit
+        mutex.unlock()
+        if exit:
+            dir.list_dir_end()
+            return
 
-		if not dir.current_is_dir() and file_name.ends_with(".lvl"):
-			temp_names.append(file_name)
-		file_name = dir.get_next()
-	dir.list_dir_end()
+        if not dir.current_is_dir() and file_name.ends_with(".lvl"):
+            temp_names.append(file_name)
+        file_name = dir.get_next()
+    dir.list_dir_end()
 
-	# 最后一次检查退出标志
-	mutex.lock()
-	exit = should_exit
-	mutex.unlock()
-	if exit:
-		return
+    mutex.lock()
+    var exit = should_exit
+    mutex.unlock()
+    if exit:
+        return
 
-	# 安全地通知主线程
-	call_deferred_thread_group("_on_files_scanned", temp_names)
+    call_deferred_thread_group("_on_files_scanned", temp_names)
 
 func _on_files_scanned(names: Array[String]):
-	file_names = names
-	thread_done = true
-	load_thread.wait_to_finish()  # 清理线程资源
-	# 分批创建 UI 避免卡顿
-	for i in range(file_names.size()):
-		var level_list_line = level_list_line_scene.instantiate()
-		var count_label = level_list_line.get_node("CountLabel")
-		count_label.text = str(i + 1)
-		var level_file_name_label = level_list_line.get_node("LevelFileNameLabel")
-		level_file_name_label.text = file_names[i]
-		add_child(level_list_line)
+    file_names = names
+    thread_done = true
+    load_thread.wait_to_finish()
 
-		if i % 10 == 9 and scene_tree:
-			await scene_tree.process_frame
+    for i in range(file_names.size()):
+        var level_list_line = level_list_line_scene.instantiate()
+        var count_label = level_list_line.get_node("CountLabel")
+        count_label.text = str(i + 1)
+        var level_file_name_label = level_list_line.get_node("LevelFileNameLabel")
+        level_file_name_label.text = file_names[i]
+        add_child(level_list_line)
+
+        if i % 10 == 9 and scene_tree:
+            await scene_tree.process_frame
+
+    await scene_tree.process_frame
+    if scroll_container:
+        scroll_container.visible = true
+    await scene_tree.process_frame  # 等visible生效、布局重算完毕
+    _restore_scroll()
+
+func _save_scroll() -> void:
+    if scroll_container == null:
+        return
+    var cfg = ConfigFile.new()
+    cfg.set_value(SCROLL_SECTION, SCROLL_KEY, scroll_container.scroll_vertical)
+    cfg.save(SCROLL_SAVE_PATH)
+
+func _restore_scroll() -> void:
+    if scroll_container == null:
+        return
+    var cfg = ConfigFile.new()
+    if cfg.load(SCROLL_SAVE_PATH) != OK:
+        return
+    var saved = cfg.get_value(SCROLL_SECTION, SCROLL_KEY, 0)
+    scroll_container.scroll_vertical = saved
 
 func _exit_tree():
-	# 通知线程退出
-	mutex.lock()
-	should_exit = true
-	mutex.unlock()
+    _save_scroll()  # 离开场景时保存
 
-	if load_thread and load_thread.is_started():
-		load_thread.wait_to_finish()
+    mutex.lock()
+    should_exit = true
+    mutex.unlock()
+
+    if load_thread and load_thread.is_started():
+        load_thread.wait_to_finish()
