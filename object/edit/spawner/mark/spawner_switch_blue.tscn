@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://jo5w2nl4pghg"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_vjm66"]
+[ext_resource type="PackedScene" uid="uid://d18xfuorl3oea" path="res://object/level/facility/switch/switch_block_blue.tscn" id="2_x7fve"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_a6img"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4a1yi"]
+load_path = "res://.godot/imported/switch.png-b0d5a5384111f7aa17415b8f5c18545a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xo7f2"]
+atlas = SubResource("CompressedTexture2D_4a1yi")
+region = Rect2(32, 128, 32, 32)
+
+[node name="SpawnerSwitchBlue" type="Node2D" unique_id=1594885199]
+script = ExtResource("1_vjm66")
+spawn_object_scene = ExtResource("2_x7fve")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
+texture = SubResource("AtlasTexture_xo7f2")
+
+[node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("4_a6img")]

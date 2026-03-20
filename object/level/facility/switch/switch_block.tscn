@@ -1,0 +1,217 @@
+[gd_scene format=3 uid="uid://jbupjhhi6kn1"]
+
+[ext_resource type="Texture2D" uid="uid://dpvm862ku2mw4" path="res://sprite/bonus/block_hit.png" id="1_4v45s"]
+[ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="2_ul8t4"]
+[ext_resource type="Texture2D" uid="uid://biw8aal1v31d0" path="res://sprite/facility/switch.png" id="2_vq30w"]
+[ext_resource type="Script" uid="uid://civi7jei8bnwn" path="res://script/level/facility/switch/switch_hit.gd" id="4_vq30w"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_lqetr"]
+[ext_resource type="AudioStream" uid="uid://cdkf8yfe26k3q" path="res://sound/level/switch.se.wav" id="6_7t4f7"]
+[ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="6_iilbi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_alh4b"]
+atlas = ExtResource("1_4v45s")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_obxoq"]
+atlas = ExtResource("2_vq30w")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15sir"]
+atlas = ExtResource("2_vq30w")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q144o"]
+atlas = ExtResource("2_ul8t4")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htnv8"]
+atlas = ExtResource("2_ul8t4")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uotgv"]
+atlas = ExtResource("2_ul8t4")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lffve"]
+atlas = ExtResource("2_vq30w")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32t75"]
+atlas = ExtResource("2_vq30w")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04cf6"]
+atlas = ExtResource("2_vq30w")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3hn75"]
+atlas = ExtResource("2_vq30w")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnips"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_alh4b")
+}],
+"loop": true,
+"name": &"bumped",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_obxoq")
+}],
+"loop": true,
+"name": &"bumped_off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15sir")
+}],
+"loop": true,
+"name": &"bumped_on",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q144o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_htnv8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uotgv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lffve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_32t75")
+}],
+"loop": true,
+"name": &"default_off",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04cf6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3hn75")
+}],
+"loop": true,
+"name": &"default_on",
+"speed": 3.0
+}]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_alh4b"]
+points = PackedVector2Array(-16, -16, 16, -16, 16.000002, 15.999997, 12.000003, 15.999998, 9.000002, 13.999999, -9.999998, 14.000002, -12.999997, 16.000002, -15.999997, 16.000002)
+
+[sub_resource type="Animation" id="Animation_alh4b"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_f4uak"]
+resource_name = "bump"
+length = 0.26667002
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -8.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.13333334, 0.26666668),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w07n4"]
+_data = {
+&"RESET": SubResource("Animation_alh4b"),
+&"bump": SubResource("Animation_f4uak")
+}
+
+[node name="SwitchBlock" type="StaticBody2D" unique_id=2059396481]
+z_index = 5
+collision_layer = 131
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1794288055]
+sprite_frames = SubResource("SpriteFrames_dnips")
+animation = &"bumped_off"
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=277944784]
+rotation = -3.1415925
+shape = SubResource("ConvexPolygonShape2D_alh4b")
+
+[node name="BlockHit" type="Node" parent="." unique_id=1771154776 node_paths=PackedStringArray("sprite", "_collision_shape_2d")]
+script = ExtResource("4_vq30w")
+bumpable = true
+sprite = NodePath("../AnimatedSprite2D")
+_collision_shape_2d = NodePath("../CollisionShape2D")
+metadata/_custom_type_script = "uid://0kceldqbdgin"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=973614777]
+libraries/ = SubResource("AnimationLibrary_w07n4")
+speed_scale = 1.2
+
+[node name="BreakSound" parent="." unique_id=1715984441 instance=ExtResource("5_lqetr")]
+stream = ExtResource("6_iilbi")
+
+[node name="BumpSound" parent="." unique_id=547067653 instance=ExtResource("5_lqetr")]
+stream = ExtResource("6_7t4f7")
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="." unique_id=209649764]
+visible = false
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 9, 14, 16, 12, 9, -12, 9, -14, 16, -16, 9)
+disabled = true
+
+[connection signal="block_break" from="BlockHit" to="BreakSound" method="play"]
+[connection signal="block_bump" from="BlockHit" to="BumpSound" method="play"]
+[connection signal="block_bump" from="BlockHit" to="AnimationPlayer" method="play" binds= [&"bump"]]
+[connection signal="animation_finished" from="AnimationPlayer" to="BlockHit" method="on_bumped" unbinds=1]
