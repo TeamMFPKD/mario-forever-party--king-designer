@@ -27,10 +27,8 @@ var overlap_turn_detect_objects: Array[Node2D] = []
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
-	# 这里获取一次玩家是因为有的继承 BasicMovement 的类会在 _ready 中用到 player
 	player = get_tree().get_first_node_in_group("player") as Node2D
 	var fc = func():
-		# 帧末再获取一次玩家是因为由于 Edit 物品摆放顺序玩家可能晚于部分物品进入场景树
 		player = get_tree().get_first_node_in_group("player") as Node2D
 		if initially_face_to_player:
 			set_movement_direction()
@@ -43,6 +41,8 @@ func _ready() -> void:
 	move_object.set_meta("basic_movement", self)
 
 func _physics_process(delta: float) -> void:
+	if in_wall_process():
+		return
 	turn_detect()
 	overlap_turn_detect()
 	speed_x_process()
@@ -55,12 +55,10 @@ func on_screen_entered() -> void:
 	set_movement_direction()
 
 func turn_detect() -> void:
-	# 自动转向检测
 	if edge_detect and move_object.is_on_floor():
 		var origin_position = move_object.position
 		move_object.position += Vector2(33.0 * sign(speed_x), 0.0)
 		move_object.force_update_transform()
-		# MoveAndCollide 的 safe_margin 参数必须为一个较小值，否则运动体会有约半截卡进地面边缘，原因未知
 		var collision = move_object.move_and_collide(Vector2.DOWN * 20.0, true, 0.05)
 		if collision == null:
 			speed_x *= -1.0
@@ -71,8 +69,6 @@ func overlap_turn_detect() -> void:
 	if not overlap_turn:
 		return
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
-	# 因为是直接使用的物理空间查询，因此推测 exclude_parent 属性无效
-	# 需要手动排除自身
 	if results.size() <= 1:
 		overlap_turn_detect_objects.clear()
 		return
@@ -88,12 +84,10 @@ func overlap_turn_detect() -> void:
 			speed_x *= -1.0
 
 func speed_x_process() -> void:
-	# x 速度
 	if move_object.is_on_wall():
 		speed_x *= -1.0
 
 func speed_y_process(delta: float) -> void:
-	# y 速度	
 	if not move_object.is_on_floor():
 		speed_y = clamp(speed_y + gravity * delta, -max_fall_speed, max_fall_speed)
 	else:
@@ -103,7 +97,7 @@ func apply_speed() -> void:
 	move_object.velocity = Vector2(speed_x, speed_y)
 
 func move() -> void:
-	move_object.move_and_slide()	
+	move_object.move_and_slide()
 
 func set_movement_direction() -> void:
 	if not initially_face_to_player:
@@ -118,39 +112,9 @@ func set_jump_speed() -> void:
 	if move_object.is_on_floor():
 		speed_y = min(0.0, jump_speed)
 
-func in_wall_process() -> void:
-	# 针对大部分敌人运动：卡墙处理
-	if move_object.move_and_collide(Vector2.ZERO, true, 1.0) == null:
-		var origin_position = move_object.position
-		if not _not_in_wall:
-			var obj = move_object
-			var is_in_wall: bool = false
-
-			obj.position += Vector2.UP * 1.0
-			obj.velocity = Vector2.ZERO
-			obj.move_and_slide()
-			is_in_wall = obj.is_on_floor()
-			obj.position = origin_position
-			
-			obj.position += Vector2.DOWN * 1.0
-			obj.velocity = Vector2.ZERO
-			obj.move_and_slide()
-			is_in_wall = obj.is_on_ceiling() or is_in_wall
-			obj.position = origin_position
-			
-			obj.velocity = Vector2.ZERO
-			obj.move_and_slide()
-			is_in_wall = obj.is_on_wall() or is_in_wall
-			obj.position = origin_position
-			
-			obj.velocity = Vector2.ZERO
-			obj.move_and_slide()
-			is_in_wall = obj.is_on_wall() or is_in_wall
-			obj.position = origin_position
-			
-			if is_in_wall:
-				move_object.position = origin_position
-			else:
-				_not_in_wall = true
-		else:
-			move_object.move_and_slide()
+# 返回 true 表示卡墙，外部应跳过本帧所有运动逻辑
+func in_wall_process() -> bool:
+	if move_object.move_and_collide(Vector2.ZERO, true, 4.0) != null:
+		move_object.velocity = Vector2.ZERO
+		return true
+	return false
