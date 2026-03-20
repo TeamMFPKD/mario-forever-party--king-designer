@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="6_mcq6y"]
 [ext_resource type="Script" uid="uid://cobk7od0sgfjn" path="res://script/multiplayer/result_list.gd" id="7_msipt"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="7_tw1oo"]
-[ext_resource type="PackedScene" uid="uid://dryy3w7a58217" path="res://ui/result_list.tscn" id="8_cur0g"]
+[ext_resource type="PackedScene" uid="uid://dryy3w7a58217" path="res://ui/list/result_list.tscn" id="8_cur0g"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_cur0g"]
 [ext_resource type="Script" uid="uid://c0vbph4q7bq5s" path="res://script/multiplayer/back_to_title_together_button.gd" id="12_jjhps"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="13_noirq"]
