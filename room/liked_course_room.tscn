@@ -12,21 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_c1gew"]
 [ext_resource type="Script" uid="uid://cjr4pmd6jrl52" path="res://script/history/liked_courses_list.gd" id="8_deglc"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="12_c1gew"]
+[ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="13_2f6ie"]
 [ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="13_c1gew"]
-
-[sub_resource type="GDScript" id="GDScript_2f6ie"]
-script/source = "extends Button
-
-var user_path : String = \"user://\"
-var absolute_path : String
-
-func _ready() -> void:
-	pressed.connect(_on_button_pressed)
-	absolute_path = ProjectSettings.globalize_path(user_path)
-	
-func _on_button_pressed() -> void:
-	OS.shell_open(absolute_path)
-"
 
 [node name="LikedCourseRoom" type="Node2D" unique_id=395487414]
 
@@ -147,7 +134,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
 text = "打开关卡目录"
-script = SubResource("GDScript_2f6ie")
+script = ExtResource("13_2f6ie")
 
 [node name="HistoryButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1621428215 instance=ExtResource("12_c1gew")]
 custom_minimum_size = Vector2(400, 0)
