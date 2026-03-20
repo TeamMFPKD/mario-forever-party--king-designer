@@ -73,7 +73,7 @@ position = Vector2(0, -2)
 shape = ExtResource("3_0f3px")
 target_position = Vector2(0, 0)
 max_results = 4
-collision_mask = 176
+collision_mask = 432
 collide_with_areas = true
 
 [node name="CrouchHeadDetect" type="Area2D" parent="." unique_id=1726060209]

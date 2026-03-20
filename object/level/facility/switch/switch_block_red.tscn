@@ -34,7 +34,8 @@ animations = [{
 size = Vector2(32, 32)
 
 [node name="SwitchBlockRed" type="StaticBody2D" unique_id=2063362158]
-collision_mask = 8
+collision_layer = 257
+collision_mask = 0
 script = ExtResource("1_joex1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=176943637]
