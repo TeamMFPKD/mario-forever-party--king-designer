@@ -4,32 +4,10 @@
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_isefn"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="3_2mukr"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_isefn"]
+[ext_resource type="Script" uid="uid://5wjt7oab1rfx" path="res://script/multiplayer/ready_count_down_label.gd" id="5_kov3k"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_w62s4"]
 [ext_resource type="AudioStream" uid="uid://bgvsg83v0obgn" path="res://sound/SE_BaloonAppear.wav" id="6_kov3k"]
 [ext_resource type="AudioStream" uid="uid://cco0shdym7ank" path="res://sound/daikettefinal.wav" id="7_enrps"]
-
-[sub_resource type="GDScript" id="GDScript_2mukr"]
-script/source = "extends Label
-
-@export var path_to_timer : NodePath
-
-var timer : Timer
-var smaller_font : bool
-
-func _ready() -> void:
-	timer = get_node(path_to_timer)
-
-func _process(delta: float) -> void:
-	if not timer:
-		return
-	text = str(int(ceil(timer.time_left)))
-	if int(ceil(timer.time_left)) == 0:
-		text = \"START!\"
-		if not smaller_font:
-			smaller_font = true
-			self_modulate = Color(\"ffe900ff\")
-			add_theme_font_size_override(\"font_size\", 100)
-"
 
 [sub_resource type="Animation" id="Animation_w62s4"]
 length = 0.001
@@ -92,26 +70,6 @@ _data = {
 &"new_animation": SubResource("Animation_2mukr")
 }
 
-[sub_resource type="GDScript" id="GDScript_w62s4"]
-script/source = "extends Node
-
-signal jump_to_scene
-signal play_animation
-
-var edit_timer : Timer
-
-func _ready() -> void:
-	if not OS.has_feature(\"editor\"):
-		emit_signal(\"play_animation\")
-		return
-	_start_edit_timer()
-	emit_signal(\"jump_to_scene\")
-
-func _start_edit_timer() -> void:
-	edit_timer = get_tree().get_first_node_in_group(\"timer_singleton\") as Timer
-	edit_timer.start()
-"
-
 [node name="ReadyRoom" type="Node2D" unique_id=380607679]
 
 [node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=1776135916]
@@ -156,7 +114,7 @@ theme_override_font_sizes/font_size = 180
 text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = SubResource("GDScript_2mukr")
+script = ExtResource("5_kov3k")
 path_to_timer = NodePath("../Timer")
 
 [node name="Timer" type="Timer" parent="GameRoomSize" unique_id=299424619]
@@ -173,7 +131,7 @@ script = ExtResource("4_isefn")
 scene_uid = &"uid://bnx7r3slvtcdt"
 
 [node name="EditTimerStarter" type="Node" parent="GameRoomSize" unique_id=439436424]
-script = SubResource("GDScript_w62s4")
+script = ExtResource("5_kov3k")
 
 [node name="CountDownSE" parent="GameRoomSize" unique_id=1715984441 instance=ExtResource("5_w62s4")]
 stream = ExtResource("6_kov3k")
@@ -184,5 +142,3 @@ stream = ExtResource("7_enrps")
 
 [connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3 unbinds=1]
 [connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/EditTimerStarter" method="_start_edit_timer" unbinds=1]
-[connection signal="jump_to_scene" from="GameRoomSize/EditTimerStarter" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3]
-[connection signal="play_animation" from="GameRoomSize/EditTimerStarter" to="GameRoomSize/AnimationPlayer" method="play" binds= [&"new_animation"]]
