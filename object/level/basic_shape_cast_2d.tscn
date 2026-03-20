@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dex4a5qcd200a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
-size = Vector2(31, 31)
+size = Vector2(30, 30)
 
 [node name="BasicShapeCast2D" type="ShapeCast2D" unique_id=219146726]
 shape = SubResource("RectangleShape2D_gj0k3")

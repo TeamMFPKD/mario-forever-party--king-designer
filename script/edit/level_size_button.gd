@@ -21,7 +21,7 @@ func _ready() -> void:
 	#pressed.connect(_on_button_pressed)
 	level_camera = get_tree().get_first_node_in_group("level_camera") as LevelCamera
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not button_pressed:
 		return
 
