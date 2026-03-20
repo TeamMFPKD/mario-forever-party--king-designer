@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="3_deglc"]
 [ext_resource type="Script" uid="uid://cpg24f471475s" path="res://script/history/load_liked_courses.gd" id="4_8xdir"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_hfxq8"]
-[ext_resource type="PackedScene" uid="uid://boi7abyxcv36r" path="res://ui/liked_course_info.tscn" id="5_7vfps"]
+[ext_resource type="PackedScene" uid="uid://boi7abyxcv36r" path="res://ui/list/liked_course_info.tscn" id="5_7vfps"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="5_eahqk"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="6_deglc"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_c1gew"]

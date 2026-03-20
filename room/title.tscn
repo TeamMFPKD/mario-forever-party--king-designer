@@ -18,7 +18,7 @@
 [ext_resource type="Script" uid="uid://bt2b120wk6vxy" path="res://script/multiplayer/host_button.gd" id="10_qon3g"]
 [ext_resource type="FontFile" uid="uid://dvb6feu20686g" path="res://font/Super-Mario-Maker-2.ttf" id="11_gcvh4"]
 [ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/join_button.gd" id="12_10dtl"]
-[ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/player_list.tscn" id="14_w38mm"]
+[ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/list/player_list.tscn" id="14_w38mm"]
 [ext_resource type="Script" uid="uid://jhsrnvitnnhq" path="res://script/multiplayer/player_list.gd" id="14_wpraw"]
 [ext_resource type="Script" uid="uid://b7nbmn0x7xyxx" path="res://script/title/edit_time_limit_show_label.gd" id="16_eahkk"]
 [ext_resource type="Script" uid="uid://dpimwttikp0xl" path="res://script/multiplayer/quit_button.gd" id="16_jc0wi"]

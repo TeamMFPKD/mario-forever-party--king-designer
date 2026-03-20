@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="5_3qbwd"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_keeci"]
 [ext_resource type="Script" uid="uid://cn2k8r20yglip" path="res://script/history/history_level_list.gd" id="6_1g7ts"]
-[ext_resource type="PackedScene" uid="uid://d2rufjgoofc74" path="res://ui/history_level_info.tscn" id="7_5mpa1"]
+[ext_resource type="PackedScene" uid="uid://d2rufjgoofc74" path="res://ui/list/history_level_info.tscn" id="7_5mpa1"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_or7ga"]
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
 
