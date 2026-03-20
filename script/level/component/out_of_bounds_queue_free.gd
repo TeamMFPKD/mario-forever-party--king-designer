@@ -35,7 +35,7 @@ func _ready():
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
 	_room_bounds = Rect2(Vector2(level_camera.limit_left, level_camera.limit_top), Vector2(level_camera.limit_right - level_camera.limit_left, level_camera.limit_bottom - level_camera.limit_top))
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	var destroy: bool = false
 	
 	# 出屏检测

@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://dt6ikdqwwgo2r" path="res://object/level/enemy/troopa/shell_green.tscn" id="1_ayybe"]
 [ext_resource type="Texture2D" uid="uid://bvvlsgqa6nkic" path="res://sprite/enemy/shell_red.png" id="2_yqujw"]
-[ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="3_3awhb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oeb4r"]
 atlas = ExtResource("2_yqujw")
@@ -46,7 +45,7 @@ animations = [{
 sprite_frames = SubResource("SpriteFrames_ypqmv")
 
 [node name="CollisionShape2D" parent="." index="1" unique_id=1893765268]
-shape = ExtResource("3_3awhb")
+visible = true
 
 [editable path="EnemyInteraction"]
 [editable path="EnemySoundManager"]

@@ -2,7 +2,7 @@ extends Area2D
 
 var timer : int = 0
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	var bodies = get_overlapping_bodies()
 	for body in bodies:
 		if not body.has_meta("interaction_with_bump"):
