@@ -22,6 +22,9 @@ func _physics_process(_delta: float) -> void:
 	# 踩踏
 	hurt_and_stompable_detect(results)
 
+	# Overlap Switch Detect
+	overlap_switch_detect(results)
+
 	# 顶砖检测
 	var origin_pos_y = cast.position.y
 	cast.position.y -= 1.0
@@ -93,6 +96,12 @@ func starman_detect(results : Array[Node2D]) -> bool:
 		
 func is_starman() -> bool:
 	return player_suit.is_starman
+
+func overlap_switch_detect(results : Array[Node2D]) -> void:
+	for result in results:
+		if not result is SwitchBlock:
+			continue
+		result.set_meta("overlapped_with_player", true)
 
 func block_hit_detect(results : Array[Node2D]) -> void:
 	#if not player.is_on_ceiling():
