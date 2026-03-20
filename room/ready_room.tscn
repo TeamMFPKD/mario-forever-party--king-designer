@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_isefn"]
 [ext_resource type="Script" uid="uid://5wjt7oab1rfx" path="res://script/multiplayer/ready_count_down_label.gd" id="5_kov3k"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_w62s4"]
+[ext_resource type="Script" uid="uid://dgkl1lc8wyie3" path="res://script/multiplayer/ready_edit_timer_starter.gd" id="6_enrps"]
 [ext_resource type="AudioStream" uid="uid://bgvsg83v0obgn" path="res://sound/SE_BaloonAppear.wav" id="6_kov3k"]
 [ext_resource type="AudioStream" uid="uid://cco0shdym7ank" path="res://sound/daikettefinal.wav" id="7_enrps"]
 
@@ -131,7 +132,7 @@ script = ExtResource("4_isefn")
 scene_uid = &"uid://bnx7r3slvtcdt"
 
 [node name="EditTimerStarter" type="Node" parent="GameRoomSize" unique_id=439436424]
-script = ExtResource("5_kov3k")
+script = ExtResource("6_enrps")
 
 [node name="CountDownSE" parent="GameRoomSize" unique_id=1715984441 instance=ExtResource("5_w62s4")]
 stream = ExtResource("6_kov3k")
@@ -141,4 +142,5 @@ volume_db = 8.0
 stream = ExtResource("7_enrps")
 
 [connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3 unbinds=1]
-[connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/EditTimerStarter" method="_start_edit_timer" unbinds=1]
+[connection signal="jump_to_scene" from="GameRoomSize/EditTimerStarter" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3]
+[connection signal="play_animation" from="GameRoomSize/EditTimerStarter" to="GameRoomSize/AnimationPlayer" method="play" binds= [&"new_animation"]]
