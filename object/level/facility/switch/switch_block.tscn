@@ -1,16 +1,10 @@
 [gd_scene format=3 uid="uid://jbupjhhi6kn1"]
 
-[ext_resource type="Texture2D" uid="uid://dpvm862ku2mw4" path="res://sprite/bonus/block_hit.png" id="1_4v45s"]
-[ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="2_ul8t4"]
 [ext_resource type="Texture2D" uid="uid://biw8aal1v31d0" path="res://sprite/facility/switch.png" id="2_vq30w"]
 [ext_resource type="Script" uid="uid://civi7jei8bnwn" path="res://script/level/facility/switch/switch_hit.gd" id="4_vq30w"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_lqetr"]
 [ext_resource type="AudioStream" uid="uid://cdkf8yfe26k3q" path="res://sound/level/switch.se.wav" id="6_7t4f7"]
 [ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="6_iilbi"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_alh4b"]
-atlas = ExtResource("1_4v45s")
-region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_obxoq"]
 atlas = ExtResource("2_vq30w")
@@ -19,18 +13,6 @@ region = Rect2(32, 64, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_15sir"]
 atlas = ExtResource("2_vq30w")
 region = Rect2(0, 64, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q144o"]
-atlas = ExtResource("2_ul8t4")
-region = Rect2(0, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_htnv8"]
-atlas = ExtResource("2_ul8t4")
-region = Rect2(0, 64, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uotgv"]
-atlas = ExtResource("2_ul8t4")
-region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lffve"]
 atlas = ExtResource("2_vq30w")
@@ -52,17 +34,9 @@ region = Rect2(0, 32, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_alh4b")
-}],
-"loop": true,
-"name": &"bumped",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_obxoq")
 }],
-"loop": true,
+"loop": false,
 "name": &"bumped_off",
 "speed": 5.0
 }, {
@@ -70,22 +44,8 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_15sir")
 }],
-"loop": true,
+"loop": false,
 "name": &"bumped_on",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_q144o")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_htnv8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uotgv")
-}],
-"loop": true,
-"name": &"default",
 "speed": 5.0
 }, {
 "frames": [{
@@ -182,8 +142,8 @@ collision_mask = 0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1794288055]
 sprite_frames = SubResource("SpriteFrames_dnips")
-animation = &"bumped_off"
-autoplay = "default"
+animation = &"bumped_on"
+autoplay = "default_on"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=277944784]
 rotation = -3.1415925
