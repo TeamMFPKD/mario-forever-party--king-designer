@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://ceublfnf1w617"]
+
+[ext_resource type="PackedScene" path="res://object/level/facility/atchi_muite_block/atchi_muite_block_blue_small.tscn" id="1_1ct0j"]
+[ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="2_2tti4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rtkba"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(0, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2uf0"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(96, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s5nxg"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(192, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dokle"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(288, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l3ybu"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(384, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_84bol"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(0, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7m1w"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(384, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t4a2a"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(288, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ti5t"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(192, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqysu"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(96, 96, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_itdim"]
+atlas = ExtResource("2_2tti4")
+region = Rect2(0, 96, 96, 96)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qbela"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rtkba")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2uf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s5nxg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dokle")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l3ybu")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"invisible",
+"speed": 32.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_84bol")
+}],
+"loop": true,
+"name": &"normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n7m1w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t4a2a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ti5t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xqysu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_itdim")
+}],
+"loop": false,
+"name": &"visible",
+"speed": 32.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fnkl3"]
+size = Vector2(96, 96)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_laeb6"]
+radius = 192.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2tti4"]
+size = Vector2(96, 96)
+
+[node name="AtchiMuiteBlockBlueLarge" unique_id=1508432741 instance=ExtResource("1_1ct0j")]
+collision_layer = 1
+collision_mask = 0
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_qbela")
+
+[node name="PhysicsCollision" parent="." index="1"]
+shape = SubResource("RectangleShape2D_fnkl3")
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+shape = SubResource("CircleShape2D_laeb6")
+
+[node name="PhysicsCollision" parent="EnemyKill" index="0"]
+shape = SubResource("RectangleShape2D_2tti4")

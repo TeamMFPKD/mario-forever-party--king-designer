@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://eqkdfq7iu6qd"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_tjlr0"]
+[ext_resource type="PackedScene" uid="uid://cy5qlv37ht47u" path="res://object/level/facility/atchi_muite_block/atchi_muite_block_blue_small.tscn" id="2_45w8i"]
+[ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="3_45w8i"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_ydcfb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4a1yi"]
+atlas = ExtResource("3_45w8i")
+region = Rect2(0, 0, 32, 32)
+
+[node name="SpawnerAtchiMuiteBlockBlueSmall" type="Node2D" unique_id=2066940420]
+script = ExtResource("1_tjlr0")
+spawn_object_scene = ExtResource("2_45w8i")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=698192262]
+texture = SubResource("AtlasTexture_4a1yi")
+
+[node name="OffsetMarker" parent="." unique_id=636497433 instance=ExtResource("4_ydcfb")]

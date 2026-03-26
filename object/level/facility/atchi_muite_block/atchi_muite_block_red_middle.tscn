@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://lyvx64xv8lnm"]
+
+[ext_resource type="PackedScene" uid="uid://cbcfu0nem6rey" path="res://object/level/facility/atchi_muite_block/atchi_muite_block_blue_middle.tscn" id="1_24lk3"]
+[ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="2_qefr1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7eeiv"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(0, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d333i"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(64, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uv3pd"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(128, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12a0t"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(192, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gblx8"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(256, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g3kqy"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(0, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uvdex"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(256, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0nml8"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(192, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7m2j"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(128, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eopvf"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(64, 224, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_citxs"]
+atlas = ExtResource("2_qefr1")
+region = Rect2(0, 224, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_taq5c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7eeiv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d333i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uv3pd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_12a0t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gblx8")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"invisible",
+"speed": 32.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g3kqy")
+}],
+"loop": true,
+"name": &"normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uvdex")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0nml8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7m2j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eopvf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_citxs")
+}],
+"loop": false,
+"name": &"visible",
+"speed": 32.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qefr1"]
+size = Vector2(64, 64)
+
+[node name="AtchiMuiteBlockRedMiddle" unique_id=1484374826 instance=ExtResource("1_24lk3")]
+mode = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_taq5c")
+
+[node name="PhysicsCollision" parent="EnemyKill" index="0"]
+shape = SubResource("RectangleShape2D_qefr1")
