@@ -3,7 +3,6 @@ extends AnimatableBody2D
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var solid: CollisionShape2D = $PhysicsCollision
 @onready var area2d: Area2D = $Area2D
-@onready var enemy_kill_area: Area2D = $EnemyKill
 
 @export_enum("Blue", "Red") var mode: int
 

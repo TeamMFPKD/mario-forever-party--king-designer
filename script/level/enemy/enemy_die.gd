@@ -11,7 +11,8 @@ enum DeathType {
 	BEETROOT,
 	STAR,
 	SHELL,
-	BUMP
+	BUMP,
+	CRUSH
 }
 
 var death_type: DeathType = DeathType.DEFAULT
@@ -32,6 +33,7 @@ var dead_texture : Texture2D
 @export var dead_scene_star : PackedScene
 @export var dead_scene_shell : PackedScene
 @export var dead_scene_bump : PackedScene
+@export var dead_scene_crush : PackedScene
 
 # 交互组件连接控制
 @export var enable_interaction_with_player: bool = true
@@ -40,6 +42,7 @@ var dead_texture : Texture2D
 @export var enable_interaction_with_star: bool = true
 @export var enable_interaction_with_shell: bool = true
 @export var enable_interaction_with_bump: bool = true
+@export var enable_interaction_with_crush: bool = true
 
 # 交互组件配置映射表
 const INTERACTION_CONFIG := {
@@ -48,7 +51,8 @@ const INTERACTION_CONFIG := {
 	"interaction_with_beetroot": {"signal": "beetroot_hitted", "death_type": DeathType.BEETROOT},
 	"interaction_with_star": {"signal": "star_hitted", "death_type": DeathType.STAR},
 	"interaction_with_shell": {"signal": "shell_hitted", "death_type": DeathType.SHELL},
-	"interaction_with_bump": {"signal": "bumped", "death_type": DeathType.BUMP}
+	"interaction_with_bump": {"signal": "bumped", "death_type": DeathType.BUMP},
+	"interaction_with_crush": {"signal": "crushed_at", "death_type": DeathType.CRUSH}
 }
 
 # 防止多次触发
@@ -92,7 +96,8 @@ func dead_instantiate(hit_position: Vector2, death_type: DeathType = DeathType.D
 		DeathType.BEETROOT: dead_scene_beetroot,
 		DeathType.BUMP: dead_scene_bump,
 		DeathType.STAR: dead_scene_star,
-		DeathType.SHELL: dead_scene_shell
+		DeathType.SHELL: dead_scene_shell,
+		DeathType.CRUSH: dead_scene_crush
 	}
 	
 	var scene = scene_map[death_type]
