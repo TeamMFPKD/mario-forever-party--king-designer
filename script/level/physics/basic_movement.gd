@@ -2,6 +2,8 @@ extends Node
 
 class_name BasicMovement
 
+signal crushed_at(crush_pos: Vector2)
+
 @export var path_to_move_object: NodePath = ".."
 var move_object : CharacterBody2D
 
@@ -116,5 +118,6 @@ func set_jump_speed() -> void:
 func in_wall_process() -> bool:
 	if move_object.move_and_collide(Vector2.ZERO, true, 4.0) != null:
 		move_object.velocity = Vector2.ZERO
+		emit_signal("crushed_at", move_object.position)
 		return true
 	return false

@@ -7,10 +7,11 @@
 [ext_resource type="Script" uid="uid://c0tnc3vqaqx0u" path="res://script/level/component/interaction_with_star.gd" id="5_1we2s"]
 [ext_resource type="Script" uid="uid://dvr7ebvtuygtk" path="res://script/level/component/interaction_with_bump.gd" id="6_dp632"]
 [ext_resource type="Script" uid="uid://bnhxalkgdtihw" path="res://script/level/component/interaction_with_shell.gd" id="6_yr1a7"]
+[ext_resource type="Script" uid="uid://cdyil6evodr6d" path="res://script/level/component/interaction_with_crush.gd" id="8_tqmks"]
 
 [node name="EnemyInteraction" type="Node" unique_id=1317140342]
 script = ExtResource("1_d33ca")
-enemy_interaction_component_meta = Array[StringName]([&"interaction_with_player", &"interaction_with_fireball", &"interaction_with_beetroot", &"interaction_with_star", &"interaction_with_shell", &"interaction_with_bump"])
+enemy_interaction_component_meta = Array[StringName]([&"interaction_with_player", &"interaction_with_fireball", &"interaction_with_beetroot", &"interaction_with_star", &"interaction_with_shell", &"interaction_with_bump", &"interaction_with_crush"])
 metadata/_custom_type_script = "uid://c0b1at08nifg8"
 
 [node name="InteractionWithPlayer" type="Node" parent="." unique_id=707962705]
@@ -36,3 +37,7 @@ metadata/_custom_type_script = "uid://bnhxalkgdtihw"
 [node name="InteractionWithBump" type="Node" parent="." unique_id=1718256866]
 script = ExtResource("6_dp632")
 metadata/_custom_type_script = "uid://dvr7ebvtuygtk"
+
+[node name="InteractionWithCrush" type="Node" parent="." unique_id=1924136299]
+script = ExtResource("8_tqmks")
+metadata/_custom_type_script = "uid://cdyil6evodr6d"
