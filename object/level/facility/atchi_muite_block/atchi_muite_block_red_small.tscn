@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://c18vf85sj8426"]
+
+[ext_resource type="PackedScene" uid="uid://cy5qlv37ht47u" path="res://object/level/facility/atchi_muite_block/atchi_muite_block_blue_small.tscn" id="1_6bmvx"]
+[ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="2_hvkti"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hbaac"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8dt2"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(32, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aap2y"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(64, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8kvag"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(96, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1csl3"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(128, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a5v1v"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkwep"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(128, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08w5r"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(96, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wlwbw"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(64, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3m5f"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(32, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g8knv"]
+atlas = ExtResource("2_hvkti")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0mayt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hbaac")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p8dt2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aap2y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8kvag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1csl3")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": false,
+"name": &"invisible",
+"speed": 32.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a5v1v")
+}],
+"loop": true,
+"name": &"normal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": null
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkwep")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08w5r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wlwbw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3m5f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g8knv")
+}],
+"loop": false,
+"name": &"visible",
+"speed": 32.0
+}]
+
+[node name="AtchiMuiteBlockRedSmall" unique_id=1099405440 instance=ExtResource("1_6bmvx")]
+collision_layer = 1
+collision_mask = 0
+mode = 1
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = SubResource("SpriteFrames_0mayt")

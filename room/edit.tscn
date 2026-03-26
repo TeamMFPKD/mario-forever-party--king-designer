@@ -96,6 +96,7 @@
 [ext_resource type="Script" uid="uid://0c86f8ap20h5" path="res://script/edit/debug_load.gd" id="88_amsrr"]
 [ext_resource type="Texture2D" uid="uid://biw8aal1v31d0" path="res://sprite/facility/switch.png" id="89_aiw0b"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="89_b0qgs"]
+[ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="90_kt6na"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -245,6 +246,10 @@ region = Rect2(0, 0, 31, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_em6xi"]
 atlas = ExtResource("78_y05j1")
 region = Rect2(5, 37, 23, 29)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4a1yi"]
+atlas = ExtResource("90_kt6na")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ifctp"]
 atlas = ExtResource("89_aiw0b")
@@ -1552,6 +1557,15 @@ offset_bottom = 164.0
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2048951371]
 layout_mode = 2
 
+[node name="ItemButtonAtchiMuiteBlock" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=1084113521 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "atchi_muite_block_blue_small"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonAtchiMuiteBlock/ButtonTexture" parent_id_path=PackedInt32Array(1084113521, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_4a1yi")
+
 [node name="ItemButtonSwitchBlock" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=1167620369 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
@@ -1790,6 +1804,7 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonCameraEdge"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonAtchiMuiteBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]
