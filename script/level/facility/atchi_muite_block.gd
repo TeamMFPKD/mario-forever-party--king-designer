@@ -20,7 +20,14 @@ func _ready() -> void:
 			visibility = false
 		1:
 			visibility = true
-	sprite.play("normal" if visibility else "invisible")
+
+	if visibility:
+		sprite.play("normal")
+	else:
+		# 直接赋值，完全跳过播放流程，不渲染任何中间帧
+		sprite.animation = "invisible"
+		sprite.frame = sprite.sprite_frames.get_frame_count("invisible") - 1
+
 	solid.set_deferred(&"disabled", not visibility)
 	player = get_tree().get_first_node_in_group("player")
 
