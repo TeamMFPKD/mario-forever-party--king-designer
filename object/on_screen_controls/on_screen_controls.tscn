@@ -54,7 +54,7 @@ shape = SubResource("RectangleShape2D_axt6o")
 action = "move_left"
 
 [node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonLeft" index="0" unique_id=1794621651]
-position = Vector2(32, 0)
+position = Vector2(48, 0)
 texture = ExtResource("2_5pvun")
 texture_pressed = ExtResource("4_axt6o")
 
@@ -64,7 +64,7 @@ shape = SubResource("RectangleShape2D_axt6o")
 action = "move_right"
 
 [node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonRight" index="0" unique_id=1794621651]
-position = Vector2(-32, 0)
+position = Vector2(-48, 0)
 texture = ExtResource("2_5pvun")
 flip_h = true
 texture_pressed = ExtResource("6_seob8")
@@ -75,7 +75,7 @@ shape = SubResource("RectangleShape2D_2b460")
 action = "move_up"
 
 [node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonUp" index="0" unique_id=1794621651]
-position = Vector2(0, 16)
+position = Vector2(0, 32)
 rotation = 1.5707964
 texture = ExtResource("2_5pvun")
 texture_pressed = ExtResource("8_unt6i")
@@ -86,7 +86,7 @@ shape = SubResource("RectangleShape2D_2b460")
 action = "move_down"
 
 [node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonDown" index="0" unique_id=1794621651]
-position = Vector2(0, -16)
+position = Vector2(0, -32)
 rotation = 1.5707964
 texture = ExtResource("2_5pvun")
 flip_h = true
@@ -132,7 +132,7 @@ texture = ExtResource("7_56r5v")
 texture_pressed = ExtResource("15_co5ac")
 
 [node name="ButtonRestart" parent="ControlButton/ControlButton" unique_id=322529464 instance=ExtResource("2_a835k")]
-position = Vector2(269, -458)
+position = Vector2(34, -470)
 action = "restart"
 
 [node name="ButtonSprite" parent="ControlButton/ControlButton/ButtonRestart" index="0" unique_id=1794621651]
@@ -140,7 +140,7 @@ texture = ExtResource("16_g0v0g")
 texture_pressed = ExtResource("15_co5ac")
 
 [node name="ButtonPhoto" parent="ControlButton/ControlButton" unique_id=477033842 instance=ExtResource("2_a835k")]
-position = Vector2(268, -655)
+position = Vector2(33, -667)
 action = "photo"
 
 [node name="ButtonSprite" parent="ControlButton/ControlButton/ButtonPhoto" index="0" unique_id=1794621651]
