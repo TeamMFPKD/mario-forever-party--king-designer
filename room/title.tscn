@@ -34,6 +34,7 @@
 [ext_resource type="Script" uid="uid://b863abvb5xbma" path="res://script/option/volume.gd" id="26_nl766"]
 [ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]
 [ext_resource type="PackedScene" uid="uid://b05l8y21x0q11" path="res://object/input_map_set.tscn" id="28_wphsk"]
+[ext_resource type="Script" uid="uid://cjmbnxdu46yvg" path="res://script/option/platform_control_set_button.gd" id="29_w12k4"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -506,7 +507,6 @@ size_flags_vertical = 6
 text = "确认"
 
 [node name="Options" parent="GameRoomSize" unique_id=1212935464 instance=ExtResource("8_c2fru")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -627,6 +627,15 @@ custom_minimum_size = Vector2(270, 96)
 layout_mode = 2
 size_flags_horizontal = 10
 text = "设置按键"
+script = ExtResource("29_w12k4")
+is_desktop_button = false
+
+[node name="ControlsButtonMobile" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls" unique_id=1760595109 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "设置按键"
+script = ExtResource("29_w12k4")
 
 [node name="Staff" parent="GameRoomSize/Options/BasicPanel" unique_id=1510288836 instance=ExtResource("8_c2fru")]
 visible = false
@@ -890,6 +899,39 @@ size_flags_horizontal = 4
 size_flags_vertical = 10
 text = "返回主设置"
 
+[node name="ControlsPanelMobile" parent="GameRoomSize/Options" unique_id=1978154676 instance=ExtResource("4_i3lsm")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="GameRoomSize/Options/ControlsPanelMobile" unique_id=798252276 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 192
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 192
+theme_override_constants/margin_bottom = 32
+
+[node name="InputMapSetLabel" parent="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer" unique_id=165553121 instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "虚拟按键布局"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer" unique_id=1207166663 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "返回主设置"
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanelMobile" unique_id=1778534696 instance=ExtResource("9_ty11l")]
+
 [node name="Language" parent="GameRoomSize" unique_id=1581453593 instance=ExtResource("8_c2fru")]
 z_index = 600
 layout_mode = 1
@@ -1034,6 +1076,8 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/GameInProgressHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="GameRoomSize/GameInProgressHint/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButtonMobile" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButtonMobile" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/BasicSettings/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Staff/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_invisible"]
@@ -1045,6 +1089,8 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]
 [connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/Language/ControlVisibieSet" method="_set_invisible" flags=3]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
