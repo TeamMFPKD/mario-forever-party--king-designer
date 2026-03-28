@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://dnm3ffgulmrea"]
+
+[ext_resource type="Script" uid="uid://b1a4mrgaf43un" path="res://script/on_screen_controls/on_screen_controls.gd" id="1_ip5kh"]
+[ext_resource type="Texture2D" uid="uid://ckupv0u275c2y" path="res://sprite/on_screen_controls/button_left.png" id="2_5pvun"]
+[ext_resource type="PackedScene" uid="uid://c4pbvx5d881p0" path="res://object/on_screen_controls/adv_touch_screen_button.tscn" id="2_a835k"]
+[ext_resource type="Texture2D" uid="uid://b8rqhp0a3e8x4" path="res://sprite/on_screen_controls/button_left_held.png" id="4_axt6o"]
+[ext_resource type="Texture2D" uid="uid://3nk6r1jxgv0y" path="res://sprite/on_screen_controls/button_right_held.png" id="6_seob8"]
+[ext_resource type="Texture2D" uid="uid://k2jbai4rq2tk" path="res://sprite/on_screen_controls/button_A.png" id="7_56r5v"]
+[ext_resource type="Texture2D" uid="uid://be7wl5kr5ek32" path="res://sprite/on_screen_controls/button_B.png" id="8_cpyrj"]
+[ext_resource type="Texture2D" uid="uid://7m0h2fy8sawb" path="res://sprite/on_screen_controls/button_up_held.png" id="8_unt6i"]
+[ext_resource type="Texture2D" uid="uid://c8xjirblyqq4i" path="res://sprite/on_screen_controls/button_down_held.png" id="10_g0v0g"]
+[ext_resource type="Texture2D" uid="uid://v0eo5asa5s4b" path="res://sprite/on_screen_controls/button_B_held.png" id="13_2rlx0"]
+[ext_resource type="Texture2D" uid="uid://cdjssv4jk227q" path="res://sprite/on_screen_controls/button_A_held.png" id="15_co5ac"]
+[ext_resource type="Texture2D" uid="uid://ch40ygbv7o0av" path="res://sprite/on_screen_controls/button_restart.png" id="16_g0v0g"]
+[ext_resource type="Texture2D" uid="uid://df7lsspnpffi4" path="res://sprite/on_screen_controls/button_photo.png" id="17_2rlx0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_axt6o"]
+size = Vector2(256, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2b460"]
+size = Vector2(160, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xwrn2"]
+size = Vector2(256, 192)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3xy7x"]
+size = Vector2(256, 192)
+
+[node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209 node_paths=PackedStringArray("control_d_pad", "control_button") groups=["mobile_control"]]
+process_mode = 3
+layer = 0
+script = ExtResource("1_ip5kh")
+control_d_pad = NodePath("ControlDPad")
+control_button = NodePath("ControlButton")
+
+[node name="ControlDPad" type="Control" parent="." unique_id=1293223226]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -565.0
+offset_right = 564.0
+offset_bottom = -1.0
+grow_vertical = 0
+mouse_filter = 1
+metadata/_edit_lock_ = true
+
+[node name="ControlDPad" type="Node2D" parent="ControlDPad" unique_id=330530679]
+position = Vector2(570, 138)
+
+[node name="ButtonLeft" parent="ControlDPad/ControlDPad" unique_id=127611734 instance=ExtResource("2_a835k")]
+position = Vector2(-408, 76.5)
+shape = SubResource("RectangleShape2D_axt6o")
+action = "move_left"
+
+[node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonLeft" index="0" unique_id=1794621651]
+position = Vector2(32, 0)
+texture = ExtResource("2_5pvun")
+texture_pressed = ExtResource("4_axt6o")
+
+[node name="ButtonRight" parent="ControlDPad/ControlDPad" unique_id=1247236065 instance=ExtResource("2_a835k")]
+position = Vector2(27.5, 76.5)
+shape = SubResource("RectangleShape2D_axt6o")
+action = "move_right"
+
+[node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonRight" index="0" unique_id=1794621651]
+position = Vector2(-32, 0)
+texture = ExtResource("2_5pvun")
+flip_h = true
+texture_pressed = ExtResource("6_seob8")
+
+[node name="ButtonUp" parent="ControlDPad/ControlDPad" unique_id=1227966600 instance=ExtResource("2_a835k")]
+position = Vector2(-190.25, -115.75)
+shape = SubResource("RectangleShape2D_2b460")
+action = "move_up"
+
+[node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonUp" index="0" unique_id=1794621651]
+position = Vector2(0, 16)
+rotation = 1.5707964
+texture = ExtResource("2_5pvun")
+texture_pressed = ExtResource("8_unt6i")
+
+[node name="ButtonDown" parent="ControlDPad/ControlDPad" unique_id=2122785038 instance=ExtResource("2_a835k")]
+position = Vector2(-190.25, 255.25)
+shape = SubResource("RectangleShape2D_2b460")
+action = "move_down"
+
+[node name="ButtonSprite" parent="ControlDPad/ControlDPad/ButtonDown" index="0" unique_id=1794621651]
+position = Vector2(0, -16)
+rotation = 1.5707964
+texture = ExtResource("2_5pvun")
+flip_h = true
+texture_pressed = ExtResource("10_g0v0g")
+
+[node name="ControlButton" type="Control" parent="." unique_id=833129568 groups=["mobile_control"]]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -312.0
+offset_top = -568.0
+offset_right = 4.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 1
+metadata/_edit_lock_ = true
+
+[node name="ControlButton" type="Node2D" parent="ControlButton" unique_id=779172288]
+position = Vector2(-164, 259)
+
+[node name="ButtonFire" parent="ControlButton/ControlButton" unique_id=342498017 instance=ExtResource("2_a835k")]
+position = Vector2(1, -18)
+shape = SubResource("RectangleShape2D_xwrn2")
+action = "move_fire"
+
+[node name="ButtonSprite" parent="ControlButton/ControlButton/ButtonFire" index="0" unique_id=1794621651]
+position = Vector2(32, 0)
+texture = ExtResource("8_cpyrj")
+texture_pressed = ExtResource("13_2rlx0")
+
+[node name="ButtonJump" parent="ControlButton/ControlButton" unique_id=357238970 instance=ExtResource("2_a835k")]
+position = Vector2(258, 59)
+shape = SubResource("RectangleShape2D_3xy7x")
+action = "move_jump"
+
+[node name="ButtonSprite" parent="ControlButton/ControlButton/ButtonJump" index="0" unique_id=1794621651]
+position = Vector2(-32, 0)
+texture = ExtResource("7_56r5v")
+texture_pressed = ExtResource("15_co5ac")
+
+[node name="ButtonRestart" parent="ControlButton/ControlButton" unique_id=322529464 instance=ExtResource("2_a835k")]
+position = Vector2(269, -458)
+action = "restart"
+
+[node name="ButtonSprite" parent="ControlButton/ControlButton/ButtonRestart" index="0" unique_id=1794621651]
+texture = ExtResource("16_g0v0g")
+texture_pressed = ExtResource("15_co5ac")
+
+[node name="ButtonPhoto" parent="ControlButton/ControlButton" unique_id=477033842 instance=ExtResource("2_a835k")]
+position = Vector2(268, -655)
+action = "photo"
+
+[node name="ButtonSprite" parent="ControlButton/ControlButton/ButtonPhoto" index="0" unique_id=1794621651]
+texture = ExtResource("17_2rlx0")
+texture_pressed = ExtResource("15_co5ac")
+
+[editable path="ControlDPad/ControlDPad/ButtonLeft"]
+[editable path="ControlDPad/ControlDPad/ButtonRight"]
+[editable path="ControlDPad/ControlDPad/ButtonUp"]
+[editable path="ControlDPad/ControlDPad/ButtonDown"]
+[editable path="ControlButton/ControlButton/ButtonFire"]
+[editable path="ControlButton/ControlButton/ButtonJump"]
+[editable path="ControlButton/ControlButton/ButtonRestart"]
+[editable path="ControlButton/ControlButton/ButtonPhoto"]

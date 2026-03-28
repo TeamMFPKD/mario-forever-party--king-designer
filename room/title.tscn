@@ -29,7 +29,7 @@
 [ext_resource type="Script" uid="uid://bisaxylwbeu48" path="res://script/language_button.gd" id="23_e6ipe"]
 [ext_resource type="Script" uid="uid://mtfbr0vs3gmu" path="res://script/title/forum_button.gd" id="23_xg860"]
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
-[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="25_ssvsf"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="25_ssvsf"]
 [ext_resource type="Script" uid="uid://b8mprwnkj4i8m" path="res://script/multiplayer/game_in_progress_hint.gd" id="26_mavin"]
 [ext_resource type="Script" uid="uid://b863abvb5xbma" path="res://script/option/volume.gd" id="26_nl766"]
 [ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7m0h2fy8sawb"
-path="res://.godot/imported/UpHeld.png-e701492e84e0f713b78c478ddb43d421.ctex"
+uid="uid://df7lsspnpffi4"
+path="res://.godot/imported/button_photo.png-a66ab4528a7f8c19bcb322337a009d31.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/UpHeld.png"
-dest_files=["res://.godot/imported/UpHeld.png-e701492e84e0f713b78c478ddb43d421.ctex"]
+source_file="res://sprite/on_screen_controls/button_photo.png"
+dest_files=["res://.godot/imported/button_photo.png-a66ab4528a7f8c19bcb322337a009d31.ctex"]
 
 [params]
 

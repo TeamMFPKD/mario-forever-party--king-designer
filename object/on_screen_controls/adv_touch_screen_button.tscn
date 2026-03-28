@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c4pbvx5d881p0"]
+
+[ext_resource type="Script" uid="uid://ma43elfsxcae" path="res://script/on_screen_controls/button_sprite.gd" id="1_lneud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lneud"]
+size = Vector2(192, 192)
+
+[node name="AdvTouchScreenButton" type="TouchScreenButton" unique_id=127611734]
+shape = SubResource("RectangleShape2D_lneud")
+passby_press = true
+
+[node name="ButtonSprite" type="Sprite2D" parent="." unique_id=1794621651]
+scale = Vector2(1.1, 1.1)
+script = ExtResource("1_lneud")
+pressed_color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true

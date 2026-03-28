@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="6_4tcn6"]
 [ext_resource type="Script" uid="uid://qpl1v6jjqf6e" path="res://script/multiplayer/force_continue_timer.gd" id="7_f0tgy"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="7_xgwxn"]
-[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="12_u7vct"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="12_u7vct"]
 
 [node name="LevelTransferRoom" type="Node2D" unique_id=574478413]
 

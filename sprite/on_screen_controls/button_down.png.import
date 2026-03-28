@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdjssv4jk227q"
-path="res://.godot/imported/AHeld.png-2a24e87ef69bed77b23cb47f52c14080.ctex"
+uid="uid://ct06twarujta1"
+path="res://.godot/imported/button_down.png-ca6c083454a364ba9303cceaa1ed88b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/AHeld.png"
-dest_files=["res://.godot/imported/AHeld.png-2a24e87ef69bed77b23cb47f52c14080.ctex"]
+source_file="res://sprite/on_screen_controls/button_down.png"
+dest_files=["res://.godot/imported/button_down.png-ca6c083454a364ba9303cceaa1ed88b1.ctex"]
 
 [params]
 

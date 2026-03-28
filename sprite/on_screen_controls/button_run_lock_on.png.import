@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7shpbh0s5x6x"
-path="res://.godot/imported/RunLockOn.png-e37b34d5b66e603f754e3450947c5610.ctex"
+path="res://.godot/imported/button_run_lock_on.png-6357318c7fe1065a2e8343e3066d78c6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/RunLockOn.png"
-dest_files=["res://.godot/imported/RunLockOn.png-e37b34d5b66e603f754e3450947c5610.ctex"]
+source_file="res://sprite/on_screen_controls/button_run_lock_on.png"
+dest_files=["res://.godot/imported/button_run_lock_on.png-6357318c7fe1065a2e8343e3066d78c6.ctex"]
 
 [params]
 
