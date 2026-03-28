@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7fr7ycoyhh0j"
-path="res://.godot/imported/StartHeld.png-1541055b29d31d510147d21e93debb3d.ctex"
+uid="uid://cdjssv4jk227q"
+path="res://.godot/imported/button_A_held.png-cda647ca29e28d35498b38c91631d686.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/StartHeld.png"
-dest_files=["res://.godot/imported/StartHeld.png-1541055b29d31d510147d21e93debb3d.ctex"]
+source_file="res://sprite/on_screen_controls/button_A_held.png"
+dest_files=["res://.godot/imported/button_A_held.png-cda647ca29e28d35498b38c91631d686.ctex"]
 
 [params]
 

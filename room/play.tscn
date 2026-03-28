@@ -31,7 +31,7 @@
 [ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture.gd" id="25_3lia6"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="26_cpu0x"]
-[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="29_chuop"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="29_chuop"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="30_aot2p"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="31_jpn7p"]
 [ext_resource type="Script" uid="uid://bspetuap5iapy" path="res://script/multiplayer/bad_level_detect.gd" id="32_6r670"]

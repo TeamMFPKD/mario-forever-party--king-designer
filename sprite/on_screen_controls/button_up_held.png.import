@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8rqhp0a3e8x4"
-path="res://.godot/imported/LeftHeld.png-43b3f697313a72ed911bac726e65d4f3.ctex"
+uid="uid://7m0h2fy8sawb"
+path="res://.godot/imported/button_up_held.png-72b8de7c7b3a5f91f9a7a7593d278cb5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/LeftHeld.png"
-dest_files=["res://.godot/imported/LeftHeld.png-43b3f697313a72ed911bac726e65d4f3.ctex"]
+source_file="res://sprite/on_screen_controls/button_up_held.png"
+dest_files=["res://.godot/imported/button_up_held.png-72b8de7c7b3a5f91f9a7a7593d278cb5.ctex"]
 
 [params]
 

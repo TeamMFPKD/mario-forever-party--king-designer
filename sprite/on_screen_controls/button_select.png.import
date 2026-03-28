@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8xjirblyqq4i"
-path="res://.godot/imported/DownHeld.png-aa2c5d989dd9b84286a3069d14e0ee11.ctex"
+uid="uid://fwhe8wro661x"
+path="res://.godot/imported/button_select.png-f442b36d79ec4a424718b7479365c696.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/DownHeld.png"
-dest_files=["res://.godot/imported/DownHeld.png-aa2c5d989dd9b84286a3069d14e0ee11.ctex"]
+source_file="res://sprite/on_screen_controls/button_select.png"
+dest_files=["res://.godot/imported/button_select.png-f442b36d79ec4a424718b7479365c696.ctex"]
 
 [params]
 

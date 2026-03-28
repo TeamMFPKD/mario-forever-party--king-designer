@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://v0eo5asa5s4b"
-path="res://.godot/imported/BHeld.png-4ed0bbf64cacbf5073c2a9f290fccc69.ctex"
+uid="uid://buf2dyux8i617"
+path="res://.godot/imported/button_run_lock.png-26c169a8f400bfb79a0086bb3d4376eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/on_screen_controls/BHeld.png"
-dest_files=["res://.godot/imported/BHeld.png-4ed0bbf64cacbf5073c2a9f290fccc69.ctex"]
+source_file="res://sprite/on_screen_controls/button_run_lock.png"
+dest_files=["res://.godot/imported/button_run_lock.png-26c169a8f400bfb79a0086bb3d4376eb.ctex"]
 
 [params]
 

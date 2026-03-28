@@ -95,7 +95,7 @@
 [ext_resource type="Script" uid="uid://nrshekgp00wk" path="res://script/edit/mouse_pop.gd" id="85_ifctp"]
 [ext_resource type="Script" uid="uid://0c86f8ap20h5" path="res://script/edit/debug_load.gd" id="88_amsrr"]
 [ext_resource type="Texture2D" uid="uid://biw8aal1v31d0" path="res://sprite/facility/switch.png" id="89_aiw0b"]
-[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/utils/mobile_control_manager.tscn" id="89_b0qgs"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="89_b0qgs"]
 [ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="90_kt6na"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
