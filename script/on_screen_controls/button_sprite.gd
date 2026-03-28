@@ -11,7 +11,7 @@ var origin_color : Color
 
 func _ready() -> void:
 	#texture_normal = texture.duplicate()
-	#button = get_node(path_to_button) as TouchScreenButton
+	button = get_node(path_to_button) as TouchScreenButton
 	origin_color = self_modulate
 	button.pressed.connect(_on_button_pressed)
 	button.released.connect(_on_button_released)
