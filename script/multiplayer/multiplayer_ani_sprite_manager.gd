@@ -31,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 		if no_player_print_limit < 10:
 			no_player_print_limit += 1
 			print("[%s] No player node found" % Time.get_time_string_from_system())
-			return
+		return
 	if not local_ani:
 		local_ani = player.get_node("AnimatedSprite2D") as AnimatedSprite2D
 		print("[%s] No AnimatedSprite2D node found" % Time.get_time_string_from_system())

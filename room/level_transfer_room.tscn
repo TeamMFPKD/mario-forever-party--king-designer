@@ -31,11 +31,11 @@ metadata/_edit_lock_ = true
 play = true
 sound_effect = true
 
-[node name="LevelSenderNode" type="Node" parent="." unique_id=1828939401]
-script = ExtResource("3_1lisc")
-
 [node name="LevelReceiverNode" type="Node" parent="." unique_id=2063183727]
 script = ExtResource("4_xgwxn")
+
+[node name="LevelSenderNode" type="Node" parent="." unique_id=1828939401]
+script = ExtResource("3_1lisc")
 
 [node name="LetsPlayTogether" type="Node" parent="." unique_id=927302995]
 script = ExtResource("5_u7vct")

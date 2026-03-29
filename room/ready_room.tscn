@@ -142,5 +142,6 @@ volume_db = 8.0
 stream = ExtResource("7_enrps")
 
 [connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3 unbinds=1]
+[connection signal="animation_finished" from="GameRoomSize/AnimationPlayer" to="GameRoomSize/EditTimerStarter" method="_start_edit_timer" unbinds=1]
 [connection signal="jump_to_scene" from="GameRoomSize/EditTimerStarter" to="GameRoomSize/JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="play_animation" from="GameRoomSize/EditTimerStarter" to="GameRoomSize/AnimationPlayer" method="play" binds= [&"new_animation"]]
