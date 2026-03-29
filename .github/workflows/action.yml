@@ -20,7 +20,7 @@ jobs:
     steps:
     # 0. 拉取仓库
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         lfs: true 
 
