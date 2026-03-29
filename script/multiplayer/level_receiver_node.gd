@@ -6,12 +6,12 @@ var saved_player_level_data = []
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager.players_updated.connect(self._players_updated)
 
 # 将非空关卡数据缓存到本地
-func _process(_delta):
+func _players_updated():
 	if not multiplayer_manager:
 		return
-
 	for player in multiplayer_manager.players:
 		if saved_player_level_data.has(player):
 			continue

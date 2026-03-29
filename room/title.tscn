@@ -508,6 +508,7 @@ size_flags_vertical = 6
 text = "确认"
 
 [node name="Options" parent="GameRoomSize" unique_id=1212935464 instance=ExtResource("8_c2fru")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -901,6 +902,7 @@ size_flags_vertical = 10
 text = "返回主设置"
 
 [node name="ControlsPanelMobile" parent="GameRoomSize/Options" unique_id=1978154676 instance=ExtResource("4_i3lsm")]
+visible = false
 layout_mode = 2
 
 [node name="UiMarginContainer" parent="GameRoomSize/Options/ControlsPanelMobile" unique_id=798252276 instance=ExtResource("8_c2fru")]

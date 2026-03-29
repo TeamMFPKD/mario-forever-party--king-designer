@@ -31,7 +31,7 @@ func game_start(game_edit_time: int) -> void:
 	MPManager.is_in_game = true
 	TimerSingleton.wait_time = game_edit_time
 	# 倒计时缓冲结束后计时开始
-	TimerSingleton.start()
+	#TimerSingleton.start()
 	if multiplayer_manager.multiplayer.is_server():
 		config.set_value("game_settings", "host_set_edit_time_limit", game_edit_time)
 		GameConfig.save()

@@ -17,10 +17,12 @@ func _ready():
 		multiplayer_manager.player.level_file_name,
 		multiplayer_manager.player.level_data
 	)
-	print("Level data sent.")
 
 	# 先等 wait_time_initial 秒
 	await get_tree().create_timer(wait_time_initial).timeout
+	
+	multiplayer_manager.emit_signal("players_updated")
+	print("Level data sent.")
 
 	while not local_players_level_data_ready:
 		local_players_level_data_ready = true
