@@ -9,18 +9,42 @@ var drag_target    : Node = null  # Node2D 容器（D-pad）或 TouchScreenButto
 # 用于 _make_buttons_layout_default，在加载存档前记录场景初始值
 var _default_dpad_pos         := Vector2.ZERO
 var _default_button_positions := {}  # action -> Vector2
+var _original_dpad_pos        := Vector2.ZERO
+var _original_button_positions := {}  # action -> Vector2
 
 func _ready():
 	super._ready()
 	mobile_control = get_tree().get_first_node_in_group("mobile_control")
 	game_config = GameConfig
-	_capture_defaults()  # 必须在 _load_positions 之前
+	_capture_original_positions()  # 记录真正的原始位置
+	_check_and_save_default_layout()  # 检查并保存默认布局到config
 	_load_positions()
 	if control:
 		control.gui_input.connect(_on_canvas_gui_input)
 
 # ──────────────────────────────────────────────
-# 记录场景原始默认位置（用于重置）
+# 检查并保存默认布局到config（如果没有配置文件）
+# ──────────────────────────────────────────────
+func _check_and_save_default_layout() -> void:
+	# 如果没有移动布局配置，保存当前布局作为默认布局
+	if not game_config.config.has_section("mobile_layout"):
+		_save_default_layout_to_config()
+	
+	# 记录当前默认位置
+	_capture_defaults()
+
+# 记录真正的原始位置（在加载任何配置之前）
+# ──────────────────────────────────────────────
+func _capture_original_positions() -> void:
+	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
+		_original_dpad_pos = mobile_control.control_d_pad.get_node("ControlDPad").position
+
+	if mobile_control.control_button and mobile_control.control_button.has_node("ControlButton"):
+		for child in mobile_control.control_button.get_node("ControlButton").get_children():
+			if child is TouchScreenButton and not child.action.is_empty():
+				_original_button_positions[child.action] = child.position
+
+# 记录场景当前默认位置（用于重置）
 # ──────────────────────────────────────────────
 func _capture_defaults() -> void:
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
@@ -147,18 +171,63 @@ func _load_positions() -> void:
 						child.position = pos
 
 # ──────────────────────────────────────────────
-# 还原默认布局（清除存档 + 恢复场景初始位置）
+# 保存默认布局到config
+# ──────────────────────────────────────────────
+func _save_default_layout_to_config() -> void:
+	if not game_config:
+		return
+
+	# 保存D-pad默认位置
+	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
+		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		game_config.config.set_value("mobile_layout_default", "dpad_position", var_to_str(container.position))
+
+	# 保存右侧按钮默认位置
+	if mobile_control.control_button and mobile_control.control_button.has_node("ControlButton"):
+		for child in mobile_control.control_button.get_node("ControlButton").get_children():
+			if child is TouchScreenButton and not child.action.is_empty():
+				game_config.config.set_value("mobile_layout_default", "btn_" + child.action, var_to_str(child.position))
+
+	game_config.save()
+
+# 还原默认布局（恢复到真正的默认位置）
 # ──────────────────────────────────────────────
 func _make_buttons_layout_default() -> void:
+	# 优先从config中读取默认布局，如果没有则使用原始位置
+	var use_default_from_config := false
+	
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
-		mobile_control.control_d_pad.get_node("ControlDPad").position = _default_dpad_pos
+		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		var saved_default = game_config.config.get_value("mobile_layout_default", "dpad_position", "")
+		if saved_default != "":
+			var pos = str_to_var(saved_default)
+			if pos is Vector2:
+				container.position = pos
+				use_default_from_config = true
+		else:
+			container.position = _original_dpad_pos
 
 	if mobile_control.control_button and mobile_control.control_button.has_node("ControlButton"):
 		for child in mobile_control.control_button.get_node("ControlButton").get_children():
 			if child is TouchScreenButton and not child.action.is_empty():
-				if _default_button_positions.has(child.action):
-					child.position = _default_button_positions[child.action]
+				var saved_default = game_config.config.get_value("mobile_layout_default", "btn_" + child.action, "")
+				if saved_default != "":
+					var pos = str_to_var(saved_default)
+					if pos is Vector2:
+						child.position = pos
+						use_default_from_config = true
+				else:
+					if _original_button_positions.has(child.action):
+						child.position = _original_button_positions[child.action]
 
+	# 清除用户自定义的移动布局配置（保留默认布局配置）
 	if game_config.config.has_section("mobile_layout"):
 		game_config.config.erase_section("mobile_layout")
+	
+	# 强制保存配置
 	game_config.save()
+	
+	# 更新当前默认位置记录
+	_capture_defaults()
+	
+	print("重置按键布局：", "使用配置中的默认布局" if use_default_from_config else "使用原始默认布局")
