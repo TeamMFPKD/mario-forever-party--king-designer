@@ -926,7 +926,19 @@ text = "虚拟按键布局"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer" unique_id=1207166663 instance=ExtResource("2_w52fc")]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer" unique_id=1864998302]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="DefaultLayoutButton" parent="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer" unique_id=995183965 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "重置布局"
+
+[node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer" unique_id=1207166663 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -1093,8 +1105,9 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/DefaultLayoutButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_make_buttons_layout_default"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]
 [connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/Language/ControlVisibieSet" method="_set_invisible" flags=3]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
