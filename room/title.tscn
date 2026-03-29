@@ -948,29 +948,6 @@ text = "返回主设置"
 [node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanelMobile" unique_id=1778534696 instance=ExtResource("9_ty11l")]
 script = ExtResource("31_n7yan")
 
-[node name="Language" parent="GameRoomSize" unique_id=1581453593 instance=ExtResource("8_c2fru")]
-z_index = 600
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -302.0
-offset_bottom = 120.0
-grow_horizontal = 0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="ControlVisibieSet" parent="GameRoomSize/Language" unique_id=1896652691 instance=ExtResource("9_ty11l")]
-
-[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
-auto_translate_mode = 2
-custom_minimum_size = Vector2(270, 0)
-layout_mode = 2
-text = "EN / 中文"
-script = ExtResource("23_e6ipe")
-
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
 visible = false
 z_index = 500
@@ -1063,6 +1040,29 @@ size_flags_vertical = 5
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "同意"
+
+[node name="Language" parent="GameRoomSize" unique_id=1581453593 instance=ExtResource("8_c2fru")]
+z_index = 600
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -302.0
+offset_bottom = 120.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Language" unique_id=1896652691 instance=ExtResource("9_ty11l")]
+
+[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
+auto_translate_mode = 2
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+text = "EN / 中文"
+script = ExtResource("23_e6ipe")
 
 [node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
 script = ExtResource("22_p5b6p")
