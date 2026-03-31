@@ -37,7 +37,12 @@ const SOUND_CONFIG := {
 		"signal": "bumped",
 		"sound_func": "play_bumped",
 		"enabled": "play_sound_bumped"
-	}
+	},
+	"interaction_with_crush": {
+		"signal": "crushed_at",
+		"sound_func": "play_kicked",
+		"enabled": "play_sound_kicked"
+	},
 }
 
 var sound_stomped: AudioStreamPlayer
