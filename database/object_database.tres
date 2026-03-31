@@ -46,6 +46,7 @@
 [ext_resource type="PackedScene" uid="uid://dgtxigsor834o" path="res://object/edit/spawner/mark/spawner_moving_platform_vertical_down.tscn" id="43_r0hk1"]
 [ext_resource type="PackedScene" uid="uid://lyec0qvo2652" path="res://object/edit/spawner/mark/spawner_moving_platform_vertical_up.tscn" id="44_06dfj"]
 [ext_resource type="PackedScene" uid="uid://du2jdlbpgk86y" path="res://object/edit/spawner/mark/spawner_platform_fall.tscn" id="45_2tyjb"]
+[ext_resource type="PackedScene" uid="uid://c888tn4afsc7e" path="res://object/edit/spawner/mark/spawner_solid_spike.tscn" id="46_6w2tk"]
 [ext_resource type="PackedScene" uid="uid://eqkdfq7iu6qd" path="res://object/edit/spawner/mark/spawner_atchi_muite_block_blue_small.tscn" id="46_gcwsj"]
 [ext_resource type="PackedScene" uid="uid://0l8jpipxm5st" path="res://object/edit/spawner/enemy/enemy_normal/spawner_thwomp.tscn" id="47_sq2xq"]
 [ext_resource type="PackedScene" uid="uid://bjiuohocysthb" path="res://object/edit/spawner/bonus/spawner_mushroom.tscn" id="48_l7y3i"]
@@ -325,7 +326,7 @@ metadata/_custom_type_script = "uid://dm2vri801p6qq"
 [sub_resource type="Resource" id="Resource_06dfj"]
 script = ExtResource("1_id4ej")
 object_name = "solid_spike"
-object_scene = ExtResource("46_gcwsj")
+object_scene = ExtResource("46_6w2tk")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_2tyjb"]
