@@ -22,8 +22,9 @@ var move_object : CharacterBody2D
 var shape_cast
 
 const FRAMERATE_ORIGIN: float = 50.0
+const CRUSHED_FRAMES: int = 1
 var player: CharacterBody2D
-var _not_in_wall: bool = false
+var crushed_frame_counter: int = 0
 
 var overlap_turn_detect_objects: Array[Node2D] = []
 
@@ -116,8 +117,13 @@ func set_jump_speed() -> void:
 
 # 返回 true 表示卡墙，外部应跳过本帧所有运动逻辑
 func in_wall_process() -> bool:
-	if move_object.move_and_collide(Vector2.ZERO, true, 4.0) != null:
+	if move_object.move_and_collide(Vector2.ZERO, true, 0.08) != null:
 		move_object.velocity = Vector2.ZERO
-		emit_signal("crushed_at", move_object.position)
-		return true
+		# 一定时间后仍未挤出被判断为卡墙
+		crushed_frame_counter += 1
+		if crushed_frame_counter >= CRUSHED_FRAMES:
+			emit_signal("crushed_at", move_object.position)
+			return true
+		return false
+	crushed_frame_counter = 0
 	return false
