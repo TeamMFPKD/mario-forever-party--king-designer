@@ -35,6 +35,7 @@
 [ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]
 [ext_resource type="PackedScene" uid="uid://b05l8y21x0q11" path="res://object/input_map_set.tscn" id="28_wphsk"]
 [ext_resource type="Script" uid="uid://cjmbnxdu46yvg" path="res://script/option/platform_control_set_button.gd" id="29_w12k4"]
+[ext_resource type="Script" uid="uid://cofxhxjig8glj" path="res://script/option/resolution_button.gd" id="30_01vp3"]
 [ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://ui/mobile_layout_set.gd" id="31_n7yan"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
@@ -639,6 +640,23 @@ text = "设置按键"
 script = ExtResource("29_w12k4")
 is_desktop_button = false
 
+[node name="Resolution" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=1161005622]
+layout_mode = 2
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Resolution" unique_id=1568091426 instance=ExtResource("9_ty11l")]
+
+[node name="ResolutionLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Resolution" unique_id=789871938 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "分辨率"
+
+[node name="ResolutionButton" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Resolution" unique_id=926364069 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 35
+text = "1920 × 1080"
+script = ExtResource("30_01vp3")
+
 [node name="Staff" parent="GameRoomSize/Options/BasicPanel" unique_id=1510288836 instance=ExtResource("8_c2fru")]
 visible = false
 layout_mode = 1
@@ -1094,6 +1112,7 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButtonMobile" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Controls/ControlsButtonMobile" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_visible"]
+[connection signal="mobile_platform_invisible" from="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Resolution/ResolutionButton" to="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/Resolution/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/BasicSettings/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Staff/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_invisible"]
