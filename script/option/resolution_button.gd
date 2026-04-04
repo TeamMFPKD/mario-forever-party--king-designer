@@ -28,13 +28,12 @@ func _ready():
 			current_index = i
 			break
 	
-	# 读取全屏配置
-	var fullscreen = config.config.get_value("display", "fullscreen", false)
-	get_window().mode = Window.MODE_FULLSCREEN if fullscreen else Window.MODE_WINDOWED
-	
 	# 设置初始按钮文本和应用分辨率
 	update_button_text()
-	apply_resolution()
+	var engine_time_mesc = Time.get_ticks_msec()
+	if engine_time_mesc < 5000.0:
+		print("[设置] 加载屏幕分辨率设置：" + saved_res)	
+		apply_resolution()
 	
 	# 连接点击信号
 	pressed.connect(_on_button_pressed)
@@ -60,7 +59,7 @@ func apply_resolution():
 	var res = resolutions[current_index]
 	var window = get_window()
 	
-	# 如果窗口处于最大化状态，取消最大化
+	# 如果窗口处于最大化状态，只在游戏启动1秒内取消最大化
 	if window.mode == Window.MODE_MAXIMIZED:
 		window.mode = Window.MODE_WINDOWED
 	
