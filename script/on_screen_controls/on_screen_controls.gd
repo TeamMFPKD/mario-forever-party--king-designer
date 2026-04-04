@@ -35,6 +35,7 @@ class_name MobileControl
 @export_group("Controls")
 @export var control_d_pad  : Control
 @export var control_button : Control
+@export var control_photo  : Node2D
 
 @export_group("D-Pad Sprites")
 @export var left  : Sprite2D
@@ -54,11 +55,14 @@ class_name MobileControl
 # ──────────────────────────────────────────────
 # 显示模式
 # ──────────────────────────────────────────────
-enum ShowModeType { HIDE, SHOW, DPADS }
+enum ShowModeType { HIDE, SHOW, DPADS, HISTORY_EDIT }
 
 @export var show_mode := ShowModeType.SHOW:
 	set(value):
 		show_mode = value
+		var control_buttons = control_button.get_node("ControlButton").get_children()
+		for button in control_buttons:
+			button.visible = true
 		match value:
 			ShowModeType.HIDE:
 				control_d_pad.visible = false
@@ -69,6 +73,13 @@ enum ShowModeType { HIDE, SHOW, DPADS }
 			ShowModeType.DPADS:
 				control_d_pad.visible = true
 				control_button.visible = false
+			ShowModeType.HISTORY_EDIT:
+				control_d_pad.visible = true
+				control_button.visible = true
+				for button in control_buttons:
+					button.visible = false
+				# 拍摄键显示
+				control_photo.visible = true
 
 # ──────────────────────────────────────────────
 # 黑名单：已知的假手柄前缀

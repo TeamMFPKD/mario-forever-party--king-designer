@@ -21,7 +21,7 @@ func _on_pressed():
 	
 	if mobile_control.show_mode == MobileControl.ShowModeType.SHOW:
 		mobile_control.show_mode = MobileControl.ShowModeType.HIDE
-	else:
+	elif mobile_control.show_mode == MobileControl.ShowModeType.HIDE:
 		mobile_control.show_mode = MobileControl.ShowModeType.SHOW
 	
 	update_button_text()
