@@ -5,6 +5,7 @@
 
 [node name="MultiplayerPlayerShadow" type="AnimatedSprite2D" unique_id=656487019]
 self_modulate = Color(1, 1, 1, 0.2509804)
+z_index = 9
 sprite_frames = ExtResource("1_6lqym")
 animation = &"idle"
 speed_scale = 0.0
