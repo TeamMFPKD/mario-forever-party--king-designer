@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="12_c1gew"]
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="13_2f6ie"]
 [ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="13_c1gew"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="15_716tq"]
 
 [node name="LikedCourseRoom" type="Node2D" unique_id=395487414]
 
@@ -152,6 +153,9 @@ text = "返回标题画面"
 stream = ExtResource("13_c1gew")
 autoplay = true
 bus = &"Music"
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("15_716tq")]
+show_mode = 0
 
 [connection signal="all_files_loaded" from="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/LikedCoursesList/LoadLikedCourses" to="GameRoomSize/UiMarginContainer/UiMarginContainer/LoadingLabel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]

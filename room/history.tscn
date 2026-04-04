@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://d2rufjgoofc74" path="res://ui/list/history_level_info.tscn" id="7_5mpa1"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_or7ga"]
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="14_ixr3s"]
 
 [node name="History" type="Node2D" unique_id=1793275075]
 
@@ -147,6 +148,9 @@ text = "返回标题画面"
 stream = ExtResource("3_b0n03")
 autoplay = true
 bus = &"Music"
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("14_ixr3s")]
+show_mode = 0
 
 [connection signal="all_files_loaded" from="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/HistoryLevelList" to="GameRoomSize/UiMarginContainer/UiMarginContainer/LoadingLabel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/LikedCourseButton" to="JumpToSceneLikedCourses" method="jump_to_scene" flags=3]
