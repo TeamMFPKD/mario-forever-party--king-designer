@@ -26,12 +26,13 @@ size = Vector2(256, 192)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3xy7x"]
 size = Vector2(256, 192)
 
-[node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209 node_paths=PackedStringArray("control_d_pad", "control_button") groups=["mobile_control"]]
+[node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209 node_paths=PackedStringArray("control_d_pad", "control_button", "control_photo") groups=["mobile_control"]]
 process_mode = 3
 layer = 0
 script = ExtResource("1_ip5kh")
 control_d_pad = NodePath("ControlDPad")
 control_button = NodePath("ControlButton")
+control_photo = NodePath("ControlButton/ControlButton/ButtonPhoto")
 
 [node name="ControlDPad" type="Control" parent="." unique_id=1293223226]
 layout_mode = 3

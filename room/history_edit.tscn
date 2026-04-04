@@ -1582,7 +1582,7 @@ text = "返回"
 autowrap_mode = 3
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("93_bska7")]
-show_mode = 2
+show_mode = 3
 
 [node name="LevelPathSetGetter" type="Node" parent="." unique_id=1860203042 node_paths=PackedStringArray("load_level_node")]
 script = ExtResource("88_8guam")
