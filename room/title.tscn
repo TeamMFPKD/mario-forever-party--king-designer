@@ -967,7 +967,6 @@ text = "返回主设置"
 script = ExtResource("31_n7yan")
 
 [node name="UserNotice" type="MarginContainer" parent="GameRoomSize" unique_id=897262998 node_paths=PackedStringArray("refuse_button", "accept_button")]
-visible = false
 z_index = 500
 layout_mode = 1
 anchors_preset = 15
@@ -1059,23 +1058,19 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "同意"
 
-[node name="Language" parent="GameRoomSize" unique_id=1581453593 instance=ExtResource("8_c2fru")]
+[node name="Language" parent="GameRoomSize/UserNotice" unique_id=1581453593 instance=ExtResource("8_c2fru")]
 z_index = 600
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -302.0
-offset_bottom = 120.0
-grow_horizontal = 0
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="ControlVisibieSet" parent="GameRoomSize/Language" unique_id=1896652691 instance=ExtResource("9_ty11l")]
+[node name="ControlVisibieSet" parent="GameRoomSize/UserNotice/Language" unique_id=1896652691 instance=ExtResource("9_ty11l")]
 
-[node name="LanguageButton" parent="GameRoomSize/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
+[node name="LanguageButton" parent="GameRoomSize/UserNotice/Language" unique_id=967291340 instance=ExtResource("2_w52fc")]
 auto_translate_mode = 2
 custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
@@ -1127,7 +1122,7 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/DefaultLayoutButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_make_buttons_layout_default"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]
-[connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/Language/ControlVisibieSet" method="_set_invisible" flags=3]
+[connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/UserNotice/Language/ControlVisibieSet" method="_set_invisible" flags=3]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
