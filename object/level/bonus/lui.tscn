@@ -81,7 +81,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gj0k3"]
-size = Vector2(32, 32)
+size = Vector2(31, 31)
 
 [node name="Lui" type="CharacterBody2D" unique_id=114751985]
 collision_layer = 32
