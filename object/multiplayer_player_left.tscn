@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://dm52vkcqcn4so"]
+
+[ext_resource type="Script" uid="uid://c7w2hw0evmdv3" path="res://script/multiplayer/multiplayer_player_left_manager.gd" id="1_n6826"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_8xi1m"]
+[ext_resource type="PackedScene" uid="uid://c7s16dwadwtav" path="res://object/multiplayer_player_left_label.tscn" id="2_pgybu"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_pgybu"]
+
+[node name="MultiplayerPlayerLeft" type="CanvasLayer" unique_id=1642091842]
+
+[node name="MultiplayerPlayerLeftManager" type="Node" parent="." unique_id=675519560 node_paths=PackedStringArray("list_control_node")]
+script = ExtResource("1_n6826")
+player_left_label_scene = ExtResource("2_pgybu")
+list_control_node = NodePath("../GameRoomSize/UiMarginContainer/VBoxContainer")
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=501104516]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+mouse_filter = 2
+script = ExtResource("2_8xi1m")
+metadata/_edit_lock_ = true
+
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("4_pgybu")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer" unique_id=41391360]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2

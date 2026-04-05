@@ -36,7 +36,7 @@
 [ext_resource type="PackedScene" uid="uid://b05l8y21x0q11" path="res://object/input_map_set.tscn" id="28_wphsk"]
 [ext_resource type="Script" uid="uid://cjmbnxdu46yvg" path="res://script/option/platform_control_set_button.gd" id="29_w12k4"]
 [ext_resource type="Script" uid="uid://cofxhxjig8glj" path="res://script/option/resolution_button.gd" id="30_01vp3"]
-[ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://ui/mobile_layout_set.gd" id="31_n7yan"]
+[ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://script/option/mobile_layout_set.gd" id="31_n7yan"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
