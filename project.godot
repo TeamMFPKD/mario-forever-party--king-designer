@@ -39,6 +39,7 @@ MPManager="*uid://ia0dcltb3dx"
 TimerSingleton="*uid://brm0gqby8wbjk"
 RandomCaptureManager="*uid://ba3qikd1k4jig"
 LevelPathSet="*uid://cmua4qyp7khya"
+MultiplayerPlayerLeft="*uid://dm52vkcqcn4so"
 
 [display]
 
