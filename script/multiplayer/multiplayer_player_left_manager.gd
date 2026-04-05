@@ -10,6 +10,7 @@ var previous_players = []
 func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager")
 	multiplayer_manager.players_updated.connect(_on_players_updated)
+	multiplayer_manager.multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 func _on_players_updated() -> void:
 	if previous_players.size() == 0:
@@ -34,3 +35,8 @@ func _on_players_changed() -> void:
 				player_left_label.text = tr(player_left_label.text).format({"player_name": prev_player.name})
 				list_control_node.add_child(player_left_label)
 				print("[%s] [玩家离开通知器] 玩家 " % Time.get_time_string_from_system(), prev_player.name, " 离开了游戏")
+
+func _on_server_disconnected() -> void:
+	var player_left_label = player_left_label_scene.instantiate() as Label
+	player_left_label.text = tr("与主机断开。")
+	list_control_node.add_child(player_left_label)

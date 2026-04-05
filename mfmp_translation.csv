@@ -88,3 +88,4 @@ Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中�
 重置布局,Default,重置布局,リセット
 分辨率,Resolution,分辨率,解像度
 玩家离开提示,{player_name} left the room.,{player_name} 离开了房间。,{player_name} がルームを退出しました。
+与主机断开。,Disconnected from server.,与主机断开。,ホストとの接続が切れました。
