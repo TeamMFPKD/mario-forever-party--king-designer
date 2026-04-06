@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dljhnfo0n1vo4"]
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
+[ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/new_bottom.png" id="2_xwl44"]
 
 [node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
 custom_minimum_size = Vector2(550, 0)
@@ -16,3 +17,33 @@ auto_translate_mode = 2
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "加入失败"
+
+[node name="PlayerReady" type="Control" parent="." unique_id=1776961063]
+visible = false
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="ReadySprite2D" type="Sprite2D" parent="PlayerReady" unique_id=1094595561]
+position = Vector2(60, 32)
+scale = Vector2(0.08, 0.07)
+texture = ExtResource("2_xwl44")
+
+[node name="ReadyLabel" parent="PlayerReady" unique_id=1322071083 instance=ExtResource("1_nfru4")]
+auto_translate_mode = 2
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -10.5
+offset_bottom = 10.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 18
+text = "Ready"
+horizontal_alignment = 1
+vertical_alignment = 1
