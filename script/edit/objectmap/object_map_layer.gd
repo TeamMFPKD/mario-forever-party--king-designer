@@ -116,11 +116,6 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		print("ObjectMapLayer: 未找到对象: ", current_object_name)
 		return
 	
-	# 如果是player对象，先删除所有已存在的player对象
-	if current_object_name == "player":
-		remove_all_objects_of_type("player")
-		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
-	
 	# 将位置对齐到32x32网格
 	var grid_position = align_to_grid(input_pos)
 	
@@ -128,6 +123,11 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 	if check_duplicate and is_grid_position_occupied(grid_position):
 		print("[%s] ObjectMapLayer: 该网格位置已有对象，不进行绘制" % Time.get_time_string_from_system())
 		return
+	
+	# 如果是player对象，先删除所有已存在的player对象
+	if current_object_name == "player":
+		remove_all_objects_of_type("player")
+		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
 	
 	var scene_instance = entry.object_scene.instantiate()
 	if scene_instance is Node2D:
