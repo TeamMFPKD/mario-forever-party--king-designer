@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://cn2k8r20yglip" path="res://script/history/history_level_list.gd" id="6_1g7ts"]
 [ext_resource type="PackedScene" uid="uid://d2rufjgoofc74" path="res://ui/list/history_level_info.tscn" id="7_5mpa1"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_or7ga"]
+[ext_resource type="PackedScene" uid="uid://8us2l8ew1hg0" path="res://ui/list/history_file_date_line.tscn" id="11_mh56w"]
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="14_ixr3s"]
 
@@ -102,6 +103,7 @@ size_flags_vertical = 3
 script = ExtResource("6_1g7ts")
 level_list_line_scene = ExtResource("7_5mpa1")
 scroll_container = NodePath("..")
+history_file_date_line_scene = ExtResource("11_mh56w")
 
 [node name="Back" parent="GameRoomSize" unique_id=1688126696 instance=ExtResource("3_1d24y")]
 layout_mode = 1

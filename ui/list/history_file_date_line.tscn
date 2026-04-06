@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://8us2l8ew1hg0"]
+
+[node name="HistoryFileDateLine" type="ColorRect" unique_id=1203623858]
+custom_minimum_size = Vector2(233, 8)
+offset_right = 233.0
+offset_bottom = 8.0
+size_flags_horizontal = 3
+color = Color(0.16, 0.16, 0.16, 0.5019608)

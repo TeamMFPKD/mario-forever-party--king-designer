@@ -5,6 +5,8 @@ signal all_files_loaded
 @export var level_list_line_scene: PackedScene
 @export var scroll_container: ScrollContainer  # 在场景里把ScrollContainer拖进来
 
+@export var history_file_date_line_scene: PackedScene
+
 var file_names: Array[String] = []
 var load_thread: Thread
 var thread_done: bool = false
@@ -64,7 +66,28 @@ func _on_files_scanned(names: Array[String]):
 	thread_done = true
 	load_thread.wait_to_finish()
 
+	var last_date: String = ""
+	
 	for i in range(file_names.size()):
+		# 从文件名中提取日期部分（假设文件名格式为：关卡名_YYYY-MM-DD.lvl）
+		var file_name: String = file_names[i]
+		var current_date: String = _extract_date_from_filename(file_name)
+		
+		# 如果日期发生变化，添加日期分隔线
+		if current_date != last_date and last_date != "":
+			var date_line = history_file_date_line_scene.instantiate()
+			# 假设日期分隔线场景有一个设置日期的函数或属性
+			if date_line.has_method("set_date"):
+				date_line.set_date(current_date)
+			elif date_line.has_method("set_text"):
+				date_line.set_text(current_date)
+			add_child(date_line)
+			
+			if scene_tree:
+				await scene_tree.process_frame
+		
+		last_date = current_date
+		
 		var level_list_line = level_list_line_scene.instantiate()
 		var count_label = level_list_line.get_node("CountLabel")
 		count_label.text = str(i + 1)
@@ -95,6 +118,34 @@ func _restore_scroll() -> void:
 		return
 	var saved = GameConfig.config.get_value(SCROLL_SECTION, SCROLL_KEY, 0)
 	scroll_container.scroll_vertical = saved
+
+func _extract_date_from_filename(filename: String) -> String:
+	"""从文件名中提取日期部分
+	假设文件名格式为：关卡名_YYYY-MM-DD.lvl 或类似格式
+	"""
+	# 移除文件扩展名
+	var base_name = filename.get_basename()
+	
+	# 尝试匹配常见的日期格式
+	var regex = RegEx.new()
+	
+	# 匹配 YYYY-MM-DD 格式
+	regex.compile("(\\d{4})-(\\d{2})-(\\d{2})")
+	var result = regex.search(base_name)
+	if result:
+		return result.get_string()
+	
+	# 匹配 YYYYMMDD 格式
+	regex.compile("(\\d{4})(\\d{2})(\\d{2})")
+	result = regex.search(base_name)
+	if result:
+		var year = result.get_string(1)
+		var month = result.get_string(2)
+		var day = result.get_string(3)
+		return "%s-%s-%s" % [year, month, day]
+	
+	# 如果没有找到日期格式，返回空字符串
+	return ""
 
 func _exit_tree():
 	_save_scroll()  # 离开场景时保存
