@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://qpl1v6jjqf6e" path="res://script/multiplayer/force_continue_timer.gd" id="7_f0tgy"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="7_xgwxn"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="12_u7vct"]
+[ext_resource type="AudioStream" uid="uid://brgw80bbwq265" path="res://sound/level_transfer_hint.wav" id="14_kfofx"]
 
 [node name="LevelTransferRoom" type="Node2D" unique_id=574478413]
 
@@ -100,6 +101,11 @@ script = ExtResource("7_f0tgy")
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("12_u7vct")]
 show_mode = 0
+
+[node name="LevelTransferringHintSound" type="AudioStreamPlayer" parent="." unique_id=467036339]
+stream = ExtResource("14_kfofx")
+autoplay = true
+bus = &"Sound"
 
 [connection signal="lets_play_together" from="LevelSenderNode" to="LetsPlayTogether" method="lets_play_together"]
 [connection signal="pressed" from="GameRoomSize/UiMarginContainer/UiButton" to="LetsPlayTogether" method="lets_play_together"]
