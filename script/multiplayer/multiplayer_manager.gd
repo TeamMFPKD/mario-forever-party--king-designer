@@ -69,6 +69,7 @@ var mp_ani_manager
 var player = {
 	"id": "invalid",
 	"name": "invalid",
+	"is_ready_to_start": false,
 	"level_file_name": "invalid",
 	"level_data": "invalid",
 	"ready": false,
@@ -379,6 +380,7 @@ func restore_origin_player_data() -> void:
 	for p in players:
 		p.level_file_name = "invalid"
 		p.level_data = "invalid"
+		p.is_ready_to_start = false
 		p.ready = false
 		p.reach_end = false
 		p.level_cause_pass = 0
@@ -394,4 +396,17 @@ func sync_origin_player_data() -> void:
 	emit_signal("players_updated")
 	print("已返回标题界面，并重新同步玩家列表数据：")
 	print(players)
-	
+
+@rpc("any_peer", "call_local")
+func get_ready(p_id: int, is_ready: bool) -> void:
+	if not multiplayer.is_server():
+		return
+	for p in players:
+		if p.id == p_id:
+			p.is_ready_to_start = is_ready
+			if is_ready:
+				print("玩家 ", p.name, " 已就绪")
+			else:
+				print("玩家 ", p.name, " 未就绪")
+			sync_players_list.rpc(players)
+			break
