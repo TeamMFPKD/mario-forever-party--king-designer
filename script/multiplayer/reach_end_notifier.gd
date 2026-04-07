@@ -20,13 +20,13 @@ func _ready():
 		all_players_reach_end = true
 		for player in multiplayer_manager.players:
 			if not player["reach_end"]:
-				print("玩家", player["name"], "未到达终点")
+				print("[%s] 玩家" % Time.get_time_string_from_system(), player["name"], "未到达终点")
 				all_players_reach_end = false
-		print("等待 ", wait_time, " 秒")
+		print("[%s] 等待 " % Time.get_time_string_from_system(), wait_time, " 秒")
 		await get_tree().create_timer(wait_time).timeout
 
-	print("所有玩家已到达终点。")
-	print("计算结果中……")
+	print("[%s] 所有玩家已到达终点。" % Time.get_time_string_from_system())
+	print("[%s] 计算结果中……" % Time.get_time_string_from_system())
 	for player in multiplayer_manager.players:
 		var level_pass_count = player["level_pass_count"]
 		var level_cause_pass = player["level_cause_pass"]
@@ -41,5 +41,4 @@ func _ready():
 		# 清空所有玩家的关卡数据内容，减少数据传输量
 		player["level_data"] = ""
 	multiplayer_manager.store_level_results.rpc(multiplayer_manager.players)
-	print("关卡游玩数据已广播")
-	
+	print("[%s] 关卡游玩数据已广播" % Time.get_time_string_from_system())

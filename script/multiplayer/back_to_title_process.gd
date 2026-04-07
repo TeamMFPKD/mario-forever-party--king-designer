@@ -12,8 +12,8 @@ func _ready():
 	if multiplayer_manager.is_in_game:
 		if multiplayer_manager.multiplayer.is_server():
 			multiplayer_manager.restore_origin_player_data()
-			print("已还原本局开始前玩家列表：")
-			print(multiplayer_manager.players)
+			print("[%s] 已还原本局开始前玩家列表：" % Time.get_time_string_from_system())
+			print("[%s] " % Time.get_time_string_from_system(), multiplayer_manager.players)
 			emit_signal("sever_back_to_title")
 		else:
 			# 比主机更早返回标题画面的玩家，需要更新玩家列表
@@ -23,5 +23,5 @@ func _ready():
 		multiplayer_manager.sync_origin_player_data.rpc()
 		var fc = func():
 			emit_signal("back_to_title")
-			print("Player page should be shown now.")
+			print("[%s] Player page should be shown now." % Time.get_time_string_from_system())
 		fc.call_deferred()

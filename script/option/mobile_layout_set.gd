@@ -230,4 +230,4 @@ func _make_buttons_layout_default() -> void:
 	# 更新当前默认位置记录
 	_capture_defaults()
 	
-	print("重置按键布局：", "使用配置中的默认布局" if use_default_from_config else "使用原始默认布局")
+	print("[%s] 重置按键布局：" % Time.get_time_string_from_system(), "使用配置中的默认布局" if use_default_from_config else "使用原始默认布局")

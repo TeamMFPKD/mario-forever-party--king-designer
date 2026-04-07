@@ -22,7 +22,7 @@ func next_level():
 		MPManager.current_level_count += 1
 		var fc = func():
 			get_tree().reload_current_scene()
-		print("player dead and should go to next level")
+		print("[%s] player dead and should go to next level" % Time.get_time_string_from_system())
 		fc.call_deferred()
 	else:
 		get_tree().change_scene_to_file("uid://c0civs02iqoki")

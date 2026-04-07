@@ -161,15 +161,15 @@ func inform_late_player() -> void:
 @rpc("authority", "call_local")
 func player_joined(player_info):
 	# 所有对等体都会收到这个消息
-	print("id：", player_info.id, " 名称：", player_info.name, " 已加入")
+	print("[%s] id：" % Time.get_time_string_from_system(), player_info.id, " 名称：", player_info.name, " 已加入")
 
 @rpc("authority", "call_local")
 func sync_players_list(players_list):
 	# 所有客户端接收并更新玩家列表
 	players = players_list
 	emit_signal("players_updated")
-	print("玩家列表：")
-	print(players)
+	print("[%s] 玩家列表：" % Time.get_time_string_from_system())
+	print("[%s] " % Time.get_time_string_from_system(), players)
 
 func _on_peer_connected(_id: int):
 	# 当有新对等体连接时，如果是主机，不需要额外处理
@@ -189,7 +189,7 @@ func _on_peer_disconnected(id: int):
 				break
 		
 		emit_signal("players_updated")
-		print("玩家 ", id, " 已离开")
+		print("[%s] 玩家 " % Time.get_time_string_from_system(), id, " 已离开")
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
 			sync_players_list.rpc(players)
@@ -197,7 +197,7 @@ func _on_peer_disconnected(id: int):
 # 服务器通知所有客户端退出房间
 @rpc("authority", "call_local")
 func server_closing():
-	print("服务器即将关闭")
+	print("[%s] 服务器即将关闭" % Time.get_time_string_from_system())
 	# 隐藏 PlayerPage
 	var player_page = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
 	if player_page:
@@ -229,9 +229,9 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data: St
 			p.level_file_name = level_file_name
 			p.level_data = level_data
 			if p.id == player.id:
-				print("已将自己的关卡数据加入玩家列表数据")
+				print("[%s] 已将自己的关卡数据加入玩家列表数据" % Time.get_time_string_from_system())
 			else:
-				print("已接收玩家 ", p.name, " 的关卡数据")
+				print("[%s] 已接收玩家 " % Time.get_time_string_from_system(), p.name, " 的关卡数据")
 			break
 
 @rpc("any_peer", "call_local")
@@ -239,7 +239,7 @@ func my_players_data_are_ready(player_id: int) -> void:
 	for p in players:
 		if p.id == player_id:
 			p.ready = true
-			print("玩家 ", player_id, " 已准备就绪")
+			print("[%s] 玩家 " % Time.get_time_string_from_system(), player_id, " 已准备就绪")
 			break
 
 @rpc("authority", "call_local")
@@ -273,12 +273,12 @@ func level_add_pass_count(level, passed : bool, player_id: int) -> void:
 			for p_player in players:
 				if p_player.id == player_id:
 					p_player["level_pass_count"] += 1
-					print("Player ", p_player.name, " passed ", p_author["name"], "'s level.")
+					print("[%s] Player " % Time.get_time_string_from_system(), p_player.name, " passed ", p_author["name"], "'s level.")
 		else:
 			p_author["level_cause_death"] += 1
 			for p_player in players:
 				if p_player.id == player_id:
-					print("Player ", p_player.name, " died in ", p_author["name"], "'s level.")
+					print("[%s] Player " % Time.get_time_string_from_system(), p_player.name, " died in ", p_author["name"], "'s level.")
 
 
 @rpc("any_peer", "call_local")
@@ -288,14 +288,14 @@ func reach_end(player_id: int) -> void:
 	for p in players:
 		if p.id == player_id:
 			p.reach_end = true
-			print("玩家 ", p.name, " 已经玩过了所有关卡！")
+			print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 已经玩过了所有关卡！")
 			break
 	
 @rpc("authority", "call_local")
 func store_level_results(players) -> void:
-	print("开始展示结果！！")
+	print("[%s] 开始展示结果！！" % Time.get_time_string_from_system())
 	for p in players:
-		print(p["name"], "的关卡通过率：", round(p["clear_rate"] * 100000.0) / 1000.0, "%",
+		print("[%s] " % Time.get_time_string_from_system(), p["name"], "的关卡通过率：", round(p["clear_rate"] * 100000.0) / 1000.0, "%",
 		" 关卡通过数：", p["level_pass_count"], " 总积分：", p["score"])
 	emit_signal("result_updated", players)
 	for p in players:
@@ -311,7 +311,7 @@ func store_level_results(players) -> void:
 			push_error("Failed to parse level data JSON.")
 			var err = FileAccess.get_open_error()
 			if err != OK:
-				print("Error loading file:", err)
+				print("[%s] Error loading file:" % Time.get_time_string_from_system(), err)
 			return
 		
 		var level_data_dict = json.data
@@ -332,7 +332,7 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 		#print("mp_ani_manager is null")
 		return
 	if not is_instance_valid(mp_ani_manager):
-		print("mp_ani_manager is not valid")
+		print("[%s] mp_ani_manager is not valid" % Time.get_time_string_from_system())
 		return
 	for ani in mp_ani_manager.anis:
 		if ani.has_meta("player_id"):
@@ -394,7 +394,7 @@ func sync_origin_player_data() -> void:
 	# 同步完整的玩家列表给所有客户端
 	sync_players_list.rpc(players)
 	emit_signal("players_updated")
-	print("已返回标题界面，并重新同步玩家列表数据：")
+	print("[%s] 已返回标题界面，并重新同步玩家列表数据：" % Time.get_time_string_from_system())
 	print(players)
 
 @rpc("any_peer", "call_local")

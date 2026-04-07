@@ -9,4 +9,4 @@ func _ready():
 func _on_pressed():
 	if multiplayer_manager:
 		multiplayer_manager.disconnect_and_cleanup()
-		print("已断开连接")
+		print("[%s] 已断开连接" % Time.get_time_string_from_system())
