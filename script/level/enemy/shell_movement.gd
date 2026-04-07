@@ -26,6 +26,7 @@ func set_jump_speed() -> void:
 
 func _on_bumped(hit_position: Vector2) -> void:
 	speed_y = jump_speed
+	move_object.position.y -= 1.0
 	shell_status.is_moving = false
 	ani.flip_v = true
 	bumping = true
