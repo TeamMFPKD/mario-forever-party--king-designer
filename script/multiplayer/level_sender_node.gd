@@ -22,20 +22,20 @@ func _ready():
 	await get_tree().create_timer(wait_time_initial).timeout
 	
 	multiplayer_manager.emit_signal("players_updated")
-	print("Level data sent.")
+	print("[%s] Level data sent." % Time.get_time_string_from_system())
 
 	while not local_players_level_data_ready:
 		local_players_level_data_ready = true
-		print("[确认玩家关卡数据]")
+		print("[%s] [确认玩家关卡数据]" % Time.get_time_string_from_system())
 		for p in multiplayer_manager.players:
 			if p.level_data != "invalid":
-				print("已接收玩家 ", p.name, " 的关卡数据")
+				print("[%s] 已接收玩家 " % Time.get_time_string_from_system(), p.name, " 的关卡数据")
 			else:
-				print("玩家 ", p.name, " 的关卡数据无效。")
+				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 的关卡数据无效。")
 				local_players_level_data_ready = false
 		if not local_players_level_data_ready:
 			# 失败了！再等 wait_time_local 秒
-			print("等待 ", wait_time_local, " 秒")
+			print("[%s] 等待 " % Time.get_time_string_from_system(), wait_time_local, " 秒")
 			await get_tree().create_timer(wait_time_local).timeout
 
 	multiplayer_manager.my_players_data_are_ready.rpc_id(1, multiplayer_manager.player.id)
@@ -45,16 +45,16 @@ func _ready():
 
 	while not all_players_data_ready:
 		all_players_data_ready = true
-		print("[确认所有玩家就绪]")
+		print("[%s] [确认所有玩家就绪]" % Time.get_time_string_from_system())
 		for p in multiplayer_manager.players:
 			if not p.ready:
-				print("玩家 ", p.name, " 未就绪。")
+				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 未就绪。")
 				all_players_data_ready = false
 			else:
-				print("玩家 ", p.name, " 已就绪。")
-		print("等待 ", wait_time_sever, " 秒")
+				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 已就绪。")
+		print("[%s] 等待 " % Time.get_time_string_from_system(), wait_time_sever, " 秒")
 		await get_tree().create_timer(wait_time_sever).timeout
 
 	# Geimu Sutato!
-	print("所有玩家准备就绪，开始游戏！")
+	print("[%s] 所有玩家准备就绪，开始游戏！" % Time.get_time_string_from_system())
 	emit_signal("lets_play_together")

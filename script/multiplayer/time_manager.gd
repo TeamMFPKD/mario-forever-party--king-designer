@@ -16,4 +16,4 @@ func _process(_delta) -> void:
 	left_time_label.text = str(int(ceil(timer.time_left)))
 
 func _on_timer_timeout() -> void:
-	print("Timeout!")
+	print("[%s] Timeout!" % Time.get_time_string_from_system())

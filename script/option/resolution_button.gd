@@ -32,7 +32,7 @@ func _ready():
 	update_button_text()
 	var engine_time_mesc = Time.get_ticks_msec()
 	if engine_time_mesc < 5000.0:
-		print("[设置] 加载屏幕分辨率设置：" + saved_res)	
+		print("[%s] [设置] 加载屏幕分辨率设置：" % Time.get_time_string_from_system() + saved_res)	
 		apply_resolution()
 	
 	# 连接点击信号
