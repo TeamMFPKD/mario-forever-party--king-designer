@@ -12,10 +12,22 @@ var wait_time_sever = 1.0
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	
+	# 检查原始 JSON 是否有效
+	var raw_json = multiplayer_manager.player.level_data
+	if raw_json.is_empty() or raw_json == "invalid":
+		push_error("[%s] player.level_data 无效，无法发送" % Time.get_time_string_from_system())
+		return
+	
+	var level_data_bytes = raw_json.to_utf8_buffer()
+	var level_data_bytes_compressed = level_data_bytes.compress(FileAccess.CompressionMode.COMPRESSION_DEFLATE)
+	
+	print("[%s] 原始 JSON 大小：%.2f KB，压缩后：%.2f KB" % [Time.get_time_string_from_system(), level_data_bytes.size() / 1024.0, level_data_bytes_compressed.size() / 1024.0])
+	
 	multiplayer_manager.transfer_level_data.rpc(
 		multiplayer_manager.player.id,
 		multiplayer_manager.player.level_file_name,
-		multiplayer_manager.player.level_data
+		level_data_bytes_compressed
 	)
 
 	# 先等 wait_time_initial 秒

@@ -22,4 +22,4 @@ func _players_updated():
 		print("[%s] 玩家 " % Time.get_time_string_from_system(), player.name, " 的关卡 ", player.level_file_name, " 的数据：", player.level_data)
 		file.close()
 		print("[%s] 玩家 " % Time.get_time_string_from_system(), player.name, " 的关卡数据已缓存到本地")
-		print("[%s] 关卡预览：" % Time.get_time_string_from_system(), player.level_data)
+		#print("[%s] 关卡预览：" % Time.get_time_string_from_system(), player.level_data)
