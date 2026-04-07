@@ -223,15 +223,33 @@ func edit_time_out():
 	emit_signal("timeout_save")
 
 @rpc("any_peer", "call_local")
-func transfer_level_data(player_id: int, level_file_name: String, level_data: String) -> void:
+func transfer_level_data(player_id: int, level_file_name: String, level_data_bytes_compressed: PackedByteArray) -> void:
 	for p in players:
 		if p.id == player_id:
 			p.level_file_name = level_file_name
-			p.level_data = level_data
+			
+			# 1. 解压
+			var level_data_bytes = level_data_bytes_compressed.decompress_dynamic(-1, FileAccess.CompressionMode.COMPRESSION_DEFLATE)
+			if level_data_bytes.is_empty():
+				push_error("[%s] 解压失败，压缩数据大小：%d 字节" % [Time.get_time_string_from_system(), level_data_bytes_compressed.size()])
+				p.level_data = "invalid"
+				return
+			
+			print("[%s] 解压成功，字节数：%d" % [Time.get_time_string_from_system(), level_data_bytes.size()])
+			
+			# 2. 转 UTF-8 字符串
+			var level_json = level_data_bytes.get_string_from_utf8()
+			if level_json.is_empty():
+				push_error("[%s] UTF-8 转换失败，字节数据可能不是有效文本" % Time.get_time_string_from_system())
+				p.level_data = "invalid"
+				return
+			
+			p.level_data = level_json
+			
 			if p.id == player.id:
 				print("[%s] 已将自己的关卡数据加入玩家列表数据" % Time.get_time_string_from_system())
 			else:
-				print("[%s] 已接收玩家 " % Time.get_time_string_from_system(), p.name, " 的关卡数据")
+				print("[%s] 已接收玩家 %s 的关卡数据，JSON 长度：%d" % [Time.get_time_string_from_system(), p.name, level_json.length()])
 			break
 
 @rpc("any_peer", "call_local")
