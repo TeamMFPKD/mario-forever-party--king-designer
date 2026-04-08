@@ -2,7 +2,7 @@ extends Node
 
 var multiplayer_manager : MultiplayerManager
 
-var saved_player_level_data = []
+var saved_player_id = []
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
@@ -13,9 +13,9 @@ func _players_updated():
 	if not multiplayer_manager:
 		return
 	for player in multiplayer_manager.players:
-		if saved_player_level_data.has(player):
+		if saved_player_id.has(player.id) or player.level_data == "invalid":
 			continue
-		saved_player_level_data.append(player)
+		saved_player_id.append(player.id)
 		# 缓存非空关卡数据
 		var file = FileAccess.open(player.level_file_name, FileAccess.WRITE)
 		file.store_string(player.level_data)
