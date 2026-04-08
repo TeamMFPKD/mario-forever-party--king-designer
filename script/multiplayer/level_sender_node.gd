@@ -33,7 +33,7 @@ func _ready():
 	# 先等 wait_time_initial 秒
 	await get_tree().create_timer(wait_time_initial).timeout
 	
-	multiplayer_manager.emit_signal("players_updated")
+	#multiplayer_manager.emit_signal("players_updated")
 	print("[%s] Level data sent." % Time.get_time_string_from_system())
 
 	while not local_players_level_data_ready:

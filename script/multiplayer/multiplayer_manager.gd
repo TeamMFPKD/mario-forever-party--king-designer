@@ -245,6 +245,7 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 				return
 			
 			p.level_data = level_json
+			emit_signal("players_updated")
 			
 			if p.id == player.id:
 				print("[%s] 已将自己的关卡数据加入玩家列表数据" % Time.get_time_string_from_system())
