@@ -57,15 +57,6 @@ metadata/_edit_lock_ = true
 
 [node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_rfq10")]
 
-[node name="TitleScreenBGMP1" type="AudioStreamPlayer" parent="." unique_id=1820936535]
-stream = ExtResource("3_bj3by")
-autoplay = true
-bus = &"Music"
-
-[node name="TitleScreenBGMP2" type="AudioStreamPlayer" parent="." unique_id=1418492999]
-stream = ExtResource("4_mavin")
-bus = &"Music"
-
 [node name="JumpToScene" type="Node" parent="." unique_id=1281676684]
 script = ExtResource("4_ikv4w")
 scene_uid = &"uid://ci7x1alix6g2"
@@ -1091,6 +1082,19 @@ layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
 
+[node name="BGMStartToPlayTimer" type="Timer" parent="." unique_id=317060978]
+wait_time = 0.3
+one_shot = true
+autostart = true
+
+[node name="TitleScreenBGMP1" type="AudioStreamPlayer" parent="." unique_id=1820936535]
+stream = ExtResource("3_bj3by")
+bus = &"Music"
+
+[node name="TitleScreenBGMP2" type="AudioStreamPlayer" parent="." unique_id=1418492999]
+stream = ExtResource("4_mavin")
+bus = &"Music"
+
 [node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
 script = ExtResource("22_p5b6p")
 
@@ -1101,8 +1105,6 @@ invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginConta
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("25_ssvsf")]
 show_mode = 0
 
-[connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
-[connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
@@ -1137,6 +1139,9 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]
 [connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/UserNotice/Language/ControlVisibieSet" method="_set_invisible" flags=3]
+[connection signal="timeout" from="BGMStartToPlayTimer" to="TitleScreenBGMP1" method="play"]
+[connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
+[connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
 [connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
 [connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
