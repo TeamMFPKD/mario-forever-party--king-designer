@@ -19,10 +19,10 @@ func _on_pressed():
 	if mobile_control == null:
 		return
 	
-	if mobile_control.show_mode == MobileControl.ShowModeType.SHOW:
+	if mobile_control.show_mode != MobileControl.ShowModeType.HIDE:
 		mobile_control.show_mode = MobileControl.ShowModeType.HIDE
 	elif mobile_control.show_mode == MobileControl.ShowModeType.HIDE:
-		mobile_control.show_mode = MobileControl.ShowModeType.SHOW
+		mobile_control.show_mode = MobileControl.ShowModeType.DPADS
 	
 	update_button_text()
 
@@ -30,7 +30,7 @@ func update_button_text():
 	if mobile_control == null:
 		return
 	
-	if mobile_control.show_mode == MobileControl.ShowModeType.SHOW:
-		text = tr("隐藏触控")
-	else:
+	if mobile_control.show_mode == MobileControl.ShowModeType.HIDE:
 		text = tr("显示触控")
+	else:
+		text = tr("隐藏触控")
