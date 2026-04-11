@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="7_orh2l"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_level.gd" id="8_pt5fk"]
 [ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/load_level.gd" id="9_27ofe"]
+[ext_resource type="Script" uid="uid://f3xmjyss4rde" path="res://script/multiplayer/test_time_label.gd" id="9_w44qo"]
 [ext_resource type="Script" uid="uid://cjkkhvnw3nf3g" path="res://script/level/tile_map_layer_semi_solid_creator.gd" id="12_e5c0k"]
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="13_3lia6"]
 [ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="14_snsbp"]
@@ -69,10 +70,32 @@ offset_bottom = 540.0
 script = ExtResource("2_pei5v")
 metadata/_edit_lock_ = true
 
-[node name="TimeHUD" parent="GameRoomSize" unique_id=277085813 instance=ExtResource("4_aqvbr")]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize" unique_id=2068984517]
 layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
 offset_left = -233.0
-offset_bottom = 233.0
+offset_bottom = 341.0
+grow_horizontal = 0
+
+[node name="TimeHUD" parent="GameRoomSize/VBoxContainer" unique_id=277085813 instance=ExtResource("4_aqvbr")]
+custom_minimum_size = Vector2(233, 200)
+layout_mode = 2
+theme_override_constants/margin_bottom = 0
+
+[node name="TestTimeHUD" parent="GameRoomSize/VBoxContainer" unique_id=1510288836 instance=ExtResource("30_aot2p")]
+layout_mode = 2
+
+[node name="TestTimeLabel" type="Label" parent="GameRoomSize/VBoxContainer/TestTimeHUD" unique_id=166882572]
+layout_mode = 2
+theme = ExtResource("26_cpu0x")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 50
+text = "30"
+horizontal_alignment = 1
+script = ExtResource("9_w44qo")
 
 [node name="GameTimeHUD" parent="GameRoomSize" unique_id=912064384 instance=ExtResource("6_dhd6j")]
 layout_mode = 1
@@ -205,7 +228,7 @@ target_mode = 0
 [node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" unique_id=1790741609]
 script = ExtResource("25_pt5fk")
 
-[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("30_aot2p")]
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1121669055 instance=ExtResource("30_aot2p")]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

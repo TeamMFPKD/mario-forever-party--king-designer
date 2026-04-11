@@ -65,6 +65,7 @@
 [ext_resource type="Texture2D" uid="uid://dmab4gsr188r3" path="res://sprite/tile/tile_sand.png" id="55_2alp4"]
 [ext_resource type="Texture2D" uid="uid://dt1kt8637l2yy" path="res://sprite/tile/tile_snow.png" id="56_g0tll"]
 [ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="56_qjgk7"]
+[ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock.png" id="56_xo7f2"]
 [ext_resource type="Texture2D" uid="uid://c24qvkx0721j3" path="res://sprite/tile/tile_snow_b.png" id="57_o6b3p"]
 [ext_resource type="Texture2D" uid="uid://bb83c57feb5h2" path="res://sprite/tile/tile_volcano.png" id="58_dpf7b"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="59_rvqgs"]
@@ -126,6 +127,10 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tdf2a"]
 atlas = ExtResource("46_bddyo")
 region = Rect2(0, 96, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8ela"]
+atlas = ExtResource("56_xo7f2")
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lpuhj"]
 load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
@@ -818,7 +823,6 @@ position = Vector2(20, -150)
 texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -172.0
 offset_top = -520.0
@@ -1025,13 +1029,22 @@ metadata/_edit_lock_ = true
 layout_mode = 2
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonMushroom" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=1174583370 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonTimeClock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=1174583370 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "time_clock"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonTimeClock/ButtonTexture" parent_id_path=PackedInt32Array(1174583370, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_p8ela")
+
+[node name="ItemButtonMushroom" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=1398412750 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "mushroom"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom/ButtonTexture" parent_id_path=PackedInt32Array(1174583370, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom/ButtonTexture" parent_id_path=PackedInt32Array(1398412750, 839201675) index="0" unique_id=1085479145]
 texture = ExtResource("56_qjgk7")
 
 [node name="ItemButtonFireFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=1940350330 instance=ExtResource("41_cvttd")]
@@ -1779,6 +1792,7 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonTimeClock"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonFireFlower"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonBeetroot"]
