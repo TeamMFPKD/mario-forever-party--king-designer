@@ -8,16 +8,19 @@ func _ready() -> void:
 func next_level_die():
 	# 向host发送 关卡名 - 死亡 数据
 	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], false, MPManager.player.id)
+	if LifeManager.lives > 1:
+		LifeManager.lives -= 1
+		get_tree().reload_current_scene()
+		return
 	next_level()
-	pass
 
 func next_level_pass():
 	# 向host发送 关卡名 - 通过 数据
 	multiplayer_manager.level_add_pass_count.rpc_id(1, MPManager.random_levels[MPManager.current_level_count], true, MPManager.player.id)
 	next_level()
-	pass
 
 func next_level():
+	LifeManager.is_lives_set_when_ready = false
 	if MPManager.current_level_count < MPManager.total_levels - 1:
 		MPManager.current_level_count += 1
 		var fc = func():

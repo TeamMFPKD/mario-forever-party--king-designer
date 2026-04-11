@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://by8cg73qfeta4"]
+
+[ext_resource type="Script" uid="uid://b34ewm4p32ywr" path="res://script/multiplayer/life_manager.gd" id="1_r1p8f"]
+
+[node name="LifeManager" type="Node" unique_id=368161271]
+script = ExtResource("1_r1p8f")

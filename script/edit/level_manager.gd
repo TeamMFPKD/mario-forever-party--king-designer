@@ -6,6 +6,8 @@ signal level_theme_changed(level_theme: LevelThemeEnum)
 
 signal load_level
 
+signal lives_changed
+
 @export_category("Level Data")
 @export var version: String = "1.0"
 @export var time_used: int = -1
@@ -41,6 +43,12 @@ enum LevelThemeEnum {
 @export var object_map : ObjectMapLayer
 @export var bgp_manager : BgpManager
 
+@export var lives : int = 2:
+	set(value):
+		value = clamp(value, 1, 3)
+		lives = value
+		emit_signal("lives_changed")
+
 var level_data_dict: Dictionary
 
 func _ready() -> void:
@@ -72,6 +80,7 @@ func get_level_data_json() -> String:
 		"object_data": object_data,
 		"pass_count": pass_count,
 		"death_count": death_count,
+		"lives": lives,
 	}
 	
 	var level_data_json = JSON.stringify(level_data_dict, "")
@@ -100,6 +109,11 @@ func load_level_data_from_json(level_data_json: String) -> void:
 
 	pass_count = level_data_dict.get("pass_count", 0)
 	death_count = level_data_dict.get("death_count", 0)
+
+	lives = level_data_dict.get("lives", 2)
+	if not LifeManager.is_lives_set_when_ready:
+		LifeManager.lives = lives
+		LifeManager.is_lives_set_when_ready = true
 	
 	# 加载瓦片数据
 	var tile_data_array = level_data_dict.get("tilemap_data", [])
