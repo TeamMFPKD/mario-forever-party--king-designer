@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://d4df0rtywmp4u"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_eftvs"]
+[ext_resource type="PackedScene" uid="uid://bt5ixe14lxdem" path="res://object/level/bonus/time_clock.tscn" id="2_eftvs"]
+[ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock.png" id="3_eftvs"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_537no"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8ela"]
+atlas = ExtResource("3_eftvs")
+region = Rect2(0, 0, 32, 32)
+
+[node name="SpawnerTimeClock" type="Node2D" unique_id=2066940420]
+script = ExtResource("1_eftvs")
+spawn_object_scene = ExtResource("2_eftvs")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=698192262]
+texture = SubResource("AtlasTexture_p8ela")
+
+[node name="OffsetMarker" parent="." unique_id=636497433 instance=ExtResource("4_537no")]

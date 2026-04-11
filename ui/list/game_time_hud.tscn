@@ -37,7 +37,7 @@ horizontal_alignment = 1
 [node name="GameTimer" type="Timer" parent="." unique_id=1795664682 groups=["game_timer"]]
 wait_time = 30.0
 one_shot = true
+autostart = true
 ignore_time_scale = true
 
 [connection signal="game_time_hud_visible" from="GameTimeManager" to="ControlVisibieSet" method="_set_visible"]
-[connection signal="game_time_hud_visible" from="GameTimeManager" to="GameTimer" method="start"]
