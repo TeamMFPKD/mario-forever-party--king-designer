@@ -97,6 +97,7 @@
 [ext_resource type="Texture2D" uid="uid://biw8aal1v31d0" path="res://sprite/facility/switch.png" id="89_aiw0b"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="89_b0qgs"]
 [ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="90_kt6na"]
+[ext_resource type="PackedScene" uid="uid://dntwmumuho35f" path="res://object/edit/life_set.tscn" id="97_4a1yi"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -1718,6 +1719,17 @@ item_type = 2
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/ItemButtonEraser/ButtonTexture" parent_id_path=PackedInt32Array(1818552784, 839201675) index="0" unique_id=1085479145]
 scale = Vector2(7, 7)
 texture = ExtResource("81_cfmm2")
+
+[node name="LifeSet" parent="GameRoomSize" unique_id=2066267448 instance=ExtResource("97_4a1yi")]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -288.0
+offset_bottom = -96.0
+grow_horizontal = 0
 
 [node name="DebugLoad" type="Node" parent="GameRoomSize" unique_id=1259708372]
 script = ExtResource("88_amsrr")

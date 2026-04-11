@@ -1,0 +1,191 @@
+[gd_scene format=3 uid="uid://dntwmumuho35f"]
+
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="1_3yi18"]
+[ext_resource type="Texture2D" uid="uid://db0ip87tocnbw" path="res://sprite/spiny_spike.png" id="1_rugdn"]
+[ext_resource type="Script" uid="uid://bbg7e1dc0xk3n" path="res://script/edit/life_set_button.gd" id="2_cgfdo"]
+[ext_resource type="Script" uid="uid://c0ylfnnmis2rw" path="res://script/edit/life_display.gd" id="2_rugdn"]
+[ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="2_vgc5h"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="6_eikvs"]
+[ext_resource type="AudioStream" uid="uid://c213arfckrjmd" path="res://sound/ready.wav" id="7_t1cis"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rugdn"]
+atlas = ExtResource("2_vgc5h")
+region = Rect2(32, 34, 31, 32)
+
+[sub_resource type="Animation" id="Animation_3yi18"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LifeDisplay/LifeDisplay:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_rugdn"]
+resource_name = "life_down"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LifeDisplay/LifeDisplay:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 8.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_cgfdo"]
+resource_name = "new_animation"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LifeDisplay/LifeDisplay:position:y")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -8.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bmt0n"]
+_data = {
+&"RESET": SubResource("Animation_3yi18"),
+&"life_down": SubResource("Animation_rugdn"),
+&"life_up": SubResource("Animation_cgfdo")
+}
+
+[node name="LifeSet" type="Control" unique_id=2066267448]
+layout_mode = 3
+offset_left = -200.0
+offset_top = -64.0
+offset_bottom = 128.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LifeUpButton" parent="." unique_id=1210628054 instance=ExtResource("1_3yi18")]
+custom_minimum_size = Vector2(128, 56)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_right = 64.0
+offset_bottom = 48.0
+grow_horizontal = 2
+text = ""
+script = ExtResource("2_cgfdo")
+life_limit = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="LifeUpButton" unique_id=86088886]
+position = Vector2(64, 24)
+scale = Vector2(2, 2)
+texture = ExtResource("1_rugdn")
+
+[node name="LifeDownButton" parent="." unique_id=1943489320 instance=ExtResource("1_3yi18")]
+custom_minimum_size = Vector2(120, 56)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -48.0
+offset_right = 64.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+text = ""
+script = ExtResource("2_cgfdo")
+
+[node name="Sprite2D" type="Sprite2D" parent="LifeDownButton" unique_id=238175876]
+position = Vector2(64, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("1_rugdn")
+flip_v = true
+
+[node name="LifeDisplay" type="Control" parent="." unique_id=1217583463]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LifeDisplay" type="Node2D" parent="LifeDisplay" unique_id=2007301511 node_paths=PackedStringArray("animation_player")]
+script = ExtResource("2_rugdn")
+animation_player = NodePath("../../AnimationPlayer")
+
+[node name="Life1" type="Node2D" parent="LifeDisplay/LifeDisplay" unique_id=952654988]
+visible = false
+position = Vector2(0, 16)
+
+[node name="Sprite2D" type="Sprite2D" parent="LifeDisplay/LifeDisplay/Life1" unique_id=563154187]
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_rugdn")
+
+[node name="Life2" type="Node2D" parent="LifeDisplay/LifeDisplay" unique_id=1221756175]
+position = Vector2(0, 16)
+
+[node name="Sprite2D" type="Sprite2D" parent="LifeDisplay/LifeDisplay/Life2" unique_id=1028039850]
+position = Vector2(27, 0)
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_rugdn")
+
+[node name="Sprite2D2" type="Sprite2D" parent="LifeDisplay/LifeDisplay/Life2" unique_id=1420580711]
+position = Vector2(-21, 0)
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_rugdn")
+
+[node name="Life3" type="Node2D" parent="LifeDisplay/LifeDisplay" unique_id=461110579]
+visible = false
+position = Vector2(0, 16)
+
+[node name="Sprite2D" type="Sprite2D" parent="LifeDisplay/LifeDisplay/Life3" unique_id=476750507]
+position = Vector2(35, 0)
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_rugdn")
+
+[node name="Sprite2D2" type="Sprite2D" parent="LifeDisplay/LifeDisplay/Life3" unique_id=345903415]
+position = Vector2(-29, 0)
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_rugdn")
+
+[node name="Sprite2D3" type="Sprite2D" parent="LifeDisplay/LifeDisplay/Life3" unique_id=1103001154]
+position = Vector2(3, 0)
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_rugdn")
+
+[node name="LifeChangeSound" parent="." unique_id=1715984441 instance=ExtResource("6_eikvs")]
+stream = ExtResource("7_t1cis")
+
+[node name="AniCooldownTimer" type="Timer" parent="." unique_id=1274871739]
+wait_time = 0.5
+one_shot = true
+autostart = true
+ignore_time_scale = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1110445639]
+libraries/ = SubResource("AnimationLibrary_bmt0n")
+
+[connection signal="pressed" from="LifeUpButton" to="LifeChangeSound" method="play"]
+[connection signal="pressed" from="LifeUpButton" to="LifeDisplay/LifeDisplay" method="_on_life_up"]
+[connection signal="pressed" from="LifeDownButton" to="LifeChangeSound" method="play"]
+[connection signal="pressed" from="LifeDownButton" to="LifeDisplay/LifeDisplay" method="_on_life_down"]
+[connection signal="timeout" from="AniCooldownTimer" to="LifeDisplay/LifeDisplay" method="_on_ani_cooldown_finished"]
