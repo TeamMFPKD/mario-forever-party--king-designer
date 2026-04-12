@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bt5ixe14lxdem"]
 
-[ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock.png" id="1_efvaj"]
+[ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock_green.png" id="1_efvaj"]
 [ext_resource type="Script" uid="uid://dd108bj8du4eo" path="res://script/level/bonus/time_clock_get.gd" id="2_kei5q"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_tyokg"]
 [ext_resource type="AudioStream" uid="uid://cxevhoqxn11ob" path="res://sound/level/time_increase.ogg" id="4_tyokg"]
