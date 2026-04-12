@@ -23,7 +23,7 @@ func _on_time_clock_get() -> void:
 	is_activated = true
 	ani.visible = false
 	emit_signal("time_clock_got")
-	game_timer.wait_time = game_timer.time_left + time_to_increase
+	game_timer.wait_time = clampf(game_timer.time_left + time_to_increase, 0.02, 999.0)
 	game_timer.start()
 
 func _on_all_process_finished() -> void:

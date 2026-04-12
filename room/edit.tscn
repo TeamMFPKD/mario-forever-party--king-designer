@@ -59,13 +59,14 @@
 [ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="49_yk8gc"]
 [ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://sprite/tile/tile_castle_b.png" id="50_dvyf1"]
 [ext_resource type="Texture2D" uid="uid://5stdy61pmtog" path="res://sprite/tile/tile_cave.png" id="51_kcxsg"]
+[ext_resource type="Texture2D" uid="uid://b5rj43wcjmop" path="res://sprite/bonus/time_clock_red.png" id="51_w23hq"]
 [ext_resource type="Texture2D" uid="uid://ejbgmhyor4n6" path="res://sprite/tile/tile_dusk.png" id="52_7qesv"]
 [ext_resource type="Texture2D" uid="uid://dagnbicl3nhg3" path="res://sprite/tile/tile_night.png" id="53_i3bxj"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="54_kd61m"]
 [ext_resource type="Texture2D" uid="uid://dmab4gsr188r3" path="res://sprite/tile/tile_sand.png" id="55_2alp4"]
 [ext_resource type="Texture2D" uid="uid://dt1kt8637l2yy" path="res://sprite/tile/tile_snow.png" id="56_g0tll"]
 [ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="56_qjgk7"]
-[ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock.png" id="56_xo7f2"]
+[ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock_green.png" id="56_xo7f2"]
 [ext_resource type="Texture2D" uid="uid://c24qvkx0721j3" path="res://sprite/tile/tile_snow_b.png" id="57_o6b3p"]
 [ext_resource type="Texture2D" uid="uid://bb83c57feb5h2" path="res://sprite/tile/tile_volcano.png" id="58_dpf7b"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="59_rvqgs"]
@@ -108,6 +109,14 @@ region = Rect2(0, 32, 32, 32)
 atlas = ExtResource("40_yebna")
 region = Rect2(0, 0, 33, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8ela"]
+atlas = ExtResource("56_xo7f2")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hlwyj"]
+atlas = ExtResource("51_w23hq")
+region = Rect2(0, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_4fasx"]
 atlas = ExtResource("42_qnirk")
 region = Rect2(0, 0, 33, 32)
@@ -127,10 +136,6 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tdf2a"]
 atlas = ExtResource("46_bddyo")
 region = Rect2(0, 96, 33, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_p8ela"]
-atlas = ExtResource("56_xo7f2")
-region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lpuhj"]
 load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
@@ -824,10 +829,32 @@ texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
 layout_mode = 0
-offset_left = -172.0
-offset_top = -520.0
-offset_right = 1042.0
-offset_bottom = -2.0
+offset_left = -174.0
+offset_top = -698.0
+offset_right = 1040.0
+offset_bottom = -6.0
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=1019353830]
+layout_mode = 2
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonTimeClock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4" unique_id=1174583370 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "time_clock"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClock/ButtonTexture" parent_id_path=PackedInt32Array(1174583370, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_p8ela")
+
+[node name="ItemButtonTimeClockDecrease" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4" unique_id=983334583 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "time_clock_decrease"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClockDecrease/ButtonTexture" parent_id_path=PackedInt32Array(983334583, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_hlwyj")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=1445714692]
 layout_mode = 2
@@ -1028,15 +1055,6 @@ metadata/_edit_lock_ = true
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=262018772]
 layout_mode = 2
 metadata/_edit_lock_ = true
-
-[node name="ItemButtonTimeClock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=1174583370 instance=ExtResource("41_cvttd")]
-layout_mode = 2
-size_flags_horizontal = 0
-object_name = "time_clock"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonTimeClock/ButtonTexture" parent_id_path=PackedInt32Array(1174583370, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_p8ela")
 
 [node name="ItemButtonMushroom" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=1398412750 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1562,6 +1580,7 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -696.0
 offset_top = -354.0
@@ -1778,6 +1797,8 @@ show_mode = 2
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB"]
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonVolcano"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClock"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClockDecrease"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonCoin"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlock"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower"]
@@ -1792,7 +1813,6 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonTimeClock"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonFireFlower"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonBeetroot"]
