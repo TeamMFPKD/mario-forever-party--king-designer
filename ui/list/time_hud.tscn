@@ -2,6 +2,45 @@
 
 [ext_resource type="Script" uid="uid://beswresvmlchb" path="res://script/multiplayer/time_manager.gd" id="1_tlac8"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_65p34"]
+[ext_resource type="Script" uid="uid://d4l4vp1b12ow3" path="res://script/multiplayer/timer_count_down_color_set.gd" id="3_lrh7t"]
+[ext_resource type="Script" uid="uid://bfn7utvw6s6ie" path="res://script/multiplayer/timer_count_down_animation.gd" id="4_la8gt"]
+
+[sub_resource type="Animation" id="Animation_3b24p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_gb51i"]
+resource_name = "count_down_hint"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.25, 1.25), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yvkjn"]
+_data = {
+&"RESET": SubResource("Animation_3b24p"),
+&"count_down_hint": SubResource("Animation_gb51i")
+}
 
 [node name="TimeHUD" type="MarginContainer" unique_id=277085813]
 custom_minimum_size = Vector2(233, 233)
@@ -18,13 +57,33 @@ theme_override_constants/margin_bottom = 32
 
 [node name="TimeManager" type="Node" parent="." unique_id=2060332455 node_paths=PackedStringArray("left_time_label")]
 script = ExtResource("1_tlac8")
-left_time_label = NodePath("../EditTimeLabel")
+left_time_label = NodePath("../Node2D/EditTimeLabel")
 
-[node name="EditTimeLabel" type="Label" parent="." unique_id=1584602101]
-layout_mode = 2
+[node name="TimerCountDownColorSet" type="Node" parent="." unique_id=1014000885]
+script = ExtResource("3_lrh7t")
+path_to_label = NodePath("../Node2D/EditTimeLabel")
+
+[node name="TimerCountDownAnimation" type="Node" parent="." unique_id=2027758441]
+script = ExtResource("4_la8gt")
+path_to_animation = NodePath("../Node2D/EditTimeLabel")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1203196328]
+libraries/ = SubResource("AnimationLibrary_yvkjn")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=937751436]
+position = Vector2(121, 112)
+
+[node name="EditTimeLabel" type="Label" parent="Node2D" unique_id=1584602101]
+offset_left = -79.0
+offset_top = -88.0
+offset_right = 90.0
+offset_bottom = 77.0
 theme = ExtResource("2_65p34")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 18
 theme_override_font_sizes/font_size = 120
 text = "20"
 horizontal_alignment = 1
+metadata/_edit_lock_ = true
+
+[connection signal="new_second_passed" from="TimerCountDownAnimation" to="AnimationPlayer" method="play"]
