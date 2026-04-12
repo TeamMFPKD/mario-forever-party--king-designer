@@ -39,4 +39,7 @@ immune_to_fireball = true
 [node name="InteractionWithBeetroot" parent="EnemyInteraction" parent_id_path=PackedInt32Array(1317140342) index="2" unique_id=92154285]
 immune_to_beetroot = true
 
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." index="7" unique_id=331215067]
+enable_node_path = NodePath(".")
+
 [editable path="EnemyInteraction"]
