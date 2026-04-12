@@ -22,8 +22,9 @@ func on_game_start() -> void:
 
 @rpc("authority", "call_local")
 func game_start(game_edit_time: int) -> void:
-	print("要开始了哟~")
-	print("本局游戏时长：", game_edit_time)
+	print("[%s] 要开始了哟~" % Time.get_datetime_string_from_system())
+	print("[%s] 本局游戏时长：" % Time.get_datetime_string_from_system(), game_edit_time)
+	# 记录游戏开始时间作为文件名的时间部分
 	var current_time = Time.get_datetime_string_from_system(false, true)
 	current_time = current_time.replace(":", "-")
 	current_time = current_time.replace(" ", "_")

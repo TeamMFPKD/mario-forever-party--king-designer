@@ -15,7 +15,7 @@ var parent : Node2D
 
 func _ready() -> void:
 	game_timer = get_tree().get_first_node_in_group("game_timer")
-	parent = get_parent()
+	parent = get_parent() as Node2D
 
 func _on_time_clock_get() -> void:
 	if is_activated:

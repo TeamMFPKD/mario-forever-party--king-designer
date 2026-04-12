@@ -262,6 +262,10 @@ region = Rect2(5, 37, 23, 29)
 atlas = ExtResource("90_kt6na")
 region = Rect2(0, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_w23hq"]
+atlas = ExtResource("90_kt6na")
+region = Rect2(0, 192, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ifctp"]
 atlas = ExtResource("89_aiw0b")
 region = Rect2(0, 0, 32, 32)
@@ -828,6 +832,7 @@ position = Vector2(20, -150)
 texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -174.0
 offset_top = -698.0
@@ -1580,24 +1585,35 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -696.0
-offset_top = -354.0
+offset_top = -522.0
 offset_right = -4.0
-offset_bottom = 164.0
+offset_bottom = 170.0
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2048951371]
+[node name="HBoxContainer4" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=1982302972]
 layout_mode = 2
 
-[node name="ItemButtonAtchiMuiteBlock" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=1084113521 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonAtchiMuiteBlock" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=1084113521 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "atchi_muite_block_blue_small"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonAtchiMuiteBlock/ButtonTexture" parent_id_path=PackedInt32Array(1084113521, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock/ButtonTexture" parent_id_path=PackedInt32Array(1084113521, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_4a1yi")
+
+[node name="ItemButtonAtchiMuiteBlock2" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=991596989 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "atchi_muite_block_red_small"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2/ButtonTexture" parent_id_path=PackedInt32Array(991596989, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_w23hq")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2048951371]
+layout_mode = 2
 
 [node name="ItemButtonSwitchBlock" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=1167620369 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1850,7 +1866,8 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonCameraEdge"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonAtchiMuiteBlock"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]
