@@ -53,6 +53,7 @@
 [ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="43_hfb1t"]
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="44_bb1r4"]
 [ext_resource type="Texture2D" uid="uid://boa8ojba4ua7m" path="res://sprite/bonus/poisonous_mushroom.png" id="45_jnkuo"]
+[ext_resource type="Texture2D" uid="uid://btxki0mu71rot" path="res://sprite/theme_preview/bg_preview_snow_b.png" id="45_oia1o"]
 [ext_resource type="Texture2D" uid="uid://4lr60loieckk" path="res://sprite/bonus/super_star.png" id="46_bddyo"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="47_gnq71"]
 [ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/edit/tilemap/tile_set_style.gd" id="48_71fdm"]
@@ -793,7 +794,7 @@ target_theme = 8
 metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB/ButtonTexture" parent_id_path=PackedInt32Array(1292653546, 1856562228) index="0" unique_id=2057330280]
-texture = ExtResource("34_pfkd6")
+texture = ExtResource("45_oia1o")
 
 [node name="ThemeButtonVolcano" parent="GameRoomSize/GroupButtonTheme/LevelTheme" unique_id=1711574094 instance=ExtResource("29_7jwj4")]
 layout_mode = 2
@@ -1585,6 +1586,7 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -696.0
 offset_top = -522.0
