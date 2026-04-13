@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://duvxl6ouvgmx" path="res://sprite/facility/giant_gate_bar_on.png" id="3_8fxcr"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_t22hb"]
 
-[node name="SpawnerGoalGate" type="Node2D" unique_id=1207902946]
+[node name="SpawnerGoalGate" type="Node2D" unique_id=1207902946 groups=["spawner_goal_gate"]]
 script = ExtResource("1_yk036")
 spawn_object_scene = ExtResource("2_3hm48")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"

@@ -90,3 +90,4 @@ Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中�
 玩家离开提示,{player_name} left the room.,{player_name} 离开了房间。,{player_name} がルームを退出しました。
 与主机断开。,Disconnected from server.,与主机断开。,ホストとの接続が切れました。
 准备完毕,I'm ready,准备完毕,準備完了
+警告：你还没有放置终点。,Warning: You haven't placed the goal.,警告：你还没有放置终点。,警告：まだゴールが配置されていません。

@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://dntwmumuho35f"]
 
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="1_3yi18"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="1_oo4ky"]
 [ext_resource type="Texture2D" uid="uid://db0ip87tocnbw" path="res://sprite/spiny_spike.png" id="1_rugdn"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_b6p67"]
 [ext_resource type="Script" uid="uid://bbg7e1dc0xk3n" path="res://script/edit/life_set_button.gd" id="2_cgfdo"]
 [ext_resource type="Script" uid="uid://c0ylfnnmis2rw" path="res://script/edit/life_display.gd" id="2_rugdn"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="2_vgc5h"]
@@ -68,11 +70,24 @@ _data = {
 
 [node name="LifeSet" type="Control" unique_id=2066267448]
 layout_mode = 3
+anchors_preset = 0
 offset_left = -200.0
 offset_top = -64.0
 offset_bottom = 128.0
+
+[node name="UiMarginContainer" parent="." unique_id=1510288836 instance=ExtResource("2_b6p67")]
+custom_minimum_size = Vector2(200, 192)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="UiPanel" parent="UiMarginContainer" unique_id=1563157272 instance=ExtResource("1_oo4ky")]
+layout_mode = 2
 
 [node name="LifeUpButton" parent="." unique_id=1210628054 instance=ExtResource("1_3yi18")]
 custom_minimum_size = Vector2(128, 56)
@@ -82,7 +97,7 @@ anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -64.0
 offset_right = 64.0
-offset_bottom = 48.0
+offset_bottom = 56.0
 grow_horizontal = 2
 text = ""
 script = ExtResource("2_cgfdo")
@@ -102,7 +117,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -64.0
-offset_top = -48.0
+offset_top = -56.0
 offset_right = 64.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -184,8 +199,8 @@ ignore_time_scale = true
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1110445639]
 libraries/ = SubResource("AnimationLibrary_bmt0n")
 
-[connection signal="pressed" from="LifeUpButton" to="LifeChangeSound" method="play"]
 [connection signal="pressed" from="LifeUpButton" to="LifeDisplay/LifeDisplay" method="_on_life_up"]
-[connection signal="pressed" from="LifeDownButton" to="LifeChangeSound" method="play"]
+[connection signal="pressed" from="LifeUpButton" to="LifeChangeSound" method="play"]
 [connection signal="pressed" from="LifeDownButton" to="LifeDisplay/LifeDisplay" method="_on_life_down"]
+[connection signal="pressed" from="LifeDownButton" to="LifeChangeSound" method="play"]
 [connection signal="timeout" from="AniCooldownTimer" to="LifeDisplay/LifeDisplay" method="_on_ani_cooldown_finished"]

@@ -36,6 +36,7 @@
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="30_aot2p"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="31_jpn7p"]
 [ext_resource type="Script" uid="uid://bspetuap5iapy" path="res://script/multiplayer/bad_level_detect.gd" id="32_6r670"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="36_dbsph"]
 [ext_resource type="Script" uid="uid://c0ylfnnmis2rw" path="res://script/edit/life_display.gd" id="36_k3g0h"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="37_dbsph"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="38_yf3j4"]
@@ -331,6 +332,20 @@ offset_left = -200.0
 offset_top = -192.0
 grow_horizontal = 0
 grow_vertical = 2
+
+[node name="UiMarginContainer" parent="GameRoomSize/LifeSet" unique_id=360521915 instance=ExtResource("30_aot2p")]
+custom_minimum_size = Vector2(200, 192)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="UiPanel" parent="GameRoomSize/LifeSet/UiMarginContainer" unique_id=1563157272 instance=ExtResource("36_dbsph")]
+layout_mode = 2
 
 [node name="LifeDisplay" type="Control" parent="GameRoomSize/LifeSet" unique_id=1217583463]
 layout_mode = 1
