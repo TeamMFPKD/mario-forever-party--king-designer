@@ -424,8 +424,8 @@ func get_ready(p_id: int, is_ready: bool) -> void:
 		if p.id == p_id:
 			p.is_ready_to_start = is_ready
 			if is_ready:
-				print("玩家 ", p.name, " 已就绪")
+				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 已就绪")
 			else:
-				print("玩家 ", p.name, " 未就绪")
+				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 未就绪")
 			sync_players_list.rpc(players)
 			break
