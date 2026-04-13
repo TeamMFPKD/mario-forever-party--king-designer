@@ -24,8 +24,8 @@ func _ready() -> void:
 func _on_body_entered(body : Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
-	if body.has_method("enter_pipe"):
-		body.enter_pipe()
+	#if body.has_method("enter_pipe"):
+	#	body.enter_pipe()
 	var direction
 	match clear_pipe_set.direction:
 		ClearPipeSet.Direction.LEFT:
