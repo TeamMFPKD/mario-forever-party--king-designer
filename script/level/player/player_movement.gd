@@ -225,7 +225,6 @@ func exit_pipe() -> void:
 	is_in_pipe = false
 
 func pipe_movement() -> void:
-	# Todo 出水管检测
 	var moving_speed : float = 4.0
 	match pipe_moving_dir:
 		PipeMoveDirection.LEFT:

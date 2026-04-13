@@ -143,20 +143,20 @@ func pipe_detect(results : Array[Node2D]) -> void:
 			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
-				if not player.is_on_wall() or not Input.is_action_pressed("move_left"):
-					continue
+				if not player.is_on_wall() or not player.is_on_floor() or not Input.is_action_pressed("move_left"):
+					break
 				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.LEFT)
 			ClearPipeEntrance.Direction.RIGHT:
-				if not player.is_on_wall() or not Input.is_action_pressed("move_right"):
-					continue
+				if not player.is_on_wall() or not player.is_on_floor() or not Input.is_action_pressed("move_right"):
+					break
 				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.RIGHT)
 			ClearPipeEntrance.Direction.UP:
 				if not player.is_on_ceiling() or not Input.is_action_pressed("move_up"):
-					continue
+					break
 				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.UP)
 			ClearPipeEntrance.Direction.DOWN:
 				if not player.is_on_floor() or not Input.is_action_pressed("move_down"):
-					continue
+					break
 				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.DOWN)
 		player.position = clear_pipe_entrance.turning_area.global_position
 
