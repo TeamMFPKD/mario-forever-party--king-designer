@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://jupmf5uffo3k"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_tq8p4"]
-[ext_resource type="PackedScene" uid="uid://briopcudjttn5" path="res://object/level/facility/pipe/pipe_horizontal_right.tscn" id="2_h7nf8"]
+[ext_resource type="PackedScene" uid="uid://briopcudjttn5" path="res://object/level/facility/pipe/normal_pipe/pipe_horizontal_right.tscn" id="2_h7nf8"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="3_yoysd"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_ki5qe"]
 

@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://8shrau4ethrp"]
+
+[ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="1_a0jae"]
+[ext_resource type="Script" uid="uid://cqvyerhywtoal" path="res://script/level/facility/pipe/clear_pipe_set.gd" id="2_svg6e"]
+[ext_resource type="Script" uid="uid://d2hxeqqn1rqj0" path="res://script/level/facility/pipe/clear_pipe_turning_area_2d.gd" id="3_jmfpk"]
+[ext_resource type="PackedScene" uid="uid://rpfvm21evybq" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_entrance.tscn" id="4_r8wvf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svg6e"]
+atlas = ExtResource("1_a0jae")
+region = Rect2(0, 64, 32, 62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jmfpk"]
+size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_svg6e"]
+size = Vector2(24, 24)
+
+[node name="ClearPipeLeft" type="StaticBody2D" unique_id=197221430]
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1583569313]
+z_index = 11
+texture = SubResource("AtlasTexture_svg6e")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=458225614]
+shape = SubResource("RectangleShape2D_jmfpk")
+
+[node name="PipeDirectionSet" type="Node" parent="." unique_id=1284212542]
+script = ExtResource("2_svg6e")
+
+[node name="ClearPipeTurningArea2D" type="Area2D" parent="." unique_id=778686657]
+collision_layer = 64
+collision_mask = 0
+script = ExtResource("3_jmfpk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClearPipeTurningArea2D" unique_id=759924695]
+shape = SubResource("RectangleShape2D_svg6e")
+debug_color = Color(0.5019608, 0.5019608, 0.5019608, 0.41960785)
+
+[node name="ClearPipeEntrance" parent="." unique_id=1594576635 instance=ExtResource("4_r8wvf")]
+position = Vector2(-24, 16)
+entrance_direction = 1

@@ -3,6 +3,7 @@ extends Node
 class_name PlayerMovement
 
 signal play_sound_jump
+signal play_sound_pipe
 
 @export var player : CharacterBody2D
 @export var player_suit : PlayerSuit
@@ -46,6 +47,18 @@ var jumpable_timer : int
 
 var crouch : bool
 
+var is_in_transport : bool = false
+
+var is_in_pipe : bool = false
+
+enum PipeMoveDirection {
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+}
+var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.LEFT
+
 # 狼跳
 var langtiao : bool
 var langtiao_time : int = 10
@@ -64,6 +77,9 @@ func _physics_process(delta):
 	move_fire = Input.is_action_pressed("move_fire")
 	move_jump = Input.is_action_pressed("move_jump")
 	
+	if transport_check():
+		return
+
 	# 水平运动
 	target_speed = 0.0
 	
@@ -177,3 +193,45 @@ func update_hit_box() -> void:
 		collision_shape.position = Vector2(0, -16.5)
 		cast.shape = shape_super
 		cast.position = Vector2(0, -16.5)
+
+func transport_check() -> bool:
+	is_in_transport = pipe_check()
+	return is_in_transport
+
+func pipe_check() -> bool:
+	if is_in_pipe:
+		pipe_movement()
+	return is_in_pipe
+
+func enter_pipe(enter_direction : PipeMoveDirection) -> void:
+	pipe_moving_dir = enter_direction
+	is_in_pipe = true
+	var pipe_move_vec : Vector2
+	match enter_direction:
+		PipeMoveDirection.LEFT:
+			pipe_move_vec = Vector2(-1, 0)
+		PipeMoveDirection.RIGHT:
+			pipe_move_vec = Vector2(1, 0)
+		PipeMoveDirection.UP:
+			pipe_move_vec = Vector2(0, -1)
+		PipeMoveDirection.DOWN:
+			pipe_move_vec = Vector2(0, 1)
+	player.position = player.position + pipe_move_vec * 16
+	emit_signal("play_sound_pipe")
+	# Todo: enter smoke particle effect
+
+func exit_pipe() -> void:
+	is_in_pipe = false
+
+func pipe_movement() -> void:
+	# Todo 出水管检测
+	var moving_speed : float = 4.0
+	match pipe_moving_dir:
+		PipeMoveDirection.LEFT:
+			player.position = player.position + Vector2(-moving_speed, 0)
+		PipeMoveDirection.RIGHT:
+			player.position = player.position + Vector2(moving_speed, 0)
+		PipeMoveDirection.UP:
+			player.position = player.position + Vector2(0, -moving_speed)
+		PipeMoveDirection.DOWN:
+			player.position = player.position + Vector2(0, moving_speed)
