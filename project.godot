@@ -164,6 +164,7 @@ locale/translations=PackedStringArray("res://mfmp_translation.en.translation", "
 2d_physics/layer_4="Player"
 2d_physics/layer_5="Enemy"
 2d_physics/layer_6="Bonus"
+2d_physics/layer_7="Pipe Entrance"
 2d_physics/layer_8="Bonus Block"
 2d_physics/layer_9="Switch"
 

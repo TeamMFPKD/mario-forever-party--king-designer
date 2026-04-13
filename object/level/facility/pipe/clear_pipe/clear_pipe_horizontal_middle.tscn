@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://by7did16ky5dm"]
+
+[ext_resource type="PackedScene" uid="uid://8shrau4ethrp" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_left.tscn" id="1_p8oj4"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p8oj4"]
+load_path = "res://.godot/imported/pipe_with_corner_transparent.png-f3ed163ff617e8a67499d22ab940ac6f.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ouiv5"]
+atlas = SubResource("CompressedTexture2D_p8oj4")
+region = Rect2(48, 64, 32, 62)
+
+[node name="ClearPipeHorizontalMiddle" unique_id=197221430 instance=ExtResource("1_p8oj4")]
+
+[node name="Sprite2D" parent="." index="0" unique_id=1583569313]
+texture = SubResource("AtlasTexture_ouiv5")
+
+[node name="PipeDirectionSet" parent="." index="2" unique_id=1284212542]
+direction = 1
+
+[node name="ClearPipeEntrance" parent="." index="4" unique_id=1594576635]
+process_mode = 4
+visible = false

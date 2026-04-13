@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://b7yevycwkatdf"]
+
+[ext_resource type="PackedScene" uid="uid://8shrau4ethrp" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_left.tscn" id="1_bcedk"]
+[ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="2_lodui"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tjhct"]
+atlas = ExtResource("2_lodui")
+region = Rect2(192, 64, 64, 62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fphae"]
+size = Vector2(64, 64)
+
+[node name="ClearPipeLeftUp" unique_id=197221430 instance=ExtResource("1_bcedk")]
+
+[node name="Sprite2D" parent="." index="0" unique_id=1583569313]
+texture = SubResource("AtlasTexture_tjhct")
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=458225614]
+shape = SubResource("RectangleShape2D_fphae")
+
+[node name="PipeDirectionSet" parent="." index="2" unique_id=1284212542]
+direction = 6
+
+[node name="ClearPipeEntrance" parent="." index="4" unique_id=1594576635]
+process_mode = 4
+visible = false

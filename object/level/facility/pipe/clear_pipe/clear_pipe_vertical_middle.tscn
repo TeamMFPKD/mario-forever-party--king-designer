@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://bkuo1gg6ye6n0"]
+
+[ext_resource type="PackedScene" uid="uid://5y24ims2nif7" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_up.tscn" id="1_5j8hh"]
+[ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="2_v0qfe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gsxcf"]
+atlas = ExtResource("2_v0qfe")
+region = Rect2(0, 45, 64, 19)
+
+[node name="ClearPipeverticalMiddle" unique_id=197221430 instance=ExtResource("1_5j8hh")]
+
+[node name="Sprite2D" parent="." index="0" unique_id=1583569313]
+position = Vector2(0, -8)
+texture = SubResource("AtlasTexture_gsxcf")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." index="1" unique_id=1029179117]
+position = Vector2(0, 8)
+texture = SubResource("AtlasTexture_gsxcf")
+
+[node name="PipeDirectionSet" parent="." index="3" unique_id=1284212542]
+direction = 4
+
+[node name="ClearPipeEntrance" parent="." index="5" unique_id=1594576635]
+process_mode = 4
+visible = false

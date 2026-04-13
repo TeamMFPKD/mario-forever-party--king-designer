@@ -113,6 +113,10 @@ func determine_state() -> String:
 			is_appearing = false
 		return "appear"
 
+	# 检查是否在水管中
+	if player_movement.is_in_pipe:
+		return "jump"
+		
 	# 检查是否在游泳状态
 	if is_in_water():
 		return "swim"

@@ -13,6 +13,15 @@ var starman : bool
 func _physics_process(_delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
 	
+	clear_pipe_turning_detect(results)
+
+	# 检测水管口（入口和出口）
+	pipe_detect(results)
+
+	# 传送时不处理交互
+	if player_movement.is_in_transport:
+		return
+
 	# 获得道具
 	bonus_detect(results)
 
@@ -122,3 +131,74 @@ func block_hit_detect(results : Array[Node2D]) -> void:
 		if block_hit_node.hidden and player.is_on_wall():
 			player_movement.speed_y = 0.0
 		block_hit_node.on_block_hit(player)
+
+func pipe_detect(results : Array[Node2D]) -> void:
+	for result in results:
+		if not result is ClearPipeEntrance:
+			continue
+		var clear_pipe_entrance = result as ClearPipeEntrance
+		if player_movement.is_in_pipe and not clear_pipe_entrance.has_meta("overlapped_with_player"):
+			player_movement.exit_pipe()
+			player.position = clear_pipe_entrance.global_position
+			return
+		match clear_pipe_entrance.entrance_direction:
+			ClearPipeEntrance.Direction.LEFT:
+				if not player.is_on_wall() or not Input.is_action_pressed("move_left"):
+					continue
+				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.LEFT)
+			ClearPipeEntrance.Direction.RIGHT:
+				if not player.is_on_wall() or not Input.is_action_pressed("move_right"):
+					continue
+				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.RIGHT)
+			ClearPipeEntrance.Direction.UP:
+				if not player.is_on_ceiling() or not Input.is_action_pressed("move_up"):
+					continue
+				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.UP)
+			ClearPipeEntrance.Direction.DOWN:
+				if not player.is_on_floor() or not Input.is_action_pressed("move_down"):
+					continue
+				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.DOWN)
+		player.position = clear_pipe_entrance.turning_area.global_position
+
+func clear_pipe_turning_detect(results : Array[Node2D]) -> void:
+	for result in results:
+		if not result is ClearPipeTurningArea2D:
+			continue
+		var clear_pipe_turning = result as ClearPipeTurningArea2D
+		if player_movement.is_in_pipe and not clear_pipe_turning.has_meta("overlapped_with_player"):
+			player.position.x = move_toward(player.position.x, clear_pipe_turning.global_position.x, 8.0)
+			player.position.y = move_toward(player.position.y, clear_pipe_turning.global_position.y, 8.0)
+			clear_pipe_turning.set_meta("overlapped_with_player", true)
+		match clear_pipe_turning.direction:
+			ClearPipeSet.Direction.LEFT:
+				if player_movement.pipe_moving_dir != PlayerMovement.PipeMoveDirection.LEFT:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
+			ClearPipeSet.Direction.RIGHT:
+				if player_movement.pipe_moving_dir != PlayerMovement.PipeMoveDirection.RIGHT:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
+			ClearPipeSet.Direction.UP:
+				if player_movement.pipe_moving_dir != PlayerMovement.PipeMoveDirection.UP:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
+			ClearPipeSet.Direction.DOWN:
+				if player_movement.pipe_moving_dir != PlayerMovement.PipeMoveDirection.DOWN:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
+			ClearPipeSet.Direction.LEFT_UP:
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.RIGHT:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.DOWN:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
+			ClearPipeSet.Direction.LEFT_DOWN:
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.RIGHT:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
+			ClearPipeSet.Direction.RIGHT_UP:
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.LEFT:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.DOWN:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
+			ClearPipeSet.Direction.RIGHT_DOWN:
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.LEFT:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
+				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
+					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
