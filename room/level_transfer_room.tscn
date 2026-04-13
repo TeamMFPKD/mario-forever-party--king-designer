@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://d32afrnh4ybhe" path="res://script/multiplayer/level_sender_node.gd" id="3_1lisc"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_1m5ex"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_4tcn6"]
-[ext_resource type="Script" uid="uid://3kcdlygevs20" path="res://script/multiplayer/level_receiver_node.gd" id="4_xgwxn"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_f0tgy"]
 [ext_resource type="Script" uid="uid://d2gdfdrdu0t5e" path="res://script/multiplayer/lets_play_together.gd" id="5_u7vct"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="6_4tcn6"]
@@ -31,9 +30,6 @@ metadata/_edit_lock_ = true
 [node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_hyiui")]
 play = true
 sound_effect = true
-
-[node name="LevelReceiverNode" type="Node" parent="." unique_id=2063183727]
-script = ExtResource("4_xgwxn")
 
 [node name="LevelSenderNode" type="Node" parent="." unique_id=1828939401]
 script = ExtResource("3_1lisc")
