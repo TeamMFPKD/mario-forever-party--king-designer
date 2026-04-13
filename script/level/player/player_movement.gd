@@ -206,6 +206,7 @@ func pipe_check() -> bool:
 func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 	pipe_moving_dir = enter_direction
 	is_in_pipe = true
+	speed_x = 0.0
 	var pipe_move_vec : Vector2
 	match enter_direction:
 		PipeMoveDirection.LEFT:
