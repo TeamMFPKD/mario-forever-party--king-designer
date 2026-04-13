@@ -8,7 +8,7 @@ func _ready() -> void:
 	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST:
 		visible = true
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.TEST:
 		return
 	if not timer:

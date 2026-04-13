@@ -20,6 +20,10 @@ var lives : int = 2:
 
 func _ready() -> void:
 	var fc = func():
+		if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
+			lives = LifeManager.lives
+			_update_life_display()
+			return
 		level_manager = get_tree().get_first_node_in_group("level_manager")
 		lives = level_manager.lives
 		_update_life_display()
