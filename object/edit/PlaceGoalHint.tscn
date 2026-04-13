@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://0qb3h74ek4st"]
+
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_ttdes"]
+[ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/hint_if_there_is_no_goal.gd" id="2_orjoo"]
+
+[sub_resource type="Animation" id="Animation_qeskf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D/UiLabel:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_nh1li"]
+resource_name = "new_animation"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D/UiLabel:self_modulate:a")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_214sl"]
+_data = {
+&"RESET": SubResource("Animation_qeskf"),
+&"new_animation": SubResource("Animation_nh1li")
+}
+
+[node name="PlaceGoalHint" type="Control" unique_id=1948189960]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1465148614]
+
+[node name="UiLabel" parent="Node2D" unique_id=1008498644 instance=ExtResource("1_ttdes")]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -269.5
+offset_top = 96.0
+offset_right = 269.5
+offset_bottom = 63.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0.011764706, 1, 1)
+text = "警告：你还没有放置终点。"
+
+[node name="HintIfThereIsNoGoal" type="Node" parent="." unique_id=972488055 node_paths=PackedStringArray("ani_player", "hint_label")]
+script = ExtResource("2_orjoo")
+ani_player = NodePath("../AnimationPlayer")
+hint_label = NodePath("../Node2D/UiLabel")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=72868605]
+libraries/ = SubResource("AnimationLibrary_214sl")

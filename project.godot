@@ -89,6 +89,7 @@ level_path_set=""
 game_config=""
 capture_texture_rect=""
 game_room=""
+spawner_goal_gate=""
 
 [input]
 
