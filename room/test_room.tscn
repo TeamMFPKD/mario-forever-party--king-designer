@@ -443,7 +443,8 @@ position = Vector2(4320, 304)
 [node name="ClearPipeverticalMiddle3" parent="." unique_id=1777849355 instance=ExtResource("41_hcvha")]
 position = Vector2(4320, 272)
 
-[node name="Label" type="Label" parent="." unique_id=1668910485]
+[node name="PipeDebugLabel" type="Label" parent="." unique_id=1668910485]
+visible = false
 z_index = 9
 offset_left = 4376.0
 offset_top = 128.0

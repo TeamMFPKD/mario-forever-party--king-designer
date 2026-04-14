@@ -31,6 +31,7 @@
 [ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="27_q82rl"]
 [ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="28_4r5tb"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="29_yslke"]
+[ext_resource type="PackedScene" uid="uid://c0y48bdosmceb" path="res://object/level/dust.tscn" id="30_tqji3"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
@@ -174,6 +175,10 @@ script = ExtResource("28_4r5tb")
 fireball_explode_scene = ExtResource("29_yslke")
 offset = Vector2(0, 12)
 
+[node name="DustEffectCreator" type="Node" parent="." unique_id=1108841225]
+script = ExtResource("28_4r5tb")
+fireball_explode_scene = ExtResource("30_tqji3")
+
 [node name="LevelEdgeLeft" parent="." unique_id=1748762059 instance=ExtResource("24_wtbdq")]
 position = Vector2(-640, 0)
 
@@ -181,9 +186,12 @@ position = Vector2(-640, 0)
 position = Vector2(640, 0)
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
+[connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="PowerDown" method="play"]
+[connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PlayerMediator/PlayerInteraction" method="_on_pipe_exited"]
+[connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PowerDown" method="play"]
+[connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
-[connection signal="play_sound_pipe" from="PlayerMediator/PlayerMovement" to="PowerDown" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
 [connection signal="player_hurt" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_hurt"]

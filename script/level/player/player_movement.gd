@@ -2,9 +2,9 @@ extends Node
 
 class_name PlayerMovement
 
-signal play_sound_jump
-signal play_sound_pipe
+signal pipe_entered
 signal pipe_exited
+signal play_sound_jump
 
 @export var player : CharacterBody2D
 @export var player_suit : PlayerSuit
@@ -219,8 +219,7 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 		PipeMoveDirection.DOWN:
 			pipe_move_vec = Vector2(0, 1)
 	player.position = player.position + pipe_move_vec * 16
-	emit_signal("play_sound_pipe")
-	# Todo: enter smoke particle effect
+	emit_signal("pipe_entered")
 
 func exit_pipe() -> void:
 	is_in_pipe = false

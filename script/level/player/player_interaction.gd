@@ -144,6 +144,12 @@ func pipe_detect(results : Array[Node2D]) -> void:
 			return
 		if player_movement.is_in_pipe:
 			return
+		await get_tree().physics_frame
+		if player_movement.is_in_pipe:
+			return
+		await get_tree().physics_frame
+		if player_movement.is_in_pipe:
+			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
 				if not player.is_on_wall() or not player.is_on_floor() or not Input.is_action_pressed("move_left"):
