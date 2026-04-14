@@ -23,12 +23,14 @@ z_index = 11
 texture = SubResource("AtlasTexture_svg6e")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=458225614]
+z_index = 11
 shape = SubResource("RectangleShape2D_jmfpk")
 
 [node name="PipeDirectionSet" type="Node" parent="." unique_id=1284212542]
 script = ExtResource("2_svg6e")
 
-[node name="ClearPipeTurningArea2D" type="Area2D" parent="." unique_id=778686657]
+[node name="ClearPipeTurningArea2D" type="Area2D" parent="." unique_id=778686657 groups=["clear_pipe_turning_area"]]
+z_index = 11
 collision_layer = 64
 collision_mask = 0
 script = ExtResource("3_jmfpk")

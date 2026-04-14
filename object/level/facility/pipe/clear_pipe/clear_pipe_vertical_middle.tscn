@@ -21,6 +21,9 @@ texture = SubResource("AtlasTexture_gsxcf")
 [node name="PipeDirectionSet" parent="." index="3" unique_id=1284212542]
 direction = 4
 
+[node name="ClearPipeTurningArea2D" parent="." index="4" unique_id=778686657]
+visible = false
+
 [node name="ClearPipeEntrance" parent="." index="5" unique_id=1594576635]
 process_mode = 4
 visible = false
