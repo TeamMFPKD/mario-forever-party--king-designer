@@ -9,6 +9,7 @@ signal player_die
 @export var cast : ShapeCast2D
 
 var starman : bool
+var pipe_get_close_timer : int = 0
 
 func _physics_process(_delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
@@ -141,6 +142,8 @@ func pipe_detect(results : Array[Node2D]) -> void:
 			player_movement.exit_pipe()
 			player.position = clear_pipe_entrance.global_position
 			return
+		if player_movement.is_in_pipe:
+			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
 				if not player.is_on_wall() or not player.is_on_floor() or not Input.is_action_pressed("move_left"):
@@ -166,9 +169,16 @@ func clear_pipe_turning_detect(results : Array[Node2D]) -> void:
 			continue
 		var clear_pipe_turning = result as ClearPipeTurningArea2D
 		if player_movement.is_in_pipe and not clear_pipe_turning.has_meta("overlapped_with_player"):
-			player.position.x = move_toward(player.position.x, clear_pipe_turning.global_position.x, 8.0)
-			player.position.y = move_toward(player.position.y, clear_pipe_turning.global_position.y, 8.0)
-			clear_pipe_turning.set_meta("overlapped_with_player", true)
+			pipe_get_close_timer += 1
+			if pipe_get_close_timer < 4:
+				player.position.x = move_toward(player.position.x, clear_pipe_turning.global_position.x, 16.0)
+				player.position.y = move_toward(player.position.y, clear_pipe_turning.global_position.y, 16.0)
+				clear_pipe_turning.set_meta("overlapped_with_player", true)
+			else:
+				pipe_get_close_timer = 0
+				if clear_pipe_turning.has_meta("overlapped_with_player"):
+					clear_pipe_turning.remove_meta("overlapped_with_player")
+				
 		match clear_pipe_turning.direction:
 			ClearPipeSet.Direction.LEFT:
 				if player_movement.pipe_moving_dir != PlayerMovement.PipeMoveDirection.LEFT:
@@ -202,3 +212,6 @@ func clear_pipe_turning_detect(results : Array[Node2D]) -> void:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
 				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
+
+func _on_pipe_exited() -> void:
+	pipe_get_close_timer = 0

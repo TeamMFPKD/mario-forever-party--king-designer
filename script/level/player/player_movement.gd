@@ -4,6 +4,7 @@ class_name PlayerMovement
 
 signal play_sound_jump
 signal play_sound_pipe
+signal pipe_exited
 
 @export var player : CharacterBody2D
 @export var player_suit : PlayerSuit
@@ -223,6 +224,11 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 
 func exit_pipe() -> void:
 	is_in_pipe = false
+	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning in turnings:
+		if turning.has_meta("overlapped_with_player"):
+			turning.remove_meta("overlapped_with_player")
+	emit_signal("pipe_exited")
 
 func pipe_movement() -> void:
 	var moving_speed : float = 4.0

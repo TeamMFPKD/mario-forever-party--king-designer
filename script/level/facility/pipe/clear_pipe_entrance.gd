@@ -20,6 +20,8 @@ func _ready() -> void:
 	clear_pipe_set = get_node(path_to_clear_pipe_set)
 	body_entered.connect(_on_body_entered)
 	turning_area = get_node(path_to_turning)
+	if process_mode == ProcessMode.PROCESS_MODE_DISABLED or not visible:
+		queue_free()
 
 func _on_body_entered(body : Node2D) -> void:
 	if not body.is_in_group("player"):
