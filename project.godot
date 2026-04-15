@@ -15,6 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MF: MP"
+config/version="v20260415_1906"
 run/main_scene="uid://dcqf1c3m14b1f"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(1, 1, 1, 1)
@@ -53,6 +54,10 @@ mouse_cursor/custom_image_hotspot=Vector2(25, 25)
 [dotnet]
 
 project/assembly_name="Mario Forever Party- King Designer"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/auto_version/plugin.cfg")
 
 [file_customization]
 
