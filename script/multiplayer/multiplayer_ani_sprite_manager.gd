@@ -47,6 +47,6 @@ func _physics_process(_delta: float) -> void:
 	multiplayer_manager.send_ani_sprite_data.rpc(
 		multiplayer_manager.player.id, multiplayer_manager.current_level_count, 
 		local_ani.global_position, player_suit.suit, player_suit.power, local_ani.animation, local_ani.frame, local_ani.flip_h,
-		player_hurt_and_die.is_dead
+		player_hurt_and_die.is_dead, local_ani.scale
 		)
 	#print("Player ", multiplayer_manager.player.name, " send ani sprite data 终了")
