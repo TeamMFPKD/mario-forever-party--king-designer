@@ -41,6 +41,15 @@
 [ext_resource type="Script" uid="uid://cofxhxjig8glj" path="res://script/option/resolution_button.gd" id="30_01vp3"]
 [ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://script/option/mobile_layout_set.gd" id="31_n7yan"]
 
+[sub_resource type="GDScript" id="GDScript_1jeef"]
+script/source = "extends Label
+
+func _ready() -> void:
+	var version = ProjectSettings.get_setting(\"application/config/version\")
+	text = version
+	push_error(\"[Game Version] \", version)
+"
+
 [node name="Title" type="Node2D" unique_id=1624875014]
 
 [node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=960181253]
@@ -1081,6 +1090,31 @@ custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
+
+[node name="AutoVersionMarginContainer" parent="GameRoomSize" unique_id=1579522722 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="AutoVersionTestLabel" parent="GameRoomSize/AutoVersionMarginContainer" unique_id=2083437424 instance=ExtResource("5_qon3s")]
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "vYYYYMMDD_AABB"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = SubResource("GDScript_1jeef")
 
 [node name="BGMStartToPlayTimer" type="Timer" parent="." unique_id=317060978]
 wait_time = 0.3
