@@ -10,7 +10,7 @@ region = Rect2(0, 45, 64, 19)
 [node name="ClearPipeverticalMiddle" unique_id=197221430 instance=ExtResource("1_5j8hh")]
 
 [node name="Sprite2D" parent="." index="0" unique_id=1583569313]
-position = Vector2(0, -8)
+position = Vector2(0, -6)
 texture = SubResource("AtlasTexture_gsxcf")
 
 [node name="Sprite2D2" type="Sprite2D" parent="." index="1" unique_id=1029179117]

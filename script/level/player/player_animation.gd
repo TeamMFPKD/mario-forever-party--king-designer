@@ -152,7 +152,13 @@ func determine_state() -> String:
 	return "idle"
 
 func determine_direction() -> int:
-	# 根据水平速度确定方向
+	if player_movement.is_in_pipe:
+		match player_movement.pipe_moving_dir:
+			PlayerMovement.PipeMoveDirection.LEFT:
+				return -1
+			PlayerMovement.PipeMoveDirection.RIGHT:
+				return 1
+		# 根据水平速度确定方向
 	if player_movement.speed_x > 0:
 		return 1
 	elif player_movement.speed_x < 0:

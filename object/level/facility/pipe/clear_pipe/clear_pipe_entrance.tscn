@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bk457do0qphkp" path="res://script/level/facility/pipe/clear_pipe_entrance.gd" id="1_ewcyj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6gyye"]
-size = Vector2(24, 24)
+size = Vector2(12, 12)
 
 [node name="ClearPipeEntrance" type="Area2D" unique_id=1594576635]
 collision_layer = 64
