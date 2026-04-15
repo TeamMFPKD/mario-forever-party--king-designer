@@ -134,6 +134,8 @@ func block_hit_detect(results : Array[Node2D]) -> void:
 		block_hit_node.on_block_hit(player)
 
 func pipe_detect(results : Array[Node2D]) -> void:
+	if player_movement.out_pipe_cooldown > 0:
+		return
 	for result in results:
 		if not result is ClearPipeEntrance:
 			continue
@@ -141,14 +143,6 @@ func pipe_detect(results : Array[Node2D]) -> void:
 		if player_movement.is_in_pipe and not clear_pipe_entrance.has_meta("overlapped_with_player"):
 			player_movement.exit_pipe()
 			player.position = clear_pipe_entrance.global_position
-			return
-		if player_movement.is_in_pipe:
-			return
-		await get_tree().physics_frame
-		if player_movement.is_in_pipe:
-			return
-		await get_tree().physics_frame
-		if player_movement.is_in_pipe:
 			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
