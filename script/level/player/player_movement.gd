@@ -51,6 +51,7 @@ var crouch : bool
 var is_in_transport : bool = false
 
 var is_in_pipe : bool = false
+var out_pipe_cooldown : int = 0
 
 enum PipeMoveDirection {
 	LEFT,
@@ -133,6 +134,9 @@ func _physics_process(delta):
 		if jumpable_timer > jumpable_time:
 			jumpable = false
 			jumpable_timer = 0
+	if out_pipe_cooldown > 0:
+		out_pipe_cooldown -= 1
+		jumpable = false
 	if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
 		speed_y = -jump_speed
 		if abs(speed_x) > max_speed_x * 0.3:
@@ -223,6 +227,7 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 
 func exit_pipe() -> void:
 	is_in_pipe = false
+	out_pipe_cooldown = 8
 	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
 	for turning in turnings:
 		if turning.has_meta("overlapped_with_player"):
