@@ -91,6 +91,7 @@ capture_texture_rect=""
 game_room=""
 spawner_goal_gate=""
 clear_pipe_turning_area=""
+clear_pipe_entrance=""
 
 [input]
 

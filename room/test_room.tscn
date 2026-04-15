@@ -51,7 +51,6 @@ script/source = "extends Label
 var player_movement: PlayerMovement
 var player_interaction: Node
 
-# 调试变量，避免每帧都打印
 var last_pipe_state := false
 var last_pipe_direction := \"\"
 var last_position := Vector2.ZERO
@@ -59,7 +58,6 @@ var last_pipe_timer := 0
 var last_transport_state := false
 var frame_count := 0
 
-# 管道转向区域检测相关
 var last_turning_area_count := 0
 var last_overlapped_turning_areas := []
 
@@ -68,7 +66,6 @@ func _ready() -> void:
 	if player:
 		player_movement = player.get_meta(\"player_movement\")
 		player_interaction = player.get_meta(\"player_interaction\")
-		# 连接管道退出信号
 		if player_movement.has_signal(\"pipe_exited\"):
 			player_movement.pipe_exited.connect(_on_pipe_exited)
 		print(\"[管道调试] 初始化完成，玩家: \", player.name)
@@ -77,11 +74,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	frame_count += 1
-	
-	# 更新显示文本
 	_update_display_text()
-	
-	# 每5帧检测一次状态变化并打印调试信息
 	if frame_count % 5 == 0:
 		_debug_pipe_state_changes()
 		_debug_turning_areas()
@@ -90,7 +83,7 @@ func _update_display_text() -> void:
 	if not player_movement or not player_interaction:
 		text = \"管道调试标签\\n未找到玩家组件\"
 		return
-	
+
 	text = \"=== 管道调试信息 ===\\n\"
 	text += \"帧数: %d\\n\" % frame_count
 	text += \"位置: (%.1f, %.1f)\\n\" % [player_movement.player.position.x, player_movement.player.position.y]
@@ -100,28 +93,31 @@ func _update_display_text() -> void:
 		player_movement.move_left, player_movement.move_right,
 		player_movement.move_up, player_movement.move_down
 	]
-	
+
 	text += \"\\n=== 管道状态 ===\\n\"
 	text += \"在管道中: %s\\n\" % player_movement.is_in_pipe
 	text += \"在传送中: %s\\n\" % player_movement.is_in_transport
 	text += \"管道方向: %s\\n\" % _get_pipe_direction_name(player_movement.pipe_moving_dir)
 	text += \"pipe_get_close_timer: %d\\n\" % player_interaction.pipe_get_close_timer
-	
-	# 检测附近的转向区域
+	text += \"对齐标志: %s\\n\" % player_interaction.is_origin_pipe_dir_set
+	if player_interaction.is_origin_pipe_dir_set:
+		text += \"原始方向: %s\\n\" % _get_pipe_direction_name(player_interaction.origin_player_pipe_dir)
+
+	# 转向区域信息
 	var turning_areas = get_tree().get_nodes_in_group(\"clear_pipe_turning\")
-	var nearby_turning_areas = []
+	var nearby = []
 	for area in turning_areas:
 		if area.global_position.distance_to(player_movement.player.position) < 100.0:
-			nearby_turning_areas.append(area)
-	
+			nearby.append(area)
+
 	text += \"\\n=== 转向区域检测 ===\\n\"
-	text += \"附近转向区域: %d个\\n\" % nearby_turning_areas.size()
-	for i in range(nearby_turning_areas.size()):
-		var area = nearby_turning_areas[i]
-		var direction_name = _get_turning_direction_name(area.direction)
-		var overlapped = area.has_meta(\"overlapped_with_player\")
-		text += \"区域%d: %s (重叠:%s) 距离:%.1f\\n\" % [i+1, direction_name, overlapped, area.global_position.distance_to(player_movement.player.position)]
-	
+	text += \"附近转向区域: %d个\\n\" % nearby.size()
+	for i in range(nearby.size()):
+		var area = nearby[i]
+		var dir_name = _get_turning_direction_name(area.direction)
+		var processed = area.has_meta(\"processed\")
+		text += \"区域%d: %s (已处理:%s) 距离:%.1f\\n\" % [i+1, dir_name, processed, area.global_position.distance_to(player_movement.player.position)]
+
 	text += \"\\n=== 其他状态 ===\\n\"
 	text += \"无敌星: %s\\n\" % player_interaction.is_starman()
 	text += \"蹲下: %s\\n\" % player_movement.crouch
@@ -129,16 +125,12 @@ func _update_display_text() -> void:
 
 func _get_pipe_direction_name(dir) -> String:
 	match dir:
-		PlayerMovement.PipeMoveDirection.LEFT:
-			return \"左\"
-		PlayerMovement.PipeMoveDirection.RIGHT:
-			return \"右\"
-		PlayerMovement.PipeMoveDirection.UP:
-			return \"上\"
-		PlayerMovement.PipeMoveDirection.DOWN:
-			return \"下\"
-		_:
-			return \"未知\"
+		PlayerMovement.PipeMoveDirection.LEFT:   return \"左\"
+		PlayerMovement.PipeMoveDirection.RIGHT:  return \"右\"
+		PlayerMovement.PipeMoveDirection.UP:     return \"上\"
+		PlayerMovement.PipeMoveDirection.DOWN:   return \"下\"
+		PlayerMovement.PipeMoveDirection.ALIGN:  return \"对齐中\"
+		_: return \"未知\"
 
 func _get_turning_direction_name(dir) -> String:
 	match dir:
@@ -155,73 +147,62 @@ func _get_turning_direction_name(dir) -> String:
 func _debug_pipe_state_changes() -> void:
 	if not player_movement or not player_interaction:
 		return
-	
-	# 检测管道状态变化
+
 	if player_movement.is_in_pipe != last_pipe_state:
 		print(\"[管道调试] 帧 %d - 管道状态变化: %s -> %s\" % [frame_count, \"在管道中\" if last_pipe_state else \"不在管道\", \"在管道中\" if player_movement.is_in_pipe else \"不在管道\"])
 		last_pipe_state = player_movement.is_in_pipe
-	
-	# 检测传送状态变化
+
 	if player_movement.is_in_transport != last_transport_state:
 		print(\"[管道调试] 帧 %d - 传送状态变化: %s -> %s\" % [frame_count, \"传送中\" if last_transport_state else \"非传送\", \"传送中\" if player_movement.is_in_transport else \"非传送\"])
 		last_transport_state = player_movement.is_in_transport
-	
-	# 检测管道方向变化
-	var current_direction = _get_pipe_direction_name(player_movement.pipe_moving_dir)
-	if current_direction != last_pipe_direction:
-		print(\"[管道调试] 帧 %d - 管道方向变化: %s -> %s\" % [frame_count, last_pipe_direction, current_direction])
-		last_pipe_direction = current_direction
-	
-	# 检测pipe_get_close_timer变化
+
+	var cur_dir = _get_pipe_direction_name(player_movement.pipe_moving_dir)
+	if cur_dir != last_pipe_direction:
+		print(\"[管道调试] 帧 %d - 管道方向变化: %s -> %s\" % [frame_count, last_pipe_direction, cur_dir])
+		last_pipe_direction = cur_dir
+
 	if player_interaction.pipe_get_close_timer != last_pipe_timer:
 		print(\"[管道调试] 帧 %d - pipe_get_close_timer变化: %d -> %d\" % [frame_count, last_pipe_timer, player_interaction.pipe_get_close_timer])
 		last_pipe_timer = player_interaction.pipe_get_close_timer
-	
-	# 特殊调试：当pipe_get_close_timer在管道中且大于0时
+
 	if player_movement.is_in_pipe and player_interaction.pipe_get_close_timer > 0:
 		print(\"[管道调试] 帧 %d - 管道中timer激活: %d\" % [frame_count, player_interaction.pipe_get_close_timer])
 
 func _debug_turning_areas() -> void:
 	if not player_movement:
 		return
-	
-	var turning_areas = get_tree().get_nodes_in_group(\"clear_pipe_turning\")
-	var current_overlapped = []
-	
-	for area in turning_areas:
+
+	var areas = get_tree().get_nodes_in_group(\"clear_pipe_turning\")
+	var current = []
+	for area in areas:
 		if area.global_position.distance_to(player_movement.player.position) < 50.0:
-			current_overlapped.append({
+			current.append({
 				\"area\": area,
 				\"direction\": _get_turning_direction_name(area.direction),
-				\"overlapped\": area.has_meta(\"overlapped_with_player\"),
+				\"processed\": area.has_meta(\"processed\"),
 				\"distance\": area.global_position.distance_to(player_movement.player.position)
 			})
-	
-	# 检测转向区域数量变化（使用 .size() 替代 len()）
-	if current_overlapped.size() != last_turning_area_count:
-		print(\"[管道调试] 帧 %d - 附近转向区域数量变化: %d -> %d\" % [frame_count, last_turning_area_count, current_overlapped.size()])
-		last_turning_area_count = current_overlapped.size()
-	
-	# 检测重叠状态变化
-	for data in current_overlapped:
-		var was_overlapped = false
-		for old_data in last_overlapped_turning_areas:
-			if old_data[\"area\"] == data[\"area\"] and old_data[\"overlapped\"]:
-				was_overlapped = true
+
+	if current.size() != last_turning_area_count:
+		print(\"[管道调试] 帧 %d - 附近转向区域数量变化: %d -> %d\" % [frame_count, last_turning_area_count, current.size()])
+		last_turning_area_count = current.size()
+
+	for data in current:
+		var was_processed = false
+		for old in last_overlapped_turning_areas:
+			if old[\"area\"] == data[\"area\"] and old[\"processed\"]:
+				was_processed = true
 				break
-		
-		if data[\"overlapped\"] != was_overlapped:
-			print(\"[管道调试] 帧 %d - 转向区域重叠状态变化: %s -> %s (距离:%.1f)\" % [frame_count, \"重叠\" if was_overlapped else \"未重叠\", \"重叠\" if data[\"overlapped\"] else \"未重叠\", data[\"distance\"]])
-	
-	last_overlapped_turning_areas = current_overlapped
+		if data[\"processed\"] != was_processed:
+			print(\"[管道调试] 帧 %d - 区域%s 处理状态变化: %s -> %s (距离:%.1f)\" % [frame_count, data[\"direction\"], \"已处理\" if was_processed else \"未处理\", \"已处理\" if data[\"processed\"] else \"未处理\", data[\"distance\"]])
+
+	last_overlapped_turning_areas = current
 
 func _on_pipe_exited() -> void:
 	print(\"[管道调试] 管道退出信号触发，帧数: %d\" % frame_count)
 	if player_movement:
 		print(\"[管道调试] 退出时位置: (%.1f, %.1f)\" % [player_movement.player.position.x, player_movement.player.position.y])
 		print(\"[管道调试] 退出时方向: %s\" % _get_pipe_direction_name(player_movement.pipe_moving_dir))
-	else:
-		print(\"[管道调试] player_movement 已失效\")
 "
 
 [node name="TestRoom" type="Node2D" unique_id=822465384]
@@ -444,13 +425,14 @@ position = Vector2(4320, 304)
 position = Vector2(4320, 272)
 
 [node name="PipeDebugLabel" type="Label" parent="." unique_id=1668910485]
-visible = false
 z_index = 9
 offset_left = 4376.0
 offset_top = 128.0
 offset_right = 4416.0
 offset_bottom = 151.0
 theme_override_constants/outline_size = 3
+text = "你
+了"
 script = SubResource("GDScript_8ejbx")
 
 [node name="Mushroom2" parent="." unique_id=739166669 instance=ExtResource("17_d7hat")]
