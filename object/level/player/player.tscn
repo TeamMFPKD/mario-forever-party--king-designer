@@ -30,6 +30,8 @@
 [ext_resource type="PackedScene" uid="uid://dv8xpx6li48si" path="res://object/level/facility/level_edge_right.tscn" id="25_741uk"]
 [ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="27_q82rl"]
 [ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="28_4r5tb"]
+[ext_resource type="AudioStream" uid="uid://bfqjgj3r5qoiq" path="res://sound/level/clear_pipe_in.wav" id="28_4thfq"]
+[ext_resource type="AudioStream" uid="uid://6tgb6rw0wpm7" path="res://sound/level/clear_pipe_out.wav" id="29_oqm3a"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="29_yslke"]
 [ext_resource type="PackedScene" uid="uid://c0y48bdosmceb" path="res://object/level/dust.tscn" id="30_tqji3"]
 
@@ -170,6 +172,12 @@ script = ExtResource("18_xbm7l")
 process_mode = 3
 stream = ExtResource("27_q82rl")
 
+[node name="ClearPipeIn" parent="." unique_id=22293381 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("28_4thfq")
+
+[node name="ClearPipeOut" parent="." unique_id=1643086049 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("29_oqm3a")
+
 [node name="ExplodeEffectCreator" type="Node" parent="." unique_id=324919191]
 script = ExtResource("28_4r5tb")
 fireball_explode_scene = ExtResource("29_yslke")
@@ -186,11 +194,11 @@ position = Vector2(-640, 0)
 position = Vector2(640, 0)
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
-[connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="PowerDown" method="play"]
 [connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
+[connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="ClearPipeIn" method="play"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PlayerMediator/PlayerInteraction" method="_on_pipe_exited"]
-[connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PowerDown" method="play"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
+[connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="ClearPipeOut" method="play"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
