@@ -142,9 +142,10 @@ func pipe_detect(results : Array[Node2D]) -> void:
 		if not result is ClearPipeEntrance:
 			continue
 		var clear_pipe_entrance = result as ClearPipeEntrance
-		if player_movement.is_in_pipe and not clear_pipe_entrance.has_meta("overlapped_with_player"):
-			player_movement.exit_pipe()
-			player.position = clear_pipe_entrance.global_position
+		if player_movement.is_in_pipe:
+			if not clear_pipe_entrance.has_meta("overlapped_with_player"):
+				player_movement.exit_pipe()
+				player.position = clear_pipe_entrance.global_position
 			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
@@ -232,3 +233,5 @@ func clear_pipe_turning_detect(results: Array[Node2D]) -> void:
 
 func _on_pipe_exited() -> void:
 	pipe_get_close_timer = 0
+	is_origin_pipe_dir_set = false
+	origin_player_pipe_dir = PlayerMovement.PipeMoveDirection.ALIGN

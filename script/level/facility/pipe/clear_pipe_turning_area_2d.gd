@@ -13,13 +13,4 @@ func _ready() -> void:
 	direction = pipe_set.direction
 	if process_mode == ProcessMode.PROCESS_MODE_DISABLED or not visible:
 		queue_free()
-	#player_movement = get_tree().get_first_node_in_group("player").get_meta("player_movement") as PlayerMovement
-
-func _physics_process(_delta: float) -> void:
-	#if not player_movement.is_in_pipe:
-	#	remove_meta("overlapped_with_player")
-
-	if has_meta("overlapped_with_player"):
-		for i in range(20):
-			await get_tree().physics_frame
-		remove_meta("overlapped_with_player")
+		
