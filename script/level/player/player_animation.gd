@@ -46,8 +46,7 @@ func update_animation():
 	
 	# Pipe Scale
 	var scale_speed : float = 0.1
-	ani.scale.x = move_toward(ani.scale.x, (0.5 if is_in_pipe() else 1.0), scale_speed)
-	ani.scale.y = move_toward(ani.scale.y, (0.5 if is_in_pipe() else 1.0), scale_speed)
+	ani.scale = ani.scale.move_toward(Vector2(0.5, 0.5) if is_in_pipe() else Vector2(1.0, 1.0), scale_speed)
 
 	if new_state != current_state or direction != last_direction:
 		# 保存当前walk动画的进度
