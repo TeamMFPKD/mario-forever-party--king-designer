@@ -5,7 +5,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6gyye"]
 size = Vector2(12, 12)
 
-[node name="ClearPipeEntrance" type="Area2D" unique_id=1594576635]
+[node name="ClearPipeEntrance" type="Area2D" unique_id=1594576635 groups=["clear_pipe_entrance"]]
 collision_layer = 64
 collision_mask = 0
 script = ExtResource("1_ewcyj")

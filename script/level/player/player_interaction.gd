@@ -10,6 +10,8 @@ signal player_die
 
 var starman : bool
 var pipe_get_close_timer : int = 0
+var is_origin_pipe_dir_set : bool = false
+var origin_player_pipe_dir : PlayerMovement.PipeMoveDirection
 
 func _physics_process(_delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
@@ -162,24 +164,36 @@ func pipe_detect(results : Array[Node2D]) -> void:
 					break
 				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.DOWN)
 		player.position = clear_pipe_entrance.turning_area.global_position
+		clear_pipe_entrance.set_meta("overlapped_with_player", true)
 
-func clear_pipe_turning_detect(results : Array[Node2D]) -> void:
+func clear_pipe_turning_detect(results: Array[Node2D]) -> void:
 	for result in results:
 		if not result is ClearPipeTurningArea2D:
 			continue
-		var clear_pipe_turning = result as ClearPipeTurningArea2D
-		if player_movement.is_in_pipe and not clear_pipe_turning.has_meta("overlapped_with_player"):
-			pipe_get_close_timer += 1
-			if pipe_get_close_timer < 4:
-				player.position.x = move_toward(player.position.x, clear_pipe_turning.global_position.x, 16.0)
-				player.position.y = move_toward(player.position.y, clear_pipe_turning.global_position.y, 16.0)
-				clear_pipe_turning.set_meta("overlapped_with_player", true)
-			else:
-				pipe_get_close_timer = 0
-				if clear_pipe_turning.has_meta("overlapped_with_player"):
-					clear_pipe_turning.remove_meta("overlapped_with_player")
-				
-		match clear_pipe_turning.direction:
+		var area = result as ClearPipeTurningArea2D
+
+		# 已经处理过的区域不再重复转向
+		if area.has_meta("processed"):
+			continue
+
+		var target = area.global_position + Vector2(0, 8)
+		var diff = target - player.global_position
+
+		# 如果需要位置对齐
+		if abs(diff.x) > 0.5 or abs(diff.y) > 0.5:
+			if not is_origin_pipe_dir_set:
+				origin_player_pipe_dir = player_movement.pipe_moving_dir
+				is_origin_pipe_dir_set = true
+			player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.ALIGN
+			player.global_position = player.global_position.move_toward(target, 4.0)
+			continue
+
+		# --- 对齐完成，执行转向 ---
+		if is_origin_pipe_dir_set:
+			player_movement.pipe_moving_dir = origin_player_pipe_dir
+			is_origin_pipe_dir_set = false
+
+		match area.direction:
 			ClearPipeSet.Direction.LEFT:
 				if player_movement.pipe_moving_dir != PlayerMovement.PipeMoveDirection.LEFT:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
@@ -195,23 +209,26 @@ func clear_pipe_turning_detect(results : Array[Node2D]) -> void:
 			ClearPipeSet.Direction.LEFT_UP:
 				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.RIGHT:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
-				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.DOWN:
+				elif player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.DOWN:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
 			ClearPipeSet.Direction.LEFT_DOWN:
 				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.RIGHT:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
-				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
+				elif player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
 			ClearPipeSet.Direction.RIGHT_UP:
 				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.LEFT:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
-				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.DOWN:
+				elif player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.DOWN:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
 			ClearPipeSet.Direction.RIGHT_DOWN:
 				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.LEFT:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
-				if player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
+				elif player_movement.pipe_moving_dir == PlayerMovement.PipeMoveDirection.UP:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
+
+		# 标记为已处理，防止再次触发
+		area.set_meta("processed", true)
 
 func _on_pipe_exited() -> void:
 	pipe_get_close_timer = 0

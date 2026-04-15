@@ -58,6 +58,7 @@ enum PipeMoveDirection {
 	RIGHT,
 	UP,
 	DOWN,
+	ALIGN,
 }
 var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.LEFT
 
@@ -227,11 +228,17 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 
 func exit_pipe() -> void:
 	is_in_pipe = false
-	out_pipe_cooldown = 8
+	out_pipe_cooldown = 10
 	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
 	for turning in turnings:
 		if turning.has_meta("overlapped_with_player"):
 			turning.remove_meta("overlapped_with_player")
+		if turning.has_meta("processed"):
+			turning.remove_meta("processed")
+	var entrances = get_tree().get_nodes_in_group("clear_pipe_entrance")
+	for entrance in entrances:
+		if entrance.has_meta("overlapped_with_player"):
+			entrance.remove_meta("overlapped_with_player")
 	emit_signal("pipe_exited")
 
 func pipe_movement() -> void:
