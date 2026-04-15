@@ -44,6 +44,11 @@ func update_animation():
 		ani.visible = true
 		hurt_timer = 0
 	
+	# Pipe Scale
+	var scale_speed : float = 0.1
+	ani.scale.x = move_toward(ani.scale.x, (0.5 if is_in_pipe() else 1.0), scale_speed)
+	ani.scale.y = move_toward(ani.scale.y, (0.5 if is_in_pipe() else 1.0), scale_speed)
+
 	if new_state != current_state or direction != last_direction:
 		# 保存当前walk动画的进度
 		if current_state == "walk" and ani.animation == "walk":
@@ -114,7 +119,7 @@ func determine_state() -> String:
 		return "appear"
 
 	# 检查是否在水管中
-	if player_movement.is_in_pipe:
+	if is_in_pipe():
 		return "jump"
 		
 	# 检查是否在游泳状态
@@ -186,3 +191,6 @@ func _on_player_suit_changed():
 				PlayerSuit.PowerupType.LUI:
 					ani.sprite_frames = player_lui_spritesframe
 	is_appearing = true
+
+func is_in_pipe() -> bool:
+	return player_movement.is_in_pipe

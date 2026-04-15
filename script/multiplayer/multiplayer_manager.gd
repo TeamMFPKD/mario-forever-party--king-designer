@@ -343,7 +343,7 @@ func store_level_results(players) -> void:
 		file.close()
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
-func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool) -> void:
+func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool, scale: Vector2) -> void:
 	#print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 	if current_level_count != current_level:
 		return
@@ -359,6 +359,8 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 				continue
 			# 位置
 			ani.global_position = ani_pos
+			# 缩放
+			ani.scale = scale
 			# 名称
 			var label = ani.get_node("UiLabel") as Label
 			for p in players:
