@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bx5alipsrvqkc" path="res://object/level/facility/platform/platform_fall.tscn" id="2_3pq7h"]
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="2_jxb5n"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_87ata"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_ekd1h"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
 atlas = ExtResource("2_jxb5n")
@@ -21,3 +22,5 @@ texture = SubResource("AtlasTexture_toeyn")
 
 [node name="OffsetMarker" parent="." unique_id=1999695252 instance=ExtResource("4_87ata")]
 position = Vector2(0, -8)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_ekd1h")]

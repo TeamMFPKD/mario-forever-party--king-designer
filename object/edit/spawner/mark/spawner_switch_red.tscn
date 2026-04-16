@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_jgupj"]
 [ext_resource type="PackedScene" uid="uid://bafyiqnptyat8" path="res://object/level/facility/switch/switch_block_red.tscn" id="2_hfwig"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_etxd7"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="4_jgupj"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_aiw0b"]
 load_path = "res://.godot/imported/switch.png-b0d5a5384111f7aa17415b8f5c18545a.ctex"
@@ -20,3 +21,5 @@ metadata/_custom_type_script = "uid://b23emkp2mb16s"
 texture = SubResource("AtlasTexture_kt6na")
 
 [node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("4_etxd7")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("4_jgupj")]

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="2_brui7"]
 [ext_resource type="PackedScene" uid="uid://crh5nm4u6d7he" path="res://object/level/enemy/piranha/piranha_blue_up.tscn" id="2_rvobf"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_vwa30"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_iwjlp"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gp0ro"]
 atlas = ExtResource("2_brui7")
@@ -22,3 +23,5 @@ texture = SubResource("AtlasTexture_gp0ro")
 [node name="OffsetMarker" parent="." unique_id=442567011 instance=ExtResource("3_vwa30")]
 position = Vector2(16, 0)
 gizmo_extents = 8.0
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_iwjlp")]
