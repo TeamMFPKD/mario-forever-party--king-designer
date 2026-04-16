@@ -63,7 +63,6 @@ script = ExtResource("5_typ66")
 fireball_explode_scene = ExtResource("6_g6bpe")
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("7_g6bpe")]
-path_to_basic_movement = NodePath("")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_vgdcu")]
 

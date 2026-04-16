@@ -64,7 +64,6 @@ overlap_turn = false
 path_to_shape_cast = NodePath("")
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("2_x6m6y")]
-path_to_basic_movement = NodePath("")
 
 [node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_jxj7q")]
 bonus_type = 1

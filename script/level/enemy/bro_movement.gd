@@ -5,7 +5,6 @@ signal play_sound_shoot
 @export var path_to_parent : NodePath = ".."
 @export var projectile_scene : PackedScene = preload("uid://3ieotv447ssg")
 @export var solid_area : Area2D
-@export var ani : AnimatedSprite2D
 @export var launch_offset : Vector2 = Vector2(0, 0)
 
 @export var walk_time : int = 50

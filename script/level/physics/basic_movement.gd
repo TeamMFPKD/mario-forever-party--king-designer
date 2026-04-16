@@ -54,22 +54,28 @@ func _ready() -> void:
 		if initially_face_to_player:
 			set_movement_direction()
 	fc.call_deferred()
-	if overlap_turn:
+	if overlap_turn or is_clear_pipe_allowed:
 		shape_cast = get_node_or_null(path_to_shape_cast) as ShapeCast2D
 		if not shape_cast:
-			push_error("BasicMovement: ShapeCast2D not found.")
+			for child in move_object.get_children():
+				if child is ShapeCast2D:
+					shape_cast = child
+					break
+			if not shape_cast:
+				push_error("BasicMovement: ShapeCast2D not found.")
 
 	move_object.set_meta("basic_movement", self)
 
-	if is_clear_pipe_allowed:
-		ani = get_node_or_null(path_to_ani) as AnimatedSprite2D
+	ani = get_node_or_null(path_to_ani) as AnimatedSprite2D
+	if not ani:
+		for child in move_object.get_children():
+			if child is AnimatedSprite2D:
+				ani = child
+				break
 		if not ani:
-			for child in move_object.get_children():
-				if child is AnimatedSprite2D:
-					ani = child
-					break
-			if not ani:
-				push_error("BasicMovement: AnimatedSprite2D not found.")
+			push_error("BasicMovement: AnimatedSprite2D not found.")
+			
+	if is_clear_pipe_allowed:
 		var dusk_creator = dust_creator_scene.instantiate()
 		pipe_entered.connect(dusk_creator.explode)
 		pipe_exited.connect(dusk_creator.explode)

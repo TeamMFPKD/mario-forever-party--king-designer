@@ -74,15 +74,6 @@ jump_speed = -250.0
 overlap_turn = false
 is_clear_pipe_allowed = true
 
-[node name="BasicMovement2" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_05vun")
-initially_face_to_player = false
-speed_x = 0.0
-jump_speed = -250.0
-overlap_turn = false
-is_clear_pipe_allowed = true
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
-
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_k3c7n")]
 collision_mask = 144
 
@@ -93,12 +84,10 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="ShellStatus" type="Node" parent="." unique_id=1050551384]
 script = ExtResource("5_0nlr7")
-path_to_shell_movement = NodePath("../BasicMovement2")
 shell_move_speed_x = 300.0
 
 [node name="ShellInteractionMoving" type="Node" parent="." unique_id=1988555070]
 script = ExtResource("5_05vun")
-path_to_movement = NodePath("../BasicMovement2")
 
 [node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_3a75j")]
 
@@ -109,7 +98,7 @@ stomp_offset = 64.0
 return_stomp_speed_y = false
 
 [node name="InteractionWithCrush" parent="EnemyInteraction" index="6" unique_id=1924136299]
-path_to_basic_movement = NodePath("../../BasicMovement2")
+path_to_basic_movement = NodePath("")
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_3mma3")]
 enable_interaction_with_player = false
@@ -130,7 +119,7 @@ metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
 [connection signal="shell_harded" from="ShellInteractionMoving" to="EnemyDie" method="die"]
 [connection signal="stomped" from="EnemyInteraction/InteractionWithPlayer" to="ShellStatus" method="_on_stomped"]
-[connection signal="bumped" from="EnemyInteraction/InteractionWithBump" to="BasicMovement2" method="_on_bumped"]
+[connection signal="bumped" from="EnemyInteraction/InteractionWithBump" to="BasicMovement" method="_on_bumped"]
 
 [editable path="EnemyInteraction"]
 [editable path="EnemySoundManager"]

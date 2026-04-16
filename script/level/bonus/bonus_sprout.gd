@@ -20,16 +20,35 @@ var initialize : bool = false
 
 func _ready() -> void:
 	bonus = get_node(path_to_bonus)
+	if bonus == null:
+		push_error("Bonus node not found at path: " + str(path_to_bonus))
+		return
+		
 	origin_bonus_collision_layer = bonus.collision_layer
 	origin_bonus_collision_mask = bonus.collision_mask
 	bonus.collision_layer = 0
 	bonus.collision_mask = 0
 	bonus.process_mode = ProcessMode.PROCESS_MODE_DISABLED
+	
 	collision_shape = get_node(path_to_collision_shape)
+	if collision_shape == null:
+		push_error("CollisionShape2D node not found at path: " + str(path_to_collision_shape))
+		return
+		
 	in_wall_cast = get_node("ShapeCast2D")
+	if in_wall_cast == null:
+		push_error("ShapeCast2D node not found")
+		return
+		
+	if collision_shape.shape == null:
+		push_error("CollisionShape2D has no shape assigned")
+		return
+		
 	in_wall_cast.shape = collision_shape.shape
+	
 	basic_movement = get_node(path_to_basic_movement)
-	basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
+	if basic_movement:
+		basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 	if bonus.has_meta("sprout_down"):
 		print("Sprout down")
 		sprout_speed = -sprout_speed
@@ -74,6 +93,9 @@ func _physics_process(delta: float) -> void:
 	
 func is_overlap() -> bool:
 	#print(ShapeCastQuery.shape_query(bonus, in_wall_cast))
+	if not in_wall_cast:
+		push_error("[%s] in_wall_cast is not set" % bonus.name)
+		return false
 	return ShapeCastQuery.shape_query(bonus, in_wall_cast).size() > 0
 
 func collision_recover() -> void:

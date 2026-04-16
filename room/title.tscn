@@ -47,7 +47,7 @@ script/source = "extends Label
 func _ready() -> void:
 	var version = ProjectSettings.get_setting(\"application/config/version\")
 	text = version
-	push_error(\"[Game Version] \", version)
+	print(\"[Game Version] \", version)
 "
 
 [node name="Title" type="Node2D" unique_id=1624875014]

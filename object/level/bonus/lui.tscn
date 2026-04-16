@@ -111,7 +111,6 @@ jump_speed = -350.0
 bonus_type = 3
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_ewvm1")]
-path_to_basic_movement = NodePath("")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_o7m3i")]
 disable_when_out_of_screen = true
