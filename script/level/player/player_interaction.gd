@@ -2,6 +2,7 @@ extends Node
 
 signal player_hurt
 signal player_die
+signal player_pipe_blocked
 
 @export var player_movement : PlayerMovement
 @export var player_suit : PlayerSuit
@@ -12,6 +13,7 @@ var starman : bool
 var pipe_get_close_timer : int = 0
 var is_origin_pipe_dir_set : bool = false
 var origin_player_pipe_dir : PlayerMovement.PipeMoveDirection
+var clear_pipe_blocked_counter : int = 0
 
 func _physics_process(_delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
@@ -145,6 +147,10 @@ func pipe_detect(results : Array[Node2D]) -> void:
 		if player_movement.is_in_pipe:
 			if not clear_pipe_entrance.has_meta("overlapped_with_player"):
 				if clear_pipe_entrance.has_meta("overlapping_with_block"):
+					clear_pipe_blocked_counter += 1
+					if clear_pipe_blocked_counter >= 2:
+						emit_signal("player_pipe_blocked")
+						return
 					match player_movement.pipe_moving_dir:
 						PlayerMovement.PipeMoveDirection.LEFT:
 							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
@@ -248,3 +254,4 @@ func _on_pipe_exited() -> void:
 	pipe_get_close_timer = 0
 	is_origin_pipe_dir_set = false
 	origin_player_pipe_dir = PlayerMovement.PipeMoveDirection.ALIGN
+	clear_pipe_blocked_counter = 0
