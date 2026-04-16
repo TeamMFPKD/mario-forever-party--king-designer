@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b2oexkna3nnjq"]
 
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="1_ruvmp"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_m3yms"]
 [ext_resource type="Script" uid="uid://d12cad01naepl" path="res://script/level/facility/platform/platform_vertical_movement.gd" id="2_ruvmp"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_ug1bi"]
 
@@ -22,12 +23,12 @@ texture = SubResource("AtlasTexture_toeyn")
 shape = SubResource("RectangleShape2D_sbx44")
 one_way_collision = true
 
-[node name="BasicMovement" type="Node" parent="." unique_id=406880572]
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_m3yms")]
 script = ExtResource("2_ruvmp")
+teleport_offset = 32.0
 speed_x = 0.0
 speed_y = -75.0
 gravity = 0.0
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_ug1bi")]
 visible = false

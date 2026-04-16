@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bsg7epf24irr"]
 
 [ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="1_ykyso"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_76d0a"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_76d0a"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="2_rfvjg"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_texes"]
 [ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="3_ujb5a"]
@@ -54,17 +54,17 @@ autoplay = "default"
 shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=1033894689]
-script = ExtResource("2_76d0a")
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_76d0a")]
 speed_x = 0.0
 overlap_turn = false
 path_to_shape_cast = NodePath("")
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+is_clear_pipe_allowed = true
 
 [node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_rfvjg")]
 bonus_type = 2
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("3_ujb5a")]
+path_to_basic_movement = NodePath("")
 
 [node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("3_texes")]
 stream = ExtResource("4_ujb5a")

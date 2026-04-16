@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="1_c5yto"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_7nuxd"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_rqauv"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_7nuxd"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_rqauv"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_cpvcr"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_1i4yp"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_e1311"]
@@ -48,9 +48,8 @@ visible = false
 shape = ExtResource("2_7nuxd")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_rqauv")
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("3_rqauv")]
+is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_7nuxd")]
 
@@ -63,6 +62,9 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="InteractionWithPlayer" parent="EnemyInteraction" index="0" unique_id=707962705]
 stompable = false
+
+[node name="InteractionWithCrush" parent="EnemyInteraction" index="6" unique_id=1924136299]
+path_to_basic_movement = NodePath("")
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_e1311")]
 dead_scene_stomp = ExtResource("7_2rbm7")

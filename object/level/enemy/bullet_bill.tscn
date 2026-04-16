@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bak1mo1icnsxi"]
 
 [ext_resource type="Texture2D" uid="uid://btt8w12nb3sf7" path="res://sprite/enemy/bullet_bill.png" id="1_uat7q"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_qiu1r"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_m4wol"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_am7a5"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_txint"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_p50n5"]
@@ -41,12 +41,10 @@ autoplay = "default"
 shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.6747229, 0.533051, 0.5441489, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_qiu1r")
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_m4wol")]
 speed_x = 200.0
 gravity = 0.0
 overlap_turn = false
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_am7a5")]
 visible = false
@@ -67,6 +65,9 @@ immune_to_beetroot = true
 
 [node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
 is_bumpable = false
+
+[node name="InteractionWithCrush" parent="EnemyInteraction" index="6" unique_id=1924136299]
+path_to_basic_movement = NodePath("")
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_d8xrg")]
 

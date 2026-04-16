@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="1_rk7yl"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_h4rsw"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_rk7yl"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_h4rsw"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_qtu74"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_qtu74"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="5_5kxqh"]
 [ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="5_24bk2"]
@@ -38,16 +38,16 @@ autoplay = "default"
 shape = ExtResource("2_h4rsw")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_rk7yl")
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("3_qtu74")]
 overlap_turn = false
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_h4rsw")]
 
 [node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("4_qtu74")]
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_24bk2")]
+path_to_basic_movement = NodePath("")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_5kxqh")]
 

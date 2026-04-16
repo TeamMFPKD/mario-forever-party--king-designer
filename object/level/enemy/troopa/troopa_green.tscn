@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="1_o6bmg"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_leciv"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_myf7u"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_2e8lh"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_leciv"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_8sxvu"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_l6s0a"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_oenqx"]
@@ -55,9 +55,8 @@ visible = false
 shape = ExtResource("2_leciv")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_myf7u")
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("3_leciv")]
+is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_2e8lh")]
 
@@ -67,6 +66,9 @@ _animated_sprite2d_path = NodePath("../AnimatedSprite2D")
 metadata/_custom_type_script = "uid://chvbcq7uttlml"
 
 [node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_l6s0a")]
+
+[node name="InteractionWithCrush" parent="EnemyInteraction" index="6" unique_id=1924136299]
+path_to_basic_movement = NodePath("")
 
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_oenqx")]
 dead_texture_override = SubResource("AtlasTexture_7go61")
