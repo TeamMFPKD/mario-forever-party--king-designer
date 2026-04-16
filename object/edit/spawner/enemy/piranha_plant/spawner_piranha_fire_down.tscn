@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b7qqcj3mgwcl6" path="res://object/level/enemy/piranha/piranha_fire_down.tscn" id="2_281rt"]
 [ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="2_inbu3"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_8f1ok"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_nbqla"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nar3m"]
 atlas = ExtResource("2_inbu3")
@@ -24,3 +25,5 @@ flip_v = true
 [node name="OffsetMarker" parent="." unique_id=1626985841 instance=ExtResource("3_8f1ok")]
 position = Vector2(16, 0)
 gizmo_extents = 8.0
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_nbqla")]

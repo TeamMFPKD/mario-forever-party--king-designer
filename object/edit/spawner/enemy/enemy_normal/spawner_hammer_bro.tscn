@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bq8cp4ab4udo7" path="res://sprite/enemy/hammer_bro.png" id="2_1c0jl"]
 [ext_resource type="PackedScene" uid="uid://m4egjldduflh" path="res://object/level/enemy/bro_hammer.tscn" id="2_idt1a"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_kia3i"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_r04tj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j60mq"]
 atlas = ExtResource("2_1c0jl")
@@ -21,3 +22,5 @@ flip_h = true
 
 [node name="OffsetMarker" parent="." unique_id=1149829167 instance=ExtResource("3_kia3i")]
 position = Vector2(0, -8)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_r04tj")]

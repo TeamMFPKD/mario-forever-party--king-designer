@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://co2s507tevqw7" path="res://object/level/facility/solid_spike.tscn" id="2_p0ac2"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="3_2socq"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_y64x0"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_tq6l4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1nixq"]
 atlas = ExtResource("3_2socq")
@@ -18,3 +19,5 @@ metadata/_custom_type_script = "uid://b23emkp2mb16s"
 texture = SubResource("AtlasTexture_1nixq")
 
 [node name="OffsetMarker" parent="." unique_id=636497433 instance=ExtResource("4_y64x0")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_tq6l4")]

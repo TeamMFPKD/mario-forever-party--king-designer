@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cw30nlxu2qg8n" path="res://object/level/enemy/goomba.tscn" id="2_280o6"]
 [ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="2_vf7p7"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_sxxyg"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_ywcic"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tvrr0"]
 atlas = ExtResource("2_vf7p7")
@@ -19,3 +20,5 @@ texture = SubResource("AtlasTexture_tvrr0")
 flip_h = true
 
 [node name="OffsetMarker" parent="." unique_id=680534825 instance=ExtResource("3_sxxyg")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_ywcic")]

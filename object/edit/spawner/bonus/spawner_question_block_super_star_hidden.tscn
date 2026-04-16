@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://6sc5xdrubdyf" path="res://object/level/block/question_block_star_hidden.tscn" id="2_utwse"]
 [ext_resource type="Texture2D" uid="uid://4lr60loieckk" path="res://sprite/bonus/super_star.png" id="3_rrak4"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_xjcc0"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_8tnl6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tdf2a"]
 atlas = ExtResource("3_rrak4")
@@ -24,3 +25,5 @@ scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_tdf2a")
 
 [node name="OffsetMarker" parent="." unique_id=398746336 instance=ExtResource("4_xjcc0")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_8tnl6")]

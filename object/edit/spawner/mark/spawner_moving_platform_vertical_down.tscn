@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bnnci6pygqaa6" path="res://object/level/facility/platform/platform_vertical_down.tscn" id="2_vu7d8"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="3_8fpms"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_yhe6j"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_n3rue"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
 atlas = ExtResource("2_5fi84")
@@ -28,3 +29,5 @@ metadata/_edit_lock_ = true
 
 [node name="OffsetMarker" parent="." unique_id=1586966884 instance=ExtResource("4_yhe6j")]
 position = Vector2(0, -8)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_n3rue")]

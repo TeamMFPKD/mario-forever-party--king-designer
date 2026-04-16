@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ckmp8d6mn8kmq" path="res://object/level/player/player.tscn" id="2_1s4ka"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="2_pxsxl"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_atetu"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_sek3l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_em6xi"]
 atlas = ExtResource("2_pxsxl")
@@ -20,3 +21,5 @@ texture = SubResource("AtlasTexture_em6xi")
 
 [node name="OffsetMarker" parent="." unique_id=281171625 instance=ExtResource("3_atetu")]
 position = Vector2(0, 2)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_sek3l")]

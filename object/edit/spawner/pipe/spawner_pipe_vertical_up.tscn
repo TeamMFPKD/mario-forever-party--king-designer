@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://1acweyfku8s4" path="res://object/level/facility/pipe/normal_pipe/pipe_vertical_up.tscn" id="2_e6wkp"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="3_nd50d"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_7r0hp"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_k1b05"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
 atlas = ExtResource("2_4b1ug")
@@ -26,3 +27,5 @@ sprite = NodePath("..")
 
 [node name="OffsetMarker" parent="." unique_id=1739843670 instance=ExtResource("4_7r0hp")]
 position = Vector2(16, 16)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_k1b05")]

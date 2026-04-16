@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://t3sik4xb6qdw" path="res://object/level/facility/pipe/normal_pipe/pipe_vertical_down.tscn" id="2_m87r0"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="3_xw333"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_sjjhn"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_51bks"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_360xo"]
 load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
@@ -28,3 +29,5 @@ sprite = NodePath("..")
 
 [node name="OffsetMarker" parent="." unique_id=806384243 instance=ExtResource("4_sjjhn")]
 position = Vector2(16, 16)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_51bks")]

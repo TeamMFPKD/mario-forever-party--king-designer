@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="2_0cdcb"]
 [ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="2_ksfdm"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_w6c43"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_d0uv5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lhxpi"]
 atlas = ExtResource("2_ksfdm")
@@ -20,3 +21,5 @@ texture = SubResource("AtlasTexture_lhxpi")
 flip_h = true
 
 [node name="OffsetMarker" parent="." unique_id=1734699467 instance=ExtResource("3_w6c43")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_d0uv5")]
