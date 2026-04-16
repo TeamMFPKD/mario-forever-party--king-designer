@@ -43,7 +43,7 @@ _data = {
 }
 
 [node name="TimeHUD" type="MarginContainer" unique_id=277085813]
-custom_minimum_size = Vector2(233, 233)
+custom_minimum_size = Vector2(256, 224)
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -71,13 +71,20 @@ path_to_animation = NodePath("../Node2D/EditTimeLabel")
 libraries/ = SubResource("AnimationLibrary_yvkjn")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=937751436]
-position = Vector2(121, 112)
+position = Vector2(128, 112)
 
 [node name="EditTimeLabel" type="Label" parent="Node2D" unique_id=1584602101]
-offset_left = -79.0
-offset_top = -88.0
-offset_right = 90.0
-offset_bottom = 77.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.5
+offset_top = -82.5
+offset_right = 72.5
+offset_bottom = 82.5
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("2_65p34")
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 18

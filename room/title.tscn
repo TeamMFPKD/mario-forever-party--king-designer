@@ -116,6 +116,31 @@ theme_override_font_sizes/font_size = 160
 text = "MARIO FOREVER
 MAKER PARTY"
 
+[node name="AutoVersionMarginContainer" parent="GameRoomSize" unique_id=1579522722 instance=ExtResource("8_c2fru")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="AutoVersionTestLabel" parent="GameRoomSize/AutoVersionMarginContainer" unique_id=2083437424 instance=ExtResource("5_qon3s")]
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 25
+text = "vYYYYMMDD_AABB"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = SubResource("GDScript_1jeef")
+
 [node name="ChooseMode" type="MarginContainer" parent="GameRoomSize" unique_id=683295364]
 layout_mode = 1
 anchors_preset = 7
@@ -1090,31 +1115,6 @@ custom_minimum_size = Vector2(270, 0)
 layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
-
-[node name="AutoVersionMarginContainer" parent="GameRoomSize" unique_id=1579522722 instance=ExtResource("8_c2fru")]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="AutoVersionTestLabel" parent="GameRoomSize/AutoVersionMarginContainer" unique_id=2083437424 instance=ExtResource("5_qon3s")]
-auto_translate_mode = 2
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 25
-text = "vYYYYMMDD_AABB"
-horizontal_alignment = 2
-vertical_alignment = 1
-script = SubResource("GDScript_1jeef")
 
 [node name="BGMStartToPlayTimer" type="Timer" parent="." unique_id=317060978]
 wait_time = 0.3

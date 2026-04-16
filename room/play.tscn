@@ -143,9 +143,7 @@ offset_bottom = 341.0
 grow_horizontal = 0
 
 [node name="TimeHUD" parent="GameRoomSize/VBoxContainer" unique_id=277085813 instance=ExtResource("4_aqvbr")]
-custom_minimum_size = Vector2(233, 200)
 layout_mode = 2
-theme_override_constants/margin_bottom = 0
 
 [node name="TestTimeHUD" parent="GameRoomSize/VBoxContainer" unique_id=1510288836 instance=ExtResource("30_aot2p")]
 layout_mode = 2
