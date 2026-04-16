@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://c7sn7qihq6t2o"]
 
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="1_r00uj"]
-[ext_resource type="Script" uid="uid://bvc3m4l3r4108" path="res://script/level/bonus/lui_movement.gd" id="2_ewvm1"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_ewvm1"]
+[ext_resource type="Script" uid="uid://bvc3m4l3r4108" path="res://script/level/bonus/lui_movement.gd" id="3_k5nvq"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_sk3bx"]
 [ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="4_2ydvy"]
 [ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="5_ewvm1"]
@@ -97,12 +98,12 @@ visible = false
 shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_ewvm1")
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_ewvm1")]
+script = ExtResource("3_k5nvq")
+path_to_visible_detect = NodePath("../GeneralVisibleOnScreenEnabler2d")
 initially_face_to_player = false
 speed_x = 0.0
 jump_speed = -350.0
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_sk3bx")]
 
@@ -110,6 +111,7 @@ metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 bonus_type = 3
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_ewvm1")]
+path_to_basic_movement = NodePath("")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("10_o7m3i")]
 disable_when_out_of_screen = true

@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://clr71f08y25nb" path="res://script/level/enemy/thwomp_movement.gd" id="2_wd4pb"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_6pwjr"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_o36fy"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="4_wvh5b"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_k0bpb"]
 [ext_resource type="Script" uid="uid://bdc2dpmlbax8j" path="res://script/level/enemy/thowmp_interaction.gd" id="6_k0bpb"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_wvh5b"]
@@ -80,18 +81,21 @@ debug_color = Color(0.62221855, 0.5554975, 0.5644728, 0.41960785)
 
 [node name="ThowmpInteraction" type="Node" parent="." unique_id=315306037 node_paths=PackedStringArray("basic_movement", "thwomp", "cast")]
 script = ExtResource("6_k0bpb")
-basic_movement = NodePath("../BasicMovement")
+basic_movement = NodePath("")
 thwomp = NodePath("..")
 cast = NodePath("../BasicShapeCast2D")
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211 node_paths=PackedStringArray("screen_notifier")]
+[node name="BasicMovement" parent="." unique_id=1013180728 node_paths=PackedStringArray("screen_notifier") instance=ExtResource("4_wvh5b")]
 script = ExtResource("2_wd4pb")
 screen_notifier = NodePath("../GeneralVisibleOnScreenEnabler2d")
+safe_distance_x = 96.0
+land_time = 72
+thwomp_gravity = 2000.0
+rising_speed = -60.0
 speed_x = 0.0
 gravity = 0.0
 max_fall_speed = 160000.0
 overlap_turn = false
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_6pwjr")]
 shape = SubResource("RectangleShape2D_gj0k3")
@@ -120,6 +124,9 @@ is_shell_hittable = false
 [node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
 is_bumpable = false
 
+[node name="InteractionWithCrush" parent="EnemyInteraction" index="6" unique_id=1924136299]
+path_to_basic_movement = NodePath("")
+
 [node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_wvh5b")]
 
 [node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("8_4ftgt")]
@@ -140,7 +147,6 @@ stream = ExtResource("12_o36fy")
 stream = ExtResource("13_k0bpb")
 
 [connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
-[connection signal="bump_block" from="ThowmpInteraction" to="BasicMovement" method="_on_bump_block"]
 [connection signal="play_sound_stun" from="BasicMovement" to="Stun" method="play"]
 [connection signal="finished" from="Smile" to="Area2D" method="_on_stun_finished"]
 

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://djo6om6obwpwa"]
+
+[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="1_33rg5"]
+
+[node name="BasicMovement" type="Node" unique_id=1013180728]
+script = ExtResource("1_33rg5")
+metadata/_custom_type_script = "uid://cil2qphnaxkrl"

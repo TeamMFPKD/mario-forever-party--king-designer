@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="1_ha5uy"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_6wxbp"]
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="2_8q1ti"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_6wxbp"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_p0ubx"]
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="4_ndbwy"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_vku51"]
@@ -48,9 +48,8 @@ visible = false
 shape = ExtResource("2_6wxbp")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
-[node name="BasicMovement" type="Node" parent="." unique_id=2103801211]
-script = ExtResource("2_8q1ti")
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("3_6wxbp")]
+is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_p0ubx")]
 

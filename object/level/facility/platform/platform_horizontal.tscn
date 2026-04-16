@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bbl8lvnjtvifa"]
 
-[ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="1_bsdqw"]
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="1_h5mbo"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_3h0sn"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_sbx44"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
@@ -21,12 +21,11 @@ texture = SubResource("AtlasTexture_toeyn")
 shape = SubResource("RectangleShape2D_sbx44")
 one_way_collision = true
 
-[node name="BasicMovement" type="Node" parent="." unique_id=406880572]
-script = ExtResource("1_bsdqw")
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_3h0sn")]
 speed_x = 150.0
 gravity = 0.0
 overlap_turn = false
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_sbx44")]
 visible = false
