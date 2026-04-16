@@ -1,6 +1,13 @@
 class_name ShapeCastQuery
 
 static func shape_query(body: Node2D, cast: ShapeCast2D) -> Array[Node2D]:
+	if cast == null:
+		push_error("ShapeCastQuery: cast parameter is null")
+		return []
+	if cast.shape == null:
+		push_error("ShapeCastQuery: cast.shape is null")
+		return []
+	
 	var space_state = body.get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = cast.shape
@@ -18,4 +25,3 @@ static func shape_query(body: Node2D, cast: ShapeCast2D) -> Array[Node2D]:
 			continue
 		nodes.append(collider as Node2D)
 	return nodes
-	

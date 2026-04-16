@@ -57,14 +57,12 @@ debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
 [node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_76d0a")]
 speed_x = 0.0
 overlap_turn = false
-path_to_shape_cast = NodePath("")
 is_clear_pipe_allowed = true
 
 [node name="BonusSet" parent="." unique_id=1780314950 instance=ExtResource("2_rfvjg")]
 bonus_type = 2
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("3_ujb5a")]
-path_to_basic_movement = NodePath("")
 
 [node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("3_texes")]
 stream = ExtResource("4_ujb5a")

@@ -1,18 +1,15 @@
 extends BasicMovement
 
 @export var path_to_shell_status: NodePath = "../ShellStatus"
-@export var path_to_ani : NodePath = "../AnimatedSprite2D"
 @export var bump_speed_x : float = -45.0
 
 var shell_status: ShellStatus
-var ani: AnimatedSprite2D
 
 var bumping : bool = false
 
 func _ready() -> void:
 	super._ready()
 	shell_status = get_node(path_to_shell_status)
-	ani = get_node(path_to_ani)
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)

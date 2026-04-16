@@ -72,7 +72,6 @@ collision_mask = 32
 bonus_type = 4
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_w2hnx")]
-path_to_basic_movement = NodePath("")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_lmxld")]
 disable_when_out_of_screen = true

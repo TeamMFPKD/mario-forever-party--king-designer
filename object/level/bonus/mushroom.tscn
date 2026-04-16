@@ -47,7 +47,6 @@ is_clear_pipe_allowed = true
 [node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("4_qtu74")]
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("5_24bk2")]
-path_to_basic_movement = NodePath("")
 
 [node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("5_5kxqh")]
 
