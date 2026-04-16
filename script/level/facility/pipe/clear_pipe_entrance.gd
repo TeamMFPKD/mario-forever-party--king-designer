@@ -25,6 +25,8 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	var blocks = get_overlapping_bodies()
+	# 必须加 position = position 这一行，否则 get_overlapping_bodies() 不更新
+	# force_update_transform() 也不管用，神奇吧，这就是 Godot の神秘物理
 	position = position
 	if blocks.size() > 0:
 		set_meta("overlapping_with_block", true)

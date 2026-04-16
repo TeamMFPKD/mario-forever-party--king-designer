@@ -433,9 +433,6 @@ position = Vector2(4224, 432)
 [node name="ClearPipeLeft2" parent="." unique_id=1261731530 instance=ExtResource("38_jiyx1")]
 position = Vector2(4880, 384)
 
-[node name="ClearPipeEntrance" parent="ClearPipeLeft2" index="4" unique_id=1594576635]
-is_debug = true
-
 [node name="ClearPipeHorizontalMiddle3" parent="." unique_id=172853664 instance=ExtResource("37_qldoc")]
 position = Vector2(4912, 384)
 
@@ -465,5 +462,3 @@ position = Vector2(5024, 184)
 
 [node name="SwitchBlockRed" parent="." unique_id=500788644 instance=ExtResource("47_m1t4l")]
 position = Vector2(4752, 400)
-
-[editable path="ClearPipeLeft2"]
