@@ -1,5 +1,7 @@
 extends Node
 
+class_name ExplodeEffectCreator
+
 @export var path_to_parent : NodePath = ".."
 @export var fireball_explode_scene : PackedScene
 @export var offset : Vector2 = Vector2(0, 0)
