@@ -25,7 +25,8 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	var blocks = get_overlapping_bodies()
-	if blocks.size():
+	position = position
+	if blocks.size() > 0:
 		set_meta("overlapping_with_block", true)
 	else:
 		if has_meta("overlapping_with_block"):

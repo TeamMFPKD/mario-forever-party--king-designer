@@ -204,6 +204,7 @@ position = Vector2(640, 0)
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
 [connection signal="player_hurt" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_hurt"]
+[connection signal="player_pipe_blocked" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="play_sound_die" from="PlayerMediator/PlayerHurtAndDie" to="Die" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="PowerDown" method="play"]
 [connection signal="player_suicided" from="PlayerMediator/PlayerHurtAndDie" to="Suicide" method="play"]
