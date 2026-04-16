@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_qb60a"]
 [ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="2_x6m6y"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_7l5d8"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_sw2n4"]
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="4_x6m6y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jxj7q"]
@@ -62,6 +63,8 @@ debug_color = Color(0.9989981, 0, 0.13936883, 0.41960785)
 speed_x = 0.0
 overlap_turn = false
 path_to_shape_cast = NodePath("")
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_sw2n4")]
 
 [node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("2_x6m6y")]
 
