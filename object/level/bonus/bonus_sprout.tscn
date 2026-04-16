@@ -17,7 +17,6 @@ shape = SubResource("RectangleShape2D_1i06t")
 target_position = Vector2(0, 0)
 max_results = 4
 collision_mask = 3
-collide_with_areas = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1935070293]
 shape = SubResource("RectangleShape2D_1i06t")

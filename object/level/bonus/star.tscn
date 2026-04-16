@@ -66,7 +66,7 @@ jump_speed = -350.0
 is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_b1dgd")]
-collision_mask = 32
+collision_mask = 112
 
 [node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("4_4nlcc")]
 bonus_type = 4
