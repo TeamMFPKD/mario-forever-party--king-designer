@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bpywk88hnp1yw"]
+
+[ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="1_py8ve"]
+[ext_resource type="PackedScene" uid="uid://c0y48bdosmceb" path="res://object/level/dust.tscn" id="2_30ra1"]
+
+[node name="DustEffectCreator" type="Node" unique_id=1311315102]
+script = ExtResource("1_py8ve")
+fireball_explode_scene = ExtResource("2_30ra1")
