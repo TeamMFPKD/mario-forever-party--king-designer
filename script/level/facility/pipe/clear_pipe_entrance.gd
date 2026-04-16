@@ -23,6 +23,18 @@ func _ready() -> void:
 	if process_mode == ProcessMode.PROCESS_MODE_DISABLED or not visible:
 		queue_free()
 
+func _physics_process(_delta: float) -> void:
+	var blocks = get_overlapping_bodies()
+	if blocks.size():
+		set_meta("overlapping_with_block", true)
+	else:
+		if has_meta("overlapping_with_block"):
+			remove_meta("overlapping_with_block")
+	if has_meta("overlapped_with_player"):
+		for i in range(6):
+			await get_tree().physics_frame
+		remove_meta("overlapped_with_player")
+
 func _on_body_entered(body : Node2D) -> void:
 	if not body.is_in_group("player"):
 		return

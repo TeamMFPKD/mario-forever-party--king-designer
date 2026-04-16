@@ -144,6 +144,17 @@ func pipe_detect(results : Array[Node2D]) -> void:
 		var clear_pipe_entrance = result as ClearPipeEntrance
 		if player_movement.is_in_pipe:
 			if not clear_pipe_entrance.has_meta("overlapped_with_player"):
+				if clear_pipe_entrance.has_meta("overlapping_with_block"):
+					match player_movement.pipe_moving_dir:
+						PlayerMovement.PipeMoveDirection.LEFT:
+							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
+						PlayerMovement.PipeMoveDirection.RIGHT:
+							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
+						PlayerMovement.PipeMoveDirection.UP:
+							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
+						PlayerMovement.PipeMoveDirection.DOWN:
+							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
+					return
 				player_movement.exit_pipe()
 				player.position = clear_pipe_entrance.global_position
 			return
