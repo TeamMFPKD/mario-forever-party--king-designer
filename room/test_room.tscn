@@ -208,9 +208,6 @@ func _on_pipe_exited() -> void:
 		print(\"[管道调试] 退出时方向: %s\" % _get_pipe_direction_name(player_movement.pipe_moving_dir))
 "
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m1t4l"]
-size = Vector2(30, 5)
-
 [node name="TestRoom" type="Node2D" unique_id=822465384]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=2117771283]
@@ -221,7 +218,7 @@ tile_set = ExtResource("1_iaqfx")
 script = ExtResource("2_vbo8m")
 
 [node name="Player" parent="." unique_id=1151748388 instance=ExtResource("3_whgqe")]
-position = Vector2(4480, 272)
+position = Vector2(4336, 208)
 
 [node name="CameraPlayerForTest" type="Camera2D" parent="Player" unique_id=1777036543 groups=["level_camera"]]
 zoom = Vector2(2, 2)
@@ -431,7 +428,7 @@ position = Vector2(4320, 304)
 position = Vector2(4320, 272)
 
 [node name="Mushroom2" parent="." unique_id=739166669 instance=ExtResource("17_d7hat")]
-position = Vector2(4224, 432)
+position = Vector2(4456, 272)
 
 [node name="ClearPipeLeft2" parent="." unique_id=1261731530 instance=ExtResource("38_jiyx1")]
 position = Vector2(4976, 384)
@@ -464,21 +461,10 @@ position = Vector2(4944, 400)
 position = Vector2(5088, 184)
 
 [node name="SwitchBlockRed" parent="." unique_id=500788644 instance=ExtResource("47_m1t4l")]
-position = Vector2(4768, 400)
+position = Vector2(4800, 400)
 
-[node name="PlatformHorizontal3" parent="." unique_id=858178512 instance=ExtResource("6_jiyx1")]
-position = Vector2(4816, 400)
-
-[node name="Sprite2D" parent="PlatformHorizontal3" index="0" unique_id=810962080]
-scale = Vector2(0.5, 0.5)
-
-[node name="CollisionShape2D" parent="PlatformHorizontal3" index="1" unique_id=1986874202]
-shape = SubResource("RectangleShape2D_m1t4l")
-
-[node name="BasicMovement" parent="PlatformHorizontal3" index="2" unique_id=1013180728]
-speed_x = 50.0
+[node name="PlatformHorizontal4" parent="." unique_id=1908317297 instance=ExtResource("6_jiyx1")]
+position = Vector2(4832, 400)
 
 [node name="Goomba2" parent="." unique_id=1407299340 instance=ExtResource("5_mvtm3")]
 position = Vector2(4416, 368)
-
-[editable path="PlatformHorizontal3"]

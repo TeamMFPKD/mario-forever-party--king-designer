@@ -44,10 +44,12 @@ enum PipeMoveDirection {
 	ALIGN,
 }
 var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
-var out_pipe_cooldown : int = 0
+var out_pipe_cooldown : int = 0          # 出管冷却，防止立即再次进入
+var pipe_in_cooldown : int = 0           # 进管冷却，防止立即误判出口
 var clear_pipe_blocked_counter : int = 0
 var previous_speed_x : float = 0.0
 var previous_speed_y : float = 0.0
+var pipe_origin_collision_layer : int
 
 # 用于转向对齐时的原始方向暂存
 var is_origin_pipe_dir_set : bool = false
@@ -84,20 +86,23 @@ func _ready() -> void:
 			
 	if is_clear_pipe_allowed:
 		var dusk_creator = dust_creator_scene.instantiate()
+		dusk_creator.parent = move_object
 		pipe_entered.connect(dusk_creator.explode)
 		pipe_exited.connect(dusk_creator.explode)
 
 func _physics_process(delta: float) -> void:
-	# 出管冷却
+	# 更新冷却计时器
 	if out_pipe_cooldown > 0:
 		out_pipe_cooldown -= 1
+	if pipe_in_cooldown > 0:
+		pipe_in_cooldown -= 1
 
-	# 如果正在管道中，执行管道移动
+	# 管道检测（每帧执行，但内部会根据冷却和状态判断）
 	pipe_detect()
 	
 	if pipe_check():
 		# 转向检测必须在管道移动前执行
-		move_object.scale = move_object.scale.move_toward(Vector2(0.3, 0.3), 0.3)
+		move_object.scale = Vector2(0.1, 0.1)  # 临时缩小视觉效果，可根据需要保留或移除
 		clear_pipe_turning_detect()
 		pipe_movement()
 		return
@@ -212,16 +217,15 @@ func pipe_detect() -> void:
 
 		# 已在管道内：处理出口检测和阻塞反转
 		if is_in_pipe:
+			# 进入冷却期间，忽略出口检测（防止碰撞箱未及时缩小导致的误判）
+			if pipe_in_cooldown > 0:
+				return
+
 			if not entrance.is_overlapped_with(move_object):
 				# 检查入口是否被实体（如砖块）阻挡
 				if entrance.has_meta("overlapping_with_block"):
 					clear_pipe_blocked_counter += 1
-					#if clear_pipe_blocked_counter >= 2:
-						# 连续两次检测到阻挡，强行退出管道
-					#	exit_pipe()
-					#	move_object.position = entrance.global_position
-					#	return
-					# 反转移动方向
+					# 如果需要可在此处添加阻塞反转逻辑，此处暂时注释
 					match pipe_moving_dir:
 						PipeMoveDirection.LEFT:
 							pipe_moving_dir = PipeMoveDirection.RIGHT
@@ -277,10 +281,14 @@ func pipe_detect() -> void:
 func enter_pipe(enter_direction: PipeMoveDirection) -> void:
 	pipe_moving_dir = enter_direction
 	is_in_pipe = true
+	pipe_in_cooldown = 5               # 设置进管冷却，持续5帧，防止误判出口
 	previous_speed_x = speed_x
 	previous_speed_y = speed_y
 	speed_x = 0.0
 	speed_y = 0.0
+	pipe_origin_collision_layer = move_object.collision_layer
+	move_object.collision_layer = move_object.collision_layer & (1 << 4)
+	move_object.force_update_transform()
 	var pipe_move_vec : Vector2
 	match enter_direction:
 		PipeMoveDirection.LEFT:
@@ -297,10 +305,12 @@ func enter_pipe(enter_direction: PipeMoveDirection) -> void:
 func exit_pipe() -> void:
 	is_in_pipe = false
 	out_pipe_cooldown = 10
-	clear_pipe_blocked_counter = 0   # 重置阻塞计数器
+	pipe_in_cooldown = 0                # 确保冷却重置
+	clear_pipe_blocked_counter = 0
 
 	speed_x = previous_speed_x
 	speed_y = previous_speed_y
+	move_object.collision_layer = pipe_origin_collision_layer
 
 	# 清除所有 turning area 的 processed 标记
 	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
