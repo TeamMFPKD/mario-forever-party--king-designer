@@ -26,6 +26,7 @@ one_way_collision = true
 speed_x = 150.0
 gravity = 0.0
 overlap_turn = false
+can_be_turn_overlap_detected = false
 is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_sbx44")]
