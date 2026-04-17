@@ -210,6 +210,7 @@ func pipe_check() -> bool:
 	return is_in_pipe
 
 func enter_pipe(enter_direction : PipeMoveDirection) -> void:
+	crouch = true
 	pipe_moving_dir = enter_direction
 	is_in_pipe = true
 	speed_x = 0.0
