@@ -82,7 +82,7 @@ func _ready() -> void:
 				ani = child
 				break
 		if not ani:
-			push_error("BasicMovement: AnimatedSprite2D not found.")
+			push_error("[%s] BasicMovement: AnimatedSprite2D not found." % move_object.name)
 			
 	if is_clear_pipe_allowed:
 		var dusk_creator = dust_creator_scene.instantiate()
