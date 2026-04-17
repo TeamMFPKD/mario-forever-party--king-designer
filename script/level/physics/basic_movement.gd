@@ -102,7 +102,7 @@ func _physics_process(delta: float) -> void:
 	
 	if pipe_check():
 		# 转向检测必须在管道移动前执行
-		move_object.scale = Vector2(0.1, 0.1)  # 临时缩小视觉效果，可根据需要保留或移除
+		move_object.scale = move_object.scale.move_toward(Vector2(0.4, 0.4), 0.3)
 		clear_pipe_turning_detect()
 		pipe_movement()
 		return
