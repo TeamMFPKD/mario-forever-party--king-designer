@@ -12,7 +12,7 @@ region = Rect2(33, 8, 95, 16)
 size = Vector2(95, 15)
 
 [node name="PlatformHorizontal" type="CharacterBody2D" unique_id=1359139927]
-collision_layer = 2
+collision_layer = 18
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=810962080]
 texture = SubResource("AtlasTexture_toeyn")

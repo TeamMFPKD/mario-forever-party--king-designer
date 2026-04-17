@@ -13,6 +13,9 @@ func _ready() -> void:
 
 func explode() -> void:
 	if fireball_explode_scene:
+		if not parent:
+			push_error("ExplodeEffectCreator: parent is not set")
+			return
 		var fireball_explode = fireball_explode_scene.instantiate() as Node2D
 		fireball_explode.position = parent.position + offset
 		parent.add_sibling(fireball_explode)
