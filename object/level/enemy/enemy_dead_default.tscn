@@ -24,6 +24,7 @@ speed_y = -400.0
 gravity = 2000.0
 overlap_turn = false
 path_to_shape_cast = NodePath("")
+path_to_ani = NodePath("../EmptyAnimatedSprite2D")
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="SpinComponent" type="Node" parent="." unique_id=1532188385]
@@ -33,3 +34,5 @@ path_to_sprite = NodePath("../Sprite2D")
 [node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=1073388980]
 script = ExtResource("3_6h8p3")
 metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[node name="EmptyAnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=264594029]
