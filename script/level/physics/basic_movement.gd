@@ -3,7 +3,6 @@ extends Node
 class_name BasicMovement
 
 signal crushed_at(crush_pos: Vector2)
-
 signal pipe_entered
 signal pipe_exited
 
@@ -45,6 +44,14 @@ enum PipeMoveDirection {
 	ALIGN,
 }
 var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
+var out_pipe_cooldown : int = 0
+var clear_pipe_blocked_counter : int = 0
+var previous_speed_x : float = 0.0
+var previous_speed_y : float = 0.0
+
+# 用于转向对齐时的原始方向暂存
+var is_origin_pipe_dir_set : bool = false
+var origin_pipe_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
@@ -81,14 +88,26 @@ func _ready() -> void:
 		pipe_exited.connect(dusk_creator.explode)
 
 func _physics_process(delta: float) -> void:
+	# 出管冷却
+	if out_pipe_cooldown > 0:
+		out_pipe_cooldown -= 1
+
+	# 如果正在管道中，执行管道移动
+	pipe_detect()
+	
 	if pipe_check():
+		# 转向检测必须在管道移动前执行
+		move_object.scale = move_object.scale.move_toward(Vector2(0.3, 0.3), 0.3)
+		clear_pipe_turning_detect()
 		pipe_movement()
 		return
+	move_object.scale = move_object.scale.move_toward(Vector2(1.0, 1.0), 0.3)
+
 	if in_wall_process():
 		return
+
 	turn_detect()
 	overlap_turn_detect()
-	pipe_detect()
 	speed_x_process()
 	speed_y_process(delta)
 	set_jump_speed()
@@ -158,11 +177,11 @@ func set_jump_speed() -> void:
 	if move_object.is_on_floor():
 		speed_y = min(0.0, jump_speed)
 
-# 返回 true 表示卡墙，外部应跳过本帧所有运动逻辑
 func in_wall_process() -> bool:
+	if out_pipe_cooldown > 0:
+		return false
 	if move_object.move_and_collide(Vector2.ZERO, true, 0.08) != null:
 		move_object.velocity = Vector2.ZERO
-		# 一定时间后仍未挤出被判断为卡墙
 		crushed_frame_counter += 1
 		if crushed_frame_counter >= CRUSHED_FRAMES:
 			emit_signal("crushed_at", move_object.position)
@@ -179,24 +198,129 @@ func pipe_check() -> bool:
 func pipe_detect() -> void:
 	if not is_clear_pipe_allowed:
 		return
-	if speed_x == 0.0:
+	if out_pipe_cooldown > 0:
 		return
+
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
-	if results.size() <= 1:
-		overlap_turn_detect_objects.clear()
-		return
 	for result in results:
 		if not result is ClearPipeEntrance:
 			continue
 		if result == move_object:
 			continue
-		enter_pipe()
 
-func enter_pipe() -> void:
+		var entrance := result as ClearPipeEntrance
+
+		# 已在管道内：处理出口检测和阻塞反转
+		if is_in_pipe:
+			if not entrance.is_overlapped_with(move_object):
+				# 检查入口是否被实体（如砖块）阻挡
+				if entrance.has_meta("overlapping_with_block"):
+					clear_pipe_blocked_counter += 1
+					#if clear_pipe_blocked_counter >= 2:
+						# 连续两次检测到阻挡，强行退出管道
+					#	exit_pipe()
+					#	move_object.position = entrance.global_position
+					#	return
+					# 反转移动方向
+					match pipe_moving_dir:
+						PipeMoveDirection.LEFT:
+							pipe_moving_dir = PipeMoveDirection.RIGHT
+						PipeMoveDirection.RIGHT:
+							pipe_moving_dir = PipeMoveDirection.LEFT
+						PipeMoveDirection.UP:
+							pipe_moving_dir = PipeMoveDirection.DOWN
+						PipeMoveDirection.DOWN:
+							pipe_moving_dir = PipeMoveDirection.UP
+					return
+				# 无阻挡，正常退出管道
+				exit_pipe()
+				move_object.position = entrance.global_position
+			return
+
+		# 不在管道内：检查进入条件
+		var should_enter := false
+		var move_dir = Vector2(speed_x, speed_y).normalized()
+		match entrance.entrance_direction:
+			ClearPipeEntrance.Direction.LEFT:
+				if move_dir.x < 0 and move_object.is_on_wall():
+					should_enter = true
+			ClearPipeEntrance.Direction.RIGHT:
+				if move_dir.x > 0 and move_object.is_on_wall():
+					should_enter = true
+			ClearPipeEntrance.Direction.UP:
+				if move_dir.y < 0 and move_object.is_on_ceiling():
+					should_enter = true
+			ClearPipeEntrance.Direction.DOWN:
+				if move_dir.y > 0 and move_object.is_on_floor():
+					should_enter = true
+
+		if not should_enter:
+			continue
+
+		# 进入管道
+		var enter_dir: PipeMoveDirection
+		match entrance.entrance_direction:
+			ClearPipeEntrance.Direction.LEFT:
+				enter_dir = PipeMoveDirection.LEFT
+			ClearPipeEntrance.Direction.RIGHT:
+				enter_dir = PipeMoveDirection.RIGHT
+			ClearPipeEntrance.Direction.UP:
+				enter_dir = PipeMoveDirection.UP
+			ClearPipeEntrance.Direction.DOWN:
+				enter_dir = PipeMoveDirection.DOWN
+
+		enter_pipe(enter_dir)
+		move_object.position = entrance.turning_area.global_position
+		entrance.overlapped_ids[move_object.get_instance_id()] = true
+		break
+
+func enter_pipe(enter_direction: PipeMoveDirection) -> void:
+	pipe_moving_dir = enter_direction
 	is_in_pipe = true
+	previous_speed_x = speed_x
+	previous_speed_y = speed_y
+	speed_x = 0.0
+	speed_y = 0.0
+	var pipe_move_vec : Vector2
+	match enter_direction:
+		PipeMoveDirection.LEFT:
+			pipe_move_vec = Vector2(-1, 0)
+		PipeMoveDirection.RIGHT:
+			pipe_move_vec = Vector2(1, 0)
+		PipeMoveDirection.UP:
+			pipe_move_vec = Vector2(0, -1)
+		PipeMoveDirection.DOWN:
+			pipe_move_vec = Vector2(0, 1)
+	move_object.position = move_object.position + pipe_move_vec * 16
+	emit_signal("pipe_entered")
 
 func exit_pipe() -> void:
 	is_in_pipe = false
+	out_pipe_cooldown = 10
+	clear_pipe_blocked_counter = 0   # 重置阻塞计数器
+
+	speed_x = previous_speed_x
+	speed_y = previous_speed_y
+
+	# 清除所有 turning area 的 processed 标记
+	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning in turnings:
+		if turning is ClearPipeTurningArea2D:
+			turning.clear_processed(move_object)
+	# 清除所有 entrance 的 overlapped 标记
+	var entrances = get_tree().get_nodes_in_group("clear_pipe_entrance")
+	for entrance in entrances:
+		if entrance is ClearPipeEntrance:
+			entrance.clear_overlapped(move_object)
+
+	for i in range(5):
+		move_object.velocity = Vector2.ZERO
+		move_object.move_and_slide()
+		move_object.force_update_transform()
+
+	pipe_moving_dir = PipeMoveDirection.ALIGN
+	is_origin_pipe_dir_set = false
+	emit_signal("pipe_exited")
 
 func pipe_movement() -> void:
 	var moving_speed : float = 4.0
@@ -209,3 +333,69 @@ func pipe_movement() -> void:
 			move_object.position = move_object.position + Vector2(0, -moving_speed)
 		PipeMoveDirection.DOWN:
 			move_object.position = move_object.position + Vector2(0, moving_speed)
+		PipeMoveDirection.ALIGN:
+			pass  # 对齐时由转向检测控制移动
+
+func clear_pipe_turning_detect() -> void:
+	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
+	for result in results:
+		if not result is ClearPipeTurningArea2D:
+			continue
+		var area := result as ClearPipeTurningArea2D
+
+		# 已处理过的转向区域不再重复转向
+		if area.is_processed(move_object):
+			continue
+
+		var target := area.global_position + Vector2(0, 8)
+		var diff := target - move_object.global_position
+
+		# 如果需要位置对齐
+		if abs(diff.x) > 0.5 or abs(diff.y) > 0.5:
+			if not is_origin_pipe_dir_set:
+				origin_pipe_dir = pipe_moving_dir
+				is_origin_pipe_dir_set = true
+			pipe_moving_dir = PipeMoveDirection.ALIGN
+			move_object.global_position = move_object.global_position.move_toward(target, 4.0)
+			continue
+
+		# 对齐完成，执行转向
+		if is_origin_pipe_dir_set:
+			pipe_moving_dir = origin_pipe_dir
+			is_origin_pipe_dir_set = false
+
+		match area.direction:
+			ClearPipeSet.Direction.LEFT:
+				if pipe_moving_dir != PipeMoveDirection.LEFT:
+					pipe_moving_dir = PipeMoveDirection.RIGHT
+			ClearPipeSet.Direction.RIGHT:
+				if pipe_moving_dir != PipeMoveDirection.RIGHT:
+					pipe_moving_dir = PipeMoveDirection.LEFT
+			ClearPipeSet.Direction.UP:
+				if pipe_moving_dir != PipeMoveDirection.UP:
+					pipe_moving_dir = PipeMoveDirection.DOWN
+			ClearPipeSet.Direction.DOWN:
+				if pipe_moving_dir != PipeMoveDirection.DOWN:
+					pipe_moving_dir = PipeMoveDirection.UP
+			ClearPipeSet.Direction.LEFT_UP:
+				if pipe_moving_dir == PipeMoveDirection.RIGHT:
+					pipe_moving_dir = PipeMoveDirection.UP
+				elif pipe_moving_dir == PipeMoveDirection.DOWN:
+					pipe_moving_dir = PipeMoveDirection.LEFT
+			ClearPipeSet.Direction.LEFT_DOWN:
+				if pipe_moving_dir == PipeMoveDirection.RIGHT:
+					pipe_moving_dir = PipeMoveDirection.DOWN
+				elif pipe_moving_dir == PipeMoveDirection.UP:
+					pipe_moving_dir = PipeMoveDirection.LEFT
+			ClearPipeSet.Direction.RIGHT_UP:
+				if pipe_moving_dir == PipeMoveDirection.LEFT:
+					pipe_moving_dir = PipeMoveDirection.UP
+				elif pipe_moving_dir == PipeMoveDirection.DOWN:
+					pipe_moving_dir = PipeMoveDirection.RIGHT
+			ClearPipeSet.Direction.RIGHT_DOWN:
+				if pipe_moving_dir == PipeMoveDirection.LEFT:
+					pipe_moving_dir = PipeMoveDirection.DOWN
+				elif pipe_moving_dir == PipeMoveDirection.UP:
+					pipe_moving_dir = PipeMoveDirection.RIGHT
+
+		area.mark_processed(move_object)

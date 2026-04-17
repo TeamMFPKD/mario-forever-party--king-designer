@@ -16,6 +16,9 @@ enum Direction {
 var clear_pipe_set : ClearPipeSet
 var turning_area : Area2D
 
+# 记录已进入该入口的实体 ID，避免重复触发
+var overlapped_ids : Dictionary = {}
+
 func _ready() -> void:
 	clear_pipe_set = get_node(path_to_clear_pipe_set)
 	body_entered.connect(_on_body_entered)
@@ -24,25 +27,35 @@ func _ready() -> void:
 		queue_free()
 
 func _physics_process(_delta: float) -> void:
-	var blocks = get_overlapping_bodies()
-	# 必须加 position = position 这一行，否则 get_overlapping_bodies() 不更新
-	# force_update_transform() 也不管用，神奇吧，这就是 Godot の神秘物理
-	position = position
-	if blocks.size() > 0:
+	var bodies = get_overlapping_bodies()
+	position = position  # 强制刷新碰撞检测（Godot 特性）
+	if bodies.size() > 0:
 		set_meta("overlapping_with_block", true)
 	else:
 		if has_meta("overlapping_with_block"):
 			remove_meta("overlapping_with_block")
-	if has_meta("overlapped_with_player"):
-		for i in range(6):
-			await get_tree().physics_frame
-		remove_meta("overlapped_with_player")
+
+	# 清理已离开的实体记录
+	var current_ids = {}
+	for body in bodies:
+		if body.is_in_group("player") or body.has_meta("basic_movement"):
+			current_ids[body.get_instance_id()] = true
+
+	# 移除已不在区域内的实体记录
+	for id in overlapped_ids.keys():
+		if not current_ids.has(id):
+			overlapped_ids.erase(id)
 
 func _on_body_entered(body : Node2D) -> void:
-	if not body.is_in_group("player"):
+	if not (body.is_in_group("player") or body.has_meta("basic_movement")):
 		return
-	#if body.has_method("enter_pipe"):
-	#	body.enter_pipe()
+
+	var id = body.get_instance_id()
+	if overlapped_ids.has(id):
+		return
+	overlapped_ids[id] = true
+
+	# 告诉 body 它应该从哪个方向进入管道（实际由 body 自己处理）
 	var direction
 	match clear_pipe_set.direction:
 		ClearPipeSet.Direction.LEFT:
@@ -54,3 +67,9 @@ func _on_body_entered(body : Node2D) -> void:
 		ClearPipeSet.Direction.DOWN:
 			direction = PlayerMovement.PipeMoveDirection.UP
 	body.set_meta("clear_pipe_direction", direction)
+
+func is_overlapped_with(body: Node2D) -> bool:
+	return overlapped_ids.has(body.get_instance_id())
+
+func clear_overlapped(body: Node2D) -> void:
+	overlapped_ids.erase(body.get_instance_id())

@@ -208,6 +208,9 @@ func _on_pipe_exited() -> void:
 		print(\"[管道调试] 退出时方向: %s\" % _get_pipe_direction_name(player_movement.pipe_moving_dir))
 "
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m1t4l"]
+size = Vector2(30, 5)
+
 [node name="TestRoom" type="Node2D" unique_id=822465384]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=2117771283]
@@ -461,10 +464,21 @@ position = Vector2(4944, 400)
 position = Vector2(5088, 184)
 
 [node name="SwitchBlockRed" parent="." unique_id=500788644 instance=ExtResource("47_m1t4l")]
-position = Vector2(4752, 400)
+position = Vector2(4768, 400)
 
 [node name="PlatformHorizontal3" parent="." unique_id=858178512 instance=ExtResource("6_jiyx1")]
 position = Vector2(4816, 400)
 
+[node name="Sprite2D" parent="PlatformHorizontal3" index="0" unique_id=810962080]
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" parent="PlatformHorizontal3" index="1" unique_id=1986874202]
+shape = SubResource("RectangleShape2D_m1t4l")
+
+[node name="BasicMovement" parent="PlatformHorizontal3" index="2" unique_id=1013180728]
+speed_x = 50.0
+
 [node name="Goomba2" parent="." unique_id=1407299340 instance=ExtResource("5_mvtm3")]
 position = Vector2(4416, 368)
+
+[editable path="PlatformHorizontal3"]
