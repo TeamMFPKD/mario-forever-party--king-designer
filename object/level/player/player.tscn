@@ -194,8 +194,10 @@ position = Vector2(640, 0)
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
 [connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="ClearPipeIn" method="play"]
+[connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PlayerMediator/PlayerInteraction" method="_on_pipe_exited"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="ClearPipeOut" method="play"]
+[connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
