@@ -2,16 +2,15 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_ea4aj"]
 [ext_resource type="PackedScene" uid="uid://khucqs51i6jb" path="res://object/level/facility/pipe/normal_pipe/pipe_horizontal_middle.tscn" id="2_rl7is"]
-[ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="3_878bk"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_wfx1i"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_7h26b"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_qxym8"]
-load_path = "res://.godot/imported/pipe_horizontal.png-3c733b497388ff2683c1a3ab7f8b6cdf.ctex"
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p8oj4"]
+load_path = "res://.godot/imported/pipe_with_corner_transparent.png-f3ed163ff617e8a67499d22ab940ac6f.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_360xo"]
-atlas = SubResource("CompressedTexture2D_qxym8")
-region = Rect2(64, 0, 32, 448)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ouiv5"]
+atlas = SubResource("CompressedTexture2D_p8oj4")
+region = Rect2(48, 64, 32, 62)
 
 [node name="SpawnerPipeHorizontalMiddle" type="Node2D" unique_id=1377143724]
 script = ExtResource("1_ea4aj")
@@ -19,13 +18,7 @@ spawn_object_scene = ExtResource("2_rl7is")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1682045415]
-position = Vector2(0, 16)
-texture = SubResource("AtlasTexture_360xo")
-vframes = 7
-
-[node name="PipeColor" type="Node" parent="Sprite2D" unique_id=557530779 node_paths=PackedStringArray("sprite")]
-script = ExtResource("3_878bk")
-sprite = NodePath("..")
+texture = SubResource("AtlasTexture_ouiv5")
 
 [node name="OffsetMarker" parent="." unique_id=811474229 instance=ExtResource("4_wfx1i")]
 position = Vector2(0, 16)

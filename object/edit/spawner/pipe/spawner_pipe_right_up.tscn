@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cv5jf3dgvbiir"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_0c2kf"]
+[ext_resource type="PackedScene" uid="uid://6widndmtdynm" path="res://object/level/facility/pipe/normal_pipe/pipe_horizontal_left.tscn" id="2_wwpym"]
+[ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="3_q51dy"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_erxkd"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_hduvb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qppoe"]
+atlas = ExtResource("3_q51dy")
+region = Rect2(128, 64, 64, 62)
+
+[node name="SpawnerPipeHorizontalLeft" type="Node2D" unique_id=479423618]
+script = ExtResource("1_0c2kf")
+spawn_object_scene = ExtResource("2_wwpym")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1842392029]
+texture = SubResource("AtlasTexture_qppoe")
+
+[node name="OffsetMarker" parent="." unique_id=1054367465 instance=ExtResource("4_erxkd")]
+position = Vector2(16, 16)
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_hduvb")]
