@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dacniuvadm601"]
+
+[ext_resource type="Texture2D" uid="uid://c21vmt8bd3wwa" path="res://sprite/edit_object_handler.svg" id="1_xvhky"]
+[ext_resource type="Texture2D" uid="uid://dqutgmdxl045r" path="res://sprite/edit_pipe_arrow.svg" id="2_smr7v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_smr7v"]
+size = Vector2(32, 32)
+
+[node name="ClearPipeNodeHandler" type="Node2D" unique_id=1739117991]
+
+[node name="EditObjectHandler" type="Sprite2D" parent="." unique_id=1237605298]
+texture = ExtResource("1_xvhky")
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="." unique_id=1259741217]
+visible = false
+shape = SubResource("RectangleShape2D_smr7v")
+
+[node name="EditPipeArrowRight" type="Sprite2D" parent="." unique_id=1607138771]
+position = Vector2(48, 0)
+texture = ExtResource("2_smr7v")
+
+[node name="EditPipeArrowLeft" type="Sprite2D" parent="." unique_id=1209078377]
+position = Vector2(-48, 0)
+texture = ExtResource("2_smr7v")
+flip_h = true
+
+[node name="EditPipeArrowUp" type="Sprite2D" parent="." unique_id=1794881595]
+position = Vector2(0, -48)
+rotation = 1.5707964
+texture = ExtResource("2_smr7v")
+flip_h = true
+
+[node name="EditPipeArrowDown" type="Sprite2D" parent="." unique_id=857450359]
+position = Vector2(0, 48)
+rotation = 1.5707964
+texture = ExtResource("2_smr7v")

@@ -85,6 +85,7 @@
 [ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="71_4y0aq"]
 [ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="72_hwca6"]
 [ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="73_6jw8q"]
+[ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="73_rnw8m"]
 [ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_stone.png" id="74_sf1wo"]
 [ext_resource type="Texture2D" uid="uid://batjbminyc3b7" path="res://sprite/camare_edge_move.png" id="75_jm62f"]
 [ext_resource type="Texture2D" uid="uid://5dcx7bwtt" path="res://sprite/enemy/thwomp.png" id="76_3l15o"]
@@ -163,6 +164,10 @@ region = Rect2(32, 128, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_r2ek7"]
 atlas = ExtResource("59_rvqgs")
 region = Rect2(0, 0, 448, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0edr"]
+atlas = ExtResource("73_rnw8m")
+region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8u7gm"]
 load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
@@ -1221,12 +1226,24 @@ script = ExtResource("60_41bow")
 sprite = NodePath("..")
 
 [node name="Pipe" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe" unique_id=1994847249 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -176.0
-offset_top = -346.0
+offset_top = -530.0
 offset_right = 352.0
-offset_bottom = -2.0
+offset_bottom = -12.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe" unique_id=72287695]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ItemButtonPipeHorizontalLeft" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer3" unique_id=980627408 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+object_name = "clear_pipe_line"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer3/ItemButtonPipeHorizontalLeft/ButtonTexture" parent_id_path=PackedInt32Array(980627408, 839201675) index="0" unique_id=1085479145]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_x0edr")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe" unique_id=1984433401]
 layout_mode = 2
@@ -1851,6 +1868,7 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/ItemButtonTileSingle"]
 [editable path="GameRoomSize/BottomItemGroups/ItemButtonTileSemiSolid"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer3/ItemButtonPipeHorizontalLeft"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalUp"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalDown"]

@@ -6,7 +6,8 @@ enum ItemType {
 	TILE,
 	OBJECT,
 	ERASER,
-	OTHER
+	CLEAR_PIPE,
+	OTHER,
 }
 
 @export var item_type: ItemType = ItemType.OBJECT

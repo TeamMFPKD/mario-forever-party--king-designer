@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dhn3nn5omhdxh"]
+
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_up.tscn" id="1_b2gps"]
+[ext_resource type="Script" uid="uid://bdt53k3b3yq43" path="res://script/edit/clear_pipe/clear_pipe_line_draw_test.gd" id="1_t82i3"]
+[ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="2_0yn7o"]
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_down.tscn" id="2_1teea"]
+[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_left.tscn" id="3_k1b4a"]
+[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_right.tscn" id="4_6m14r"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_middle.tscn" id="5_0kxvf"]
+[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_middle.tscn" id="5_1teea"]
+[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/spawner/pipe/spawner_pipe_left_up.tscn" id="7_6m14r"]
+[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/spawner/pipe/spawner_pipe_right_up.tscn" id="7_k1b4a"]
+[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/spawner/pipe/spawner_pipe_left_down.tscn" id="8_0kxvf"]
+[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/spawner/pipe/spawner_pipe_right_down.tscn" id="10_ing2k"]
+
+[node name="Node2D" type="Node2D" unique_id=528691786]
+script = ExtResource("1_t82i3")
+
+[node name="PipeBuilder" type="Node2D" parent="." unique_id=849851025]
+script = ExtResource("2_0yn7o")
+cap_up_scene = ExtResource("1_b2gps")
+cap_down_scene = ExtResource("2_1teea")
+cap_left_scene = ExtResource("3_k1b4a")
+cap_right_scene = ExtResource("4_6m14r")
+straight_horizontal_scene = ExtResource("5_1teea")
+straight_vertical_scene = ExtResource("5_0kxvf")
+corner_ur_scene = ExtResource("7_k1b4a")
+corner_ul_scene = ExtResource("7_6m14r")
+corner_dr_scene = ExtResource("10_ing2k")
+corner_dl_scene = ExtResource("8_0kxvf")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1273545662]
+position = Vector2(960, 540)
+
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=185594905]
+repeat_size = Vector2(32, 32)
+repeat_times = 120
+
+[node name="Line2D" type="Line2D" parent="Parallax2D" unique_id=1999715409]
+self_modulate = Color(0.5251, 0.5251, 0.59, 1)
+points = PackedVector2Array(0, 0, 32, 0, 32, 32, 0, 32)
+closed = true
+width = 2.0
+default_color = Color(0, 1, 1, 1)
