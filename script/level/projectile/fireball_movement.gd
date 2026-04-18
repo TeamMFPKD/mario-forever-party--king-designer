@@ -4,6 +4,7 @@ signal explode
 
 func _ready():
 	super._ready()
+	crushed_at.connect(_on_crushed)
 	if get_parent().has_meta("fireball_direction"):
 		var direction = get_parent().get_meta("fireball_direction") as int
 		if direction != 1:
@@ -15,3 +16,6 @@ func _physics_process(delta):
 		emit_signal("explode")
 		move_object.queue_free()
 		
+func _on_crushed(_pos: Vector2):
+	emit_signal("explode")
+	move_object.queue_free()
