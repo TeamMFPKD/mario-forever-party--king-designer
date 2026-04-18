@@ -42,6 +42,16 @@ func build_pipes() -> void:
 	var fixed_straights: Array[Dictionary] = []
 	var used_positions: Dictionary = {}
 	
+	# 首先检测所有拐角点
+	var corner_indices: Array[int] = []
+	for i in range(1, pts.size() - 1):
+		var prev_direction = get_orthogonal_direction(pts[i-1], pts[i])
+		var next_direction = get_orthogonal_direction(pts[i], pts[i+1])
+		if prev_direction != Vector2.ZERO and next_direction != Vector2.ZERO and prev_direction != next_direction:
+			corner_indices.append(i)
+			print("  🔁 检测到拐角点: 索引 %d" % i)
+	
+	# 处理每两个相邻点之间的管道段
 	for i in range(pts.size() - 1):
 		var start = pts[i]
 		var end = pts[i + 1]
@@ -49,66 +59,59 @@ func build_pipes() -> void:
 		if direction == Vector2.ZERO:
 			continue
 		
-		# 计算两点之间的精确中点
-		var exact_mid = (start + end) / 2.0
+		# 检查当前段是否在拐角点之前或之后
+		var is_before_corner = (i + 1 in corner_indices)  # 当前段的终点是拐角点
+		var is_after_corner = false  # 初始化标志
 		
-		# 计算两点之间的精确中点（不进行网格对齐）
-		var exact_center = (start + end) / 2.0
+		# 检查当前段是否在拐角点之后（起点是拐角点）
+		if i in corner_indices:
+			is_after_corner = true
 		
-		# 使用精确中点作为管道中心，允许半网格位置
-		var final_center = exact_center
-		
-		# 使用四舍五入的坐标作为唯一标识（用于去重）
-		var pos_key = str(Vector2(round(final_center.x / STEP) * STEP, round(final_center.y / STEP) * STEP))
-		
-		# 如果这个位置还没有管道，则添加
-		if not used_positions.has(pos_key):
-			used_positions[pos_key] = true
-			fixed_straights.append({
-				"index": i,
-				"start": start,
-				"end": end,
-				"center": final_center,
-				"dir": direction,
-				"type": "straight"
-			})
-	
-	# 如果需要在拐角后多生成一个部件，检测方向变化
-	# 检测路径中的方向变化点
-	var additional_parts: Array[Dictionary] = []
-	for i in range(1, pts.size() - 1):
-		var prev_direction = get_orthogonal_direction(pts[i-1], pts[i])
-		var next_direction = get_orthogonal_direction(pts[i], pts[i+1])
-		if prev_direction != Vector2.ZERO and next_direction != Vector2.ZERO and prev_direction != next_direction:
-			# 发生方向变化，即拐角点
-			# 在拐角点后（下一个方向）多生成一个管道部件
-			var corner_pt = pts[i]
-			var next_pt = pts[i+1]
-			# 计算两点之间的精确中点（不进行网格对齐）
-			var exact_center = (corner_pt + next_pt) / 2.0
-			
-			# 使用精确中点作为管道中心，允许半网格位置
-			var aligned_additional = exact_center
+		if is_before_corner:
+			# 在拐角之前的点对应的零件少生成一个，跳过此段
+			print("  ⏭️ 跳过拐角前的管道段: [%d] 到 [%d]" % [i, i+1])
+			continue
+		elif is_after_corner:
+			# 拐角之后的第一个零件向前推进半格 (16px) 
+			var base_center = (start + end) / 2.0
+			var adjusted_center = base_center - direction * (STEP / 2.0)  # 向起点方向移动半格
 			
 			# 使用四舍五入的坐标作为唯一标识（用于去重）
-			var pos_key = str(Vector2(round(aligned_additional.x / STEP) * STEP, round(aligned_additional.y / STEP) * STEP))
+			var pos_key = str(Vector2(round(adjusted_center.x / STEP) * STEP, round(adjusted_center.y / STEP) * STEP))
 			
-			# 只有当该位置未被占用时才添加额外部件
+			# 如果这个位置还没有管道，则添加
 			if not used_positions.has(pos_key):
 				used_positions[pos_key] = true
-				additional_parts.append({
+				fixed_straights.append({
 					"index": i,
-					"start": corner_pt,
-					"end": next_pt,
-					"center": aligned_additional,
-					"dir": next_direction,
+					"start": start,
+					"end": end,
+					"center": adjusted_center,
+					"dir": direction,
 					"type": "straight"
 				})
-				print("  ➕ 拐角后补充管道部件: 中心(%.0f,%.0f)" % [aligned_additional.x, aligned_additional.y])
-	
-	# 合并主要管道和额外管道
-	for additional_part in additional_parts:
-		fixed_straights.append(additional_part)
+				print("  📐 拐角后调整管道部件: 中心(%.0f,%.0f), 原中心(%.0f,%.0f), 方向 %s" % [adjusted_center.x, adjusted_center.y, base_center.x, base_center.y, dir_to_str(direction)])
+		else:
+			# 普通段按原逻辑处理
+			var exact_center = (start + end) / 2.0
+			
+			# 使用精确中点作为管道中心，允许半网格位置
+			var final_center = exact_center
+			
+			# 使用四舍五入的坐标作为唯一标识（用于去重）
+			var pos_key = str(Vector2(round(final_center.x / STEP) * STEP, round(final_center.y / STEP) * STEP))
+			
+			# 如果这个位置还没有管道，则添加
+			if not used_positions.has(pos_key):
+				used_positions[pos_key] = true
+				fixed_straights.append({
+					"index": i,
+					"start": start,
+					"end": end,
+					"center": final_center,
+					"dir": direction,
+					"type": "straight"
+				})
 	
 	# 如果没有任何直线段，退出
 	if fixed_straights.is_empty():
