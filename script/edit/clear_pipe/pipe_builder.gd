@@ -74,7 +74,7 @@ func build_pipes() -> void:
 		elif is_after_corner:
 			# 拐角之后的第一个零件向前推进半格 (16px) 
 			var base_center = (start + end) / 2.0
-			var adjusted_center = base_center - direction * (STEP / 2.0)  # 向起点方向移动半格
+			var adjusted_center = base_center + direction * (STEP / 2.0)  # 朝向终点方向移动半格
 			
 			# 使用四舍五入的坐标作为唯一标识（用于去重）
 			var pos_key = str(Vector2(round(adjusted_center.x / STEP) * STEP, round(adjusted_center.y / STEP) * STEP))
