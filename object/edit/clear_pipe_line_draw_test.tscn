@@ -8,10 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_right.tscn" id="4_6m14r"]
 [ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_middle.tscn" id="5_0kxvf"]
 [ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_middle.tscn" id="5_1teea"]
-[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/spawner/pipe/spawner_pipe_left_up.tscn" id="7_6m14r"]
-[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/spawner/pipe/spawner_pipe_right_up.tscn" id="7_k1b4a"]
-[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/spawner/pipe/spawner_pipe_left_down.tscn" id="8_0kxvf"]
-[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/spawner/pipe/spawner_pipe_right_down.tscn" id="10_ing2k"]
+[ext_resource type="PackedScene" uid="uid://b7yevycwkatdf" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_left_up.tscn" id="9_0kxvf"]
+[ext_resource type="PackedScene" uid="uid://dnvl51nxi6xmp" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_right_up.tscn" id="9_t82i3"]
+[ext_resource type="PackedScene" uid="uid://bluk0q4tg0juq" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_right_down.tscn" id="11_0yn7o"]
+[ext_resource type="PackedScene" uid="uid://ck07kh8tub6su" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_left_down.tscn" id="12_xuyf1"]
 
 [node name="Node2D" type="Node2D" unique_id=528691786]
 script = ExtResource("1_t82i3")
@@ -24,10 +24,10 @@ cap_left_scene = ExtResource("3_k1b4a")
 cap_right_scene = ExtResource("4_6m14r")
 straight_horizontal_scene = ExtResource("5_1teea")
 straight_vertical_scene = ExtResource("5_0kxvf")
-corner_ur_scene = ExtResource("7_k1b4a")
-corner_ul_scene = ExtResource("7_6m14r")
-corner_dr_scene = ExtResource("10_ing2k")
-corner_dl_scene = ExtResource("8_0kxvf")
+corner_ur_scene = ExtResource("9_t82i3")
+corner_ul_scene = ExtResource("9_0kxvf")
+corner_dr_scene = ExtResource("11_0yn7o")
+corner_dl_scene = ExtResource("12_xuyf1")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1273545662]
 position = Vector2(960, 540)
