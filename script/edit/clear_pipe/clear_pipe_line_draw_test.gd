@@ -2,7 +2,7 @@ extends Node2D
 
 var line: Line2D
 var drawing: bool = false
-var points: Array[Vector2] = []          # 网格对齐的点
+var points: Array[Vector2] = []
 var last_point: Vector2 = Vector2.ZERO
 var last_direction: Vector2 = Vector2.ZERO
 const STEP: float = 32.0
@@ -42,19 +42,20 @@ func start_drawing(pos: Vector2) -> void:
 	last_point = snapped
 	last_direction = Vector2.ZERO
 	line.points = points
+	print("=== 开始绘制，起点: (%.1f, %.1f) ===" % [snapped.x, snapped.y])
 
 func stop_drawing() -> void:
 	drawing = false
-	print("绘制结束，共 %d 个点" % points.size())
-	# 绘制完成后，通知管道生成器
+	print("=== 绘制结束，共 %d 个点 ===" % points.size())
+	_print_points_debug()
 	if has_node("PipeBuilder"):
 		var pb = $PipeBuilder
 		if pb.has_method("build_pipes"):
 			pb.build_pipes()
 		else:
-			printerr("PipeBuilder 节点缺少 build_pipes 方法，请检查脚本是否正确挂载。")
+			printerr("PipeBuilder 缺少 build_pipes 方法")
 	else:
-		printerr("未找到 PipeBuilder 子节点。")
+		printerr("未找到 PipeBuilder 子节点")
 
 func update_drawing(current_pos: Vector2) -> void:
 	if points.is_empty():
@@ -73,53 +74,44 @@ func update_drawing(current_pos: Vector2) -> void:
 	if move_dir == Vector2.ZERO:
 		return
 
-	# ---------- 增强回退检测（支持拐角）----------
-	# 如果点数 >=2，检查当前移动方向是否使鼠标回到倒数第二个点的方向
+	# ----- 回退检测（增强版）-----
 	var is_reverse = false
 	if points.size() >= 2:
 		var prev = points[-2]
-		var vec_to_prev = prev - last_point
-		# 计算从 last_point 指向 prev 的方向（正交）
 		var back_dir = Vector2.ZERO
+		var vec_to_prev = prev - last_point
 		if abs(vec_to_prev.x) > 0.1:
 			back_dir = Vector2(sign(vec_to_prev.x), 0.0)
 		elif abs(vec_to_prev.y) > 0.1:
 			back_dir = Vector2(0.0, sign(vec_to_prev.y))
-		# 如果当前移动方向与回退方向一致，则是反向操作
 		if back_dir != Vector2.ZERO and move_dir == back_dir:
 			is_reverse = true
 
 	if is_reverse:
-		# 反向移动时，每移动 STEP 距离就尝试删除最后一个点
 		var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
 		if axis_dist >= STEP:
 			var candidate = last_point + move_dir * STEP
-			# 如果候选点到达（或越过）倒数第二个点的位置，则删除最后一个点
 			var prev_point = points[-2]
-			var dist_to_prev = candidate.distance_squared_to(prev_point)
-			# 允许一定的误差，因为步长可能是32或64，但反向时我们只按STEP移动
-			if dist_to_prev <= STEP * STEP + 1.0:
+			if candidate.distance_squared_to(prev_point) <= STEP * STEP + 1.0:
 				points.pop_back()
 				if points.size() > 0:
 					last_point = points.back()
-					# 更新方向
 					if points.size() >= 2:
-						var new_prev = points[-2]
-						last_direction = (last_point - new_prev).normalized()
+						last_direction = (last_point - points[-2]).normalized()
 					else:
 						last_direction = Vector2.ZERO
 				else:
-					# 所有点被删除，重新开始
 					last_point = candidate
 					points.append(candidate)
 					last_direction = Vector2.ZERO
 				line.points = points
+				print("回退删除点，剩余 %d 个点" % points.size())
+				_print_points_debug()
 			else:
-				# 如果没有到达前一个点，只更新追踪点位置（不删除点，模拟平滑跟随）
 				last_point = candidate
-		return  # 回退时不进行前进逻辑
+		return
 
-	# ---------- 正常前进逻辑 ----------
+	# ----- 正常前进逻辑 -----
 	var direction_changed = (last_direction != Vector2.ZERO and move_dir != last_direction)
 	var required_step = STEP * 2.0 if direction_changed else STEP
 
@@ -132,8 +124,11 @@ func update_drawing(current_pos: Vector2) -> void:
 	if can_add_point(candidate) and not would_overlap_visually(candidate):
 		points.append(candidate)
 		last_point = candidate
+		# 关键修正：拐角后立即更新 last_direction 为新的 move_dir
 		last_direction = move_dir
 		line.points = points
+		print("添加点: (%.1f, %.1f)，方向: %s，步长: %d" % [candidate.x, candidate.y, dir_to_str(move_dir), required_step])
+		_print_points_debug()
 
 func snap_to_grid(pos: Vector2) -> Vector2:
 	return Vector2(round(pos.x / STEP) * STEP, round(pos.y / STEP) * STEP)
@@ -202,3 +197,18 @@ func cross(p1, p2, p3):
 func on_segment(p1, p2, p):
 	return p.x >= min(p1.x, p2.x) - 0.001 and p.x <= max(p1.x, p2.x) + 0.001 and \
 		   p.y >= min(p1.y, p2.y) - 0.001 and p.y <= max(p1.y, p2.y) + 0.001
+
+func _print_points_debug() -> void:
+	var str = "当前点序列: ["
+	for i in range(points.size()):
+		if i > 0: str += ", "
+		str += "(%.0f,%.0f)" % [points[i].x, points[i].y]
+	str += "]"
+	print(str)
+
+func dir_to_str(dir: Vector2) -> String:
+	if dir == Vector2.RIGHT: return "RIGHT"
+	if dir == Vector2.LEFT:  return "LEFT"
+	if dir == Vector2.UP:    return "UP"
+	if dir == Vector2.DOWN:  return "DOWN"
+	return "UNKNOWN"
