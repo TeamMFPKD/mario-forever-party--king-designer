@@ -38,62 +38,78 @@ func build_pipes() -> void:
 	for i in pts.size():
 		print("  pts[%d] = (%.0f, %.0f)" % [i, pts[i].x, pts[i].y])
 
-	# 第一步：收集所有原始线段信息
-	var raw_segments: Array[Dictionary] = []
+	# 修复逻辑：每两个相邻点之间生成一个管道零件，正确处理半格偏移
+	var fixed_straights: Array[Dictionary] = []
+	var used_positions: Dictionary = {}
+	
 	for i in range(pts.size() - 1):
 		var start = pts[i]
 		var end = pts[i + 1]
-		var dir = get_orthogonal_direction(start, end)
-		if dir == Vector2.ZERO:
+		var direction = get_orthogonal_direction(start, end)
+		if direction == Vector2.ZERO:
 			continue
-		var dist = start.distance_to(end)
-		var center = (start + end) * 0.5
-		var seg_type = "straight" if is_equal_approx(dist, STEP) else "corner"
-		raw_segments.append({
-			"index": i,
-			"start": start, "end": end, "center": center, "dir": dir,
-			"type": seg_type
-		})
-
-	# 第二步：强制修正直线段数量（处理拐角前后多一少一问题）
-	var fixed_straights: Array[Dictionary] = []
-	var i = 0
-	while i < raw_segments.size():
-		var seg = raw_segments[i]
-		if seg.type == "straight":
-			# 检查是否为拐角前的多余直线段
-			# 条件：下一个线段是拐角，且当前线段与前一线段同向（形成连续直线）
-			var next_is_corner = (i + 1 < raw_segments.size() and raw_segments[i + 1].type == "corner")
-			var prev_same_dir = (fixed_straights.size() > 0 and fixed_straights[-1].dir == seg.dir)
-			if next_is_corner and prev_same_dir:
-				# 这是拐角前多余的直线段，跳过（不加入 fixed_straights）
-				print("  ⚠️ 跳过拐角前多余直线段: 中心(%.0f,%.0f)" % [seg.center.x, seg.center.y])
-				i += 1
-				continue
-			fixed_straights.append(seg)
-		else:  # corner
-			# 检查拐角后是否紧跟直线段，若无则补充一个
-			var next_is_straight = (i + 1 < raw_segments.size() and raw_segments[i + 1].type == "straight")
-			if not next_is_straight and i + 1 < raw_segments.size():
-				# 拐角后缺少直线段，根据拐角后的下一个点方向补一个
-				var next_seg = raw_segments[i + 1]  # 可能是另一个拐角或直线
-				# 但通常拐角后应当紧跟直线，若无则生成一个虚拟直线段
-				var next_start = seg.end
-				var next_end = next_seg.start
-				var virt_dir = get_orthogonal_direction(next_start, next_end)
-				if virt_dir != Vector2.ZERO:
-					var virt_center = (next_start + next_end) * 0.5
-					var virt_seg = {
-						"index": -1,
-						"start": next_start, "end": next_end, "center": virt_center, "dir": virt_dir,
-						"type": "straight", "virtual": true
-					}
-					fixed_straights.append(virt_seg)
-					print("  ➕ 拐角后补充直线段: 中心(%.0f,%.0f)" % [virt_center.x, virt_center.y])
-			i += 1
-			continue
-		i += 1
-
+		
+		# 计算两点之间的精确中点
+		var exact_mid = (start + end) / 2.0
+		
+		# 计算两点之间的精确中点（不进行网格对齐）
+		var exact_center = (start + end) / 2.0
+		
+		# 使用精确中点作为管道中心，允许半网格位置
+		var final_center = exact_center
+		
+		# 使用四舍五入的坐标作为唯一标识（用于去重）
+		var pos_key = str(Vector2(round(final_center.x / STEP) * STEP, round(final_center.y / STEP) * STEP))
+		
+		# 如果这个位置还没有管道，则添加
+		if not used_positions.has(pos_key):
+			used_positions[pos_key] = true
+			fixed_straights.append({
+				"index": i,
+				"start": start,
+				"end": end,
+				"center": final_center,
+				"dir": direction,
+				"type": "straight"
+			})
+	
+	# 如果需要在拐角后多生成一个部件，检测方向变化
+	# 检测路径中的方向变化点
+	var additional_parts: Array[Dictionary] = []
+	for i in range(1, pts.size() - 1):
+		var prev_direction = get_orthogonal_direction(pts[i-1], pts[i])
+		var next_direction = get_orthogonal_direction(pts[i], pts[i+1])
+		if prev_direction != Vector2.ZERO and next_direction != Vector2.ZERO and prev_direction != next_direction:
+			# 发生方向变化，即拐角点
+			# 在拐角点后（下一个方向）多生成一个管道部件
+			var corner_pt = pts[i]
+			var next_pt = pts[i+1]
+			# 计算两点之间的精确中点（不进行网格对齐）
+			var exact_center = (corner_pt + next_pt) / 2.0
+			
+			# 使用精确中点作为管道中心，允许半网格位置
+			var aligned_additional = exact_center
+			
+			# 使用四舍五入的坐标作为唯一标识（用于去重）
+			var pos_key = str(Vector2(round(aligned_additional.x / STEP) * STEP, round(aligned_additional.y / STEP) * STEP))
+			
+			# 只有当该位置未被占用时才添加额外部件
+			if not used_positions.has(pos_key):
+				used_positions[pos_key] = true
+				additional_parts.append({
+					"index": i,
+					"start": corner_pt,
+					"end": next_pt,
+					"center": aligned_additional,
+					"dir": next_direction,
+					"type": "straight"
+				})
+				print("  ➕ 拐角后补充管道部件: 中心(%.0f,%.0f)" % [aligned_additional.x, aligned_additional.y])
+	
+	# 合并主要管道和额外管道
+	for additional_part in additional_parts:
+		fixed_straights.append(additional_part)
+	
 	# 如果没有任何直线段，退出
 	if fixed_straights.is_empty():
 		print("没有直线段可生成")
