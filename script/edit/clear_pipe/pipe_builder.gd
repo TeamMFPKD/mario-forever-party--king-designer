@@ -8,7 +8,7 @@ extends Node2D
 @export var straight_horizontal_scene: PackedScene
 @export var straight_vertical_scene: PackedScene
 
-@export var corner_ur_scene: PackedScene   # 暂未使用
+@export var corner_ur_scene: PackedScene
 @export var corner_ul_scene: PackedScene
 @export var corner_dr_scene: PackedScene
 @export var corner_dl_scene: PackedScene
@@ -38,11 +38,9 @@ func build_pipes() -> void:
 	for i in pts.size():
 		print("  pts[%d] = (%.0f, %.0f)" % [i, pts[i].x, pts[i].y])
 
-	# 修复逻辑：每两个相邻点之间生成一个管道零件，正确处理半格偏移
 	var fixed_straights: Array[Dictionary] = []
 	var used_positions: Dictionary = {}
 	
-	# 首先检测所有拐角点
 	var corner_indices: Array[int] = []
 	for i in range(1, pts.size() - 1):
 		var prev_direction = get_orthogonal_direction(pts[i-1], pts[i])
@@ -51,7 +49,6 @@ func build_pipes() -> void:
 			corner_indices.append(i)
 			print("  🔁 检测到拐角点: 索引 %d" % i)
 	
-	# 处理每两个相邻点之间的管道段
 	for i in range(pts.size() - 1):
 		var start = pts[i]
 		var end = pts[i + 1]
@@ -59,27 +56,16 @@ func build_pipes() -> void:
 		if direction == Vector2.ZERO:
 			continue
 		
-		# 检查当前段是否在拐角点之前或之后
-		var is_before_corner = (i + 1 in corner_indices)  # 当前段的终点是拐角点
-		var is_after_corner = false  # 初始化标志
-		
-		# 检查当前段是否在拐角点之后（起点是拐角点）
-		if i in corner_indices:
-			is_after_corner = true
+		var is_before_corner = (i + 1 in corner_indices)
+		var is_after_corner = (i in corner_indices)
 		
 		if is_before_corner:
-			# 在拐角之前的点对应的零件少生成一个，跳过此段
 			print("  ⏭️ 跳过拐角前的管道段: [%d] 到 [%d]" % [i, i+1])
 			continue
 		elif is_after_corner:
-			# 拐角之后的第一个零件向前推进半格 (16px) 
 			var base_center = (start + end) / 2.0
-			var adjusted_center = base_center + direction * (STEP / 2.0)  # 朝向终点方向移动半格
-			
-			# 使用四舍五入的坐标作为唯一标识（用于去重）
+			var adjusted_center = base_center + direction * (STEP / 2.0)
 			var pos_key = str(Vector2(round(adjusted_center.x / STEP) * STEP, round(adjusted_center.y / STEP) * STEP))
-			
-			# 如果这个位置还没有管道，则添加
 			if not used_positions.has(pos_key):
 				used_positions[pos_key] = true
 				fixed_straights.append({
@@ -92,16 +78,9 @@ func build_pipes() -> void:
 				})
 				print("  📐 拐角后调整管道部件: 中心(%.0f,%.0f), 原中心(%.0f,%.0f), 方向 %s" % [adjusted_center.x, adjusted_center.y, base_center.x, base_center.y, dir_to_str(direction)])
 		else:
-			# 普通段按原逻辑处理
 			var exact_center = (start + end) / 2.0
-			
-			# 使用精确中点作为管道中心，允许半网格位置
 			var final_center = exact_center
-			
-			# 使用四舍五入的坐标作为唯一标识（用于去重）
 			var pos_key = str(Vector2(round(final_center.x / STEP) * STEP, round(final_center.y / STEP) * STEP))
-			
-			# 如果这个位置还没有管道，则添加
 			if not used_positions.has(pos_key):
 				used_positions[pos_key] = true
 				fixed_straights.append({
@@ -113,7 +92,6 @@ func build_pipes() -> void:
 					"type": "straight"
 				})
 	
-	# 放置拐角零件
 	for corner_idx in corner_indices:
 		var corner_pos = pts[corner_idx]
 		var prev_direction = get_orthogonal_direction(pts[corner_idx-1], pts[corner_idx])
@@ -121,14 +99,12 @@ func build_pipes() -> void:
 		place_corner(corner_pos, prev_direction, next_direction)
 		print("  生成拐角: 位置(%.0f,%.0f), 从%s到%s" % [corner_pos.x, corner_pos.y, dir_to_str(prev_direction), dir_to_str(next_direction)])
 
-	# 如果没有任何直线段，退出
 	if fixed_straights.is_empty():
 		print("没有直线段可生成")
 		return
 
 	print("修正后直线段数量: %d" % fixed_straights.size())
 
-	# 第三步：生成零件（首尾替换为开口）
 	for idx in range(fixed_straights.size()):
 		var seg = fixed_straights[idx]
 		var center: Vector2 = seg.center
@@ -201,24 +177,21 @@ func place_corner(center: Vector2, incoming_dir: Vector2, outgoing_dir: Vector2)
 	var rot: float = 0.0
 	
 	print("    正在放置拐角: 位置=(%.0f,%.0f), 从%s到%s" % [center.x, center.y, dir_to_str(incoming_dir), dir_to_str(outgoing_dir)])
-	# 根据拐角点周围的相邻点位置来确定拐角类型
-	# incoming_dir是管道进入的方向，outgoing_dir是管道出去的方向
-	# 所以在拐角点，incoming_dir的反方向和outgoing_dir方向都有管道
 	var left_has_pipe = (incoming_dir == Vector2.RIGHT || outgoing_dir == Vector2.LEFT)
 	var right_has_pipe = (incoming_dir == Vector2.LEFT || outgoing_dir == Vector2.RIGHT)
 	var up_has_pipe = (incoming_dir == Vector2.DOWN || outgoing_dir == Vector2.UP)
 	var down_has_pipe = (incoming_dir == Vector2.UP || outgoing_dir == Vector2.DOWN)
 	
-	if up_has_pipe && right_has_pipe:  # 上方和右侧有管道
+	if up_has_pipe && right_has_pipe:
 		scene = corner_ur_scene
 		print("    选择UR拐角: 上方和右侧有管道")
-	elif up_has_pipe && left_has_pipe:  # 上方和左侧有管道
+	elif up_has_pipe && left_has_pipe:
 		scene = corner_ul_scene
 		print("    选择UL拐角: 上方和左侧有管道")
-	elif down_has_pipe && right_has_pipe:  # 下方和右侧有管道
+	elif down_has_pipe && right_has_pipe:
 		scene = corner_dr_scene
 		print("    选择DR拐角: 下方和右侧有管道")
-	elif down_has_pipe && left_has_pipe:  # 下方和左侧有管道
+	elif down_has_pipe && left_has_pipe:
 		scene = corner_dl_scene
 		print("    选择DL拐角: 下方和左侧有管道")
 	else:

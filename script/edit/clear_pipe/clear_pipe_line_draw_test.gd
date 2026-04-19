@@ -6,6 +6,7 @@ var points: Array[Vector2] = []
 var last_point: Vector2 = Vector2.ZERO
 var last_direction: Vector2 = Vector2.ZERO
 const STEP: float = 32.0
+const CORNER_STEP: float = 64.0
 const LINE_WIDTH: float = 62.0
 
 func _ready() -> void:
@@ -113,7 +114,16 @@ func update_drawing(current_pos: Vector2) -> void:
 
 	# ----- 正常前进逻辑 -----
 	var direction_changed = (last_direction != Vector2.ZERO and move_dir != last_direction)
-	var required_step = STEP * 2.0 if direction_changed else STEP
+	
+	# 🆕 新增：拐弯前必须满足当前方向已经连续绘制了至少两个直线段（即同向点数≥3）
+	if direction_changed:
+		var straight_count = count_consecutive_same_direction(move_dir)  # 注意：这里检查的是**拐弯前**的方向（即 last_direction）
+		if straight_count < 2:
+			# 不满足最小直线长度，忽略拐弯尝试，继续等待同向移动
+			print("  ⚠️ 拐弯前直线长度不足（当前同向段数 %d，需要至少 2），忽略拐弯" % straight_count)
+			return
+	
+	var required_step = CORNER_STEP if direction_changed else STEP
 
 	var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
 	if axis_dist < required_step:
@@ -124,11 +134,37 @@ func update_drawing(current_pos: Vector2) -> void:
 	if can_add_point(candidate) and not would_overlap_visually(candidate):
 		points.append(candidate)
 		last_point = candidate
-		# 关键修正：拐角后立即更新 last_direction 为新的 move_dir
 		last_direction = move_dir
 		line.points = points
 		print("添加点: (%.1f, %.1f)，方向: %s，步长: %d" % [candidate.x, candidate.y, dir_to_str(move_dir), required_step])
 		_print_points_debug()
+
+# 辅助函数：计算当前最后一个方向（即 last_direction）连续出现的段数
+# 注意：我们想要的是“当前正在绘制的方向上”已经有多少个连续的直线段（不包含当前正在尝试添加的段）
+func count_consecutive_same_direction(proposed_dir: Vector2) -> int:
+	# 实际检查的是 last_direction，即拐弯前的方向
+	var dir_to_check = last_direction
+	if dir_to_check == Vector2.ZERO:
+		return 0
+	var count = 0
+	# 从倒数第二个点开始向前遍历，统计连续同向的线段
+	# 注意：线段数量 = 点数 - 1
+	var i = points.size() - 2
+	while i >= 1:
+		var p1 = points[i - 1]
+		var p2 = points[i]
+		var seg_dir = get_orthogonal_direction(p1, p2)
+		if seg_dir == dir_to_check:
+			count += 1
+		else:
+			break
+		i -= 1
+	# 还要加上最后一个线段（points[-2] 到 last_point）
+	if points.size() >= 2:
+		var last_seg_dir = get_orthogonal_direction(points[-2], last_point)
+		if last_seg_dir == dir_to_check:
+			count += 1
+	return count
 
 func snap_to_grid(pos: Vector2) -> Vector2:
 	return Vector2(round(pos.x / STEP) * STEP, round(pos.y / STEP) * STEP)
@@ -197,6 +233,15 @@ func cross(p1, p2, p3):
 func on_segment(p1, p2, p):
 	return p.x >= min(p1.x, p2.x) - 0.001 and p.x <= max(p1.x, p2.x) + 0.001 and \
 		   p.y >= min(p1.y, p2.y) - 0.001 and p.y <= max(p1.y, p2.y) + 0.001
+
+func get_orthogonal_direction(p1: Vector2, p2: Vector2) -> Vector2:
+	var dx = p2.x - p1.x
+	var dy = p2.y - p1.y
+	if abs(dx) > 0.1 and abs(dy) < 0.1:
+		return Vector2(sign(dx), 0.0)
+	elif abs(dy) > 0.1 and abs(dx) < 0.1:
+		return Vector2(0.0, sign(dy))
+	return Vector2.ZERO
 
 func _print_points_debug() -> void:
 	var str = "当前点序列: ["
