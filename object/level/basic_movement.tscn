@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cil2qphnaxkrl" path="res://script/level/physics/basic_movement.gd" id="1_33rg5"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="2_k4dqa"]
+[ext_resource type="Script" uid="uid://bbtguxvb2355i" path="res://script/level/no_sound_if_not_on_screen.gd" id="2_ql7qy"]
 [ext_resource type="AudioStream" uid="uid://bfqjgj3r5qoiq" path="res://sound/level/clear_pipe_in.wav" id="3_ql7qy"]
 [ext_resource type="AudioStream" uid="uid://6tgb6rw0wpm7" path="res://sound/level/clear_pipe_out.wav" id="4_qe4mh"]
 
@@ -9,11 +10,20 @@
 script = ExtResource("1_33rg5")
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
+[node name="NoSoundIfNotOnScreen" type="Node" parent="." unique_id=409263369 node_paths=PackedStringArray("is_on_screen_node", "basic_movement")]
+script = ExtResource("2_ql7qy")
+is_on_screen_node = NodePath("VisibleOnScreenNotifier2D")
+basic_movement = NodePath("..")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="NoSoundIfNotOnScreen" unique_id=966442520]
+
 [node name="ClearPipeIn" parent="." unique_id=1715984441 instance=ExtResource("2_k4dqa")]
 stream = ExtResource("3_ql7qy")
 
 [node name="ClearPipeOut" parent="." unique_id=1135949016 instance=ExtResource("2_k4dqa")]
 stream = ExtResource("4_qe4mh")
 
-[connection signal="pipe_entered" from="." to="ClearPipeIn" method="play"]
-[connection signal="pipe_exited" from="." to="ClearPipeOut" method="play"]
+[connection signal="pipe_entered" from="." to="NoSoundIfNotOnScreen" method="_play_sound_pipe_in"]
+[connection signal="pipe_exited" from="." to="NoSoundIfNotOnScreen" method="_play_sound_pipe_out"]
+[connection signal="play_sound_pipe_in" from="NoSoundIfNotOnScreen" to="ClearPipeIn" method="play"]
+[connection signal="play_sound_pipe_out" from="NoSoundIfNotOnScreen" to="ClearPipeOut" method="play"]
