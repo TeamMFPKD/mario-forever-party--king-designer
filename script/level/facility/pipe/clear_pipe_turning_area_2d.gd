@@ -11,6 +11,7 @@ var direction : ClearPipeSet.Direction = ClearPipeSet.Direction.LEFT
 var processed_ids : Dictionary = {}
 
 func _ready() -> void:
+	get_parent().set_meta("clear_pipe_turning_area", self)
 	pipe_set = get_node(path_to_clear_pipe_set)
 	direction = pipe_set.direction
 	body_exited.connect(_on_body_exited)

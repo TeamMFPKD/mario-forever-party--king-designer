@@ -15,6 +15,7 @@ enum Direction {
 
 var clear_pipe_set : ClearPipeSet
 var turning_area : Area2D
+var overlap_player_meta_cnt : int = 0
 
 # 记录已进入该入口的实体 ID，避免重复触发
 var overlapped_ids : Dictionary = {}
@@ -41,10 +42,30 @@ func _physics_process(_delta: float) -> void:
 		if body.is_in_group("player") or body.has_meta("basic_movement"):
 			current_ids[body.get_instance_id()] = true
 
+		# 透明水管的连接
+		if body.has_meta("clear_pipe_turning_area"):
+			var turning = body.get_meta("clear_pipe_turning_area") as ClearPipeTurningArea2D
+			var t_dir = turning.direction
+			var e_dir = entrance_direction
+			if t_dir == ClearPipeSet.Direction.LEFT and e_dir == Direction.LEFT \
+			or t_dir == ClearPipeSet.Direction.RIGHT and e_dir == Direction.RIGHT \
+			or t_dir == ClearPipeSet.Direction.UP and e_dir == Direction.UP \
+			or t_dir == ClearPipeSet.Direction.DOWN and e_dir == Direction.DOWN:
+				queue_free()
+
 	# 移除已不在区域内的实体记录
 	for id in overlapped_ids.keys():
 		if not current_ids.has(id):
 			overlapped_ids.erase(id)
+
+	# 针对玩家的 overlap meta 处理
+	if has_meta("overlapped_with_player"):
+		if overlap_player_meta_cnt < 5:
+			overlap_player_meta_cnt += 1
+		else:
+			remove_meta("overlapped_with_player")
+
+
 
 func _on_body_entered(body : Node2D) -> void:
 	if not (body.is_in_group("player") or body.has_meta("basic_movement")):
