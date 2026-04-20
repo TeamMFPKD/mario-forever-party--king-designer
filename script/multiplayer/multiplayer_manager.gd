@@ -224,6 +224,9 @@ func edit_time_out():
 
 @rpc("any_peer", "call_local")
 func transfer_level_data(player_id: int, level_file_name: String, level_data_bytes_compressed: PackedByteArray) -> void:
+	# 防止结束时主机发送不带关卡数据的玩家信息，导致空关卡数据覆盖本地文件
+	if player.reach_end:
+		return
 	for p in players:
 		if p.id == player_id:
 			p.level_file_name = level_file_name
