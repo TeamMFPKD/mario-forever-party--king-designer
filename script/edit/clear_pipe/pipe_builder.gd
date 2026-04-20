@@ -17,24 +17,54 @@ const STEP: float = 32.0
 const CORNER_STEP: float = 64.0
 
 func build_pipes() -> void:
-	for child in get_children():
-		child.queue_free()
-
+	clear_all_pipes()
+	
 	var parent = get_parent()
 	if not parent or not parent.has_method("get"):
 		return
-	var pts_var = parent.get("points")
-	if not (pts_var is Array):
+	
+	var line_data_list = parent.get("line_data_list")
+	if line_data_list is Array and line_data_list.size() > 0:
+		build_pipes_from_lines(line_data_list)
 		return
+	
+	var pts_var = parent.get("points")
+	if pts_var is Array:
+		build_single_line(pts_var)
+
+func build_pipes_from_lines(line_data_list: Array) -> void:
+	clear_all_pipes()
+	
+	for line_idx in range(line_data_list.size()):
+		var line_data = line_data_list[line_idx]
+		var pts_var = line_data.get("points", [])
+		
+		var pts: Array[Vector2] = []
+		for p in pts_var:
+			if p is Vector2:
+				pts.append(p)
+		
+		if pts.size() < 2:
+			continue
+		
+		print("========== 生成线条 %d 管道，点数: %d ==========" % [line_idx, pts.size()])
+		build_line_pipes(pts, line_idx)
+
+func build_single_line(pts_var: Array) -> void:
+	clear_all_pipes()
+	
 	var pts: Array[Vector2] = []
 	for p in pts_var:
 		if p is Vector2:
 			pts.append(p)
-
+	
 	if pts.size() < 2:
 		return
-
+	
 	print("========== 生成管道，点数: %d ==========" % pts.size())
+	build_line_pipes(pts, 0)
+
+func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 	for i in pts.size():
 		print("  pts[%d] = (%.0f, %.0f)" % [i, pts[i].x, pts[i].y])
 
@@ -74,7 +104,8 @@ func build_pipes() -> void:
 					"end": end,
 					"center": adjusted_center,
 					"dir": direction,
-					"type": "straight"
+					"type": "straight",
+					"line_idx": line_idx
 				})
 				print("  📐 拐角后调整管道部件: 中心(%.0f,%.0f), 原中心(%.0f,%.0f), 方向 %s" % [adjusted_center.x, adjusted_center.y, base_center.x, base_center.y, dir_to_str(direction)])
 		else:
@@ -89,7 +120,8 @@ func build_pipes() -> void:
 					"end": end,
 					"center": final_center,
 					"dir": direction,
-					"type": "straight"
+					"type": "straight",
+					"line_idx": line_idx
 				})
 	
 	for corner_idx in corner_indices:
@@ -123,6 +155,9 @@ func build_pipes() -> void:
 
 	print("生成完成，共 %d 个零件" % fixed_straights.size())
 
+func clear_all_pipes() -> void:
+	for child in get_children():
+		child.queue_free()
 
 func get_orthogonal_direction(p1: Vector2, p2: Vector2) -> Vector2:
 	var dx = p2.x - p1.x
@@ -132,7 +167,6 @@ func get_orthogonal_direction(p1: Vector2, p2: Vector2) -> Vector2:
 	elif abs(dy) > 0.1 and abs(dx) < 0.1:
 		return Vector2(0.0, sign(dy))
 	return Vector2.ZERO
-
 
 func place_straight(center: Vector2, dir: Vector2) -> void:
 	var scene: PackedScene
@@ -152,7 +186,6 @@ func place_straight(center: Vector2, dir: Vector2) -> void:
 		inst.rotation_degrees = rot
 		add_child(inst)
 
-
 func place_cap(center: Vector2, outward_dir: Vector2) -> void:
 	var scene: PackedScene
 	var rot: float = 0.0
@@ -170,7 +203,6 @@ func place_cap(center: Vector2, outward_dir: Vector2) -> void:
 		inst.position = center
 		inst.rotation_degrees = rot
 		add_child(inst)
-
 
 func place_corner(center: Vector2, incoming_dir: Vector2, outgoing_dir: Vector2) -> void:
 	var scene: PackedScene
@@ -203,7 +235,6 @@ func place_corner(center: Vector2, incoming_dir: Vector2, outgoing_dir: Vector2)
 		inst.position = center
 		inst.rotation_degrees = rot
 		add_child(inst)
-
 
 func dir_to_str(dir: Vector2) -> String:
 	if dir == Vector2.RIGHT: return "RIGHT"
