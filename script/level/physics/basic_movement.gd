@@ -105,6 +105,21 @@ func _physics_process(delta: float) -> void:
 		move_object.scale = move_object.scale.move_toward(Vector2(0.4, 0.4), 0.3)
 		clear_pipe_turning_detect()
 		pipe_movement()
+
+		# 安全检测：管道运动后如果没有与墙体（碰撞层第1位）/TileMap重叠，说明已脱离管道
+		if pipe_in_cooldown <= 0:
+			var query = PhysicsShapeQueryParameters2D.new()
+			query.shape = shape_cast.shape
+			query.transform = move_object.global_transform
+			query.collision_mask = 1
+			query.collide_with_bodies = true
+			query.collide_with_areas = false
+			query.exclude = [move_object.get_rid()]
+			var block_results = move_object.get_world_2d().direct_space_state.intersect_shape(query)
+			if block_results.is_empty():
+				exit_pipe()
+				move_object.force_update_transform()
+
 		return
 	move_object.scale = move_object.scale.move_toward(Vector2(1.0, 1.0), 0.3)
 
@@ -141,19 +156,23 @@ func overlap_turn_detect() -> void:
 		overlap_turn_detect_objects.clear()
 		return
 	for result in results:
+		if not is_instance_valid(result):
+			continue
 		if result is ClearPipeEntrance:
 			continue
 		if result == move_object:
 			continue
 		if result.has_meta("basic_movement"):
 			var other_basic_movement_node = result.get_meta("basic_movement") as BasicMovement
-			if not other_basic_movement_node.can_be_turn_overlap_detected:
+			if not is_instance_valid(other_basic_movement_node) or not other_basic_movement_node.can_be_turn_overlap_detected:
 				continue
 		if !(result in overlap_turn_detect_objects):
 			overlap_turn_detect_objects.append(result)
 			speed_x *= -1.0
 
 func speed_x_process() -> void:
+	if out_pipe_cooldown > 0:
+		return
 	if move_object.is_on_wall():
 		speed_x *= -1.0
 
@@ -208,7 +227,7 @@ func pipe_detect() -> void:
 
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
 	for result in results:
-		if not result is ClearPipeEntrance:
+		if not is_instance_valid(result) or not result is ClearPipeEntrance:
 			continue
 		if result == move_object:
 			continue
@@ -221,24 +240,33 @@ func pipe_detect() -> void:
 			if pipe_in_cooldown > 0:
 				return
 
-			if not entrance.is_overlapped_with(move_object):
-				# 检查入口是否被实体（如砖块）阻挡
-				if entrance.has_meta("overlapping_with_block"):
-					clear_pipe_blocked_counter += 1
-					# 如果需要可在此处添加阻塞反转逻辑，此处暂时注释
-					match pipe_moving_dir:
-						PipeMoveDirection.LEFT:
-							pipe_moving_dir = PipeMoveDirection.RIGHT
-						PipeMoveDirection.RIGHT:
-							pipe_moving_dir = PipeMoveDirection.LEFT
-						PipeMoveDirection.UP:
-							pipe_moving_dir = PipeMoveDirection.DOWN
-						PipeMoveDirection.DOWN:
-							pipe_moving_dir = PipeMoveDirection.UP
-					return
-				# 无阻挡，正常退出管道
-				exit_pipe()
-				move_object.position = entrance.global_position
+			if entrance.has_meta("overlapping_with_block"):
+				clear_pipe_blocked_counter += 1
+				match pipe_moving_dir:
+					PipeMoveDirection.LEFT:
+						pipe_moving_dir = PipeMoveDirection.RIGHT
+					PipeMoveDirection.RIGHT:
+						pipe_moving_dir = PipeMoveDirection.LEFT
+					PipeMoveDirection.UP:
+						pipe_moving_dir = PipeMoveDirection.DOWN
+					PipeMoveDirection.DOWN:
+						pipe_moving_dir = PipeMoveDirection.UP
+				clear_turning_processed_for_reversal()
+				return
+
+			# 无阻挡，正常退出管道
+			exit_pipe()
+			move_object.position = entrance.global_position
+			move_object.force_update_transform()
+			match entrance.entrance_direction:
+				ClearPipeEntrance.Direction.LEFT:
+					speed_x = -abs(speed_x) if speed_x else -60
+				ClearPipeEntrance.Direction.RIGHT:
+					speed_x = abs(speed_x) if speed_x else 60
+				ClearPipeEntrance.Direction.UP:
+					speed_y = -abs(speed_y) if speed_y else -60
+				ClearPipeEntrance.Direction.DOWN:
+					speed_y = abs(speed_y) if speed_y else 60
 			return
 
 		# 不在管道内：检查进入条件
@@ -274,7 +302,7 @@ func pipe_detect() -> void:
 				enter_dir = PipeMoveDirection.DOWN
 
 		enter_pipe(enter_dir)
-		move_object.position = entrance.turning_area.global_position
+		move_object.position = entrance.turning_area.global_position if is_instance_valid(entrance.turning_area) else entrance.global_position
 		entrance.overlapped_ids[move_object.get_instance_id()] = true
 		break
 
@@ -315,12 +343,12 @@ func exit_pipe() -> void:
 	# 清除所有 turning area 的 processed 标记
 	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
 	for turning in turnings:
-		if turning is ClearPipeTurningArea2D:
+		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
 			turning.clear_processed(move_object)
 	# 清除所有 entrance 的 overlapped 标记
 	var entrances = get_tree().get_nodes_in_group("clear_pipe_entrance")
 	for entrance in entrances:
-		if entrance is ClearPipeEntrance:
+		if is_instance_valid(entrance) and entrance is ClearPipeEntrance:
 			entrance.clear_overlapped(move_object)
 
 	for i in range(5):
@@ -345,11 +373,12 @@ func pipe_movement() -> void:
 			move_object.position = move_object.position + Vector2(0, moving_speed)
 		PipeMoveDirection.ALIGN:
 			pass  # 对齐时由转向检测控制移动
+	move_object.force_update_transform()
 
 func clear_pipe_turning_detect() -> void:
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
 	for result in results:
-		if not result is ClearPipeTurningArea2D:
+		if not is_instance_valid(result) or not result is ClearPipeTurningArea2D:
 			continue
 		var area := result as ClearPipeTurningArea2D
 
@@ -409,3 +438,9 @@ func clear_pipe_turning_detect() -> void:
 					pipe_moving_dir = PipeMoveDirection.RIGHT
 
 		area.mark_processed(move_object)
+
+func clear_turning_processed_for_reversal() -> void:
+	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning in turnings:
+		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
+			turning.clear_processed(move_object)

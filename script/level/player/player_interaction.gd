@@ -35,6 +35,7 @@ func _physics_process(_delta: float) -> void:
 		var block_results = player.get_world_2d().direct_space_state.intersect_shape(query)
 		if block_results.is_empty():
 			player_movement.exit_pipe()
+			player.force_update_transform()
 
 	# 传送时不处理交互
 	if player_movement.is_in_transport:
@@ -180,6 +181,7 @@ func pipe_detect(results : Array[Node2D]) -> void:
 
 			player_movement.exit_pipe()
 			player.position = clear_pipe_entrance.global_position
+			player.force_update_transform()
 			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
