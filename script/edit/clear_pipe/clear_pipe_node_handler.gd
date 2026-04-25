@@ -21,20 +21,64 @@ func _ready() -> void:
 		touch_screen_button.released.connect(_on_released)
 	_apply_tail_state()
 	hide_arrows()
+	update_handler_color()
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			var global_pos = event.global_position
+			var handler_global_pos = global_position
+			var diff = global_pos - handler_global_pos
+			if abs(diff.x) <= 16.0 and abs(diff.y) <= 16.0:
+				if event.pressed and not is_held:
+					is_held = true
+					handler_pressed.emit(self)
+					update_arrow_visibility()
+					update_handler_color()
+					get_viewport().set_input_as_handled()
+				elif not event.pressed and is_held:
+					is_held = false
+					handler_released.emit(self)
+					hide_arrows()
+					update_handler_color()
+					get_viewport().set_input_as_handled()
+	elif event is InputEventScreenTouch:
+		var global_pos = event.position
+		var handler_global_pos = global_position
+		var diff = global_pos - handler_global_pos
+		if abs(diff.x) <= 16.0 and abs(diff.y) <= 16.0:
+			if event.pressed and not is_held:
+				is_held = true
+				handler_pressed.emit(self)
+				update_arrow_visibility()
+				update_handler_color()
+				get_viewport().set_input_as_handled()
+			elif not event.pressed and is_held:
+				is_held = false
+				handler_released.emit(self)
+				hide_arrows()
+				update_handler_color()
+				get_viewport().set_input_as_handled()
+
+func _is_point_in_handler(pos: Vector2) -> bool:
+	return abs(pos.x) <= 16.0 and abs(pos.y) <= 16.0
 
 func _on_pressed() -> void:
 	is_held = true
 	handler_pressed.emit(self)
 	update_arrow_visibility()
+	update_handler_color()
 
 func _on_released() -> void:
 	is_held = false
 	handler_released.emit(self)
 	hide_arrows()
+	update_handler_color()
 
 func set_tail(value: bool) -> void:
 	is_tail = value
 	_apply_tail_state()
+	update_handler_color()
 
 func set_held(value: bool) -> void:
 	is_held = value
@@ -42,12 +86,23 @@ func set_held(value: bool) -> void:
 		update_arrow_visibility()
 	else:
 		hide_arrows()
+	update_handler_color()
 
 func _apply_tail_state() -> void:
 	var touch_screen_button = get_node_or_null("TouchScreenButton")
 	if touch_screen_button:
-		touch_screen_button.visible = is_tail
-		touch_screen_button.shape = _original_shape if is_tail else null
+		touch_screen_button.visible = true
+		touch_screen_button.shape = _original_shape
+
+func update_handler_color() -> void:
+	var edit_handler = get_node_or_null("EditObjectHandler")
+	if not edit_handler:
+		return
+	
+	if is_held:
+		edit_handler.modulate = Color(1, 0.5, 0, 1)
+	else:
+		edit_handler.modulate = Color.WHITE
 
 func hide_arrows() -> void:
 	var arrow_right = get_node_or_null("EditPipeArrowRight")
@@ -65,7 +120,7 @@ func hide_arrows() -> void:
 		arrow_down.visible = false
 
 func update_arrow_visibility() -> void:
-	if not is_tail or not is_held:
+	if not is_held:
 		hide_arrows()
 		return
 	
