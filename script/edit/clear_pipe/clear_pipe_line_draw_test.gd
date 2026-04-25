@@ -9,6 +9,7 @@ var line_data_list: Array[Dictionary] = []
 var current_line_index: int = -1
 var drawing: bool = false
 var editing_line_index: int = -1
+var editing_from_head: bool = false
 var dragging_line_index: int = -1
 var drag_start_pos: Vector2 = Vector2.ZERO
 var drag_original_points: Array[Vector2] = []
@@ -26,6 +27,16 @@ func _ready() -> void:
 	add_child(lines_node)
 
 func _input(event: InputEvent) -> void:
+	if drawing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		stop_drawing()
+		return
+	
+	if event is InputEventMouseMotion and drawing:
+		update_drawing(get_local_mouse_position())
+	elif event is InputEventScreenDrag and drawing:
+		update_drawing(to_local(event.position))
+
+func _unhandled_input(event: InputEvent) -> void:
 	if dragging_line_index >= 0:
 		handle_dragging(event)
 		return
@@ -55,10 +66,6 @@ func _input(event: InputEvent) -> void:
 				start_drawing(click_pos)
 		else:
 			stop_drawing()
-	elif event is InputEventMouseMotion and drawing:
-		update_drawing(get_local_mouse_position())
-	elif event is InputEventScreenDrag and drawing:
-		update_drawing(to_local(event.position))
 
 func get_line_at_position(pos: Vector2) -> int:
 	for i in range(line_data_list.size()):
@@ -91,7 +98,6 @@ func start_dragging_line(line_idx: int, pos: Vector2) -> void:
 	dragging_line_index = line_idx
 	drag_start_pos = snap_to_grid(pos)
 	drag_original_points = line_data_list[line_idx].points.duplicate()
-	print("开始拖动线条 %d" % line_idx)
 
 func handle_dragging(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -134,7 +140,6 @@ func update_dragging(current_pos: Vector2) -> void:
 		new_points.append(p + delta)
 	
 	if would_lines_overlap(dragging_line_index, new_points):
-		print("拖动被阻止: 线条 %d 会与其他线条重叠" % dragging_line_index)
 		return
 	
 	line_data.points = new_points
@@ -157,7 +162,6 @@ func finish_dragging() -> void:
 	
 	dragging_line_index = -1
 	drag_original_points.clear()
-	print("结束拖动")
 
 func would_lines_overlap(exclude_idx: int, new_points: Array[Vector2]) -> bool:
 	if new_points.size() < 2:
@@ -169,7 +173,29 @@ func would_lines_overlap(exclude_idx: int, new_points: Array[Vector2]) -> bool:
 		var other_points = line_data_list[i].points
 		if check_lines_overlap(new_points, other_points):
 			return true
+	
 	return false
+
+func can_draw_in_direction_from_head(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
+	var test_pos = from_pos + direction * STEP
+	
+	var line_data = line_data_list[line_idx]
+	var points = line_data.points
+	
+	if points.size() >= 2:
+		var first_dir = get_orthogonal_direction(points[0], points[1])
+		if first_dir != Vector2.ZERO:
+			if direction == first_dir or direction == -first_dir:
+				return true
+			return true
+	
+	for i in range(line_data_list.size()):
+		var other_points = line_data_list[i].points
+		for j in range(other_points.size()):
+			if other_points[j].distance_squared_to(test_pos) < STEP * STEP * 0.25:
+				return false
+	
+	return true
 
 func check_lines_overlap(points1: Array[Vector2], points2: Array[Vector2]) -> bool:
 	if points1.size() < 2 or points2.size() < 2:
@@ -197,7 +223,6 @@ func segments_too_close(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2) -> b
 			var b_min_x = min(b1.x, b2.x)
 			var b_max_x = max(b1.x, b2.x)
 			if not (a_max_x < b_min_x or a_min_x > b_max_x):
-				print("检测到水平线重叠: y_diff=%.1f, a=[%.0f,%.0f], b=[%.0f,%.0f]" % [y_diff, a_min_x, a_max_x, b_min_x, b_max_x])
 				return true
 	elif not a_horizontal and not b_horizontal:
 		var x_diff = abs(a1.x - b1.x)
@@ -207,7 +232,6 @@ func segments_too_close(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2) -> b
 			var b_min_y = min(b1.y, b2.y)
 			var b_max_y = max(b1.y, b2.y)
 			if not (a_max_y < b_min_y or a_min_y > b_max_y):
-				print("检测到垂直线重叠: x_diff=%.1f, a=[%.0f,%.0f], b=[%.0f,%.0f]" % [x_diff, a_min_y, a_max_y, b_min_y, b_max_y])
 				return true
 	else:
 		var h_start: Vector2
@@ -233,7 +257,6 @@ func segments_too_close(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2) -> b
 		
 		if v_start.x >= h_min_x and v_start.x <= h_max_x:
 			if h_start.y >= v_min_y and h_start.y <= v_max_y:
-				print("检测到水平垂直交叉: 水平(%.0f,%.0f)->(%.0f,%.0f), 垂直(%.0f,%.0f)->(%.0f,%.0f)" % [h_start.x, h_start.y, h_end.x, h_end.y, v_start.x, v_start.y, v_end.x, v_end.y])
 				return true
 	
 	return false
@@ -242,7 +265,6 @@ func start_drawing(pos: Vector2) -> void:
 	var snapped = snap_to_grid(pos)
 	
 	if is_point_on_any_line(snapped):
-		print("起点与现有线条重叠，无法创建新线条")
 		return
 	
 	var new_line_data = create_new_line(snapped)
@@ -255,12 +277,11 @@ func start_drawing(pos: Vector2) -> void:
 	update_handler_directions(current_line_index)
 	
 	drawing = true
-	print("=== 开始绘制新线条 %d，起点: (%.1f, %.1f) ===" % [current_line_index, snapped.x, snapped.y])
 
 func create_new_line(start_pos: Vector2) -> Dictionary:
 	var line = Line2D.new()
 	line.width = LINE_WIDTH
-	line.default_color = Color.WHITE
+	line.default_color = Color(1, 1, 1, 0.1)
 	line.joint_mode = Line2D.LINE_JOINT_ROUND
 	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	line.end_cap_mode = Line2D.LINE_CAP_ROUND
@@ -289,12 +310,10 @@ func create_handler(pos: Vector2, line_idx: int, is_tail: bool) -> Node2D:
 	return handler
 
 func _on_handler_pressed(handler: Node2D) -> void:
-	if not handler.is_tail:
-		return
 	editing_line_index = handler.line_index
+	editing_from_head = not handler.is_tail
 	handler.set_held(true)
 	drawing = true
-	print("开始编辑线条 %d" % editing_line_index)
 
 func stop_drawing() -> void:
 	if not drawing:
@@ -308,20 +327,22 @@ func stop_drawing() -> void:
 		var line_data = line_data_list[active_idx]
 		var points = line_data.points
 		
-		if points.size() < 2:
+		if points.size() < 3:
 			remove_line(active_idx)
 		else:
-			if line_data.end_handler:
+			if editing_from_head and line_data.start_handler:
+				line_data.start_handler.set_held(false)
+				line_data.start_handler.position = points[0]
+			elif line_data.end_handler:
 				line_data.end_handler.set_held(false)
 				line_data.end_handler.position = points[points.size() - 1]
 			update_handler_directions(active_idx)
 			
-			print("=== 绘制结束，线条 %d，共 %d 个点 ===" % [active_idx, points.size()])
-			_print_points_debug(points)
 			rebuild_pipes()
 	
 	current_line_index = -1
 	editing_line_index = -1
+	editing_from_head = false
 
 func remove_line(line_idx: int) -> void:
 	if line_idx < 0 or line_idx >= line_data_list.size():
@@ -350,12 +371,96 @@ func update_drawing(current_pos: Vector2) -> void:
 	
 	var line_data = line_data_list[active_idx]
 	var points: Array[Vector2] = line_data.points
-	var last_point: Vector2 = points.back() if points.size() > 0 else Vector2.ZERO
-	var last_direction: Vector2 = line_data.last_direction
 	
 	if points.is_empty():
 		return
+	
+	if editing_from_head:
+		update_drawing_from_head(active_idx, line_data, points, current_pos)
+	else:
+		update_drawing_from_tail(active_idx, line_data, points, current_pos)
 
+func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Array[Vector2], current_pos: Vector2) -> void:
+	var first_point: Vector2 = points[0]
+	var first_direction: Vector2 = line_data.get("first_direction", Vector2.ZERO)
+	
+	if points.size() >= 2:
+		var second = points[1]
+		var vec_to_second = second - first_point
+		if abs(vec_to_second.x) > 0.1:
+			first_direction = Vector2(sign(vec_to_second.x), 0.0)
+		elif abs(vec_to_second.y) > 0.1:
+			first_direction = Vector2(0.0, sign(vec_to_second.y))
+		line_data.first_direction = first_direction
+	
+	var snapped = snap_to_grid(current_pos)
+	var diff = snapped - first_point
+	
+	var move_dir = Vector2.ZERO
+	if abs(diff.x) > abs(diff.y):
+		move_dir = Vector2(sign(diff.x), 0.0)
+	else:
+		move_dir = Vector2(0.0, sign(diff.y))
+	
+	if move_dir == Vector2.ZERO:
+		return
+	
+	var is_reverse = false
+	if points.size() >= 2:
+		var second = points[1]
+		var vec_to_second = second - first_point
+		var forward_dir = Vector2.ZERO
+		if abs(vec_to_second.x) > 0.1:
+			forward_dir = Vector2(sign(vec_to_second.x), 0.0)
+		elif abs(vec_to_second.y) > 0.1:
+			forward_dir = Vector2(0.0, sign(vec_to_second.y))
+		if forward_dir != Vector2.ZERO and move_dir == forward_dir:
+			is_reverse = true
+	
+	if is_reverse:
+		var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
+		if axis_dist >= STEP:
+			var candidate = first_point + move_dir * STEP
+			var second_point = points[1]
+			if candidate.distance_squared_to(second_point) <= STEP * STEP + 1.0:
+				points.pop_front()
+				if points.size() > 0:
+					line_data.first_direction = Vector2.ZERO
+					update_line_and_handlers(active_idx)
+				else:
+					points.push_front(candidate)
+					line_data.first_direction = Vector2.ZERO
+					update_line_and_handlers(active_idx)
+			else:
+				first_point = candidate
+		return
+	
+	var is_extending = (first_direction != Vector2.ZERO and move_dir == -first_direction)
+	
+	var direction_changed = false
+	if first_direction != Vector2.ZERO and move_dir != Vector2.ZERO:
+		if move_dir != first_direction and move_dir != -first_direction:
+			direction_changed = true
+	
+	var required_step = STEP
+	if direction_changed:
+		required_step = CORNER_STEP
+	
+	var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
+	if axis_dist < required_step:
+		return
+	
+	var candidate = first_point + move_dir * required_step
+	
+	if can_add_point_at_head(points, candidate, active_idx) and not would_overlap_visually_at_head(points, candidate) and not would_overlap_other_lines_at_head(active_idx, points, candidate):
+		points.push_front(candidate)
+		line_data.first_direction = -move_dir
+		update_line_and_handlers(active_idx)
+
+func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Array[Vector2], current_pos: Vector2) -> void:
+	var last_point: Vector2 = points.back() if points.size() > 0 else Vector2.ZERO
+	var last_direction: Vector2 = line_data.last_direction
+	
 	var snapped = snap_to_grid(current_pos)
 	var diff = snapped - last_point
 
@@ -390,8 +495,6 @@ func update_drawing(current_pos: Vector2) -> void:
 				if points.size() > 0:
 					line_data.last_direction = get_last_direction(points)
 					update_line_and_handlers(active_idx)
-					print("回退删除点，剩余 %d 个点" % points.size())
-					_print_points_debug(points)
 				else:
 					points.append(candidate)
 					line_data.last_direction = Vector2.ZERO
@@ -402,7 +505,7 @@ func update_drawing(current_pos: Vector2) -> void:
 
 	var direction_changed = (last_direction != Vector2.ZERO and move_dir != last_direction)
 	
-	if direction_changed:
+	if direction_changed and points.size() == 2:
 		var straight_count = count_consecutive_same_direction(points, last_direction)
 		if straight_count < 2:
 			return
@@ -418,18 +521,18 @@ func update_drawing(current_pos: Vector2) -> void:
 		points.append(candidate)
 		line_data.last_direction = move_dir
 		update_line_and_handlers(active_idx)
-		print("添加点: (%.1f, %.1f)，方向: %s，步长: %d" % [candidate.x, candidate.y, dir_to_str(move_dir), required_step])
-		_print_points_debug(points)
 
 func update_line_and_handlers(line_idx: int) -> void:
 	var line_data = line_data_list[line_idx]
 	line_data.line.points = line_data.points
 	
-	if line_data.end_handler:
-		var points = line_data.points
-		if points.size() > 0:
+	var points = line_data.points
+	if points.size() > 0:
+		if line_data.start_handler:
+			line_data.start_handler.position = points[0]
+		if line_data.end_handler:
 			line_data.end_handler.position = points[points.size() - 1]
-			update_handler_directions(line_idx)
+		update_handler_directions(line_idx)
 
 func update_handlers_for_line(line_idx: int) -> void:
 	var line_data = line_data_list[line_idx]
@@ -444,20 +547,25 @@ func update_handlers_for_line(line_idx: int) -> void:
 
 func update_handler_directions(line_idx: int) -> void:
 	var line_data = line_data_list[line_idx]
-	if not line_data.end_handler:
-		return
-	
 	var points = line_data.points
 	if points.size() < 1:
 		return
 	
-	var tail_pos = points[points.size() - 1]
-	var can_right = can_draw_in_direction(line_idx, tail_pos, Vector2.RIGHT)
-	var can_left = can_draw_in_direction(line_idx, tail_pos, Vector2.LEFT)
-	var can_up = can_draw_in_direction(line_idx, tail_pos, Vector2.UP)
-	var can_down = can_draw_in_direction(line_idx, tail_pos, Vector2.DOWN)
+	if line_data.start_handler:
+		var head_pos = points[0]
+		var can_right = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.RIGHT)
+		var can_left = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.LEFT)
+		var can_up = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.UP)
+		var can_down = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.DOWN)
+		line_data.start_handler.set_draw_directions(can_right, can_left, can_up, can_down)
 	
-	line_data.end_handler.set_draw_directions(can_right, can_left, can_up, can_down)
+	if line_data.end_handler:
+		var tail_pos = points[points.size() - 1]
+		var can_right = can_draw_in_direction(line_idx, tail_pos, Vector2.RIGHT)
+		var can_left = can_draw_in_direction(line_idx, tail_pos, Vector2.LEFT)
+		var can_up = can_draw_in_direction(line_idx, tail_pos, Vector2.UP)
+		var can_down = can_draw_in_direction(line_idx, tail_pos, Vector2.DOWN)
+		line_data.end_handler.set_draw_directions(can_right, can_left, can_up, can_down)
 
 func can_draw_in_direction(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
 	var test_pos = from_pos + direction * STEP
@@ -501,6 +609,22 @@ func count_consecutive_same_direction(points: Array[Vector2], dir_to_check: Vect
 		var last_seg_dir = get_orthogonal_direction(points[-2], points[-1])
 		if last_seg_dir == dir_to_check:
 			count += 1
+	return count
+
+func count_consecutive_same_direction_from_head(points: Array[Vector2], dir_to_check: Vector2) -> int:
+	if dir_to_check == Vector2.ZERO or points.size() < 2:
+		return 0
+	var count = 0
+	var i = 0
+	while i < points.size() - 1:
+		var p1 = points[i]
+		var p2 = points[i + 1]
+		var seg_dir = get_orthogonal_direction(p1, p2)
+		if seg_dir == dir_to_check:
+			count += 1
+		else:
+			break
+		i += 1
 	return count
 
 func snap_to_grid(pos: Vector2) -> Vector2:
@@ -558,8 +682,6 @@ func would_overlap_other_lines(exclude_idx: int, points: Array[Vector2], new_poi
 	var seg_start = points.back()
 	var seg_end = new_point
 	
-	print("检查新线段 (%.0f,%.0f)->(%.0f,%.0f) 是否与其他线条重叠，共 %d 条其他线条" % [seg_start.x, seg_start.y, seg_end.x, seg_end.y, line_data_list.size() - 1])
-	
 	for i in range(line_data_list.size()):
 		if i == exclude_idx:
 			continue
@@ -567,7 +689,6 @@ func would_overlap_other_lines(exclude_idx: int, points: Array[Vector2], new_poi
 		if other_points.size() < 2:
 			continue
 		if check_new_segment_overlap(seg_start, seg_end, other_points):
-			print("新线段 (%.0f,%.0f)->(%.0f,%.0f) 与线条 %d 重叠" % [seg_start.x, seg_start.y, seg_end.x, seg_end.y, i])
 			return true
 	return false
 
@@ -575,7 +696,6 @@ func check_new_segment_overlap(seg_start: Vector2, seg_end: Vector2, other_point
 	for j in range(other_points.size() - 1):
 		var p1 = other_points[j]
 		var p2 = other_points[j + 1]
-		print("  检查与线段 (%.0f,%.0f)->(%.0f,%.0f)" % [p1.x, p1.y, p2.x, p2.y])
 		if segments_too_close(seg_start, seg_end, p1, p2):
 			return true
 	return false
@@ -619,14 +739,6 @@ func get_orthogonal_direction(p1: Vector2, p2: Vector2) -> Vector2:
 		return Vector2(0.0, sign(dy))
 	return Vector2.ZERO
 
-func _print_points_debug(points: Array[Vector2]) -> void:
-	var str = "当前点序列: ["
-	for i in range(points.size()):
-		if i > 0: str += ", "
-		str += "(%.0f,%.0f)" % [points[i].x, points[i].y]
-	str += "]"
-	print(str)
-
 func dir_to_str(dir: Vector2) -> String:
 	if dir == Vector2.RIGHT: return "RIGHT"
 	if dir == Vector2.LEFT:  return "LEFT"
@@ -651,3 +763,70 @@ func get_all_points() -> Array[Vector2]:
 
 func get_line_data_list() -> Array[Dictionary]:
 	return line_data_list
+
+func can_add_point_at_head(points: Array[Vector2], new_point: Vector2, exclude_line_idx: int) -> bool:
+	if points.size() < 2:
+		return true
+	var seg_start = new_point
+	var seg_end = points[0]
+	for i in range(1, points.size() - 1):
+		var p1 = points[i]
+		var p2 = points[i + 1]
+		if segments_intersect(p1, p2, seg_start, seg_end):
+			return false
+	return true
+
+func would_overlap_visually_at_head(points: Array[Vector2], new_point: Vector2) -> bool:
+	if points.size() < 2:
+		return false
+	var seg_start = new_point
+	var seg_end = points[0]
+	var is_horizontal = (seg_start.y == seg_end.y)
+	var y_level = seg_start.y if is_horizontal else 0.0
+	var x_level = seg_start.x if not is_horizontal else 0.0
+	var x_min = min(seg_start.x, seg_end.x)
+	var x_max = max(seg_start.x, seg_end.x)
+	var y_min = min(seg_start.y, seg_end.y)
+	var y_max = max(seg_start.y, seg_end.y)
+
+	for i in range(1, points.size() - 1):
+		var p1 = points[i]
+		var p2 = points[i + 1]
+		var other_h = (p1.y == p2.y)
+		if is_horizontal and other_h:
+			if abs(y_level - p1.y) < LINE_WIDTH:
+				var ox_min = min(p1.x, p2.x)
+				var ox_max = max(p1.x, p2.x)
+				if not (x_max < ox_min or x_min > ox_max):
+					return true
+		elif not is_horizontal and not other_h:
+			if abs(x_level - p1.x) < LINE_WIDTH:
+				var oy_min = min(p1.y, p2.y)
+				var oy_max = max(p1.y, p2.y)
+				if not (y_max < oy_min or y_min > oy_max):
+					return true
+	return false
+
+func would_overlap_other_lines_at_head(exclude_idx: int, points: Array[Vector2], new_point: Vector2) -> bool:
+	if points.size() < 1:
+		return false
+	
+	var seg_start = new_point
+	var seg_end = points[0]
+	
+	for i in range(line_data_list.size()):
+		if i == exclude_idx:
+			var other_points = line_data_list[i].points
+			if other_points.size() >= 2:
+				for j in range(1, other_points.size() - 1):
+					var p1 = other_points[j]
+					var p2 = other_points[j + 1]
+					if segments_too_close(seg_start, seg_end, p1, p2):
+						return true
+			continue
+		var other_points = line_data_list[i].points
+		if other_points.size() < 2:
+			continue
+		if check_new_segment_overlap(seg_start, seg_end, other_points):
+			return true
+	return false
