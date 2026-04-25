@@ -52,6 +52,7 @@ var is_in_transport : bool = false
 
 var is_in_pipe : bool = false
 var out_pipe_cooldown : int = 0
+var pipe_in_cooldown : int = 0
 
 enum PipeMoveDirection {
 	LEFT,
@@ -72,6 +73,13 @@ var target_speed : float
 var speed_y : float
 
 func _physics_process(delta):
+	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
+	if out_pipe_cooldown > 0:
+		out_pipe_cooldown -= 1
+		jumpable = false
+	if pipe_in_cooldown > 0:
+		pipe_in_cooldown -= 1
+
 	# 处理输入
 	move_up = Input.is_action_pressed("move_up")
 	move_down = Input.is_action_pressed("move_down")
@@ -135,9 +143,6 @@ func _physics_process(delta):
 		if jumpable_timer > jumpable_time:
 			jumpable = false
 			jumpable_timer = 0
-	if out_pipe_cooldown > 0:
-		out_pipe_cooldown -= 1
-		jumpable = false
 	if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
 		speed_y = -jump_speed
 		if abs(speed_x) > max_speed_x * 0.3:
@@ -213,6 +218,7 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 	crouch = true
 	pipe_moving_dir = enter_direction
 	is_in_pipe = true
+	pipe_in_cooldown = 5
 	player.set_meta("is_in_pipe", true)
 	speed_x = 0.0
 	var pipe_move_vec : Vector2
@@ -232,16 +238,15 @@ func exit_pipe() -> void:
 	is_in_pipe = false
 	player.remove_meta("is_in_pipe")
 	out_pipe_cooldown = 10
-	# 清除所有 turning area 的 processed 标记
+	pipe_in_cooldown = 0
 	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
 	for turning in turnings:
-		if turning.has_meta("processed"):
-			turning.remove_meta("processed")
-	# 清除所有 entrance 的 overlapped 标记
+		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
+			turning.clear_processed(player)
 	var entrances = get_tree().get_nodes_in_group("clear_pipe_entrance")
 	for entrance in entrances:
-		if entrance.has_meta("overlapped_with_player"):
-			entrance.remove_meta("overlapped_with_player")
+		if is_instance_valid(entrance) and entrance is ClearPipeEntrance:
+			entrance.clear_overlapped(player)
 	
 	pipe_moving_dir = PipeMoveDirection.ALIGN
 	emit_signal("pipe_exited")
@@ -257,3 +262,4 @@ func pipe_movement() -> void:
 			player.position = player.position + Vector2(0, -moving_speed)
 		PipeMoveDirection.DOWN:
 			player.position = player.position + Vector2(0, moving_speed)
+	player.force_update_transform()

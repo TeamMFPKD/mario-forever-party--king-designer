@@ -23,6 +23,19 @@ func _physics_process(_delta: float) -> void:
 	# 检测水管口（入口和出口）
 	pipe_detect(results)
 
+	# 安全检测：管道内如果没有与墙体（碰撞层第1位）/TileMap重叠，说明已脱离管道
+	if player_movement.is_in_pipe and player_movement.pipe_in_cooldown <= 0:
+		var query = PhysicsShapeQueryParameters2D.new()
+		query.shape = cast.shape
+		query.transform = cast.global_transform
+		query.collision_mask = 1
+		query.collide_with_bodies = true
+		query.collide_with_areas = false
+		query.exclude = [player.get_rid()]
+		var block_results = player.get_world_2d().direct_space_state.intersect_shape(query)
+		if block_results.is_empty():
+			player_movement.exit_pipe()
+
 	# 传送时不处理交互
 	if player_movement.is_in_transport:
 		return
@@ -141,28 +154,32 @@ func pipe_detect(results : Array[Node2D]) -> void:
 	if player_movement.out_pipe_cooldown > 0:
 		return
 	for result in results:
-		if not result is ClearPipeEntrance:
+		if not is_instance_valid(result) or not result is ClearPipeEntrance:
 			continue
 		var clear_pipe_entrance = result as ClearPipeEntrance
 		if player_movement.is_in_pipe:
-			if not clear_pipe_entrance.has_meta("overlapped_with_player"):
-				if clear_pipe_entrance.has_meta("overlapping_with_block"):
-					clear_pipe_blocked_counter += 1
-					if clear_pipe_blocked_counter >= 2:
-						emit_signal("player_pipe_blocked")
-						return
-					match player_movement.pipe_moving_dir:
-						PlayerMovement.PipeMoveDirection.LEFT:
-							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
-						PlayerMovement.PipeMoveDirection.RIGHT:
-							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
-						PlayerMovement.PipeMoveDirection.UP:
-							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
-						PlayerMovement.PipeMoveDirection.DOWN:
-							player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
+			if player_movement.pipe_in_cooldown > 0:
+				return
+
+			if clear_pipe_entrance.has_meta("overlapping_with_block"):
+				clear_pipe_blocked_counter += 1
+				if clear_pipe_blocked_counter >= 2:
+					emit_signal("player_pipe_blocked")
 					return
-				player_movement.exit_pipe()
-				player.position = clear_pipe_entrance.global_position
+				match player_movement.pipe_moving_dir:
+					PlayerMovement.PipeMoveDirection.LEFT:
+						player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
+					PlayerMovement.PipeMoveDirection.RIGHT:
+						player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.LEFT
+					PlayerMovement.PipeMoveDirection.UP:
+						player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.DOWN
+					PlayerMovement.PipeMoveDirection.DOWN:
+						player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.UP
+				clear_turning_processed_for_reversal()
+				return
+
+			player_movement.exit_pipe()
+			player.position = clear_pipe_entrance.global_position
 			return
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
@@ -183,17 +200,18 @@ func pipe_detect(results : Array[Node2D]) -> void:
 				if not player.is_on_floor() or not Input.is_action_pressed("move_down"):
 					break
 				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.DOWN)
-		player.position = clear_pipe_entrance.turning_area.global_position
-		clear_pipe_entrance.set_meta("overlapped_with_player", true)
+		player.position = clear_pipe_entrance.turning_area.global_position if is_instance_valid(clear_pipe_entrance.turning_area) else clear_pipe_entrance.global_position
+		clear_pipe_entrance.overlapped_ids[player.get_instance_id()] = true
+		break
 
 func clear_pipe_turning_detect(results: Array[Node2D]) -> void:
 	for result in results:
-		if not result is ClearPipeTurningArea2D:
+		if not is_instance_valid(result) or not result is ClearPipeTurningArea2D:
 			continue
 		var area = result as ClearPipeTurningArea2D
 
 		# 已经处理过的区域不再重复转向
-		if area.has_meta("processed"):
+		if area.is_processed(player):
 			continue
 
 		var target = area.global_position + Vector2(0, 8)
@@ -248,10 +266,16 @@ func clear_pipe_turning_detect(results: Array[Node2D]) -> void:
 					player_movement.pipe_moving_dir = PlayerMovement.PipeMoveDirection.RIGHT
 
 		# 标记为已处理，防止再次触发
-		area.set_meta("processed", true)
+		area.mark_processed(player)
 
 func _on_pipe_exited() -> void:
 	pipe_get_close_timer = 0
 	is_origin_pipe_dir_set = false
 	origin_player_pipe_dir = PlayerMovement.PipeMoveDirection.ALIGN
 	clear_pipe_blocked_counter = 0
+
+func clear_turning_processed_for_reversal() -> void:
+	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning in turnings:
+		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
+			turning.clear_processed(player)
