@@ -213,6 +213,7 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 	crouch = true
 	pipe_moving_dir = enter_direction
 	is_in_pipe = true
+	player.set_meta("is_in_pipe", true)
 	speed_x = 0.0
 	var pipe_move_vec : Vector2
 	match enter_direction:
@@ -229,6 +230,7 @@ func enter_pipe(enter_direction : PipeMoveDirection) -> void:
 
 func exit_pipe() -> void:
 	is_in_pipe = false
+	player.remove_meta("is_in_pipe")
 	out_pipe_cooldown = 10
 	# 清除所有 turning area 的 processed 标记
 	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
