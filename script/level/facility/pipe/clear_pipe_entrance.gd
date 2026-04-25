@@ -15,6 +15,7 @@ enum Direction {
 
 var clear_pipe_set : ClearPipeSet
 var turning_area : Area2D
+var entrance_shape : Shape2D
 var overlap_player_meta_cnt : int = 0
 
 # 记录已进入该入口的实体 ID，避免重复触发
@@ -24,17 +25,37 @@ func _ready() -> void:
 	clear_pipe_set = get_node(path_to_clear_pipe_set)
 	body_entered.connect(_on_body_entered)
 	turning_area = get_node(path_to_turning)
+	for child in get_children():
+		if child is CollisionShape2D and child.shape:
+			entrance_shape = child.shape
+			break
 	if process_mode == ProcessMode.PROCESS_MODE_DISABLED or not visible:
 		queue_free()
 
 func _physics_process(_delta: float) -> void:
-	var bodies = get_overlapping_bodies()
-	position = position  # 强制刷新碰撞检测（Godot 特性）
-	if bodies.size() > 0:
+	# 使用 intersect_shape 检测所有碰撞体（含 TileMap 瓦片）
+	var has_block := false
+	if entrance_shape:
+		var query = PhysicsShapeQueryParameters2D.new()
+		query.shape = entrance_shape
+		query.transform = global_transform
+		query.collision_mask = collision_mask
+		query.collide_with_bodies = true
+		query.collide_with_areas = false
+		var results = get_world_2d().direct_space_state.intersect_shape(query)
+		for result in results:
+			var collider = result.get("collider")
+			if is_instance_valid(collider) and not (collider.is_in_group("player") or collider.has_meta("basic_movement")):
+				has_block = true
+				break
+	if has_block:
 		set_meta("overlapping_with_block", true)
 	else:
 		if has_meta("overlapping_with_block"):
 			remove_meta("overlapping_with_block")
+
+	# 用 get_overlapping_bodies 追踪玩家/敌人实体
+	var bodies = get_overlapping_bodies()
 
 	# 清理已离开的实体记录
 	var current_ids = {}
@@ -44,21 +65,21 @@ func _physics_process(_delta: float) -> void:
 
 		# 透明水管的连接
 		if body.has_meta("clear_pipe_turning_area"):
-			var turning = body.get_meta("clear_pipe_turning_area") as ClearPipeTurningArea2D
-			var t_dir = turning.direction
-			var e_dir = entrance_direction
-			if t_dir == ClearPipeSet.Direction.LEFT and e_dir == Direction.LEFT \
-			or t_dir == ClearPipeSet.Direction.RIGHT and e_dir == Direction.RIGHT \
-			or t_dir == ClearPipeSet.Direction.UP and e_dir == Direction.UP \
-			or t_dir == ClearPipeSet.Direction.DOWN and e_dir == Direction.DOWN:
-				queue_free()
+			var turning = body.get_meta("clear_pipe_turning_area")
+			if is_instance_valid(turning):
+				var cd = turning.direction
+				var ed = entrance_direction
+				if cd == ClearPipeSet.Direction.LEFT and ed == Direction.LEFT \
+				or cd == ClearPipeSet.Direction.RIGHT and ed == Direction.RIGHT \
+				or cd == ClearPipeSet.Direction.UP and ed == Direction.UP \
+				or cd == ClearPipeSet.Direction.DOWN and ed == Direction.DOWN:
+					queue_free()
 
 	# 移除已不在区域内的实体记录
 	for id in overlapped_ids.keys():
 		if not current_ids.has(id):
-			# 检查物体是否在管道内，如果是则不清除记录
 			var body = instance_from_id(id)
-			if body:
+			if is_instance_valid(body):
 				if body.is_in_group("player") and body.has_meta("is_in_pipe"):
 					continue
 				elif body.has_meta("basic_movement"):
@@ -67,17 +88,12 @@ func _physics_process(_delta: float) -> void:
 						continue
 			overlapped_ids.erase(id)
 
-	# 针对玩家的 overlap meta 处理
+	# 针对玩家的 overlap meta 处理 — 无条件 5 帧后清除
 	if has_meta("overlapped_with_player"):
 		if overlap_player_meta_cnt < 5:
 			overlap_player_meta_cnt += 1
 		else:
-			# 检查玩家是否还在管道内，如果是则不清除
-			var player = get_tree().get_first_node_in_group("player")
-			if player and player.has_meta("is_in_pipe"):
-				overlap_player_meta_cnt = 0  # 重置计数器，继续等待
-			else:
-				remove_meta("overlapped_with_player")
+			remove_meta("overlapped_with_player")
 
 
 
@@ -89,19 +105,6 @@ func _on_body_entered(body : Node2D) -> void:
 	if overlapped_ids.has(id):
 		return
 	overlapped_ids[id] = true
-
-	# 告诉 body 它应该从哪个方向进入管道（实际由 body 自己处理）
-	var direction
-	match clear_pipe_set.direction:
-		ClearPipeSet.Direction.LEFT:
-			direction = PlayerMovement.PipeMoveDirection.RIGHT
-		ClearPipeSet.Direction.RIGHT:
-			direction = PlayerMovement.PipeMoveDirection.LEFT
-		ClearPipeSet.Direction.UP:
-			direction = PlayerMovement.PipeMoveDirection.DOWN
-		ClearPipeSet.Direction.DOWN:
-			direction = PlayerMovement.PipeMoveDirection.UP
-	body.set_meta("clear_pipe_direction", direction)
 
 func is_overlapped_with(body: Node2D) -> bool:
 	return overlapped_ids.has(body.get_instance_id())
