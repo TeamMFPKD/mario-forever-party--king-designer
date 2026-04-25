@@ -23,45 +23,38 @@ func _ready() -> void:
 	hide_arrows()
 	update_handler_color()
 
+func _event_to_world(event: InputEvent) -> Vector2:
+	var viewport = get_viewport()
+	if viewport:
+		return viewport.get_canvas_transform().affine_inverse() * event.position
+	return event.position
+
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			var global_pos = event.global_position
-			var handler_global_pos = global_position
-			var diff = global_pos - handler_global_pos
-			if abs(diff.x) <= 16.0 and abs(diff.y) <= 16.0:
-				if event.pressed and not is_held:
-					is_held = true
-					handler_pressed.emit(self)
-					update_arrow_visibility()
-					update_handler_color()
-					get_viewport().set_input_as_handled()
-				elif not event.pressed and is_held:
-					is_held = false
-					handler_released.emit(self)
-					hide_arrows()
-					update_handler_color()
-					get_viewport().set_input_as_handled()
-	elif event is InputEventScreenTouch:
-		var global_pos = event.position
-		var handler_global_pos = global_position
-		var diff = global_pos - handler_global_pos
-		if abs(diff.x) <= 16.0 and abs(diff.y) <= 16.0:
-			if event.pressed and not is_held:
-				is_held = true
-				handler_pressed.emit(self)
-				update_arrow_visibility()
-				update_handler_color()
-				get_viewport().set_input_as_handled()
-			elif not event.pressed and is_held:
-				is_held = false
-				handler_released.emit(self)
-				hide_arrows()
-				update_handler_color()
-				get_viewport().set_input_as_handled()
+	if not (event is InputEventMouseButton or event is InputEventScreenTouch):
+		return
+	if event is InputEventMouseButton and event.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	var pressed: bool = event.pressed
+
+	var world_pos = _event_to_world(event)
+	var diff = world_pos - global_position
+	if abs(diff.x) <= 20.0 and abs(diff.y) <= 20.0:
+		if pressed and not is_held:
+			is_held = true
+			handler_pressed.emit(self)
+			update_arrow_visibility()
+			update_handler_color()
+			get_viewport().set_input_as_handled()
+		elif not pressed and is_held:
+			is_held = false
+			handler_released.emit(self)
+			hide_arrows()
+			update_handler_color()
+			get_viewport().set_input_as_handled()
 
 func _is_point_in_handler(pos: Vector2) -> bool:
-	return abs(pos.x) <= 16.0 and abs(pos.y) <= 16.0
+	return abs(pos.x) <= 20.0 and abs(pos.y) <= 20.0
 
 func _on_pressed() -> void:
 	is_held = true

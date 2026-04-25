@@ -56,6 +56,15 @@ func _physics_process(_delta: float) -> void:
 	# 移除已不在区域内的实体记录
 	for id in overlapped_ids.keys():
 		if not current_ids.has(id):
+			# 检查物体是否在管道内，如果是则不清除记录
+			var body = instance_from_id(id)
+			if body:
+				if body.is_in_group("player") and body.has_meta("is_in_pipe"):
+					continue
+				elif body.has_meta("basic_movement"):
+					var basic_movement = body.get_meta("basic_movement")
+					if basic_movement.is_in_pipe:
+						continue
 			overlapped_ids.erase(id)
 
 	# 针对玩家的 overlap meta 处理
@@ -63,7 +72,12 @@ func _physics_process(_delta: float) -> void:
 		if overlap_player_meta_cnt < 5:
 			overlap_player_meta_cnt += 1
 		else:
-			remove_meta("overlapped_with_player")
+			# 检查玩家是否还在管道内，如果是则不清除
+			var player = get_tree().get_first_node_in_group("player")
+			if player and player.has_meta("is_in_pipe"):
+				overlap_player_meta_cnt = 0  # 重置计数器，继续等待
+			else:
+				remove_meta("overlapped_with_player")
 
 
 

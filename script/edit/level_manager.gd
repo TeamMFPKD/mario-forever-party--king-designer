@@ -41,6 +41,8 @@ enum LevelThemeEnum {
 @export var tile_map : TileMapLayer
 @export var tile_set_manager : TileSetManager
 @export var object_map : ObjectMapLayer
+@export var clear_pipe_draw : Node
+@export var pipe_builder : Node
 @export var bgp_manager : BgpManager
 
 @export var lives : int = 2:
@@ -71,6 +73,11 @@ func get_level_data_json() -> String:
 	else:
 		push_warning("ObjectMapLayer not found or missing get_object_data method")
 
+	# 获取clear pipe线数据
+	var pipe_line_data = []
+	if clear_pipe_draw and clear_pipe_draw.has_method("get_pipe_line_data"):
+		pipe_line_data = clear_pipe_draw.get_pipe_line_data()
+
 	level_data_dict = {
 		"version": version,
 		"time_used": time_used,
@@ -78,6 +85,7 @@ func get_level_data_json() -> String:
 		"level_size": level_size,
 		"tilemap_data": tile_data as Array,
 		"object_data": object_data,
+		"pipe_line_data": pipe_line_data,
 		"pass_count": pass_count,
 		"death_count": death_count,
 		"lives": lives,
@@ -134,6 +142,30 @@ func load_level_data_from_json(level_data_json: String) -> void:
 			push_warning("ObjectMapLayer not found or missing load_object_data method")
 	else:
 		push_warning("No object data found in level file")
+
+	# 加载clear pipe线数据
+	var pipe_line_data_array = level_data_dict.get("pipe_line_data", [])
+	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
+		if clear_pipe_draw and clear_pipe_draw.has_method("load_from_pipe_line_data"):
+			clear_pipe_draw.load_from_pipe_line_data(pipe_line_data_array)
+			print("[%s] 管道线数据加载完成，共加载 " % Time.get_time_string_from_system(), pipe_line_data_array.size(), " 条管道")
+		elif pipe_builder and pipe_builder.has_method("build_pipes_from_lines"):
+			var line_data_list: Array = []
+			for line_entry in pipe_line_data_array:
+				var pts_data = line_entry.get("points", [])
+				var points: Array[Vector2] = []
+				for p_dict in pts_data:
+					points.append(Vector2(p_dict.get("x", 0), p_dict.get("y", 0)))
+				if points.size() >= 2:
+					line_data_list.append({"points": points})
+			if line_data_list.size() > 0:
+				pipe_builder.build_pipes_from_lines(line_data_list)
+				print("[%s] 管道线数据加载完成，共加载 " % Time.get_time_string_from_system(), line_data_list.size(), " 条管道")
+	else:
+		if clear_pipe_draw and clear_pipe_draw.has_method("clear_all_lines"):
+			clear_pipe_draw.clear_all_lines()
+		if pipe_builder and pipe_builder.has_method("clear_all_pipes"):
+			pipe_builder.clear_all_pipes()
 
 	print("[%s] Level loaded." % Time.get_time_string_from_system())
 

@@ -14,58 +14,111 @@ var dragging_line_index: int = -1
 var drag_start_pos: Vector2 = Vector2.ZERO
 var drag_original_points: Array[Vector2] = []
 
+var drawing_enabled: bool = false
+
 var handlers_node: Node2D
 var lines_node: Node2D
 
 func _ready() -> void:
 	handlers_node = Node2D.new()
 	handlers_node.name = "Handlers"
+	handlers_node.process_mode = Node.PROCESS_MODE_DISABLED
 	add_child(handlers_node)
-	
+
 	lines_node = Node2D.new()
 	lines_node.name = "Lines"
 	add_child(lines_node)
 
 func _input(event: InputEvent) -> void:
-	if drawing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		stop_drawing()
+	if not drawing_enabled:
 		return
-	
-	if event is InputEventMouseMotion and drawing:
-		update_drawing(get_local_mouse_position())
-	elif event is InputEventScreenDrag and drawing:
-		update_drawing(to_local(event.position))
 
-func _unhandled_input(event: InputEvent) -> void:
-	if dragging_line_index >= 0:
-		handle_dragging(event)
+	var local_pos: Vector2
+
+	if event is InputEventMouseButton or event is InputEventMouseMotion:
+		var viewport = get_viewport()
+		if viewport:
+			local_pos = to_local(viewport.get_canvas_transform().affine_inverse() * event.position)
+		else:
+			local_pos = get_local_mouse_position()
+
+	elif event is InputEventScreenTouch or event is InputEventScreenDrag:
+		var viewport = get_viewport()
+		if viewport:
+			local_pos = to_local(viewport.get_canvas_transform().affine_inverse() * event.position)
+		else:
+			local_pos = to_local(event.position)
+
+	else:
 		return
-	
-	if editing_line_index >= 0:
-		handle_editing(event)
-		return
-	
+
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
-				var click_pos = get_local_mouse_position()
-				var clicked_line = get_line_at_position(click_pos)
-				if clicked_line >= 0:
-					start_dragging_line(clicked_line, click_pos)
+				var handler = get_handler_at_position(local_pos)
+				if handler:
+					if not drawing and dragging_line_index < 0:
+						_on_handler_pressed(handler)
 				else:
-					start_drawing(click_pos)
+					var clicked_line = get_line_at_position(local_pos)
+					if clicked_line >= 0:
+						start_dragging_line(clicked_line, local_pos)
+					else:
+						start_drawing(local_pos)
 			else:
-				stop_drawing()
+				print("_input: mouse release, dragging=", dragging_line_index, " drawing=", drawing)
+				if dragging_line_index >= 0:
+					finish_dragging()
+				if drawing:
+					stop_drawing()
+
+	elif event is InputEventMouseMotion:
+		if dragging_line_index >= 0:
+			update_dragging(local_pos)
+		elif drawing:
+			update_drawing(local_pos)
+
 	elif event is InputEventScreenTouch:
 		if event.pressed:
-			var click_pos = to_local(event.position)
-			var clicked_line = get_line_at_position(click_pos)
-			if clicked_line >= 0:
-				start_dragging_line(clicked_line, click_pos)
+			var handler = get_handler_at_position(local_pos)
+			if handler:
+				if not drawing and dragging_line_index < 0:
+					_on_handler_pressed(handler)
 			else:
-				start_drawing(click_pos)
+				var clicked_line = get_line_at_position(local_pos)
+				if clicked_line >= 0:
+					start_dragging_line(clicked_line, local_pos)
+				else:
+					start_drawing(local_pos)
 		else:
-			stop_drawing()
+			if dragging_line_index >= 0:
+				finish_dragging()
+			if drawing:
+				stop_drawing()
+
+	elif event is InputEventScreenDrag:
+		if dragging_line_index >= 0:
+			update_dragging(local_pos)
+		elif drawing:
+			update_drawing(local_pos)
+
+func _screen_to_local(screen_pos: Vector2) -> Vector2:
+	var viewport = get_viewport()
+	if viewport:
+		return to_local(viewport.get_canvas_transform().affine_inverse() * screen_pos)
+	return to_local(screen_pos)
+
+func get_handler_at_position(pos: Vector2) -> Node2D:
+	if not handlers_node:
+		return null
+	var closest: Node2D = null
+	var closest_dist: float = 22.0 * 22.0
+	for handler in handlers_node.get_children():
+		var dist = handler.position.distance_squared_to(pos)
+		if dist < closest_dist:
+			closest_dist = dist
+			closest = handler
+	return closest
 
 func get_line_at_position(pos: Vector2) -> int:
 	for i in range(line_data_list.size()):
@@ -86,7 +139,7 @@ func is_point_near_segment(point: Vector2, seg_start: Vector2, seg_end: Vector2,
 	var seg_len = seg_vec.length()
 	if seg_len < 0.001:
 		return point.distance_to(seg_start) <= threshold
-	
+
 	var seg_dir = seg_vec.normalized()
 	var point_vec = point - seg_start
 	var projection = point_vec.dot(seg_dir)
@@ -99,49 +152,24 @@ func start_dragging_line(line_idx: int, pos: Vector2) -> void:
 	drag_start_pos = snap_to_grid(pos)
 	drag_original_points = line_data_list[line_idx].points.duplicate()
 
-func handle_dragging(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-			finish_dragging()
-	elif event is InputEventScreenTouch:
-		if not event.pressed:
-			finish_dragging()
-	elif event is InputEventMouseMotion:
-		update_dragging(get_local_mouse_position())
-	elif event is InputEventScreenDrag:
-		update_dragging(to_local(event.position))
-
-func handle_editing(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if not event.pressed:
-				stop_drawing()
-	elif event is InputEventScreenTouch:
-		if not event.pressed:
-			stop_drawing()
-	elif event is InputEventMouseMotion:
-		update_drawing(get_local_mouse_position())
-	elif event is InputEventScreenDrag:
-		update_drawing(to_local(event.position))
-
 func update_dragging(current_pos: Vector2) -> void:
 	if dragging_line_index < 0:
 		return
-	
+
 	var snapped = snap_to_grid(current_pos)
 	var delta = snapped - drag_start_pos
-	
+
 	if delta == Vector2.ZERO:
 		return
-	
+
 	var line_data = line_data_list[dragging_line_index]
 	var new_points: Array[Vector2] = []
 	for p in drag_original_points:
 		new_points.append(p + delta)
-	
+
 	if would_lines_overlap(dragging_line_index, new_points):
 		return
-	
+
 	line_data.points = new_points
 	line_data.line.points = new_points
 	update_handlers_for_line(dragging_line_index)
@@ -151,7 +179,7 @@ func finish_dragging() -> void:
 		var line_data = line_data_list[dragging_line_index]
 		var new_points = line_data.points
 		var delta = new_points[0] - drag_original_points[0] if new_points.size() > 0 else Vector2.ZERO
-		
+
 		if delta != Vector2.ZERO:
 			if would_lines_overlap(dragging_line_index, new_points):
 				line_data.points = drag_original_points.duplicate()
@@ -159,48 +187,48 @@ func finish_dragging() -> void:
 				update_handlers_for_line(dragging_line_index)
 			else:
 				rebuild_pipes()
-	
+
 	dragging_line_index = -1
 	drag_original_points.clear()
 
 func would_lines_overlap(exclude_idx: int, new_points: Array[Vector2]) -> bool:
 	if new_points.size() < 2:
 		return false
-	
+
 	for i in range(line_data_list.size()):
 		if i == exclude_idx:
 			continue
 		var other_points = line_data_list[i].points
 		if check_lines_overlap(new_points, other_points):
 			return true
-	
+
 	return false
 
 func can_draw_in_direction_from_head(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
 	var test_pos = from_pos + direction * STEP
-	
+
 	var line_data = line_data_list[line_idx]
 	var points = line_data.points
-	
+
 	if points.size() >= 2:
 		var first_dir = get_orthogonal_direction(points[0], points[1])
 		if first_dir != Vector2.ZERO:
 			if direction == first_dir or direction == -first_dir:
 				return true
 			return true
-	
+
 	for i in range(line_data_list.size()):
 		var other_points = line_data_list[i].points
 		for j in range(other_points.size()):
 			if other_points[j].distance_squared_to(test_pos) < STEP * STEP * 0.25:
 				return false
-	
+
 	return true
 
 func check_lines_overlap(points1: Array[Vector2], points2: Array[Vector2]) -> bool:
 	if points1.size() < 2 or points2.size() < 2:
 		return false
-	
+
 	for i in range(points1.size() - 1):
 		var p1_start = points1[i]
 		var p1_end = points1[i + 1]
@@ -214,7 +242,7 @@ func check_lines_overlap(points1: Array[Vector2], points2: Array[Vector2]) -> bo
 func segments_too_close(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2) -> bool:
 	var a_horizontal = abs(a1.y - a2.y) < 0.1
 	var b_horizontal = abs(b1.y - b2.y) < 0.1
-	
+
 	if a_horizontal and b_horizontal:
 		var y_diff = abs(a1.y - b1.y)
 		if y_diff < LINE_WIDTH:
@@ -238,7 +266,7 @@ func segments_too_close(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2) -> b
 		var h_end: Vector2
 		var v_start: Vector2
 		var v_end: Vector2
-		
+
 		if a_horizontal:
 			h_start = a1
 			h_end = a2
@@ -249,33 +277,33 @@ func segments_too_close(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2) -> b
 			h_end = b2
 			v_start = a1
 			v_end = a2
-		
+
 		var h_min_x = min(h_start.x, h_end.x)
 		var h_max_x = max(h_start.x, h_end.x)
 		var v_min_y = min(v_start.y, v_end.y)
 		var v_max_y = max(v_start.y, v_end.y)
-		
+
 		if v_start.x >= h_min_x and v_start.x <= h_max_x:
 			if h_start.y >= v_min_y and h_start.y <= v_max_y:
 				return true
-	
+
 	return false
 
 func start_drawing(pos: Vector2) -> void:
 	var snapped = snap_to_grid(pos)
-	
+
 	if is_point_on_any_line(snapped):
 		return
-	
+
 	var new_line_data = create_new_line(snapped)
 	line_data_list.append(new_line_data)
 	current_line_index = line_data_list.size() - 1
-	
+
 	var end_handler = create_handler(snapped, current_line_index, true)
 	end_handler.set_held(true)
 	line_data_list[current_line_index].end_handler = end_handler
 	update_handler_directions(current_line_index)
-	
+
 	drawing = true
 
 func create_new_line(start_pos: Vector2) -> Dictionary:
@@ -286,12 +314,12 @@ func create_new_line(start_pos: Vector2) -> Dictionary:
 	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
 	line.end_cap_mode = Line2D.LINE_CAP_ROUND
 	lines_node.add_child(line)
-	
+
 	var points: Array[Vector2] = [start_pos]
 	line.points = points
-	
+
 	var start_handler = create_handler(start_pos, line_data_list.size(), false)
-	
+
 	return {
 		"line": line,
 		"points": points,
@@ -310,6 +338,10 @@ func create_handler(pos: Vector2, line_idx: int, is_tail: bool) -> Node2D:
 	return handler
 
 func _on_handler_pressed(handler: Node2D) -> void:
+	if not drawing_enabled:
+		return
+	if drawing or dragging_line_index >= 0:
+		return
 	editing_line_index = handler.line_index
 	editing_from_head = not handler.is_tail
 	handler.set_held(true)
@@ -318,15 +350,17 @@ func _on_handler_pressed(handler: Node2D) -> void:
 func stop_drawing() -> void:
 	if not drawing:
 		return
-	
+
+	print("stop_drawing: called, drawing=", drawing)
 	drawing = false
-	
+	print("stop_drawing: drawing set to false, active_idx=", editing_line_index if editing_line_index >= 0 else current_line_index)
+
 	var active_idx = editing_line_index if editing_line_index >= 0 else current_line_index
-	
+
 	if active_idx >= 0 and active_idx < line_data_list.size():
 		var line_data = line_data_list[active_idx]
 		var points = line_data.points
-		
+
 		if points.size() < 3:
 			remove_line(active_idx)
 		else:
@@ -337,9 +371,9 @@ func stop_drawing() -> void:
 				line_data.end_handler.set_held(false)
 				line_data.end_handler.position = points[points.size() - 1]
 			update_handler_directions(active_idx)
-			
+
 			rebuild_pipes()
-	
+
 	current_line_index = -1
 	editing_line_index = -1
 	editing_from_head = false
@@ -347,7 +381,7 @@ func stop_drawing() -> void:
 func remove_line(line_idx: int) -> void:
 	if line_idx < 0 or line_idx >= line_data_list.size():
 		return
-	
+
 	var line_data = line_data_list[line_idx]
 	if line_data.line:
 		line_data.line.queue_free()
@@ -355,9 +389,9 @@ func remove_line(line_idx: int) -> void:
 		line_data.start_handler.queue_free()
 	if line_data.end_handler:
 		line_data.end_handler.queue_free()
-	
+
 	line_data_list.remove_at(line_idx)
-	
+
 	for i in range(line_data_list.size()):
 		var ld = line_data_list[i]
 		ld.start_handler.line_index = i
@@ -368,13 +402,13 @@ func update_drawing(current_pos: Vector2) -> void:
 	var active_idx = editing_line_index if editing_line_index >= 0 else current_line_index
 	if active_idx < 0 or active_idx >= line_data_list.size():
 		return
-	
+
 	var line_data = line_data_list[active_idx]
 	var points: Array[Vector2] = line_data.points
-	
+
 	if points.is_empty():
 		return
-	
+
 	if editing_from_head:
 		update_drawing_from_head(active_idx, line_data, points, current_pos)
 	else:
@@ -383,7 +417,7 @@ func update_drawing(current_pos: Vector2) -> void:
 func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Array[Vector2], current_pos: Vector2) -> void:
 	var first_point: Vector2 = points[0]
 	var first_direction: Vector2 = line_data.get("first_direction", Vector2.ZERO)
-	
+
 	if points.size() >= 2:
 		var second = points[1]
 		var vec_to_second = second - first_point
@@ -392,19 +426,19 @@ func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Ar
 		elif abs(vec_to_second.y) > 0.1:
 			first_direction = Vector2(0.0, sign(vec_to_second.y))
 		line_data.first_direction = first_direction
-	
+
 	var snapped = snap_to_grid(current_pos)
 	var diff = snapped - first_point
-	
+
 	var move_dir = Vector2.ZERO
 	if abs(diff.x) > abs(diff.y):
 		move_dir = Vector2(sign(diff.x), 0.0)
 	else:
 		move_dir = Vector2(0.0, sign(diff.y))
-	
+
 	if move_dir == Vector2.ZERO:
 		return
-	
+
 	var is_reverse = false
 	if points.size() >= 2:
 		var second = points[1]
@@ -416,7 +450,7 @@ func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Ar
 			forward_dir = Vector2(0.0, sign(vec_to_second.y))
 		if forward_dir != Vector2.ZERO and move_dir == forward_dir:
 			is_reverse = true
-	
+
 	if is_reverse:
 		var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
 		if axis_dist >= STEP:
@@ -434,24 +468,24 @@ func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Ar
 			else:
 				first_point = candidate
 		return
-	
+
 	var is_extending = (first_direction != Vector2.ZERO and move_dir == -first_direction)
-	
+
 	var direction_changed = false
 	if first_direction != Vector2.ZERO and move_dir != Vector2.ZERO:
 		if move_dir != first_direction and move_dir != -first_direction:
 			direction_changed = true
-	
+
 	var required_step = STEP
 	if direction_changed:
 		required_step = CORNER_STEP
-	
+
 	var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
 	if axis_dist < required_step:
 		return
-	
+
 	var candidate = first_point + move_dir * required_step
-	
+
 	if can_add_point_at_head(points, candidate, active_idx) and not would_overlap_visually_at_head(points, candidate) and not would_overlap_other_lines_at_head(active_idx, points, candidate):
 		points.push_front(candidate)
 		line_data.first_direction = -move_dir
@@ -460,7 +494,7 @@ func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Ar
 func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Array[Vector2], current_pos: Vector2) -> void:
 	var last_point: Vector2 = points.back() if points.size() > 0 else Vector2.ZERO
 	var last_direction: Vector2 = line_data.last_direction
-	
+
 	var snapped = snap_to_grid(current_pos)
 	var diff = snapped - last_point
 
@@ -504,12 +538,12 @@ func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Ar
 		return
 
 	var direction_changed = (last_direction != Vector2.ZERO and move_dir != last_direction)
-	
+
 	if direction_changed and points.size() == 2:
 		var straight_count = count_consecutive_same_direction(points, last_direction)
 		if straight_count < 2:
 			return
-	
+
 	var required_step = CORNER_STEP if direction_changed else STEP
 	var axis_dist = abs(diff.x) if move_dir.x != 0 else abs(diff.y)
 	if axis_dist < required_step:
@@ -525,7 +559,7 @@ func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Ar
 func update_line_and_handlers(line_idx: int) -> void:
 	var line_data = line_data_list[line_idx]
 	line_data.line.points = line_data.points
-	
+
 	var points = line_data.points
 	if points.size() > 0:
 		if line_data.start_handler:
@@ -537,7 +571,7 @@ func update_line_and_handlers(line_idx: int) -> void:
 func update_handlers_for_line(line_idx: int) -> void:
 	var line_data = line_data_list[line_idx]
 	var points = line_data.points
-	
+
 	if points.size() > 0:
 		if line_data.start_handler:
 			line_data.start_handler.position = points[0]
@@ -550,7 +584,7 @@ func update_handler_directions(line_idx: int) -> void:
 	var points = line_data.points
 	if points.size() < 1:
 		return
-	
+
 	if line_data.start_handler:
 		var head_pos = points[0]
 		var can_right = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.RIGHT)
@@ -558,7 +592,7 @@ func update_handler_directions(line_idx: int) -> void:
 		var can_up = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.UP)
 		var can_down = can_draw_in_direction_from_head(line_idx, head_pos, Vector2.DOWN)
 		line_data.start_handler.set_draw_directions(can_right, can_left, can_up, can_down)
-	
+
 	if line_data.end_handler:
 		var tail_pos = points[points.size() - 1]
 		var can_right = can_draw_in_direction(line_idx, tail_pos, Vector2.RIGHT)
@@ -569,21 +603,21 @@ func update_handler_directions(line_idx: int) -> void:
 
 func can_draw_in_direction(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
 	var test_pos = from_pos + direction * STEP
-	
+
 	var line_data = line_data_list[line_idx]
 	var points = line_data.points
-	
+
 	if points.size() >= 2:
 		var last_dir = get_orthogonal_direction(points[-2], points[-1])
 		if last_dir != Vector2.ZERO and direction != last_dir:
 			return true
-	
+
 	for i in range(line_data_list.size()):
 		var other_points = line_data_list[i].points
 		for j in range(other_points.size()):
 			if other_points[j].distance_squared_to(test_pos) < STEP * STEP * 0.25:
 				return false
-	
+
 	return true
 
 func get_last_direction(points: Array[Vector2]) -> Vector2:
@@ -678,10 +712,10 @@ func would_overlap_visually(points: Array[Vector2], new_point: Vector2) -> bool:
 func would_overlap_other_lines(exclude_idx: int, points: Array[Vector2], new_point: Vector2) -> bool:
 	if points.size() < 1:
 		return false
-	
+
 	var seg_start = points.back()
 	var seg_end = new_point
-	
+
 	for i in range(line_data_list.size()):
 		if i == exclude_idx:
 			continue
@@ -739,31 +773,6 @@ func get_orthogonal_direction(p1: Vector2, p2: Vector2) -> Vector2:
 		return Vector2(0.0, sign(dy))
 	return Vector2.ZERO
 
-func dir_to_str(dir: Vector2) -> String:
-	if dir == Vector2.RIGHT: return "RIGHT"
-	if dir == Vector2.LEFT:  return "LEFT"
-	if dir == Vector2.UP:    return "UP"
-	if dir == Vector2.DOWN:  return "DOWN"
-	return "UNKNOWN"
-
-func rebuild_pipes() -> void:
-	if has_node("PipeBuilder"):
-		var pb = $PipeBuilder
-		if pb.has_method("build_pipes_from_lines"):
-			pb.build_pipes_from_lines(line_data_list)
-		elif pb.has_method("build_pipes"):
-			pb.build_pipes()
-
-func get_all_points() -> Array[Vector2]:
-	var all_points: Array[Vector2] = []
-	for line_data in line_data_list:
-		for p in line_data.points:
-			all_points.append(p)
-	return all_points
-
-func get_line_data_list() -> Array[Dictionary]:
-	return line_data_list
-
 func can_add_point_at_head(points: Array[Vector2], new_point: Vector2, exclude_line_idx: int) -> bool:
 	if points.size() < 2:
 		return true
@@ -810,10 +819,10 @@ func would_overlap_visually_at_head(points: Array[Vector2], new_point: Vector2) 
 func would_overlap_other_lines_at_head(exclude_idx: int, points: Array[Vector2], new_point: Vector2) -> bool:
 	if points.size() < 1:
 		return false
-	
+
 	var seg_start = new_point
 	var seg_end = points[0]
-	
+
 	for i in range(line_data_list.size()):
 		if i == exclude_idx:
 			var other_points = line_data_list[i].points
@@ -830,3 +839,108 @@ func would_overlap_other_lines_at_head(exclude_idx: int, points: Array[Vector2],
 		if check_new_segment_overlap(seg_start, seg_end, other_points):
 			return true
 	return false
+
+func rebuild_pipes() -> void:
+	if has_node("PipeBuilder"):
+		var pb = $PipeBuilder
+		if pb.has_method("build_pipes_from_lines"):
+			pb.build_pipes_from_lines(line_data_list)
+		elif pb.has_method("build_pipes"):
+			pb.build_pipes()
+
+func get_all_points() -> Array[Vector2]:
+	var all_points: Array[Vector2] = []
+	for line_data in line_data_list:
+		for p in line_data.points:
+			all_points.append(p)
+	return all_points
+
+func get_line_data_list() -> Array[Dictionary]:
+	return line_data_list
+
+func get_pipe_line_data() -> Array:
+	var data: Array = []
+	for line_data in line_data_list:
+		var line_points: Array = []
+		for p in line_data.points:
+			line_points.append({"x": p.x, "y": p.y})
+		if line_points.size() >= 2:
+			data.append({"points": line_points})
+	return data
+
+func load_from_pipe_line_data(data: Array) -> void:
+	clear_all_lines()
+
+	for line_entry in data:
+		var pts_data = line_entry.get("points", [])
+		var points: Array[Vector2] = []
+		for p_dict in pts_data:
+			points.append(Vector2(p_dict.get("x", 0), p_dict.get("y", 0)))
+
+		if points.size() < 2:
+			continue
+
+		var line = Line2D.new()
+		line.width = LINE_WIDTH
+		line.default_color = Color(1, 1, 1, 0.1)
+		line.joint_mode = Line2D.LINE_JOINT_ROUND
+		line.begin_cap_mode = Line2D.LINE_CAP_ROUND
+		line.end_cap_mode = Line2D.LINE_CAP_ROUND
+		lines_node.add_child(line)
+		line.points = points
+
+		var last_direction = get_orthogonal_direction(points[-2], points[-1]) if points.size() >= 2 else Vector2.ZERO
+		var start_handler = create_handler(points[0], line_data_list.size(), false)
+		var end_handler = create_handler(points[points.size() - 1], line_data_list.size(), true)
+
+		line_data_list.append({
+			"line": line,
+			"points": points,
+			"last_direction": last_direction,
+			"start_handler": start_handler,
+			"end_handler": end_handler
+		})
+
+	for i in range(line_data_list.size()):
+		update_handler_directions(i)
+
+	rebuild_pipes()
+
+func clear_all_lines() -> void:
+	for line_data in line_data_list:
+		if line_data.line:
+			line_data.line.queue_free()
+		if line_data.start_handler:
+			line_data.start_handler.queue_free()
+		if line_data.end_handler:
+			line_data.end_handler.queue_free()
+	line_data_list.clear()
+	current_line_index = -1
+	dragging_line_index = -1
+	drawing = false
+
+func erase_line_at_world_position(world_pos: Vector2) -> bool:
+	var local_pos = to_local(world_pos)
+	var line_idx = get_line_at_position(local_pos)
+	if line_idx >= 0:
+		remove_line(line_idx)
+		rebuild_pipes()
+		return true
+	return false
+
+func _process(_delta: float) -> void:
+	if drawing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		print("_process: drawing but mouse released, force stop")
+		stop_drawing()
+
+func set_drawing_enabled(enabled: bool) -> void:
+	drawing_enabled = enabled
+	if not enabled:
+		if drawing:
+			stop_drawing()
+		dragging_line_index = -1
+		if handlers_node:
+			handlers_node.process_mode = Node.PROCESS_MODE_DISABLED
+	else:
+		if handlers_node:
+			handlers_node.process_mode = Node.PROCESS_MODE_INHERIT

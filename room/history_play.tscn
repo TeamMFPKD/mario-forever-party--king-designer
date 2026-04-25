@@ -28,16 +28,27 @@
 [ext_resource type="Script" uid="uid://cw836hlngytf1" path="res://script/multiplayer/multiplayer_ani_sprite_manager.gd" id="25_vtonu"]
 [ext_resource type="PackedScene" uid="uid://bb3rl8fd2qhlq" path="res://object/multiplayer_player_shadow.tscn" id="26_m4oc0"]
 [ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture.gd" id="27_rul26"]
+[ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="28_4xnh8"]
 [ext_resource type="PackedScene" uid="uid://b487gtilcxsuk" path="res://object/history/take_photo.tscn" id="28_cxniv"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="28_ysgyl"]
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_up.tscn" id="29_3ysqt"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="29_28d7q"]
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_down.tscn" id="30_6rodu"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="30_jm5fm"]
+[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_left.tscn" id="31_bwcxx"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="31_pt7ut"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="31_sbo3u"]
+[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_right.tscn" id="32_jb8w7"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="32_jgnbe"]
+[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="33_21r08"]
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="33_o1hfa"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_middle.tscn" id="34_dbxtb"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="34_me11v"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="35_fb74i"]
+[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_up.tscn" id="35_yks77"]
+[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_up.tscn" id="36_ygfio"]
+[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_down.tscn" id="37_hbmxt"]
+[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_down.tscn" id="38_vtonu"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
 
@@ -80,9 +91,6 @@ visible = true
 layout_mode = 1
 offset_left = -233.0
 offset_bottom = 233.0
-
-[node name="GameTimer" parent="GameRoomSize/GameTimeHUD" index="3" unique_id=1795664682]
-autostart = true
 
 [node name="LevelInfo" parent="GameRoomSize" unique_id=1694047089 instance=ExtResource("7_jgnbe")]
 layout_mode = 1
@@ -129,13 +137,14 @@ background_database = ExtResource("10_ue3jg")
 object_database = ExtResource("11_ciud4")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager", "pipe_builder") groups=["level_manager"]]
 script = ExtResource("12_snksi")
 level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
 object_map = NodePath("../ObjectMapLayer")
 bgp_manager = NodePath("../BgpManager")
+pipe_builder = NodePath("../PipeBuilder")
 metadata/_custom_type_script = "uid://dcj1u3dweru3n"
 
 [node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1922304214 node_paths=PackedStringArray("level_data_node")]
@@ -187,6 +196,19 @@ metadata/_edit_lock_ = true
 [node name="MultiplayerAniSpriteManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1918431650]
 script = ExtResource("25_vtonu")
 mp_ani_shadow_scene = ExtResource("26_m4oc0")
+
+[node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1862963793]
+script = ExtResource("28_4xnh8")
+cap_up_scene = ExtResource("29_3ysqt")
+cap_down_scene = ExtResource("30_6rodu")
+cap_left_scene = ExtResource("31_bwcxx")
+cap_right_scene = ExtResource("32_jb8w7")
+straight_horizontal_scene = ExtResource("33_21r08")
+straight_vertical_scene = ExtResource("34_dbxtb")
+corner_ur_scene = ExtResource("35_yks77")
+corner_ul_scene = ExtResource("36_ygfio")
+corner_dr_scene = ExtResource("37_hbmxt")
+corner_dl_scene = ExtResource("38_vtonu")
 
 [node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=1870457232]
 process_mode = 3
