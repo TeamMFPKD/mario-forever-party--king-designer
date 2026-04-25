@@ -1,13 +1,13 @@
 [gd_resource type="Resource" script_class="ObjectDatabase" format=3 uid="uid://bts1hfa763775"]
 
 [ext_resource type="Script" uid="uid://dm2vri801p6qq" path="res://script/edit/objectmap/object_database_entry.gd" id="1_id4ej"]
-[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_up.tscn" id="3_11f4k"]
-[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_middle.tscn" id="4_1i5ur"]
+[ext_resource type="PackedScene" uid="uid://blod1t7vxoxs5" path="res://object/edit/spawner/pipe/spawner_pipe_normal_vertical_up.tscn" id="2_fnciw"]
+[ext_resource type="PackedScene" uid="uid://b865x0of06mnw" path="res://object/edit/spawner/pipe/spawner_pipe_normal_vertical_middle.tscn" id="3_jtyfk"]
+[ext_resource type="PackedScene" uid="uid://ciju04mylwbds" path="res://object/edit/spawner/pipe/spawner_pipe_normal_vertical_down.tscn" id="4_130xp"]
 [ext_resource type="Script" uid="uid://caqq52ddr6o8s" path="res://script/edit/objectmap/object_database.gd" id="4_olmxw"]
-[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/spawner/pipe/spawner_pipe_vertical_down.tscn" id="5_llym7"]
-[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_left.tscn" id="6_vdl7r"]
-[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_middle.tscn" id="7_lei4y"]
-[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/spawner_pipe_horizontal_right.tscn" id="8_t0bnu"]
+[ext_resource type="PackedScene" uid="uid://cgrwnvkxymho3" path="res://object/edit/spawner/pipe/spawner_pipe_normal_horizontal_left.tscn" id="5_ptf5v"]
+[ext_resource type="PackedScene" uid="uid://c4p30kmtl3m2" path="res://object/edit/spawner/pipe/spawner_pipe_normal_horizontal_middle.tscn" id="6_wv3hx"]
+[ext_resource type="PackedScene" uid="uid://d3rd62lwkuu2b" path="res://object/edit/spawner/pipe/spawner_pipe_normal_horizontal_right.tscn" id="7_u5kpd"]
 [ext_resource type="PackedScene" uid="uid://djjo46dqfedvs" path="res://object/edit/spawner/bonus/spawner_question_block.tscn" id="8_t2jpc"]
 [ext_resource type="PackedScene" uid="uid://dgkew1nv882t7" path="res://object/edit/spawner/bonus/spawner_question_block_hidden.tscn" id="9_j65qk"]
 [ext_resource type="PackedScene" uid="uid://dj57ohfor8c4s" path="res://object/edit/spawner/bonus/spawner_question_block_fire_flower.tscn" id="10_obv1q"]
@@ -65,37 +65,37 @@
 [sub_resource type="Resource" id="Resource_b7y0g"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_vertical_up"
-object_scene = ExtResource("3_11f4k")
+object_scene = ExtResource("2_fnciw")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_j82gr"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_vertical_middle"
-object_scene = ExtResource("4_1i5ur")
+object_scene = ExtResource("3_jtyfk")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_uoicw"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_vertical_down"
-object_scene = ExtResource("5_llym7")
+object_scene = ExtResource("4_130xp")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_hwqcn"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_horizontal_left"
-object_scene = ExtResource("6_vdl7r")
+object_scene = ExtResource("5_ptf5v")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_mxc0p"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_horizontal_middle"
-object_scene = ExtResource("7_lei4y")
+object_scene = ExtResource("6_wv3hx")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_57x2i"]
 script = ExtResource("1_id4ej")
 object_name = "pipe_horizontal_right"
-object_scene = ExtResource("8_t0bnu")
+object_scene = ExtResource("7_u5kpd")
 metadata/_custom_type_script = "uid://dm2vri801p6qq"
 
 [sub_resource type="Resource" id="Resource_427p0"]
