@@ -28,12 +28,12 @@ func _ready():
 			current_index = i
 			break
 	
-	# 设置初始按钮文本和应用分辨率
+	# 设置初始按钮文本和应用分辨率（不居中窗口）
 	update_button_text()
 	var engine_time_mesc = Time.get_ticks_msec()
 	if engine_time_mesc < 5000.0:
 		print("[%s] [设置] 加载屏幕分辨率设置：" % Time.get_time_string_from_system() + saved_res)	
-		apply_resolution()
+		apply_resolution(false)
 	
 	# 连接点击信号
 	pressed.connect(_on_button_pressed)
@@ -42,8 +42,8 @@ func _on_button_pressed():
 	# 切换到下一个分辨率
 	current_index = (current_index + 1) % resolutions.size()
 	
-	# 应用分辨率并更新按钮文本
-	apply_resolution()
+	# 应用分辨率并更新按钮文本（居中窗口到第一个显示器）
+	apply_resolution(true)
 	update_button_text()
 	
 	# 保存配置
@@ -54,7 +54,7 @@ func update_button_text():
 	# 更新按钮文本为当前分辨率
 	text = resolutions[current_index]["name"]
 
-func apply_resolution():
+func apply_resolution(center_window: bool = false):
 	# 应用当前选中的分辨率
 	var res = resolutions[current_index]
 	var window = get_window()
@@ -66,10 +66,12 @@ func apply_resolution():
 	# 设置窗口大小（Godot 4.x API）
 	window.size = Vector2i(res["width"], res["height"])
 	
-	# 居中窗口
-	var screen_size = DisplayServer.screen_get_size()
-	var window_position = (screen_size - window.size) / 2
-	window.position = Vector2i(window_position.x, window_position.y)
+	# 居中窗口到第一个显示器
+	if center_window:
+		var screen_size = DisplayServer.screen_get_size(0)
+		var screen_position = DisplayServer.screen_get_position(0)
+		var window_position = screen_position + (screen_size - window.size) / 2
+		window.position = Vector2i(window_position.x, window_position.y)
 
 func _resolution_mobile_platform_invisible() -> void:
 	emit_signal("mobile_platform_invisible")
