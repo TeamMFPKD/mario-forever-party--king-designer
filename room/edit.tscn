@@ -103,6 +103,18 @@
 [ext_resource type="Texture2D" uid="uid://crxquyiaaex0w" path="res://sprite/facility/atchi_muite_block.png" id="90_kt6na"]
 [ext_resource type="PackedScene" uid="uid://dntwmumuho35f" path="res://object/edit/life_set.tscn" id="97_4a1yi"]
 [ext_resource type="PackedScene" uid="uid://0qb3h74ek4st" path="res://object/edit/place_goal_hint.tscn" id="100_g1j3t"]
+[ext_resource type="Script" uid="uid://bdt53k3b3yq43" path="res://script/edit/clear_pipe/clear_pipe_line_draw_test.gd" id="101_oia1o"]
+[ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="102_oia1o"]
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_up.tscn" id="103_oia1o"]
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_down.tscn" id="104_oia1o"]
+[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_left.tscn" id="105_oia1o"]
+[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_right.tscn" id="106_oia1o"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_middle.tscn" id="107_oia1o"]
+[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="108_oia1o"]
+[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_up.tscn" id="109_oia1o"]
+[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_up.tscn" id="110_oia1o"]
+[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_down.tscn" id="111_oia1o"]
+[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_down.tscn" id="112_oia1o"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -419,13 +431,15 @@ background_database = ExtResource("6_0b6sj")
 object_database = ExtResource("7_io5w1")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "clear_pipe_draw", "pipe_builder", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("8_amsrr")
 level_theme = 5
 level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
 object_map = NodePath("../ObjectMapLayer")
+clear_pipe_draw = NodePath("../ClearPipeLineDraw")
+pipe_builder = NodePath("../ClearPipeLineDraw/PipeBuilder")
 bgp_manager = NodePath("../BgpManager")
 metadata/_custom_type_script = "uid://dcj1u3dweru3n"
 
@@ -437,11 +451,12 @@ level_data_node = NodePath("../LevelManager")
 script = ExtResource("9_b0qgs")
 level_data_node = NodePath("../LevelManager")
 
-[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "tile_button", "button_eraser") groups=["level_control"]]
+[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "clear_pipe_draw", "tile_button", "button_eraser") groups=["level_control"]]
 script = ExtResource("10_g7up7")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
 object_map_layer = NodePath("../ObjectMapLayer")
 object_map_draw = NodePath("../ObjectMapLayer/ObjectMapDraw")
+clear_pipe_draw = NodePath("../ClearPipeLineDraw")
 tile_button = NodePath("../../../../BottomItemGroups/ItemButtonTile")
 button_eraser = NodePath("../../../../RightItemGroups/ItemButtonEraser")
 metadata/_custom_type_script = "uid://dl0jbge2cmsy8"
@@ -523,6 +538,22 @@ script = ExtResource("23_rnw8m")
 closed = true
 default_color = Color(0, 0.63333344, 1, 0.7529412)
 script = ExtResource("24_x0edr")
+
+[node name="ClearPipeLineDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=2076543210]
+script = ExtResource("101_oia1o")
+
+[node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=2076543211]
+script = ExtResource("102_oia1o")
+cap_up_scene = ExtResource("103_oia1o")
+cap_down_scene = ExtResource("104_oia1o")
+cap_left_scene = ExtResource("105_oia1o")
+cap_right_scene = ExtResource("106_oia1o")
+straight_horizontal_scene = ExtResource("108_oia1o")
+straight_vertical_scene = ExtResource("107_oia1o")
+corner_ur_scene = ExtResource("109_oia1o")
+corner_ul_scene = ExtResource("110_oia1o")
+corner_dr_scene = ExtResource("111_oia1o")
+corner_dl_scene = ExtResource("112_oia1o")
 
 [node name="LevelSizeGroup" type="Control" parent="GameRoomSize" unique_id=573696587 groups=["item_group"]]
 layout_mode = 1
@@ -1238,6 +1269,7 @@ size_flags_horizontal = 4
 
 [node name="ItemButtonPipeHorizontalLeft" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer3" unique_id=980627408 instance=ExtResource("41_cvttd")]
 layout_mode = 2
+item_type = 3
 object_name = "clear_pipe_line"
 metadata/_edit_lock_ = true
 

@@ -41,6 +41,17 @@
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="37_dbsph"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="38_yf3j4"]
 [ext_resource type="AudioStream" uid="uid://c213arfckrjmd" path="res://sound/ready.wav" id="39_k06ju"]
+[ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="40_k06ju"]
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_up.tscn" id="41_k06ju"]
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_down.tscn" id="42_k06ju"]
+[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_left.tscn" id="43_k06ju"]
+[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_right.tscn" id="44_k06ju"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_middle.tscn" id="45_k06ju"]
+[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="46_k06ju"]
+[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_up.tscn" id="47_k06ju"]
+[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_up.tscn" id="48_k06ju"]
+[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_down.tscn" id="49_k06ju"]
+[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_down.tscn" id="50_k06ju"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rugdn"]
 atlas = ExtResource("37_dbsph")
@@ -193,13 +204,14 @@ background_database = ExtResource("5_dhd6j")
 object_database = ExtResource("6_2q1y6")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager", "pipe_builder") groups=["level_manager"]]
 script = ExtResource("7_orh2l")
 level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
 object_map = NodePath("../ObjectMapLayer")
 bgp_manager = NodePath("../BgpManager")
+pipe_builder = NodePath("../PipeBuilder")
 metadata/_custom_type_script = "uid://dcj1u3dweru3n"
 
 [node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1922304214 node_paths=PackedStringArray("level_data_node")]
@@ -251,6 +263,19 @@ metadata/_edit_lock_ = true
 [node name="MultiplayerAniSpriteManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1918431650]
 script = ExtResource("5_27ofe")
 mp_ani_shadow_scene = ExtResource("6_uf5c5")
+
+[node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=2076543212]
+script = ExtResource("40_k06ju")
+cap_up_scene = ExtResource("41_k06ju")
+cap_down_scene = ExtResource("42_k06ju")
+cap_left_scene = ExtResource("43_k06ju")
+cap_right_scene = ExtResource("44_k06ju")
+straight_horizontal_scene = ExtResource("46_k06ju")
+straight_vertical_scene = ExtResource("45_k06ju")
+corner_ur_scene = ExtResource("47_k06ju")
+corner_ul_scene = ExtResource("48_k06ju")
+corner_dr_scene = ExtResource("49_k06ju")
+corner_dl_scene = ExtResource("50_k06ju")
 
 [node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=1870457232]
 process_mode = 3

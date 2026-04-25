@@ -26,16 +26,28 @@
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="28_27nso"]
 [ext_resource type="PackedScene" uid="uid://b487gtilcxsuk" path="res://object/history/take_photo.tscn" id="28_d41mo"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/utils/input_handler.gd" id="29_apndl"]
+[ext_resource type="Script" uid="uid://bdt53k3b3yq43" path="res://script/edit/clear_pipe/clear_pipe_line_draw_test.gd" id="29_hdnkf"]
+[ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="30_0qlom"]
 [ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/edit/test_node.gd" id="30_imagh"]
+[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_up.tscn" id="31_eshj6"]
 [ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="31_n3y3y"]
+[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_down.tscn" id="32_u4pfm"]
 [ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/edit/camera_edge.gd" id="32_xmqcf"]
+[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_left.tscn" id="33_3oivx"]
 [ext_resource type="PackedScene" uid="uid://ch2w5yfycdtlk" path="res://object/edit/level_size_button.tscn" id="33_788hh"]
 [ext_resource type="PackedScene" uid="uid://0xmx7bfg3xwu" path="res://object/edit/group_button.tscn" id="34_l2l3l"]
+[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_right.tscn" id="34_prsmy"]
 [ext_resource type="Texture2D" uid="uid://behvhlnq6eh41" path="res://sprite/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png" id="35_7r8s6"]
+[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="35_in7wb"]
+[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_vertical_middle.tscn" id="36_7xdke"]
 [ext_resource type="AudioStream" uid="uid://12eiiaxfi3yr" path="res://sound/edit/Opening Theme Menu.wav" id="36_bmyx2"]
+[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_up.tscn" id="37_6b2gj"]
 [ext_resource type="PackedScene" uid="uid://ccdwe4aun6qhw" path="res://object/edit/theme_button.tscn" id="37_7tf6k"]
+[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_up.tscn" id="38_mw8ew"]
 [ext_resource type="Texture2D" uid="uid://det68trrrwcck" path="res://sprite/theme_preview/bg_preview_castle.png" id="38_pra2d"]
 [ext_resource type="Texture2D" uid="uid://b1sukktc65iri" path="res://sprite/theme_preview/bg_preview_castle_b.png" id="39_dk45u"]
+[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_right_down.tscn" id="39_g1vq0"]
+[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/spawner/pipe/clear_pipe/spawner_pipe_left_down.tscn" id="40_0p0tn"]
 [ext_resource type="Texture2D" uid="uid://566f7q58vnma" path="res://sprite/theme_preview/bg_preview_cave.png" id="40_pcm7o"]
 [ext_resource type="Texture2D" uid="uid://cu1s7gevmubce" path="res://sprite/theme_preview/bg_preview_dusk.png" id="41_gx72u"]
 [ext_resource type="Texture2D" uid="uid://b58ek8gie8cg6" path="res://sprite/theme_preview/bg_preview_night.png" id="42_teumv"]
@@ -389,13 +401,15 @@ background_database = ExtResource("13_hdnkf")
 object_database = ExtResource("14_0qlom")
 metadata/_custom_type_script = "uid://324h4vpgb0rx"
 
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "bgp_manager") groups=["level_manager"]]
+[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=534476077 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "clear_pipe_draw", "pipe_builder", "bgp_manager") groups=["level_manager"]]
 script = ExtResource("15_eshj6")
 level_theme = 5
 level_camera = NodePath("../LevelCamera")
 tile_map = NodePath("../TileMapLayer")
 tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
 object_map = NodePath("../ObjectMapLayer")
+clear_pipe_draw = NodePath("../ClearPipeLineDraw")
+pipe_builder = NodePath("../ClearPipeLineDraw/PipeBuilder")
 bgp_manager = NodePath("../BgpManager")
 metadata/_custom_type_script = "uid://dcj1u3dweru3n"
 
@@ -462,6 +476,22 @@ visible = false
 closed = true
 default_color = Color(0, 0.63333344, 1, 0.7529412)
 script = ExtResource("32_xmqcf")
+
+[node name="ClearPipeLineDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1255105978]
+script = ExtResource("29_hdnkf")
+
+[node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=417563516]
+script = ExtResource("30_0qlom")
+cap_up_scene = ExtResource("31_eshj6")
+cap_down_scene = ExtResource("32_u4pfm")
+cap_left_scene = ExtResource("33_3oivx")
+cap_right_scene = ExtResource("34_prsmy")
+straight_horizontal_scene = ExtResource("35_in7wb")
+straight_vertical_scene = ExtResource("36_7xdke")
+corner_ur_scene = ExtResource("37_6b2gj")
+corner_ul_scene = ExtResource("38_mw8ew")
+corner_dr_scene = ExtResource("39_g1vq0")
+corner_dl_scene = ExtResource("40_0p0tn")
 
 [node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=606104598 instance=ExtResource("28_d41mo")]
 

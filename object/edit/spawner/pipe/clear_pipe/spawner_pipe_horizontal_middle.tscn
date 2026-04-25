@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bcg3r6pqocoyj"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_ea4aj"]
-[ext_resource type="PackedScene" uid="uid://khucqs51i6jb" path="res://object/level/facility/pipe/normal_pipe/pipe_horizontal_middle.tscn" id="2_rl7is"]
+[ext_resource type="PackedScene" uid="uid://by7did16ky5dm" path="res://object/level/facility/pipe/clear_pipe/clear_pipe_horizontal_middle.tscn" id="2_rl7is"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_wfx1i"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_7h26b"]
 
@@ -21,6 +21,5 @@ metadata/_custom_type_script = "uid://b23emkp2mb16s"
 texture = SubResource("AtlasTexture_ouiv5")
 
 [node name="OffsetMarker" parent="." unique_id=811474229 instance=ExtResource("4_wfx1i")]
-position = Vector2(0, 16)
 
 [node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_7h26b")]
