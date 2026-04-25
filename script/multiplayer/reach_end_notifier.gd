@@ -39,6 +39,6 @@ func _ready():
 		player["score"] = score
 
 		# 清空所有玩家的关卡数据内容，减少数据传输量
-		player["level_data"] = ""
+		player["level_data"] = "invalid"
 	multiplayer_manager.store_level_results.rpc(multiplayer_manager.players)
 	print("[%s] 关卡游玩数据已广播" % Time.get_time_string_from_system())

@@ -18,7 +18,7 @@ func _ready():
 		else:
 			# 比主机更早返回标题画面的玩家，需要更新玩家列表
 			emit_signal("client_back_to_title")
-			emit_signal("players_updated")
+			multiplayer_manager.emit_signal("players_updated")
 		multiplayer_manager.is_in_game = false
 		multiplayer_manager.sync_origin_player_data.rpc()
 		var fc = func():
