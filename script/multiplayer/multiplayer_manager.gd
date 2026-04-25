@@ -227,6 +227,9 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 	# 防止结束时主机发送不带关卡数据的玩家信息，导致空关卡数据覆盖本地文件
 	if player.reach_end:
 		return
+	if level_file_name == "invalid" or level_file_name.is_empty():
+		push_error("[%s] transfer_level_data received invalid file name" % Time.get_time_string_from_system())
+		return
 	for p in players:
 		if p.id == player_id:
 			p.level_file_name = level_file_name
@@ -324,17 +327,22 @@ func store_level_results(players) -> void:
 		var level_file_path = p["level_file_name"]
 		var pass_count = p["level_cause_pass"]
 		var death_count = p["level_cause_death"]
-		var file = FileAccess.open(level_file_path, FileAccess.READ_WRITE)
+		var file = FileAccess.open(level_file_path, FileAccess.READ)
+		if not file:
+			var err = FileAccess.get_open_error()
+			push_error("[%s] Failed to open level file: %s, error: %d" % [Time.get_time_string_from_system(), level_file_path, err])
+			continue
 		var content = file.get_as_text()
+		file.close()
+		if content.is_empty():
+			push_error("[%s] Level file is empty: %s" % [Time.get_time_string_from_system(), level_file_path])
+			continue
 		var json = JSON.new()
 		var error = json.parse(content)
 		
 		if error != OK:
-			push_error("Failed to parse level data JSON.")
-			var err = FileAccess.get_open_error()
-			if err != OK:
-				print("[%s] Error loading file:" % Time.get_time_string_from_system(), err)
-			return
+			push_error("Failed to parse level data JSON: %s" % level_file_path)
+			continue
 		
 		var level_data_dict = json.data
 
@@ -342,8 +350,19 @@ func store_level_results(players) -> void:
 		level_data_dict["death_count"] = death_count
 
 		var level_data_json = JSON.stringify(level_data_dict, "")
-		file.store_string(level_data_json)
-		file.close()
+		var tmp_file_path = level_file_path + ".tmp"
+		var write_file = FileAccess.open(tmp_file_path, FileAccess.WRITE)
+		if not write_file:
+			var wr_err = FileAccess.get_open_error()
+			push_error("[%s] Failed to open file for writing: %s, error: %d" % [Time.get_time_string_from_system(), tmp_file_path, wr_err])
+			continue
+		write_file.store_string(level_data_json)
+		write_file.close()
+		var dir = DirAccess.open("user://")
+		if dir:
+			var rename_err = dir.rename(tmp_file_path, level_file_path)
+			if rename_err != OK:
+				push_error("[%s] Rename failed: %s -> %s, error: %d" % [Time.get_time_string_from_system(), tmp_file_path, level_file_path, rename_err])
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
 func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool, scale: Vector2) -> void:

@@ -28,13 +28,24 @@ func _on_save_button_pressed() -> void:
 		multiplayer_manager.player.level_file_name = file_name
 		multiplayer_manager.player.level_data = level_data_json
 		if Input.is_key_pressed(KEY_Q) and emulate_bad_level:
-			multiplayer_manager.player.level_data = ""
+			multiplayer_manager.player.level_data = "invalid"
 
 func save_to_level(content):
-	var file = FileAccess.open(file_name, FileAccess.WRITE)
+	if content.is_empty():
+		push_error("[%s] Cannot save empty level data" % Time.get_time_string_from_system())
+		return
+	var tmp_file_name = file_name + ".tmp"
+	var file = FileAccess.open(tmp_file_name, FileAccess.WRITE)
 	var err = FileAccess.get_open_error()
-	if err != OK:
-		print("[%s] Error saving file:" % Time.get_time_string_from_system(), err)
+	if err != OK or not file:
+		print("[%s] Error saving file: %d" % [Time.get_time_string_from_system(), err])
 		return
 	file.store_string(content)
 	file.close()
+	var dir = DirAccess.open("user://")
+	if dir:
+		var rename_err = dir.rename(tmp_file_name, file_name)
+		if rename_err != OK:
+			push_error("[%s] Failed to rename temp file: %d" % [Time.get_time_string_from_system(), rename_err])
+	else:
+		push_error("[%s] Failed to open user directory" % Time.get_time_string_from_system())
