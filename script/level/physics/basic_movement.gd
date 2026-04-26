@@ -374,8 +374,10 @@ func pipe_movement() -> void:
 	match pipe_moving_dir:
 		PipeMoveDirection.LEFT:
 			move_object.position = move_object.position + Vector2(-moving_speed, 0)
+			previous_speed_x = -abs(previous_speed_x)
 		PipeMoveDirection.RIGHT:
 			move_object.position = move_object.position + Vector2(moving_speed, 0)
+			previous_speed_x = abs(previous_speed_x)
 		PipeMoveDirection.UP:
 			move_object.position = move_object.position + Vector2(0, -moving_speed)
 		PipeMoveDirection.DOWN:
