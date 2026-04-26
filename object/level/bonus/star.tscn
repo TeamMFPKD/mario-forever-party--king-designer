@@ -64,6 +64,7 @@ debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 speed_x = 90.0
 jump_speed = -350.0
 is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_b1dgd")]
 collision_mask = 112
