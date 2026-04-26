@@ -79,9 +79,8 @@ visible = false
 shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.62221855, 0.5554975, 0.5644728, 0.41960785)
 
-[node name="ThowmpInteraction" type="Node" parent="." unique_id=315306037 node_paths=PackedStringArray("basic_movement", "thwomp", "cast")]
+[node name="ThowmpInteraction" type="Node" parent="." unique_id=315306037 node_paths=PackedStringArray("thwomp", "cast")]
 script = ExtResource("6_k0bpb")
-basic_movement = NodePath("")
 thwomp = NodePath("..")
 cast = NodePath("../BasicShapeCast2D")
 
@@ -96,11 +95,16 @@ speed_x = 0.0
 gravity = 0.0
 max_fall_speed = 160000.0
 overlap_turn = false
+is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
+is_clear_pipe_allowed_down = true
+is_clear_pipe_allowed_left = false
+is_clear_pipe_allowed_right = false
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_6pwjr")]
 shape = SubResource("RectangleShape2D_gj0k3")
 max_results = 8
-collision_mask = 128
+collision_mask = 192
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
 script = ExtResource("4_o36fy")

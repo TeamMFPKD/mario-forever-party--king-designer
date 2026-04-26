@@ -261,8 +261,8 @@ func pipe_detect() -> void:
 				return
 
 			# 无阻挡，正常退出管道
-			exit_pipe()
 			move_object.position = entrance.global_position
+			exit_pipe()
 			move_object.force_update_transform()
 			'''
 			match entrance.entrance_direction:
