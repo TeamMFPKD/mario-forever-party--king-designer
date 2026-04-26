@@ -20,7 +20,13 @@ signal pipe_exited
 @export var can_be_turn_overlap_detected : bool = true
 @export var path_to_shape_cast: NodePath = "../BasicShapeCast2D"
 
+@export_category("Clear Pipe")
 @export var is_clear_pipe_allowed : bool = false
+@export var is_clear_pipe_allowed_up : bool = false
+@export var is_clear_pipe_allowed_down : bool = false
+@export var is_clear_pipe_allowed_left : bool = true
+@export var is_clear_pipe_allowed_right : bool = true
+
 @export var path_to_ani: NodePath = "../AnimatedSprite2D"
 @export var dust_creator_scene : PackedScene = preload("uid://bpywk88hnp1yw")
 
@@ -258,6 +264,7 @@ func pipe_detect() -> void:
 			exit_pipe()
 			move_object.position = entrance.global_position
 			move_object.force_update_transform()
+			'''
 			match entrance.entrance_direction:
 				ClearPipeEntrance.Direction.LEFT:
 					speed_x = -abs(speed_x) if speed_x else -60
@@ -267,6 +274,7 @@ func pipe_detect() -> void:
 					speed_y = -abs(speed_y) if speed_y else -60
 				ClearPipeEntrance.Direction.DOWN:
 					speed_y = abs(speed_y) if speed_y else 60
+			'''
 			return
 
 		# 不在管道内：检查进入条件
@@ -274,16 +282,16 @@ func pipe_detect() -> void:
 		var move_dir = Vector2(speed_x, speed_y).normalized()
 		match entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
-				if move_dir.x < 0 and move_object.is_on_wall():
+				if move_dir.x < 0 and is_clear_pipe_allowed_left:
 					should_enter = true
 			ClearPipeEntrance.Direction.RIGHT:
-				if move_dir.x > 0 and move_object.is_on_wall():
+				if move_dir.x > 0 and is_clear_pipe_allowed_right:
 					should_enter = true
 			ClearPipeEntrance.Direction.UP:
-				if move_dir.y < 0 and move_object.is_on_ceiling():
+				if move_object.is_on_ceiling() and is_clear_pipe_allowed_up:
 					should_enter = true
 			ClearPipeEntrance.Direction.DOWN:
-				if move_dir.y > 0 and move_object.is_on_floor():
+				if move_object.is_on_floor() and is_clear_pipe_allowed_down:
 					should_enter = true
 
 		if not should_enter:
@@ -338,6 +346,7 @@ func exit_pipe() -> void:
 
 	speed_x = previous_speed_x
 	speed_y = previous_speed_y
+
 	move_object.collision_layer = pipe_origin_collision_layer
 
 	# 清除所有 turning area 的 processed 标记
