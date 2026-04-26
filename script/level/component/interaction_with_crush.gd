@@ -29,4 +29,11 @@ func on_crush_hit(crush_position: Vector2) -> void:
 	emit_signal("crushed_at", crush_position)
 	
 func _get_basic_movement() -> BasicMovement:
-	return get_node_or_null(path_to_basic_movement)
+	var basic_movement_node = get_node_or_null(path_to_basic_movement)
+	if not basic_movement_node:
+		var children = get_parent().get_parent().get_children()
+		for child in children:
+			if child is BasicMovement:
+				basic_movement_node = child
+				break
+	return basic_movement_node
