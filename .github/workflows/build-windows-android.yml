@@ -37,7 +37,7 @@ jobs:
           mkdir -v -p ~/.config/
           mv /root/.config/godot ~/.config/godot
           mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-          echo "$KEYSTORE" | base64 -d > debug.keystore
+          echo "$KEYSTORE" | base64 -d > /root/debug.keystore
         env:
           KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
@@ -53,7 +53,7 @@ jobs:
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "${{ matrix.export_template }}" "${EXPORT_DIR}/${{ matrix.name }}/${EXPORT_NAME}.${{ matrix.ext }}"
         env:
-          GODOT_ANDROID_KEYSTORE_RELEASE_PATH: "debug.keystore"
+          GODOT_ANDROID_KEYSTORE_RELEASE_PATH: "/root/debug.keystore"
           GODOT_ANDROID_KEYSTORE_RELEASE_USER: ${{ secrets.KEYSTORE_USER }}
           GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
 
