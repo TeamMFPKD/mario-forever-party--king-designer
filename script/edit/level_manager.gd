@@ -52,6 +52,7 @@ enum LevelThemeEnum {
 		emit_signal("lives_changed")
 
 var level_data_dict: Dictionary
+var _cached_pipe_line_data: Array = []
 
 func _ready() -> void:
 	#if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
@@ -77,6 +78,9 @@ func get_level_data_json() -> String:
 	var pipe_line_data = []
 	if clear_pipe_draw and clear_pipe_draw.has_method("get_pipe_line_data"):
 		pipe_line_data = clear_pipe_draw.get_pipe_line_data()
+		_cached_pipe_line_data = pipe_line_data.duplicate(true)
+	else:
+		pipe_line_data = _cached_pipe_line_data
 
 	level_data_dict = {
 		"version": version,
@@ -145,6 +149,10 @@ func load_level_data_from_json(level_data_json: String) -> void:
 
 	# 加载clear pipe线数据
 	var pipe_line_data_array = level_data_dict.get("pipe_line_data", [])
+	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
+		_cached_pipe_line_data = pipe_line_data_array.duplicate(true)
+	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
+		_cached_pipe_line_data = pipe_line_data_array.duplicate(true)
 	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
 		if clear_pipe_draw and clear_pipe_draw.has_method("load_from_pipe_line_data"):
 			clear_pipe_draw.load_from_pipe_line_data(pipe_line_data_array)
