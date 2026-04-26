@@ -23,6 +23,7 @@ func _ready() -> void:
 	handlers_node = Node2D.new()
 	handlers_node.name = "Handlers"
 	handlers_node.process_mode = Node.PROCESS_MODE_DISABLED
+	handlers_node.visible = drawing_enabled
 	add_child(handlers_node)
 
 	lines_node = Node2D.new()
@@ -941,6 +942,8 @@ func set_drawing_enabled(enabled: bool) -> void:
 		dragging_line_index = -1
 		if handlers_node:
 			handlers_node.process_mode = Node.PROCESS_MODE_DISABLED
+			handlers_node.visible = false
 	else:
 		if handlers_node:
 			handlers_node.process_mode = Node.PROCESS_MODE_INHERIT
+			handlers_node.visible = true
