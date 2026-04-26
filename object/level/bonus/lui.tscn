@@ -104,6 +104,11 @@ path_to_visible_detect = NodePath("../GeneralVisibleOnScreenEnabler2d")
 initially_face_to_player = false
 speed_x = 0.0
 jump_speed = -350.0
+is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
+is_clear_pipe_allowed_down = true
+is_clear_pipe_allowed_left = false
+is_clear_pipe_allowed_right = false
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_sk3bx")]
 

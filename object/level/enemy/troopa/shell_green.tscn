@@ -73,9 +73,10 @@ speed_x = 0.0
 jump_speed = -250.0
 overlap_turn = false
 is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_k3c7n")]
-collision_mask = 144
+collision_mask = 208
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
 script = ExtResource("4_cbggm")
