@@ -46,6 +46,9 @@ speed_x = 500.0
 gravity = 2000.0
 jump_speed = -300.0
 overlap_turn = false
+is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
+is_clear_pipe_allowed_down = true
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_eauwl")]
