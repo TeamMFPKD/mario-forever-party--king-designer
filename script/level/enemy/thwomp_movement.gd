@@ -27,6 +27,10 @@ func _ready():
 func _physics_process(delta):
 	super._physics_process(delta)
 	#print("state: ", state)
+	if is_in_pipe:
+		if state == ThwompState.LAND:
+			state = ThwompState.FALL
+		return
 	match state:
 		ThwompState.IDLE:
 			if not screen_notifier.is_on_screen():
@@ -67,3 +71,13 @@ func _on_bump_block():
 	land_timer = 0
 	emit_signal("play_sound_stun")
 	state = ThwompState.LAND
+
+func exit_pipe() -> void:
+	match pipe_moving_dir:
+		PipeMoveDirection.UP:
+			state = ThwompState.RISE
+			move_object.position.y -= 48.0
+			_origin_position_y = move_object.position.y
+		PipeMoveDirection.RIGHT:
+			previous_speed_x = abs(previous_speed_x)
+	super.exit_pipe()
