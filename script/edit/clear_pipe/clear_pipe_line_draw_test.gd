@@ -206,26 +206,58 @@ func would_lines_overlap(exclude_idx: int, new_points: Array[Vector2]) -> bool:
 	return false
 
 func can_draw_in_direction_from_head(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
-	var test_pos = from_pos + direction * STEP
-
 	var line_data = line_data_list[line_idx]
 	var points = line_data.points
 
 	if points.size() >= 2:
 		var first_dir = get_orthogonal_direction(points[0], points[1])
 		if first_dir != Vector2.ZERO:
-			if direction == first_dir or direction == -first_dir:
+			if direction == first_dir:
 				return true
+			var is_turn = (direction != -first_dir)
+			var step = CORNER_STEP if is_turn else STEP
+			var candidate = from_pos + direction * step
+			if not can_add_point_at_head(points, candidate, line_idx):
+				return false
+			if would_overlap_visually_at_head(points, candidate):
+				return false
+			if would_overlap_other_lines_at_head(line_idx, points, candidate):
+				return false
 			return true
 
-	for i in range(line_data_list.size()):
-		var other_points = line_data_list[i].points
-		for j in range(other_points.size()):
-			if other_points[j].distance_squared_to(test_pos) < STEP * STEP * 0.25:
-				return false
-
+	var candidate = from_pos + direction * STEP
+	if would_overlap_other_lines_at_head(line_idx, points, candidate):
+		return false
 	return true
 
+func can_draw_in_direction(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
+	var line_data = line_data_list[line_idx]
+	var points = line_data.points
+
+	if points.size() >= 2:
+		var last_dir = get_orthogonal_direction(points[-2], points[-1])
+		if last_dir != Vector2.ZERO:
+			if direction == -last_dir:
+				return true
+			var is_turn = (direction != last_dir)
+			if is_turn and points.size() == 2:
+				var straight_count = count_consecutive_same_direction(points, last_dir)
+				if straight_count < 2:
+					return false
+			var step = CORNER_STEP if is_turn else STEP
+			var candidate = from_pos + direction * step
+			if not can_add_point(points, candidate, line_idx):
+				return false
+			if would_overlap_visually(points, candidate):
+				return false
+			if would_overlap_other_lines(line_idx, points, candidate):
+				return false
+			return true
+
+	var candidate = from_pos + direction * STEP
+	if would_overlap_other_lines(line_idx, points, candidate):
+		return false
+	return true
 func check_lines_overlap(points1: Array[Vector2], points2: Array[Vector2]) -> bool:
 	if points1.size() < 2 or points2.size() < 2:
 		return false
@@ -601,25 +633,6 @@ func update_handler_directions(line_idx: int) -> void:
 		var can_up = can_draw_in_direction(line_idx, tail_pos, Vector2.UP)
 		var can_down = can_draw_in_direction(line_idx, tail_pos, Vector2.DOWN)
 		line_data.end_handler.set_draw_directions(can_right, can_left, can_up, can_down)
-
-func can_draw_in_direction(line_idx: int, from_pos: Vector2, direction: Vector2) -> bool:
-	var test_pos = from_pos + direction * STEP
-
-	var line_data = line_data_list[line_idx]
-	var points = line_data.points
-
-	if points.size() >= 2:
-		var last_dir = get_orthogonal_direction(points[-2], points[-1])
-		if last_dir != Vector2.ZERO and direction != last_dir:
-			return true
-
-	for i in range(line_data_list.size()):
-		var other_points = line_data_list[i].points
-		for j in range(other_points.size()):
-			if other_points[j].distance_squared_to(test_pos) < STEP * STEP * 0.25:
-				return false
-
-	return true
 
 func get_last_direction(points: Array[Vector2]) -> Vector2:
 	if points.size() < 2:
