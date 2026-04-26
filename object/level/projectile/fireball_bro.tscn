@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cedfngdjbn1ra" path="res://sprite/projectile/fireball.png" id="1_y6g7c"]
 [ext_resource type="Script" uid="uid://ckuyqjdj04out" path="res://script/level/projectile/fireball_movement.gd" id="2_c6kwj"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_an8qw"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_c6kwj"]
 [ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="4_y6g7c"]
 [ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="5_41ls0"]
 [ext_resource type="Script" uid="uid://b17bv5u32d8ac" path="res://script/level/projectile/create_explode_effect.gd" id="6_rq1xj"]
@@ -38,14 +39,16 @@ autoplay = "default"
 shape = SubResource("CircleShape2D_lwykp")
 debug_color = Color(0.99999994, 0.2645593, 0.20245287, 0.41960785)
 
-[node name="FireballMovement" type="Node" parent="." unique_id=2103801211]
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("3_c6kwj")]
 script = ExtResource("2_c6kwj")
 initially_face_to_player = false
 speed_x = 500.0
 gravity = 2000.0
 jump_speed = -300.0
 overlap_turn = false
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
+is_clear_pipe_allowed_down = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_an8qw")]
 visible = false
@@ -71,4 +74,4 @@ metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 [node name="FireballExplode" parent="." unique_id=1715984441 instance=ExtResource("9_v255j")]
 stream = ExtResource("10_c558k")
 
-[connection signal="explode" from="FireballMovement" to="CreateExplodeEffect" method="explode"]
+[connection signal="explode" from="BasicMovement" to="CreateExplodeEffect" method="explode"]

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://fv66fb8pmnxu" path="res://sprite/projectile/hammer.png" id="1_jmgug"]
 [ext_resource type="Script" uid="uid://ckuyqjdj04out" path="res://script/level/projectile/fireball_movement.gd" id="2_8td6p"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_nj5v8"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_ujdcr"]
 [ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="4_3al0f"]
 [ext_resource type="Script" uid="uid://buas3t2dwsma" path="res://script/level/projectile/fireball_sprite_spin.gd" id="4_uu26y"]
@@ -38,14 +39,16 @@ autoplay = "default"
 shape = SubResource("CircleShape2D_37p56")
 debug_color = Color(0.65913457, 0.54113346, 0.5432109, 0.41960785)
 
-[node name="FireballMovement" type="Node" parent="." unique_id=2103801211]
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_nj5v8")]
 script = ExtResource("2_8td6p")
 initially_face_to_player = false
 speed_x = 175.0
 speed_y = -400.0
 gravity = 800.0
 overlap_turn = false
-metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+is_clear_pipe_allowed = true
+is_clear_pipe_allowed_up = true
+is_clear_pipe_allowed_down = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_ujdcr")]
 visible = false
