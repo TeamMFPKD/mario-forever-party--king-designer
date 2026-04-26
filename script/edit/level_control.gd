@@ -38,6 +38,8 @@ func switch_to_tilemap_mode():
 	current_drawing_mode = DrawingMode.TILEMAP
 	current_object_name = ""
 
+	reset_input_state()
+
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
 		tile_map_draw.set_drawing_enabled(true)
 		if tile_map_draw.has_method("set_brush_mode"):
@@ -59,6 +61,8 @@ func switch_to_objectmap_mode(object_name: String):
 	current_drawing_mode = DrawingMode.OBJECTMAP
 	current_object_name = object_name
 
+	reset_input_state()
+
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
 		tile_map_draw.set_drawing_enabled(false)
 
@@ -76,6 +80,8 @@ func switch_to_clear_pipe_mode(object_name: String):
 	current_drawing_mode = DrawingMode.CLEAR_PIPE
 	current_object_name = object_name
 
+	reset_input_state()
+
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
 		tile_map_draw.set_drawing_enabled(false)
 
@@ -92,6 +98,8 @@ func switch_to_clear_pipe_mode(object_name: String):
 func switch_to_eraser_mode():
 	current_drawing_mode = DrawingMode.ERASER
 	current_object_name = ""
+
+	reset_input_state()
 
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
 		tile_map_draw.set_drawing_enabled(true)
@@ -116,6 +124,8 @@ func _on_eraser_button_pressed():
 func switch_to_tilemap_mode_with_coords(custom_atlas_coords: Vector2i = Vector2i(-1, -1)):
 	current_drawing_mode = DrawingMode.TILEMAP
 	current_object_name = ""
+
+	reset_input_state()
 
 	if tile_map_draw and tile_map_draw.has_method("set_drawing_enabled"):
 		tile_map_draw.set_drawing_enabled(true)
@@ -269,3 +279,20 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 			var timer = get_tree().create_timer(0.1)
 			await timer.timeout
 			control.visible = false
+
+func reset_input_state():
+	var input_handler: InputHandler = null
+	if clear_pipe_draw and clear_pipe_draw.has_method("get_pipe_line_data"):
+		var parent = clear_pipe_draw.get_parent()
+		if parent:
+			for child in parent.get_children():
+				if child is InputHandler:
+					input_handler = child
+					break
+	if not input_handler:
+		for child in get_tree().root.get_children():
+			if child is InputHandler:
+				input_handler = child
+				break
+	if input_handler:
+		input_handler.is_clicking = false
