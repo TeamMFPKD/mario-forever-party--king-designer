@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://btt8w12nb3sf7" path="res://sprite/enemy/bullet_bill.png" id="1_uat7q"]
 [ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_m4wol"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_am7a5"]
+[ext_resource type="Script" uid="uid://umg7j3igybjg" path="res://script/level/enemy/bullet_bill_movement.gd" id="3_uat7q"]
 [ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="4_txint"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_p50n5"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_d8xrg"]
@@ -42,9 +43,11 @@ shape = SubResource("RectangleShape2D_gj0k3")
 debug_color = Color(0.6747229, 0.533051, 0.5441489, 0.41960785)
 
 [node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("2_m4wol")]
+script = ExtResource("3_uat7q")
 speed_x = 200.0
 gravity = 0.0
 overlap_turn = false
+is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_am7a5")]
 visible = false
