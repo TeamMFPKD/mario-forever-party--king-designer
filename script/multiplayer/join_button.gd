@@ -6,6 +6,8 @@ extends Button
 
 @export var player_page : Control
 
+@export var player_name_limit : int = 12
+
 var multiplayer_manager : MultiplayerManager
 var game_config : Node
 var frp_domain : String = ""
@@ -32,6 +34,8 @@ func _on_button_pressed() -> void:
 	remote_port = line_edit_remote_port.text.to_int()
 	multiplayer_manager.remote_port = remote_port
 	player_name = line_edit_player_name.text
+	# 冻双告诉我名字一定要长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长
+	player_name = player_name.substr(0, player_name_limit)
 	multiplayer_manager.player_name = player_name
 	
 	# 保存配置到GameConfig
