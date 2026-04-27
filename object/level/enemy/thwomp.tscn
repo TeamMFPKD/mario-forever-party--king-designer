@@ -103,7 +103,6 @@ is_clear_pipe_allowed_right = false
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_6pwjr")]
 shape = SubResource("RectangleShape2D_gj0k3")
-max_results = 8
 collision_mask = 192
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
