@@ -11,6 +11,8 @@ signal play_sound_stun
 var _origin_position_y : float
 var land_timer : int
 
+var is_ready : bool = false
+
 enum ThwompState {
 	IDLE,
 	FALL,
@@ -23,10 +25,19 @@ var state = ThwompState.IDLE
 func _ready():
 	super._ready()
 	_origin_position_y = move_object.position.y
+	await screen_notifier.ready
+	for i in range(10):
+		# 等待10帧
+		await get_tree().physics_frame
+	is_ready = true
+	#print("is_ready: ", is_ready)
 
 func _physics_process(delta):
 	super._physics_process(delta)
 	#print("state: ", state)
+	if not is_ready:
+		#print("is_ready: ", is_ready)
+		return
 	if is_in_pipe:
 		if state == ThwompState.LAND:
 			state = ThwompState.FALL
@@ -35,8 +46,10 @@ func _physics_process(delta):
 		ThwompState.IDLE:
 			if not screen_notifier.is_on_screen():
 				return
+			move_object.force_update_transform()
 			if player.position.x < move_object.position.x + safe_distance_x \
 			and player.position.x > move_object.position.x - safe_distance_x:
+				#print("thwomp is in FALL status")
 				state = ThwompState.FALL
 		ThwompState.FALL:
 			gravity = thwomp_gravity
