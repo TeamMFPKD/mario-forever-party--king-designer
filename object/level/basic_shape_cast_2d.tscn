@@ -6,6 +6,6 @@ size = Vector2(30, 30)
 [node name="BasicShapeCast2D" type="ShapeCast2D" unique_id=219146726]
 shape = SubResource("RectangleShape2D_gj0k3")
 target_position = Vector2(0, 0)
-max_results = 4
+max_results = 8
 collision_mask = 80
 collide_with_areas = true
