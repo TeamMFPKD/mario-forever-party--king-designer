@@ -18,6 +18,11 @@ func _ready():
 func _on_shoot():
 	var fireball = piranha_fireball_scene.instantiate() as Node2D
 	fireball.position = shoot_position_marker.global_position
+	if not player:
+		player = get_tree().get_first_node_in_group("player") as Node2D
+		if not player:
+			push_error("Piranha shoot: Player not found.")
+			return
 	fireball.set_meta("fireball_direction", 1 if parent.global_position.x < player.global_position.x else -1)
 	parent.add_sibling(fireball)
 	emit_signal("play_sound_shoot")
