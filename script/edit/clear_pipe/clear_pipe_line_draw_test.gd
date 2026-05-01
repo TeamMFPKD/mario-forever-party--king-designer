@@ -1,5 +1,7 @@
 extends Node2D
 
+@export var debug_mode: bool = false
+
 const STEP: float = 32.0
 const CORNER_STEP: float = 64.0
 const LINE_WIDTH: float = 62.0
@@ -946,6 +948,16 @@ func _process(_delta: float) -> void:
 	if drawing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		print("_process: drawing but mouse released, force stop")
 		stop_drawing()
+	if debug_mode:
+		queue_redraw()
+
+func _draw() -> void:
+	if not debug_mode:
+		return
+	for line_data in line_data_list:
+		var points = line_data.points
+		for p in points:
+			draw_circle(p, 8.0, Color.RED)
 
 func set_drawing_enabled(enabled: bool) -> void:
 	drawing_enabled = enabled

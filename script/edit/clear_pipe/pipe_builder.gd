@@ -1,5 +1,7 @@
 extends Node2D
 
+@export var debug_mode: bool = false
+
 @export var cap_up_scene: PackedScene
 @export var cap_down_scene: PackedScene
 @export var cap_left_scene: PackedScene
@@ -70,6 +72,8 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 		var prev_dir = get_orthogonal_direction(pts[i-1], pts[i])
 		var next_dir = get_orthogonal_direction(pts[i], pts[i+1])
 		if prev_dir != Vector2.ZERO and next_dir != Vector2.ZERO and prev_dir != next_dir:
+			if debug_mode:
+				print("corner at pts[", i, "] = ", pts[i], " prev_dir=", prev_dir, " next_dir=", next_dir)
 			place_corner(pts[i], prev_dir, next_dir)
 
 	for i in range(pts.size() - 1):
@@ -79,6 +83,7 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 		if direction == Vector2.ZERO:
 			continue
 		
+		var segment_length = start.distance_to(end)
 		var center = (start + end) / 2.0
 		
 		var is_first_segment = (i == 0)
@@ -96,19 +101,43 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 			if prev_dir != Vector2.ZERO and prev_dir != direction:
 				has_corner_before = true
 		
-		if has_corner_after:
+		if debug_mode:
+			print("segment ", i, ": start=", start, " end=", end, " length=", segment_length, " has_corner_after=", has_corner_after, " has_corner_before=", has_corner_before)
+		
+		if has_corner_after and segment_length < CORNER_STEP:
+			if debug_mode:
+				print("  -> skipped (corner after, length < 64)")
 			continue
 		
-		if has_corner_before:
+		if has_corner_after and has_corner_before:
+			if debug_mode:
+				print("  -> skipped (between two corners)")
+			continue
+		
+		if has_corner_after:
+			center = start + direction * (STEP / 2.0)
+			if debug_mode:
+				print("  -> corner after, center offset to: ", center)
+		elif has_corner_before:
 			center = center + direction * (STEP / 2.0)
+			if debug_mode:
+				print("  -> corner before, center offset to: ", center)
 		
 		if is_first_segment and is_last_segment:
+			if debug_mode:
+				print("  -> place_straight at ", center)
 			place_straight(center, direction)
 		elif is_first_segment:
+			if debug_mode:
+				print("  -> place_cap at ", center, " dir ", -direction)
 			place_cap(center, -direction)
 		elif is_last_segment:
+			if debug_mode:
+				print("  -> place_cap at ", center, " dir ", direction)
 			place_cap(center, direction)
 		else:
+			if debug_mode:
+				print("  -> place_straight at ", center)
 			place_straight(center, direction)
 
 func clear_all_pipes() -> void:
