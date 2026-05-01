@@ -97,8 +97,9 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 				has_corner_before = true
 		
 		if has_corner_after:
-			center = center - direction * (STEP / 2.0)
-		elif has_corner_before:
+			continue
+		
+		if has_corner_before:
 			center = center + direction * (STEP / 2.0)
 		
 		if is_first_segment and is_last_segment:
