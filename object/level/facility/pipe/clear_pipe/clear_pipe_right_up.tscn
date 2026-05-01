@@ -5,7 +5,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qppoe"]
 atlas = ExtResource("2_xlto7")
-region = Rect2(128, 64, 64, 62)
+region = Rect2(128, 64, 64, 64)
 
 [node name="ClearPipeRightUp" unique_id=197221430 instance=ExtResource("1_3vlve")]
 
