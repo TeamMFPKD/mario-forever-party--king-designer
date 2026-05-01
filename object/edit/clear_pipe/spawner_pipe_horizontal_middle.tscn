@@ -10,7 +10,7 @@ load_path = "res://.godot/imported/pipe_with_corner_transparent.png-f3ed163ff617
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ouiv5"]
 atlas = SubResource("CompressedTexture2D_p8oj4")
-region = Rect2(48, 64, 32, 62)
+region = Rect2(48, 64, 32, 64)
 
 [node name="SpawnerPipeHorizontalMiddle" type="Node2D" unique_id=1377143724]
 script = ExtResource("1_ea4aj")
