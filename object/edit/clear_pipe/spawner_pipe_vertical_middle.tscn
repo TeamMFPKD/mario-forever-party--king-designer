@@ -8,7 +8,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j86k7"]
 atlas = ExtResource("3_v5tec")
-region = Rect2(0, 45, 64, 19)
+region = Rect2(0, 32, 64, 32)
 
 [node name="SpawnerPipeVerticalMiddle" type="Node2D" unique_id=1267928015]
 script = ExtResource("1_ixlfj")
@@ -16,11 +16,6 @@ spawn_object_scene = ExtResource("2_v5tec")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=70001394]
-position = Vector2(0, -8)
-texture = SubResource("AtlasTexture_j86k7")
-
-[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=739893818]
-position = Vector2(0, 8)
 texture = SubResource("AtlasTexture_j86k7")
 
 [node name="OffsetMarker" parent="." unique_id=673199987 instance=ExtResource("4_xxdqu")]
