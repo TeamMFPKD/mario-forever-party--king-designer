@@ -64,26 +64,30 @@ func capture() -> void:
 	else:
 		print("Failed to save photo. Error code: ", image_error)
 	
-	# 复制关卡文件
-	var copy_error = dir.copy(path, target_lvl)
-	if copy_error == OK:
-		print("Level file copied to: ", target_lvl)
-		
-		# 可选：验证复制是否成功
-		if FileAccess.file_exists(target_lvl):
-			print("Level file verified at destination")
+	# 检查是否已在收藏目录中
+	if path.contains(LIKED_COURSE_FOLDER_NAME):
+		print("Level already in liked courses, screenshot updated only")
 	else:
-		print("Failed to copy level file. Error code: ", copy_error)
-		
-		# 备用复制方法：使用 FileAccess 读写
-		var source_file = FileAccess.open(path, FileAccess.READ)
-		var dest_file = FileAccess.open(target_lvl, FileAccess.WRITE)
-		if source_file and dest_file:
-			var data = source_file.get_buffer(source_file.get_length())
-			dest_file.store_buffer(data)
-			print("Level file copied using FileAccess fallback")
+		# 复制关卡文件
+		var copy_error = dir.copy(path, target_lvl)
+		if copy_error == OK:
+			print("Level file copied to: ", target_lvl)
+			
+			# 可选：验证复制是否成功
+			if FileAccess.file_exists(target_lvl):
+				print("Level file verified at destination")
 		else:
-			print("Fallback copy also failed")
+			print("Failed to copy level file. Error code: ", copy_error)
+			
+			# 备用复制方法：使用 FileAccess 读写
+			var source_file = FileAccess.open(path, FileAccess.READ)
+			var dest_file = FileAccess.open(target_lvl, FileAccess.WRITE)
+			if source_file and dest_file:
+				var data = source_file.get_buffer(source_file.get_length())
+				dest_file.store_buffer(data)
+				print("Level file copied using FileAccess fallback")
+			else:
+				print("Fallback copy also failed")
 
 	_create_capture_preview()
 
