@@ -127,13 +127,9 @@ func get_orthogonal_direction(p1: Vector2, p2: Vector2) -> Vector2:
 func place_straight(center: Vector2, dir: Vector2) -> void:
 	var scene: PackedScene
 	var rot: float = 0.0
-	if dir == Vector2.RIGHT:
+	if dir == Vector2.RIGHT or dir == Vector2.LEFT:
 		scene = straight_horizontal_scene; rot = 0.0
-	elif dir == Vector2.LEFT:
-		scene = straight_horizontal_scene; rot = 180.0
-	elif dir == Vector2.UP:
-		scene = straight_vertical_scene; rot = 0.0
-	elif dir == Vector2.DOWN:
+	elif dir == Vector2.UP or dir == Vector2.DOWN:
 		scene = straight_vertical_scene; rot = 0.0
 	else: return
 	if scene:
