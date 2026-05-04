@@ -26,8 +26,7 @@ func _ready():
 	super._ready()
 	_origin_position_y = move_object.position.y
 	await screen_notifier.ready
-	for i in range(10):
-		# 等待10帧
+	for i in range(3):
 		await get_tree().physics_frame
 	is_ready = true
 	#print("is_ready: ", is_ready)
