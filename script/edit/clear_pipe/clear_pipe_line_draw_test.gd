@@ -2,6 +2,9 @@ extends Node2D
 
 @export var debug_mode: bool = false
 
+signal pipe_moved
+signal pipe_drawn
+
 const STEP: float = 32.0
 const CORNER_STEP: float = 64.0
 const LINE_WIDTH: float = 62.0
@@ -176,6 +179,8 @@ func update_dragging(current_pos: Vector2) -> void:
 	line_data.points = new_points
 	line_data.line.points = new_points
 	update_handlers_for_line(dragging_line_index)
+	
+	emit_signal("pipe_moved")
 
 func finish_dragging() -> void:
 	if dragging_line_index >= 0:
@@ -494,12 +499,18 @@ func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Ar
 			if candidate.distance_squared_to(second_point) <= STEP * STEP + 1.0:
 				points.pop_front()
 				if points.size() > 0:
-					line_data.first_direction = Vector2.ZERO
-					update_line_and_handlers(active_idx)
+						line_data.first_direction = Vector2.ZERO
+						update_line_and_handlers(active_idx)
+						# Emit signal when pipe is drawn to play sound effect
+						emit_signal("pipe_drawn")
+					# Emit signal when pipe is drawn to play sound effect
+						emit_signal("pipe_drawn")
 				else:
 					points.push_front(candidate)
 					line_data.first_direction = Vector2.ZERO
 					update_line_and_handlers(active_idx)
+					# Emit signal when pipe is drawn to play sound effect
+					emit_signal("pipe_drawn")
 			else:
 				first_point = candidate
 		return
@@ -525,6 +536,9 @@ func update_drawing_from_head(active_idx: int, line_data: Dictionary, points: Ar
 		points.push_front(candidate)
 		line_data.first_direction = -move_dir
 		update_line_and_handlers(active_idx)
+		
+		# Emit signal when pipe is drawn to play sound effect
+		emit_signal("pipe_drawn")
 
 func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Array[Vector2], current_pos: Vector2) -> void:
 	var last_point: Vector2 = points.back() if points.size() > 0 else Vector2.ZERO
@@ -564,10 +578,14 @@ func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Ar
 				if points.size() > 0:
 					line_data.last_direction = get_last_direction(points)
 					update_line_and_handlers(active_idx)
+					# Emit signal when pipe is drawn to play sound effect
+					emit_signal("pipe_drawn")
 				else:
 					points.append(candidate)
 					line_data.last_direction = Vector2.ZERO
 					update_line_and_handlers(active_idx)
+					# Emit signal when pipe is drawn to play sound effect
+					emit_signal("pipe_drawn")
 			else:
 				last_point = candidate
 		return
@@ -590,6 +608,9 @@ func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Ar
 		points.append(candidate)
 		line_data.last_direction = move_dir
 		update_line_and_handlers(active_idx)
+		
+		# Emit signal when pipe is drawn to play sound effect
+		emit_signal("pipe_drawn")
 
 func update_line_and_handlers(line_idx: int) -> void:
 	var line_data = line_data_list[line_idx]
