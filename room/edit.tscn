@@ -52,10 +52,14 @@
 [ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="42_qnirk"]
 [ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="43_hfb1t"]
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="44_bb1r4"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="45_jdcwv"]
 [ext_resource type="Texture2D" uid="uid://boa8ojba4ua7m" path="res://sprite/bonus/poisonous_mushroom.png" id="45_jnkuo"]
 [ext_resource type="Texture2D" uid="uid://btxki0mu71rot" path="res://sprite/theme_preview/bg_preview_snow_b.png" id="45_oia1o"]
 [ext_resource type="Texture2D" uid="uid://4lr60loieckk" path="res://sprite/bonus/super_star.png" id="46_bddyo"]
+[ext_resource type="AudioStream" uid="uid://cu8hie3bvctvl" path="res://sound/edit/move.wav" id="46_io63s"]
+[ext_resource type="AudioStream" uid="uid://ddiihhr28rgn7" path="res://sound/edit/slider.ogg" id="46_lq4t0"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="47_gnq71"]
+[ext_resource type="Script" uid="uid://dr7gaaht3lsw3" path="res://script/level/sound/play_sound_when_not_playing.gd" id="47_lq4t0"]
 [ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/edit/tilemap/tile_set_style.gd" id="48_71fdm"]
 [ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="49_yk8gc"]
 [ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://sprite/tile/tile_castle_b.png" id="50_dvyf1"]
@@ -554,6 +558,15 @@ corner_ur_scene = ExtResource("109_oia1o")
 corner_ul_scene = ExtResource("110_oia1o")
 corner_dr_scene = ExtResource("111_oia1o")
 corner_dl_scene = ExtResource("112_oia1o")
+
+[node name="PipeDrag" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=1191868969 instance=ExtResource("45_jdcwv")]
+stream = ExtResource("46_lq4t0")
+volume_db = -5.0
+script = ExtResource("47_lq4t0")
+
+[node name="PipeMove" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=1715984441 instance=ExtResource("45_jdcwv")]
+stream = ExtResource("46_io63s")
+script = ExtResource("47_lq4t0")
 
 [node name="LevelSizeGroup" type="Control" parent="GameRoomSize" unique_id=573696587 groups=["item_group"]]
 layout_mode = 1
@@ -1852,6 +1865,8 @@ show_mode = 2
 [connection signal="pressed" from="GameRoomSize/SaveLoad/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
 [connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
+[connection signal="pipe_drawn" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeDrag" method="play"]
+[connection signal="pipe_moved" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeMove" method="play_sound_when_not_playing"]
 [connection signal="load_level" from="GameRoomSize/DebugLoad" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_debug_load"]
 
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]
