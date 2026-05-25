@@ -401,6 +401,12 @@ func stop_drawing() -> void:
 		var line_data = line_data_list[active_idx]
 		var points = line_data.points
 
+		if debug_mode:
+			var pts_str = ""
+			for p in points:
+				pts_str += "(" + str(p.x) + ", " + str(p.y) + ") "
+			print("[STOP] points: ", pts_str)
+
 		if points.size() < 3:
 			remove_line(active_idx)
 		else:
@@ -605,6 +611,16 @@ func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Ar
 	var candidate = last_point + move_dir * required_step
 
 	if can_add_point(points, candidate, active_idx) and not would_overlap_visually(points, candidate) and not would_overlap_other_lines(active_idx, points, candidate):
+		# When turning at the tail, remove the point before the corner to
+		# avoid an extra short segment that creates a visual gap.
+		if direction_changed and points.size() >= 3:
+			var prev_seg_dir = get_orthogonal_direction(points[-3], points[-2])
+			if prev_seg_dir != Vector2.ZERO and prev_seg_dir == line_data.last_direction:
+				var removed = points[-2]
+				points.remove_at(points.size() - 2)
+				if debug_mode:
+					print("[FIX] removed point before corner: (", removed.x, ", ", removed.y, "), new points size=", points.size())
+
 		points.append(candidate)
 		line_data.last_direction = move_dir
 		update_line_and_handlers(active_idx)

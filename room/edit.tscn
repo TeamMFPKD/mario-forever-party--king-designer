@@ -545,9 +545,11 @@ script = ExtResource("24_x0edr")
 
 [node name="ClearPipeLineDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=2076543210]
 script = ExtResource("101_oia1o")
+debug_mode = true
 
 [node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=2076543211]
 script = ExtResource("102_oia1o")
+debug_mode = true
 cap_up_scene = ExtResource("103_oia1o")
 cap_down_scene = ExtResource("104_oia1o")
 cap_left_scene = ExtResource("105_oia1o")
