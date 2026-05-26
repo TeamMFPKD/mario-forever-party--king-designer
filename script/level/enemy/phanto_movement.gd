@@ -25,6 +25,7 @@ var frame: int = 0
 # Blinking logic (Alterable Values AA, AB)
 var _aa: int = 0  # Counter for blink cycle
 var _is_blinking: bool = false
+var _shader_material: ShaderMaterial  # Per-instance material copy
 
 ## Start the blinking sequence. Call this to trigger the flash effect.
 func start_blink() -> void:
@@ -59,10 +60,8 @@ func _update_blink() -> void:
 		_set_shader_enabled(false)
 
 func _set_shader_enabled(enabled: bool) -> void:
-	var sprite: AnimatedSprite2D = move_object.get_node("AnimatedSprite2D") as AnimatedSprite2D
-	if sprite and sprite.material:
-		var mat: ShaderMaterial = sprite.material as ShaderMaterial
-		mat.set_shader_parameter("enabled", enabled)
+	if _shader_material:
+		_shader_material.set_shader_parameter("enabled", enabled)
 
 func _create_effect() -> void:
 	var effect_node: Node = move_object.get_node("PhantoEffect")
@@ -75,6 +74,12 @@ func _ready() -> void:
 	if not move_object:
 		push_error("Move object (parent) not found.")
 		return
+
+	# Create per-instance material copy to avoid shared state
+	var sprite: AnimatedSprite2D = move_object.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite and sprite.material:
+		_shader_material = sprite.material.duplicate() as ShaderMaterial
+		sprite.material = _shader_material
 
 	# Target resolution: explicit path first, then "player" group
 	if not path_to_target.is_empty():
