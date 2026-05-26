@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://cbp4yks2cibli"]
+
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="1_odo7v"]
+[ext_resource type="Script" uid="uid://b8ehwy4p2gon2" path="res://script/level/facility/key_movement.gd" id="2_kudd7"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_4gtrg"]
+[ext_resource type="AudioStream" uid="uid://cjgdx78gewkb1" path="res://sound/level/smw_key_get.wav" id="4_112jo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ba2jk"]
+atlas = ExtResource("1_odo7v")
+region = Rect2(448, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2bvg"]
+atlas = ExtResource("1_odo7v")
+region = Rect2(352, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kudd7"]
+atlas = ExtResource("1_odo7v")
+region = Rect2(384, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4gtrg"]
+atlas = ExtResource("1_odo7v")
+region = Rect2(416, 32, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_112jo"]
+animations = [{
+"frames": [{
+"duration": 15.0,
+"texture": SubResource("AtlasTexture_ba2jk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g2bvg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kudd7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4gtrg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5l5ub"]
+size = Vector2(30, 30)
+
+[node name="Key" type="Area2D" unique_id=648015708]
+collision_layer = 0
+collision_mask = 8
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1940421232]
+sprite_frames = SubResource("SpriteFrames_112jo")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1318956261]
+shape = SubResource("RectangleShape2D_5l5ub")
+
+[node name="KeyMovement" type="Node" parent="." unique_id=632958652]
+script = ExtResource("2_kudd7")
+
+[node name="KeyGet" parent="." unique_id=1715984441 instance=ExtResource("3_4gtrg")]
+stream = ExtResource("4_112jo")
+
+[connection signal="play_sound_get" from="KeyMovement" to="KeyGet" method="play"]
