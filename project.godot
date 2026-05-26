@@ -74,6 +74,7 @@ folder_colors={
 "res://script/": "gray",
 "res://shader/": "gray",
 "res://sound/": "blue",
+"res://sprite/animated_sprite_resource/": "purple",
 "res://sprite/background/": "green",
 "res://sprite/bonus/": "yellow",
 "res://sprite/enemy/": "orange",
