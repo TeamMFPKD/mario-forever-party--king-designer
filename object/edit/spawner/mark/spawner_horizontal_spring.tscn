@@ -10,7 +10,7 @@
 atlas = ExtResource("3_e886r")
 region = Rect2(31, 16, 31, 32)
 
-[node name="SpawnerSpring" type="Node2D" unique_id=2021423520]
+[node name="SpawnerHorizontalSpring" type="Node2D" unique_id=2021423520]
 script = ExtResource("1_rkubn")
 spawn_object_scene = ExtResource("2_rkubn")
 metadata/_custom_type_script = "uid://b23emkp2mb16s"

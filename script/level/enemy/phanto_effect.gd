@@ -14,10 +14,9 @@ func _ready() -> void:
 	parent = get_node(path_to_move_object) as Node2D
 
 func _physics_process(_delta: float) -> void:
-	_create_effect()
+	pass  # Effect creation is now controlled via trigger_effect()
 
-func _create_effect() -> void:
-	await get_tree().physics_frame
+func trigger_effect() -> void:
 	var effect = effect_scene.instantiate() as Node2D
 	effect.position = parent.position
 	parent.add_sibling(effect)

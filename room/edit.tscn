@@ -907,6 +907,7 @@ position = Vector2(20, -150)
 texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -174.0
 offset_top = -698.0
@@ -1673,7 +1674,6 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -704.0
 offset_top = -698.0

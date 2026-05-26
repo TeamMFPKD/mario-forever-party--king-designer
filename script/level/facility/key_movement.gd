@@ -130,6 +130,6 @@ func _create_phanto(body: Node) -> void:
 	# Phanto will not spawn at the same position as the player, but a bit away
 	angle -= PI / 4.0
 	spawn_vector = Vector2.from_angle(angle)
-	var spawn_position = spawn_vector * 384.0
+	var spawn_position = spawn_vector * (640.0 + 64.0)
 	phanto.position = key.position + spawn_position
 	key.add_sibling(phanto)
