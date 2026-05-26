@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://btt1b1mprgdix"]
+
+[ext_resource type="Texture2D" uid="uid://rm1pndhonmy7" path="res://sprite/enemy/phanto.png" id="1_mr1av"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bc0n6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mr1av")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_5owps"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_dlvlf"]
+resource_name = "new_animation"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:self_modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6e0sj"]
+_data = {
+&"RESET": SubResource("Animation_5owps"),
+&"new_animation": SubResource("Animation_dlvlf")
+}
+
+[node name="PlayerLuiEffect" type="Node2D" unique_id=1540662790]
+z_index = 14
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=983888091]
+sprite_frames = SubResource("SpriteFrames_bc0n6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1145464705]
+libraries/ = SubResource("AnimationLibrary_6e0sj")
+autoplay = &"new_animation"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="queue_free" unbinds=1]
