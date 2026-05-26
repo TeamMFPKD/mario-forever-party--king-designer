@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://jbupjhhi6kn1" path="res://object/level/facility/switch/switch_block.tscn" id="45_2yx74"]
 [ext_resource type="PackedScene" uid="uid://d18xfuorl3oea" path="res://object/level/facility/switch/switch_block_blue.tscn" id="46_m1t4l"]
 [ext_resource type="PackedScene" uid="uid://bafyiqnptyat8" path="res://object/level/facility/switch/switch_block_red.tscn" id="47_m1t4l"]
+[ext_resource type="PackedScene" uid="uid://d00fw34l1cbco" path="res://object/level/enemy/phanto.tscn" id="49_lchq8"]
 [ext_resource type="PackedScene" uid="uid://1b2nn2daiiwi" path="res://object/level/facility/horizontal_spring.tscn" id="50_d7hat"]
 
 [sub_resource type="GDScript" id="GDScript_8ejbx"]
@@ -490,3 +491,6 @@ position = Vector2(4720, 80)
 
 [node name="Goomba4" parent="." unique_id=1149345203 instance=ExtResource("5_mvtm3")]
 position = Vector2(4816, 208)
+
+[node name="Phanto" parent="." unique_id=481058443 instance=ExtResource("49_lchq8")]
+position = Vector2(4664, 64)
