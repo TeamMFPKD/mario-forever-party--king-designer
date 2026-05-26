@@ -22,6 +22,53 @@ var velocity: Vector2 = Vector2.ZERO
 var target_pos: Vector2
 var frame: int = 0
 
+# Blinking logic (Alterable Values AA, AB)
+var _aa: int = 0  # Counter for blink cycle
+var _is_blinking: bool = false
+
+## Start the blinking sequence. Call this to trigger the flash effect.
+func start_blink() -> void:
+	_aa = 0
+	_is_blinking = true
+
+## Stops the blinking and resets the shader to normal.
+func stop_blink() -> void:
+	_is_blinking = false
+	_aa = 0
+	_set_shader_enabled(false)
+
+func _update_blink() -> void:
+	if not _is_blinking:
+		return
+
+	# AA < 14: blinking cycle
+	if _aa < 14:
+		_aa += 1
+		var ab: int = _aa % 5  # AB = AA mod 5
+
+		# Set effect to None first (enabled = false)
+		_set_shader_enabled(false)
+
+		# If AB < 2, set effect to Inverted (enabled = true)
+		if ab < 2:
+			_set_shader_enabled(true)
+	# AA = 14: create effect and stop blinking
+	elif _aa == 14:
+		_is_blinking = false
+		_aa = 0
+		_set_shader_enabled(false)
+
+func _set_shader_enabled(enabled: bool) -> void:
+	var sprite: AnimatedSprite2D = move_object.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite and sprite.material:
+		var mat: ShaderMaterial = sprite.material as ShaderMaterial
+		mat.set_shader_parameter("enabled", enabled)
+
+func _create_effect() -> void:
+	var effect_node: Node = move_object.get_node("PhantoEffect")
+	if effect_node and effect_node.has_method("trigger_effect"):
+		effect_node.trigger_effect()
+
 
 func _ready() -> void:
 	move_object = get_node_or_null(path_to_move_obj) as Node2D
@@ -44,6 +91,8 @@ func _physics_process(_delta: float) -> void:
 	if not move_object:
 		return
 
+	_update_blink()
+
 	frame += 1
 	_update_target_position()
 
@@ -57,6 +106,8 @@ func _physics_process(_delta: float) -> void:
 	# Apply velocity every frame
 	pos += velocity
 	move_object.global_position = pos
+	
+	_create_effect()
 
 
 func _update_target_position() -> void:
@@ -112,3 +163,11 @@ func _decelerate_axis(val: float, step: float) -> float:
 		if val > 0.0:
 			return 0.0
 	return val
+
+
+# 只是测试用，但是感觉很有趣，保留也不错（
+"""
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("move_jump"):
+		start_blink()
+"""

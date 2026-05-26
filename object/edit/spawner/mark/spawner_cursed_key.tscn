@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://sm7e1odfldar"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_00hfj"]
+[ext_resource type="PackedScene" uid="uid://qegad31yf6yd" path="res://object/level/facility/cursed_key.tscn" id="2_00hfj"]
+[ext_resource type="Texture2D" uid="uid://cbqydv4ek0pae" path="res://sprite/facility/cursed_key.png" id="3_tge55"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_w74aa"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="4_fibxq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnirk"]
+atlas = ExtResource("3_tge55")
+region = Rect2(0, 2, 32, 32)
+
+[node name="SpawnerCursedKey" type="Node2D" unique_id=1594885199]
+script = ExtResource("1_00hfj")
+spawn_object_scene = ExtResource("2_00hfj")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
+texture = SubResource("AtlasTexture_qnirk")
+
+[node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("3_w74aa")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("4_fibxq")]

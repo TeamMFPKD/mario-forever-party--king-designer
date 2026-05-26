@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://d00fw34l1cbco"]
 
+[ext_resource type="Shader" uid="uid://dcwkqc8fwc34n" path="res://shader/invert.gdshader" id="1_dq0ao"]
 [ext_resource type="Texture2D" uid="uid://rm1pndhonmy7" path="res://sprite/enemy/phanto.png" id="1_iunss"]
 [ext_resource type="Script" uid="uid://q8766iqhm1dg" path="res://script/level/enemy/phanto_movement.gd" id="2_bc0n6"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="3_gqauo"]
@@ -8,6 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="6_nbrqb"]
 [ext_resource type="Script" uid="uid://cb8nvcn7pnw7m" path="res://script/level/enemy/phanto_effect.gd" id="7_gqauo"]
 [ext_resource type="PackedScene" uid="uid://btt1b1mprgdix" path="res://object/level/enemy/phanto_effect.tscn" id="8_m6xv0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nbrqb"]
+shader = ExtResource("1_dq0ao")
+shader_parameter/enabled = false
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bc0n6"]
 animations = [{
@@ -29,6 +34,7 @@ collision_layer = 16
 collision_mask = 0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=16928561]
+material = SubResource("ShaderMaterial_nbrqb")
 sprite_frames = SubResource("SpriteFrames_bc0n6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=389099815]
@@ -71,5 +77,10 @@ is_crushable = false
 [node name="PhantoEffect" type="Node" parent="." unique_id=404061307]
 script = ExtResource("7_gqauo")
 effect_scene = ExtResource("8_m6xv0")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=889924824]
+rect = Rect2(-16, -16, 32, 32)
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="PhantoMovement" method="start_blink"]
 
 [editable path="EnemyInteraction"]
