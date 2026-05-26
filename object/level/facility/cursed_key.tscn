@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://qegad31yf6yd"]
+
+[ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key.tscn" id="1_2w703"]
+[ext_resource type="SpriteFrames" uid="uid://d3csexwps6t7a" path="res://sprite/animated_sprite_resource/cursed_key.tres" id="2_yyuxl"]
+[ext_resource type="PackedScene" uid="uid://d00fw34l1cbco" path="res://object/level/enemy/phanto.tscn" id="3_p2py1"]
+
+[node name="Key" unique_id=648015708 instance=ExtResource("1_2w703")]
+
+[node name="AnimatedSprite2D" parent="." index="0" unique_id=1940421232]
+sprite_frames = ExtResource("2_yyuxl")
+
+[node name="KeyMovement" parent="." index="2" unique_id=632958652]
+cursed = true
+phanto_scene = ExtResource("3_p2py1")

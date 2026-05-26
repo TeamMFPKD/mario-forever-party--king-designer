@@ -48,6 +48,7 @@
 [ext_resource type="PackedScene" uid="uid://d18xfuorl3oea" path="res://object/level/facility/switch/switch_block_blue.tscn" id="46_m1t4l"]
 [ext_resource type="PackedScene" uid="uid://bafyiqnptyat8" path="res://object/level/facility/switch/switch_block_red.tscn" id="47_m1t4l"]
 [ext_resource type="PackedScene" uid="uid://1b2nn2daiiwi" path="res://object/level/facility/horizontal_spring.tscn" id="50_d7hat"]
+[ext_resource type="PackedScene" uid="uid://qegad31yf6yd" path="res://object/level/facility/cursed_key.tscn" id="50_pphef"]
 [ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key.tscn" id="50_xdq7u"]
 
 [sub_resource type="GDScript" id="GDScript_8ejbx"]
@@ -494,3 +495,15 @@ position = Vector2(4816, 208)
 
 [node name="Key" parent="." unique_id=648015708 instance=ExtResource("50_xdq7u")]
 position = Vector2(4584, 224)
+
+[node name="Key2" parent="." unique_id=1304391723 instance=ExtResource("50_xdq7u")]
+position = Vector2(4696, 144)
+
+[node name="Key3" parent="." unique_id=746694261 instance=ExtResource("50_xdq7u")]
+position = Vector2(4632, 160)
+
+[node name="Key4" parent="." unique_id=1415649926 instance=ExtResource("50_xdq7u")]
+position = Vector2(4688, 208)
+
+[node name="Key5" parent="." unique_id=1276433292 instance=ExtResource("50_pphef")]
+position = Vector2(4592, 272)

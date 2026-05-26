@@ -5,6 +5,9 @@ signal play_sound_get
 @export var path_to_key: NodePath = ".."
 @export var path_to_ani: NodePath = "../AnimatedSprite2D"
 
+@export var cursed: bool = false
+@export var phanto_scene: PackedScene
+
 var key: Node2D
 var ani: AnimatedSprite2D
 var past_player_status: Array = []
@@ -14,11 +17,15 @@ enum KeyState {
 	GOT,
 	FOLLOWING,
 }
+var key_id: int = 0
 var state: KeyState = KeyState.IDLE:
 	set(value):
 		state = value
 		if value == KeyState.FOLLOWING:
 			emit_signal("play_sound_get")
+			add_to_group("key_following")
+			var following_keys = get_tree().get_nodes_in_group("key_following")
+			key_id = following_keys.size()
 var time: float = 0.0
 
 var track_frame: int = 0
@@ -48,6 +55,8 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if body.is_in_group("player"):
 		state = KeyState.FOLLOWING
+		if cursed:
+			_create_phanto(body)
 
 func _physics_process(delta: float) -> void:
 	if not key or not ani:
@@ -68,9 +77,10 @@ func _physics_process(delta: float) -> void:
 func _follow_player() -> void:
 	var player = get_tree().get_first_node_in_group("player") as Node2D
 	var player_movement = player.get_meta("player_movement") as PlayerMovement
+
 	if player_movement.speed_x != 0.0:
 		dir = sign(player_movement.speed_x)
-	var target_offset = -16.0 * dir
+	var target_offset = -(16.0 + (key_id - 1) * 8.0) * dir
 
 	if not player:
 		return
@@ -86,7 +96,7 @@ func _follow_player() -> void:
 		}
 	)
 
-	if track_frame > 7:
+	if track_frame > 5 + (key_id - 1) * 5:
 		start_track = true
 	
 	if not start_track:
@@ -108,7 +118,18 @@ func _follow_player() -> void:
 		is_previous_x_same = past_player_status[MAX_PAST_STATUS - 1]["position"].x == past_player_status[start_track_timer]["position"].x
 	if past_player_status[start_track_timer]["is_on_floor"]:
 		if not is_previous_x_same:
-			key.position.y -= abs(sin(time * 5.0) * 8.0)
+			key.position.y -= abs(sin(time * 5.0 + (key_id - 1) * 0.5) * 8.0)
 
-	offset_x += (target_offset - offset_x) * 0.1
+	offset_x += (target_offset - offset_x) * 0.02
 	key.position.x += offset_x
+
+func _create_phanto(body: Node) -> void:
+	var phanto = phanto_scene.instantiate() as Node2D
+	var spawn_vector = body.position - key.position
+	var angle = Vector2.ZERO.angle_to(spawn_vector)
+	# Phanto will not spawn at the same position as the player, but a bit away
+	angle -= PI / 4.0
+	spawn_vector = Vector2.from_angle(angle)
+	var spawn_position = spawn_vector * 384.0
+	phanto.position = key.position + spawn_position
+	key.add_sibling(phanto)
