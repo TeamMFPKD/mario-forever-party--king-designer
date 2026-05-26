@@ -32,6 +32,8 @@ signal play_sound_jump
 @export var gravity_normal_lui = 2300
 @export var gravity_hold_jump_lui = 1000
 
+@export var horizontal_spring_bounce_speed_x: float = 500.0
+
 var move_up : bool
 var move_down : bool
 var move_left : bool
@@ -263,3 +265,7 @@ func pipe_movement() -> void:
 		PipeMoveDirection.DOWN:
 			player.position = player.position + Vector2(0, moving_speed)
 	player.force_update_transform()
+
+func on_horizontal_spring_bounce(spring: Node2D) -> void:
+	var dir = 1.0 if player.global_position.x > spring.global_position.x else -1.0
+	speed_x = abs(horizontal_spring_bounce_speed_x) * dir

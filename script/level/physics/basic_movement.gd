@@ -11,6 +11,14 @@ signal pipe_exited
 @export var initially_face_to_player: bool = true
 @export var speed_x: float = 60.0
 @export var speed_y: float
+
+@export var horizontal_spring_bounce_speed_x: float = 200.0
+@export var horizontal_spring_bounce_speed_y: float = -300.0
+@export var horizontal_spring_deacceleration_x: float = 5.0
+@export var horizontal_spring_deacceleration_y: float = 5.0
+var spring_bounce_speed_x: float = 0.0
+var spring_bounce_speed_y: float = 0.0
+
 @export var gravity: float = 650.0
 @export var max_fall_speed: float = 999.0
 @export var jump_speed: float
@@ -137,6 +145,7 @@ func _physics_process(delta: float) -> void:
 	speed_x_process()
 	speed_y_process(delta)
 	set_jump_speed()
+	process_horizontal_spring_speed()
 	apply_speed()
 	move()
 
@@ -156,6 +165,8 @@ func turn_detect() -> void:
 
 func overlap_turn_detect() -> void:
 	if not overlap_turn:
+		return
+	if spring_bounce_speed_x != 0.0 or spring_bounce_speed_y != 0.0:
 		return
 	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
 	if results.size() <= 1:
@@ -189,7 +200,7 @@ func speed_y_process(delta: float) -> void:
 		speed_y = 0.0
 
 func apply_speed() -> void:
-	move_object.velocity = Vector2(speed_x, speed_y)
+	move_object.velocity = Vector2(speed_x + spring_bounce_speed_x, speed_y + spring_bounce_speed_y)
 
 func move() -> void:
 	move_object.move_and_slide()
@@ -455,3 +466,15 @@ func clear_turning_processed_for_reversal() -> void:
 	for turning in turnings:
 		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
 			turning.clear_processed(move_object)
+
+func on_horizontal_spring_bounce(spring: Node2D) -> void:
+	var dir = 1.0 if move_object.global_position.x > spring.global_position.x else -1.0
+	spring_bounce_speed_x = abs(horizontal_spring_bounce_speed_x) * dir
+	spring_bounce_speed_y = horizontal_spring_bounce_speed_y
+	speed_x = abs(speed_x) * dir
+	if speed_y > 0.0:
+		speed_y = 0.0
+
+func process_horizontal_spring_speed() -> void:
+	spring_bounce_speed_x = move_toward(spring_bounce_speed_x, 0.0, horizontal_spring_deacceleration_x)
+	spring_bounce_speed_y = move_toward(spring_bounce_speed_y, 0.0, horizontal_spring_deacceleration_y)

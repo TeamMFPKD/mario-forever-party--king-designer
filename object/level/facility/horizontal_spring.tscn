@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://1b2nn2daiiwi"]
+
+[ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="1_h6cg2"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_q3in6"]
+[ext_resource type="Script" uid="uid://0jw2piuhybx1" path="res://script/level/facility/horizontal_spring_collsion_area.gd" id="3_mi0ck"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="4_23r3p"]
+[ext_resource type="AudioStream" uid="uid://n218pjy788m8" path="res://sound/level/springboard.wav" id="5_lwwrg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3in6"]
+atlas = ExtResource("1_h6cg2")
+region = Rect2(31, 16, 31, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mi0ck"]
+atlas = ExtResource("1_h6cg2")
+region = Rect2(62, 32, 31, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_awh24"]
+atlas = ExtResource("1_h6cg2")
+region = Rect2(0, 0, 31, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x8d8a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3in6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi0ck")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_awh24")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mi0ck")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3in6")
+}],
+"loop": false,
+"name": &"bounce",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3in6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3in6"]
+size = Vector2(32, 31)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h6cg2"]
+size = Vector2(28, 31)
+
+[node name="HorizontalSpring" type="Node2D" unique_id=646351064]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1490166092]
+collision_layer = 2
+collision_mask = 3
+
+[node name="BasicMovement" parent="CharacterBody2D" unique_id=1013180728 instance=ExtResource("2_q3in6")]
+speed_x = 0.0
+overlap_turn = false
+can_be_turn_overlap_detected = false
+is_clear_pipe_allowed_left = false
+is_clear_pipe_allowed_right = false
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1411468840]
+rotation = 1.5707964
+sprite_frames = SubResource("SpriteFrames_x8d8a")
+animation = &"bounce"
+autoplay = "default"
+frame = 4
+frame_progress = 1.0
+
+[node name="HorizontalSpringCollsionArea" type="Area2D" parent="CharacterBody2D" unique_id=600350545]
+collision_layer = 0
+collision_mask = 56
+script = ExtResource("3_mi0ck")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/HorizontalSpringCollsionArea" unique_id=830799710]
+shape = SubResource("RectangleShape2D_q3in6")
+debug_color = Color(1, 0.012887177, 0.045718662, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=926533691]
+shape = SubResource("RectangleShape2D_h6cg2")
+one_way_collision = true
+
+[node name="Bounce" parent="." unique_id=1715984441 instance=ExtResource("4_23r3p")]
+stream = ExtResource("5_lwwrg")
+
+[connection signal="spring_bounced" from="CharacterBody2D/HorizontalSpringCollsionArea" to="Bounce" method="play"]
+[connection signal="spring_bounced" from="CharacterBody2D/HorizontalSpringCollsionArea" to="CharacterBody2D/AnimatedSprite2D" method="play" binds= [&"bounce"]]
