@@ -118,6 +118,8 @@
 [ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/clear_pipe/spawner_pipe_right_up.tscn" id="109_oia1o"]
 [ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/clear_pipe/spawner_pipe_left_up.tscn" id="110_oia1o"]
 [ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/clear_pipe/spawner_pipe_right_down.tscn" id="111_oia1o"]
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="111_yebna"]
+[ext_resource type="Texture2D" uid="uid://cbqydv4ek0pae" path="res://sprite/facility/cursed_key.png" id="112_cvttd"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="112_oia1o"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
@@ -289,6 +291,22 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("90_kt6na")
 region = Rect2(0, 192, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfb1t"]
+atlas = ExtResource("111_yebna")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb1r4"]
+atlas = ExtResource("111_yebna")
+region = Rect2(192, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvttd"]
+atlas = ExtResource("111_yebna")
+region = Rect2(448, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnirk"]
+atlas = ExtResource("112_cvttd")
+region = Rect2(0, 2, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_ifctp"]
 atlas = ExtResource("89_aiw0b")
 region = Rect2(0, 0, 32, 32)
@@ -307,13 +325,13 @@ load_path = "res://.godot/imported/switch.png-b0d5a5384111f7aa17415b8f5c18545a.c
 atlas = SubResource("CompressedTexture2D_4a1yi")
 region = Rect2(32, 128, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_io63s"]
-atlas = ExtResource("77_pqowm")
-region = Rect2(31, 16, 31, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_1nixq"]
 atlas = ExtResource("85_g7up7")
 region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_io63s"]
+atlas = ExtResource("77_pqowm")
+region = Rect2(31, 16, 31, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
 atlas = ExtResource("79_7it4e")
@@ -889,7 +907,6 @@ position = Vector2(20, -150)
 texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -174.0
 offset_top = -698.0
@@ -1656,11 +1673,12 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
+visible = false
 layout_mode = 0
-offset_left = -696.0
-offset_top = -522.0
-offset_right = -4.0
-offset_bottom = 170.0
+offset_left = -704.0
+offset_top = -698.0
+offset_right = -12.0
+offset_bottom = 168.0
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=1982302972]
 layout_mode = 2
@@ -1682,6 +1700,47 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2/ButtonTexture" parent_id_path=PackedInt32Array(991596989, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_w23hq")
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=656989267]
+layout_mode = 2
+
+[node name="ItemButtonDoor" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=684452163 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "atchi_muite_block_blue_small"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoor/ButtonTexture" parent_id_path=PackedInt32Array(684452163, 839201675) index="0" unique_id=1085479145]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_hfb1t")
+
+[node name="ItemButtonDoorLocked" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=917639081 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "atchi_muite_block_blue_small"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoorLocked/ButtonTexture" parent_id_path=PackedInt32Array(917639081, 839201675) index="0" unique_id=1085479145]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_bb1r4")
+
+[node name="ItemButtonKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=415456035 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonKey/ButtonTexture" parent_id_path=PackedInt32Array(415456035, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_cvttd")
+
+[node name="ItemButtonCursedKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=935023006 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "cursed_key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey/ButtonTexture" parent_id_path=PackedInt32Array(935023006, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_qnirk")
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2048951371]
 layout_mode = 2
@@ -1713,15 +1772,14 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue/ButtonTexture" parent_id_path=PackedInt32Array(2104201737, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_xo7f2")
 
-[node name="ItemButtonSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=2015388323 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonSolidSpike" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=226230677 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
-object_name = "horizontal_spring"
+object_name = "solid_spike"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSpring/ButtonTexture" parent_id_path=PackedInt32Array(2015388323, 839201675) index="0" unique_id=1085479145]
-rotation = 1.5707964
-texture = SubResource("AtlasTexture_io63s")
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSolidSpike/ButtonTexture" parent_id_path=PackedInt32Array(226230677, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_1nixq")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2056440720]
 layout_mode = 2
@@ -1755,14 +1813,15 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSpring/ButtonTexture" parent_id_path=PackedInt32Array(219218855, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_uuoyo")
 
-[node name="ItemButtonSolidSpike" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" unique_id=226230677 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonHorizontalSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" unique_id=2015388323 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
-object_name = "solid_spike"
+object_name = "horizontal_spring"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSolidSpike/ButtonTexture" parent_id_path=PackedInt32Array(226230677, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_1nixq")
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonHorizontalSpring/ButtonTexture" parent_id_path=PackedInt32Array(2015388323, 839201675) index="0" unique_id=1085479145]
+rotation = 1.5707964
+texture = SubResource("AtlasTexture_io63s")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=1014086319]
 layout_mode = 2
@@ -1961,14 +2020,18 @@ show_mode = 2
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoor"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoorLocked"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonKey"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSpring"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSolidSpike"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonPlayer"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSpring"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSolidSpike"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonHorizontalSpring"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformHorizontal"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalDown"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalUp"]
