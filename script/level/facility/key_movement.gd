@@ -132,4 +132,6 @@ func _create_phanto(body: Node) -> void:
 	spawn_vector = Vector2.from_angle(angle)
 	var spawn_position = spawn_vector * (640.0 + 64.0)
 	phanto.position = key.position + spawn_position
-	key.add_sibling(phanto)
+	var fc = func():
+		key.add_sibling(phanto)
+	fc.call_deferred()
