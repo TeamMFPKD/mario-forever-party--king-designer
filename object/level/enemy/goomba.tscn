@@ -44,7 +44,6 @@ sprite_frames = SubResource("SpriteFrames_00uy1")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
-visible = false
 shape = ExtResource("2_6wxbp")
 debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 
@@ -52,6 +51,7 @@ debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
 is_clear_pipe_allowed = true
 
 [node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("3_p0ubx")]
+visible = false
 
 [node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1079562517]
 script = ExtResource("4_vku51")

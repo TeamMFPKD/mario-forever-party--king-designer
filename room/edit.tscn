@@ -307,6 +307,10 @@ load_path = "res://.godot/imported/switch.png-b0d5a5384111f7aa17415b8f5c18545a.c
 atlas = SubResource("CompressedTexture2D_4a1yi")
 region = Rect2(32, 128, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_io63s"]
+atlas = ExtResource("77_pqowm")
+region = Rect2(31, 16, 31, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_1nixq"]
 atlas = ExtResource("85_g7up7")
 region = Rect2(0, 0, 32, 32)
@@ -1272,6 +1276,7 @@ script = ExtResource("60_41bow")
 sprite = NodePath("..")
 
 [node name="Pipe" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe" unique_id=1994847249 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -176.0
 offset_top = -530.0
@@ -1651,7 +1656,6 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -696.0
 offset_top = -522.0
@@ -1708,6 +1712,16 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue/ButtonTexture" parent_id_path=PackedInt32Array(2104201737, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_xo7f2")
+
+[node name="ItemButtonSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3" unique_id=2015388323 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "horizontal_spring"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSpring/ButtonTexture" parent_id_path=PackedInt32Array(2015388323, 839201675) index="0" unique_id=1085479145]
+rotation = 1.5707964
+texture = SubResource("AtlasTexture_io63s")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2056440720]
 layout_mode = 2
@@ -1950,6 +1964,7 @@ show_mode = 2
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSpring"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonPlayer"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSpring"]
