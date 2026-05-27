@@ -295,8 +295,6 @@ func enter_door(door_id: int, door: DoorComponent) -> void:
 		if d.id == door_id and target_doors.size() < 2:
 			target_doors.append(d)
 	for d in target_doors:
-		print(d.get_parent().get_parent().name)
-	for d in target_doors:
 		d.play_animation_enter()
 		if d == door:
 			continue
