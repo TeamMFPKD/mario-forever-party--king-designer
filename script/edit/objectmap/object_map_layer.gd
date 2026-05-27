@@ -11,7 +11,11 @@ var current_object_name = ""
 var drawing_enabled = false
 
 # 门ID计数器
-var _door_id_counter: int = 0
+var _door_id_counter: int = 1
+# 最大门组数
+const MAX_DOOR_GROUPS: int = 4
+# 每组门数量
+const DOORS_PER_GROUP: int = 2
 
 # 拖动相关变量
 var _dragging_object: Dictionary = {}
@@ -206,6 +210,13 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		remove_all_objects_of_type("player")
 		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
 	
+	# 如果是门对象，先检查数量限制
+	if current_object_name == "door":
+		var door_count = _get_door_count()
+		if door_count >= MAX_DOOR_GROUPS * DOORS_PER_GROUP:
+			print("[%s] ObjectMapLayer: 已达到最大门数量限制 (%d个)" % [Time.get_time_string_from_system(), MAX_DOOR_GROUPS * DOORS_PER_GROUP])
+			return
+	
 	var scene_instance = entry.object_scene.instantiate()
 	if scene_instance is Node2D:
 		scene_instance.global_position = grid_position
@@ -282,12 +293,61 @@ func _set_door_id(door_node: Node2D, door_id: int):
 	if door_node is Spawner or door_node.has_meta("spawn_object_scene"):
 		# Spawner类型，在Spawner上存储door_id
 		door_node.set_meta("door_id", door_id)
+		# 根据door_id设置Suit节点的texture
+		_update_door_suit_texture(door_node, door_id)
 		return
 	
 	# 直接获取Area2D/DoorComponent并设置
 	var door_component = door_node.get_node_or_null("Area2D/DoorComponent")
 	if door_component and door_component.has_method("set_door_id"):
 		door_component.set_door_id(door_id)
+
+# 获取当前已放置的门数量
+func _get_door_count() -> int:
+	var count = 0
+	for object_data in objects:
+		if object_data.get("object_name") == "door":
+			count += 1
+	return count
+
+# 根据door_id设置Suit节点的texture
+func _update_door_suit_texture(door_node: Node2D, door_id: int):
+	print("[%s] _update_door_suit_texture: door_node=%s, door_id=%d" % [Time.get_time_string_from_system(), door_node.name, door_id])
+	
+	# 获取Suit节点
+	var suit_node = door_node.get_node_or_null("Suit")
+	print("[%s] Suit节点: %s" % [Time.get_time_string_from_system(), suit_node])
+	
+	if not suit_node:
+		print("[%s] 警告：找不到Suit节点" % Time.get_time_string_from_system())
+		return
+	
+	if not suit_node.has_method("set_texture"):
+		print("[%s] 警告：Suit节点没有set_texture方法" % Time.get_time_string_from_system())
+		return
+	
+	# 从Spawner的sprites数组中获取纹理
+	var sprites_array = door_node.get("sprites")
+	if sprites_array == null:
+		sprites_array = []
+	print("[%s] sprites数组: %s, 长度: %d" % [Time.get_time_string_from_system(), sprites_array, len(sprites_array)])
+	
+	if len(sprites_array) == 0:
+		print("[%s] 警告：sprites数组为空" % Time.get_time_string_from_system())
+		return
+	
+	# 根据door_id选择花色（1-4对应四种花色）
+	var suit_index = (door_id - 1) % len(sprites_array)
+	print("[%s] 花色索引: %d" % [Time.get_time_string_from_system(), suit_index])
+	
+	var texture = sprites_array[suit_index]
+	print("[%s] 纹理: %s" % [Time.get_time_string_from_system(), texture])
+	
+	if texture:
+		suit_node.texture = texture
+		print("[%s] 设置门花色成功" % Time.get_time_string_from_system())
+	else:
+		print("[%s] 警告：纹理为空" % Time.get_time_string_from_system())
 
 # 新增：发射放置音效的函数
 func emit_place_sound():

@@ -3,6 +3,7 @@ extends Node2D
 class_name Spawner
 
 @export var spawn_object_scene : PackedScene
+@export var sprites: Array[Texture2D] = []
 
 var is_in_level: bool
 var offset: Vector2
