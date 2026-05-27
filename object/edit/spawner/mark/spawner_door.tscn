@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://cfq5xt441wjpe"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_wyrne"]
+[ext_resource type="PackedScene" uid="uid://g57deo7yorb3" path="res://object/level/facility/door/door.tscn" id="2_wyrne"]
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="3_iht8h"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_qssry"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_1woo1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfb1t"]
+atlas = ExtResource("3_iht8h")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wyrne"]
+size = Vector2(32, 64)
+
+[node name="SpawnerDoor" type="Node2D" unique_id=1594885199]
+script = ExtResource("1_wyrne")
+spawn_object_scene = ExtResource("2_wyrne")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
+position = Vector2(0, -16)
+texture = SubResource("AtlasTexture_hfb1t")
+
+[node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("4_qssry")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_1woo1")]
+
+[node name="CollisionShape2D" parent="SpawnerProperty/Area2D" parent_id_path=PackedInt32Array(1302585872, 9006205) index="0" unique_id=263472878]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_wyrne")
+
+[editable path="SpawnerProperty"]
