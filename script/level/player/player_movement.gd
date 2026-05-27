@@ -71,7 +71,9 @@ var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
 
 # 门
 var is_in_door : bool = false
-
+var in_door_timer : int = 0
+var target_doors : Array
+var target_door : DoorComponent
 
 # 狼跳
 var langtiao : bool
@@ -284,22 +286,36 @@ func door_check() -> bool:
 	return is_in_door
 
 func enter_door(door_id: int, door: DoorComponent) -> void:
+	if is_in_door:
+		return
+	is_in_door = true
+	target_doors.clear()
 	var all_doors = get_tree().get_nodes_in_group("door")
-	var doors: Array
 	for d in all_doors:
-		if door.id == door_id and doors.size() < 2:
-			doors.append(d)
-	for d in doors:
+		if d.id == door_id and target_doors.size() < 2:
+			target_doors.append(d)
+	for d in target_doors:
+		print(d.get_parent().get_parent().name)
+	for d in target_doors:
+		d.play_animation_enter()
 		if d == door:
 			continue
-		player.global_position = d.global_position + Vector2(0, -8.0)
-		player.reset_physics_interpolation()
+		target_door = d
+	speed_x = 0.0
+	in_door_timer = 0
 	emit_signal("door_entered")
-
 
 func exit_door() -> void:
 	is_in_door = false
 	emit_signal("door_exited")
 
 func door_movement() -> void:
-	pass
+	in_door_timer += 1
+	match in_door_timer:
+		50:
+			player.global_position = target_door.global_position + Vector2(0, 3.0)
+			player.reset_physics_interpolation()
+			for d in target_doors:
+				d.play_animation_exit()
+		100:
+			exit_door()

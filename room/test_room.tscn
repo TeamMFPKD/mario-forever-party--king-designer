@@ -222,7 +222,7 @@ tile_set = ExtResource("1_iaqfx")
 script = ExtResource("2_vbo8m")
 
 [node name="Player" parent="." unique_id=1151748388 instance=ExtResource("3_whgqe")]
-position = Vector2(4504, 264)
+position = Vector2(4320, 192)
 
 [node name="CameraPlayerForTest" type="Camera2D" parent="Player" unique_id=1777036543 groups=["level_camera"]]
 zoom = Vector2(2, 2)
@@ -510,7 +510,24 @@ position = Vector2(4688, 208)
 position = Vector2(4592, 272)
 
 [node name="Door" parent="." unique_id=129675867 instance=ExtResource("51_xdq7u")]
-position = Vector2(4304, 208)
+position = Vector2(4080, 176)
 
 [node name="Door2" parent="." unique_id=141346360 instance=ExtResource("51_xdq7u")]
-position = Vector2(4336, 208)
+position = Vector2(4176, 176)
+
+[node name="Door3" parent="." unique_id=154172699 instance=ExtResource("51_xdq7u")]
+position = Vector2(4048, 400)
+
+[node name="DoorComponent" parent="Door3/Area2D" parent_id_path=PackedInt32Array(154172699, 248836387) index="1" unique_id=1603212476]
+id = 1
+
+[node name="Door4" parent="." unique_id=957585422 instance=ExtResource("51_xdq7u")]
+position = Vector2(4112, 400)
+
+[node name="DoorComponent" parent="Door4/Area2D" parent_id_path=PackedInt32Array(957585422, 248836387) index="1" unique_id=1603212476]
+id = 1
+
+[editable path="Door"]
+[editable path="Door2"]
+[editable path="Door3"]
+[editable path="Door4"]
