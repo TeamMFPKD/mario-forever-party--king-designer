@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d3qkd24i4tinm"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_63yvh"]
-[ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key.tscn" id="2_63yvh"]
+[ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key/key.tscn" id="2_63yvh"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_pqqbs"]
 [ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="3_yv33a"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="4_8riny"]

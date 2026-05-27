@@ -33,6 +33,8 @@
 [ext_resource type="AudioStream" uid="uid://bfqjgj3r5qoiq" path="res://sound/level/clear_pipe_in.wav" id="28_4thfq"]
 [ext_resource type="AudioStream" uid="uid://6tgb6rw0wpm7" path="res://sound/level/clear_pipe_out.wav" id="29_oqm3a"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="29_yslke"]
+[ext_resource type="AudioStream" uid="uid://jyh7p7upppu2" path="res://sound/level/SE_DoorOpenFC.wav" id="30_vh3yy"]
+[ext_resource type="AudioStream" uid="uid://bxa3jh2vdnit2" path="res://sound/level/SE_DoorCloseFC.wav" id="31_j733o"]
 [ext_resource type="PackedScene" uid="uid://bpywk88hnp1yw" path="res://object/level/dust_effect_creator.tscn" id="32_4thfq"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
@@ -77,7 +79,7 @@ position = Vector2(0, -2)
 shape = ExtResource("3_0f3px")
 target_position = Vector2(0, 0)
 max_results = 4
-collision_mask = 496
+collision_mask = 1008
 collide_with_areas = true
 
 [node name="CrouchHeadDetect" type="Area2D" parent="." unique_id=1726060209]
@@ -179,6 +181,12 @@ stream = ExtResource("28_4thfq")
 [node name="ClearPipeOut" parent="." unique_id=1643086049 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("29_oqm3a")
 
+[node name="DoorEnterSE" parent="." unique_id=922457361 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("30_vh3yy")
+
+[node name="DoorExitSE" parent="." unique_id=1309750775 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("31_j733o")
+
 [node name="ExplodeEffectCreator" type="Node" parent="." unique_id=324919191]
 script = ExtResource("28_4r5tb")
 fireball_explode_scene = ExtResource("29_yslke")
@@ -193,6 +201,8 @@ position = Vector2(-640, 0)
 position = Vector2(640, 0)
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]
+[connection signal="door_entered" from="PlayerMediator/PlayerMovement" to="DoorEnterSE" method="play"]
+[connection signal="door_exited" from="PlayerMediator/PlayerMovement" to="DoorExitSE" method="play"]
 [connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="ClearPipeIn" method="play"]
 [connection signal="pipe_entered" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PlayerMediator/PlayerInteraction" method="_on_pipe_exited"]
