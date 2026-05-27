@@ -294,6 +294,8 @@ func door_detect(results: Array[Node2D]) -> void:
 		return
 	if not Input.is_action_pressed("move_up"):
 		return
+	if player_movement.is_in_door:
+		return
 	for result in results:
 		if not result.has_meta("door_component"):
 			continue
