@@ -2,9 +2,13 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_wyrne"]
 [ext_resource type="PackedScene" uid="uid://g57deo7yorb3" path="res://object/level/facility/door/door.tscn" id="2_wyrne"]
+[ext_resource type="Texture2D" uid="uid://dtxrjo2u3u7tp" path="res://sprite/facility/suit/spade.svg" id="3_1woo1"]
 [ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="3_iht8h"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_qssry"]
+[ext_resource type="Texture2D" uid="uid://c1dvoivbtax6" path="res://sprite/facility/suit/heart.svg" id="4_wbhfd"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_1woo1"]
+[ext_resource type="Texture2D" uid="uid://2y8wjfspraw" path="res://sprite/facility/suit/club.svg" id="5_a4gta"]
+[ext_resource type="Texture2D" uid="uid://djtgch2nt8ufi" path="res://sprite/facility/suit/diamond.svg" id="6_a32yb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hfb1t"]
 atlas = ExtResource("3_iht8h")
@@ -16,11 +20,17 @@ size = Vector2(32, 64)
 [node name="SpawnerDoor" type="Node2D" unique_id=1594885199]
 script = ExtResource("1_wyrne")
 spawn_object_scene = ExtResource("2_wyrne")
+sprites = Array[Texture2D]([null, ExtResource("3_1woo1"), ExtResource("4_wbhfd"), ExtResource("5_a4gta"), ExtResource("6_a32yb")])
 metadata/_custom_type_script = "uid://b23emkp2mb16s"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
 position = Vector2(0, -16)
 texture = SubResource("AtlasTexture_hfb1t")
+
+[node name="Suit" type="Sprite2D" parent="." unique_id=1234567890]
+position = Vector2(8, 8)
+scale = Vector2(0.14, 0.14)
+texture = ExtResource("3_1woo1")
 
 [node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("4_qssry")]
 
