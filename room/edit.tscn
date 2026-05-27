@@ -1707,7 +1707,7 @@ layout_mode = 2
 [node name="ItemButtonDoor" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=684452163 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
-object_name = "atchi_muite_block_blue_small"
+object_name = "door"
 metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoor/ButtonTexture" parent_id_path=PackedInt32Array(684452163, 839201675) index="0" unique_id=1085479145]
@@ -1717,7 +1717,7 @@ texture = SubResource("AtlasTexture_hfb1t")
 [node name="ItemButtonDoorLocked" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=917639081 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
-object_name = "atchi_muite_block_blue_small"
+object_name = "door_locked"
 metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoorLocked/ButtonTexture" parent_id_path=PackedInt32Array(917639081, 839201675) index="0" unique_id=1085479145]

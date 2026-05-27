@@ -10,6 +10,9 @@ var is_placing = false
 var current_object_name = ""
 var drawing_enabled = false
 
+# 门ID计数器
+var _door_id_counter: int = 0
+
 func _ready():
 	# 确保有输入处理器
 	setup_input_handler()
@@ -145,8 +148,70 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		
 		print("[%s] 放置对象: " % Time.get_time_string_from_system(), entry.object_name, " 在网格位置: ", grid_position)
 		
+		# 如果是门对象，需要成对放置
+		if current_object_name == "door":
+			_place_paired_door(scene_instance, grid_position, entry)
+		
 		# 发射放置音效信号
 		emit_place_sound()
+
+# 成对放置门
+func _place_paired_door(first_door: Node2D, first_position: Vector2, entry: ObjectDatabaseEntry):
+	_door_id_counter += 1
+	var door_id = _door_id_counter
+	
+	# 设置第一个门的ID
+	_set_door_id(first_door, door_id)
+	
+	# 更新第一个门的object_data，添加door_id
+	for i in range(objects.size()):
+		var obj = objects[i]
+		if obj.get("instance") == first_door:
+			objects[i]["door_id"] = door_id
+			break
+	
+	# 计算第二个门的位置（相邻格子）
+	var second_position = first_position + Vector2(32, 0)  # 右边相邻格子
+	
+	# 检查第二个位置是否已有对象
+	if is_grid_position_occupied(second_position):
+		second_position = first_position + Vector2(0, -32)  # 上边相邻格子
+		if is_grid_position_occupied(second_position):
+			second_position = first_position + Vector2(-32, 0)  # 左边相邻格子
+			if is_grid_position_occupied(second_position):
+				second_position = first_position + Vector2(0, 32)  # 下边相邻格子
+	
+	# 创建第二个门
+	var second_door = entry.object_scene.instantiate()
+	if second_door is Node2D:
+		second_door.global_position = second_position
+		add_child(second_door)
+		
+		# 设置第二个门的ID
+		_set_door_id(second_door, door_id)
+		
+		# 保存第二个门的信息
+		var object_data_second = {
+			"object_name": entry.object_name,
+			"object_scene": entry.object_scene,
+			"position": second_position,
+			"instance": second_door,
+			"door_id": door_id
+		}
+		objects.append(object_data_second)
+		
+		print("[%s] 放置配对门，ID: " % Time.get_time_string_from_system(), door_id, " 位置: ", second_position)
+
+# 设置门的ID
+func _set_door_id(door_node: Node2D, door_id: int):
+	# 尝试获取 DoorComponent 脚本
+	var door_component = door_node.get_node_or_null("Area2D/DoorComponent") as Node
+	if door_component and door_component.has_method("set_door_id"):
+		door_component.set_door_id(door_id)
+	elif door_component:
+		# 直接设置 id 属性
+		if door_component.has("id"):
+			door_component.set("id", door_id)
 
 # 新增：发射放置音效的函数
 func emit_place_sound():
@@ -210,14 +275,54 @@ func remove_object_at_position(input_pos: Vector2):
 	if object_to_remove:
 		if object_to_remove.has("object_name") and object_to_remove["object_name"] == "player":
 			return false
-		if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
-			object_to_remove["instance"].queue_free()
-		objects.erase(object_to_remove)
+		
+		# 如果是门对象，需要同时删除配对门
+		if object_to_remove.has("object_name") and object_to_remove["object_name"] == "door":
+			_remove_paired_doors(object_to_remove)
+		else:
+			if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
+				object_to_remove["instance"].queue_free()
+			objects.erase(object_to_remove)
+		
 		print("[%s] 橡皮擦：清除对象在位置 " % Time.get_time_string_from_system(), grid_position)
 		return true
 	
 	#print("橡皮擦：位置 ", grid_position, " 没有对象")
 	return false
+
+# 删除配对门
+func _remove_paired_doors(object_to_remove: Dictionary):
+	var door_id = object_to_remove.get("door_id", -1)
+	
+	# 如果没有door_id，尝试从实例获取
+	if door_id == -1 and object_to_remove.has("instance"):
+		door_id = _get_door_id(object_to_remove["instance"])
+	
+	if door_id != -1:
+		# 找到所有属于同一组（相同door_id）的门并删除
+		var doors_to_remove = []
+		for object_data in objects:
+			if object_data.get("door_id", -1) == door_id:
+				doors_to_remove.append(object_data)
+		
+		for door_data in doors_to_remove:
+			if door_data.has("instance") and is_instance_valid(door_data["instance"]):
+				door_data["instance"].queue_free()
+			objects.erase(door_data)
+		
+		print("[%s] 橡皮擦：删除配对门，ID: " % Time.get_time_string_from_system(), door_id, " 共删除 ", doors_to_remove.size(), " 个")
+	else:
+		# 没有找到door_id，只删除当前门
+		if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
+			object_to_remove["instance"].queue_free()
+		objects.erase(object_to_remove)
+
+# 获取门的ID
+func _get_door_id(door_node: Node2D) -> int:
+	var door_component = door_node.get_node_or_null("Area2D/DoorComponent") as Node
+	if door_component and door_component.has("id"):
+		return door_component.get("id")
+	return -1
 
 # 获取指定位置的对象
 func get_object_at_position(input_pos: Vector2) -> Dictionary:
@@ -259,12 +364,16 @@ func get_object_data() -> Array:
 				"y": object_data["position"].y
 			}
 		}
+		# 如果是门，保存门的ID
+		if object_data["object_name"] == "door" and object_data.has("door_id"):
+			save_object["door_id"] = object_data["door_id"]
 		save_data.append(save_object)
 	return save_data
 
 # 加载对象数据（用于关卡加载）
 func load_object_data(object_data: Array):
 	clear_all_objects()
+	_door_id_counter = 0  # 重置门ID计数器
 	
 	for save_object in object_data:
 		var object_name = save_object["object_name"]
@@ -273,4 +382,59 @@ func load_object_data(object_data: Array):
 		# 在数据库中查找对应的对象
 		if database_holder and database_holder.object_database:
 			current_object_name = object_name
-			place_object_at_position(obj_position, true)
+			
+			# 如果是门，需要成对加载
+			if object_name == "door" and save_object.has("door_id"):
+				_load_paired_door(obj_position, save_object["door_id"])
+			else:
+				place_object_at_position(obj_position, true)
+
+# 加载成对门
+func _load_paired_door(first_position: Vector2, door_id: int):
+	var entry = find_object_by_name("door")
+	if not entry or not entry.object_scene:
+		return
+	
+	# 创建第一个门
+	var door1 = entry.object_scene.instantiate()
+	if door1 is Node2D:
+		door1.global_position = first_position
+		add_child(door1)
+		_set_door_id(door1, door_id)
+		
+		var object_data1 = {
+			"object_name": "door",
+			"object_scene": entry.object_scene,
+			"position": first_position,
+			"instance": door1,
+			"door_id": door_id
+		}
+		objects.append(object_data1)
+	
+	# 创建第二个门
+	var second_position = first_position + Vector2(32, 0)
+	if is_grid_position_occupied(second_position):
+		second_position = first_position + Vector2(0, -32)
+		if is_grid_position_occupied(second_position):
+			second_position = first_position + Vector2(-32, 0)
+			if is_grid_position_occupied(second_position):
+				second_position = first_position + Vector2(0, 32)
+	
+	var door2 = entry.object_scene.instantiate()
+	if door2 is Node2D:
+		door2.global_position = second_position
+		add_child(door2)
+		_set_door_id(door2, door_id)
+		
+		var object_data2 = {
+			"object_name": "door",
+			"object_scene": entry.object_scene,
+			"position": second_position,
+			"instance": door2,
+			"door_id": door_id
+		}
+		objects.append(object_data2)
+	
+	# 更新门ID计数器
+	if door_id > _door_id_counter:
+		_door_id_counter = door_id
