@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b0mdhximger6c"]
+
+[ext_resource type="PackedScene" uid="uid://g57deo7yorb3" path="res://object/level/facility/door/door.tscn" id="1_p02jc"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="2_ypuuq"]
+[ext_resource type="AudioStream" uid="uid://ckq58fj1ucnj8" path="res://sound/level/smw_chain.ogg" id="3_vkv6h"]
+
+[node name="DoorLocked" unique_id=129675867 instance=ExtResource("1_p02jc")]
+
+[node name="LockedSE" parent="." index="2" unique_id=1715984441 instance=ExtResource("2_ypuuq")]
+stream = ExtResource("3_vkv6h")

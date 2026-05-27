@@ -28,6 +28,12 @@ func spawn() -> void:
 	spawn_object.position = position + offset
 	add_sibling(spawn_object)
 	visible = false
+	
+	# 如果有door_id meta，设置到spawn出来的对象
+	if has_meta("door_id"):
+		var door_component = spawn_object.get_node_or_null("Area2D/DoorComponent")
+		if door_component and door_component.has_method("set_door_id"):
+			door_component.set_door_id(get_meta("door_id"))
 
 func in_level_check() -> bool:
 	return GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST \

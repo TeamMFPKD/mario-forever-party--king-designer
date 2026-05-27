@@ -13,6 +13,12 @@ var drawing_enabled = false
 # 门ID计数器
 var _door_id_counter: int = 0
 
+# 拖动相关变量
+var _dragging_object: Dictionary = {}
+var _drag_start_pos: Vector2 = Vector2.ZERO
+var _drag_original_pos: Vector2 = Vector2.ZERO
+var _is_dragging: bool = false
+
 func _ready():
 	# 确保有输入处理器
 	setup_input_handler()
@@ -92,20 +98,88 @@ func setup_input_handler():
 	else:
 		print("[%s] ObjectMapLayer: Error: Failed to find or create InputHandler" % Time.get_time_string_from_system())
 
+func _update_drag(world_pos: Vector2) -> void:
+	if not _is_dragging or _dragging_object.is_empty():
+		return
+	
+	var new_grid_pos = align_to_grid(world_pos)
+	var current_pos = _dragging_object.get("position", Vector2.ZERO)
+	
+	if new_grid_pos == current_pos:
+		return
+	
+	for object_data in objects:
+		if object_data == _dragging_object:
+			continue
+		if object_data.has("position") and object_data["position"] == new_grid_pos:
+			print("[%s] 拖动被阻止：目标位置已有对象" % Time.get_time_string_from_system())
+			return
+	
+	var instance = _dragging_object.get("instance")
+	if instance and is_instance_valid(instance):
+		instance.global_position = new_grid_pos
+		_dragging_object["position"] = new_grid_pos
+		print("[%s] 拖动更新位置: " % Time.get_time_string_from_system(), current_pos, " -> ", new_grid_pos)
+
+func _finish_drag() -> void:
+	if not _is_dragging:
+		return
+	
+	print("[%s] 拖动结束" % Time.get_time_string_from_system())
+	_is_dragging = false
+	
+	if _dragging_object.is_empty():
+		return
+	
+	var new_pos = _dragging_object.get("position", _drag_original_pos)
+	
+	if _dragging_object.get("object_name") == "door":
+		_on_door_dragged(_dragging_object, new_pos)
+	
+	_dragging_object = {}
+
+func _on_door_dragged(door_data: Dictionary, new_pos: Vector2) -> void:
+	var door_id = door_data.get("door_id", -1)
+	if door_id == -1:
+		return
+	
+	for object_data in objects:
+		if object_data.get("door_id", -1) == door_id and object_data != door_data:
+			if object_data.has("instance") and is_instance_valid(object_data["instance"]):
+				print("[%s] 门拖动：同组门ID %d 位置更新" % [Time.get_time_string_from_system(), door_id])
+
 func _on_input_clicked(input_pos: Vector2):
+	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT:
+		return
+	
+	var grid_pos = align_to_grid(input_pos)
+	
+	for object_data in objects:
+		if object_data.has("instance") and is_instance_valid(object_data["instance"]):
+			var obj_pos = object_data["position"]
+			if abs(obj_pos.x - grid_pos.x) < 16.0 and abs(obj_pos.y - grid_pos.y) < 16.0:
+				_dragging_object = object_data
+				_drag_start_pos = input_pos
+				_drag_original_pos = object_data["position"]
+				_is_dragging = true
+				print("[%s] 开始拖动对象: " % Time.get_time_string_from_system(), object_data.get("object_name", "unknown"), " 位置: ", obj_pos)
+				return
+	
 	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
 		place_object_at_position(input_pos, true)
 
 # 新增：处理拖拽事件
 func _on_input_dragged(input_pos: Vector2):
-	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
-		# 将位置对齐到网格
+	if _is_dragging:
+		_update_drag(input_pos)
+	elif drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
 		var grid_position = align_to_grid(input_pos)
-		# 检查该网格位置是否已有对象
 		if not is_grid_position_occupied(grid_position):
 			place_object_at_position(input_pos, false)
 
 func _on_input_released(_input_pos: Vector2):
+	if _is_dragging:
+		_finish_drag()
 	is_placing = false
 
 # 在指定位置放置对象
@@ -204,14 +278,16 @@ func _place_paired_door(first_door: Node2D, first_position: Vector2, entry: Obje
 
 # 设置门的ID
 func _set_door_id(door_node: Node2D, door_id: int):
-	# 尝试获取 DoorComponent 脚本
-	var door_component = door_node.get_node_or_null("Area2D/DoorComponent") as Node
+	# 检查是否是Spawner类型（通过class_name或property_exists）
+	if door_node is Spawner or door_node.has_meta("spawn_object_scene"):
+		# Spawner类型，在Spawner上存储door_id
+		door_node.set_meta("door_id", door_id)
+		return
+	
+	# 直接获取Area2D/DoorComponent并设置
+	var door_component = door_node.get_node_or_null("Area2D/DoorComponent")
 	if door_component and door_component.has_method("set_door_id"):
 		door_component.set_door_id(door_id)
-	elif door_component:
-		# 直接设置 id 属性
-		if door_component.has("id"):
-			door_component.set("id", door_id)
 
 # 新增：发射放置音效的函数
 func emit_place_sound():
@@ -383,57 +459,32 @@ func load_object_data(object_data: Array):
 		if database_holder and database_holder.object_database:
 			current_object_name = object_name
 			
-			# 如果是门，需要成对加载
+			# 如果是门，直接加载（不再成对创建）
 			if object_name == "door" and save_object.has("door_id"):
-				_load_paired_door(obj_position, save_object["door_id"])
+				_load_single_door(obj_position, save_object["door_id"])
 			else:
 				place_object_at_position(obj_position, true)
 
-# 加载成对门
-func _load_paired_door(first_position: Vector2, door_id: int):
+# 加载单个门（直接加载，不创建配对）
+func _load_single_door(door_position: Vector2, door_id: int):
 	var entry = find_object_by_name("door")
 	if not entry or not entry.object_scene:
 		return
 	
-	# 创建第一个门
-	var door1 = entry.object_scene.instantiate()
-	if door1 is Node2D:
-		door1.global_position = first_position
-		add_child(door1)
-		_set_door_id(door1, door_id)
+	var door = entry.object_scene.instantiate()
+	if door is Node2D:
+		door.global_position = door_position
+		add_child(door)
+		_set_door_id(door, door_id)
 		
-		var object_data1 = {
+		var object_data = {
 			"object_name": "door",
 			"object_scene": entry.object_scene,
-			"position": first_position,
-			"instance": door1,
+			"position": door_position,
+			"instance": door,
 			"door_id": door_id
 		}
-		objects.append(object_data1)
-	
-	# 创建第二个门
-	var second_position = first_position + Vector2(32, 0)
-	if is_grid_position_occupied(second_position):
-		second_position = first_position + Vector2(0, -32)
-		if is_grid_position_occupied(second_position):
-			second_position = first_position + Vector2(-32, 0)
-			if is_grid_position_occupied(second_position):
-				second_position = first_position + Vector2(0, 32)
-	
-	var door2 = entry.object_scene.instantiate()
-	if door2 is Node2D:
-		door2.global_position = second_position
-		add_child(door2)
-		_set_door_id(door2, door_id)
-		
-		var object_data2 = {
-			"object_name": "door",
-			"object_scene": entry.object_scene,
-			"position": second_position,
-			"instance": door2,
-			"door_id": door_id
-		}
-		objects.append(object_data2)
+		objects.append(object_data)
 	
 	# 更新门ID计数器
 	if door_id > _door_id_counter:
