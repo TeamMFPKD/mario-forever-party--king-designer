@@ -4,6 +4,8 @@ class_name PlayerMovement
 
 signal pipe_entered
 signal pipe_exited
+signal door_entered
+signal door_exited
 signal play_sound_jump
 
 @export var player : CharacterBody2D
@@ -50,8 +52,10 @@ var jumpable_timer : int
 
 var crouch : bool
 
+# 传送中通用 flag
 var is_in_transport : bool = false
 
+# 透明水管
 var is_in_pipe : bool = false
 var out_pipe_cooldown : int = 0
 var pipe_in_cooldown : int = 0
@@ -64,6 +68,10 @@ enum PipeMoveDirection {
 	ALIGN,
 }
 var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
+
+# 门
+var is_in_door : bool = false
+
 
 # 狼跳
 var langtiao : bool
@@ -208,7 +216,7 @@ func update_hit_box() -> void:
 		cast.position = Vector2(0, -16.5)
 
 func transport_check() -> bool:
-	is_in_transport = pipe_check()
+	is_in_transport = pipe_check() or door_check()
 	return is_in_transport
 
 func pipe_check() -> bool:
@@ -269,3 +277,29 @@ func pipe_movement() -> void:
 func on_horizontal_spring_bounce(spring: Node2D) -> void:
 	var dir = 1.0 if player.global_position.x > spring.global_position.x else -1.0
 	speed_x = abs(horizontal_spring_bounce_speed_x) * dir
+
+func door_check() -> bool:
+	if is_in_door:
+		door_movement()
+	return is_in_door
+
+func enter_door(door_id: int, door: DoorComponent) -> void:
+	var all_doors = get_tree().get_nodes_in_group("door")
+	var doors: Array
+	for d in all_doors:
+		if door.id == door_id and doors.size() < 2:
+			doors.append(d)
+	for d in doors:
+		if d == door:
+			continue
+		player.global_position = d.global_position + Vector2(0, -8.0)
+		player.reset_physics_interpolation()
+	emit_signal("door_entered")
+
+
+func exit_door() -> void:
+	is_in_door = false
+	emit_signal("door_exited")
+
+func door_movement() -> void:
+	pass

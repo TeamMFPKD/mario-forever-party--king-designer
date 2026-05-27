@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://g57deo7yorb3"]
+
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="1_60l8v"]
+[ext_resource type="Script" uid="uid://cklib65p0rd7y" path="res://script/level/facility/door.gd" id="2_3di1t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f8gi5"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jn546"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2qx3"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(32, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v2ubh"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(64, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l44oi"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(64, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxier"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(32, 64, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yvt0x"]
+atlas = ExtResource("1_60l8v")
+region = Rect2(0, 64, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jqfk2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f8gi5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jn546")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t2qx3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v2ubh")
+}],
+"loop": false,
+"name": &"enter",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l44oi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mxier")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yvt0x")
+}],
+"loop": false,
+"name": &"exit",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2dxps"]
+size = Vector2(20, 32)
+
+[node name="Door" type="Node2D" unique_id=129675867]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1618459164]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_jqfk2")
+autoplay = "default"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=248836387]
+collision_layer = 512
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=218827061]
+shape = SubResource("RectangleShape2D_2dxps")
+
+[node name="DoorComponent" type="Node2D" parent="Area2D" unique_id=1603212476]
+script = ExtResource("2_3di1t")
+metadata/_custom_type_script = "uid://cklib65p0rd7y"

@@ -23,6 +23,9 @@ func _physics_process(_delta: float) -> void:
 	# 检测水管口（入口和出口）
 	pipe_detect(results)
 
+	# 检测门
+	door_detect(results)
+
 	# 安全检测：管道内如果没有与墙体（碰撞层第1位）/TileMap重叠，说明已脱离管道
 	if player_movement.is_in_pipe and player_movement.pipe_in_cooldown <= 0:
 		var query = PhysicsShapeQueryParameters2D.new()
@@ -281,3 +284,23 @@ func clear_turning_processed_for_reversal() -> void:
 	for turning in turnings:
 		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
 			turning.clear_processed(player)
+
+func door_detect(results: Array[Node2D]) -> void:
+	if not player_movement:
+		return
+	if not player:
+		return
+	if not player.is_on_floor():
+		return
+	if not Input.is_action_pressed("move_up"):
+		return
+	for result in results:
+		if not result.has_meta("door_component"):
+			continue
+		var door = result.get_meta("door_component")
+		if door is not DoorComponent:
+			continue
+		if player.global_position.y > door.global_position.y + 8.0 \
+		or player.global_position.y < door.global_position.y - 8.0:
+			continue
+		player_movement.enter_door(door.id, door)

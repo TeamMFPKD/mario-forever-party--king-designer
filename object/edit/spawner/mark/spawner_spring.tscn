@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_8t1g1"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="2_8t1g1"]
-[ext_resource type="PackedScene" uid="uid://enusggu4pi7w" path="res://object/level/facility/spring.tscn" id="2_hxoj0"]
+[ext_resource type="PackedScene" uid="uid://enusggu4pi7w" path="res://object/level/facility/spring/spring.tscn" id="2_hxoj0"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_irlhx"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_dpnhb"]
 
