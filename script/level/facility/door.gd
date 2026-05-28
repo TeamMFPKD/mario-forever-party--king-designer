@@ -88,7 +88,6 @@ func try_enter() -> bool:
 					for d in doors:
 						if d.id == id:
 							d.unlocked = true
-							break
 					emit_signal("play_sound_unlock")
 					return true
 	return false
