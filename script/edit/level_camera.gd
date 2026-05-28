@@ -10,6 +10,9 @@ var speed : float = 0.0
 var direction := Vector2.ZERO
 
 var player
+var last_player_position: Vector2
+
+const TELEPORT_THRESHOLD = 64.0
 
 func _physics_process(delta: float) -> void:
 	var is_in_level = in_level_check()
@@ -19,8 +22,13 @@ func _physics_process(delta: float) -> void:
 			if not player:
 				return
 			position = player.position
+			last_player_position = player.position
 			reset_physics_interpolation()
 			return
+		if last_player_position.distance_to(player.position) > TELEPORT_THRESHOLD:
+			position = player.position
+			reset_physics_interpolation()
+		last_player_position = player.position
 		position = player.position
 		return
 
