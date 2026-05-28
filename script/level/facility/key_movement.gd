@@ -56,7 +56,11 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		state = KeyState.FOLLOWING
 		if cursed:
-			_create_phanto(body)
+			add_to_group("key_following_cursed")
+			var got_cursed_keys = get_tree().get_nodes_in_group("key_following_cursed")
+			var phantos = get_tree().get_nodes_in_group("phanto")
+			if phantos.size() < got_cursed_keys.size():
+				_create_phanto(body)
 
 func _physics_process(delta: float) -> void:
 	if not key or not ani:

@@ -70,6 +70,9 @@ func _create_effect() -> void:
 
 
 func _ready() -> void:
+	# Used for key-create-phanto
+	add_to_group("phanto")
+	
 	move_object = get_node_or_null(path_to_move_obj) as Node2D
 	if not move_object:
 		push_error("Move object (parent) not found.")
@@ -95,6 +98,9 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	if not move_object:
 		return
+
+	var cursed_keys = get_tree().get_nodes_in_group("key_following_cursed")
+	tracking_enabled = (cursed_keys.size() != 0)
 
 	_update_blink()
 
