@@ -76,6 +76,7 @@ size = Vector2(20, 32)
 [node name="Door" type="Node2D" unique_id=129675867]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1618459164]
+z_index = -2
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_jqfk2")
 animation = &"enter"
