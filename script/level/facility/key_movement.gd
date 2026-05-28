@@ -27,6 +27,9 @@ var state: KeyState = KeyState.IDLE:
 			add_to_group("key_following")
 			var following_keys = get_tree().get_nodes_in_group("key_following")
 			key_id = following_keys.size()
+			var player = get_tree().get_first_node_in_group("player") as Node2D
+			if player:
+				last_player_position = player.position
 var time: float = 0.0
 
 var track_frame: int = 0
@@ -37,6 +40,9 @@ var dir: float = 1.0
 var offset_x: float = 0.0
 
 const MAX_PAST_STATUS = 200
+const TELEPORT_THRESHOLD = 64.0
+
+var last_player_position: Vector2
 
 func _ready() -> void:
 	key = get_node(path_to_key) as Node2D
@@ -86,14 +92,25 @@ func _physics_process(delta: float) -> void:
 
 func _follow_player() -> void:
 	var player = get_tree().get_first_node_in_group("player") as Node2D
-	var player_movement = player.get_meta("player_movement") as PlayerMovement
+	if not player:
+		return
 
+	var player_movement = player.get_meta("player_movement") as PlayerMovement
 	if player_movement.speed_x != 0.0:
 		dir = sign(player_movement.speed_x)
 	var target_offset = -(16.0 + (key_id - 1) * 8.0) * dir
 
-	if not player:
-		return
+	var teleported = last_player_position.distance_to(player.position) > TELEPORT_THRESHOLD
+	if teleported:
+		var entry = {"position": player.position, "is_on_floor": player.is_on_floor()}
+		past_player_status.fill(entry)
+		key.position = player.position + Vector2(0, -8)
+		track_frame = 0
+		start_track_timer = 0
+		start_track = false
+		key.reset_physics_interpolation()
+
+	last_player_position = player.position
 
 	if track_frame < MAX_PAST_STATUS - 1:
 		track_frame += 1
