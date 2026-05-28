@@ -1,6 +1,7 @@
 extends Node
 
 signal play_sound_get
+signal overflow
 
 @export var path_to_key: NodePath = ".."
 @export var path_to_ani: NodePath = "../AnimatedSprite2D"
@@ -54,6 +55,11 @@ func _on_body_entered(body: Node) -> void:
 	if state != KeyState.IDLE:
 		return
 	if body.is_in_group("player"):
+		var locked_doors = round(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
+		var got_keys = get_tree().get_nodes_in_group("key_following").size()
+		if got_keys >= locked_doors:
+			emit_signal("overflow")
+			return
 		state = KeyState.FOLLOWING
 		if cursed:
 			add_to_group("key_following_cursed")

@@ -150,7 +150,7 @@ _data = {
 sprite_frames = SubResource("SpriteFrames_jbueq")
 animation = &"default"
 
-[node name="DoorComponent" parent="Area2D" parent_id_path=PackedInt32Array(248836387) index="1" unique_id=1603212476]
+[node name="DoorComponent" parent="Area2D" parent_id_path=PackedInt32Array(248836387) index="1" unique_id=1603212476 groups=["door_locked"]]
 locked = true
 
 [node name="LockedSE" parent="." index="2" unique_id=1715984441 instance=ExtResource("2_ypuuq")]

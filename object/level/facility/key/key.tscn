@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_4gtrg"]
 [ext_resource type="PackedScene" uid="uid://d00fw34l1cbco" path="res://object/level/enemy/phanto.tscn" id="3_112jo"]
 [ext_resource type="AudioStream" uid="uid://cjgdx78gewkb1" path="res://sound/level/smw_key_get.wav" id="4_112jo"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_58lqj"]
+[ext_resource type="AudioStream" uid="uid://cevunaerjje18" path="res://sound/level/MW_KeyNotGet.wav" id="7_a0ovq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ba2jk"]
 atlas = ExtResource("1_odo7v")
@@ -63,4 +65,11 @@ phanto_scene = ExtResource("3_112jo")
 [node name="KeyGet" parent="." unique_id=1715984441 instance=ExtResource("3_4gtrg")]
 stream = ExtResource("4_112jo")
 
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("6_58lqj")]
+
+[node name="KeyNotGet" parent="." unique_id=240008646 instance=ExtResource("3_4gtrg")]
+stream = ExtResource("7_a0ovq")
+
+[connection signal="overflow" from="KeyMovement" to="EnemyDie" method="die" flags=3]
+[connection signal="overflow" from="KeyMovement" to="KeyNotGet" method="play"]
 [connection signal="play_sound_get" from="KeyMovement" to="KeyGet" method="play"]
