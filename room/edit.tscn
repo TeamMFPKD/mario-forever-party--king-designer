@@ -537,6 +537,10 @@ metadata/_custom_type_script = "uid://omfdsevbgrom"
 script = ExtResource("19_xo7f2")
 object_map_layer = NodePath("..")
 
+[node name="ObjectDrag" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" unique_id=1715984441 instance=ExtResource("45_jdcwv")]
+stream = ExtResource("46_io63s")
+script = ExtResource("47_lq4t0")
+
 [node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1317430190 node_paths=PackedStringArray("database_holder")]
 script = ExtResource("20_w23hq")
 database_holder = NodePath("../DatabaseHolder")
@@ -567,11 +571,9 @@ script = ExtResource("24_x0edr")
 
 [node name="ClearPipeLineDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=2076543210]
 script = ExtResource("101_oia1o")
-debug_mode = true
 
 [node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=2076543211]
 script = ExtResource("102_oia1o")
-debug_mode = true
 cap_up_scene = ExtResource("103_oia1o")
 cap_down_scene = ExtResource("104_oia1o")
 cap_left_scene = ExtResource("105_oia1o")
@@ -588,7 +590,7 @@ stream = ExtResource("46_lq4t0")
 volume_db = -5.0
 script = ExtResource("47_lq4t0")
 
-[node name="PipeMove" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=1715984441 instance=ExtResource("45_jdcwv")]
+[node name="PipeMove" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" unique_id=716592356 instance=ExtResource("45_jdcwv")]
 stream = ExtResource("46_io63s")
 script = ExtResource("47_lq4t0")
 
@@ -1940,6 +1942,7 @@ show_mode = 2
 [connection signal="pressed" from="GameRoomSize/SaveLoad/VBoxContainer/LoadButton" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed"]
 [connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
 [connection signal="play_sound_erase" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelControl/SoundErase" method="play"]
+[connection signal="play_sound_drag" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer/ObjectDrag" method="play_sound_when_not_playing"]
 [connection signal="pipe_drawn" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeDrag" method="play"]
 [connection signal="pipe_moved" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeMove" method="play_sound_when_not_playing"]
 [connection signal="load_level" from="GameRoomSize/DebugLoad" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_debug_load"]
