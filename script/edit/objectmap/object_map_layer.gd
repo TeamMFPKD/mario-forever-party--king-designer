@@ -2,6 +2,8 @@ extends Node2D
 
 class_name ObjectMapLayer
 
+signal play_sound_drag
+
 @export var objects : Array = []
 @export var database_holder: DatabaseHolder
 
@@ -124,6 +126,7 @@ func _update_drag(world_pos: Vector2) -> void:
 		instance.global_position = new_grid_pos
 		_dragging_object["position"] = new_grid_pos
 		print("[%s] 拖动更新位置: " % Time.get_time_string_from_system(), current_pos, " -> ", new_grid_pos)
+		emit_signal("play_sound_drag")
 
 func _finish_drag() -> void:
 	if not _is_dragging:
