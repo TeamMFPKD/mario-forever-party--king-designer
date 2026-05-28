@@ -311,7 +311,7 @@ func door_movement() -> void:
 	in_door_timer += 1
 	match in_door_timer:
 		50:
-			player.global_position = target_door.global_position + Vector2(0, 3.0)
+			player.global_position = target_door.global_position + Vector2(0, 3.5)
 			player.reset_physics_interpolation()
 			for d in target_doors:
 				d.play_animation_exit()

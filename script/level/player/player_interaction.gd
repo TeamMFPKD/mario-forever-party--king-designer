@@ -305,4 +305,6 @@ func door_detect(results: Array[Node2D]) -> void:
 		if player.global_position.y > door.global_position.y + 8.0 \
 		or player.global_position.y < door.global_position.y - 8.0:
 			continue
+		if not door.try_enter():
+			continue
 		player_movement.enter_door(door.id, door)
