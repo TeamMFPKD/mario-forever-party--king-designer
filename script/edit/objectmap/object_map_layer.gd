@@ -12,8 +12,8 @@ var is_placing = false
 var current_object_name = ""
 var drawing_enabled = false
 
-# 门ID计数器
-var _door_id_counter: int = 1
+# 门ID计数器（初始为0，这样第一组门的ID就是1）
+var _door_id_counter: int = 0
 # 最大门组数
 const MAX_DOOR_GROUPS: int = 4
 # 每组门数量
@@ -214,7 +214,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
 	
 	# 如果是门对象，先检查数量限制
-	if current_object_name == "door":
+	if current_object_name == "door" or current_object_name == "door_locked":
 		var door_count = _get_door_count()
 		if door_count >= MAX_DOOR_GROUPS * DOORS_PER_GROUP:
 			print("[%s] ObjectMapLayer: 已达到最大门数量限制 (%d个)" % [Time.get_time_string_from_system(), MAX_DOOR_GROUPS * DOORS_PER_GROUP])
@@ -237,7 +237,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		print("[%s] 放置对象: " % Time.get_time_string_from_system(), entry.object_name, " 在网格位置: ", grid_position)
 		
 		# 如果是门对象，需要成对放置
-		if current_object_name == "door":
+		if current_object_name == "door" or current_object_name == "door_locked":
 			_place_paired_door(scene_instance, grid_position, entry)
 		
 		# 发射放置音效信号
@@ -245,8 +245,29 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 
 # 成对放置门
 func _place_paired_door(first_door: Node2D, first_position: Vector2, entry: ObjectDatabaseEntry):
-	_door_id_counter += 1
-	var door_id = _door_id_counter
+	var used_ids = []
+	for object_data in objects:
+		var obj_name = object_data.get("object_name", "")
+		if (obj_name == "door" or obj_name == "door_locked") and object_data.has("door_id"):
+			var id = object_data["door_id"]
+			if id > 0 and id <= MAX_DOOR_GROUPS:
+				used_ids.append(id)
+
+	var door_id = -1
+	for candidate_id in range(1, MAX_DOOR_GROUPS + 1):
+		if candidate_id not in used_ids:
+			door_id = candidate_id
+			break
+
+	if door_id == -1:
+		push_error("最多只能放置4组门！")
+		return
+
+	if door_id > _door_id_counter:
+		_door_id_counter = door_id
+
+	var suit_index_for_log = (door_id - 1) % 4 + 1
+	print("[%s] 放置门组: ID=%d, 应使用花色%d" % [Time.get_time_string_from_system(), door_id, suit_index_for_log])
 	
 	# 设置第一个门的ID
 	_set_door_id(first_door, door_id)
@@ -305,11 +326,12 @@ func _set_door_id(door_node: Node2D, door_id: int):
 	if door_component and door_component.has_method("set_door_id"):
 		door_component.set_door_id(door_id)
 
-# 获取当前已放置的门数量
+# 获取当前已放置的门数量（包括door和door_locked）
 func _get_door_count() -> int:
 	var count = 0
 	for object_data in objects:
-		if object_data.get("object_name") == "door":
+		var obj_name = object_data.get("object_name", "")
+		if obj_name == "door" or obj_name == "door_locked":
 			count += 1
 	return count
 
@@ -330,20 +352,28 @@ func _update_door_suit_texture(door_node: Node2D, door_id: int):
 		return
 	
 	# 从Spawner的sprites数组中获取纹理
-	var sprites_array = door_node.get("sprites")
-	if sprites_array == null:
-		sprites_array = []
+	var sprites_array = []
+	if door_node.has_method("get_sprites"):
+		sprites_array = door_node.get_sprites()
+	elif "sprites" in door_node:
+		sprites_array = door_node.sprites
 	print("[%s] sprites数组: %s, 长度: %d" % [Time.get_time_string_from_system(), sprites_array, len(sprites_array)])
 	
-	if len(sprites_array) == 0:
-		print("[%s] 警告：sprites数组为空" % Time.get_time_string_from_system())
+	# 过滤掉null元素，获取有效的纹理列表
+	var valid_textures = []
+	for tex in sprites_array:
+		if tex != null:
+			valid_textures.append(tex)
+	
+	if len(valid_textures) == 0:
+		print("[%s] 警告：没有有效的花色纹理" % Time.get_time_string_from_system())
 		return
 	
 	# 根据door_id选择花色（1-4对应四种花色）
-	var suit_index = (door_id - 1) % len(sprites_array)
-	print("[%s] 花色索引: %d" % [Time.get_time_string_from_system(), suit_index])
+	var suit_index = (door_id - 1) % len(valid_textures)
+	print("[%s] 花色索引: %d (有效纹理数量: %d)" % [Time.get_time_string_from_system(), suit_index, len(valid_textures)])
 	
-	var texture = sprites_array[suit_index]
+	var texture = valid_textures[suit_index]
 	print("[%s] 纹理: %s" % [Time.get_time_string_from_system(), texture])
 	
 	if texture:
@@ -415,8 +445,9 @@ func remove_object_at_position(input_pos: Vector2):
 		if object_to_remove.has("object_name") and object_to_remove["object_name"] == "player":
 			return false
 		
-		# 如果是门对象，需要同时删除配对门
-		if object_to_remove.has("object_name") and object_to_remove["object_name"] == "door":
+		# 如果是门对象（door或door_locked），需要同时删除配对门
+		var obj_name = object_to_remove.get("object_name", "")
+		if obj_name == "door" or obj_name == "door_locked":
 			_remove_paired_doors(object_to_remove)
 		else:
 			if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
@@ -504,7 +535,8 @@ func get_object_data() -> Array:
 			}
 		}
 		# 如果是门，保存门的ID
-		if object_data["object_name"] == "door" and object_data.has("door_id"):
+		var obj_name = object_data["object_name"]
+		if (obj_name == "door" or obj_name == "door_locked") and object_data.has("door_id"):
 			save_object["door_id"] = object_data["door_id"]
 		save_data.append(save_object)
 	return save_data
@@ -522,15 +554,15 @@ func load_object_data(object_data: Array):
 		if database_holder and database_holder.object_database:
 			current_object_name = object_name
 			
-			# 如果是门，直接加载（不再成对创建）
-			if object_name == "door" and save_object.has("door_id"):
-				_load_single_door(obj_position, save_object["door_id"])
+			# 如果是门（door或door_locked），直接加载（不再成对创建）
+			if (object_name == "door" or object_name == "door_locked") and save_object.has("door_id"):
+				_load_single_door(object_name, obj_position, save_object["door_id"])
 			else:
 				place_object_at_position(obj_position, true)
 
 # 加载单个门（直接加载，不创建配对）
-func _load_single_door(door_position: Vector2, door_id: int):
-	var entry = find_object_by_name("door")
+func _load_single_door(object_name: String, door_position: Vector2, door_id: int):
+	var entry = find_object_by_name(object_name)
 	if not entry or not entry.object_scene:
 		return
 	
@@ -541,13 +573,15 @@ func _load_single_door(door_position: Vector2, door_id: int):
 		_set_door_id(door, door_id)
 		
 		var object_data = {
-			"object_name": "door",
+			"object_name": object_name,
 			"object_scene": entry.object_scene,
 			"position": door_position,
 			"instance": door,
 			"door_id": door_id
 		}
 		objects.append(object_data)
+		
+		print("[%s] 加载门: %s, ID: %d, 位置: %s" % [Time.get_time_string_from_system(), object_name, door_id, door_position])
 	
 	# 更新门ID计数器
 	if door_id > _door_id_counter:
