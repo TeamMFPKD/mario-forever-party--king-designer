@@ -20,6 +20,5 @@ rotation = 1.5707964
 texture = SubResource("AtlasTexture_io63s")
 
 [node name="OffsetMarker" parent="." unique_id=143398822 instance=ExtResource("4_y6sgt")]
-position = Vector2(0, -8)
 
 [node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_aldr5")]

@@ -145,7 +145,7 @@ func _finish_drag() -> void:
 	
 	_dragging_object = {}
 
-func _on_door_dragged(door_data: Dictionary, new_pos: Vector2) -> void:
+func _on_door_dragged(door_data: Dictionary, _new_pos: Vector2) -> void:
 	var door_id = door_data.get("door_id", -1)
 	if door_id == -1:
 		return
