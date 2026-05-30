@@ -29,10 +29,10 @@ var players = []:
 	set(value):
 		print("[%s] players set player size: " % Time.get_time_string_from_system(), players.size())
 		for p in players:
-			print("[%s] players set player name: " % Time.get_time_string_from_system(), p.name)
+			print("[%s] players set player: %s" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 		print("[%s] players set value size: " % Time.get_time_string_from_system(), value.size())
 		for v in value:
-			print("[%s] players set value player name: " % Time.get_time_string_from_system(), v.name)
+			print("[%s] players set value player: %s" % [Time.get_time_string_from_system(), format_player(v.name, v.id)])
 		if players.size() < value.size():
 			emit_signal("play_sound_joined")
 			print("[%s] play sound joined" % Time.get_time_string_from_system())
@@ -104,16 +104,14 @@ func _on_host_button_pressed():
 	players.append(player)
 	emit_signal("players_updated")
 	print("[%s] 主机已启动。" % Time.get_time_string_from_system())
-	print("[%s] 玩家ID：" % Time.get_time_string_from_system(), multiplayer.get_unique_id())
-	print("[%s] 玩家名称：" % Time.get_time_string_from_system(), player_name)
+	print("[%s] 主机玩家：%s" % [Time.get_time_string_from_system(), format_player(player_name, player.id)])
 
 func _on_join_button_pressed():
 	var peer = ENetMultiplayerPeer.new()
 	
 	print("[%s] 连接IP：" % Time.get_time_string_from_system(), frp_domain)
 	print("[%s] 连接端口：" % Time.get_time_string_from_system(), remote_port)
-	print("[%s] 玩家ID：" % Time.get_time_string_from_system(), multiplayer.get_unique_id())
-	print("[%s] 玩家名称：" % Time.get_time_string_from_system(), player_name)
+	print("[%s] 本地玩家：%s" % [Time.get_time_string_from_system(), format_player(player_name, multiplayer.get_unique_id())])
 
 	var error = peer.create_client(frp_domain, remote_port)
 	
@@ -161,7 +159,7 @@ func inform_late_player() -> void:
 @rpc("authority", "call_local")
 func player_joined(player_info):
 	# 所有对等体都会收到这个消息
-	print("[%s] id：" % Time.get_time_string_from_system(), player_info.id, " 名称：", player_info.name, " 已加入")
+	print("[%s] 玩家 %s 已加入" % [Time.get_time_string_from_system(), format_player(player_info.name, player_info.id)])
 
 @rpc("authority", "call_local")
 func sync_players_list(players_list):
@@ -179,6 +177,12 @@ func _on_peer_connected(_id: int):
 func _on_peer_disconnected(id: int):
 	# 当对等体断开连接时
 	if multiplayer.is_server():
+		var p_name = "?"
+		for p in players:
+			if p.id == id:
+				p_name = p.name
+				break
+		
 		# 服务器：从 players 列表中移除离开的玩家
 		# 这样写是为了触发 players 的 set 方法，因为 Array.append() 不会触发 set 方法
 		var p_list = players.duplicate()
@@ -189,7 +193,7 @@ func _on_peer_disconnected(id: int):
 				break
 		
 		emit_signal("players_updated")
-		print("[%s] 玩家 " % Time.get_time_string_from_system(), id, " 已离开")
+		print("[%s] 玩家 %s 已离开" % [Time.get_time_string_from_system(), format_player(p_name, id)])
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
 			sync_players_list.rpc(players)
@@ -256,7 +260,7 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 			if p.id == player.id:
 				print("[%s] 已将自己的关卡数据加入玩家列表数据" % Time.get_time_string_from_system())
 			else:
-				print("[%s] 已接收玩家 %s 的关卡数据，JSON 长度：%d" % [Time.get_time_string_from_system(), p.name, level_json.length()])
+				print("[%s] 已接收玩家 %s 的关卡数据，JSON 长度：%d" % [Time.get_time_string_from_system(), format_player(p.name, p.id), level_json.length()])
 			break
 
 @rpc("any_peer", "call_local")
@@ -264,7 +268,7 @@ func my_players_data_are_ready(player_id: int) -> void:
 	for p in players:
 		if p.id == player_id:
 			p.ready = true
-			print("[%s] 玩家 " % Time.get_time_string_from_system(), player_id, " 已准备就绪")
+			print("[%s] 玩家 %s 已准备就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 			break
 
 @rpc("authority", "call_local")
@@ -298,12 +302,12 @@ func level_add_pass_count(level, passed : bool, player_id: int) -> void:
 			for p_player in players:
 				if p_player.id == player_id:
 					p_player["level_pass_count"] += 1
-					print("[%s] Player " % Time.get_time_string_from_system(), p_player.name, " passed ", p_author["name"], "'s level.")
+					print("[%s] Player %s passed %s's level." % [Time.get_time_string_from_system(), format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
 		else:
 			p_author["level_cause_death"] += 1
 			for p_player in players:
 				if p_player.id == player_id:
-					print("[%s] Player " % Time.get_time_string_from_system(), p_player.name, " died in ", p_author["name"], "'s level.")
+					print("[%s] Player %s died in %s's level." % [Time.get_time_string_from_system(), format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
 
 
 @rpc("any_peer", "call_local")
@@ -313,15 +317,14 @@ func reach_end(player_id: int) -> void:
 	for p in players:
 		if p.id == player_id:
 			p.reach_end = true
-			print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 已经玩过了所有关卡！")
+			print("[%s] 玩家 %s 已经玩过了所有关卡！" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 			break
 	
 @rpc("authority", "call_local")
 func store_level_results(players) -> void:
 	print("[%s] 开始展示结果！！" % Time.get_time_string_from_system())
 	for p in players:
-		print("[%s] " % Time.get_time_string_from_system(), p["name"], "的关卡通过率：", round(p["clear_rate"] * 100000.0) / 1000.0, "%",
-		" 关卡通过数：", p["level_pass_count"], " 总积分：", p["score"])
+		print("[%s] %s 的关卡通过率：%s%%  关卡通过数：%d  总积分：%d" % [Time.get_time_string_from_system(), format_player(p["name"], p["id"]), str(round(p["clear_rate"] * 100000.0) / 1000.0), p["level_pass_count"], p["score"]])
 	emit_signal("result_updated", players)
 	for p in players:
 		var level_file_path = p["level_file_name"]
@@ -419,6 +422,16 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			ani.set_meta("player_id", player_id)
 			break
 
+static func get_device_tag() -> String:
+	var unique_id = OS.get_unique_id()
+	if unique_id.is_empty():
+		return "?????"
+	unique_id = unique_id.replace("{", "").replace("}", "").replace("-", "")
+	return unique_id.substr(0, 5)
+
+static func format_player(p_name, p_id) -> String:
+	return "[%s] %s (%s)" % [get_device_tag(), p_name, p_id]
+
 func restore_origin_player_data() -> void:
 	for p in players:
 		p.level_file_name = "invalid"
@@ -458,8 +471,8 @@ func get_ready(p_id: int, is_ready: bool) -> void:
 		if p.id == p_id:
 			p.is_ready_to_start = is_ready
 			if is_ready:
-				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 已就绪")
+				print("[%s] 玩家 %s 已就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 			else:
-				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 未就绪")
+				print("[%s] 玩家 %s 未就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 			sync_players_list.rpc(players)
 			break

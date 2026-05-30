@@ -41,9 +41,9 @@ func _ready():
 		print("[%s] [确认玩家关卡数据]" % Time.get_time_string_from_system())
 		for p in multiplayer_manager.players:
 			if p.level_data != "invalid":
-				print("[%s] 已接收玩家 " % Time.get_time_string_from_system(), p.name, " 的关卡数据")
+				print("[%s] 已接收玩家 %s 的关卡数据" % [Time.get_time_string_from_system(), MPManager.format_player(p.name, p.id)])
 			else:
-				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 的关卡数据无效。")
+				print("[%s] 玩家 %s 的关卡数据无效。" % [Time.get_time_string_from_system(), MPManager.format_player(p.name, p.id)])
 				local_players_level_data_ready = false
 		if not local_players_level_data_ready:
 			# 失败了！再等 wait_time_local 秒
@@ -60,10 +60,10 @@ func _ready():
 		print("[%s] [确认所有玩家就绪]" % Time.get_time_string_from_system())
 		for p in multiplayer_manager.players:
 			if not p.ready:
-				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 未就绪。")
+				print("[%s] 玩家 %s 未就绪。" % [Time.get_time_string_from_system(), MPManager.format_player(p.name, p.id)])
 				all_players_data_ready = false
 			else:
-				print("[%s] 玩家 " % Time.get_time_string_from_system(), p.name, " 已就绪。")
+				print("[%s] 玩家 %s 已就绪。" % [Time.get_time_string_from_system(), MPManager.format_player(p.name, p.id)])
 		print("[%s] 等待 " % Time.get_time_string_from_system(), wait_time_sever, " 秒")
 		await get_tree().create_timer(wait_time_sever).timeout
 
