@@ -20,7 +20,7 @@ func _ready():
 		all_players_reach_end = true
 		for player in multiplayer_manager.players:
 			if not player["reach_end"]:
-				print("[%s] 玩家" % Time.get_time_string_from_system(), player["name"], "未到达终点")
+				print("[%s] 玩家 %s 未到达终点" % [Time.get_time_string_from_system(), MPManager.format_player(player["name"], player["id"])])
 				all_players_reach_end = false
 		print("[%s] 等待 " % Time.get_time_string_from_system(), wait_time, " 秒")
 		await get_tree().create_timer(wait_time).timeout
