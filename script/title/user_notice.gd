@@ -20,7 +20,7 @@ func _ready():
 
 func _on_refuse_button_pressed():
 	get_tree().quit()
-	print("拒绝并退出")
+	print("[user_notice.gd] 拒绝并退出")
 
 func _on_accept_button_pressed():
 	visible = false
