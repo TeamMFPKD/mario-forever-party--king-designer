@@ -237,6 +237,13 @@ func disconnect_and_cleanup(reason := "意外断开连接") -> void:
 		for i in range(2):
 			await get_tree().physics_frame
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	
+	# Clear player
+	restore_origin_player_data()
+	# Clear players
+	players.clear()
+	# Clear messages
+	messages.clear()
 
 @rpc("authority")
 func edit_time_out():
