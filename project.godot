@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MF: MP"
-config/version="v20260530_1457"
+config/version="v20260530_1649"
 run/main_scene="uid://dcqf1c3m14b1f"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(1, 1, 1, 1)
@@ -43,6 +43,7 @@ LevelPathSet="*uid://cmua4qyp7khya"
 MultiplayerPlayerLeft="*uid://dm52vkcqcn4so"
 LifeManager="*uid://by8cg73qfeta4"
 MouseSpriteManager="*uid://bn1io84ug6xwb"
+MessageSidebar="*uid://wycwx4fbk27d"
 
 [display]
 
