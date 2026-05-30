@@ -30,7 +30,7 @@ func _ready() -> void:
 	_status_changed()
 
 func _on_players_updated() -> void:
-	enabled = multiplayer_manager.players.size() >= 1
+	enabled = multiplayer_manager.players.size() >= 2
 
 func _status_changed() -> void:
 	if not enabled:
