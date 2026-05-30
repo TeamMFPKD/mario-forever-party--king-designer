@@ -157,6 +157,9 @@ func register_player_on_host(player_info):
 	# 同步完整的玩家列表给所有客户端
 	sync_players_list.rpc(p_list)
 
+	# 同步所有聊天记录给新客户端
+	sync_messages.rpc(messages)
+
 @rpc("authority", "call_remote")
 func inform_late_player() -> void:
 	push_warning("已连接主机。但该房间游戏已经开始。即将断开连接。")
@@ -244,6 +247,8 @@ func disconnect_and_cleanup(reason := "意外断开连接") -> void:
 	players.clear()
 	# Clear messages
 	messages.clear()
+	emit_signal("players_updated")
+	emit_signal("messages_updated")
 
 @rpc("authority")
 func edit_time_out():
