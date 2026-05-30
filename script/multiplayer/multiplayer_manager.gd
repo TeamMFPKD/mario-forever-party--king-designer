@@ -13,6 +13,8 @@ signal result_updated
 signal play_sound_joined
 signal play_sound_exited
 
+signal messages_updated
+
 @export var player_dead_spritesframe : SpriteFrames
 
 var local_port
@@ -23,6 +25,9 @@ var frp_domain = ""
 var player_name = ""
 
 var game_start_time : String
+
+var messages = []
+var msg_cnt: int = 0
 
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []:
@@ -433,14 +438,14 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			ani.set_meta("player_id", player_id)
 			break
 
-static func get_device_tag() -> String:
+func get_device_tag() -> String:
 	var unique_id = OS.get_unique_id()
 	if unique_id.is_empty():
 		return "?????"
 	unique_id = unique_id.replace("{", "").replace("}", "").replace("-", "")
 	return unique_id.substr(0, 5)
 
-static func format_player(p_name, p_id) -> String:
+func format_player(p_name, p_id) -> String:
 	return "[%s] %s (%s)" % [get_device_tag(), p_name, p_id]
 
 func print_players() -> void:
@@ -498,3 +503,29 @@ func get_ready(p_id: int, is_ready: bool) -> void:
 				print("[%s] 玩家 %s 未就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 			sync_players_list.rpc(players)
 			break
+
+@rpc("any_peer", "call_local", "reliable", 10)
+func send_message(p_id: int, unique_id: String, msg: String) -> void:
+	if not multiplayer.is_server():
+		return
+	var p_name = "invalid_name"
+	for p in players:
+		if p.id == p_id:
+			p_name = p.name
+			break
+	messages.append(
+		{
+			"cnt": msg_cnt,
+			"player_id": p_id, "message": msg,
+			"unique_id": unique_id,
+			"player_name": p_name,
+			"msg": msg,
+		}
+	)
+	msg_cnt += 1
+	sync_messages.rpc(messages)
+
+@rpc("authority", "call_local", "reliable", 10)
+func sync_messages(msgs: Array) -> void:
+	messages = msgs
+	emit_signal("messages_updated")

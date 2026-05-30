@@ -7,8 +7,12 @@ Mario Forever: Maker Party is a game with DIY features. Please ensure the follow
 · Abide by local laws and regulations.
 · Do not use the level creation function to produce or spread malicious code, viruses, or design malicious levels that may induce device malfunctions or information leakage for players.
 
-Level Storage Notice
-For level reuse purposes, the levels you create will be automatically cached to other players’ local devices during online gameplay; similarly, levels created by other players will also be automatically cached to your local device.","欢迎游玩 Mario Forever: Maker Party！
+Level Storage Notice:
+· For level reuse purposes, the levels you create will be automatically cached to other players' local devices during online gameplay; similarly, levels created by other players will also be automatically cached to your local device.
+
+Message System Notice:
+· For security reasons, please do not send sensitive information. Communicate respectfully.
+· Messages sent are visible to all players in the current room. Messages may be saved by others.","欢迎游玩 Mario Forever: Maker Party！
 
 Mario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：
 · 创作的关卡内容符合公序良俗，不得包含暴力、色情、低俗、歧视、恐怖等不良及违法违规内容
@@ -16,7 +20,11 @@ Mario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程
 · 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡
 
 关卡存储说明：
-· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。","Mario Forever: Maker Party へようこそ！
+· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。
+
+消息系统说明：
+· 考虑到信息安全等因素，请勿发送敏感信息。请文明交流。
+· 发送的消息在当前房间中所有玩家可见。消息可能会被别人保存。","Mario Forever: Maker Party へようこそ！
 
 Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中は、以下の点を守ってください：
 · 作成するコースの内容は公序良俗に反せず、暴力的、わいせつ、低俗、差別的、ホラーなどの不適切、違法、または規約違反の内容を含まないこと。
@@ -24,7 +32,11 @@ Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中�
 · コース作成機能を悪用して、悪意のあるコードやウイルスを作成・拡散したり、プレイヤーの端末の誤作動や情報漏洩を誘発するような悪質なコースを設計しないこと。
 
 コース保存に関する説明：
-· コース再利用のため、オンラインプレイ中にあなたが作成したコースは他のプレイヤーのローカルデバイスに自動的にキャッシュされます。同様に、他のプレイヤーが作成したコースもあなたのローカルデバイスに自動的にキャッシュされます。"
+· コース再利用のため、オンラインプレイ中にあなたが作成したコースは他のプレイヤーのローカルデバイスに自動的にキャッシュされます。同様に、他のプレイヤーが作成したコースもあなたのローカルデバイスに自動的にキャッシュされます。
+
+メッセージシステムに関する説明：
+· 情報セキュリティのため、センシティブな情報は送信しないでください。マナーを守り、丁寧にコミュニケーションを行ってください。
+· 送信したメッセージは現在のルーム内の全プレイヤーに表示されます。メッセージは他のプレイヤーによって保存される可能性があります。"
 拒绝并退出,Decline,拒绝并退出,拒否して終了
 同意,Accept,同意,同意する
 组织游戏,Host,组织游戏,ゲームを主催
@@ -93,3 +105,4 @@ Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中�
 警告：你还没有放置终点。,Warning: You haven't placed the goal.,警告：你还没有放置终点。,警告：まだゴールが配置されていません。
 消息,Messages,消息,メッセージ
 发送,Send,发送,送信
+[系统] 文明交流，请不要发送敏感信息,[SYS] Please be respectful. Do not send sensitive messages.,[系统] 文明交流，请不要发送敏感信息,[システム] マナーを守り、センシティブな内容は送信しないでください。
