@@ -431,6 +431,16 @@ func restore_origin_player_data() -> void:
 		p.level_pass_count = 0
 		p.clear_rate = 0.0
 		p.score = 0
+	player.level_file_name = "invalid"
+	player.level_data = "invalid"
+	player.is_ready_to_start = false
+	player.ready = false
+	player.reach_end = false
+	player.level_cause_pass = 0
+	player.level_cause_death = 0
+	player.level_pass_count = 0
+	player.clear_rate = 0.0
+	player.score = 0
 
 @rpc("authority", "call_local")
 func sync_origin_player_data() -> void:
