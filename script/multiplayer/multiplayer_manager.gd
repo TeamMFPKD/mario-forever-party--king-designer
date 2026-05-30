@@ -48,6 +48,8 @@ var total_levels : int = 0
 
 var level_results = []
 
+var _pending_disconnect_reasons = {}
+
 var is_in_game : bool = false:
 	set(value):
 		is_in_game = value
@@ -154,7 +156,7 @@ func register_player_on_host(player_info):
 func inform_late_player() -> void:
 	push_warning("已连接主机。但该房间游戏已经开始。即将断开连接。")
 	emit_signal("game_in_progress_hint")
-	disconnect_and_cleanup()
+	disconnect_and_cleanup("游戏已开始，拒绝加入")
 
 @rpc("authority", "call_local")
 func player_joined(player_info):
@@ -192,7 +194,9 @@ func _on_peer_disconnected(id: int):
 				break
 		
 		emit_signal("players_updated")
-		print("[%s] 玩家 %s 已离开" % [Time.get_time_string_from_system(), format_player(p_name, id)])
+		var reason = _pending_disconnect_reasons.get(id, "意外断开连接")
+		_pending_disconnect_reasons.erase(id)
+		push_warning("[%s] 玩家 %s — %s" % [Time.get_time_string_from_system(), format_player(p_name, id), reason])
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
 			sync_players_list.rpc(players)
@@ -210,15 +214,21 @@ func server_closing():
 	# 断开连接
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
+@rpc("any_peer", "call_remote")
+func notify_disconnect(reason: String) -> void:
+	if not multiplayer.is_server():
+		return
+	var sender_id = multiplayer.get_remote_sender_id()
+	_pending_disconnect_reasons[sender_id] = reason
+
 # 断开连接并清理
-func disconnect_and_cleanup():
-	players = []
-	emit_signal("players_updated")
+func disconnect_and_cleanup(reason := "意外断开连接") -> void:
+	var tag = format_player(player.name, player.id)
 	if multiplayer.is_server():
-		# 服务器：通知所有客户端（包括自己）
+		print("[%s] 玩家 %s — %s" % [Time.get_time_string_from_system(), tag, reason])
 		server_closing.rpc()
 	else:
-		# 客户端：直接断开连接，服务器会通过 peer_disconnected 信号检测
+		notify_disconnect.rpc_id(1, reason)
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 @rpc("authority")
