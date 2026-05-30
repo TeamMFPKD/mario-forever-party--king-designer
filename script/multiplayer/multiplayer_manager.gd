@@ -27,18 +27,18 @@ var game_start_time : String
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
 var players = []:
 	set(value):
-		print("[%s] players set player size: " % Time.get_time_string_from_system(), players.size())
-		for p in players:
-			print("[%s] players set player: %s" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
-		print("[%s] players set value size: " % Time.get_time_string_from_system(), value.size())
-		for v in value:
-			print("[%s] players set value player: %s" % [Time.get_time_string_from_system(), format_player(v.name, v.id)])
+		#print("[%s] players set player size: " % Time.get_time_string_from_system(), players.size())
+		#for p in players:
+			#print("[%s] players set player: %s" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
+		#print("[%s] players set value size: " % Time.get_time_string_from_system(), value.size())
+		#for v in value:
+			#print("[%s] players set value player: %s" % [Time.get_time_string_from_system(), format_player(v.name, v.id)])
 		if players.size() < value.size():
 			emit_signal("play_sound_joined")
-			print("[%s] play sound joined" % Time.get_time_string_from_system())
+			#print("[%s] play sound joined" % Time.get_time_string_from_system())
 		if players.size() > value.size():
 			emit_signal("play_sound_exited")
-			print("[%s] play sound exited" % Time.get_time_string_from_system())
+			#print("[%s] play sound exited" % Time.get_time_string_from_system())
 		players = value
 
 var random_levels = []
@@ -229,6 +229,8 @@ func disconnect_and_cleanup(reason := "意外断开连接") -> void:
 		server_closing.rpc()
 	else:
 		notify_disconnect.rpc_id(1, reason)
+		for i in range(2):
+			await get_tree().physics_frame
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 
 @rpc("authority")
