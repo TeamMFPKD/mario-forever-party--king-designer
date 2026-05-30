@@ -166,8 +166,7 @@ func sync_players_list(players_list):
 	# 所有客户端接收并更新玩家列表
 	players = players_list
 	emit_signal("players_updated")
-	print("[%s] 玩家列表：" % Time.get_time_string_from_system())
-	print("[%s] " % Time.get_time_string_from_system(), players)
+	print_players()
 
 func _on_peer_connected(_id: int):
 	# 当有新对等体连接时，如果是主机，不需要额外处理
@@ -432,6 +431,17 @@ static func get_device_tag() -> String:
 static func format_player(p_name, p_id) -> String:
 	return "[%s] %s (%s)" % [get_device_tag(), p_name, p_id]
 
+func print_players() -> void:
+	for p in players:
+		var lv = p.level_data
+		var lv_len = lv.length()
+		if lv_len > 100:
+			lv = lv.substr(0, 100) + "..."
+		print("[%s]  %s" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
+		print("[%s]    ready=%s  end=%s  file=%s" % [Time.get_time_string_from_system(), p.is_ready_to_start, p.reach_end, p.level_file_name])
+		print("[%s]    level_data[%d]: %s" % [Time.get_time_string_from_system(), lv_len, lv])
+		print("")
+
 func restore_origin_player_data() -> void:
 	for p in players:
 		p.level_file_name = "invalid"
@@ -461,7 +471,7 @@ func sync_origin_player_data() -> void:
 	sync_players_list.rpc(players)
 	emit_signal("players_updated")
 	print("[%s] 已返回标题界面，并重新同步玩家列表数据：" % Time.get_time_string_from_system())
-	print(players)
+	print_players()
 
 @rpc("any_peer", "call_local")
 func get_ready(p_id: int, is_ready: bool) -> void:
