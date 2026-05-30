@@ -13,7 +13,7 @@ func _ready():
 		if multiplayer_manager.multiplayer.is_server():
 			multiplayer_manager.restore_origin_player_data()
 			print("[%s] 已还原本局开始前玩家列表：" % Time.get_time_string_from_system())
-			print("[%s] " % Time.get_time_string_from_system(), multiplayer_manager.players)
+			multiplayer_manager.print_players()
 			emit_signal("sever_back_to_title")
 		else:
 			# 比主机更早返回标题画面的玩家，需要更新玩家列表
