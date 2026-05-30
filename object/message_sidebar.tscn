@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://wycwx4fbk27d"]
+
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="1_s13lt"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="2_8jfuv"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_vwrul"]
+[ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="3_vwrul"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="4_q17kt"]
+[ext_resource type="Script" uid="uid://h1kqnmx4icg8" path="res://script/message_siderbar_status.gd" id="6_vwrul"]
+
+[node name="MessageSidebar" type="CanvasLayer" unique_id=865887864]
+
+[node name="Control" type="Control" parent="." unique_id=2087811218]
+layout_mode = 3
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -400.0
+offset_bottom = 400.0
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=949836027]
+custom_minimum_size = Vector2(504, 800)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -504.0
+offset_top = -400.0
+offset_bottom = 400.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="UiPanel" parent="Control/HBoxContainer" unique_id=1563157272 instance=ExtResource("1_s13lt")]
+custom_minimum_size = Vector2(436, 800)
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="Control/HBoxContainer/UiPanel" unique_id=1510288836 instance=ExtResource("2_vwrul")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/UiPanel/UiMarginContainer" unique_id=268664003]
+layout_mode = 2
+
+[node name="UiPanel" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1495457222 instance=ExtResource("1_s13lt")]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="UiLabel" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/UiPanel" unique_id=1008498644 instance=ExtResource("2_8jfuv")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -31.5
+offset_right = 45.0
+offset_bottom = 31.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "消息"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1642945686]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=1501468933]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer" unique_id=450634342]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="UiLineEdit" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=205965961 instance=ExtResource("3_vwrul")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UiButton" parent="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1210628054 instance=ExtResource("4_q17kt")]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 24
+text = "发送"
+
+[node name="Button" type="Button" parent="Control/HBoxContainer" unique_id=2111418370]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 30
+text = "💬"
+
+[node name="MessageSiderbarStatus" type="Node" parent="." unique_id=98910284 node_paths=PackedStringArray("sidebar_show_button", "control")]
+script = ExtResource("6_vwrul")
+sidebar_show_button = NodePath("../Control/HBoxContainer/Button")
+control = NodePath("../Control")
