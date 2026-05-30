@@ -19,6 +19,6 @@ func _on_files_dropped(files: PackedStringArray) -> void:
 		if file_path.get_extension().to_lower() == "lvl":
 			load_level.emit(file_path)
 		else:
-			print("Dropped file is not a .lvl file: ", file_path)
+			print("[debug_load.gd] Dropped file is not a .lvl file: ", file_path)
 	else:
-		print("No files dropped")
+		print("[debug_load.gd] No files dropped")
