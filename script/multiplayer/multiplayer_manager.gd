@@ -46,6 +46,9 @@ var players = []:
 			#print("[%s] play sound exited" % Time.get_time_string_from_system())
 		players = value
 
+		if value.size() < 2 and multiplayer.is_server():
+			msg_cnt = 0
+
 var random_levels = []
 var current_level_count : int = 0
 
@@ -86,7 +89,9 @@ var player = {
 	"level_pass_count": 0,
 	"clear_rate": 0.0,
 	"score": 0,
+	"device_id": "invalid",
 }
+var device_id: String = "invalid"
 
 
 func _ready():
@@ -98,6 +103,8 @@ func _ready():
 	multiplayer.connection_failed.connect(func(): print("[%s] 连接失败" % Time.get_time_string_from_system()))
 	multiplayer.server_disconnected.connect(func(): print("[%s] 服务器断开" % Time.get_time_string_from_system()))
 
+	device_id = get_device_tag()
+
 func _on_host_button_pressed():
 	# 主机端代码通常不需要修改，仍监听本地端口
 	var peer = ENetMultiplayerPeer.new()
@@ -107,6 +114,7 @@ func _on_host_button_pressed():
 
 	player.id = multiplayer.get_unique_id()
 	player.name = player_name
+	player.device_id = device_id
 
 	players.append(player)
 	emit_signal("players_updated")
@@ -132,6 +140,7 @@ func _on_connected_to_server():
 	# 客户端连接成功后，向主机发送自己的玩家信息
 	player.id = multiplayer.get_unique_id()
 	player.name = player_name
+	player.device_id = device_id
 	# 仅向主机发送加入请求
 	register_player_on_host.rpc_id(1, player)
 
@@ -168,8 +177,8 @@ func inform_late_player() -> void:
 
 @rpc("authority", "call_local")
 func player_joined(player_info):
-	# 所有对等体都会收到这个消息
-	print("[%s] 玩家 %s 已加入" % [Time.get_time_string_from_system(), format_player(player_info.name, player_info.id)])
+	var tag = _get_tag(player_info.get("device_id", ""))
+	print("[%s] 玩家 [%s] %s (%s) 已加入" % [Time.get_time_string_from_system(), tag, player_info.name, player_info.id])
 
 @rpc("authority", "call_local")
 func sync_players_list(players_list):
@@ -187,9 +196,11 @@ func _on_peer_disconnected(id: int):
 	# 当对等体断开连接时
 	if multiplayer.is_server():
 		var p_name = "?"
+		var p_device_id = ""
 		for p in players:
 			if p.id == id:
 				p_name = p.name
+				p_device_id = p.get("device_id", "")
 				break
 		
 		# 服务器：从 players 列表中移除离开的玩家
@@ -204,7 +215,8 @@ func _on_peer_disconnected(id: int):
 		emit_signal("players_updated")
 		var reason = _pending_disconnect_reasons.get(id, "意外断开连接")
 		_pending_disconnect_reasons.erase(id)
-		push_warning("[%s] 玩家 %s — %s" % [Time.get_time_string_from_system(), format_player(p_name, id), reason])
+		var tag = _get_tag(p_device_id)
+		push_warning("[%s] 玩家 [%s] %s (%s) — %s" % [Time.get_time_string_from_system(), tag, p_name, id, reason])
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
 			sync_players_list.rpc(players)
@@ -450,15 +462,26 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			ani.set_meta("player_id", player_id)
 			break
 
+func _get_tag(device_id: String) -> String:
+	if device_id.is_empty():
+		return "?????"
+	return device_id.substr(0, 5)
+
 func get_device_tag() -> String:
 	var unique_id = OS.get_unique_id()
-	if unique_id.is_empty():
+	if unique_id == "":
 		return "?????"
 	unique_id = unique_id.replace("{", "").replace("}", "").replace("-", "")
 	return unique_id.substr(0, 5)
 
 func format_player(p_name, p_id) -> String:
-	return "[%s] %s (%s)" % [get_device_tag(), p_name, p_id]
+	return "[%s] %s (%s)" % [get_player_device_tag(p_id), p_name, p_id]
+
+func get_player_device_tag(player_id: int) -> String:
+	for p in players:
+		if p.id == player_id:
+			return p.device_id
+	return "?????"
 
 func print_players() -> void:
 	for p in players:

@@ -34,7 +34,7 @@ func _on_players_changed() -> void:
 				var player_left_label = player_left_label_scene.instantiate() as Label
 				player_left_label.text = tr(player_left_label.text).format({"player_name": prev_player.name})
 				list_control_node.add_child(player_left_label)
-				print("[%s] [玩家离开通知器] 玩家 %s 离开了游戏" % [Time.get_time_string_from_system(), MPManager.format_player(prev_player.name, prev_player.id)])
+				#print("[%s] [玩家离开通知器] 玩家 %s 离开了游戏" % [Time.get_time_string_from_system(), MPManager.format_player(prev_player.name, prev_player.id)])
 
 func _on_server_disconnected() -> void:
 	var player_left_label = player_left_label_scene.instantiate() as Label
