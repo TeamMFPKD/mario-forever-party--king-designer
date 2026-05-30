@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c7w2hw0evmdv3" path="res://script/multiplayer/multiplayer_player_left_manager.gd" id="1_n6826"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_8xi1m"]
-[ext_resource type="PackedScene" uid="uid://c7s16dwadwtav" path="res://object/multiplayer_player_left_label.tscn" id="2_pgybu"]
+[ext_resource type="PackedScene" uid="uid://c7s16dwadwtav" path="res://object/multiplayer/multiplayer_player_left_label.tscn" id="2_pgybu"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_pgybu"]
 
 [node name="MultiplayerPlayerLeft" type="CanvasLayer" unique_id=1642091842]
