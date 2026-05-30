@@ -13,7 +13,7 @@ func _process(_delta: float) -> void:
 		push_error("hint_label is not set")
 		return
 	hint_label.visible = false
-	if ceil(timer.wait_time) > 10:
+	if ceil(timer.time_left) > 10:
 		return
 	var goals = get_tree().get_nodes_in_group("spawner_goal_gate")
 	if goals.size() == 0:
