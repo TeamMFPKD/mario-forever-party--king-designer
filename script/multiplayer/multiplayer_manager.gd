@@ -520,6 +520,7 @@ func send_message(p_id: int, unique_id: String, msg: String) -> void:
 		if p.id == p_id:
 			p_name = p.name
 			break
+	var time_str = Time.get_time_string_from_system(false)
 	messages.append(
 		{
 			"cnt": msg_cnt,
@@ -527,6 +528,7 @@ func send_message(p_id: int, unique_id: String, msg: String) -> void:
 			"unique_id": unique_id,
 			"player_name": p_name,
 			"msg": msg,
+			"time": time_str,
 		}
 	)
 	msg_cnt += 1

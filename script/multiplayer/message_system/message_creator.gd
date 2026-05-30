@@ -25,7 +25,7 @@ func _on_messages_updated() -> void:
 	for m in multiplayer_manager.messages:
 		var msg_instance = message_scene.instantiate()
 		var label = msg_instance.get_node("UiLabel") as Label
-		label.text = m["player_name"] + ": " + m["msg"]
+		label.text = m["player_name"] + " (" + m.get("time", "") + "): " + m["msg"]
 		var fc = func():
 			target_container.add_child(msg_instance)
 		fc.call_deferred()

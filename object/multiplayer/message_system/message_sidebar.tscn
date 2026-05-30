@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_e54xg"]
 [ext_resource type="Script" uid="uid://h1kqnmx4icg8" path="res://script/multiplayer/message_system/message_siderbar_status.gd" id="6_ahly0"]
 [ext_resource type="Script" uid="uid://m2188uiv8pn8" path="res://script/multiplayer/message_system/message_sender.gd" id="7_cmo4g"]
+[ext_resource type="Script" uid="uid://c2kchpvblbw3n" path="res://script/multiplayer/message_system/message_cache.gd" id="8_x2bgn"]
 
 [node name="MessageSidebar" type="CanvasLayer" unique_id=865887864]
 
@@ -129,5 +130,8 @@ control = NodePath("../Control")
 script = ExtResource("7_cmo4g")
 line_edit = NodePath("../Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/UiLineEdit")
 send_button = NodePath("../Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/HBoxContainer/UiButton")
+
+[node name="MessageCache" type="Node" parent="." unique_id=2014508234]
+script = ExtResource("8_x2bgn")
 
 [editable path="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/TestMessageLabel"]
