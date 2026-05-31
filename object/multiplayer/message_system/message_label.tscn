@@ -2,20 +2,16 @@
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nosnk"]
 
-[node name="MessageLabel" type="Control" unique_id=1934307386]
+[node name="MessageLabel" type="HBoxContainer" unique_id=733303033]
 custom_minimum_size = Vector2(420, 36)
-layout_mode = 3
-anchors_preset = 0
 offset_right = 420.0
-offset_bottom = 36.0
+offset_bottom = 75.0
 size_flags_horizontal = 3
 
 [node name="UiLabel" parent="." unique_id=1008498644 instance=ExtResource("1_nosnk")]
 auto_translate_mode = 2
 custom_minimum_size = Vector2(420, 36)
-layout_mode = 1
-offset_right = 420.0
-offset_bottom = 75.0
+layout_mode = 2
 theme_override_font_sizes/font_size = 25
 text = "[系统] 文明交流，请不要发送敏感信息"
-autowrap_mode = 2
+autowrap_mode = 1
