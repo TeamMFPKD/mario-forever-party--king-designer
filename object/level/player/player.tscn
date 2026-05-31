@@ -33,8 +33,8 @@
 [ext_resource type="AudioStream" uid="uid://bfqjgj3r5qoiq" path="res://sound/level/clear_pipe_in.wav" id="28_4thfq"]
 [ext_resource type="AudioStream" uid="uid://6tgb6rw0wpm7" path="res://sound/level/clear_pipe_out.wav" id="29_oqm3a"]
 [ext_resource type="PackedScene" uid="uid://bkp0cxcybg7s2" path="res://object/level/projectile/explode.tscn" id="29_yslke"]
-[ext_resource type="AudioStream" uid="uid://jyh7p7upppu2" path="res://sound/level/SE_DoorOpenFC.wav" id="30_vh3yy"]
-[ext_resource type="AudioStream" uid="uid://bxa3jh2vdnit2" path="res://sound/level/SE_DoorCloseFC.wav" id="31_j733o"]
+[ext_resource type="AudioStream" uid="uid://jyh7p7upppu2" path="res://sound/level/door_and_key/SE_DoorOpenFC.wav" id="30_vh3yy"]
+[ext_resource type="AudioStream" uid="uid://bxa3jh2vdnit2" path="res://sound/level/door_and_key/SE_DoorCloseFC.wav" id="31_j733o"]
 [ext_resource type="PackedScene" uid="uid://bpywk88hnp1yw" path="res://object/level/dust_effect_creator.tscn" id="32_4thfq"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
