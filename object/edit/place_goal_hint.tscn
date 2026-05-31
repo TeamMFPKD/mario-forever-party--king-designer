@@ -50,7 +50,8 @@ grow_vertical = 2
 [node name="Node2D" type="Node2D" parent="." unique_id=1465148614]
 
 [node name="UiLabel" parent="Node2D" unique_id=1008498644 instance=ExtResource("1_ttdes")]
-anchors_preset = -1
+visible = false
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -269.5

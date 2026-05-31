@@ -220,6 +220,13 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 			print("[%s] ObjectMapLayer: 已达到最大门数量限制 (%d个)" % [Time.get_time_string_from_system(), MAX_DOOR_GROUPS * DOORS_PER_GROUP])
 			return
 	
+	# 粉币数量限制（最多10个）
+	if current_object_name == "pink_coin":
+		var pink_coin_count = _get_pink_coin_count()
+		if pink_coin_count >= 10:
+			print("粉币数量已达上限")
+			return
+	
 	var scene_instance = entry.object_scene.instantiate()
 	if scene_instance is Node2D:
 		scene_instance.global_position = grid_position
@@ -325,6 +332,14 @@ func _set_door_id(door_node: Node2D, door_id: int):
 	var door_component = door_node.get_node_or_null("Area2D/DoorComponent")
 	if door_component and door_component.has_method("set_door_id"):
 		door_component.set_door_id(door_id)
+
+# 获取当前已放置的粉币数量
+func _get_pink_coin_count() -> int:
+	var count = 0
+	for object_data in objects:
+		if object_data.get("object_name", "") == "pink_coin":
+			count += 1
+	return count
 
 # 获取当前已放置的门数量（包括door和door_locked）
 func _get_door_count() -> int:

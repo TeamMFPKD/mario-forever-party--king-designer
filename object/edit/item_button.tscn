@@ -4,7 +4,7 @@
 [ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_tw4dc"]
 [ext_resource type="Script" uid="uid://br4dgypxyxj4l" path="res://script/edit/item_button.gd" id="2_43re8"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="3_qh42o"]
-[ext_resource type="AudioStream" uid="uid://dcglprempjllp" path="res://sound/edit/item_select.ogg" id="3_vvhug"]
+[ext_resource type="AudioStream" uid="uid://dhgmhs28bmru8" path="res://sound/edit/item_select.wav" id="5_754x0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k5hgj"]
 atlas = ExtResource("3_qh42o")
@@ -72,7 +72,7 @@ texture = SubResource("AtlasTexture_k5hgj")
 metadata/_edit_lock_ = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=652359851]
-stream = ExtResource("3_vvhug")
+stream = ExtResource("5_754x0")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2121228712]
 libraries/ = SubResource("AnimationLibrary_k5hgj")

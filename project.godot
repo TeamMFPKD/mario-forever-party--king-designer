@@ -101,6 +101,7 @@ spawner_goal_gate=""
 clear_pipe_turning_area=""
 clear_pipe_entrance=""
 door_locked=""
+pink_coin=""
 
 [input]
 
