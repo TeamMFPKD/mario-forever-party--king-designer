@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_e54xg"]
 [ext_resource type="Script" uid="uid://h1kqnmx4icg8" path="res://script/multiplayer/message_system/message_siderbar_status.gd" id="6_ahly0"]
 [ext_resource type="Script" uid="uid://m2188uiv8pn8" path="res://script/multiplayer/message_system/message_sender.gd" id="7_cmo4g"]
+[ext_resource type="Texture2D" uid="uid://bqpkb13ttaame" path="res://sprite/message.svg" id="8_ahly0"]
 [ext_resource type="Script" uid="uid://c2kchpvblbw3n" path="res://script/multiplayer/message_system/message_cache.gd" id="8_x2bgn"]
 
 [node name="MessageSidebar" type="CanvasLayer" unique_id=865887864]
@@ -119,7 +120,11 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 30
-text = "💬"
+
+[node name="Sprite2D" type="Sprite2D" parent="Control/HBoxContainer/Button" unique_id=212858635]
+position = Vector2(32, 36)
+scale = Vector2(2, 2)
+texture = ExtResource("8_ahly0")
 
 [node name="MessageSiderbarStatus" type="Node" parent="." unique_id=98910284 node_paths=PackedStringArray("sidebar_show_button", "control")]
 script = ExtResource("6_ahly0")
