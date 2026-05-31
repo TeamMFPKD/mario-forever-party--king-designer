@@ -12,6 +12,8 @@ func _ready():
 func _players_updated():
 	if not multiplayer_manager:
 		return
+	if not multiplayer_manager.is_in_game:
+		return
 	for player in multiplayer_manager.players:
 		if saved_player_id.has(player.id) or player.level_data == "invalid" or player.level_data.is_empty() or player.level_file_name == "invalid":
 			continue
