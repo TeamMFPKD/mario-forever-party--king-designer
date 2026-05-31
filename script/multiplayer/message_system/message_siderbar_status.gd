@@ -1,5 +1,10 @@
 extends Node
 
+signal new_message_hint
+
+signal play_sound_msg_open
+signal play_sound_msg_close
+
 @export var sidebar_show_button: Button
 @export var control: Control
 
@@ -26,6 +31,7 @@ var _tween: Tween
 func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	multiplayer_manager.players_updated.connect(_on_players_updated)
+	multiplayer_manager.messages_updated.connect(_on_messages_updated)
 	sidebar_show_button.pressed.connect(_on_sidebar_show_button_pressed)
 	_status_changed()
 
@@ -62,3 +68,9 @@ func _get_x_for_status(s: Status) -> float:
 
 func _on_sidebar_show_button_pressed() -> void:
 	show = not show
+	emit_signal("play_sound_msg_open" if show else "play_sound_msg_close")
+
+func _on_messages_updated() -> void:
+	if status == Status.EXPANDED:
+		return
+	emit_signal("new_message_hint")

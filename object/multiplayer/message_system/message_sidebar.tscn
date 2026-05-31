@@ -11,6 +11,11 @@
 [ext_resource type="Script" uid="uid://m2188uiv8pn8" path="res://script/multiplayer/message_system/message_sender.gd" id="7_cmo4g"]
 [ext_resource type="Texture2D" uid="uid://bqpkb13ttaame" path="res://sprite/message.svg" id="8_ahly0"]
 [ext_resource type="Script" uid="uid://c2kchpvblbw3n" path="res://script/multiplayer/message_system/message_cache.gd" id="8_x2bgn"]
+[ext_resource type="Texture2D" uid="uid://db2o8kskdpwli" path="res://sprite/new_msg_hint.svg" id="9_5me3d"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="10_x5rhx"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="14_08jfe"]
+[ext_resource type="AudioStream" uid="uid://c5jhxhhuonpvu" path="res://sound/msg_open.wav" id="15_x1bxs"]
+[ext_resource type="AudioStream" uid="uid://bl30fkasbtv7b" path="res://sound/msg_close.wav" id="16_wbiif"]
 
 [node name="MessageSidebar" type="CanvasLayer" unique_id=865887864]
 
@@ -121,10 +126,22 @@ size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 30
 
-[node name="Sprite2D" type="Sprite2D" parent="Control/HBoxContainer/Button" unique_id=212858635]
+[node name="MsgSprite2D" type="Sprite2D" parent="Control/HBoxContainer/Button" unique_id=212858635]
 position = Vector2(32, 36)
 scale = Vector2(2, 2)
 texture = ExtResource("8_ahly0")
+
+[node name="Control" type="Control" parent="Control/HBoxContainer/Button/MsgSprite2D" unique_id=272120441]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+
+[node name="NewMsgSprite2D" type="Sprite2D" parent="Control/HBoxContainer/Button/MsgSprite2D/Control" unique_id=1722835696]
+position = Vector2(4, 4)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_5me3d")
+
+[node name="ControlVisibieSet" parent="Control/HBoxContainer/Button/MsgSprite2D/Control" unique_id=416177451 instance=ExtResource("10_x5rhx")]
 
 [node name="MessageSiderbarStatus" type="Node" parent="." unique_id=98910284 node_paths=PackedStringArray("sidebar_show_button", "control")]
 script = ExtResource("6_ahly0")
@@ -138,5 +155,16 @@ send_button = NodePath("../Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxC
 
 [node name="MessageCache" type="Node" parent="." unique_id=2014508234]
 script = ExtResource("8_x2bgn")
+
+[node name="MsgOpen" parent="." unique_id=1715984441 instance=ExtResource("14_08jfe")]
+stream = ExtResource("15_x1bxs")
+
+[node name="MsgClose" parent="." unique_id=59029941 instance=ExtResource("14_08jfe")]
+stream = ExtResource("16_wbiif")
+
+[connection signal="pressed" from="Control/HBoxContainer/Button" to="Control/HBoxContainer/Button/MsgSprite2D/Control/ControlVisibieSet" method="_set_invisible"]
+[connection signal="new_message_hint" from="MessageSiderbarStatus" to="Control/HBoxContainer/Button/MsgSprite2D/Control/ControlVisibieSet" method="_set_visible"]
+[connection signal="play_sound_msg_close" from="MessageSiderbarStatus" to="MsgClose" method="play"]
+[connection signal="play_sound_msg_open" from="MessageSiderbarStatus" to="MsgOpen" method="play"]
 
 [editable path="Control/HBoxContainer/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/TestMessageLabel"]
