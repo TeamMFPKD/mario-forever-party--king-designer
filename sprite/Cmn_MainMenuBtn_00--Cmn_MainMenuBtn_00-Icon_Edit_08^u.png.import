@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://db0ip87tocnbw"
-path="res://.godot/imported/spiny_spike.png-7c76e23d9d980b0971173471da512c08.ctex"
+uid="uid://4t4j1ek037hr"
+path="res://.godot/imported/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png-a703f8b3fa96fbe9d612712f3b12a600.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/spiny_spike.png"
-dest_files=["res://.godot/imported/spiny_spike.png-7c76e23d9d980b0971173471da512c08.ctex"]
+source_file="res://sprite/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png"
+dest_files=["res://.godot/imported/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png-a703f8b3fa96fbe9d612712f3b12a600.ctex"]
 
 [params]
 

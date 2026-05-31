@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://behvhlnq6eh41"
-path="res://.godot/imported/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png-b6b5f26d014d6817e8fc357ce38a132b.ctex"
+uid="uid://db0ip87tocnbw"
+path="res://.godot/imported/spiny_spike.png-40d060a543107c7c63a15bf25a69773b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png"
-dest_files=["res://.godot/imported/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png-b6b5f26d014d6817e8fc357ce38a132b.ctex"]
+source_file="res://sprite/ui/spiny_spike.png"
+dest_files=["res://.godot/imported/spiny_spike.png-40d060a543107c7c63a15bf25a69773b.ctex"]
 
 [params]
 

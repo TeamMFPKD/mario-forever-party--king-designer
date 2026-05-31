@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bte80pp2bpn"
-path="res://.godot/imported/s_left_1.png-3761361147aaf262eb944771f4e495e2.ctex"
+uid="uid://b4wwb3afxrg0n"
+path="res://.godot/imported/pink_coin_hud_pixel.png-1b9288c4998eeae91c101cedca523f87.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/s_left_1.png"
-dest_files=["res://.godot/imported/s_left_1.png-3761361147aaf262eb944771f4e495e2.ctex"]
+source_file="res://sprite/facility/pink_coin_hud_pixel.png"
+dest_files=["res://.godot/imported/pink_coin_hud_pixel.png-1b9288c4998eeae91c101cedca523f87.ctex"]
 
 [params]
 

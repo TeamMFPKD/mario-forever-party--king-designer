@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://ch07v2yfii176"]
+
+[ext_resource type="Texture2D" uid="uid://cn7tcpj3773qo" path="res://sprite/facility/pink_coin_hud.png" id="1_wxv2u"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q47ha"]
+atlas = ExtResource("1_wxv2u")
+region = Rect2(0, 0, 15, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sqj45"]
+atlas = ExtResource("1_wxv2u")
+region = Rect2(25, 0, 15, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mgu57"]
+atlas = ExtResource("1_wxv2u")
+region = Rect2(14, 0, 12, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qyv1u"]
+atlas = ExtResource("1_wxv2u")
+region = Rect2(38, 0, 26, 32)
+
+[node name="PinkCoinCanvasLayer" type="CanvasLayer" unique_id=338551298]
+
+[node name="Node" type="Node" parent="." unique_id=627027193]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1579269278]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -72.0
+offset_bottom = 32.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1185087234]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_q47ha")
+stretch_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer" unique_id=1000028880]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer" unique_id=856535086]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_sqj45")
+stretch_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1793967233]
+position = Vector2(1765, -16)
+texture = SubResource("AtlasTexture_mgu57")
+
+[node name="Sprite2D4" type="Sprite2D" parent="." unique_id=714273754]
+position = Vector2(1765, 8)
+texture = SubResource("AtlasTexture_qyv1u")

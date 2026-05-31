@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dc0ijcgdrdf1x"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_e4k50"]
+[ext_resource type="PackedScene" uid="uid://dslqarn7f27e1" path="res://object/level/facility/key/pink_coin.tscn" id="2_e4k50"]
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="3_e4k50"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_w8qk2"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_pfdtl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3g51"]
+atlas = ExtResource("3_e4k50")
+region = Rect2(352, 0, 32, 32)
+
+[node name="SpawnerPinkCoin" type="Node2D" unique_id=1594885199]
+script = ExtResource("1_e4k50")
+spawn_object_scene = ExtResource("2_e4k50")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
+texture = SubResource("AtlasTexture_h3g51")
+
+[node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("4_w8qk2")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_pfdtl")]

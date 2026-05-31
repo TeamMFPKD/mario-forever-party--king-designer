@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyhmu8daj54iy"
-path="res://.godot/imported/mf_cn_community.png-bd2321aa90c3ab27196276c144023ad2.ctex"
+uid="uid://behvhlnq6eh41"
+path="res://.godot/imported/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png-ab8b2a927790513a8f48d7c673a9eee4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mf_cn_community.png"
-dest_files=["res://.godot/imported/mf_cn_community.png-bd2321aa90c3ab27196276c144023ad2.ctex"]
+source_file="res://sprite/ui/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png"
+dest_files=["res://.godot/imported/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png-ab8b2a927790513a8f48d7c673a9eee4.ctex"]
 
 [params]
 

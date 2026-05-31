@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dslqarn7f27e1"]
+
+[ext_resource type="Script" uid="uid://b0drcvkr0ypyg" path="res://script/level/facility/pink_coin.gd" id="1_4rsn5"]
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="1_6vrkh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rsn5"]
+atlas = ExtResource("1_6vrkh")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yw82f"]
+atlas = ExtResource("1_6vrkh")
+region = Rect2(384, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r7dy0"]
+atlas = ExtResource("1_6vrkh")
+region = Rect2(416, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3f85"]
+atlas = ExtResource("1_6vrkh")
+region = Rect2(448, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rqcem"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rsn5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yw82f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r7dy0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3f85")
+}],
+"loop": true,
+"name": &"default",
+"speed": 9.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hj51i"]
+radius = 15.0
+
+[node name="PinkCoin" type="Area2D" unique_id=873626146]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_4rsn5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=692630976]
+sprite_frames = SubResource("SpriteFrames_rqcem")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1687236299]
+shape = SubResource("CircleShape2D_hj51i")
+debug_color = Color(0.961024, 2.5027991e-06, 0.5154511, 0.41960785)
+
+[connection signal="body_entered" from="." to="." method="queue_free" flags=3]

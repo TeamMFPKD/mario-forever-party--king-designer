@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dljhnfo0n1vo4"]
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
-[ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/new_bottom.png" id="2_xwl44"]
+[ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/ui/new_bottom.png" id="2_xwl44"]
 
 [node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
 custom_minimum_size = Vector2(550, 0)

@@ -49,6 +49,7 @@
 [ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/clear_pipe/spawner_pipe_left_up.tscn" id="36_ygfio"]
 [ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/clear_pipe/spawner_pipe_right_down.tscn" id="37_hbmxt"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="38_vtonu"]
+[ext_resource type="PackedScene" uid="uid://ch07v2yfii176" path="res://object/level/facility/key/pink_coin_canvas_layer.tscn" id="39_3ysqt"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
 
@@ -209,6 +210,8 @@ corner_ur_scene = ExtResource("35_yks77")
 corner_ul_scene = ExtResource("36_ygfio")
 corner_dr_scene = ExtResource("37_hbmxt")
 corner_dl_scene = ExtResource("38_vtonu")
+
+[node name="PinkCoinCanvasLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=338551298 instance=ExtResource("39_3ysqt")]
 
 [node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=1870457232]
 process_mode = 3

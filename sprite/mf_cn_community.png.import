@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fx213utsoaw5"
-path="res://.godot/imported/Cmn_DragCursor_00--Cmn_DragCursor_00-Icon_Drag_00^t.png-1229a3f647aa34135dbaa15ba6c6b852.ctex"
+uid="uid://dyhmu8daj54iy"
+path="res://.godot/imported/mf_cn_community.png-84399debcc32dde0fe711c10d96fb89a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Cmn_DragCursor_00--Cmn_DragCursor_00-Icon_Drag_00^t.png"
-dest_files=["res://.godot/imported/Cmn_DragCursor_00--Cmn_DragCursor_00-Icon_Drag_00^t.png-1229a3f647aa34135dbaa15ba6c6b852.ctex"]
+source_file="res://sprite/mf_cn_community.png"
+dest_files=["res://.godot/imported/mf_cn_community.png-84399debcc32dde0fe711c10d96fb89a.ctex"]
 
 [params]
 

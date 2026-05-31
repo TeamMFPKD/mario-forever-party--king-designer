@@ -34,7 +34,7 @@
 [ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/edit/camera_edge.gd" id="24_x0edr"]
 [ext_resource type="PackedScene" uid="uid://ch2w5yfycdtlk" path="res://object/edit/level_size_button.tscn" id="25_2yom2"]
 [ext_resource type="PackedScene" uid="uid://0xmx7bfg3xwu" path="res://object/edit/group_button.tscn" id="26_ve5w1"]
-[ext_resource type="Texture2D" uid="uid://behvhlnq6eh41" path="res://sprite/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png" id="27_l5ep8"]
+[ext_resource type="Texture2D" uid="uid://behvhlnq6eh41" path="res://sprite/ui/Nwk_WorldMapInfo_00--Nwk_WorldMapInfo_00-WM_GameSkin_woods_00^l.png" id="27_l5ep8"]
 [ext_resource type="AudioStream" uid="uid://12eiiaxfi3yr" path="res://sound/edit/Opening Theme Menu.wav" id="28_rrlga"]
 [ext_resource type="PackedScene" uid="uid://ccdwe4aun6qhw" path="res://object/edit/theme_button.tscn" id="29_7jwj4"]
 [ext_resource type="Texture2D" uid="uid://det68trrrwcck" path="res://sprite/theme_preview/bg_preview_castle.png" id="30_nfwtu"]
@@ -91,14 +91,14 @@
 [ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="73_6jw8q"]
 [ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="73_rnw8m"]
 [ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_stone.png" id="74_sf1wo"]
-[ext_resource type="Texture2D" uid="uid://batjbminyc3b7" path="res://sprite/camare_edge_move.png" id="75_jm62f"]
+[ext_resource type="Texture2D" uid="uid://batjbminyc3b7" path="res://sprite/ui/camare_edge_move.png" id="75_jm62f"]
 [ext_resource type="Texture2D" uid="uid://5dcx7bwtt" path="res://sprite/enemy/thwomp.png" id="76_3l15o"]
 [ext_resource type="Texture2D" uid="uid://b7x6hjrevd6jc" path="res://sprite/facility/giant_gate.png" id="76_6crsa"]
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="77_pqowm"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="78_y05j1"]
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="79_7it4e"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="80_h441a"]
-[ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="81_cfmm2"]
+[ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/ui/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="81_cfmm2"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="85_g7up7"]
 [ext_resource type="Script" uid="uid://nrshekgp00wk" path="res://script/edit/mouse_pop.gd" id="85_ifctp"]
 [ext_resource type="Script" uid="uid://0c86f8ap20h5" path="res://script/edit/debug_load.gd" id="88_amsrr"]
@@ -290,6 +290,10 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_w23hq"]
 atlas = ExtResource("90_kt6na")
 region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3g51"]
+atlas = ExtResource("111_yebna")
+region = Rect2(352, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hfb1t"]
 atlas = ExtResource("111_yebna")
@@ -1703,6 +1707,15 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2/ButtonTexture" parent_id_path=PackedInt32Array(991596989, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_w23hq")
 
+[node name="ItemButtonPinkCoin" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=1381185012 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "pink_coin"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonPinkCoin/ButtonTexture" parent_id_path=PackedInt32Array(1381185012, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_h3g51")
+
 [node name="HBoxContainer5" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=656989267]
 layout_mode = 2
 
@@ -2023,6 +2036,7 @@ show_mode = 2
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonPinkCoin"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoor"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoorLocked"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonKey"]

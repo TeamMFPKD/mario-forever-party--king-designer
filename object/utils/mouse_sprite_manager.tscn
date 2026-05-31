@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bn1io84ug6xwb"]
 
 [ext_resource type="Script" uid="uid://bg3qa4dgl4ftb" path="res://script/utils/mouse_sprite_manager.gd" id="1_o2r0s"]
-[ext_resource type="Texture2D" uid="uid://4t4j1ek037hr" path="res://Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png" id="2_35xqd"]
-[ext_resource type="Texture2D" uid="uid://fx213utsoaw5" path="res://Cmn_DragCursor_00--Cmn_DragCursor_00-Icon_Drag_00^t.png" id="3_ygi7c"]
+[ext_resource type="Texture2D" uid="uid://4t4j1ek037hr" path="res://sprite/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png" id="2_35xqd"]
+[ext_resource type="Texture2D" uid="uid://fx213utsoaw5" path="res://sprite/Cmn_DragCursor_00--Cmn_DragCursor_00-Icon_Drag_00^t.png" id="3_ygi7c"]
 
 [node name="MouseSpriteManager" type="Node" unique_id=2102689339]
 script = ExtResource("1_o2r0s")
