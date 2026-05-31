@@ -8,6 +8,7 @@ class_name PinkCoinManager
 @export var obtained_texture: Texture2D
 
 @export var key_scene: PackedScene
+@export var pink_coin_get_sound: PinkCoinGetSound
 
 var pink_coins_cnt: int = 0
 var obtained_cnt: int = 0
@@ -40,9 +41,10 @@ func _setup_coin_display():
 
 func pink_coin_obtained() -> void:
 	obtained_cnt += 1
+	if pink_coin_get_sound:
+		pink_coin_get_sound.play_get(obtained_cnt - 1, pink_coins_cnt)
 	_setup_coin_display()
 	if obtained_cnt == pink_coins_cnt:
-		#print("PinkCoinManager: 所有粉币都已获得!")
 		_create_key()
 
 func _create_key() -> void:
