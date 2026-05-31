@@ -36,13 +36,13 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 9.0
+"speed": 6.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hj51i"]
 radius = 15.0
 
-[node name="PinkCoin" type="Area2D" unique_id=873626146]
+[node name="PinkCoin" type="Area2D" unique_id=873626146 groups=["pink_coin"]]
 collision_layer = 0
 collision_mask = 8
 script = ExtResource("1_4rsn5")
@@ -54,5 +54,3 @@ autoplay = "default"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1687236299]
 shape = SubResource("CircleShape2D_hj51i")
 debug_color = Color(0.961024, 2.5027991e-06, 0.5154511, 0.41960785)
-
-[connection signal="body_entered" from="." to="." method="queue_free" flags=3]
