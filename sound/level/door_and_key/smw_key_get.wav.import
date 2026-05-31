@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://cjgdx78gewkb1"
-path="res://.godot/imported/smw_key_get.wav-b2a1abc0e158dfb8b21a0c4b67350fe6.sample"
+path="res://.godot/imported/smw_key_get.wav-5b438e67d9f0522ba80725524a594f48.sample"
 
 [deps]
 
-source_file="res://sound/level/smw_key_get.wav"
-dest_files=["res://.godot/imported/smw_key_get.wav-b2a1abc0e158dfb8b21a0c4b67350fe6.sample"]
+source_file="res://sound/level/door_and_key/smw_key_get.wav"
+dest_files=["res://.godot/imported/smw_key_get.wav-5b438e67d9f0522ba80725524a594f48.sample"]
 
 [params]
 

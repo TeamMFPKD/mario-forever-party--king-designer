@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://g57deo7yorb3" path="res://object/level/facility/door/door.tscn" id="1_p02jc"]
 [ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="2_vkv6h"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="2_ypuuq"]
-[ext_resource type="AudioStream" uid="uid://ckq58fj1ucnj8" path="res://sound/level/smw_chain.ogg" id="3_vkv6h"]
-[ext_resource type="AudioStream" uid="uid://odaieysg1yu7" path="res://sound/level/MW_KeyOpen.wav" id="5_5h1rm"]
+[ext_resource type="AudioStream" uid="uid://ckq58fj1ucnj8" path="res://sound/level/door_and_key/smw_chain.ogg" id="3_vkv6h"]
+[ext_resource type="AudioStream" uid="uid://odaieysg1yu7" path="res://sound/level/door_and_key/MW_KeyOpen.wav" id="5_5h1rm"]
 [ext_resource type="Script" uid="uid://dr7gaaht3lsw3" path="res://script/level/sound/play_sound_when_not_playing.gd" id="5_8fsub"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5h1rm"]

@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://odaieysg1yu7"
-path="res://.godot/imported/MW_KeyOpen.wav-b6384d25aa8c75565209ecf3ab716fa4.sample"
+path="res://.godot/imported/MW_KeyOpen.wav-6c2d27d3e8c30e29f25c07bddf55ea87.sample"
 
 [deps]
 
-source_file="res://sound/level/MW_KeyOpen.wav"
-dest_files=["res://.godot/imported/MW_KeyOpen.wav-b6384d25aa8c75565209ecf3ab716fa4.sample"]
+source_file="res://sound/level/door_and_key/MW_KeyOpen.wav"
+dest_files=["res://.godot/imported/MW_KeyOpen.wav-6c2d27d3e8c30e29f25c07bddf55ea87.sample"]
 
 [params]
 
