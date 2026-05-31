@@ -1,5 +1,7 @@
 extends Node
 
+class_name KeyMovement
+
 signal play_sound_get
 signal overflow
 
@@ -30,6 +32,14 @@ var state: KeyState = KeyState.IDLE:
 			var player = get_tree().get_first_node_in_group("player") as Node2D
 			if player:
 				last_player_position = player.position
+			if cursed:
+				add_to_group("key_following_cursed")
+				var got_cursed_keys = get_tree().get_nodes_in_group("key_following_cursed")
+				var phantos = get_tree().get_nodes_in_group("phanto")
+				if phantos.size() < got_cursed_keys.size():
+					_create_phanto(player)
+		if value == KeyState.GOT:
+			add_to_group("key_following")
 var time: float = 0.0
 
 var track_frame: int = 0
@@ -38,6 +48,8 @@ var start_track: bool = false
 
 var dir: float = 1.0
 var offset_x: float = 0.0
+
+var _got_tween: Tween
 
 const MAX_PAST_STATUS = 200
 const TELEPORT_THRESHOLD = 64.0
@@ -61,18 +73,25 @@ func _on_body_entered(body: Node) -> void:
 	if state != KeyState.IDLE:
 		return
 	if body.is_in_group("player"):
-		var locked_doors = round(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
-		var got_keys = get_tree().get_nodes_in_group("key_following").size()
-		if got_keys >= locked_doors:
-			emit_signal("overflow")
+		if not try_follow():
 			return
-		state = KeyState.FOLLOWING
-		if cursed:
-			add_to_group("key_following_cursed")
-			var got_cursed_keys = get_tree().get_nodes_in_group("key_following_cursed")
-			var phantos = get_tree().get_nodes_in_group("phanto")
-			if phantos.size() < got_cursed_keys.size():
-				_create_phanto(body)
+		state = KeyState.GOT
+	
+
+func try_to_get_key(body: Node2D = null) -> void:
+	if not body:
+		body = get_tree().get_first_node_in_group("player") as Node2D
+	if not body:
+		push_error("KeyMovement: No player found to get the key!")
+		return
+
+func try_follow() -> bool:
+	var locked_doors = round(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
+	var got_keys = get_tree().get_nodes_in_group("key_following").size()
+	if got_keys > locked_doors:
+		emit_signal("overflow")
+		return false
+	return true
 
 func _physics_process(delta: float) -> void:
 	if not key or not ani:
@@ -85,7 +104,16 @@ func _physics_process(delta: float) -> void:
 			ani.position.y = sin(time) * 4.0
 
 		KeyState.GOT:
-			pass
+			if not try_follow():
+				return
+			if not _got_tween:
+				_got_tween = create_tween()
+				_got_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+				_got_tween.tween_property(key, "position:y", key.position.y - 80.0, 0.4)
+				_got_tween.finished.connect(func():
+					state = KeyState.FOLLOWING
+					_got_tween = null
+				)
 
 		KeyState.FOLLOWING:
 			_follow_player()

@@ -102,6 +102,7 @@ clear_pipe_turning_area=""
 clear_pipe_entrance=""
 door_locked=""
 pink_coin=""
+pink_coin_manager=""
 
 [input]
 

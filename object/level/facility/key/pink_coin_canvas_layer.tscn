@@ -3,39 +3,41 @@
 [ext_resource type="Script" uid="uid://gbnonfrwc5va" path="res://script/level/facility/pink_coin_manager.gd" id="1_mgu57"]
 [ext_resource type="Texture2D" uid="uid://cn7tcpj3773qo" path="res://sprite/facility/pink_coin_hud.png" id="1_wxv2u"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_q47ha"]
+[ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key/key.tscn" id="3_qyv1u"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_sqj45"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mgu57"]
 atlas = ExtResource("1_wxv2u")
-region = Rect2(14, 0, 12, 32)
+region = Rect2(14, 0, 18, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qyv1u"]
 atlas = ExtResource("1_wxv2u")
-region = Rect2(38, 0, 26, 32)
+region = Rect2(46, 0, 18, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q47ha"]
 atlas = ExtResource("1_wxv2u")
-region = Rect2(0, 0, 15, 32)
+region = Rect2(0, 0, 14, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sqj45"]
 atlas = ExtResource("1_wxv2u")
-region = Rect2(25, 0, 15, 32)
+region = Rect2(31, 0, 15, 32)
 
 [node name="PinkCoinCanvasLayer" type="CanvasLayer" unique_id=338551298]
 visible = false
 
-[node name="PinkCoinManager" type="Node" parent="." unique_id=627027193 node_paths=PackedStringArray("inner_hbox")]
+[node name="PinkCoinManager" type="Node" parent="." unique_id=627027193 node_paths=PackedStringArray("inner_hbox") groups=["pink_coin_manager"]]
 script = ExtResource("1_mgu57")
 inner_hbox = NodePath("../UiMarginContainer/HBoxContainer/HBoxContainer")
 not_obtained_texture = SubResource("AtlasTexture_mgu57")
 obtained_texture = SubResource("AtlasTexture_qyv1u")
+key_scene = ExtResource("3_qyv1u")
 
 [node name="UiMarginContainer" parent="." unique_id=1510288836 instance=ExtResource("3_sqj45")]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -38.0
-offset_bottom = 32.0
+offset_left = -93.0
+offset_bottom = 48.0
 grow_horizontal = 0
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
@@ -49,14 +51,15 @@ size_flags_vertical = 0
 
 [node name="TextureRect" type="TextureRect" parent="UiMarginContainer/HBoxContainer" unique_id=1185087234]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 size_flags_vertical = 4
 texture = SubResource("AtlasTexture_q47ha")
 stretch_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UiMarginContainer/HBoxContainer" unique_id=1000028880]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
+size_flags_vertical = 4
 
 [node name="TextureRect2" type="TextureRect" parent="UiMarginContainer/HBoxContainer" unique_id=856535086]
 layout_mode = 2

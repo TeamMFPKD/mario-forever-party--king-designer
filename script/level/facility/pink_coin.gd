@@ -6,16 +6,21 @@ var obtained: bool = false:
 		obtained = value
 		if obtained:
 			remove_from_group("pink_coin")
-			$CollisionShape2D.disabled = true
+			collision_mask =0
 			$AnimatedSprite2D.speed_scale = 8.0
 var origin_pos_y: float
+
+var pink_coin_manager: PinkCoinManager
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	origin_pos_y = global_position.y
+	pink_coin_manager = get_tree().get_first_node_in_group("pink_coin_manager") as PinkCoinManager
 
 func _on_body_entered(_body: Node) -> void:
 	obtained = true
+	if pink_coin_manager:
+		pink_coin_manager.pink_coin_obtained()
 
 func _physics_process(_delta):
 	if not obtained:
