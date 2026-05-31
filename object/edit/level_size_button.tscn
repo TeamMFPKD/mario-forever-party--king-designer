@@ -2,8 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_p7by8"]
 [ext_resource type="Script" uid="uid://c0d3raw2hl0jl" path="res://script/edit/level_size_button.gd" id="2_t0oly"]
-[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/item_box.png" id="3_wlm1x"]
-[ext_resource type="Texture2D" uid="uid://bte80pp2bpn" path="res://sprite/s_left_1.png" id="4_t0oly"]
+[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/ui/item_box.png" id="3_wlm1x"]
+[ext_resource type="Texture2D" uid="uid://bte80pp2bpn" path="res://sprite/ui/s_left_1.png" id="4_t0oly"]
 [ext_resource type="AudioStream" uid="uid://c1jkrsxequ3hf" path="res://sound/edit/SE_commentVisible.wav" id="6_lff6i"]
 
 [sub_resource type="Animation" id="Animation_qh42o"]

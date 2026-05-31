@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b41scgyg4lqe8"]
 
-[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/item_box.png" id="1_072lp"]
+[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/ui/item_box.png" id="1_072lp"]
 [ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_tw4dc"]
 [ext_resource type="Script" uid="uid://br4dgypxyxj4l" path="res://script/edit/item_button.gd" id="2_43re8"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="3_qh42o"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://0xmx7bfg3xwu"]
 
 [ext_resource type="Theme" uid="uid://c5d7guvf4g74w" path="res://item_button.tres" id="1_maxtu"]
-[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/item_box.png" id="1_src82"]
+[ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/ui/item_box.png" id="1_src82"]
 [ext_resource type="Script" uid="uid://dh5jyddyk7vbq" path="res://script/edit/group_button.gd" id="2_0vreg"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="2_maxtu"]
 [ext_resource type="AudioStream" uid="uid://d4chqh4mvx661" path="res://sound/edit/item_group_select.ogg" id="5_0vreg"]

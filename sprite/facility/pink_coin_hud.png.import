@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://batjbminyc3b7"
-path="res://.godot/imported/camare_edge_move.png-082c67dfc7fd0971c421ffb8a1cb6ff5.ctex"
+uid="uid://cn7tcpj3773qo"
+path="res://.godot/imported/pink_coin_hud.png-c8b027170971da981f326d70f77f9ca6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/camare_edge_move.png"
-dest_files=["res://.godot/imported/camare_edge_move.png-082c67dfc7fd0971c421ffb8a1cb6ff5.ctex"]
+source_file="res://sprite/facility/pink_coin_hud.png"
+dest_files=["res://.godot/imported/pink_coin_hud.png-c8b027170971da981f326d70f77f9ca6.ctex"]
 
 [params]
 

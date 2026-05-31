@@ -42,6 +42,7 @@
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="38_yf3j4"]
 [ext_resource type="AudioStream" uid="uid://c213arfckrjmd" path="res://sound/ready.wav" id="39_k06ju"]
 [ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="40_k06ju"]
+[ext_resource type="PackedScene" uid="uid://ch07v2yfii176" path="res://object/level/facility/key/pink_coin_canvas_layer.tscn" id="41_b1rav"]
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/clear_pipe/spawner_pipe_vertical_up.tscn" id="41_k06ju"]
 [ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/clear_pipe/spawner_pipe_vertical_down.tscn" id="42_k06ju"]
 [ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_left.tscn" id="43_k06ju"]
@@ -276,6 +277,8 @@ corner_ur_scene = ExtResource("47_k06ju")
 corner_ul_scene = ExtResource("48_k06ju")
 corner_dr_scene = ExtResource("49_k06ju")
 corner_dl_scene = ExtResource("50_k06ju")
+
+[node name="PinkCoinCanvasLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=338551298 instance=ExtResource("41_b1rav")]
 
 [node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=1870457232]
 process_mode = 3

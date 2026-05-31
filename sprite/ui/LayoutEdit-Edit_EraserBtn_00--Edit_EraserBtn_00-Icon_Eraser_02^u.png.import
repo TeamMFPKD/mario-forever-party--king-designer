@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4t4j1ek037hr"
-path="res://.godot/imported/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png-4af308dff92f2f48d752ce2e142890fa.ctex"
+uid="uid://cq3m7ws38j4yg"
+path="res://.godot/imported/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png-49cf3466a12afc5f177a8501cce85538.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png"
-dest_files=["res://.godot/imported/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png-4af308dff92f2f48d752ce2e142890fa.ctex"]
+source_file="res://sprite/ui/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png"
+dest_files=["res://.godot/imported/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png-49cf3466a12afc5f177a8501cce85538.ctex"]
 
 [params]
 
