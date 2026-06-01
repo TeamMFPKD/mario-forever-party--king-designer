@@ -2,6 +2,8 @@ extends Node
 
 class_name PinkCoinManager
 
+signal play_paper_fold_ani
+
 @export var inner_hbox: HBoxContainer
 
 @export var not_obtained_texture: Texture2D
@@ -46,6 +48,8 @@ func pink_coin_obtained() -> void:
 	_setup_coin_display()
 	if obtained_cnt == pink_coins_cnt:
 		_create_key()
+		await get_tree().create_timer(0.5, false, true).timeout
+		play_paper_fold_ani.emit()
 
 func _create_key() -> void:
 	var key_instance = key_scene.instantiate() as Node2D

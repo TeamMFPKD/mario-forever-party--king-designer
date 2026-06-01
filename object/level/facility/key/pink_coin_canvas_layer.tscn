@@ -26,6 +26,7 @@
 [ext_resource type="AudioStream" uid="uid://c2obkvrhlg0fy" path="res://sound/level/door_and_key/pink_coin/SE_MW_pinkcoin_00017.wav" id="24_3woxb"]
 [ext_resource type="AudioStream" uid="uid://bmrmj5omeed06" path="res://sound/level/door_and_key/pink_coin/SE_MW_pinkcoin_00018.wav" id="25_obpqg"]
 [ext_resource type="AudioStream" uid="uid://cm152qb3la6hc" path="res://sound/level/door_and_key/pink_coin/SE_MW_pinkcoin_00019.wav" id="26_y2b3s"]
+[ext_resource type="Script" uid="uid://cfjcpdjqiuldq" path="res://script/level/facility/ui_page_turn_effect.gd" id="27_5p3dm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mgu57"]
 atlas = ExtResource("1_wxv2u")
@@ -94,3 +95,9 @@ stretch_mode = 2
 script = ExtResource("6_oh4gc")
 get_sounds = Array[AudioStream]([ExtResource("7_5p3dm"), ExtResource("8_l5rvb"), ExtResource("9_3cc8i"), ExtResource("10_nfih6"), ExtResource("11_2nc0o"), ExtResource("12_rek3u"), ExtResource("13_pur4g"), ExtResource("14_uyb0m"), ExtResource("15_4yu2t"), ExtResource("16_tetnm")])
 all_get_sounds = Array[AudioStream]([ExtResource("17_sdf8y"), ExtResource("18_ouh0v"), ExtResource("19_vtmdc"), ExtResource("20_iny5l"), ExtResource("21_c6chx"), ExtResource("22_bbc1x"), ExtResource("23_w8gxk"), ExtResource("24_3woxb"), ExtResource("25_obpqg"), ExtResource("26_y2b3s")])
+
+[node name="UiPageTurnEffect" type="Node" parent="." unique_id=1105393563 node_paths=PackedStringArray("canvas_layer")]
+script = ExtResource("27_5p3dm")
+canvas_layer = NodePath("..")
+
+[connection signal="play_paper_fold_ani" from="PinkCoinManager" to="UiPageTurnEffect" method="fold_paper"]
