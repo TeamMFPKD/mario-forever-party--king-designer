@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bxe8b1px3dchg"]
+
+[ext_resource type="PackedScene" uid="uid://p05n5rqqxgeq" path="res://object/level/block/question_block_fire_flower.tscn" id="1_ktsvy"]
+[ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key/key.tscn" id="2_ktsvy"]
+
+[node name="QuestionBlockKey" unique_id=2059396481 instance=ExtResource("1_ktsvy")]
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=277944784]
+rotation = 3.1415927
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+sprout_item_scene = ExtResource("2_ktsvy")
+adv_sprout_item_scene = null

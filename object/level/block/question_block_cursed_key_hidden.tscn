@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bgubixamo7eq3"]
+
+[ext_resource type="PackedScene" uid="uid://cgr8ipy46rjpi" path="res://object/level/block/question_block_cursed_key.tscn" id="1_nar6l"]
+
+[node name="QuestionBlockCursedKeyHidden" unique_id=2059396481 instance=ExtResource("1_nar6l")]
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+hidden = true

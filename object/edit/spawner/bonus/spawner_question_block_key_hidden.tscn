@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bn7w555540kxu"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_bw1yn"]
+[ext_resource type="PackedScene" uid="uid://d1812hntdtd65" path="res://object/level/block/question_block_key_hidden.tscn" id="2_l7tyj"]
+[ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="3_gqumo"]
+[ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="4_l7tyj"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="5_snuq0"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_b7ev2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvttd"]
+atlas = ExtResource("4_l7tyj")
+region = Rect2(448, 32, 32, 32)
+
+[node name="SpawnerQuestionBlockKeyHidden" type="Node2D" unique_id=140604724]
+script = ExtResource("1_bw1yn")
+spawn_object_scene = ExtResource("2_l7tyj")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2015513562]
+texture = ExtResource("3_gqumo")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D" unique_id=1311543507]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_cvttd")
+
+[node name="OffsetMarker" parent="." unique_id=398746336 instance=ExtResource("5_snuq0")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_b7ev2")]

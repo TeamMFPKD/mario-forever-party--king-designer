@@ -158,6 +158,14 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("46_bddyo")
 region = Rect2(0, 96, 33, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvttd"]
+atlas = ExtResource("111_yebna")
+region = Rect2(448, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnirk"]
+atlas = ExtResource("112_cvttd")
+region = Rect2(0, 2, 32, 32)
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lpuhj"]
 load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
 
@@ -303,11 +311,11 @@ region = Rect2(0, 64, 32, 64)
 atlas = ExtResource("111_yebna")
 region = Rect2(192, 64, 32, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cvttd"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jnkuo"]
 atlas = ExtResource("111_yebna")
 region = Rect2(448, 32, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qnirk"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bddyo"]
 atlas = ExtResource("112_cvttd")
 region = Rect2(0, 2, 32, 32)
 
@@ -913,7 +921,6 @@ position = Vector2(20, -150)
 texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -174.0
 offset_top = -698.0
@@ -923,6 +930,24 @@ offset_bottom = -6.0
 [node name="HBoxContainer4" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=1019353830]
 layout_mode = 2
 metadata/_edit_lock_ = true
+
+[node name="ItemButtonCoin" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4" unique_id=918873883 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "coin"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonCoin/ButtonTexture" parent_id_path=PackedInt32Array(918873883, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_mwnlh")
+
+[node name="ItemButtonBrick" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4" unique_id=2047181197 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "brick"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonBrick/ButtonTexture" parent_id_path=PackedInt32Array(2047181197, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("38_lq4t0")
 
 [node name="ItemButtonTimeClock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4" unique_id=1174583370 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -946,15 +971,6 @@ texture = SubResource("AtlasTexture_hlwyj")
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
-
-[node name="ItemButtonCoin" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=918873883 instance=ExtResource("41_cvttd")]
-layout_mode = 2
-size_flags_horizontal = 0
-object_name = "coin"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonCoin/ButtonTexture" parent_id_path=PackedInt32Array(918873883, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="ItemButtonQuestionBlock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=1975092214 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1040,19 +1056,40 @@ scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_tdf2a")
 metadata/_edit_lock_ = true
 
+[node name="ItemButtonQuestionBlockKey" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=999192484 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockKey/ButtonTexture" parent_id_path=PackedInt32Array(999192484, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockKey/ButtonTexture/ItemPreview" index="0" unique_id=325709532]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_cvttd")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockCursedKey" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=1636533888 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_cursed_key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCursedKey/ButtonTexture" parent_id_path=PackedInt32Array(1636533888, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCursedKey/ButtonTexture/ItemPreview" index="0" unique_id=224650850]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_qnirk")
+metadata/_edit_lock_ = true
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=1246934112]
 layout_mode = 2
 size_flags_vertical = 3
 metadata/_edit_lock_ = true
-
-[node name="ItemButtonBrick" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=2047181197 instance=ExtResource("41_cvttd")]
-layout_mode = 2
-size_flags_horizontal = 0
-object_name = "brick"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonBrick/ButtonTexture" parent_id_path=PackedInt32Array(2047181197, 839201675) index="0" unique_id=1085479145]
-texture = ExtResource("38_lq4t0")
 
 [node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=1798484599 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1136,6 +1173,36 @@ texture = ExtResource("47_gnq71")
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_tdf2a")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockKeyHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=496557379 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_key_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockKeyHidden/ButtonTexture" parent_id_path=PackedInt32Array(496557379, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("47_gnq71")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockKeyHidden/ButtonTexture/ItemPreview" index="0" unique_id=503562768]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_cvttd")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockCursedKeyHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=426526599 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_cursed_key_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCursedKeyHidden/ButtonTexture" parent_id_path=PackedInt32Array(426526599, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("47_gnq71")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCursedKeyHidden/ButtonTexture/ItemPreview" index="0" unique_id=989146689]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_qnirk")
 metadata/_edit_lock_ = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=262018772]
@@ -1680,6 +1747,7 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -704.0
 offset_top = -698.0
@@ -1746,7 +1814,7 @@ object_name = "key"
 metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonKey/ButtonTexture" parent_id_path=PackedInt32Array(415456035, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_cvttd")
+texture = SubResource("AtlasTexture_jnkuo")
 
 [node name="ItemButtonCursedKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=935023006 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1755,7 +1823,7 @@ object_name = "cursed_key"
 metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey/ButtonTexture" parent_id_path=PackedInt32Array(935023006, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_qnirk")
+texture = SubResource("AtlasTexture_bddyo")
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2048951371]
 layout_mode = 2
@@ -1980,22 +2048,26 @@ show_mode = 2
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB"]
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonVolcano"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonCoin"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonBrick"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClock"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClockDecrease"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonCoin"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlock"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockLui"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonBrick"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockKey"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCursedKey"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockKeyHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCursedKeyHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonFireFlower"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonBeetroot"]
