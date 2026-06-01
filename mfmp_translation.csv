@@ -106,3 +106,11 @@ Mario Forever: Maker Party はDIY要素を持つゲームです。プレイ中�
 消息,Messages,消息,メッセージ
 发送,Send,发送,送信
 [系统] 文明交流，请不要发送敏感信息,[SYS] Please be respectful. Do not send sensitive messages.,[系统] 文明交流，请不要发送敏感信息,[システム] マナーを守り、センシティブな内容は送信しないでください。
+导出成功,Export Complete,导出成功,エクスポート完了
+导出失败,Export Failed,导出失败,エクスポート失敗
+导入成功,Import Complete,导入成功,インポート完了
+导入失败,Import Failed,导入失败,インポート失敗
+导出已取消,Export Cancelled,导出已取消,エクスポート中止
+导入已取消,Import Cancelled,导入已取消,インポート中止
+导出,Export,导出,エクスポート
+导入,Import,导入,インポート

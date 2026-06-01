@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="8_or7ga"]
 [ext_resource type="PackedScene" uid="uid://8us2l8ew1hg0" path="res://ui/list/history_file_date_line.tscn" id="11_mh56w"]
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
+[ext_resource type="PackedScene" uid="uid://bgbnexddng5mx" path="res://object/level_import_export.tscn" id="14_guxlu"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="14_ixr3s"]
 
 [node name="History" type="Node2D" unique_id=1793275075]
@@ -61,6 +62,7 @@ theme_override_constants/margin_left = 128
 theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 128
 theme_override_constants/margin_bottom = 128
+metadata/_edit_lock_ = true
 
 [node name="UiPanel" parent="GameRoomSize/UiMarginContainer" unique_id=1563157272 instance=ExtResource("5_3qbwd")]
 layout_mode = 2
@@ -127,7 +129,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="OpenLevelFolderButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1210628054 instance=ExtResource("5_1x7xw")]
+[node name="OpenLevelFolderButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1438155414 instance=ExtResource("5_1x7xw")]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
@@ -145,6 +147,9 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
 text = "返回标题画面"
+
+[node name="LevelImportExport" parent="GameRoomSize" unique_id=1195559321 instance=ExtResource("14_guxlu")]
+layout_mode = 1
 
 [node name="HistoryRoomBGM" type="AudioStreamPlayer" parent="." unique_id=134026921]
 stream = ExtResource("3_b0n03")
