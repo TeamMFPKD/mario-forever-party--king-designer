@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cgr8ipy46rjpi"]
+
+[ext_resource type="PackedScene" uid="uid://p05n5rqqxgeq" path="res://object/level/block/question_block_fire_flower.tscn" id="1_5r656"]
+[ext_resource type="PackedScene" uid="uid://qegad31yf6yd" path="res://object/level/facility/key/cursed_key.tscn" id="2_5r656"]
+
+[node name="QuestionBlockCursedKey" unique_id=2059396481 instance=ExtResource("1_5r656")]
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=277944784]
+rotation = 3.1415927
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+sprout_item_scene = ExtResource("2_5r656")
+adv_sprout_item_scene = null
