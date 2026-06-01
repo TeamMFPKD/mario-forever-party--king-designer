@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://bgbnexddng5mx"]
+
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="1_g823o"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_dpuln"]
+[ext_resource type="Texture2D" uid="uid://c7pon78lp4bsx" path="res://sprite/ui/import_icon.svg" id="3_ty7h1"]
+[ext_resource type="Texture2D" uid="uid://bnf4e1v0baixr" path="res://sprite/ui/export_icon.svg" id="4_jm58v"]
+[ext_resource type="Script" uid="uid://phv6senrd0nd" path="res://script/import_export_manager.gd" id="5_dpuln"]
+[ext_resource type="Script" uid="uid://b8mprwnkj4i8m" path="res://script/multiplayer/game_in_progress_hint.gd" id="6_clswn"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="7_fmrit"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="8_gwsfw"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="9_bxv88"]
+
+[node name="LevelImportExport" type="Control" unique_id=1195559321]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UiMarginContainer" parent="." unique_id=1510288836 instance=ExtResource("1_g823o")]
+layout_mode = 1
+offset_right = 128.0
+offset_bottom = 196.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UiMarginContainer" unique_id=1073175466]
+layout_mode = 2
+
+[node name="UiButton" parent="UiMarginContainer/VBoxContainer" unique_id=1210628054 instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 2
+text = ""
+
+[node name="Sprite2D" type="Sprite2D" parent="UiMarginContainer/VBoxContainer/UiButton" unique_id=895096582]
+position = Vector2(36, 36)
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("3_ty7h1")
+
+[node name="UiButton2" parent="UiMarginContainer/VBoxContainer" unique_id=49862583 instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = ""
+
+[node name="Sprite2D" type="Sprite2D" parent="UiMarginContainer/VBoxContainer/UiButton2" unique_id=1897749897]
+position = Vector2(36, 36)
+scale = Vector2(0.08, 0.08)
+texture = ExtResource("4_jm58v")
+
+[node name="ImportExportManager" type="Node" parent="." unique_id=1161052426 node_paths=PackedStringArray("hint_lable")]
+script = ExtResource("5_dpuln")
+hint_lable = NodePath("../ImportExportHint/UiPanel/UiMarginContainer/VBoxContainer/UiLabel")
+
+[node name="ImportExportHint" parent="." unique_id=1342954559 instance=ExtResource("1_g823o")]
+visible = false
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_clswn")
+
+[node name="ControlVisibieSet" parent="ImportExportHint" unique_id=416177451 instance=ExtResource("7_fmrit")]
+
+[node name="UiPanel" parent="ImportExportHint" unique_id=1563157272 instance=ExtResource("8_gwsfw")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="ImportExportHint/UiPanel" unique_id=250192173 instance=ExtResource("1_g823o")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ImportExportHint/UiPanel/UiMarginContainer" unique_id=245415266]
+layout_mode = 2
+
+[node name="UiLabel" parent="ImportExportHint/UiPanel/UiMarginContainer/VBoxContainer" unique_id=1008498644 instance=ExtResource("9_bxv88")]
+layout_mode = 2
+size_flags_vertical = 6
+text = "导入成功"
+horizontal_alignment = 1
+
+[node name="UiButton" parent="ImportExportHint/UiPanel/UiMarginContainer/VBoxContainer" unique_id=222353015 instance=ExtResource("2_dpuln")]
+layout_mode = 2
+size_flags_vertical = 6
+text = "确认"
+
+[connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton" to="ImportExportManager" method="_on_import_button_pressed"]
+[connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton2" to="ImportExportManager" method="_on_export_button_pressed"]
+[connection signal="export_failed" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
+[connection signal="export_succeeded" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
+[connection signal="import_failed" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
+[connection signal="import_succeeded" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="ImportExportHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="ImportExportHint/ControlVisibieSet" method="_set_invisible"]
