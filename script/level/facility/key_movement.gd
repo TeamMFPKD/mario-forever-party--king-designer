@@ -69,6 +69,10 @@ func _ready() -> void:
 		}
 	)
 
+	# 从问号砖生成
+	if key.has_meta("spawned_by_block"):
+		state = KeyState.GOT
+
 func _on_body_entered(body: Node) -> void:
 	if state != KeyState.IDLE:
 		return
