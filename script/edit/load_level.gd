@@ -35,10 +35,10 @@ func _on_load_button_pressed() -> void:
 func load_from_level() -> String:
 	var file = FileAccess.open(file_name, FileAccess.READ)
 	if not file:
-		push_error("Failed to open file or this is a new file.")
+		print("[load_level.gd] Failed to open file or this is a new file.")
 		var err = FileAccess.get_open_error()
 		if err != OK:
-			print("[%s] [load_level.gd] Error loading file:" % Time.get_time_string_from_system(), err)
+			push_error("[%s] [load_level.gd] Error loading file:" % Time.get_time_string_from_system(), err)
 			return ""
 	var content = file.get_as_text()
 	file.close()

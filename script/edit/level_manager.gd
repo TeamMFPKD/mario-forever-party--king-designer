@@ -184,8 +184,8 @@ func update_theme() -> void:
 	if tile_set_manager != null:
 		tile_set_manager.update_tile_set(level_theme)
 	else:
-		push_warning("TileSetManager is null!")
+		print("TileSetManager is null!")
 	if bgp_manager != null:
 		bgp_manager.update_bgp(level_theme)
 	else:
-		push_warning("BgpManager is null!")
+		print("BgpManager is null!")
