@@ -20,7 +20,7 @@ func _ready() -> void:
 	
 	jump_to_scene_history_edit_node = get_tree().get_first_node_in_group("jump_to_scene_history_edit")
 	if jump_to_scene_history_edit_node:
-		print("[%s] 返回历史记录查看模式" % Time.get_time_string_from_system())
+		print("[%s] [GoalGate] 返回历史记录查看模式" % Time.get_time_string_from_system())
 		var fc = func() -> void:
 			var game_mode = GameModeSingleton
 			game_mode.game_mode = game_mode.GameModeType.HISTORY_EDIT
@@ -49,7 +49,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 		get_tree().paused = true
 
-		print("[%s] goal reached" % Time.get_time_string_from_system())
+		print("[%s] [GoalGate] goal reached" % Time.get_time_string_from_system())
 		emit_signal("goal_reached")
 
 		if is_instance_valid(self) and is_inside_tree():

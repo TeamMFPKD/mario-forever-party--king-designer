@@ -14,7 +14,6 @@ func _physics_process(_delta: float) -> void:
 	if not player:
 		if print_counter < 10:
 			print_counter += 1
-			print("sealer: player not found")
+			push_error("[sealer.gd] player not found")
 		return
 	position.y = min(origin_pos_y, player.position.y)
-	

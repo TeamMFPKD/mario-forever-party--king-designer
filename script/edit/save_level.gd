@@ -21,9 +21,9 @@ func _ready() -> void:
 
 func _on_save_button_pressed() -> void:
 	var level_data_json = level_data_node.get_level_data_json()
-	print("[%s] save path: " % Time.get_time_string_from_system(), file_name)
+	print("[%s] [save_level.gd] save path: " % Time.get_time_string_from_system(), file_name)
 	save_to_level(level_data_json)
-	print("[%s] Level saved." % Time.get_time_string_from_system())
+	print("[%s] [save_level.gd] Level saved." % Time.get_time_string_from_system())
 	if multiplayer_manager:
 		multiplayer_manager.player.level_file_name = file_name
 		multiplayer_manager.player.level_data = level_data_json
@@ -38,7 +38,7 @@ func save_to_level(content):
 	var file = FileAccess.open(tmp_file_name, FileAccess.WRITE)
 	var err = FileAccess.get_open_error()
 	if err != OK or not file:
-		print("[%s] Error saving file: %d" % [Time.get_time_string_from_system(), err])
+		print("[%s] [save_level.gd] Error saving file: %d" % [Time.get_time_string_from_system(), err])
 		return
 	file.store_string(content)
 	file.close()

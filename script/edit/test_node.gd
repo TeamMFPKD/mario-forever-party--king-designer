@@ -39,8 +39,8 @@ func _physics_process(_delta: float) -> void:
 		
 
 func _button_1_pressed():
-	print("Button 1 Pressed")
+	print("[test_node.gd] Button 1 Pressed")
 
 func _button_2_pressed():
-	print("Button 2 Pressed")
+	print("[test_node.gd] Button 2 Pressed")
 	

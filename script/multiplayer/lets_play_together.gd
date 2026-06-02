@@ -6,7 +6,7 @@ func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 
 func lets_play_together():
-	print("[%s] Lets play together" % Time.get_time_string_from_system())
+	print("[%s] [lets_play_together.gd] Lets play together" % Time.get_time_string_from_system())
 	var levels = []
 	for player in multiplayer_manager.players:
 		if player.level_data == "invalid":
@@ -20,8 +20,8 @@ func lets_play_together():
 	random_levels.shuffle()
 	
 	# 显示编号结果
-	print("[%s] 随机选择结果：" % Time.get_time_string_from_system())
+	print("[%s] [lets_play_together.gd] 随机选择结果：" % Time.get_time_string_from_system())
 	for i in range(random_levels.size()):
-		print("[%s] " % Time.get_time_string_from_system(), str(i) + " " + random_levels[i])
+		print("[%s] [lets_play_together.gd] " % Time.get_time_string_from_system(), str(i) + " " + random_levels[i])
 	
 	multiplayer_manager.lets_play_together.rpc(random_levels)

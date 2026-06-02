@@ -72,14 +72,14 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 		var pts_str = ""
 		for p in pts:
 			pts_str += "(" + str(p.x) + ", " + str(p.y) + ") "
-		print("[BUILDER] line ", line_idx, " pts: ", pts_str)
+		print("[PipeBuilder] line ", line_idx, " pts: ", pts_str)
 
 	for i in range(1, pts.size() - 1):
 		var prev_dir = get_orthogonal_direction(pts[i-1], pts[i])
 		var next_dir = get_orthogonal_direction(pts[i], pts[i+1])
 		if prev_dir != Vector2.ZERO and next_dir != Vector2.ZERO and prev_dir != next_dir:
 			if debug_mode:
-				print("corner at pts[", i, "] = ", pts[i], " prev_dir=", prev_dir, " next_dir=", next_dir)
+				print("[PipeBuilder] corner at pts[", i, "] = ", pts[i], " prev_dir=", prev_dir, " next_dir=", next_dir)
 			place_corner(pts[i], prev_dir, next_dir)
 
 	for i in range(pts.size() - 1):
@@ -108,20 +108,20 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 				has_corner_before = true
 		
 		if debug_mode:
-			print("  segment ", i, ": start=", start, " end=", end, " length=", segment_length, " has_corner_after=", has_corner_after, " has_corner_before=", has_corner_before)
+			print("[PipeBuilder]  segment ", i, ": start=", start, " end=", end, " length=", segment_length, " has_corner_after=", has_corner_after, " has_corner_before=", has_corner_before)
 		
 		if segment_length < CORNER_STEP and (has_corner_after or has_corner_before):
 			if debug_mode:
 				if has_corner_after:
-					print("  -> skipped (corner after, length < ", CORNER_STEP, ")")
+					print("[PipeBuilder]  -> skipped (corner after, length < ", CORNER_STEP, ")")
 				else:
-					print("  -> skipped (corner before, length < ", CORNER_STEP, ")")
+					print("[PipeBuilder]  -> skipped (corner before, length < ", CORNER_STEP, ")")
 			continue
 		
 		if has_corner_after and has_corner_before:
 			if segment_length <= CORNER_STEP:
 				if debug_mode:
-					print("  -> skipped (between two corners)")
+					print("[PipeBuilder]  -> skipped (between two corners)")
 				continue
 			var middle_len = segment_length - CORNER_STEP
 			var offset = CORNER_STEP / 2.0
@@ -129,7 +129,7 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 				var piece_center = start + direction * (offset + STEP / 2.0)
 				place_straight(piece_center, direction)
 				if debug_mode:
-					print("  -> place_straight at (", piece_center.x, ", ", piece_center.y, ") dir=", dir_to_str(direction))
+					print("[PipeBuilder]  -> place_straight at (", piece_center.x, ", ", piece_center.y, ") dir=", dir_to_str(direction))
 				offset += STEP
 				middle_len -= STEP
 			continue
@@ -137,27 +137,27 @@ func build_line_pipes(pts: Array[Vector2], line_idx: int) -> void:
 		if has_corner_after:
 			center = start + direction * (STEP / 2.0)
 			if debug_mode:
-				print("  -> corner after, center offset to: ", center)
+				print("[PipeBuilder]  -> corner after, center offset to: ", center)
 		elif has_corner_before:
 			center = center + direction * (STEP / 2.0)
 			if debug_mode:
-				print("  -> corner before, center offset to: ", center)
+				print("[PipeBuilder]  -> corner before, center offset to: ", center)
 		
 		if is_first_segment and is_last_segment:
 			if debug_mode:
-				print("  -> place_straight at ", center)
+				print("[PipeBuilder]  -> place_straight at ", center)
 			place_straight(center, direction)
 		elif is_first_segment:
 			if debug_mode:
-				print("  -> place_cap at ", center, " dir ", -direction)
+				print("[PipeBuilder]  -> place_cap at ", center, " dir ", -direction)
 			place_cap(center, -direction)
 		elif is_last_segment:
 			if debug_mode:
-				print("  -> place_cap at ", center, " dir ", direction)
+				print("[PipeBuilder]  -> place_cap at ", center, " dir ", direction)
 			place_cap(center, direction)
 		else:
 			if debug_mode:
-				print("  -> place_straight at ", center)
+				print("[PipeBuilder]  -> place_straight at ", center)
 			place_straight(center, direction)
 
 func clear_all_pipes() -> void:
@@ -187,7 +187,7 @@ func place_straight(center: Vector2, dir: Vector2) -> void:
 		inst.rotation_degrees = rot
 		add_child(inst)
 	if debug_mode:
-		print("[PIPE] straight at (", center.x, ", ", center.y, ") dir=", dir_to_str(dir))
+		print("[PipeBuilder] straight at (", center.x, ", ", center.y, ") dir=", dir_to_str(dir))
 
 func place_cap(center: Vector2, outward_dir: Vector2) -> void:
 	var scene: PackedScene
@@ -207,7 +207,7 @@ func place_cap(center: Vector2, outward_dir: Vector2) -> void:
 		inst.rotation_degrees = rot
 		add_child(inst)
 	if debug_mode:
-		print("[PIPE] cap at (", center.x, ", ", center.y, ") dir=", dir_to_str(outward_dir))
+		print("[PipeBuilder] cap at (", center.x, ", ", center.y, ") dir=", dir_to_str(outward_dir))
 
 func place_corner(center: Vector2, incoming_dir: Vector2, outgoing_dir: Vector2) -> void:
 	var scene: PackedScene
@@ -235,7 +235,7 @@ func place_corner(center: Vector2, incoming_dir: Vector2, outgoing_dir: Vector2)
 		inst.rotation_degrees = rot
 		add_child(inst)
 	if debug_mode:
-		print("[PIPE] corner at (", center.x, ", ", center.y, ") in=", dir_to_str(incoming_dir), " out=", dir_to_str(outgoing_dir))
+		print("[PipeBuilder] corner at (", center.x, ", ", center.y, ") in=", dir_to_str(incoming_dir), " out=", dir_to_str(outgoing_dir))
 
 func dir_to_str(dir: Vector2) -> String:
 	if dir == Vector2.RIGHT: return "RIGHT"

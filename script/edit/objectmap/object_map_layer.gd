@@ -39,13 +39,13 @@ func _ready():
 	# 查找对应的对象条目
 	var entry = find_object_by_name(current_object_name)
 	if not entry or not entry.object_scene:
-		print("[%s] ObjectMapLayer: 未找到对象: " % Time.get_time_string_from_system(), current_object_name)
+		print("[%s] [ObjectMapLayer] 未找到对象: " % Time.get_time_string_from_system(), current_object_name)
 		return
 	
 	# 如果是player对象，先删除所有已存在的player对象
 	if current_object_name == "player":
 		remove_all_objects_of_type("player")
-		print("[%s] ObjectMapLayer: 放置player前已清除所有已存在的player对象" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 放置player前已清除所有已存在的player对象" % Time.get_time_string_from_system())
 	
 	# 将位置对齐到32x32网格
 	var grid_position = align_to_grid(Vector2(112.0, 400.0))
@@ -82,7 +82,7 @@ func setup_input_handler():
 		get_parent().call_deferred("add_child", input_handler)
 		# 等待一帧让InputHandler完全初始化
 		await get_tree().process_frame
-		print("[%s] ObjectMapLayer: InputHandler created and added to parent" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] InputHandler created and added to parent" % Time.get_time_string_from_system())
 	
 	# 重新获取InputHandler引用
 	input_handler = null
@@ -100,9 +100,9 @@ func setup_input_handler():
 		# 新增：连接拖拽信号
 		if not input_handler.input_dragged.is_connected(_on_input_dragged):
 			input_handler.input_dragged.connect(_on_input_dragged)
-		print("[%s] ObjectMapLayer: InputHandler signals connected successfully" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] InputHandler signals connected successfully" % Time.get_time_string_from_system())
 	else:
-		print("[%s] ObjectMapLayer: Error: Failed to find or create InputHandler" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] Error: Failed to find or create InputHandler" % Time.get_time_string_from_system())
 
 func _update_drag(world_pos: Vector2) -> void:
 	if not _is_dragging or _dragging_object.is_empty():
@@ -118,21 +118,21 @@ func _update_drag(world_pos: Vector2) -> void:
 		if object_data == _dragging_object:
 			continue
 		if object_data.has("position") and object_data["position"] == new_grid_pos:
-			print("[%s] 拖动被阻止：目标位置已有对象" % Time.get_time_string_from_system())
+			print("[%s] [ObjectMapLayer] 拖动被阻止：目标位置已有对象" % Time.get_time_string_from_system())
 			return
 	
 	var instance = _dragging_object.get("instance")
 	if instance and is_instance_valid(instance):
 		instance.global_position = new_grid_pos
 		_dragging_object["position"] = new_grid_pos
-		print("[%s] 拖动更新位置: " % Time.get_time_string_from_system(), current_pos, " -> ", new_grid_pos)
+		print("[%s] [ObjectMapLayer] 拖动更新位置: " % Time.get_time_string_from_system(), current_pos, " -> ", new_grid_pos)
 		emit_signal("play_sound_drag")
 
 func _finish_drag() -> void:
 	if not _is_dragging:
 		return
 	
-	print("[%s] 拖动结束" % Time.get_time_string_from_system())
+	print("[%s] [ObjectMapLayer] 拖动结束" % Time.get_time_string_from_system())
 	_is_dragging = false
 	
 	if _dragging_object.is_empty():
@@ -153,7 +153,7 @@ func _on_door_dragged(door_data: Dictionary, _new_pos: Vector2) -> void:
 	for object_data in objects:
 		if object_data.get("door_id", -1) == door_id and object_data != door_data:
 			if object_data.has("instance") and is_instance_valid(object_data["instance"]):
-				print("[%s] 门拖动：同组门ID %d 位置更新" % [Time.get_time_string_from_system(), door_id])
+				print("[%s] [ObjectMapLayer] 门拖动：同组门ID %d 位置更新" % [Time.get_time_string_from_system(), door_id])
 
 func _on_input_clicked(input_pos: Vector2):
 	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.EDIT:
@@ -169,7 +169,7 @@ func _on_input_clicked(input_pos: Vector2):
 				_drag_start_pos = input_pos
 				_drag_original_pos = object_data["position"]
 				_is_dragging = true
-				print("[%s] 开始拖动对象: " % Time.get_time_string_from_system(), object_data.get("object_name", "unknown"), " 位置: ", obj_pos)
+				print("[%s] [ObjectMapLayer] 开始拖动对象: " % Time.get_time_string_from_system(), object_data.get("object_name", "unknown"), " 位置: ", obj_pos)
 				return
 	
 	if drawing_enabled and database_holder and database_holder.object_database and current_object_name != "":
@@ -197,7 +197,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 	# 查找对应的对象条目
 	var entry = find_object_by_name(current_object_name)
 	if not entry or not entry.object_scene:
-		print("ObjectMapLayer: 未找到对象: ", current_object_name)
+		print("[%s] [ObjectMapLayer] 未找到对象: ", current_object_name)
 		return
 	
 	# 将位置对齐到32x32网格
@@ -205,13 +205,13 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 	
 	# 检查该网格位置是否已有对象（仅在需要时检查）
 	if check_duplicate and is_grid_position_occupied(grid_position):
-		print("[%s] ObjectMapLayer: 该网格位置已有对象，不进行绘制" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 该网格位置已有对象，不进行绘制" % Time.get_time_string_from_system())
 		return
 	
 	# 如果是player对象，先删除所有已存在的player对象
 	if current_object_name == "player":
 		remove_all_objects_of_type("player")
-		print("ObjectMapLayer: 放置player前已清除所有已存在的player对象")
+		print("[%s] [ObjectMapLayer] 放置player前已清除所有已存在的player对象" % Time.get_time_string_from_system())
 	
 	# 如果是门对象，先检查数量限制
 	if current_object_name == "door" or current_object_name == "door_locked":
@@ -224,7 +224,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 	if current_object_name == "pink_coin":
 		var pink_coin_count = _get_pink_coin_count()
 		if pink_coin_count >= 10:
-			print("粉币数量已达上限")
+			print("[%s] [ObjectMapLayer] 粉币数量已达上限" % Time.get_time_string_from_system())
 			return
 	
 	var scene_instance = entry.object_scene.instantiate()
@@ -241,7 +241,7 @@ func place_object_at_position(input_pos: Vector2, check_duplicate: bool = true):
 		}
 		objects.append(object_data)
 		
-		print("[%s] 放置对象: " % Time.get_time_string_from_system(), entry.object_name, " 在网格位置: ", grid_position)
+		print("[%s] [ObjectMapLayer] 放置对象: " % Time.get_time_string_from_system(), entry.object_name, " 在网格位置: ", grid_position)
 		
 		# 如果是门对象，需要成对放置
 		if current_object_name == "door" or current_object_name == "door_locked":
@@ -267,14 +267,14 @@ func _place_paired_door(first_door: Node2D, first_position: Vector2, entry: Obje
 			break
 
 	if door_id == -1:
-		push_error("最多只能放置4组门！")
+		push_error("[%s] [ObjectMapLayer] 最多只能放置4组门！" % Time.get_time_string_from_system())
 		return
 
 	if door_id > _door_id_counter:
 		_door_id_counter = door_id
 
 	var suit_index_for_log = (door_id - 1) % 4 + 1
-	print("[%s] 放置门组: ID=%d, 应使用花色%d" % [Time.get_time_string_from_system(), door_id, suit_index_for_log])
+	print("[%s] [ObjectMapLayer] 放置门组: ID=%d, 应使用花色%d" % [Time.get_time_string_from_system(), door_id, suit_index_for_log])
 	
 	# 设置第一个门的ID
 	_set_door_id(first_door, door_id)
@@ -316,7 +316,7 @@ func _place_paired_door(first_door: Node2D, first_position: Vector2, entry: Obje
 		}
 		objects.append(object_data_second)
 		
-		print("[%s] 放置配对门，ID: " % Time.get_time_string_from_system(), door_id, " 位置: ", second_position)
+		print("[%s] [ObjectMapLayer] 放置配对门，ID: " % Time.get_time_string_from_system(), door_id, " 位置: ", second_position)
 
 # 设置门的ID
 func _set_door_id(door_node: Node2D, door_id: int):
@@ -352,18 +352,18 @@ func _get_door_count() -> int:
 
 # 根据door_id设置Suit节点的texture
 func _update_door_suit_texture(door_node: Node2D, door_id: int):
-	print("[%s] _update_door_suit_texture: door_node=%s, door_id=%d" % [Time.get_time_string_from_system(), door_node.name, door_id])
+	print("[%s] [ObjectMapLayer] _update_door_suit_texture: door_node=%s, door_id=%d" % [Time.get_time_string_from_system(), door_node.name, door_id])
 	
 	# 获取Suit节点
 	var suit_node = door_node.get_node_or_null("Suit")
-	print("[%s] Suit节点: %s" % [Time.get_time_string_from_system(), suit_node])
+	print("[%s] [ObjectMapLayer] Suit节点: %s" % [Time.get_time_string_from_system(), suit_node])
 	
 	if not suit_node:
-		print("[%s] 警告：找不到Suit节点" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 警告：找不到Suit节点" % Time.get_time_string_from_system())
 		return
 	
 	if not suit_node.has_method("set_texture"):
-		print("[%s] 警告：Suit节点没有set_texture方法" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 警告：Suit节点没有set_texture方法" % Time.get_time_string_from_system())
 		return
 	
 	# 从Spawner的sprites数组中获取纹理
@@ -372,7 +372,7 @@ func _update_door_suit_texture(door_node: Node2D, door_id: int):
 		sprites_array = door_node.get_sprites()
 	elif "sprites" in door_node:
 		sprites_array = door_node.sprites
-	print("[%s] sprites数组: %s, 长度: %d" % [Time.get_time_string_from_system(), sprites_array, len(sprites_array)])
+	print("[%s] [ObjectMapLayer] sprites数组: %s, 长度: %d" % [Time.get_time_string_from_system(), sprites_array, len(sprites_array)])
 	
 	# 过滤掉null元素，获取有效的纹理列表
 	var valid_textures = []
@@ -381,21 +381,21 @@ func _update_door_suit_texture(door_node: Node2D, door_id: int):
 			valid_textures.append(tex)
 	
 	if len(valid_textures) == 0:
-		print("[%s] 警告：没有有效的花色纹理" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 警告：没有有效的花色纹理" % Time.get_time_string_from_system())
 		return
 	
 	# 根据door_id选择花色（1-4对应四种花色）
 	var suit_index = (door_id - 1) % len(valid_textures)
-	print("[%s] 花色索引: %d (有效纹理数量: %d)" % [Time.get_time_string_from_system(), suit_index, len(valid_textures)])
+	print("[%s] [ObjectMapLayer] 花色索引: %d (有效纹理数量: %d)" % [Time.get_time_string_from_system(), suit_index, len(valid_textures)])
 	
 	var texture = valid_textures[suit_index]
-	print("[%s] 纹理: %s" % [Time.get_time_string_from_system(), texture])
+	print("[%s] [ObjectMapLayer] 纹理: %s" % [Time.get_time_string_from_system(), texture])
 	
 	if texture:
 		suit_node.texture = texture
-		print("[%s] 设置门花色成功" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 设置门花色成功" % Time.get_time_string_from_system())
 	else:
-		print("[%s] 警告：纹理为空" % Time.get_time_string_from_system())
+		print("[%s] [ObjectMapLayer] 警告：纹理为空" % Time.get_time_string_from_system())
 
 # 新增：发射放置音效的函数
 func emit_place_sound():
@@ -411,14 +411,14 @@ func start_placing_object(object_name: String):
 		current_object_name = object_name
 		is_placing = true
 		drawing_enabled = true
-		print("ObjectMapLayer: 开始放置对象，名称: ", object_name)
+		print("[%s] [ObjectMapLayer] 开始放置对象: " % Time.get_time_string_from_system(), object_name)
 
 # 公共方法：停止放置对象
 func stop_placing_object():
 	is_placing = false
 	drawing_enabled = false
 	current_object_name = ""
-	print("ObjectMapLayer: 停止放置对象")
+	print("[%s] [ObjectMapLayer] 停止放置对象" % Time.get_time_string_from_system())
 
 # 将位置对齐到32x32网格
 func align_to_grid(input_pos: Vector2) -> Vector2:
@@ -469,10 +469,10 @@ func remove_object_at_position(input_pos: Vector2):
 				object_to_remove["instance"].queue_free()
 			objects.erase(object_to_remove)
 		
-		print("[%s] 橡皮擦：清除对象在位置 " % Time.get_time_string_from_system(), grid_position)
+		print("[%s] [ObjectMapLayer] 橡皮擦：清除对象在位置 " % Time.get_time_string_from_system(), grid_position)
 		return true
 	
-	#print("橡皮擦：位置 ", grid_position, " 没有对象")
+	#print("[%s] [ObjectMapLayer] 橡皮擦：位置 " % Time.get_time_string_from_system(), grid_position, " 没有对象")
 	return false
 
 # 删除配对门
@@ -495,7 +495,7 @@ func _remove_paired_doors(object_to_remove: Dictionary):
 				door_data["instance"].queue_free()
 			objects.erase(door_data)
 		
-		print("[%s] 橡皮擦：删除配对门，ID: " % Time.get_time_string_from_system(), door_id, " 共删除 ", doors_to_remove.size(), " 个")
+		print("[%s] [ObjectMapLayer] 橡皮擦：删除配对门，ID: " % Time.get_time_string_from_system(), door_id, " 共删除 ", doors_to_remove.size(), " 个")
 	else:
 		# 没有找到door_id，只删除当前门
 		if object_to_remove.has("instance") and is_instance_valid(object_to_remove["instance"]):
@@ -536,7 +536,7 @@ func remove_all_objects_of_type(object_name: String):
 			object_data["instance"].queue_free()
 		objects.erase(object_data)
 	
-	print("[%s] 已删除所有类型为 '" % Time.get_time_string_from_system(), object_name, "' 的对象，共删除 ", objects_to_remove.size(), " 个")
+	print("[%s] [ObjectMapLayer] 已删除所有类型为 '" % Time.get_time_string_from_system(), object_name, "' 的对象，共删除 ", objects_to_remove.size(), " 个")
 
 # 保存对象数据（用于关卡保存）
 func get_object_data() -> Array:
@@ -596,7 +596,7 @@ func _load_single_door(object_name: String, door_position: Vector2, door_id: int
 		}
 		objects.append(object_data)
 		
-		print("[%s] 加载门: %s, ID: %d, 位置: %s" % [Time.get_time_string_from_system(), object_name, door_id, door_position])
+		print("[%s] [ObjectMapLayer] 加载门: %s, ID: %d, 位置: %s" % [Time.get_time_string_from_system(), object_name, door_id, door_position])
 	
 	# 更新门ID计数器
 	if door_id > _door_id_counter:

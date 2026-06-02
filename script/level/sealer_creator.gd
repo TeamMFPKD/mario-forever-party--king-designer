@@ -15,7 +15,7 @@ func _ready() -> void:
 
 func detect_level_ceiling() -> void:
 	if not tile_map or not level_camera:
-		print("SealerCreator: TileMap或LevelCamera未找到")
+		push_error("SealerCreator: TileMap或LevelCamera未找到")
 		return
 	
 	# 获取Camera的limit_top位置
@@ -44,17 +44,17 @@ func detect_level_ceiling() -> void:
 		if abs(world_pos.y - camera_top) <= 32:
 			# 创建sealer
 			create_sealer(world_pos)
-			print("SealerCreator: 在limit_top附近创建sealer，位置: ", world_pos, " 图集坐标: ", atlas_coords)
+			#print("SealerCreator: 在limit_top附近创建sealer，位置: ", world_pos, " 图集坐标: ", atlas_coords)
 
 func create_sealer(create_pos: Vector2) -> void:
 	if not sealer_scene:
-		print("SealerCreator: Sealer场景未设置")
+		push_error("SealerCreator: Sealer场景未设置")
 		return
 	
 	var sealer = sealer_scene.instantiate() as Node2D
 	if sealer:
 		sealer.position = create_pos
 		add_sibling(sealer)
-		print("SealerCreator: Sealer创建成功，位置: ", create_pos)
+		#print("SealerCreator: Sealer创建成功，位置: ", create_pos)
 	else:
-		print("SealerCreator: Sealer实例化失败")
+		push_error("SealerCreator: Sealer实例化失败")

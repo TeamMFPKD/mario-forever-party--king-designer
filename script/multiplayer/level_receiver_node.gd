@@ -31,9 +31,9 @@ func _players_updated():
 		var dir = DirAccess.open("user://")
 		if dir:
 			dir.rename(tmp_file_name, player.level_file_name)
-		print("[%s] 玩家 %s 的关卡 %s 的数据大小：%d" % [Time.get_time_string_from_system(), MPManager.format_player(player.name, player.id), player.level_file_name, player.level_data.length()])
-		print("[%s] 玩家 %s 的关卡数据已缓存到本地" % [Time.get_time_string_from_system(), MPManager.format_player(player.name, player.id)])
-		#print("[%s] 关卡预览：" % Time.get_time_string_from_system(), player.level_data)
+		print("[%s] [LevelReceiver] 玩家 %s 的关卡 %s 的数据大小：%d" % [Time.get_time_string_from_system(), MPManager.format_player(player.name, player.id), player.level_file_name, player.level_data.length()])
+		print("[%s] [LevelReceiver] 玩家 %s 的关卡数据已缓存到本地" % [Time.get_time_string_from_system(), MPManager.format_player(player.name, player.id)])
+		#print("[%s] [LevelReceiver] 关卡预览：" % Time.get_time_string_from_system(), player.level_data)
 
 		if saved_player_id.size() >= multiplayer_manager.players.size():
 			saved_player_id = []
