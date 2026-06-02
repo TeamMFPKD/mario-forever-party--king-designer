@@ -8,6 +8,8 @@ signal play_sound_msg_close
 @export var sidebar_show_button: Button
 @export var control: Control
 
+@export var debug: bool = false
+
 var enabled: bool = false:
 	set(value):
 		enabled = value
@@ -36,7 +38,7 @@ func _ready() -> void:
 	_status_changed()
 
 func _on_players_updated() -> void:
-	enabled = multiplayer_manager.players.size() >= 2
+	enabled = multiplayer_manager.players.size() >= (2 if not debug else 1)
 
 func _status_changed() -> void:
 	if not enabled:
