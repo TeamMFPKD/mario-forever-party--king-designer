@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_cur0g"]
 [ext_resource type="Script" uid="uid://c0vbph4q7bq5s" path="res://script/multiplayer/back_to_title_together_button.gd" id="12_jjhps"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="13_noirq"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="15_5xsjv"]
+[ext_resource type="AudioStream" uid="uid://bhfecec1p8kjj" path="res://sound/SE_networkWindowOpen.wav" id="16_kckux"]
 
 [node name="ResultRoom" type="Node2D" unique_id=609637802]
 
@@ -212,8 +214,12 @@ script = ExtResource("12_jjhps")
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("13_noirq")]
 show_mode = 0
 
+[node name="ResultShowSE" parent="." unique_id=1715984441 instance=ExtResource("15_5xsjv")]
+stream = ExtResource("16_kckux")
+
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTitle/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTable/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/WaitingLabel/ControlVisibieSet" method="_set_invisible"]
+[connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="ResultShowSE" method="play"]
 [connection signal="back_to_title" from="GameRoomSize/Back/ToTitleButton" to="JumpToScene" method="jump_to_scene"]
