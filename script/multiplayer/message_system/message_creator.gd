@@ -28,6 +28,7 @@ func _on_messages_updated() -> void:
 		label.text = m["player_name"] + " (" + m.get("time", "") + "): " + "\n" + m["msg"]
 		var fc = func():
 			target_container.add_child(msg_instance)
+			label.custom_minimum_size.y = label.size.y + 8.0
 		fc.call_deferred()
 
 	await get_tree().process_frame
