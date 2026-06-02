@@ -16,16 +16,29 @@ func _on_messages_updated() -> void:
 	if not target_container:
 		push_error("TargetContainer not found")
 		return
+	'''
 	var message_nodes = target_container.get_children()
 	var sys_msg_node = message_nodes[0] if message_nodes.size() > 0 else null
 	for node in message_nodes:
 		if node == sys_msg_node:
 			continue
 		node.queue_free()
-	for m in multiplayer_manager.messages:
+	'''
+	var msg_amount = multiplayer_manager.messages.size()
+	for m in range(msg_amount):
 		var msg_instance = message_scene.instantiate()
 		var label = msg_instance.get_node("UiLabel") as Label
-		label.text = m["player_name"] + " (" + m.get("time", "") + "): " + "\n" + m["msg"]
+		if multiplayer_manager.messages[m]["displayed"]:
+			continue
+		multiplayer_manager.messages[m]["displayed"] = true
+		label.text = \
+			multiplayer_manager.messages[m]["player_name"] \
+			+ " (" \
+			+ multiplayer_manager.messages[m].get("time", "") \
+			+ "): " \
+			+"\n" \
+			+ multiplayer_manager.messages[m]["msg"]
+
 		var fc = func():
 			target_container.add_child(msg_instance)
 			label.custom_minimum_size.y = label.size.y + 8.0
