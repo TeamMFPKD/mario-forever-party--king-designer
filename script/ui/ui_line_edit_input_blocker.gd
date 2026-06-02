@@ -1,5 +1,7 @@
 extends LineEdit
 
+class_name UiLineEditInputBlocker
+
 const PLAYER_ACTIONS := ["move_up", "move_down", "move_left", "move_right", "move_fire", "move_jump", "restart", "photo"]
 
 var _saved_events: Dictionary = {}
