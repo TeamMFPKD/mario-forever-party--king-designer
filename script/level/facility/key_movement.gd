@@ -26,7 +26,8 @@ var state: KeyState = KeyState.IDLE:
 		state = value
 		if value == KeyState.FOLLOWING:
 			emit_signal("play_sound_get")
-			add_to_group("key_following")
+			if not is_in_group("key_following"):
+				add_to_group("key_following")
 			var following_keys = get_tree().get_nodes_in_group("key_following")
 			key_id = following_keys.size()
 			var player = get_tree().get_first_node_in_group("player") as Node2D
@@ -39,7 +40,17 @@ var state: KeyState = KeyState.IDLE:
 				if phantos.size() < got_cursed_keys.size():
 					_create_phanto(player)
 		if value == KeyState.GOT:
+			if not try_follow():
+				return
 			add_to_group("key_following")
+			if not _got_tween:
+				_got_tween = create_tween()
+				_got_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+				_got_tween.tween_property(key, "position:y", key.position.y - 80.0, 0.4)
+				_got_tween.finished.connect(func():
+					state = KeyState.FOLLOWING
+					_got_tween = null
+				)
 var time: float = 0.0
 
 var track_frame: int = 0
@@ -79,7 +90,7 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		if not try_follow():
 			return
-		state = KeyState.GOT
+		state = KeyState.FOLLOWING
 	
 
 func try_to_get_key(body: Node2D = null) -> void:
@@ -92,7 +103,9 @@ func try_to_get_key(body: Node2D = null) -> void:
 func try_follow() -> bool:
 	var locked_doors = round(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
 	var got_keys = get_tree().get_nodes_in_group("key_following").size()
-	if got_keys > locked_doors:
+	print("got_keys: ", got_keys, "\nlocked_doors: ", locked_doors)
+	print("key_state: " + str(state))
+	if got_keys >= locked_doors:
 		emit_signal("overflow")
 		return false
 	return true
@@ -108,16 +121,7 @@ func _physics_process(delta: float) -> void:
 			ani.position.y = sin(time) * 4.0
 
 		KeyState.GOT:
-			if not try_follow():
-				return
-			if not _got_tween:
-				_got_tween = create_tween()
-				_got_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
-				_got_tween.tween_property(key, "position:y", key.position.y - 80.0, 0.4)
-				_got_tween.finished.connect(func():
-					state = KeyState.FOLLOWING
-					_got_tween = null
-				)
+			pass
 
 		KeyState.FOLLOWING:
 			_follow_player()

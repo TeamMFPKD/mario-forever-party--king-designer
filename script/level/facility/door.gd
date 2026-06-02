@@ -88,6 +88,8 @@ func try_enter() -> bool:
 					for d in doors:
 						if d.id == id:
 							d.unlocked = true
+							d.remove_from_group("door_locked")
+					remove_from_group("door_locked")
 					emit_signal("play_sound_unlock")
 					return true
 	return false
