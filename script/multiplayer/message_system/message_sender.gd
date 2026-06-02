@@ -21,6 +21,9 @@ func _input(event: InputEvent) -> void:
 		if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
 			if not send_button.is_disabled() and send_button.global_position.x > 0.0:
 				send_message()
+				await get_tree().process_frame
+				line_edit.grab_focus()
+				line_edit.edit()
 
 func _on_send_button_pressed():
 	send_message()
@@ -44,5 +47,5 @@ func send_message():
 		multiplayer_manager.get_device_tag(),
 		line_edit.text,
 	)
-	line_edit.text = ""  # 发送后清空输入框
+	line_edit.clear()
 	send_button.set_disabled(true)
