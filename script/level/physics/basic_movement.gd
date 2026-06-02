@@ -192,6 +192,7 @@ func speed_x_process() -> void:
 		return
 	if move_object.is_on_wall():
 		speed_x *= -1.0
+		spring_bounce_speed_x *= -1.0
 
 func speed_y_process(delta: float) -> void:
 	if not move_object.is_on_floor():
