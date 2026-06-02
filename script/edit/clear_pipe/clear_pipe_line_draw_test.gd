@@ -72,7 +72,7 @@ func _input(event: InputEvent) -> void:
 					else:
 						start_drawing(local_pos)
 			else:
-				print("_input: mouse release, dragging=", dragging_line_index, " drawing=", drawing)
+				print("[ClearPipeDraw] _input: mouse release, dragging=", dragging_line_index, " drawing=", drawing)
 				if dragging_line_index >= 0:
 					finish_dragging()
 				if drawing:
@@ -391,9 +391,9 @@ func stop_drawing() -> void:
 	if not drawing:
 		return
 
-	print("stop_drawing: called, drawing=", drawing)
+	print("[ClearPipeDraw] stop_drawing: called, drawing=", drawing)
 	drawing = false
-	print("stop_drawing: drawing set to false, active_idx=", editing_line_index if editing_line_index >= 0 else current_line_index)
+	print("[ClearPipeDraw] stop_drawing: drawing set to false, active_idx=", editing_line_index if editing_line_index >= 0 else current_line_index)
 
 	var active_idx = editing_line_index if editing_line_index >= 0 else current_line_index
 
@@ -405,7 +405,7 @@ func stop_drawing() -> void:
 			var pts_str = ""
 			for p in points:
 				pts_str += "(" + str(p.x) + ", " + str(p.y) + ") "
-			print("[STOP] points: ", pts_str)
+			print("[ClearPipeDraw] [STOP] points: ", pts_str)
 
 		if points.size() < 3:
 			remove_line(active_idx)
@@ -619,7 +619,7 @@ func update_drawing_from_tail(active_idx: int, line_data: Dictionary, points: Ar
 				var removed = points[-2]
 				points.remove_at(points.size() - 2)
 				if debug_mode:
-					print("[FIX] removed point before corner: (", removed.x, ", ", removed.y, "), new points size=", points.size())
+					print("[ClearPipeDraw] [FIX] removed point before corner: (", removed.x, ", ", removed.y, "), new points size=", points.size())
 
 		points.append(candidate)
 		line_data.last_direction = move_dir
@@ -983,7 +983,7 @@ func erase_line_at_world_position(world_pos: Vector2) -> bool:
 
 func _process(_delta: float) -> void:
 	if drawing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		print("_process: drawing but mouse released, force stop")
+		print("[ClearPipeDraw] _process: drawing but mouse released, force stop")
 		stop_drawing()
 	if debug_mode:
 		queue_redraw()

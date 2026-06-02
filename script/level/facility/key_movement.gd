@@ -103,8 +103,6 @@ func try_to_get_key(body: Node2D = null) -> void:
 func try_follow() -> bool:
 	var locked_doors = round(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
 	var got_keys = get_tree().get_nodes_in_group("key_following").size()
-	print("got_keys: ", got_keys, "\nlocked_doors: ", locked_doors)
-	print("key_state: " + str(state))
 	if got_keys >= locked_doors:
 		emit_signal("overflow")
 		return false

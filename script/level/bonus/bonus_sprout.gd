@@ -50,7 +50,7 @@ func _ready() -> void:
 	if basic_movement:
 		basic_movement.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 	if bonus.has_meta("sprout_down"):
-		print("Sprout down")
+		#print("[BonusSprout] Sprout down")
 		sprout_speed = -sprout_speed
 
 	# 神神秘秘 CharacterBody2D

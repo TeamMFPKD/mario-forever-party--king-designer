@@ -349,9 +349,9 @@ func check_and_draw_border_terrain(cell_coords: Vector2i):
 # 设置自定义图块坐标
 func set_custom_atlas_coords(coords: Vector2i):
 	custom_atlas_coords = coords
-	print("TileMapDraw: 设置自定义图块坐标为: ", coords)
+	print("[%s] TileMapDraw: 设置自定义图块坐标为: " % Time.get_time_string_from_system(), coords)
 
 # 清除自定义图块坐标，恢复默认行为
 func clear_custom_atlas_coords():
 	custom_atlas_coords = Vector2i(-1, -1)
-	print("TileMapDraw: 清除自定义图块坐标，恢复默认行为")
+	print("[%s] TileMapDraw: 清除自定义图块坐标，恢复默认行为" % Time.get_time_string_from_system())

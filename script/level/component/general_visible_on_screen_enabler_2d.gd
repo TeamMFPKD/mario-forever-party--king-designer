@@ -12,7 +12,7 @@ func _ready():
 
 func _on_screen_entered():
 	if _parent == null:
-		print("GeneralVisibleOnScreenEnabler2d: _parent is null!")
+		push_error("GeneralVisibleOnScreenEnabler2d: _parent is null!")
 		return
 	
 	_parent.process_mode = Node.PROCESS_MODE_INHERIT

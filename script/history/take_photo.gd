@@ -23,23 +23,23 @@ func capture() -> void:
 	if not dir.dir_exists(LIKED_COURSE_FOLDER_NAME):
 		var error = dir.make_dir(LIKED_COURSE_FOLDER_NAME)
 		if error != OK:
-			print("Failed to create directory: ", error)
+			push_error("[take_photo.gd] Failed to create directory: ", error)
 			return
 	
 	# 获取关卡文件路径
 	level_path_node = get_tree().get_first_node_in_group("level_path_set")
 	if not level_path_node:
-		print("Level path node not found")
+		push_error("[take_photo.gd] Level path node not found")
 		return
 		
 	var path = level_path_node.get_meta("level_path_name", "invalid") as String
 	if path == "invalid" or path.is_empty():
-		print("Invalid level path")
+		push_error("[take_photo.gd] Invalid level path")
 		return
 	
 	# 检查源文件是否存在
 	if not FileAccess.file_exists(path):
-		print("Source level file does not exist: ", path)
+		push_error("[take_photo.gd] Source level file does not exist: ", path)
 		return
 	
 	# 构建目标路径
@@ -60,24 +60,25 @@ func capture() -> void:
 	var image_error = sav_image.save_png(target_png)
 	
 	if image_error == OK:
-		print("Photo saved to: ", target_png)
+		print("[take_photo.gd] Photo saved to: ", target_png)
 	else:
-		print("Failed to save photo. Error code: ", image_error)
+		push_error("[take_photo.gd] Failed to save photo. Error code: ", image_error)
 	
 	# 检查是否已在收藏目录中
 	if path.contains(LIKED_COURSE_FOLDER_NAME):
-		print("Level already in liked courses, screenshot updated only")
+		print("[take_photo.gd] Level already in liked courses, screenshot updated only")
 	else:
 		# 复制关卡文件
 		var copy_error = dir.copy(path, target_lvl)
 		if copy_error == OK:
-			print("Level file copied to: ", target_lvl)
+			#print("[take_photo.gd] Level file copied to: ", target_lvl)
 			
 			# 可选：验证复制是否成功
 			if FileAccess.file_exists(target_lvl):
-				print("Level file verified at destination")
+				pass
+				#print("[take_photo.gd] Level file verified at destination")
 		else:
-			print("Failed to copy level file. Error code: ", copy_error)
+			push_error("[take_photo.gd] Failed to copy level file. Error code: ", copy_error)
 			
 			# 备用复制方法：使用 FileAccess 读写
 			var source_file = FileAccess.open(path, FileAccess.READ)
@@ -85,9 +86,9 @@ func capture() -> void:
 			if source_file and dest_file:
 				var data = source_file.get_buffer(source_file.get_length())
 				dest_file.store_buffer(data)
-				print("Level file copied using FileAccess fallback")
+				#print("[take_photo.gd] Level file copied using FileAccess fallback")
 			else:
-				print("Fallback copy also failed")
+				push_error("[take_photo.gd] Fallback copy also failed")
 
 	_create_capture_preview()
 
@@ -154,7 +155,8 @@ func _create_capture_preview() -> void:
 	
 	# 动画结束后处理
 	tween.finished.connect(func():
-		print("动画完成")
+		pass
+		#print("[take_photo.gd] 动画完成")
 		# 可以选择不移除，让 sprite 留在 texture_rect 上
 		# 或者延迟移除：
 		# await get_tree().create_timer(0.5).timeout

@@ -55,7 +55,7 @@ func set_fireball_velocity(angle_deg: float) -> void:
 	# 计算速度分量（注意坐标系：x向右，y向下）
 	var velocity_x = fireball_speed * sin(angle_rad)
 	var velocity_y = fireball_speed * cos(angle_rad)
-	print(velocity_x, velocity_y)
+	#print(velocity_x, velocity_y)
 	
 	# 设置速度
 	speed_x = velocity_x

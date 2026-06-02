@@ -29,4 +29,4 @@ func fall() -> void:
 		return
 	activated = true
 	gravity = fall_gravity
-	print("PlatformFallMovement: fall")
+	#print("PlatformFallMovement: fall")

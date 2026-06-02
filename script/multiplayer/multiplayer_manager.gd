@@ -517,8 +517,10 @@ func restore_origin_player_data() -> void:
 	player.clear_rate = 0.0
 	player.score = 0
 
-@rpc("authority", "call_local")
+@rpc("any_peer", "call_local")
 func sync_origin_player_data() -> void:
+	if not multiplayer.is_server():
+		return
 	# 同步完整的玩家列表给所有客户端
 	sync_players_list.rpc(players)
 	emit_signal("players_updated")

@@ -13,7 +13,7 @@ func _ready() -> void:
 		push_warning("play_next_level_manager is not assigned in PlayerDead")
 	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST:
 		player_dead.connect(GameModeSingleton.go_to_edit)
-		print("player dead and should go to edit")
+		print("[player_dead.gd] player dead and should go to edit")
 	elif GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
 		await get_tree().create_timer(1.2).timeout
 		emit_signal("next_level")
