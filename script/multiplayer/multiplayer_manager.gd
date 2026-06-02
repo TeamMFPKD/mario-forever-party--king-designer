@@ -559,6 +559,7 @@ func send_message(p_id: int, unique_id: String, msg: String) -> void:
 			"player_name": p_name,
 			"msg": msg,
 			"time": time_str,
+			"displayed": false,
 		}
 	)
 	msg_cnt += 1
