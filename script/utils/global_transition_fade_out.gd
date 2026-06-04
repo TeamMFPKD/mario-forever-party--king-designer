@@ -2,7 +2,7 @@ extends Node
 
 @export var rect_texture: TextureRect
 
-@export var duration: float = 0.12
+@export var duration: float = 0.18
 
 var texture_material: ShaderMaterial
 
