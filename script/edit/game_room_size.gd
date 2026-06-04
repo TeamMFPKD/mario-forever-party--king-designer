@@ -1,6 +1,6 @@
 extends Control
 
-var viewport
+var viewport: Viewport
 var visible_rect
 
 func _ready() -> void :

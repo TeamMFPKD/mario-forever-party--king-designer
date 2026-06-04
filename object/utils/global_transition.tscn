@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cwjt3obt14yfy"]
+
+[ext_resource type="Script" uid="uid://bkwrd2ip2w6qb" path="res://script/utils/global_transition.gd" id="1_7v6di"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_enquh"]
+[ext_resource type="Texture2D" uid="uid://djr2lscpgyin2" path="res://icon_godot.svg" id="3_j48gu"]
+[ext_resource type="Shader" uid="uid://di2j1ij136aqn" path="res://shader/global_transition.gdshader" id="3_mf0sm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5qs6"]
+shader = ExtResource("3_mf0sm")
+shader_parameter/iResolution = Vector2(1920, 1080)
+shader_parameter/iTime = -233.0
+
+[node name="GlobalTransitionCanvasLayer" type="CanvasLayer" unique_id=853938428]
+layer = 10
+
+[node name="GlobalTransition" type="Node" parent="." unique_id=1048549700 node_paths=PackedStringArray("rect_texture")]
+script = ExtResource("1_7v6di")
+rect_texture = NodePath("../GameRoomSize/TextureRect")
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=1621371095]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+mouse_filter = 2
+script = ExtResource("2_enquh")
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="GameRoomSize" unique_id=1770091010]
+material = SubResource("ShaderMaterial_d5qs6")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_j48gu")
