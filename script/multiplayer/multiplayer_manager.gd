@@ -21,8 +21,8 @@ var local_port
 # 端口使用Sakura Frp隧道配置的远程端口
 var remote_port
 # Sakura Frp提供的域名
-var frp_domain = ""
-var player_name = ""
+var frp_domain: String = ""
+var player_name: String = ""
 
 var game_start_time : String
 
@@ -462,10 +462,10 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			ani.set_meta("player_id", player_id)
 			break
 
-func _get_tag(device_id: String) -> String:
-	if device_id.is_empty():
+func _get_tag(player_device_id: String) -> String:
+	if player_device_id.is_empty():
 		return "?????"
-	return device_id.substr(0, 5)
+	return player_device_id.substr(0, 5)
 
 func get_device_tag() -> String:
 	var unique_id = OS.get_unique_id()

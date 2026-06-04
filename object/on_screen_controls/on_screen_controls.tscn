@@ -28,7 +28,7 @@ size = Vector2(256, 192)
 
 [node name="OnScreenControls" type="CanvasLayer" unique_id=1607093209 node_paths=PackedStringArray("control_d_pad", "control_button", "control_photo") groups=["mobile_control"]]
 process_mode = 3
-layer = 0
+layer = 100
 script = ExtResource("1_ip5kh")
 control_d_pad = NodePath("ControlDPad")
 control_button = NodePath("ControlButton")
