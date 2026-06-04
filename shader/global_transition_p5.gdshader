@@ -2,8 +2,12 @@ shader_type canvas_item;
 
 uniform vec2 iResolution;
 uniform float iTime;
+uniform float iDuration; // 保留以兼容脚本，实际未使用
 
 #define PI 3.141592
+
+// ---- 可调参数：视觉中心相对 scroll 的偏移（单位：归一化空间，默认 1.0 对应最大星星位置）----
+const float center_offset = 1.0;
 
 float rand1(float p) {
     p = fract(p * 0.1031);
@@ -49,20 +53,19 @@ void fragment() {
     float ratioX = iResolution.x / min(iResolution.x, iResolution.y);
     float ratioY = iResolution.y / min(iResolution.x, iResolution.y);
     float scroll = iTime * 0.75 * ratioX;
-    vec3 color = vec3(0.0);
-    float totalAlpha = 0.0;
 
+    vec3 star_color = vec3(0.0);
+    float star_alpha = 0.0;
+
+    // 绘制所有已出现的星星（randX <= scroll）
     for (float i = 0.0; i < 150.0; i++) {
         float offset = rand1(i) < 0.5 ? iTime : -iTime;
         float randX = (rand1(i + 66042.0) - 0.5) * ratioX;
         float randY = (rand1(i + 93472.0) - 0.5) * ratioY;
 
-        // 原版 size 公式完全保留，自带放大出现、缩小消失
         float size = mix(0.0, clamp(rand1(i + 84.0), 0.05, 0.2) * ratioX,
                          pow(clamp(cos(abs(randX - scroll) - 1.0), 0.001, 1.0), 20.0));
         if (size < 0.01) continue;
-
-        // 只屏蔽轴尚未到达的星：scroll 还没推进到 randX 时跳过
         if (randX > scroll) continue;
 
         float rot = rand1(i + 54634.0) * PI * 2.0;
@@ -73,9 +76,21 @@ void fragment() {
         float blur = fwidth(star);
         vec3 cur = mix(BLACK, RED, vec3(SmoothSquareWave(star * 9.0 - offset * 0.3, blur * 9.0)));
         float a = 1.0 - smoothstep(0.0, blur, star);
-        color = mix(color, cur, a);
-        totalAlpha = max(totalAlpha, a);
+        star_color = mix(star_color, cur, a);
+        star_alpha = max(star_alpha, a);
     }
 
-    COLOR = vec4(color, totalAlpha);
+    // 星星群视觉中心线：位于 scroll - 1.0（最大星星处），与 scroll 同步速度
+    float center_line = scroll - center_offset;
+    float x_local = fit.x;
+
+    vec4 tex = texture(TEXTURE, UV);
+
+    if (x_local >= center_line) {
+        // 右侧：原始纹理背景 + 星星叠加
+        COLOR = vec4(mix(tex.rgb, star_color, star_alpha), 1.0);
+    } else {
+        // 左侧：透明背景 + 星星
+        COLOR = vec4(star_color, star_alpha);
+    }
 }
