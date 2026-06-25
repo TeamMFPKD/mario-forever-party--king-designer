@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c2xxmqdwu8doi"]
 
 [ext_resource type="PackedScene" uid="uid://bkjm2u4cn4r1p" path="res://object/level/enemy/piranha/piranha_green_up.tscn" id="1_r6wdn"]
-[ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="2_28hgr"]
+[ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_plant/piranha_fire.png" id="2_28hgr"]
 [ext_resource type="Script" uid="uid://bsbk7ccjs30bv" path="res://script/level/enemy/piranha_shoot.gd" id="3_3b1ow"]
 [ext_resource type="Script" uid="uid://c2855303v4jng" path="res://script/level/enemy/piranha_fire_animation.gd" id="4_w6m2w"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_qq5xl"]

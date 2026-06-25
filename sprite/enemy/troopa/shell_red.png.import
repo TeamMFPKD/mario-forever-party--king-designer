@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bg80yiox1vics"
-path="res://.godot/imported/piranha_fire.png-6fc1fc3f6c329aed81672f920efe35cc.ctex"
+uid="uid://bvvlsgqa6nkic"
+path="res://.godot/imported/shell_red.png-7b7355b25faa6cd29830918e2abec23d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/piranha_fire.png"
-dest_files=["res://.godot/imported/piranha_fire.png-6fc1fc3f6c329aed81672f920efe35cc.ctex"]
+source_file="res://sprite/enemy/troopa/shell_red.png"
+dest_files=["res://.godot/imported/shell_red.png-7b7355b25faa6cd29830918e2abec23d.ctex"]
 
 [params]
 

@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://5n7num3si6rk"]
+
+[ext_resource type="Texture2D" uid="uid://sjd4mwqt2b7f" path="res://sprite/enemy/magikoopa/magikoopa.png" id="1_68oaf"]
+[ext_resource type="Script" uid="uid://m5308uygse3w" path="res://script/level/enemy/magikoopa/magikoopa_magic.gd" id="2_aojix"]
+[ext_resource type="AudioStream" uid="uid://b66voixsqrev8" path="res://sound/level/smw_magic.wav" id="3_lg2p7"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_pt2gx"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_1cbk4"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="7_5j0sk"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="8_dsxib"]
+[ext_resource type="PackedScene" uid="uid://ce833n4fa50ri" path="res://object/level/enemy/magikoopa/magic.tscn" id="8_g6rqd"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="9_35pyh"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="9_gbwqe"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="10_bcc4l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q4sau"]
+atlas = ExtResource("1_68oaf")
+region = Rect2(0, 0, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0st4e"]
+atlas = ExtResource("1_68oaf")
+region = Rect2(0, 64, 96, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pflen"]
+atlas = ExtResource("1_68oaf")
+region = Rect2(96, 64, 96, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bfqnt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q4sau")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0st4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pflen")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0st4e")
+}],
+"loop": true,
+"name": &"shoot",
+"speed": 50.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r3qds"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sjjix"]
+size = Vector2(30, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1xiys"]
+size = Vector2(30, 44)
+
+[node name="Magikoopa" type="CharacterBody2D" unique_id=1894491448]
+collision_layer = 16
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1133494168]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_bfqnt")
+animation = &"shoot"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1379731687]
+visible = false
+shape = SubResource("RectangleShape2D_r3qds")
+debug_color = Color(0, 0.643137, 0.309804, 0.419608)
+
+[node name="EnemyInteraction" parent="." unique_id=16625430 instance=ExtResource("5_pt2gx")]
+
+[node name="EnemyDie" parent="." unique_id=560373447 instance=ExtResource("6_1cbk4")]
+
+[node name="AddScoreComponent" parent="." unique_id=1808089032 instance=ExtResource("7_5j0sk")]
+
+[node name="EnemySoundManager" parent="." unique_id=1133509632 instance=ExtResource("8_dsxib")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=1400944657 instance=ExtResource("9_35pyh")]
+
+[node name="Magic" type="Node2D" parent="." unique_id=1618099970]
+script = ExtResource("2_aojix")
+safe_range = 80.0
+magic_scene = ExtResource("8_g6rqd")
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="Magic" unique_id=533396791]
+visible = false
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_sjjix")
+target_position = Vector2(0, 0)
+collision_mask = 3
+metadata/_edit_lock_ = true
+
+[node name="ShapeCast2D2" type="ShapeCast2D" parent="Magic" unique_id=907922877]
+visible = false
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_1xiys")
+target_position = Vector2(0, 0)
+collision_mask = 3
+
+[node name="MagicSE" parent="Magic" unique_id=1715984441 instance=ExtResource("9_gbwqe")]
+stream = ExtResource("3_lg2p7")
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=1220172528]
+script = ExtResource("10_bcc4l")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[editable path="EnemyInteraction"]

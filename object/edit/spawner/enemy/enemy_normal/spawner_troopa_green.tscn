@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_ksfdm"]
 [ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="2_0cdcb"]
-[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="2_ksfdm"]
+[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa/troopa_green.png" id="2_ksfdm"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_w6c43"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_d0uv5"]
 

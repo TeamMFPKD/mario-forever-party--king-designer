@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://gy3qgt27dc47"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_brui7"]
-[ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="2_brui7"]
+[ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_plant/piranha_blue.png" id="2_brui7"]
 [ext_resource type="PackedScene" uid="uid://crh5nm4u6d7he" path="res://object/level/enemy/piranha/piranha_blue_up.tscn" id="2_rvobf"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_vwa30"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_iwjlp"]

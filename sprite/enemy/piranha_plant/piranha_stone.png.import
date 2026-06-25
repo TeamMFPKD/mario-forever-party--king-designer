@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcxv3y55u505"
-path="res://.godot/imported/troopa_green.png-ae1323d305edaed07929cfd0d2369b6c.ctex"
+uid="uid://r25m4lm8exok"
+path="res://.godot/imported/piranha_stone.png-3f97876fd5bd06a1f388964f02edf492.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/troopa_green.png"
-dest_files=["res://.godot/imported/troopa_green.png-ae1323d305edaed07929cfd0d2369b6c.ctex"]
+source_file="res://sprite/enemy/piranha_plant/piranha_stone.png"
+dest_files=["res://.godot/imported/piranha_stone.png-3f97876fd5bd06a1f388964f02edf492.ctex"]
 
 [params]
 

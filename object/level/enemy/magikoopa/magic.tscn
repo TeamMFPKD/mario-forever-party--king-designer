@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://ce833n4fa50ri"]
+
+[ext_resource type="Texture2D" uid="uid://c1vers38poaow" path="res://sprite/enemy/magikoopa/magic.png" id="5_f5o2m"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="5_xsv3k"]
+[ext_resource type="Script" uid="uid://chvbcq7uttlml" path="res://script/level/component/auto_sprite_flip_h.gd" id="6_1wo8e"]
+[ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="7_q4lsa"]
+[ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="8_6bk1v"]
+[ext_resource type="PackedScene" uid="uid://bl3cfshm2ayw1" path="res://object/level/add_score_component.tscn" id="9_0iwha"]
+[ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="10_rbdyd"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="11_f702u"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="12_g8dnj"]
+[ext_resource type="Script" uid="uid://b7iyrljgyxiwq" path="res://script/level/enemy/magikoopa/magic_movement.gd" id="13_mvmnt"]
+[ext_resource type="Script" uid="uid://bcxhhapidfado" path="res://script/level/enemy/magikoopa/magic_body.gd" id="14_body"]
+[ext_resource type="Script" uid="uid://dv1mxvldtfbbu" path="res://script/level/enemy/magikoopa/magic_effect_spawner.gd" id="15_effect"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gtu1a"]
+radius = 8.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q0m46"]
+atlas = ExtResource("5_f5o2m")
+region = Rect2(0, 0, 29, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s866f"]
+atlas = ExtResource("5_f5o2m")
+region = Rect2(0, 30, 29, 30)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gpq5x"]
+atlas = ExtResource("5_f5o2m")
+region = Rect2(0, 60, 29, 30)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qfn7i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q0m46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s866f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gpq5x")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ds081"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0s0m5"]
+radius = 14.0
+
+[node name="Magic" type="CharacterBody2D" unique_id=1575636084]
+collision_layer = 16
+collision_mask = 0
+
+[node name="Body" type="Area2D" parent="." unique_id=1505740272]
+collision_layer = 0
+collision_mask = 128
+script = ExtResource("14_body")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body" unique_id=1377277534]
+visible = false
+shape = SubResource("CircleShape2D_gtu1a")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2003316090]
+rotation = 3460.22
+sprite_frames = SubResource("SpriteFrames_qfn7i")
+autoplay = "default"
+frame = 2
+frame_progress = 0.955802
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=126825683]
+visible = false
+shape = SubResource("CircleShape2D_ds081")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="BasicMovement" type="Node" parent="." unique_id=1013180728]
+script = ExtResource("13_mvmnt")
+initially_face_to_player = false
+speed_x = 300.0
+gravity = 0.0
+overlap_turn = false
+
+[node name="MagicEffectSpawner" type="Node" parent="." unique_id=1759005205]
+script = ExtResource("15_effect")
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("5_xsv3k")]
+shape = SubResource("CircleShape2D_0s0m5")
+
+[node name="AutoSpriteFlipH" type="Node" parent="." unique_id=1759005204]
+script = ExtResource("6_1wo8e")
+metadata/_custom_type_script = "uid://chvbcq7uttlml"
+
+[node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("7_q4lsa")]
+
+[node name="InteractionWithPlayer" parent="EnemyInteraction" index="0" unique_id=707962705]
+stompable = false
+
+[node name="InteractionWithFireball" parent="EnemyInteraction" index="1" unique_id=1266694774]
+immune_to_fireball = true
+
+[node name="InteractionWithBeetroot" parent="EnemyInteraction" index="2" unique_id=92154285]
+immune_to_beetroot = true
+
+[node name="InteractionWithShell" parent="EnemyInteraction" index="4" unique_id=1504211400]
+is_shell_hittable = false
+
+[node name="InteractionWithBump" parent="EnemyInteraction" index="5" unique_id=1718256866]
+is_bumpable = false
+
+[node name="InteractionWithCrush" parent="EnemyInteraction" index="6" unique_id=1924136299]
+path_to_basic_movement = NodePath("")
+is_crushable = false
+
+[node name="EnemyDie" parent="." unique_id=20942104 instance=ExtResource("8_6bk1v")]
+
+[node name="AddScoreComponent" parent="." unique_id=2067097888 instance=ExtResource("9_0iwha")]
+
+[node name="EnemySoundManager" parent="." unique_id=1895912420 instance=ExtResource("10_rbdyd")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("11_f702u")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=1905849852]
+script = ExtResource("12_g8dnj")
+out_of_screen_detection = true
+screen_up_offset = 32.0
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[connection signal="body_entered" from="Body" to="Body" method="_on_body_body_entered"]
+
+[editable path="EnemyInteraction"]

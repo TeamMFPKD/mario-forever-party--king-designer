@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cbmqhdfakug1d"]
 
 [ext_resource type="PackedScene" uid="uid://dt6ikdqwwgo2r" path="res://object/level/enemy/troopa/shell_green.tscn" id="1_ayybe"]
-[ext_resource type="Texture2D" uid="uid://bvvlsgqa6nkic" path="res://sprite/enemy/shell_red.png" id="2_yqujw"]
+[ext_resource type="Texture2D" uid="uid://bvvlsgqa6nkic" path="res://sprite/enemy/troopa/shell_red.png" id="2_yqujw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oeb4r"]
 atlas = ExtResource("2_yqujw")

@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://duj6uud1jhnqf"]
 
 [ext_resource type="PackedScene" uid="uid://b4mexma31ltxc" path="res://object/level/enemy/troopa/troopa_green.tscn" id="1_nauhh"]
-[ext_resource type="Texture2D" uid="uid://grjsk3ap7oql" path="res://sprite/enemy/troopa_red.png" id="2_5xi74"]
+[ext_resource type="Texture2D" uid="uid://grjsk3ap7oql" path="res://sprite/enemy/troopa/troopa_red.png" id="2_5xi74"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="3_geyck"]
-[ext_resource type="Texture2D" uid="uid://bvvlsgqa6nkic" path="res://sprite/enemy/shell_red.png" id="3_x5t2q"]
+[ext_resource type="Texture2D" uid="uid://bvvlsgqa6nkic" path="res://sprite/enemy/troopa/shell_red.png" id="3_x5t2q"]
 [ext_resource type="PackedScene" uid="uid://cbmqhdfakug1d" path="res://object/level/enemy/troopa/shell_red.tscn" id="4_43hfj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6nard"]

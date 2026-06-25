@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://x2ntca21oxn0"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_52wow"]
+[ext_resource type="PackedScene" uid="uid://5n7num3si6rk" path="res://object/level/enemy/magikoopa/magikoopa.tscn" id="2_52wow"]
+[ext_resource type="Texture2D" uid="uid://sjd4mwqt2b7f" path="res://sprite/enemy/magikoopa/magikoopa.png" id="3_fihn3"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_hu1nu"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_log5l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gnq71"]
+atlas = ExtResource("3_fihn3")
+region = Rect2(24, 8, 48, 56)
+
+[node name="SpawnerMagikoopa" type="Node2D" unique_id=929337500]
+script = ExtResource("1_52wow")
+spawn_object_scene = ExtResource("2_52wow")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1582712599]
+position = Vector2(0, -12)
+texture = SubResource("AtlasTexture_gnq71")
+flip_h = true
+
+[node name="OffsetMarker" parent="." unique_id=1364515649 instance=ExtResource("4_hu1nu")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_log5l")]
