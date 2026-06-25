@@ -45,6 +45,7 @@ LifeManager="*uid://by8cg73qfeta4"
 MouseSpriteManager="*uid://bn1io84ug6xwb"
 MessageSidebar="*uid://wycwx4fbk27d"
 GlobalTransition="*uid://cwjt3obt14yfy"
+TitleAnimationManager="*uid://ba32rpxettui3"
 
 [display]
 
