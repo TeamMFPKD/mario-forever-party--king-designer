@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ba32rpxettui3"]
+
+[ext_resource type="Script" uid="uid://dxmioeva08do" path="res://script/title/animation/title_animation_manager.gd" id="1_y0tnq"]
+
+[node name="TitleAnimationManager" type="Node" unique_id=758152415]
+script = ExtResource("1_y0tnq")

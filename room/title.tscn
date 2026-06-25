@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/title/user_notice.gd" id="4_ytxtj"]
 [ext_resource type="Script" uid="uid://62e2gryab40o" path="res://script/title/game_start.gd" id="5_estsl"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_qon3s"]
+[ext_resource type="Script" uid="uid://cx6yyimn2ct7f" path="res://script/title/animation/ui_animation_fall.gd" id="7_rowrn"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="8_c2fru"]
 [ext_resource type="Script" uid="uid://uik7s3sqhhif" path="res://script/title/game_version.gd" id="9_4xy5l"]
 [ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="9_qon3g"]
@@ -41,6 +42,44 @@
 [ext_resource type="Script" uid="uid://cjmbnxdu46yvg" path="res://script/option/platform_control_set_button.gd" id="29_w12k4"]
 [ext_resource type="Script" uid="uid://cofxhxjig8glj" path="res://script/option/resolution_button.gd" id="30_01vp3"]
 [ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://script/option/mobile_layout_set.gd" id="31_n7yan"]
+[ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="37_yfoso"]
+[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="38_rowrn"]
+[ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="39_pwog8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]
+atlas = ExtResource("37_yfoso")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lhxpi"]
+atlas = ExtResource("38_rowrn")
+region = Rect2(1, 47, 31, 45)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8u7gm"]
+load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p8x2f"]
+atlas = SubResource("CompressedTexture2D_8u7gm")
+region = Rect2(0, 64, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yfoso"]
+atlas = ExtResource("37_yfoso")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rowrn"]
+atlas = SubResource("CompressedTexture2D_8u7gm")
+region = Rect2(64, 64, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwog8"]
+atlas = ExtResource("37_yfoso")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37ha4"]
+atlas = ExtResource("39_pwog8")
+region = Rect2(0, 0, 35, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_32xhp"]
+atlas = SubResource("CompressedTexture2D_8u7gm")
+region = Rect2(192, 64, 64, 32)
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -108,6 +147,9 @@ theme_override_font_sizes/font_size = 160
 text = "MARIO FOREVER
 MAKER PARTY"
 
+[node name="UiAnimationFall" type="Node" parent="GameRoomSize/Title" unique_id=1885359486]
+script = ExtResource("7_rowrn")
+
 [node name="AutoVersionMarginContainer" parent="GameRoomSize" unique_id=1579522722 instance=ExtResource("8_c2fru")]
 layout_mode = 1
 anchors_preset = 15
@@ -133,7 +175,21 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("9_4xy5l")
 
-[node name="ChooseMode" type="MarginContainer" parent="GameRoomSize" unique_id=683295364]
+[node name="ChooseModePanel" parent="GameRoomSize" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -452.5
+offset_top = -460.0
+offset_right = 452.5
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ChooseMode" type="MarginContainer" parent="GameRoomSize/ChooseModePanel" unique_id=683295364]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -141,8 +197,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -401.0
-offset_top = -472.0
+offset_top = -444.0
 offset_right = 401.0
+offset_bottom = 28.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_left = 16
@@ -150,17 +207,17 @@ theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 64
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/ChooseMode" unique_id=758802449]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/ChooseModePanel/ChooseMode" unique_id=758802449]
 layout_mode = 2
 theme_override_constants/separation = 128
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ChooseMode/HBoxContainer" unique_id=847404174]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer" unique_id=847404174]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 0
 theme_override_constants/separation = 32
 
-[node name="ChooseHostButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
+[node name="ChooseHostButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(320, 150)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -168,27 +225,27 @@ size_flags_vertical = 0
 text = "组织游戏"
 icon_alignment = 1
 
-[node name="ChooseJoinButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
+[node name="ChooseJoinButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(320, 150)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "加入游戏"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="GameRoomSize/ChooseMode/HBoxContainer" unique_id=2012226893]
+[node name="VBoxContainer2" type="VBoxContainer" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer" unique_id=2012226893]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 0
 theme_override_constants/separation = 32
 
-[node name="HistoryButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1210628054 instance=ExtResource("2_w52fc")]
+[node name="HistoryButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1210628054 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(320, 150)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "游玩记录"
 
-[node name="OptionsButton" parent="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1658739772 instance=ExtResource("2_w52fc")]
+[node name="OptionsButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1658739772 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(320, 150)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -831,7 +888,7 @@ size_flags_horizontal = 6
 size_flags_vertical = 4
 text = "返回"
 
-[node name="ControlsPanel" parent="GameRoomSize/Options" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+[node name="ControlsPanel" parent="GameRoomSize/Options" unique_id=2000237551 instance=ExtResource("4_i3lsm")]
 visible = false
 layout_mode = 2
 
@@ -1109,6 +1166,81 @@ layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
 
+[node name="Control" type="Control" parent="GameRoomSize" unique_id=987626403]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Node2D" type="Node2D" parent="GameRoomSize/Control" unique_id=993007539]
+z_index = -10
+scale = Vector2(3, 3)
+
+[node name="Sprite2DPipe" type="Sprite2D" parent="GameRoomSize/Control/Node2D" unique_id=214733939]
+position = Vector2(-156.00002, -118.66666)
+rotation = -0.34906584
+texture = SubResource("AtlasTexture_4ndrp")
+
+[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe" unique_id=674446431]
+z_index = -1
+position = Vector2(0, -40)
+texture = SubResource("AtlasTexture_lhxpi")
+flip_h = true
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe" unique_id=163928691]
+repeat_size = Vector2(0, 32)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe/Parallax2D" unique_id=1800957048]
+position = Vector2(0, 144)
+texture = SubResource("AtlasTexture_p8x2f")
+metadata/_edit_lock_ = true
+
+[node name="Sprite2DPipe2" type="Sprite2D" parent="GameRoomSize/Control/Node2D" unique_id=2073061778]
+position = Vector2(-6.6666665, -145.33333)
+texture = SubResource("AtlasTexture_yfoso")
+
+[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe2" unique_id=1010591224]
+repeat_size = Vector2(0, 32)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe2/Parallax2D" unique_id=1516081178]
+position = Vector2(0, 144)
+texture = SubResource("AtlasTexture_rowrn")
+metadata/_edit_lock_ = true
+
+[node name="Sprite2DPipe3" type="Sprite2D" parent="GameRoomSize/Control/Node2D" unique_id=725260187]
+position = Vector2(172, -60.00002)
+rotation = 0.7853982
+texture = SubResource("AtlasTexture_pwog8")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe3" unique_id=1364785631]
+z_index = -1
+position = Vector2(0, -40)
+texture = SubResource("AtlasTexture_37ha4")
+flip_h = true
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe3" unique_id=1747001236]
+repeat_size = Vector2(0, 32)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe3/Parallax2D" unique_id=1424443759]
+position = Vector2(0, 144)
+texture = SubResource("AtlasTexture_32xhp")
+metadata/_edit_lock_ = true
+
 [node name="BGMStartToPlayTimer" type="Timer" parent="." unique_id=317060978]
 wait_time = 0.3
 one_shot = true
@@ -1133,10 +1265,10 @@ invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginConta
 show_mode = 0
 
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
-[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene"]
-[connection signal="pressed" from="GameRoomSize/ChooseMode/HBoxContainer/VBoxContainer2/OptionsButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene"]
+[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/OptionsButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
