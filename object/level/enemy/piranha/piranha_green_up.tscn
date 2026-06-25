@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bkjm2u4cn4r1p"]
 
-[ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="1_2dh1x"]
+[ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_plant/piranha_green.png" id="1_2dh1x"]
 [ext_resource type="Script" uid="uid://ceu284f7cfulc" path="res://script/level/enemy/piranha_movement.gd" id="2_0ohy1"]
 [ext_resource type="PackedScene" uid="uid://bcfmfgm8jsnuo" path="res://object/level/enemy/enemy_interaction.tscn" id="5_gwe5a"]
 [ext_resource type="PackedScene" uid="uid://dl0usoanifx8r" path="res://object/level/enemy/enemy_die.tscn" id="6_8tkp4"]

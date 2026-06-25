@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://d3s02bdqv0vds"]
+
+[ext_resource type="Texture2D" uid="uid://cf3bau5s042ej" path="res://sprite/enemy/magikoopa/magic_particle.png" id="1_1xktw"]
+[ext_resource type="Script" uid="uid://bnsjec4ws7j0c" path="res://script/level/enemy/magikoopa/magic_particle.gd" id="2_ycar8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ycar8"]
+atlas = ExtResource("1_1xktw")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bp05w"]
+atlas = ExtResource("1_1xktw")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aj6ep"]
+atlas = ExtResource("1_1xktw")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6u7o4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ycar8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bp05w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aj6ep")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="MagicParticle" type="AnimatedSprite2D" unique_id=1534808723]
+sprite_frames = SubResource("SpriteFrames_6u7o4")
+autoplay = "default"
+frame = 2
+frame_progress = 1.0
+script = ExtResource("2_ycar8")

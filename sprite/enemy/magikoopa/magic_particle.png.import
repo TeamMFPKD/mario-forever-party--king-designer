@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5rbtnf8w7vys"
-path="res://.godot/imported/troopa_fly_green.png-c47e92774e841867c53d625177b9b99d.ctex"
+uid="uid://cf3bau5s042ej"
+path="res://.godot/imported/magic_particle.png-7518a8d58e03668a007f140526cb52ed.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/troopa_fly_green.png"
-dest_files=["res://.godot/imported/troopa_fly_green.png-c47e92774e841867c53d625177b9b99d.ctex"]
+source_file="res://sprite/enemy/magikoopa/magic_particle.png"
+dest_files=["res://.godot/imported/magic_particle.png-7518a8d58e03668a007f140526cb52ed.ctex"]
 
 [params]
 

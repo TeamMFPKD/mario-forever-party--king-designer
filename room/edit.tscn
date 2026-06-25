@@ -77,20 +77,20 @@
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="59_rvqgs"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="60_41bow"]
 [ext_resource type="Texture2D" uid="uid://ciu4jkh28vrfr" path="res://sprite/pipe/pipe_horizontal.png" id="61_3eot8"]
-[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="62_po8je"]
+[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa/troopa_green.png" id="62_po8je"]
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="63_yl8ll"]
 [ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="64_q3lrf"]
-[ext_resource type="Texture2D" uid="uid://grjsk3ap7oql" path="res://sprite/enemy/troopa_red.png" id="65_kuyo0"]
-[ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/buzzy_beetle.png" id="66_h2e6j"]
+[ext_resource type="Texture2D" uid="uid://grjsk3ap7oql" path="res://sprite/enemy/troopa/troopa_red.png" id="65_kuyo0"]
+[ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/troopa/buzzy_beetle.png" id="66_h2e6j"]
 [ext_resource type="Texture2D" uid="uid://bq8cp4ab4udo7" path="res://sprite/enemy/hammer_bro.png" id="67_6vqq7"]
 [ext_resource type="Texture2D" uid="uid://4gmofwbo8lf4" path="res://sprite/enemy/fire_bro.png" id="68_rna61"]
 [ext_resource type="Texture2D" uid="uid://cvhrkx7nkaafo" path="res://sprite/enemy/bullet_bill_cannon.png" id="69_5h8dv"]
 [ext_resource type="Texture2D" uid="uid://h3hw031ivhbu" path="res://sprite/enemy/boo.png" id="70_rxljj"]
-[ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_green.png" id="71_4y0aq"]
-[ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_fire.png" id="72_hwca6"]
-[ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_blue.png" id="73_6jw8q"]
+[ext_resource type="Texture2D" uid="uid://bwuhhrliqqmpq" path="res://sprite/enemy/piranha_plant/piranha_green.png" id="71_4y0aq"]
+[ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_plant/piranha_fire.png" id="72_hwca6"]
+[ext_resource type="Texture2D" uid="uid://cy7osce3kxd36" path="res://sprite/enemy/piranha_plant/piranha_blue.png" id="73_6jw8q"]
 [ext_resource type="Texture2D" uid="uid://cxuirnxsgnwhr" path="res://sprite/pipe/pipe_with_corner_transparent.png" id="73_rnw8m"]
-[ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_stone.png" id="74_sf1wo"]
+[ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_plant/piranha_stone.png" id="74_sf1wo"]
 [ext_resource type="Texture2D" uid="uid://batjbminyc3b7" path="res://sprite/ui/camare_edge_move.png" id="75_jm62f"]
 [ext_resource type="Texture2D" uid="uid://5dcx7bwtt" path="res://sprite/enemy/thwomp.png" id="76_3l15o"]
 [ext_resource type="Texture2D" uid="uid://b7x6hjrevd6jc" path="res://sprite/facility/giant_gate.png" id="76_6crsa"]
@@ -110,6 +110,7 @@
 [ext_resource type="Script" uid="uid://bdt53k3b3yq43" path="res://script/edit/clear_pipe/clear_pipe_line_draw_test.gd" id="101_oia1o"]
 [ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="102_oia1o"]
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/clear_pipe/spawner_pipe_vertical_up.tscn" id="103_oia1o"]
+[ext_resource type="Texture2D" uid="uid://sjd4mwqt2b7f" path="res://sprite/enemy/magikoopa/magikoopa.png" id="103_qnirk"]
 [ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/clear_pipe/spawner_pipe_vertical_down.tscn" id="104_oia1o"]
 [ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_left.tscn" id="105_oia1o"]
 [ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_right.tscn" id="106_oia1o"]
@@ -262,6 +263,10 @@ region = Rect2(0, 0, 64, 66)
 [sub_resource type="AtlasTexture" id="AtlasTexture_m0llv"]
 atlas = ExtResource("70_rxljj")
 region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gnq71"]
+atlas = ExtResource("103_qnirk")
+region = Rect2(24, 8, 48, 56)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ttk4a"]
 atlas = ExtResource("71_4y0aq")
@@ -1614,6 +1619,16 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_m0llv")
 flip_h = true
 
+[node name="ItemButtonMagikoopa" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2" unique_id=720774010 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "magikoopa"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonMagikoopa/ButtonTexture" parent_id_path=PackedInt32Array(720774010, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_gnq71")
+flip_h = true
+
 [node name="PiranhaPlant" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy" unique_id=1815552802]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -2096,6 +2111,7 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonCannon"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonThwomp"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonBoo"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonMagikoopa"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaGreenUp"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaBlueUp"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfxl1mxbf2xiv"
-path="res://.godot/imported/buzzy_beetle.png-2804647657486a5bf7f14961892d6060.ctex"
+uid="uid://cy7osce3kxd36"
+path="res://.godot/imported/piranha_blue.png-e94ec56e91091cb596a3eea01c16d7a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/buzzy_beetle.png"
-dest_files=["res://.godot/imported/buzzy_beetle.png-2804647657486a5bf7f14961892d6060.ctex"]
+source_file="res://sprite/enemy/piranha_plant/piranha_blue.png"
+dest_files=["res://.godot/imported/piranha_blue.png-e94ec56e91091cb596a3eea01c16d7a2.ctex"]
 
 [params]
 

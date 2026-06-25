@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bwuhhrliqqmpq"
-path="res://.godot/imported/piranha_green.png-130bafec7dd791d93b742ac8a0277167.ctex"
+uid="uid://c1vers38poaow"
+path="res://.godot/imported/magic.png-cfe49c342a555799af0f041336101eaa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/piranha_green.png"
-dest_files=["res://.godot/imported/piranha_green.png-130bafec7dd791d93b742ac8a0277167.ctex"]
+source_file="res://sprite/enemy/magikoopa/magic.png"
+dest_files=["res://.godot/imported/magic.png-cfe49c342a555799af0f041336101eaa.ctex"]
 
 [params]
 

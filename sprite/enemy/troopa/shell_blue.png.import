@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://grjsk3ap7oql"
-path="res://.godot/imported/troopa_red.png-d4c809a68d437998d6d9cfce32547bc7.ctex"
+uid="uid://b0n355b0i2ym6"
+path="res://.godot/imported/shell_blue.png-f4e83dc003a71435b92132ca1b08f18f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/troopa_red.png"
-dest_files=["res://.godot/imported/troopa_red.png-d4c809a68d437998d6d9cfce32547bc7.ctex"]
+source_file="res://sprite/enemy/troopa/shell_blue.png"
+dest_files=["res://.godot/imported/shell_blue.png-f4e83dc003a71435b92132ca1b08f18f.ctex"]
 
 [params]
 

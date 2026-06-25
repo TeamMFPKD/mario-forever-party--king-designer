@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dt6ikdqwwgo2r"]
 
-[ext_resource type="Texture2D" uid="uid://cj6lfbhmvlnj4" path="res://sprite/enemy/shell_green.png" id="1_57orn"]
+[ext_resource type="Texture2D" uid="uid://cj6lfbhmvlnj4" path="res://sprite/enemy/troopa/shell_green.png" id="1_57orn"]
 [ext_resource type="Script" uid="uid://frw2hge25ijg" path="res://script/level/enemy/shell_movement.gd" id="2_05vun"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_06bww"]
 [ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_jtkl4"]

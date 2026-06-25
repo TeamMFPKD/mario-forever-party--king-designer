@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://5s6fte7o4wm"]
 
 [ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_7f57j"]
-[ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/buzzy_beetle.png" id="2_7f57j"]
+[ext_resource type="Texture2D" uid="uid://bfxl1mxbf2xiv" path="res://sprite/enemy/troopa/buzzy_beetle.png" id="2_7f57j"]
 [ext_resource type="PackedScene" uid="uid://dypcy1al6fwtc" path="res://object/level/enemy/troopa/beetle.tscn" id="2_kpxsx"]
 [ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_humr5"]
 [ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_6d1y8"]

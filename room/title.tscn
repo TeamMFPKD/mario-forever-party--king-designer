@@ -43,7 +43,7 @@
 [ext_resource type="Script" uid="uid://cofxhxjig8glj" path="res://script/option/resolution_button.gd" id="30_01vp3"]
 [ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://script/option/mobile_layout_set.gd" id="31_n7yan"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="37_yfoso"]
-[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa_green.png" id="38_rowrn"]
+[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa/troopa_green.png" id="38_rowrn"]
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="39_pwog8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]

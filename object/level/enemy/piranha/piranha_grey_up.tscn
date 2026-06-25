@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bqktcrlxlh8je"]
 
 [ext_resource type="PackedScene" uid="uid://bkjm2u4cn4r1p" path="res://object/level/enemy/piranha/piranha_green_up.tscn" id="1_gk3qt"]
-[ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_stone.png" id="2_ussov"]
+[ext_resource type="Texture2D" uid="uid://r25m4lm8exok" path="res://sprite/enemy/piranha_plant/piranha_stone.png" id="2_ussov"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1r5mn"]
 atlas = ExtResource("2_ussov")

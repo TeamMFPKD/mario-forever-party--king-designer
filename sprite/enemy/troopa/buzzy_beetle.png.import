@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgq6xx7yadlyc"
-path="res://.godot/imported/troopa_fly_blue.png-8c396602dda1f260dcfb0501e82be68e.ctex"
+uid="uid://bfxl1mxbf2xiv"
+path="res://.godot/imported/buzzy_beetle.png-4f10f72d19c006194a4be42a5dd1c579.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/troopa_fly_blue.png"
-dest_files=["res://.godot/imported/troopa_fly_blue.png-8c396602dda1f260dcfb0501e82be68e.ctex"]
+source_file="res://sprite/enemy/troopa/buzzy_beetle.png"
+dest_files=["res://.godot/imported/buzzy_beetle.png-4f10f72d19c006194a4be42a5dd1c579.ctex"]
 
 [params]
 

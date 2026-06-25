@@ -51,6 +51,7 @@
 [ext_resource type="PackedScene" uid="uid://qegad31yf6yd" path="res://object/level/facility/key/cursed_key.tscn" id="50_pphef"]
 [ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key/key.tscn" id="50_xdq7u"]
 [ext_resource type="PackedScene" uid="uid://g57deo7yorb3" path="res://object/level/facility/door/door.tscn" id="51_xdq7u"]
+[ext_resource type="PackedScene" uid="uid://5n7num3si6rk" path="res://object/level/enemy/magikoopa/magikoopa.tscn" id="52_pphef"]
 
 [sub_resource type="GDScript" id="GDScript_8ejbx"]
 script/source = "extends Label
@@ -526,6 +527,30 @@ position = Vector2(4112, 400)
 
 [node name="DoorComponent" parent="Door4/Area2D" parent_id_path=PackedInt32Array(957585422, 248836387) index="1" unique_id=1603212476]
 id = 1
+
+[node name="Magikoopa" parent="." unique_id=221160924 instance=ExtResource("52_pphef")]
+position = Vector2(4080, 176)
+
+[node name="BrickBlock5" parent="." unique_id=113311514 instance=ExtResource("32_udf3v")]
+position = Vector2(4216, 304)
+
+[node name="BrickBlock6" parent="." unique_id=1928587263 instance=ExtResource("32_udf3v")]
+position = Vector2(4240, 352)
+
+[node name="BrickBlock7" parent="." unique_id=1605027748 instance=ExtResource("32_udf3v")]
+position = Vector2(4272, 400)
+
+[node name="BrickBlock8" parent="." unique_id=1246409400 instance=ExtResource("32_udf3v")]
+position = Vector2(4312, 376)
+
+[node name="BrickBlock9" parent="." unique_id=848765519 instance=ExtResource("32_udf3v")]
+position = Vector2(4376, 288)
+
+[node name="BrickBlock10" parent="." unique_id=129959006 instance=ExtResource("32_udf3v")]
+position = Vector2(4232, 184)
+
+[node name="BrickBlock11" parent="." unique_id=2019851658 instance=ExtResource("32_udf3v")]
+position = Vector2(4264, 112)
 
 [editable path="Door"]
 [editable path="Door2"]

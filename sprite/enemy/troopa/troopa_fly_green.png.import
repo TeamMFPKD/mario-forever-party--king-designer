@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cuceivicqbexh"
-path="res://.godot/imported/troopa_blue.png-a73e555be0b1a1ec6a3d7564050a9ed5.ctex"
+uid="uid://b5rbtnf8w7vys"
+path="res://.godot/imported/troopa_fly_green.png-9fab2be9e097662c085ede19e8567362.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprite/enemy/troopa_blue.png"
-dest_files=["res://.godot/imported/troopa_blue.png-a73e555be0b1a1ec6a3d7564050a9ed5.ctex"]
+source_file="res://sprite/enemy/troopa/troopa_fly_green.png"
+dest_files=["res://.godot/imported/troopa_fly_green.png-9fab2be9e097662c085ede19e8567362.ctex"]
 
 [params]
 
