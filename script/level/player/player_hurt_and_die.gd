@@ -46,7 +46,7 @@ func _physics_process(_delta: float) -> void:
 	if player.position.y > level_camera.limit_bottom + 32 \
 	or player.position.x < level_camera.limit_left - 32 \
 	or player.position.x > level_camera.limit_right + 32 \
-	or (player.position.y < level_camera.limit_top - 32 and round(player.rotation_degrees) % 360 == 180):
+	or (player.position.y < level_camera.limit_top - 32 and player.up_direction.y > 0.5):
 		_on_player_die()
 
 	if is_hurting:
@@ -81,7 +81,7 @@ func _on_player_die() -> void:
 
 	var dead = player_dead_scene.instantiate() as Node2D
 	dead.position = player.position
-	dead.rotation = player.rotation
+	dead.rotation = atan2(player.up_direction.x, -player.up_direction.y)
 	player.add_sibling(dead)
 
 	if is_inside_tree():

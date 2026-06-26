@@ -39,7 +39,7 @@ signal play_sound_jump
 @export_range(-360.0, 360.0, 5.0) var rotate_with_up: float = 0.0:
 	set(value):
 		rotate_with_up = value
-		player.rotation_degrees = rotate_with_up
+		#player.rotation_degrees = rotate_with_up
 		player.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 
 @export var triangle_speed_x_limit: float = 300.0
@@ -338,6 +338,7 @@ func door_movement() -> void:
 func on_triangle_block() -> void:
 	if is_switching_gravity:
 		rotate_with_up = move_toward(rotate_with_up, target_gravity, 10.0)
+		speed_y = 0.0
 		if abs(rotate_with_up - target_gravity) < 10.0:
 			rotate_with_up = target_gravity
 			if not is_on_triangle:
