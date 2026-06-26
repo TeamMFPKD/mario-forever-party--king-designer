@@ -3,6 +3,7 @@
 [ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="1_iaqfx"]
 [ext_resource type="Script" uid="uid://cjkkhvnw3nf3g" path="res://script/level/tile_map_layer_semi_solid_creator.gd" id="2_vbo8m"]
 [ext_resource type="PackedScene" uid="uid://ckmp8d6mn8kmq" path="res://object/level/player/player.tscn" id="3_whgqe"]
+[ext_resource type="Script" uid="uid://brg4vg3v6dw2k" path="res://script/level/test_room_debug_label.gd" id="4_yujc7"]
 [ext_resource type="PackedScene" uid="uid://cw30nlxu2qg8n" path="res://object/level/enemy/goomba.tscn" id="5_mvtm3"]
 [ext_resource type="PackedScene" uid="uid://bbl8lvnjtvifa" path="res://object/level/facility/platform/platform_horizontal.tscn" id="6_jiyx1"]
 [ext_resource type="PackedScene" uid="uid://b2oexkna3nnjq" path="res://object/level/facility/platform/platform_vertical_up.tscn" id="7_ue3ck"]
@@ -56,20 +57,6 @@
 [ext_resource type="PackedScene" uid="uid://ynitkwswfduh" path="res://object/level/facility/triangle_block/triangle_block_gravity_top_right.tscn" id="54_erbnt"]
 [ext_resource type="PackedScene" uid="uid://8ljpehme030d" path="res://object/level/facility/triangle_block/triangle_block_gravity_bottom_left.tscn" id="55_yujc7"]
 [ext_resource type="PackedScene" uid="uid://c6oqcpk72tayi" path="res://object/level/facility/triangle_block/triangle_block_gravity_top_left.tscn" id="56_n637y"]
-
-[sub_resource type="GDScript" id="GDScript_erbnt"]
-script/source = "extends Label
-
-@export var player_mov: PlayerMovement
-
-func _process(_delta) -> void:
-	'''
-	text = \"is_on_triangle: \" + str(player_mov.is_on_triangle) + \"\\n\" + \\
-	\"is_switching_gravity: \" + str(player_mov.is_switching_gravity)
-	'''
-	
-	text = \"spdY: \" + str(player_mov.speed_y) + \"\\nspdX: \" + str(player_mov.speed_x)
-"
 
 [sub_resource type="GDScript" id="GDScript_8ejbx"]
 script/source = "extends Label
@@ -252,15 +239,28 @@ limit_right = 6040
 limit_bottom = 700
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="Player" unique_id=1308095212 node_paths=PackedStringArray("player_mov")]
-offset_left = -96.0
-offset_top = -72.0
-offset_right = 32.0
-offset_bottom = -23.0
-text = "\"is_on_triangle: \"
-\"is_on_triangle: \""
-script = SubResource("GDScript_erbnt")
-player_mov = NodePath("../PlayerMediator/PlayerMovement")
+[node name="DebugCanvasLayer" type="CanvasLayer" parent="." unique_id=748203275]
+
+[node name="PipeDebugLabel" type="Label" parent="DebugCanvasLayer" unique_id=1668910485]
+visible = false
+z_index = 9
+offset_left = 4376.0
+offset_top = 128.0
+offset_right = 4416.0
+offset_bottom = 177.0
+theme_override_constants/outline_size = 3
+text = "你
+了"
+script = SubResource("GDScript_8ejbx")
+
+[node name="TestRoomDebugLabel" type="Label" parent="DebugCanvasLayer" unique_id=1308095212 node_paths=PackedStringArray("player_mov", "player_node")]
+offset_right = 128.0
+offset_bottom = 49.0
+theme_override_font_sizes/font_size = 20
+text = "debug"
+script = ExtResource("4_yujc7")
+player_mov = NodePath("../../Player/PlayerMediator/PlayerMovement")
+player_node = NodePath("../../Player")
 
 [node name="Goomba" parent="." unique_id=114751985 instance=ExtResource("5_mvtm3")]
 position = Vector2(608, 400)
@@ -472,18 +472,6 @@ position = Vector2(5008, 384)
 [node name="ClearPipeRight2" parent="." unique_id=131210556 instance=ExtResource("39_ue3ck")]
 position = Vector2(5136, 384)
 
-[node name="PipeDebugLabel" type="Label" parent="." unique_id=1668910485]
-visible = false
-z_index = 9
-offset_left = 4376.0
-offset_top = 128.0
-offset_right = 4416.0
-offset_bottom = 177.0
-theme_override_constants/outline_size = 3
-text = "你
-了"
-script = SubResource("GDScript_8ejbx")
-
 [node name="SwitchBlock" parent="." unique_id=910132958 instance=ExtResource("45_2yx74")]
 position = Vector2(5072, 264)
 
@@ -592,7 +580,6 @@ position = Vector2(5456, 400)
 [node name="TriangleBlockGravityTopLeft" parent="." unique_id=1065775045 instance=ExtResource("56_n637y")]
 position = Vector2(5456, 208)
 
-[editable path="Player"]
 [editable path="Door"]
 [editable path="Door2"]
 [editable path="Door3"]
