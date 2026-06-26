@@ -76,6 +76,9 @@ func update_animation():
 		if current_state == "walk" and ani.animation == "walk":
 			walk_animation_frame = ani.frame
 	
+	# 根据重力方向旋转精灵
+	ani.rotation_degrees = player_movement.rotate_with_up
+
 	# 设置方向
 	if player.is_on_floor():
 		ani.flip_h = (direction == -1)
