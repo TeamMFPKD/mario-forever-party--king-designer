@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://b1m8q3ohov2jo"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_twlyx"]
+[ext_resource type="PackedScene" uid="uid://8ljpehme030d" path="res://object/level/facility/triangle_block/triangle_block_gravity_bottom_left.tscn" id="2_twlyx"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_frxks"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="4_36b1v"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hmwou"]
+load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9f0f55ce7523c.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d7pwa"]
+atlas = SubResource("CompressedTexture2D_hmwou")
+region = Rect2(96, 0, 32, 32)
+
+[node name="SpawnerTriangleBlockGravityBottomLeft" type="Node2D" unique_id=1594885199]
+script = ExtResource("1_twlyx")
+spawn_object_scene = ExtResource("2_twlyx")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
+texture = SubResource("AtlasTexture_d7pwa")
+
+[node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("3_frxks")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("4_36b1v")]

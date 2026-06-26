@@ -81,6 +81,7 @@ func _on_player_die() -> void:
 
 	var dead = player_dead_scene.instantiate() as Node2D
 	dead.position = player.position
+	dead.rotation = player.rotation
 	player.add_sibling(dead)
 
 	if is_inside_tree():

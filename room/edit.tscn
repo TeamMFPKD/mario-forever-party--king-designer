@@ -122,6 +122,7 @@
 [ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="111_yebna"]
 [ext_resource type="Texture2D" uid="uid://cbqydv4ek0pae" path="res://sprite/facility/cursed_key.png" id="112_cvttd"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="112_oia1o"]
+[ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="116_hfb1t"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -350,9 +351,34 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("77_pqowm")
 region = Rect2(31, 16, 31, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_3p3ro"]
+atlas = ExtResource("116_hfb1t")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hmwou"]
+load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9f0f55ce7523c.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d7pwa"]
+atlas = SubResource("CompressedTexture2D_hmwou")
+region = Rect2(96, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_toeyn"]
 atlas = ExtResource("79_7it4e")
 region = Rect2(33, 8, 95, 16)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_g12li"]
+load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9f0f55ce7523c.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8o126"]
+atlas = SubResource("CompressedTexture2D_g12li")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gotbk"]
+load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9f0f55ce7523c.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vunie"]
+atlas = SubResource("CompressedTexture2D_gotbk")
+region = Rect2(96, 32, 32, 32)
 
 [node name="Room" type="Node2D" unique_id=513281532]
 
@@ -1764,9 +1790,8 @@ texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
 layout_mode = 0
-offset_left = -704.0
+offset_left = -1040.0
 offset_top = -698.0
-offset_right = -12.0
 offset_bottom = 168.0
 
 [node name="HBoxContainer4" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=1982302972]
@@ -1921,6 +1946,24 @@ metadata/_edit_lock_ = true
 rotation = 1.5707964
 texture = SubResource("AtlasTexture_io63s")
 
+[node name="ItemButtonTriangleBr" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" unique_id=1944762327 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "triangle_br"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBr/ButtonTexture" parent_id_path=PackedInt32Array(1944762327, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_3p3ro")
+
+[node name="ItemButtonTriangleBl" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" unique_id=853311435 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "triangle_bl"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBl/ButtonTexture" parent_id_path=PackedInt32Array(853311435, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_d7pwa")
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=1014086319]
 layout_mode = 2
 size_flags_vertical = 3
@@ -1997,6 +2040,24 @@ position = Vector2(0, -35)
 scale = Vector2(0.6, 0.6)
 texture = SubResource("AtlasTexture_toeyn")
 metadata/_edit_lock_ = true
+
+[node name="ItemButtonTriangleTr" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" unique_id=1894089872 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "triangle_tr"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTr/ButtonTexture" parent_id_path=PackedInt32Array(1894089872, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_8o126")
+
+[node name="ItemButtonTriangleTl" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" unique_id=1366001594 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "triangle_tl"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTl/ButtonTexture" parent_id_path=PackedInt32Array(1366001594, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_vunie")
 
 [node name="ItemButtonEraser" parent="GameRoomSize/RightItemGroups" unique_id=1818552784 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -2137,8 +2198,12 @@ show_mode = 2
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSpring"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonHorizontalSpring"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBr"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBl"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformHorizontal"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalDown"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalUp"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonPlatformFall"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTr"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTl"]
 [editable path="GameRoomSize/RightItemGroups/ItemButtonEraser"]

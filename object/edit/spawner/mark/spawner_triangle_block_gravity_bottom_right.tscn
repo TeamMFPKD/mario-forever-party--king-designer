@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://2h47eelss63i"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_epd7s"]
+[ext_resource type="PackedScene" uid="uid://fg5m850mwm3x" path="res://object/level/facility/triangle_block/triangle_block_gravity_bottom_right.tscn" id="2_fndvn"]
+[ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="3_aeshr"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="3_cj513"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="4_aeshr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3p3ro"]
+atlas = ExtResource("3_aeshr")
+region = Rect2(64, 0, 32, 32)
+
+[node name="SpawnerTriangleBlockGravityBottomRight" type="Node2D" unique_id=1594885199]
+script = ExtResource("1_epd7s")
+spawn_object_scene = ExtResource("2_fndvn")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=434294129]
+texture = SubResource("AtlasTexture_3p3ro")
+
+[node name="OffsetMarker" parent="." unique_id=1017645738 instance=ExtResource("3_cj513")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("4_aeshr")]

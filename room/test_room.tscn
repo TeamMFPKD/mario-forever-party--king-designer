@@ -63,8 +63,12 @@ script/source = "extends Label
 @export var player_mov: PlayerMovement
 
 func _process(_delta) -> void:
+	'''
 	text = \"is_on_triangle: \" + str(player_mov.is_on_triangle) + \"\\n\" + \\
 	\"is_switching_gravity: \" + str(player_mov.is_switching_gravity)
+	'''
+	
+	text = \"spdY: \" + str(player_mov.speed_y) + \"\\nspdX: \" + str(player_mov.speed_x)
 "
 
 [sub_resource type="GDScript" id="GDScript_8ejbx"]
