@@ -62,6 +62,8 @@ func _physics_process(_delta: float) -> void:
 	results = ShapeCastQuery.shape_query(player, cast)
 	block_hit_detect(results)
 	cast.position.y = origin_pos_y
+
+	triangle_block_detect(results)
 	
 func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 	for result in results:
@@ -308,3 +310,19 @@ func door_detect(results: Array[Node2D]) -> void:
 		if not door.try_enter():
 			continue
 		player_movement.enter_door(door.id, door)
+
+func triangle_block_detect(results: Array[Node2D]) -> void:
+	player_movement.is_on_triangle = false
+	for result in results:
+		var triangle_block_settings = result.get_node_or_null("%TriangleBlockSettings")
+		if not triangle_block_settings:
+			continue
+		
+		player_movement.is_on_triangle = true
+
+		'''
+		# 根据角度来判断方向
+		match triangle_block_settings.triangle_dir:
+			TriangleBlockSettings.TriangleDir.BOTTOM_RIGHT:
+				pass
+		'''

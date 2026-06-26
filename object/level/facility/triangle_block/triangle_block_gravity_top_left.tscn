@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c6oqcpk72tayi"]
+
+[ext_resource type="PackedScene" uid="uid://fg5m850mwm3x" path="res://object/level/facility/triangle_block/triangle_block_gravity_bottom_right.tscn" id="1_ihpkp"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gotbk"]
+load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9f0f55ce7523c.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vunie"]
+atlas = SubResource("CompressedTexture2D_gotbk")
+region = Rect2(96, 32, 32, 32)
+
+[node name="TriangleBlockGravityTopLeft" unique_id=1976301295 instance=ExtResource("1_ihpkp")]
+
+[node name="Sprite2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(1400912957) index="0" unique_id=2031939512]
+texture = SubResource("AtlasTexture_vunie")
+
+[node name="CollisionPolygon2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(1400912957) index="1" unique_id=1581928486]
+polygon = PackedVector2Array(-16, 16, 16, -16, -16, -16)
+
+[node name="TriangleBlockSettings" parent="StaticBody2D/TriangleBlockArea2D" parent_id_path=PackedInt32Array(1964843202) index="1" unique_id=1449737698]
+triangle_dir = 3

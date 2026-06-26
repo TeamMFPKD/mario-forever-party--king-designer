@@ -42,6 +42,8 @@ signal play_sound_jump
 		player.rotation_degrees = rotate_with_up
 		player.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 
+@export var triangle_speed_x_limit: float = 300.0
+
 var move_up : bool
 var move_down : bool
 var move_left : bool
@@ -89,6 +91,12 @@ var langtiao_timer : int
 var speed_x : float
 var target_speed : float
 var speed_y : float
+
+# 多重力
+var is_on_triangle: bool = false
+var target_gravity : float = 0.0
+var is_switching_gravity: bool = false
+
 
 func _physics_process(delta):
 	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
@@ -186,6 +194,9 @@ func _physics_process(delta):
 
 	# 掉落桥检测
 	platform_fall_detect()
+
+	# 多重力
+	on_triangle_block()
 
 	# 更新碰撞箱
 	update_hit_box()
@@ -323,3 +334,23 @@ func door_movement() -> void:
 				d.play_animation_exit()
 		100:
 			exit_door()
+
+func on_triangle_block() -> void:
+	if is_switching_gravity:
+		rotate_with_up = move_toward(rotate_with_up, target_gravity, 10.0)
+		if abs(rotate_with_up - target_gravity) < 10.0:
+			rotate_with_up = target_gravity
+			if not is_on_triangle:
+				is_switching_gravity = false
+		return
+
+	if not player.is_on_floor():
+		return
+
+	if is_on_triangle and not is_switching_gravity:
+		if speed_x > triangle_speed_x_limit:
+			target_gravity -= 90.0
+			is_switching_gravity = true
+		elif speed_x < -triangle_speed_x_limit:
+			target_gravity += 90.0
+			is_switching_gravity = true

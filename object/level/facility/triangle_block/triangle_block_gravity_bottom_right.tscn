@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://fg5m850mwm3x"]
+
+[ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="1_wp7iu"]
+[ext_resource type="Script" uid="uid://c7bmmcq28gu42" path="res://script/level/facility/triangle_block_settings.gd" id="2_3p3ro"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3p3ro"]
+atlas = ExtResource("1_wp7iu")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wp7iu"]
+radius = 14.0
+
+[node name="TriangleBlockGravityBottomRight" type="Node2D" unique_id=1976301295]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1400912957]
+collision_mask = 0
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=2031939512]
+texture = SubResource("AtlasTexture_3p3ro")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1581928486]
+polygon = PackedVector2Array(-16, 16, 16, 16, 16, -16)
+
+[node name="TriangleBlockArea2D" type="Area2D" parent="StaticBody2D" unique_id=1964843202]
+collision_layer = 1024
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/TriangleBlockArea2D" unique_id=1664859268]
+shape = SubResource("CircleShape2D_wp7iu")
+
+[node name="TriangleBlockSettings" type="Node" parent="StaticBody2D/TriangleBlockArea2D" unique_id=1449737698]
+unique_name_in_owner = true
+script = ExtResource("2_3p3ro")
+metadata/_custom_type_script = "uid://c7bmmcq28gu42"
