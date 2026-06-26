@@ -36,6 +36,12 @@ signal play_sound_jump
 
 @export var horizontal_spring_bounce_speed_x: float = 500.0
 
+@export_range(-360.0, 360.0, 5.0) var rotate_with_up: float = 0.0:
+	set(value):
+		rotate_with_up = value
+		player.rotation_degrees = rotate_with_up
+		player.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
+
 var move_up : bool
 var move_down : bool
 var move_left : bool
@@ -175,7 +181,7 @@ func _physics_process(delta):
 
 
 	# 应用速度
-	player.velocity = Vector2(speed_x, speed_y)
+	player.velocity = Vector2(-player.up_direction.y, player.up_direction.x) * speed_x - player.up_direction * speed_y
 	player.move_and_slide()
 
 	# 掉落桥检测
