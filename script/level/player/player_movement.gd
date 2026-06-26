@@ -97,6 +97,9 @@ var is_on_triangle: bool = false
 var target_gravity : float = 0.0
 var is_switching_gravity: bool = false
 
+# 重力切换时保持输入锁（-1=未锁定, 0-3=锁定的局部方向ID）
+var input_lock: Array[int] = [-1, -1, -1, -1]
+
 
 func _physics_process(delta):
 	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
@@ -107,10 +110,7 @@ func _physics_process(delta):
 		pipe_in_cooldown -= 1
 
 	# 处理输入
-	move_up = Input.is_action_pressed("move_up")
-	move_down = Input.is_action_pressed("move_down")
-	move_left = Input.is_action_pressed("move_left")
-	move_right = Input.is_action_pressed("move_right")
+	_update_directional_input()
 	move_fire = Input.is_action_pressed("move_fire")
 	move_jump = Input.is_action_pressed("move_jump")
 	
@@ -352,6 +352,62 @@ func on_triangle_block() -> void:
 		if speed_x > triangle_speed_x_limit:
 			target_gravity -= 90.0
 			is_switching_gravity = true
+			_lock_current_input()
 		elif speed_x < -triangle_speed_x_limit:
 			target_gravity += 90.0
 			is_switching_gravity = true
+			_lock_current_input()
+
+func _lock_current_input() -> void:
+	var raw = [
+		Input.is_action_pressed("move_right"),
+		Input.is_action_pressed("move_up"),
+		Input.is_action_pressed("move_left"),
+		Input.is_action_pressed("move_down"),
+	]
+	var step = wrapi(int(round(-rotate_with_up / 90.0)), 0, 4)
+	var grav = _INPUT_ID_MAP[step]
+	for key_idx in range(4):
+		if raw[key_idx]:
+			if input_lock[key_idx] == -1:
+				input_lock[key_idx] = grav[key_idx]
+		else:
+			input_lock[key_idx] = -1
+
+const _INPUT_ID_MAP: Array[Array] = [
+	[0, 1, 2, 3],  #  0°:   →=右  ↑=上  ←=左  ↓=下
+	[1, 0, 3, 2],  # -90°:  ↑=右  →=上  ↓=左  ←=下
+	[2, 3, 0, 1],  #-180°:  ←=右  ↓=上  →=左  ↑=下
+	[3, 2, 1, 0],  #-270°:  ↓=右  ←=上  ↑=左  →=下
+]
+
+func _set_move_dir(idx: int, val: bool) -> void:
+	match idx:
+		0: move_right = val
+		1: move_up = val
+		2: move_left = val
+		3: move_down = val
+
+func _update_directional_input() -> void:
+	var raw = [
+		Input.is_action_pressed("move_right"),  # 0
+		Input.is_action_pressed("move_up"),     # 1
+		Input.is_action_pressed("move_left"),   # 2
+		Input.is_action_pressed("move_down"),   # 3
+	]
+
+	var step = wrapi(int(round(-rotate_with_up / 90.0)), 0, 4)
+	var grav = _INPUT_ID_MAP[step]
+
+	move_right = false
+	move_up = false
+	move_left = false
+	move_down = false
+
+	for key_idx in range(4):
+		if not raw[key_idx]:
+			input_lock[key_idx] = -1
+		elif input_lock[key_idx] != -1:
+			_set_move_dir(input_lock[key_idx], true)
+		else:
+			_set_move_dir(grav[key_idx], true)
