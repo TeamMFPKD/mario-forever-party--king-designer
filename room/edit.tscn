@@ -1504,6 +1504,7 @@ texture = SubResource("AtlasTexture_tvrr0")
 flip_h = true
 
 [node name="Enemy" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy" unique_id=777588406 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -951.0
 offset_top = -706.0
@@ -1762,7 +1763,6 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -704.0
 offset_top = -698.0

@@ -183,6 +183,7 @@ locale/translations=PackedStringArray("res://mfmp_translation.en.translation", "
 2d_physics/layer_8="Bonus Block"
 2d_physics/layer_9="Switch"
 2d_physics/layer_10="Door"
+2d_physics/layer_11="Triangle Block"
 
 [physics]
 

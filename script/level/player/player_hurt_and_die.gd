@@ -43,7 +43,10 @@ func _physics_process(_delta: float) -> void:
 	# Update invincible
 	update_invincible()
 
-	if player.position.y > level_camera.limit_bottom + 32:
+	if player.position.y > level_camera.limit_bottom + 32 \
+	or player.position.x < level_camera.limit_left - 32 \
+	or player.position.x > level_camera.limit_right + 32 \
+	or (player.position.y < level_camera.limit_top - 32 and round(player.rotation_degrees) % 360 == 180):
 		_on_player_die()
 
 	if is_hurting:
