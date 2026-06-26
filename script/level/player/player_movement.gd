@@ -188,15 +188,15 @@ func _physics_process(delta):
 	speed_y = minf(speed_y, max_speed_y)
 
 
+	# 多重力
+	on_triangle_block()
+
 	# 应用速度
 	player.velocity = Vector2(-player.up_direction.y, player.up_direction.x) * speed_x - player.up_direction * speed_y
 	player.move_and_slide()
 
 	# 掉落桥检测
 	platform_fall_detect()
-
-	# 多重力
-	on_triangle_block()
 
 	# 更新碰撞箱
 	update_hit_box()
@@ -344,8 +344,8 @@ func on_triangle_block() -> void:
 				is_switching_gravity = false
 		return
 
-	if not player.is_on_floor():
-		return
+	#if not player.is_on_floor():
+	#	return
 
 	if is_on_triangle and not is_switching_gravity:
 		if speed_x > triangle_speed_x_limit:
