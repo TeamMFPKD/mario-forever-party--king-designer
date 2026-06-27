@@ -72,7 +72,13 @@ level_theme = 9
 tile_set = ExtResource("12_jcg2v")
 metadata/_custom_type_script = "uid://cyiibxigdwr06"
 
+[sub_resource type="Resource" id="Resource_ywsbu"]
+script = ExtResource("2_vp2qs")
+level_theme = 10
+tile_set = ExtResource("3_uvuqr")
+metadata/_custom_type_script = "uid://cyiibxigdwr06"
+
 [resource]
 script = ExtResource("1_hyd7o")
-tile_map_block_database_entry = Array[ExtResource("2_vp2qs")]([SubResource("Resource_3txn7"), SubResource("Resource_r8555"), SubResource("Resource_rckhr"), SubResource("Resource_vm2cf"), SubResource("Resource_gkia3"), SubResource("Resource_tt848"), SubResource("Resource_nn4t8"), SubResource("Resource_mq1de"), SubResource("Resource_23nor"), SubResource("Resource_lx0j3")])
+tile_map_block_database_entry = Array[ExtResource("2_vp2qs")]([SubResource("Resource_3txn7"), SubResource("Resource_r8555"), SubResource("Resource_rckhr"), SubResource("Resource_vm2cf"), SubResource("Resource_gkia3"), SubResource("Resource_tt848"), SubResource("Resource_nn4t8"), SubResource("Resource_mq1de"), SubResource("Resource_23nor"), SubResource("Resource_lx0j3"), SubResource("Resource_ywsbu")])
 metadata/_custom_type_script = "uid://6as1rookwmdm"

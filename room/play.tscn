@@ -46,6 +46,7 @@
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/clear_pipe/spawner_pipe_vertical_up.tscn" id="41_k06ju"]
 [ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/clear_pipe/spawner_pipe_vertical_down.tscn" id="42_k06ju"]
 [ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_left.tscn" id="43_k06ju"]
+[ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="43_oe7au"]
 [ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_right.tscn" id="44_k06ju"]
 [ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/clear_pipe/spawner_pipe_vertical_middle.tscn" id="45_k06ju"]
 [ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="46_k06ju"]
@@ -292,6 +293,17 @@ autostart = true
 wait_time = 0.1
 one_shot = true
 autostart = true
+
+[node name="Node2D" type="Node2D" parent="GameRoomSize/SubViewportContainer" unique_id=776712122]
+
+[node name="GameBorderTextureRect" type="TextureRect" parent="GameRoomSize/SubViewportContainer/Node2D" unique_id=2015560352]
+custom_minimum_size = Vector2(660, 500)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 1300.0
+offset_bottom = 980.0
+texture = ExtResource("43_oe7au")
+expand_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
 layout_mode = 0

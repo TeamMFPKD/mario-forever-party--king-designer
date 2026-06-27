@@ -50,6 +50,7 @@
 [ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/clear_pipe/spawner_pipe_right_down.tscn" id="37_hbmxt"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="38_vtonu"]
 [ext_resource type="PackedScene" uid="uid://ch07v2yfii176" path="res://object/level/facility/key/pink_coin_canvas_layer.tscn" id="39_3ysqt"]
+[ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="42_6rodu"]
 
 [node name="Play" type="Node2D" unique_id=1958081526]
 
@@ -227,6 +228,17 @@ one_shot = true
 autostart = true
 
 [node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=606104598 instance=ExtResource("28_cxniv")]
+
+[node name="Node2D" type="Node2D" parent="GameRoomSize/SubViewportContainer" unique_id=620656611]
+
+[node name="GameBorderTextureRect" type="TextureRect" parent="GameRoomSize/SubViewportContainer/Node2D" unique_id=1367058599]
+custom_minimum_size = Vector2(660, 500)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 1300.0
+offset_bottom = 980.0
+texture = ExtResource("42_6rodu")
+expand_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
 layout_mode = 0

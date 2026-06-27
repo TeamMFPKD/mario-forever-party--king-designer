@@ -30,3 +30,5 @@ func update_pipe_color(level_theme: LevelManager.LevelThemeEnum) -> void:
 			sprite.frame = 4
 		LevelManager.LevelThemeEnum.VOLCANO:
 			sprite.frame = 5
+		LevelManager.LevelThemeEnum.GALAXY:
+			sprite.frame = 4

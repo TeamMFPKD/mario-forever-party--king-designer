@@ -50,6 +50,7 @@
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="40_0p0tn"]
 [ext_resource type="Texture2D" uid="uid://566f7q58vnma" path="res://sprite/theme_preview/bg_preview_cave.png" id="40_pcm7o"]
 [ext_resource type="Texture2D" uid="uid://cu1s7gevmubce" path="res://sprite/theme_preview/bg_preview_dusk.png" id="41_gx72u"]
+[ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="42_0qlom"]
 [ext_resource type="Texture2D" uid="uid://b58ek8gie8cg6" path="res://sprite/theme_preview/bg_preview_night.png" id="42_teumv"]
 [ext_resource type="Texture2D" uid="uid://do2r2vtxrv0r" path="res://sprite/theme_preview/bg_preview_sand.png" id="43_u6yin"]
 [ext_resource type="Texture2D" uid="uid://36hej2aqjidd" path="res://sprite/theme_preview/bg_preview_snow.png" id="44_b0tds"]
@@ -494,6 +495,17 @@ corner_dr_scene = ExtResource("39_g1vq0")
 corner_dl_scene = ExtResource("40_0p0tn")
 
 [node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=606104598 instance=ExtResource("28_d41mo")]
+
+[node name="Node2D" type="Node2D" parent="GameRoomSize/SubViewportContainer" unique_id=1356563539]
+
+[node name="GameBorderTextureRect" type="TextureRect" parent="GameRoomSize/SubViewportContainer/Node2D" unique_id=1820112210]
+custom_minimum_size = Vector2(660, 500)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 1300.0
+offset_bottom = 980.0
+texture = ExtResource("42_0qlom")
+expand_mode = 1
 
 [node name="LevelSizeGroup" type="Control" parent="GameRoomSize" unique_id=573696587 groups=["item_group"]]
 visible = false
