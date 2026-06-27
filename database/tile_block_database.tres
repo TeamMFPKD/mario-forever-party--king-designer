@@ -12,6 +12,7 @@
 [ext_resource type="TileSet" uid="uid://kipkw1ykiuq8" path="res://tileset/tileset_snow.tres" id="10_ul7d0"]
 [ext_resource type="TileSet" uid="uid://cnhqax16b8vxn" path="res://tileset/tileset_snow_b.tres" id="11_n0moo"]
 [ext_resource type="TileSet" uid="uid://p5u0wevedk7h" path="res://tileset/tileset_volcano.tres" id="12_jcg2v"]
+[ext_resource type="TileSet" uid="uid://b6osbru03dgb7" path="res://tileset/tileset_galaxy.tres" id="13_ne8q1"]
 
 [sub_resource type="Resource" id="Resource_3txn7"]
 script = ExtResource("2_vp2qs")
@@ -75,7 +76,7 @@ metadata/_custom_type_script = "uid://cyiibxigdwr06"
 [sub_resource type="Resource" id="Resource_ywsbu"]
 script = ExtResource("2_vp2qs")
 level_theme = 10
-tile_set = ExtResource("3_uvuqr")
+tile_set = ExtResource("13_ne8q1")
 metadata/_custom_type_script = "uid://cyiibxigdwr06"
 
 [resource]
