@@ -60,24 +60,15 @@
 [ext_resource type="AudioStream" uid="uid://ddiihhr28rgn7" path="res://sound/edit/slider.ogg" id="46_lq4t0"]
 [ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="47_gnq71"]
 [ext_resource type="Script" uid="uid://dr7gaaht3lsw3" path="res://script/level/sound/play_sound_when_not_playing.gd" id="47_lq4t0"]
-[ext_resource type="Script" uid="uid://ddjb1p2siob83" path="res://script/edit/tilemap/tile_set_style.gd" id="48_71fdm"]
-[ext_resource type="Texture2D" uid="uid://401ldlwhakx3" path="res://sprite/tile/tile_castle.png" id="49_yk8gc"]
-[ext_resource type="Texture2D" uid="uid://e1foalf6p524" path="res://sprite/tile/tile_castle_b.png" id="50_dvyf1"]
-[ext_resource type="Texture2D" uid="uid://5stdy61pmtog" path="res://sprite/tile/tile_cave.png" id="51_kcxsg"]
+[ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="49_kiwdd"]
 [ext_resource type="Texture2D" uid="uid://b5rj43wcjmop" path="res://sprite/bonus/time_clock_red.png" id="51_w23hq"]
-[ext_resource type="Texture2D" uid="uid://ejbgmhyor4n6" path="res://sprite/tile/tile_dusk.png" id="52_7qesv"]
-[ext_resource type="Texture2D" uid="uid://dagnbicl3nhg3" path="res://sprite/tile/tile_night.png" id="53_i3bxj"]
-[ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="54_kd61m"]
-[ext_resource type="Texture2D" uid="uid://dmab4gsr188r3" path="res://sprite/tile/tile_sand.png" id="55_2alp4"]
-[ext_resource type="Texture2D" uid="uid://dt1kt8637l2yy" path="res://sprite/tile/tile_snow.png" id="56_g0tll"]
 [ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="56_qjgk7"]
 [ext_resource type="Texture2D" uid="uid://1xjg6286tk0s" path="res://sprite/bonus/time_clock_green.png" id="56_xo7f2"]
-[ext_resource type="Texture2D" uid="uid://c24qvkx0721j3" path="res://sprite/tile/tile_snow_b.png" id="57_o6b3p"]
-[ext_resource type="Texture2D" uid="uid://bb83c57feb5h2" path="res://sprite/tile/tile_volcano.png" id="58_dpf7b"]
 [ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="59_rvqgs"]
 [ext_resource type="Script" uid="uid://nudrc84ih436" path="res://script/edit/pipe_color.gd" id="60_41bow"]
 [ext_resource type="Texture2D" uid="uid://ciu4jkh28vrfr" path="res://sprite/pipe/pipe_horizontal.png" id="61_3eot8"]
 [ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa/troopa_green.png" id="62_po8je"]
+[ext_resource type="Texture2D" uid="uid://ocf7wu3vx5mq" path="res://sprite/theme_preview/bg_preview_galaxy.png" id="63_bb1r4"]
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="63_yl8ll"]
 [ext_resource type="Texture2D" uid="uid://dkcv83bxvx7r1" path="res://sprite/enemy/goomba.png" id="64_q3lrf"]
 [ext_resource type="Texture2D" uid="uid://grjsk3ap7oql" path="res://sprite/enemy/troopa/troopa_red.png" id="65_kuyo0"]
@@ -97,6 +88,7 @@
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="77_pqowm"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="78_y05j1"]
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="79_7it4e"]
+[ext_resource type="PackedScene" uid="uid://gfkelnk0ovbl" path="res://object/edit/tile_set_style.tscn" id="79_pfkd6"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="80_h441a"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/ui/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="81_cfmm2"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="85_g7up7"]
@@ -637,6 +629,17 @@ script = ExtResource("47_lq4t0")
 stream = ExtResource("46_io63s")
 script = ExtResource("47_lq4t0")
 
+[node name="Node2D" type="Node2D" parent="GameRoomSize/SubViewportContainer" unique_id=442967601]
+
+[node name="GameBorderTextureRect" type="TextureRect" parent="GameRoomSize/SubViewportContainer/Node2D" unique_id=1131902600]
+custom_minimum_size = Vector2(660, 500)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 1300.0
+offset_bottom = 980.0
+texture = ExtResource("49_kiwdd")
+expand_mode = 1
+
 [node name="LevelSizeGroup" type="Control" parent="GameRoomSize" unique_id=573696587 groups=["item_group"]]
 layout_mode = 1
 anchors_preset = 5
@@ -832,10 +835,9 @@ texture = ExtResource("27_l5ep8")
 stream = ExtResource("28_rrlga")
 
 [node name="LevelTheme" type="HBoxContainer" parent="GameRoomSize/GroupButtonTheme" unique_id=870500736 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_top = -174.0
-offset_right = 1624.0
+offset_right = 1720.0
 offset_bottom = -14.0
 
 [node name="ThemeButtonCastle" parent="GameRoomSize/GroupButtonTheme/LevelTheme" unique_id=809677850 instance=ExtResource("29_7jwj4")]
@@ -923,6 +925,15 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonVolcano/ButtonTexture" parent_id_path=PackedInt32Array(1711574094, 1856562228) index="0" unique_id=2057330280]
 texture = ExtResource("37_jdcwv")
+
+[node name="ThemeButtonGalaxy" parent="GameRoomSize/GroupButtonTheme/LevelTheme" unique_id=2080035385 instance=ExtResource("29_7jwj4")]
+layout_mode = 2
+size_flags_horizontal = 3
+target_theme = 10
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonGalaxy/ButtonTexture" parent_id_path=PackedInt32Array(2080035385, 1856562228) index="0" unique_id=2057330280]
+texture = ExtResource("63_bb1r4")
 
 [node name="BottomItemGroups" type="HBoxContainer" parent="GameRoomSize" unique_id=340307882]
 layout_mode = 1
@@ -1304,20 +1315,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/ItemButtonTile/ButtonTexture" parent_id_path=PackedInt32Array(476318096, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_5m21x")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/BottomItemGroups/ItemButtonTile/ButtonTexture/ItemPreview" index="0" unique_id=1695088988]
-script = ExtResource("48_71fdm")
-theme_to_tile_preview = Dictionary[int, Texture2D]({
-0: ExtResource("49_yk8gc"),
-1: ExtResource("50_dvyf1"),
-2: ExtResource("51_kcxsg"),
-3: ExtResource("52_7qesv"),
-4: ExtResource("53_i3bxj"),
-5: ExtResource("54_kd61m"),
-6: ExtResource("55_2alp4"),
-7: ExtResource("56_g0tll"),
-8: ExtResource("57_o6b3p"),
-9: ExtResource("58_dpf7b")
-})
+[node name="TileSetStyle" parent="GameRoomSize/BottomItemGroups/ItemButtonTile/ButtonTexture/ItemPreview" index="0" unique_id=1010340270 instance=ExtResource("79_pfkd6")]
 
 [node name="ItemButtonTileSingle" parent="GameRoomSize/BottomItemGroups" unique_id=981797274 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1328,20 +1326,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/ItemButtonTileSingle/ButtonTexture" parent_id_path=PackedInt32Array(981797274, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_2hpln")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/BottomItemGroups/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0" unique_id=598942637]
-script = ExtResource("48_71fdm")
-theme_to_tile_preview = Dictionary[int, Texture2D]({
-0: ExtResource("49_yk8gc"),
-1: ExtResource("50_dvyf1"),
-2: ExtResource("51_kcxsg"),
-3: ExtResource("52_7qesv"),
-4: ExtResource("53_i3bxj"),
-5: ExtResource("54_kd61m"),
-6: ExtResource("55_2alp4"),
-7: ExtResource("56_g0tll"),
-8: ExtResource("57_o6b3p"),
-9: ExtResource("58_dpf7b")
-})
+[node name="TileSetStyle" parent="GameRoomSize/BottomItemGroups/ItemButtonTileSingle/ButtonTexture/ItemPreview" index="0" unique_id=633388950 instance=ExtResource("79_pfkd6")]
 
 [node name="ItemButtonTileSemiSolid" parent="GameRoomSize/BottomItemGroups" unique_id=398093930 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1352,20 +1337,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/ItemButtonTileSemiSolid/ButtonTexture" parent_id_path=PackedInt32Array(398093930, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_c6bpw")
 
-[node name="TileSetStyle" type="Node" parent="GameRoomSize/BottomItemGroups/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0" unique_id=1562132706]
-script = ExtResource("48_71fdm")
-theme_to_tile_preview = Dictionary[int, Texture2D]({
-0: ExtResource("49_yk8gc"),
-1: ExtResource("50_dvyf1"),
-2: ExtResource("51_kcxsg"),
-3: ExtResource("52_7qesv"),
-4: ExtResource("53_i3bxj"),
-5: ExtResource("54_kd61m"),
-6: ExtResource("55_2alp4"),
-7: ExtResource("56_g0tll"),
-8: ExtResource("57_o6b3p"),
-9: ExtResource("58_dpf7b")
-})
+[node name="TileSetStyle" parent="GameRoomSize/BottomItemGroups/ItemButtonTileSemiSolid/ButtonTexture/ItemPreview" index="0" unique_id=1227560852 instance=ExtResource("79_pfkd6")]
 
 [node name="GroupButtonPipe" parent="GameRoomSize/BottomItemGroups" unique_id=1147622410 node_paths=PackedStringArray("item_group") instance=ExtResource("26_ve5w1")]
 layout_mode = 2
@@ -1789,6 +1761,7 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -1040.0
 offset_top = -698.0
@@ -2123,6 +2096,7 @@ show_mode = 2
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnow"]
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB"]
 [editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonVolcano"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonGalaxy"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonCoin"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonBrick"]

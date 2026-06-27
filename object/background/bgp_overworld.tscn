@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcnkw2lj4logj"]
+[gd_scene format=3 uid="uid://bcnkw2lj4logj"]
 
 [ext_resource type="Script" uid="uid://bunsnb4qcf7yw" path="res://script/background/background_set.gd" id="1_cek8s"]
 [ext_resource type="Texture2D" uid="uid://cja2ui8hrqfce" path="res://sprite/background/glassland.bg.png" id="2_7s41u"]

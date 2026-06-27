@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://c0kf7rbfgdt2d"]
+
+[ext_resource type="Script" uid="uid://bunsnb4qcf7yw" path="res://script/background/background_set.gd" id="1_e2e80"]
+[ext_resource type="Shader" uid="uid://b2vcadgboqbwe" path="res://shader/galaxy_shader_by_mzrlee.gdshader" id="3_k7a5p"]
+[ext_resource type="Texture2D" uid="uid://djr2lscpgyin2" path="res://icon_godot.svg" id="4_ftc5p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iqgnh"]
+shader = ExtResource("3_k7a5p")
+
+[node name="BackgroundOverworld" type="Node2D" unique_id=61279737]
+z_index = -500
+script = ExtResource("1_e2e80")
+metadata/_custom_type_script = "uid://bunsnb4qcf7yw"
+
+[node name="Parallax2DGalaxy" type="Parallax2D" parent="." unique_id=529723937]
+scroll_scale = Vector2(0, 0)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Parallax2DGalaxy" unique_id=2052063825]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 480.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="Parallax2DGalaxy/SubViewportContainer" unique_id=1499663576]
+handle_input_locally = false
+size = Vector2i(640, 480)
+render_target_update_mode = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2DGalaxy/SubViewportContainer/SubViewport" unique_id=1911643660]
+material = SubResource("ShaderMaterial_iqgnh")
+position = Vector2(320, 240)
+scale = Vector2(5, 3.75)
+texture = ExtResource("4_ftc5p")
+metadata/_edit_lock_ = true

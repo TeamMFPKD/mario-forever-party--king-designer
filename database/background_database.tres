@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://c481lfk1oouvv" path="res://object/background/bgp_snow.tscn" id="8_38pgq"]
 [ext_resource type="PackedScene" uid="uid://k6e8y7cf8iyh" path="res://object/background/bgp_volcano.tscn" id="9_p7akc"]
 [ext_resource type="PackedScene" uid="uid://ddt2ca4hn4kco" path="res://object/background/bgp_snow_b.tscn" id="10_uvuqr"]
+[ext_resource type="PackedScene" uid="uid://c0kf7rbfgdt2d" path="res://object/background/bgp_galaxy.tscn" id="12_38pgq"]
 
 [sub_resource type="Resource" id="Resource_hyd7o"]
 script = ExtResource("1_irw4x")
@@ -72,7 +73,13 @@ level_theme = 9
 background_scene = ExtResource("9_p7akc")
 metadata/_custom_type_script = "uid://cagoblqdkevb1"
 
+[sub_resource type="Resource" id="Resource_p7akc"]
+script = ExtResource("1_irw4x")
+level_theme = 10
+background_scene = ExtResource("12_38pgq")
+metadata/_custom_type_script = "uid://cagoblqdkevb1"
+
 [resource]
 script = ExtResource("2_f6hl6")
-background_entries = Array[ExtResource("1_irw4x")]([SubResource("Resource_hyd7o"), SubResource("Resource_vp2qs"), SubResource("Resource_lskja"), SubResource("Resource_rh00t"), SubResource("Resource_qwnx4"), SubResource("Resource_rbxa1"), SubResource("Resource_2uox7"), SubResource("Resource_puu8q"), SubResource("Resource_nxp13"), SubResource("Resource_d6g7n")])
+background_entries = Array[ExtResource("1_irw4x")]([SubResource("Resource_hyd7o"), SubResource("Resource_vp2qs"), SubResource("Resource_lskja"), SubResource("Resource_rh00t"), SubResource("Resource_qwnx4"), SubResource("Resource_rbxa1"), SubResource("Resource_2uox7"), SubResource("Resource_puu8q"), SubResource("Resource_nxp13"), SubResource("Resource_d6g7n"), SubResource("Resource_p7akc")])
 metadata/_custom_type_script = "uid://dwcdlj86cjidb"

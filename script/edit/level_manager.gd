@@ -22,6 +22,7 @@ enum LevelThemeEnum {
 	SNOW,
 	SNOW_B,
 	VOLCANO,
+	GALAXY,
 }
 @export var level_theme: LevelThemeEnum:
 	set(value):
