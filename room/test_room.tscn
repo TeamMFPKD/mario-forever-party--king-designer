@@ -584,6 +584,9 @@ position = Vector2(5456, 208)
 [node name="Mushroom3" parent="." unique_id=1814255894 instance=ExtResource("58_n637y")]
 position = Vector2(5568, 376)
 
+[node name="FireFlower2" parent="." unique_id=1304594435 instance=ExtResource("14_m1t4l")]
+position = Vector2(5488, 336)
+
 [editable path="Door"]
 [editable path="Door2"]
 [editable path="Door3"]

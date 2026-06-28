@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://7l3pjn0ykam3" path="res://script/level/player/player_movement.gd" id="2_d0xdx"]
 [ext_resource type="Script" uid="uid://tag7wjib5k0y" path="res://script/level/player/player_mediator.gd" id="2_gq3kn"]
 [ext_resource type="Shape2D" uid="uid://ca4jxp44syflr" path="res://object/level/player/player_collision_shape_small.tres" id="3_0f3px"]
+[ext_resource type="Shape2D" uid="uid://bbkituur80vbq" path="res://object/level/player/player_collision_shape_big.tres" id="3_1b4u5"]
 [ext_resource type="Shape2D" uid="uid://1xg435m2mqxi" path="res://object/level/player/player_collision_shape_super.tres" id="3_8p21p"]
 [ext_resource type="Script" uid="uid://dfmmex64hbhoh" path="res://script/level/player/player_animation.gd" id="3_d0xdx"]
 [ext_resource type="Script" uid="uid://cfnlw3m1kj135" path="res://script/level/player/player_interaction.gd" id="4_3e465"]
@@ -23,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://c8k70uglbhl1b" path="res://object/level/player/player_lui_effect.tscn" id="11_4mpgj"]
 [ext_resource type="SpriteFrames" uid="uid://de7ppmn5laego" path="res://object/level/player/mario_big.tres" id="11_j733o"]
 [ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="11_xbm7l"]
+[ext_resource type="Shape2D" uid="uid://bhfyscc0lxmab" path="res://object/level/player/player_collision_shape_big_crouch.tres" id="15_csahg"]
 [ext_resource type="AudioStream" uid="uid://cqphd6kl5ua3c" path="res://sound/level/mario_jump.se.wav" id="16_3sfxm"]
 [ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
 [ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="18_xbm7l"]
@@ -52,6 +54,7 @@ slide_on_ceiling = false
 floor_constant_speed = true
 floor_block_on_wall = false
 floor_max_angle = 1.0471976
+floor_snap_length = 8.0
 platform_on_leave = 2
 safe_margin = 0.09
 
@@ -72,7 +75,7 @@ script = ExtResource("2_741uk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
 position = Vector2(1, -2)
-shape = ExtResource("3_8p21p")
+shape = ExtResource("3_0f3px")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
 visible = false
@@ -125,6 +128,8 @@ collision_shape = NodePath("../../CollisionShape2D")
 cast = NodePath("../../InteractionShapeCast2D")
 shape_small = ExtResource("3_0f3px")
 shape_super = ExtResource("3_8p21p")
+shape_big = ExtResource("3_1b4u5")
+shape_big_crouch = ExtResource("15_csahg")
 crouch_head_area = NodePath("../../CrouchHeadDetect")
 
 [node name="PlayerInteraction" type="Node" parent="PlayerMediator" unique_id=1627366199 node_paths=PackedStringArray("player_movement", "player_suit", "player", "cast")]
@@ -141,8 +146,6 @@ player = NodePath("../..")
 
 [node name="PlayerSuit" type="Node" parent="PlayerMediator" unique_id=808079872]
 script = ExtResource("5_5qxp0")
-suit = 2
-power = 3
 
 [node name="PlayerShoot" type="Node" parent="PlayerMediator" unique_id=1295931707 node_paths=PackedStringArray("player_suit", "player", "player_movement", "player_animation_sprite")]
 script = ExtResource("6_pi5xa")

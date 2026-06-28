@@ -193,6 +193,8 @@ func _on_player_suit_changed():
 					ani.sprite_frames = player_beetroot_spritesframe
 				PlayerSuit.PowerupType.LUI:
 					ani.sprite_frames = player_lui_spritesframe
+				PlayerSuit.PowerupType.BIG:
+					ani.sprite_frames = player_big_spritesframe
 	is_appearing = true
 
 func is_in_pipe() -> bool:

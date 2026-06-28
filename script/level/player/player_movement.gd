@@ -17,6 +17,7 @@ signal play_sound_jump
 @export var shape_small : Shape2D
 @export var shape_super : Shape2D
 @export var shape_big : Shape2D
+@export var shape_big_crouch: Shape2D
 
 @export var crouch_head_area : Area2D
 
@@ -218,22 +219,34 @@ func platform_fall_detect() -> void:
 		#print(platform_fall_movement)
 		platform_fall_movement.fall()
 
+class SizeStatus:
+	enum SizeType {
+		SMALL,
+		SUPER,
+		BIG,
+		BIG_CROUCH,
+	}
+
 func update_hit_box() -> void:
-	var is_super : bool
+	var target_shape: Shape2D
+	var target_position: Vector2
 	if crouch or player_suit.suit == PlayerSuit.SuitType.SMALL:
-		is_super = false
+		target_shape = shape_small
+		target_position = Vector2(0, -1.5)
 	else:
-		is_super = true
-	if not is_super:
-		collision_shape.shape = shape_small
-		collision_shape.position = Vector2(0, -1.5)
-		cast.shape = shape_small
-		cast.position = Vector2(0, -1.5)
-	else:
-		collision_shape.shape = shape_super
-		collision_shape.position = Vector2(0, -16.5)
-		cast.shape = shape_super
-		cast.position = Vector2(0, -16.5)
+		target_shape = shape_super
+		target_position = Vector2(0, -16.5)
+	if player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BIG:
+		target_shape = shape_big
+		target_position = Vector2(0, -16.5)
+		if crouch:
+			target_shape = shape_big_crouch
+			target_position = Vector2(0, -1.5)
+
+	collision_shape.shape = target_shape
+	cast.shape = target_shape
+	collision_shape.position = target_position
+	cast.position = target_position
 
 func transport_check() -> bool:
 	is_in_transport = pipe_check() or door_check()
@@ -337,7 +350,7 @@ func door_movement() -> void:
 			exit_door()
 
 func _snap_to_ground() -> void:
-	var snap = player.move_and_collide(-player.up_direction * 4.0)
+	var snap = player.move_and_collide(-player.up_direction * 32.0)
 	if snap:
 		speed_y = 0.0
 
