@@ -39,7 +39,8 @@ signal play_sound_jump
 @export_range(-360.0, 360.0, 5.0) var rotate_with_up: float = 0.0:
 	set(value):
 		rotate_with_up = value
-		#player.rotation_degrees = rotate_with_up
+		collision_shape.rotation_degrees = rotate_with_up
+		cast.rotation_degrees = rotate_with_up
 		player.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 
 @export var triangle_speed_x_limit: float = 300.0
@@ -335,18 +336,23 @@ func door_movement() -> void:
 		100:
 			exit_door()
 
+func _snap_to_ground() -> void:
+	var snap = player.move_and_collide(-player.up_direction * 4.0)
+	if snap:
+		speed_y = 0.0
+
 func on_triangle_block() -> void:
 	if is_switching_gravity:
 		rotate_with_up = move_toward(rotate_with_up, target_gravity, 10.0)
-		speed_y = 0.0
+		_snap_to_ground()
 		if abs(rotate_with_up - target_gravity) < 10.0:
 			rotate_with_up = target_gravity
 			if not is_on_triangle:
 				is_switching_gravity = false
 		return
 
-	#if not player.is_on_floor():
-	#	return
+	if not player.is_on_floor():
+		return
 
 	if is_on_triangle and not is_switching_gravity:
 		if speed_x > triangle_speed_x_limit:
