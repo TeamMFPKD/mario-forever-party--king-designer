@@ -194,6 +194,9 @@ stream = ExtResource("30_vh3yy")
 [node name="DoorExitSE" parent="." unique_id=1309750775 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("31_j733o")
 
+[node name="BreakTileSE" parent="." unique_id=1066134224 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("27_q82rl")
+
 [node name="ExplodeEffectCreator" type="Node" parent="." unique_id=324919191]
 script = ExtResource("28_4r5tb")
 fireball_explode_scene = ExtResource("29_yslke")
@@ -217,6 +220,7 @@ position = Vector2(640, 0)
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PlayerMediator/PlayerInteraction" method="_on_pipe_exited"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="ClearPipeOut" method="play"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
+[connection signal="play_sound_break_tile" from="PlayerMediator/PlayerMovement" to="BreakTileSE" method="play"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]

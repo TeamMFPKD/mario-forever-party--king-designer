@@ -153,6 +153,7 @@ shape = SubResource("ConvexPolygonShape2D_alh4b")
 script = ExtResource("4_vq30w")
 bumpable = true
 sprite = NodePath("../AnimatedSprite2D")
+is_hard_breakable_block = false
 _collision_shape_2d = NodePath("../CollisionShape2D")
 metadata/_custom_type_script = "uid://0kceldqbdgin"
 
