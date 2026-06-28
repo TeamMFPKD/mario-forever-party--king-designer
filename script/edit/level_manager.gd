@@ -9,7 +9,7 @@ signal load_level
 signal lives_changed
 
 @export_category("Level Data")
-@export var version: String = "1.0"
+@export var version: int = 2
 @export var time_used: int = -1
 enum LevelThemeEnum {
 	CASTLE,
@@ -109,7 +109,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 
 	level_data_dict = json.data
 
-	version = level_data_dict.get("version", "1.0")
+	version = int(level_data_dict.get("version", 1))
 	time_used = level_data_dict.get("time_used", -1)
 
 	level_size = level_data_dict.get("level_size", [0, 0, 640, 480])
