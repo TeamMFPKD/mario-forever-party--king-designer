@@ -209,6 +209,7 @@ func _physics_process(delta):
 		if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
 			speed_y = -jump_speed
 			break_tile_cd_floor = false
+			break_tile_cd_ceil = false
 			if abs(speed_x) > max_speed_x * 0.3:
 				speed_y *= jump_speed_factor
 			jumpable = false
