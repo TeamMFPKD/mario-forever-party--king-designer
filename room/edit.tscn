@@ -965,6 +965,7 @@ position = Vector2(20, -150)
 texture = SubResource("AtlasTexture_mwnlh")
 
 [node name="Bonus" type="VBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" unique_id=1299550030 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -264.0
 offset_top = -698.0
@@ -1342,7 +1343,7 @@ object_name = "mushroom_big"
 metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBig/ButtonTexture" parent_id_path=PackedInt32Array(2128305627, 839201675) index="0" unique_id=1085479145]
-scale = Vector2(40, 40)
+scale = Vector2(60, 60)
 texture = ExtResource("76_h71uv")
 
 [node name="ItemButtonTile" parent="GameRoomSize/BottomItemGroups" unique_id=476318096 instance=ExtResource("41_cvttd")]

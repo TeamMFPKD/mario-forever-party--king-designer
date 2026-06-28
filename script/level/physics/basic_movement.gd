@@ -64,6 +64,7 @@ var clear_pipe_blocked_counter : int = 0
 var previous_speed_x : float = 0.0
 var previous_speed_y : float = 0.0
 var pipe_origin_collision_layer : int
+var origin_scale: Vector2
 
 # 用于转向对齐时的原始方向暂存
 var is_origin_pipe_dir_set : bool = false
@@ -71,6 +72,7 @@ var origin_pipe_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
+	origin_scale = move_object.scale
 	player = get_tree().get_first_node_in_group("player") as Node2D
 	var fc = func():
 		player = get_tree().get_first_node_in_group("player") as Node2D
@@ -116,7 +118,7 @@ func _physics_process(delta: float) -> void:
 	
 	if pipe_check():
 		# 转向检测必须在管道移动前执行
-		move_object.scale = move_object.scale.move_toward(Vector2(0.4, 0.4), 0.3)
+		move_object.scale = move_object.scale.move_toward(origin_scale * 0.4, origin_scale.length() * 0.3)
 		clear_pipe_turning_detect()
 		pipe_movement()
 
@@ -135,7 +137,7 @@ func _physics_process(delta: float) -> void:
 				move_object.force_update_transform()
 
 		return
-	move_object.scale = move_object.scale.move_toward(Vector2(1.0, 1.0), 0.3)
+	move_object.scale = move_object.scale.move_toward(origin_scale * 1.0, origin_scale.length() * 0.3)
 
 	if in_wall_process():
 		return
