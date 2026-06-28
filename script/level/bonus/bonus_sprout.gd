@@ -18,8 +18,15 @@ var origin_bonus_collision_mask : int
 
 var initialize : bool = false
 
+@export var scale_transition: bool = false
+@export var mini_scale: float = 0.5
+var origin_scale: Vector2
+
 func _ready() -> void:
 	bonus = get_node(path_to_bonus)
+	if scale_transition:
+		origin_scale = bonus.scale
+		bonus.scale = origin_scale * mini_scale
 	if bonus == null:
 		push_error("Bonus node not found at path: " + str(path_to_bonus))
 		return
@@ -90,7 +97,10 @@ func _physics_process(delta: float) -> void:
 				basic_movement.set_movement_direction()
 		is_sprout = true
 		bonus.collision_layer = origin_bonus_collision_layer
-	
+
+	if scale_transition:
+		bonus.scale = bonus.scale.move_toward(origin_scale, 0.04)
+
 func is_overlap() -> bool:
 	#print(ShapeCastQuery.shape_query(bonus, in_wall_cast))
 	if not in_wall_cast:

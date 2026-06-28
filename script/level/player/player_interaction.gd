@@ -171,7 +171,12 @@ func block_hit_detect(results : Array[Node2D]) -> void:
 		
 		if player_suit.suit == PlayerSuit.SuitType.POWERED \
 		and player_suit.power == PlayerSuit.PowerupType.BIG:
-			player_movement.break_tile_cd = true
+			player_movement.break_tile_cd_ceil = true
+			for i in range(6):
+				await get_tree().physics_frame
+				if player_movement.speed_y > 0.0:
+					player_movement.break_tile_cd_ceil = false
+					break;
 		
 
 func pipe_detect(results : Array[Node2D]) -> void:

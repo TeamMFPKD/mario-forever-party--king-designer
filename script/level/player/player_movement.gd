@@ -120,7 +120,8 @@ var input_lock: Array[int] = [-1, -1, -1, -1]
 
 # 大马里奥，体积大
 @export var break_tile_speed_y: float = 300.0
-var break_tile_cd: bool = false
+var break_tile_cd_floor: bool = false
+var break_tile_cd_ceil: bool = false
 var player_big_disable_jump: bool = false
 
 
@@ -207,7 +208,7 @@ func _physics_process(delta):
 				jumpable_timer = 0
 		if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
 			speed_y = -jump_speed
-			break_tile_cd = false
+			break_tile_cd_floor = false
 			if abs(speed_x) > max_speed_x * 0.3:
 				speed_y *= jump_speed_factor
 			jumpable = false
@@ -469,18 +470,18 @@ func _update_directional_input() -> void:
 
 # 大马里奥踩硬砖
 func _player_big_break_tile_pound() -> void:
-	if break_tile_cd:
+	if break_tile_cd_floor:
 		return
-	break_tile_cd = true
+	break_tile_cd_floor = true
 
 	var motion = Vector2(-player.up_direction * 8.0)
 	var collision = player.move_and_collide(motion, true)
 	_hard_breakable_block_collide(collision, motion)
 
 func _player_big_break_tile_bump() -> void:
-	if break_tile_cd:
+	if break_tile_cd_ceil:
 		return
-	break_tile_cd = true
+	break_tile_cd_ceil = true
 	var motion = Vector2(player.up_direction * 8.0)
 	var collision = player.move_and_collide(motion, true)
 	_hard_breakable_block_collide(collision, motion)
