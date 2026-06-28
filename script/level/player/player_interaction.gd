@@ -112,6 +112,9 @@ func bonus_detect(results : Array[Node2D]) -> void:
 		if bonus_set_node.bonus_type == BonusSet.BonusType.LUI:
 			player_suit.suit = PlayerSuit.SuitType.POWERED
 			player_suit.power = PlayerSuit.PowerupType.LUI
+		if bonus_set_node.bonus_type == BonusSet.BonusType.BIG:
+			player_suit.suit = PlayerSuit.SuitType.POWERED
+			player_suit.power = PlayerSuit.PowerupType.BIG
 		if bonus_set_node.bonus_type == BonusSet.BonusType.STAR:
 			player_suit.starman_start()
 

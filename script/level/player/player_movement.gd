@@ -16,6 +16,7 @@ signal play_sound_jump
 
 @export var shape_small : Shape2D
 @export var shape_super : Shape2D
+@export var shape_big : Shape2D
 
 @export var crouch_head_area : Area2D
 

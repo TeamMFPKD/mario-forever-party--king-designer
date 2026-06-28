@@ -10,6 +10,7 @@ enum BonusType {
 	BEETROOT,
 	LUI,
 	STAR,
+	BIG,
 }
 
 @export var bonus_type : BonusType = BonusType.MUSHROOM

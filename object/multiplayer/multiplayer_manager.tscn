@@ -9,6 +9,7 @@
 [ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="6_hd2b7"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="7_mdd72"]
 [ext_resource type="AudioStream" uid="uid://cxqyd026s46gt" path="res://sound/SE_NetworkOK.wav" id="8_hd2b7"]
+[ext_resource type="SpriteFrames" uid="uid://de7ppmn5laego" path="res://object/level/player/mario_big.tres" id="8_nm32k"]
 [ext_resource type="Script" uid="uid://3kcdlygevs20" path="res://script/multiplayer/level_receiver_node.gd" id="8_x8ny5"]
 [ext_resource type="AudioStream" uid="uid://cpit5g3mvi7s8" path="res://sound/SE_NetworkLeft.wav" id="9_x8ny5"]
 
@@ -35,6 +36,7 @@ player_super_spritesframe = ExtResource("3_5abiu")
 player_fireball_spritesframe = ExtResource("4_1brco")
 player_beetroot_spritesframe = ExtResource("5_mdd72")
 player_lui_spritesframe = ExtResource("6_hd2b7")
+player_big_spritesframe = ExtResource("8_nm32k")
 
 [node name="LevelReceiverNode" type="Node" parent="." unique_id=1783126947]
 script = ExtResource("8_x8ny5")

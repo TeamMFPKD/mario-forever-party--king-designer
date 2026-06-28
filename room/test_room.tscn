@@ -57,6 +57,7 @@
 [ext_resource type="PackedScene" uid="uid://ynitkwswfduh" path="res://object/level/facility/triangle_block/triangle_block_gravity_top_right.tscn" id="54_erbnt"]
 [ext_resource type="PackedScene" uid="uid://8ljpehme030d" path="res://object/level/facility/triangle_block/triangle_block_gravity_bottom_left.tscn" id="55_yujc7"]
 [ext_resource type="PackedScene" uid="uid://c6oqcpk72tayi" path="res://object/level/facility/triangle_block/triangle_block_gravity_top_left.tscn" id="56_n637y"]
+[ext_resource type="PackedScene" uid="uid://b7kfv8mbbjjgr" path="res://object/level/bonus/mushroom_big.tscn" id="58_n637y"]
 
 [sub_resource type="GDScript" id="GDScript_8ejbx"]
 script/source = "extends Label
@@ -579,6 +580,9 @@ position = Vector2(5456, 400)
 
 [node name="TriangleBlockGravityTopLeft" parent="." unique_id=1065775045 instance=ExtResource("56_n637y")]
 position = Vector2(5456, 208)
+
+[node name="Mushroom3" parent="." unique_id=1814255894 instance=ExtResource("58_n637y")]
+position = Vector2(5568, 376)
 
 [editable path="Door"]
 [editable path="Door2"]
