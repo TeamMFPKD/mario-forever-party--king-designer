@@ -500,33 +500,31 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 		return
 	var collider = collision.get_collider()
 	if collider is TileMapLayer:
-
 		var tilemap = collision.get_collider() as TileMapLayer
-		var hit_cell = tilemap.local_to_map(tilemap.to_local(collision.get_position()) - collision.get_normal())
-
-		var tile_size = tilemap.tile_set.tile_size
-		var shape = collision_shape.shape
-		var half_in_tiles = 1
-		if shape is RectangleShape2D:
-			half_in_tiles = ceili(shape.size.x / tile_size.x / 2.0)
-		elif shape is CapsuleShape2D:
-			half_in_tiles = ceili(shape.radius * 2.0 / tile_size.x / 2.0)
-		half_in_tiles = max(1, half_in_tiles)
-
-		var erased := false
-		for dx in range(-half_in_tiles, half_in_tiles + 1):
-			var cp = Vector2i(hit_cell.x + dx, hit_cell.y)
-			var td = tilemap.get_cell_tile_data(cp)
+		
+		var offsets = [Vector2(0.5, 0), Vector2(-0.5, 0), Vector2(0, 0.5), Vector2(0, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5), Vector2(0.5, -0.5), Vector2(-0.5, -0.5)]
+		var hit_cell = null
+		for off in offsets:
+			var pt = collision.get_position() + off
+			var local_pt = tilemap.to_local(pt)
+			var cell = tilemap.local_to_map(local_pt)
+			var td = tilemap.get_cell_tile_data(cell)
 			if td and td.get_custom_data("big_breakable"):
-				tilemap.set_cell(cp, -1)
-				erased = true
-				_spawn_fragments(tilemap.map_to_local(cp))
-				emit_signal("play_sound_break_tile")
-				speed_y = -break_tile_speed_y
-				player_big_disable_jump = true
-	
-		if erased:
+				hit_cell = cell
+				break
+
+		if hit_cell != null:
+			var cp = Vector2i(hit_cell.x, hit_cell.y)
+			tilemap.erase_cell(cp)  # 或 set_cell(cp, -1)
+			_spawn_fragments(tilemap.map_to_local(cp))
 			tilemap.update_internals()
+			speed_y = -break_tile_speed_y
+			player_big_disable_jump = true
+			emit_signal("play_sound_break_tile")
+			
+			# 递归检测连续碰撞
+			var collision2 = player.move_and_collide(motion, true)
+			_hard_breakable_block_collide(collision2, motion)
 
 
 	if collider.has_meta("hard_breakable_block"):
