@@ -15,6 +15,8 @@ signal block_break
 @export var sprout_item_scene: PackedScene = null
 @export var adv_sprout_item_scene: PackedScene = null
 
+@export var is_hard_breakable_block: bool = true
+
 enum BumpState {
 	IDLE,
 	BUMPING,
@@ -54,6 +56,9 @@ var _origin_collision_layer: int = 0
 func _ready() -> void:
 	parent = get_parent() as StaticBody2D
 	_metadata_inject(parent)
+
+	if is_hard_breakable_block:
+		parent.set_meta("hard_breakable_block", true)
 	
 	# 隐藏砖
 	_origin_collision_layer = parent.collision_layer

@@ -7,6 +7,22 @@ signal pipe_exited
 signal door_entered
 signal door_exited
 signal play_sound_jump
+signal play_sound_break_tile
+
+@export var _block_fragment_scene: PackedScene = preload("uid://ct006nlnmf8dg")
+const FRAMERATE_ORIGIN: float = 60.0
+var _fragment_create_position: Array[Vector2] = [
+	Vector2(-8.0, -8.0),
+	Vector2(8.0, 8.0),
+	Vector2(-8.0, 8.0),
+	Vector2(8.0, -8.0),
+]
+var _fragment_velocity_data: Array[Vector2] = [
+	Vector2(-3.0, -6.0) * FRAMERATE_ORIGIN,
+	Vector2(-2.0, -4.0) * FRAMERATE_ORIGIN,
+	Vector2(2.0, -4.0) * FRAMERATE_ORIGIN,
+	Vector2(3.0, -6.0) * FRAMERATE_ORIGIN,
+]
 
 @export var player : CharacterBody2D
 @export var player_suit : PlayerSuit
@@ -102,6 +118,11 @@ var is_switching_gravity: bool = false
 # 重力切换时保持输入锁（-1=未锁定, 0-3=锁定的局部方向ID）
 var input_lock: Array[int] = [-1, -1, -1, -1]
 
+# 大马里奥，体积大
+@export var break_tile_speed_y: float = 300.0
+var break_tile_cd: bool = false
+var player_big_disable_jump: bool = false
+
 
 func _physics_process(delta):
 	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
@@ -158,25 +179,38 @@ func _physics_process(delta):
 
 
 	# 垂直运动
+	if player_big_disable_jump:
+		player_big_disable_jump = false
+
 	if player.is_on_floor():
-		speed_y = 0.0
+		# 大马里奥，体积大
+		if speed_y > 100.0 and \
+		player_suit.suit == PlayerSuit.SuitType.POWERED and \
+		player_suit.power == PlayerSuit.PowerupType.BIG:
+			speed_y = 0.0
+			_player_big_break_tile()
+		else:
+			speed_y = 0.0
 		langtiao_timer = 0
-	if speed_y >= 0.0 and is_action_pressed(jump):
-		jumpable = true
-	if !player.is_on_floor():
-		langtiao_timer += 1
-		langtiao = langtiao_timer < langtiao_time
-	if jumpable:
-		jumpable_timer += 1
-		if jumpable_timer > jumpable_time:
+
+	if not player_big_disable_jump:
+		if speed_y >= 0.0 and is_action_pressed(jump):
+			jumpable = true
+		if !player.is_on_floor():
+			langtiao_timer += 1
+			langtiao = langtiao_timer < langtiao_time
+		if jumpable:
+			jumpable_timer += 1
+			if jumpable_timer > jumpable_time:
+				jumpable = false
+				jumpable_timer = 0
+		if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
+			speed_y = -jump_speed
+			break_tile_cd = false
+			if abs(speed_x) > max_speed_x * 0.3:
+				speed_y *= jump_speed_factor
 			jumpable = false
-			jumpable_timer = 0
-	if move_jump and jumpable and (player.is_on_floor() or (langtiao and speed_y > 0.0)):
-		speed_y = -jump_speed
-		if abs(speed_x) > max_speed_x * 0.3:
-			speed_y *= jump_speed_factor
-		jumpable = false
-		emit_signal("play_sound_jump")
+			emit_signal("play_sound_jump")
 
 	if player.is_on_ceiling():
 		speed_y = 0.0
@@ -430,3 +464,68 @@ func _update_directional_input() -> void:
 			_set_move_dir(input_lock[key_idx], true)
 		else:
 			_set_move_dir(grav[key_idx], true)
+
+# 大马里奥踩硬砖
+func _player_big_break_tile() -> void:
+	if break_tile_cd:
+		return
+	
+	break_tile_cd = true
+
+	var collision = player.move_and_collide(-player.up_direction * 8.0, true)
+	_hard_breakable_block_collide(collision)
+
+func _hard_breakable_block_collide(collision: KinematicCollision2D) -> void:
+	if not collision:
+		return
+	var collider = collision.get_collider()
+	if collider is TileMapLayer:
+
+		var tilemap = collision.get_collider() as TileMapLayer
+		var hit_cell = tilemap.local_to_map(tilemap.to_local(collision.get_position()) - collision.get_normal())
+
+		var tile_size = tilemap.tile_set.tile_size
+		var shape = collision_shape.shape
+		var half_in_tiles = 1
+		if shape is RectangleShape2D:
+			half_in_tiles = ceili(shape.size.x / tile_size.x / 2.0)
+		elif shape is CapsuleShape2D:
+			half_in_tiles = ceili(shape.radius * 2.0 / tile_size.x / 2.0)
+		half_in_tiles = max(1, half_in_tiles)
+
+		var erased := false
+		for dx in range(-half_in_tiles, half_in_tiles + 1):
+			var cp = Vector2i(hit_cell.x + dx, hit_cell.y)
+			var td = tilemap.get_cell_tile_data(cp)
+			if td and td.get_custom_data("big_breakable"):
+				tilemap.set_cell(cp, -1)
+				erased = true
+				_spawn_fragments(tilemap.map_to_local(cp))
+				emit_signal("play_sound_break_tile")
+	
+		if erased:
+			tilemap.update_internals()
+
+		speed_y = -break_tile_speed_y
+		player_big_disable_jump = true
+
+	if collider.has_meta("hard_breakable_block"):
+		_spawn_fragments(collider.global_position)
+		collider.free()
+		speed_y = -break_tile_speed_y
+		player_big_disable_jump = true
+		emit_signal("play_sound_break_tile")
+
+		# 神秘递归
+		var collision2 = player.move_and_collide(-player.up_direction * 8.0, true)
+		_hard_breakable_block_collide(collision2)
+
+
+func _spawn_fragments(world_pos: Vector2) -> void:
+	for i in _fragment_velocity_data.size():
+		var f = _block_fragment_scene.instantiate()
+		f.global_position = world_pos + _fragment_create_position[i]
+		f.reset_physics_interpolation()
+		f.speed_x = _fragment_velocity_data[i].x
+		f.speed_y = _fragment_velocity_data[i].y
+		player.get_parent().add_child(f)
