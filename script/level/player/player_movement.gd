@@ -144,6 +144,9 @@ func _physics_process(delta):
 	target_speed = 0.0
 	
 	if player.is_on_wall():
+		if player.is_on_floor():
+			_player_big_break_tile_wall()
+			speed_y = 0.0
 		speed_x = 0.0
 
 	# 下蹲
@@ -184,11 +187,9 @@ func _physics_process(delta):
 
 	if player.is_on_floor():
 		# 大马里奥，体积大
-		if speed_y > 100.0 and \
-		player_suit.suit == PlayerSuit.SuitType.POWERED and \
-		player_suit.power == PlayerSuit.PowerupType.BIG:
+		if speed_y > 100.0:
 			speed_y = 0.0
-			_player_big_break_tile()
+			_player_big_break_tile_pound()
 		else:
 			speed_y = 0.0
 		langtiao_timer = 0
@@ -213,6 +214,7 @@ func _physics_process(delta):
 			emit_signal("play_sound_jump")
 
 	if player.is_on_ceiling():
+		_player_big_break_tile_bump()
 		speed_y = 0.0
 	
 	var current_gravity = gravity_hold_jump if move_jump else gravity_normal
@@ -466,16 +468,32 @@ func _update_directional_input() -> void:
 			_set_move_dir(grav[key_idx], true)
 
 # 大马里奥踩硬砖
-func _player_big_break_tile() -> void:
+func _player_big_break_tile_pound() -> void:
 	if break_tile_cd:
 		return
-	
 	break_tile_cd = true
 
-	var collision = player.move_and_collide(-player.up_direction * 8.0, true)
-	_hard_breakable_block_collide(collision)
+	var motion = Vector2(-player.up_direction * 8.0)
+	var collision = player.move_and_collide(motion, true)
+	_hard_breakable_block_collide(collision, motion)
 
-func _hard_breakable_block_collide(collision: KinematicCollision2D) -> void:
+func _player_big_break_tile_bump() -> void:
+	if break_tile_cd:
+		return
+	break_tile_cd = true
+	var motion = Vector2(player.up_direction * 8.0)
+	var collision = player.move_and_collide(motion, true)
+	_hard_breakable_block_collide(collision, motion)
+
+func _player_big_break_tile_wall() -> void:
+	var motion = Vector2(player.velocity.normalized() * 2.0)
+	var collision = player.move_and_collide(motion, true)
+	_hard_breakable_block_collide(collision, motion)
+
+func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vector2) -> void:
+	if not (player_suit.suit == PlayerSuit.SuitType.POWERED and \
+		player_suit.power == PlayerSuit.PowerupType.BIG):
+			return
 	if not collision:
 		return
 	var collider = collision.get_collider()
@@ -502,12 +520,12 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D) -> void:
 				erased = true
 				_spawn_fragments(tilemap.map_to_local(cp))
 				emit_signal("play_sound_break_tile")
+				speed_y = -break_tile_speed_y
+				player_big_disable_jump = true
 	
 		if erased:
 			tilemap.update_internals()
 
-		speed_y = -break_tile_speed_y
-		player_big_disable_jump = true
 
 	if collider.has_meta("hard_breakable_block"):
 		_spawn_fragments(collider.global_position)
@@ -517,8 +535,8 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D) -> void:
 		emit_signal("play_sound_break_tile")
 
 		# 神秘递归
-		var collision2 = player.move_and_collide(-player.up_direction * 8.0, true)
-		_hard_breakable_block_collide(collision2)
+		var collision2 = player.move_and_collide(motion, true)
+		_hard_breakable_block_collide(collision2, motion)
 
 
 func _spawn_fragments(world_pos: Vector2) -> void:
