@@ -8,7 +8,12 @@ signal block_break
 # 顶砖
 @export var bumpable: bool = false
 @export var bumpable_one_shot: bool = false
-@export var hidden: bool = false
+@export var hidden: bool = false:
+	set(value):
+		hidden = value
+		if hidden and is_hard_breakable_block:
+			_set_hard_block_meta()
+
 @export var _block_bump_area_2d_scene: PackedScene = preload("uid://8nv6va42xrsg")
 @export var sprite: AnimatedSprite2D
 
@@ -57,8 +62,8 @@ func _ready() -> void:
 	parent = get_parent() as StaticBody2D
 	_metadata_inject(parent)
 
-	if is_hard_breakable_block:
-		parent.set_meta("hard_breakable_block", true)
+	if is_hard_breakable_block and not hidden:
+		_set_hard_block_meta()
 	
 	# 隐藏砖
 	_origin_collision_layer = parent.collision_layer
@@ -74,6 +79,10 @@ func _ready() -> void:
 
 func _metadata_inject(p_parent: Node2D) -> void:
 	p_parent.set_meta("interaction_with_block", self)
+
+func _set_hard_block_meta() -> void:
+	parent = get_parent()
+	parent.set_meta("hard_breakable_block", true)
 
 func on_block_hit(collider: Node2D) -> void:
 	if not bumping and is_bumpable(collider):

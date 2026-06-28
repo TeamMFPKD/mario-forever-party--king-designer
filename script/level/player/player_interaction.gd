@@ -57,11 +57,11 @@ func _physics_process(_delta: float) -> void:
 	overlap_switch_detect(results)
 
 	# 顶砖检测
-	var origin_pos_y = cast.position.y
-	cast.position.y -= 1.0
+	var origin_pos = cast.position
+	cast.position += player.up_direction
 	results = ShapeCastQuery.shape_query(player, cast)
 	block_hit_detect(results)
-	cast.position.y = origin_pos_y
+	cast.position = origin_pos
 
 	triangle_block_detect(results)
 	
@@ -144,10 +144,18 @@ func block_hit_detect(results : Array[Node2D]) -> void:
 	#if not player.is_on_ceiling():
 	#	return
 	#print("block_hit_detect reuslts: ", results)
+
 	for result in results:
 		if not result.has_meta("interaction_with_block"):
 			continue
 		var block_hit_node = result.get_meta("interaction_with_block") as BlockHit
+		
+		# 大马里奥特殊处理
+		if player_suit.suit == PlayerSuit.SuitType.POWERED \
+		and player_suit.power == PlayerSuit.PowerupType.BIG \
+		and not block_hit_node.hidden:
+			continue
+
 		if not block_hit_node.hidden and not player.is_on_ceiling():
 			continue
 		if block_hit_node.hidden:
@@ -159,6 +167,12 @@ func block_hit_detect(results : Array[Node2D]) -> void:
 		if block_hit_node.hidden and player.is_on_wall():
 			player_movement.speed_y = 0.0
 		block_hit_node.on_block_hit(player)
+		
+		
+		if player_suit.suit == PlayerSuit.SuitType.POWERED \
+		and player_suit.power == PlayerSuit.PowerupType.BIG:
+			player_movement.break_tile_cd = true
+		
 
 func pipe_detect(results : Array[Node2D]) -> void:
 	if player_movement.out_pipe_cooldown > 0:
