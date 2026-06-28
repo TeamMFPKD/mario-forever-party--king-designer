@@ -194,10 +194,12 @@ offset = Vector2(0, 12)
 
 [node name="DustEffectCreator" parent="." unique_id=1311315102 instance=ExtResource("32_4thfq")]
 
-[node name="LevelEdgeLeft" parent="." unique_id=1748762059 instance=ExtResource("24_wtbdq")]
+[node name="LevelEdge" type="Node" parent="." unique_id=1265488575]
+
+[node name="LevelEdgeLeft" parent="LevelEdge" unique_id=1748762059 instance=ExtResource("24_wtbdq")]
 position = Vector2(-640, 0)
 
-[node name="LevelEdgeRight" parent="." unique_id=1828755264 instance=ExtResource("25_741uk")]
+[node name="LevelEdgeRight" parent="LevelEdge" unique_id=1828755264 instance=ExtResource("25_741uk")]
 position = Vector2(640, 0)
 
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Skid" method="_on_player_skid"]

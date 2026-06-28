@@ -31,7 +31,7 @@ const RIGHT_NORMALS := [
 
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
-	player_movement = get_node("../PlayerMediator/PlayerMovement") as PlayerMovement
+	player_movement = get_node("../../PlayerMediator/PlayerMovement") as PlayerMovement
 	origin_collision_layer = collision_layer
 	collision_layer = 0
 	var cs = $CollisionShape2D
@@ -40,6 +40,7 @@ func _ready() -> void:
 			cs.shape = LEVEL_EDGE_SHAPE_LEFT.duplicate()
 		EgdeType.RIGHT:
 			cs.shape = LEVEL_EDGE_SHAPE_RIGHT.duplicate()
+			global_position.x = level_camera.limit_right
 	edge_shape = cs.shape
 	var fc = func():
 		collision_layer = origin_collision_layer

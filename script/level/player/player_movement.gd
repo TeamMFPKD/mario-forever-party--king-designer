@@ -39,8 +39,7 @@ signal play_sound_jump
 @export_range(-360.0, 360.0, 5.0) var rotate_with_up: float = 0.0:
 	set(value):
 		rotate_with_up = value
-		collision_shape.rotation_degrees = rotate_with_up
-		cast.rotation_degrees = rotate_with_up
+		player.rotation_degrees = rotate_with_up
 		player.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 
 @export var triangle_speed_x_limit: float = 300.0
