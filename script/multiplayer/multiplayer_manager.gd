@@ -72,6 +72,7 @@ var is_in_game : bool = false:
 @export var player_fireball_spritesframe : SpriteFrames
 @export var player_beetroot_spritesframe : SpriteFrames
 @export var player_lui_spritesframe : SpriteFrames
+@export var player_big_spritesframe: SpriteFrames
 
 var mp_ani_manager
 

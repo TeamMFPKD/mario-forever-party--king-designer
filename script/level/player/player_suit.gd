@@ -19,6 +19,7 @@ enum PowerupType {
 	FIREBALL,
 	BEETROOT,
 	LUI,
+	BIG,
 }
 
 @export var suit: SuitType = SuitType.SMALL:

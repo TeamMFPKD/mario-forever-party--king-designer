@@ -16,6 +16,7 @@ signal play_sound_skid
 @export var player_fireball_spritesframe : SpriteFrames
 @export var player_beetroot_spritesframe : SpriteFrames
 @export var player_lui_spritesframe : SpriteFrames
+@export var player_big_spritesframe: SpriteFrames
 
 var current_state : String = "idle"
 var last_direction : int = 1  # 1表示向右，-1表示向左
