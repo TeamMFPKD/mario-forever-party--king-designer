@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b7kfv8mbbjjgr"]
 
-[ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="1_i6ix6"]
+[ext_resource type="Texture2D" uid="uid://vwi8pqa2xavj" path="res://sprite/bonus/mushroom_big.png" id="1_i6ix6"]
 [ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_ovygf"]
 [ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_1c8gi"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="4_e4c3d"]
@@ -11,28 +11,29 @@
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="9_v5xmv"]
 [ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="10_u48ue"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xe747"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovygf"]
 atlas = ExtResource("1_i6ix6")
-region = Rect2(0, 0, 31, 32)
+region = Rect2(0, 0, 16, 16)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_n37im"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_1c8gi"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xe747")
+"texture": SubResource("AtlasTexture_ovygf")
 }],
 "loop": true,
 "name": &"default",
 "speed": 5.0
 }]
 
-[node name="Mushroom" type="CharacterBody2D" unique_id=114751985]
+[node name="MushroomBig" type="CharacterBody2D" unique_id=114751985]
 scale = Vector2(2, 2)
 collision_layer = 32
 collision_mask = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
-sprite_frames = SubResource("SpriteFrames_n37im")
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_1c8gi")
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
