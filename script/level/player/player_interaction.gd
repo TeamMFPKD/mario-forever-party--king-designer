@@ -74,7 +74,8 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 			continue
 		# 在上方踩踏并且可以踩踏
 		interaction_with_player_node.on_overlap(player)
-		if player.position.y < result.position.y + interaction_with_player_node.stomp_offset \
+		var up = player.up_direction
+		if player.global_position.dot(up) > result.global_position.dot(up) - interaction_with_player_node.stomp_offset \
 		and interaction_with_player_node.stompable:
 			# 踩踏成功
 			if (not is_starman()) or (is_starman() and interaction_with_player_node.starman_stompable):
