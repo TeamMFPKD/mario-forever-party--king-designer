@@ -384,6 +384,7 @@ texture_region_size = Vector2i(32, 32)
 11:3/0/terrains_peering_bit/top_side = 0
 0:4/0 = 0
 0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+0:4/0/custom_data_1 = true
 1:4/0 = 0
 1:4/0/custom_data_0 = true
 
@@ -395,4 +396,6 @@ terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 custom_data_layer_0/name = "semi-solid"
 custom_data_layer_0/type = 1
+custom_data_layer_1/name = "big_breakable"
+custom_data_layer_1/type = 1
 sources/0 = SubResource("TileSetAtlasSource_l3001")
