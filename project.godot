@@ -105,6 +105,7 @@ clear_pipe_entrance=""
 door_locked=""
 pink_coin=""
 pink_coin_manager=""
+level_manager=""
 
 [input]
 

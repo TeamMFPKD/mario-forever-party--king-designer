@@ -5,6 +5,9 @@
 [ext_resource type="Script" uid="uid://dy8q17c1owdph" path="res://script/level/component/interaction_with_player.gd" id="3_5yd5n"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="4_awh24"]
 [ext_resource type="AudioStream" uid="uid://n218pjy788m8" path="res://sound/level/springboard.wav" id="5_ko16b"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="6_1h3qk"]
+[ext_resource type="Script" uid="uid://dusfabfds4xy7" path="res://script/level/facility/spring_version_diff.gd" id="7_fvml3"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="7_v1bwf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_awh24"]
 atlas = ExtResource("2_5yd5n")
@@ -91,6 +94,15 @@ metadata/_custom_type_script = "uid://dy8q17c1owdph"
 
 [node name="Bounce" parent="." unique_id=1715984441 instance=ExtResource("4_awh24")]
 stream = ExtResource("5_ko16b")
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("6_1h3qk")]
+
+[node name="SpringVersionDiff" type="Node" parent="GeneralVisibleOnScreenEnabler2d" unique_id=492105226]
+script = ExtResource("7_fvml3")
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2071419589]
+script = ExtResource("7_v1bwf")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
 
 [connection signal="stomped" from="InteractionWithPlayer" to="Bounce" method="play" unbinds=1]
 [connection signal="stomped" from="InteractionWithPlayer" to="AnimatedSprite2D" method="play" unbinds=1 binds= [&"bounce"]]
