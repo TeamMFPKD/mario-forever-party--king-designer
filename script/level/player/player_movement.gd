@@ -515,8 +515,18 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 
 		if hit_cell != null:
 			var cp = Vector2i(hit_cell.x, hit_cell.y)
-			tilemap.erase_cell(cp)  # 或 set_cell(cp, -1)
-			_spawn_fragments(tilemap.map_to_local(cp))
+			var tile_tex: Texture2D = null
+			var source_id = tilemap.get_cell_source_id(cp)
+			var atlas_coords = tilemap.get_cell_atlas_coords(cp)
+			if source_id >= 0 and atlas_coords != Vector2i(-1, -1):
+				var source = tilemap.tile_set.get_source(source_id) as TileSetAtlasSource
+				if source:
+					var atlas_tex = AtlasTexture.new()
+					atlas_tex.atlas = source.texture
+					atlas_tex.region = source.get_tile_texture_region(atlas_coords)
+					tile_tex = atlas_tex
+			tilemap.erase_cell(cp)
+			_spawn_fragments(tilemap.map_to_local(cp), tile_tex)
 			tilemap.update_internals()
 			speed_y = -break_tile_speed_y
 			player_big_disable_jump = true
@@ -528,7 +538,17 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 
 
 	if collider.has_meta("hard_breakable_block"):
-		_spawn_fragments(collider.global_position)
+		var block_tex: Texture2D = null
+		for child in collider.get_children():
+			if child is Sprite2D:
+				block_tex = child.texture
+				break
+			elif child is AnimatedSprite2D:
+				var anim = child.animation
+				if anim and child.sprite_frames.has_animation(anim):
+					block_tex = child.sprite_frames.get_frame_texture(anim, child.frame)
+				break
+		_spawn_fragments(collider.global_position, block_tex)
 		collider.free()
 		speed_y = -break_tile_speed_y
 		player_big_disable_jump = true
@@ -539,9 +559,11 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 		_hard_breakable_block_collide(collision2, motion)
 
 
-func _spawn_fragments(world_pos: Vector2) -> void:
+func _spawn_fragments(world_pos: Vector2, tex: Texture2D = null) -> void:
 	for i in _fragment_velocity_data.size():
 		var f = _block_fragment_scene.instantiate()
+		if tex:
+			f.sprite.texture = tex
 		f.global_position = world_pos + _fragment_create_position[i]
 		f.reset_physics_interpolation()
 		f.speed_x = _fragment_velocity_data[i].x

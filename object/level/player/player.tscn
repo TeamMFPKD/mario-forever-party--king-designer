@@ -59,7 +59,6 @@ platform_on_leave = 2
 safe_margin = 0.09
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
-visible = false
 sprite_frames = ExtResource("1_8csaa")
 animation = &"idle"
 offset = Vector2(0, -20)
@@ -76,7 +75,7 @@ script = ExtResource("2_741uk")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
 position = Vector2(1, -2)
-shape = ExtResource("3_1b4u5")
+shape = ExtResource("3_0f3px")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
 visible = false
