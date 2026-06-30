@@ -34,7 +34,7 @@ func _physics_process(_delta: float) -> void:
 
 func create_fireball() -> void:
 	var fireball = fireball_scene.instantiate() as CharacterBody2D
-	fireball.position = player.position + offset
+	fireball.position = player.position + offset.rotated(player.rotation)
 	fireball.rotation = player.rotation
 	fireball.up_direction = player.up_direction
 	fireball.set_meta("fireball_direction", -1 if player_animation_sprite.flip_h else 1)
@@ -42,7 +42,7 @@ func create_fireball() -> void:
 
 func create_beetroot() -> void:
 	var beetroot = beetroot_scene.instantiate() as CharacterBody2D
-	beetroot.position = player.position + offset
+	beetroot.position = player.position + offset.rotated(player.rotation)
 	beetroot.rotation = player.rotation
 	beetroot.up_direction = player.up_direction
 	beetroot.set_meta("beetroot_direction", -1 if player_animation_sprite.flip_h else 1)
