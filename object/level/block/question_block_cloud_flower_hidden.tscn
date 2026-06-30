@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://nr83lg6ph4ub"]
+
+[ext_resource type="PackedScene" uid="uid://b118gsn6eaweq" path="res://object/level/block/question_block_cloud_flower.tscn" id="1_5q14k"]
+
+[node name="QuestionBlockCloudFlowerHidden" unique_id=2059396481 instance=ExtResource("1_5q14k")]
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+hidden = true

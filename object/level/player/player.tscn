@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://c8k70uglbhl1b" path="res://object/level/player/player_lui_effect.tscn" id="11_4mpgj"]
 [ext_resource type="SpriteFrames" uid="uid://de7ppmn5laego" path="res://object/level/player/mario_big.tres" id="11_j733o"]
 [ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="11_xbm7l"]
+[ext_resource type="SpriteFrames" uid="uid://ew0hi7le0ntc" path="res://object/level/player/mario_bee.tres" id="12_j1dgc"]
+[ext_resource type="SpriteFrames" uid="uid://ynxlcn01a0xr" path="res://object/level/player/mario_cloud.tres" id="13_27nu0"]
 [ext_resource type="Shape2D" uid="uid://bhfyscc0lxmab" path="res://object/level/player/player_collision_shape_big_crouch.tres" id="15_csahg"]
 [ext_resource type="AudioStream" uid="uid://cqphd6kl5ua3c" path="res://sound/level/mario_jump.se.wav" id="16_3sfxm"]
 [ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
@@ -61,7 +63,7 @@ safe_margin = 0.09
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
 sprite_frames = ExtResource("1_8csaa")
-animation = &"walk"
+animation = &"idle"
 offset = Vector2(0, -20)
 
 [node name="InvincibleEffect" type="AnimatedSprite2D" parent="." unique_id=913106306]
@@ -120,6 +122,8 @@ player_fireball_spritesframe = ExtResource("9_3sfxm")
 player_beetroot_spritesframe = ExtResource("10_qe8py")
 player_lui_spritesframe = ExtResource("11_xbm7l")
 player_big_spritesframe = ExtResource("11_j733o")
+player_bee_spritesframe = ExtResource("12_j1dgc")
+player_cloud_spritesframe = ExtResource("13_27nu0")
 
 [node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player", "player_suit", "collision_shape", "cast", "crouch_head_area")]
 script = ExtResource("2_d0xdx")

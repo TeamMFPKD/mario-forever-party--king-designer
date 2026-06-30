@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cds0aeekhvc1u"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_lbqpv"]
+[ext_resource type="PackedScene" uid="uid://d238moi6epy16" path="res://object/level/block/question_block_mushroom_bee.tscn" id="2_lbqpv"]
+[ext_resource type="Texture2D" uid="uid://bv4j51wmku4ii" path="res://sprite/bonus/question_block.png" id="3_d7gwm"]
+[ext_resource type="Texture2D" uid="uid://n8ymiwm5hef" path="res://sprite/bonus/mushroom_bee.png" id="4_lbqpv"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="5_5uwsa"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_b4657"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
+atlas = ExtResource("3_d7gwm")
+region = Rect2(0, 32, 32, 32)
+
+[node name="SpawnerQuestionBlockMushroomBee" type="Node2D" unique_id=398784866]
+script = ExtResource("1_lbqpv")
+spawn_object_scene = ExtResource("2_lbqpv")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2123271352]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D" unique_id=1078709844]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_lbqpv")
+
+[node name="OffsetMarker" parent="." unique_id=2101789563 instance=ExtResource("5_5uwsa")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_b4657")]

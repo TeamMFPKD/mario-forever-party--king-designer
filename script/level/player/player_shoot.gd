@@ -33,14 +33,18 @@ func _physics_process(_delta: float) -> void:
 				emit_signal("play_sound_shoot")
 
 func create_fireball() -> void:
-	var fireball = fireball_scene.instantiate() as Node2D
+	var fireball = fireball_scene.instantiate() as CharacterBody2D
 	fireball.position = player.position + offset
+	fireball.rotation = player.rotation
+	fireball.up_direction = player.up_direction
 	fireball.set_meta("fireball_direction", -1 if player_animation_sprite.flip_h else 1)
 	player.add_sibling(fireball)
 
 func create_beetroot() -> void:
-	var beetroot = beetroot_scene.instantiate() as Node2D
+	var beetroot = beetroot_scene.instantiate() as CharacterBody2D
 	beetroot.position = player.position + offset
+	beetroot.rotation = player.rotation
+	beetroot.up_direction = player.up_direction
 	beetroot.set_meta("beetroot_direction", -1 if player_animation_sprite.flip_h else 1)
 	player.add_sibling(beetroot)
 

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bxs3a2i1feafr"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_3u1py"]
+[ext_resource type="PackedScene" uid="uid://b751xjg8lwtym" path="res://object/level/bonus/mushroom_bee.tscn" id="2_3u1py"]
+[ext_resource type="Texture2D" uid="uid://n8ymiwm5hef" path="res://sprite/bonus/mushroom_bee.png" id="3_kyacg"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="4_fssp5"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="5_ow64v"]
+
+[node name="SpawnerMushroom" type="Node2D" unique_id=398784866]
+script = ExtResource("1_3u1py")
+spawn_object_scene = ExtResource("2_3u1py")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2123271352]
+texture = ExtResource("3_kyacg")
+
+[node name="OffsetMarker" parent="." unique_id=2101789563 instance=ExtResource("4_fssp5")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("5_ow64v")]
