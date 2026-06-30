@@ -58,6 +58,9 @@ static var _original_collision_shape_2d: Shape2D = null
 var _origin_collision_layer: int = 0
 #var _hidden_shape: RectangleShape2D = preload("uid://dgpgao4212wvq")
 
+const HIDDEN_LAYER: int = 132
+
+
 func _ready() -> void:
 	parent = get_parent() as StaticBody2D
 	_metadata_inject(parent)
@@ -76,6 +79,20 @@ func _ready() -> void:
 		player = get_tree().get_first_node_in_group("player")
 		player_suit = player.get_meta("player_suit") as PlayerSuit
 	fc.call_deferred()
+
+func _physics_process(_delta: float) -> void:
+	# Hidden Block patch
+	if not hidden or not player:
+		return
+	var player_movement = player.get_meta("player_movement") as PlayerMovement if player.has_meta("player_movement") else null
+	if not player_movement:
+		return
+	if int(round(player_movement.target_gravity)) % 360 != 0:
+		parent.collision_layer = 0
+	else:
+		parent.collision_layer = HIDDEN_LAYER
+	
+
 
 func _metadata_inject(p_parent: Node2D) -> void:
 	p_parent.set_meta("interaction_with_block", self)
@@ -179,7 +196,7 @@ func set_hidden() -> void:
 		return
 	sprite.visible = false
 	#_collision_shape_2d.position = Vector2.DOWN * 13.0
-	parent.collision_layer = 132
+	parent.collision_layer = HIDDEN_LAYER
 	Callable(_apply_hidden_shape).call_deferred()
 
 func _apply_hidden_shape() -> void:
