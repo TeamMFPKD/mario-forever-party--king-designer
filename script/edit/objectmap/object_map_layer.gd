@@ -4,7 +4,7 @@ class_name ObjectMapLayer
 
 signal play_sound_drag
 
-@export var objects : Array = []
+@export var objects: Array = []
 @export var database_holder: DatabaseHolder
 
 # 输入处理相关变量

@@ -5,7 +5,7 @@ signal back_to_title
 signal sever_back_to_title
 signal client_back_to_title
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager

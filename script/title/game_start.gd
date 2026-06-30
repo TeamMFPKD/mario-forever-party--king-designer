@@ -2,9 +2,9 @@ extends Node
 
 signal game_started
 
-@export var bar : HScrollBar
+@export var bar: HScrollBar
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 var config
 

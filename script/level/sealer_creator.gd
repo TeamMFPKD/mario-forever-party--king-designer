@@ -1,10 +1,10 @@
 extends Node
 
-@export var path_to_tile_map : NodePath = ".."
-@export var sealer_scene : PackedScene
+@export var path_to_tile_map: NodePath = ".."
+@export var sealer_scene: PackedScene
 
-var tile_map : TileMapLayer
-var level_camera : Camera2D
+var tile_map: TileMapLayer
+var level_camera: Camera2D
 
 func _ready() -> void:
 	tile_map = get_node(path_to_tile_map)

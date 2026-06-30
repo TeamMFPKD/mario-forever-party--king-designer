@@ -1,11 +1,11 @@
 extends VBoxContainer
 
-@export var player_list_scene : PackedScene
-@export var path_to_ready_sound_node : NodePath = "../ReadySound"
+@export var player_list_scene: PackedScene
+@export var path_to_ready_sound_node: NodePath = "../ReadySound"
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 var players
-var ready_sound_node : AudioStreamPlayer
+var ready_sound_node: AudioStreamPlayer
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager

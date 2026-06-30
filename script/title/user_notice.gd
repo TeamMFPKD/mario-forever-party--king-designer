@@ -2,10 +2,10 @@ extends MarginContainer
 
 signal notice_accepted
 
-@export var refuse_button : Button
-@export var accept_button : Button
+@export var refuse_button: Button
+@export var accept_button: Button
 
-var config : ConfigFile
+var config: ConfigFile
 
 const USER_NOTICE_SECTION = "user_notice_v2"
 

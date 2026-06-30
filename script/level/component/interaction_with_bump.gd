@@ -4,8 +4,8 @@ class_name InteractionWithBump
 
 signal bumped(hit_position: Vector2)
 
-@export var is_bumpable : bool = true
-@export var immune_to_bump : bool = false
+@export var is_bumpable: bool = true
+@export var immune_to_bump: bool = false
 
 func _ready() -> void:
 	metadata_inject()

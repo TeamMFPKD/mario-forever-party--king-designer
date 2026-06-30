@@ -17,23 +17,23 @@ enum DeathType {
 
 var death_type: DeathType = DeathType.DEFAULT
 
-var dead_instance : Node2D
-var parent : Node2D
+var dead_instance: Node2D
+var parent: Node2D
 
-@export var path_to_animated_sprite : NodePath = "../AnimatedSprite2D"
-var ani : AnimatedSprite2D
-var dead_texture : Texture2D
+@export var path_to_animated_sprite: NodePath = "../AnimatedSprite2D"
+var ani: AnimatedSprite2D
+var dead_texture: Texture2D
 
-@export var dead_scene_default : PackedScene = preload("uid://cllkdvixqmhrc")
-@export var dead_texture_override : Texture2D
+@export var dead_scene_default: PackedScene = preload("uid://cllkdvixqmhrc")
+@export var dead_texture_override: Texture2D
 
-@export var dead_scene_stomp : PackedScene
-@export var dead_scene_fireball : PackedScene
-@export var dead_scene_beetroot : PackedScene
-@export var dead_scene_star : PackedScene
-@export var dead_scene_shell : PackedScene
-@export var dead_scene_bump : PackedScene
-@export var dead_scene_crush : PackedScene
+@export var dead_scene_stomp: PackedScene
+@export var dead_scene_fireball: PackedScene
+@export var dead_scene_beetroot: PackedScene
+@export var dead_scene_star: PackedScene
+@export var dead_scene_shell: PackedScene
+@export var dead_scene_bump: PackedScene
+@export var dead_scene_crush: PackedScene
 
 # 交互组件连接控制
 @export var enable_interaction_with_player: bool = true

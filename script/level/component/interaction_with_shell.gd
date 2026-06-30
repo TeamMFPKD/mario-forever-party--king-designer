@@ -4,8 +4,8 @@ class_name InteractionWithShell
 
 signal shell_hitted
 
-@export var is_shell_hittable : bool = true
-@export var immune_to_shell : bool = false
+@export var is_shell_hittable: bool = true
+@export var immune_to_shell: bool = false
 
 func _ready() -> void:
 	metadata_inject()

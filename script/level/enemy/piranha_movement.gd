@@ -4,15 +4,15 @@ class_name PiranhaMovement
 
 signal shoot
 
-@export var path_to_piranha : NodePath = ".."
-var piranha : Node2D
+@export var path_to_piranha: NodePath = ".."
+var piranha: Node2D
 
 enum MoveDirection {
 	UP,
 	DOWN,
 }
 
-@export var move_direction : MoveDirection = MoveDirection.UP
+@export var move_direction: MoveDirection = MoveDirection.UP
 
 enum State {
 	IN,
@@ -21,20 +21,20 @@ enum State {
 	GOING_IN,
 }
 
-var state : State = State.IN
+var state: State = State.IN
 
-@export var speed : float = 60.0
-@export var shy_distance : float = 64.0
-@export var wait_time : int = 84
+@export var speed: float = 60.0
+@export var shy_distance: float = 64.0
+@export var wait_time: int = 84
 
-@export var fire : bool
+@export var fire: bool
 
-var wait_timer : int = 0
-var player : Node2D
-var out_position_y : float
-var in_position_y : float
+var wait_timer: int = 0
+var player: Node2D
+var out_position_y: float
+var in_position_y: float
 
-const PIRANHA_MOVE_DISTANCE : float = 64.0
+const PIRANHA_MOVE_DISTANCE: float = 64.0
 
 func _ready() -> void:
 	piranha = get_node(path_to_piranha)
@@ -50,7 +50,7 @@ func _ready() -> void:
 	in_position_y = piranha.position.y
 
 func _physics_process(delta: float) -> void:
-	var is_shy : bool
+	var is_shy: bool
 	if player.position.x < piranha.position.x + shy_distance \
 	and player.position.x > piranha.position.x - shy_distance:
 		is_shy = true

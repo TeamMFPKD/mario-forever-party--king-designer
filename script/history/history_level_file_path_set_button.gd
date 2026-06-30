@@ -1,15 +1,15 @@
 extends Button
 
-@export var target_game_mode : GameModeSingleton.GameModeType
-@export var level_file_name_label : Label
+@export var target_game_mode: GameModeSingleton.GameModeType
+@export var level_file_name_label: Label
 
-@export var is_liked_course : bool = false
+@export var is_liked_course: bool = false
 
-var basic_path_name : String = "user://"
-var level_path_name : String
-var level_path_set : Node
+var basic_path_name: String = "user://"
+var level_path_name: String
+var level_path_set: Node
 
-const LIKED_COURSES_FOLDER_NAME : String = "liked courses"
+const LIKED_COURSES_FOLDER_NAME: String = "liked courses"
 
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)

@@ -2,15 +2,15 @@ extends Node
 
 signal play_sound_shoot
 
-@export var player_suit : PlayerSuit
-@export var player : Node2D
-@export var player_movement : PlayerMovement
-@export var player_animation_sprite : AnimatedSprite2D
+@export var player_suit: PlayerSuit
+@export var player: Node2D
+@export var player_movement: PlayerMovement
+@export var player_animation_sprite: AnimatedSprite2D
 
-@export var fireball_scene : PackedScene
-@export var beetroot_scene : PackedScene
+@export var fireball_scene: PackedScene
+@export var beetroot_scene: PackedScene
 
-@export var offset : Vector2 = Vector2(0, -32.0)
+@export var offset: Vector2 = Vector2(0, -32.0)
 
 func _physics_process(_delta: float) -> void:
 	if player_movement.is_in_transport:

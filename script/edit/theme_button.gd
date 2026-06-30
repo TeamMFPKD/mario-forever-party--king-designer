@@ -1,8 +1,8 @@
 extends Button
 
-@export var target_theme : LevelManager.LevelThemeEnum
+@export var target_theme: LevelManager.LevelThemeEnum
 
-var level_manager : LevelManager
+var level_manager: LevelManager
 
 func _ready() -> void:
 	level_manager = get_tree().get_first_node_in_group("level_manager") as LevelManager

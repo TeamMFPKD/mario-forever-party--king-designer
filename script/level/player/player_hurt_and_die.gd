@@ -14,15 +14,15 @@ var invincible_timer = 0
 
 @export var player_dead_scene: PackedScene = preload("uid://034w35iv6qfh")
 
-@export var player_suit : PlayerSuit
+@export var player_suit: PlayerSuit
 @export var player: Node2D
 
 var level_camera: Camera2D
 
-var invincible : bool
-var invincible_starman : bool
+var invincible: bool
+var invincible_starman: bool
 
-var game_timer : Timer
+var game_timer: Timer
 
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D

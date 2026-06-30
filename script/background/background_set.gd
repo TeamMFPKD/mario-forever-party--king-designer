@@ -11,7 +11,7 @@ var room_top = 0;
 var room_right = 640;
 var room_bottom = 480;
 
-var level_camera : LevelCamera
+var level_camera: LevelCamera
 var _original_position: Vector2
 
 func _ready() -> void:

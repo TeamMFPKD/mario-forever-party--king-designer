@@ -1,13 +1,13 @@
 extends Node
 
 @export var level_data_node: LevelManager
-@export var emulate_bad_level : bool
+@export var emulate_bad_level: bool
 
 var file_name: String = "user://mfmp_"
 var date_time: String = "datetime"
 var author: String = "author"
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager

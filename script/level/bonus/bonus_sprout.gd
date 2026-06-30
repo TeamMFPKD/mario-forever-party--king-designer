@@ -2,21 +2,21 @@ extends CharacterBody2D
 
 class_name BonusSprout
 
-@export var path_to_bonus : NodePath = ".."
-@export var path_to_collision_shape : NodePath = "../CollisionShape2D"
+@export var path_to_bonus: NodePath = ".."
+@export var path_to_collision_shape: NodePath = "../CollisionShape2D"
 @export var sprout_speed = 50.0
-@export var path_to_basic_movement : NodePath = "../BasicMovement"
+@export var path_to_basic_movement: NodePath = "../BasicMovement"
 
-var bonus : CharacterBody2D
-var collision_shape : CollisionShape2D
-var in_wall_cast : ShapeCast2D
-var basic_movement : BasicMovement
+var bonus: CharacterBody2D
+var collision_shape: CollisionShape2D
+var in_wall_cast: ShapeCast2D
+var basic_movement: BasicMovement
 
-var is_sprout : bool = false
-var origin_bonus_collision_layer : int
-var origin_bonus_collision_mask : int
+var is_sprout: bool = false
+var origin_bonus_collision_layer: int
+var origin_bonus_collision_mask: int
 
-var initialize : bool = false
+var initialize: bool = false
 
 @export var scale_transition: bool = false
 @export var mini_scale: float = 0.5

@@ -6,8 +6,8 @@ enum LanguageType {
 	ja,
 }
 
-var config : ConfigFile
-var current_language : String
+var config: ConfigFile
+var current_language: String
 
 func _ready():
 	# 连接按钮点击信号

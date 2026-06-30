@@ -59,7 +59,7 @@ void fragment() {
 
     // 绘制所有已出现的星星（randX <= scroll）
     for (float i = 0.0; i < 150.0; i++) {
-        float offset = rand1(i) < 0.5 ? iTime : -iTime;
+        float offset = rand1(i) < 0.5 ? iTime: -iTime;
         float randX = (rand1(i + 66042.0) - 0.5) * ratioX;
         float randY = (rand1(i + 93472.0) - 0.5) * ratioY;
 

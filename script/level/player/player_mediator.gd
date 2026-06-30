@@ -1,12 +1,12 @@
 extends Node
 
-@export var player : CharacterBody2D
-@export var player_movement : Node
-@export var player_interaction : Node
-@export var player_hurt_and_die : Node
-@export var player_suit : Node
-@export var player_shoot : Node
-@export var player_animation : Node
+@export var player: CharacterBody2D
+@export var player_movement: Node
+@export var player_interaction: Node
+@export var player_hurt_and_die: Node
+@export var player_suit: Node
+@export var player_shoot: Node
+@export var player_animation: Node
 
 func _ready() -> void:
 	player.set_meta("player_movement", player_movement)

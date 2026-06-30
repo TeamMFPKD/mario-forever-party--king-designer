@@ -30,32 +30,32 @@ var spring_bounce_speed_y: float = 0.0
 			move_object.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 @export var edge_detect: bool = false
 
-@export var overlap_turn : bool = true
-@export var can_be_turn_overlap_detected : bool = true
+@export var overlap_turn: bool = true
+@export var can_be_turn_overlap_detected: bool = true
 @export var path_to_shape_cast: NodePath = "../BasicShapeCast2D"
 
 @export_category("Clear Pipe")
-@export var is_clear_pipe_allowed : bool = false
-@export var is_clear_pipe_allowed_up : bool = false
-@export var is_clear_pipe_allowed_down : bool = false
-@export var is_clear_pipe_allowed_left : bool = true
-@export var is_clear_pipe_allowed_right : bool = true
+@export var is_clear_pipe_allowed: bool = false
+@export var is_clear_pipe_allowed_up: bool = false
+@export var is_clear_pipe_allowed_down: bool = false
+@export var is_clear_pipe_allowed_left: bool = true
+@export var is_clear_pipe_allowed_right: bool = true
 
 @export var path_to_ani: NodePath = "../AnimatedSprite2D"
-@export var dust_creator_scene : PackedScene = preload("uid://bpywk88hnp1yw")
+@export var dust_creator_scene: PackedScene = preload("uid://bpywk88hnp1yw")
 
 const FRAMERATE_ORIGIN: float = 50.0
 const CRUSHED_FRAMES: int = 1
 
-var move_object : CharacterBody2D
+var move_object: CharacterBody2D
 var player: CharacterBody2D
-var shape_cast : ShapeCast2D
+var shape_cast: ShapeCast2D
 var overlap_turn_detect_objects: Array[Node2D] = []
 
 var crushed_frame_counter: int = 0
 
-var ani : AnimatedSprite2D
-var is_in_pipe : bool = false
+var ani: AnimatedSprite2D
+var is_in_pipe: bool = false
 enum PipeMoveDirection {
 	LEFT,
 	RIGHT,
@@ -63,18 +63,18 @@ enum PipeMoveDirection {
 	DOWN,
 	ALIGN,
 }
-var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
-var out_pipe_cooldown : int = 0          # 出管冷却，防止立即再次进入
-var pipe_in_cooldown : int = 0           # 进管冷却，防止立即误判出口
-var clear_pipe_blocked_counter : int = 0
-var previous_speed_x : float = 0.0
-var previous_speed_y : float = 0.0
-var pipe_origin_collision_layer : int
+var pipe_moving_dir: PipeMoveDirection = PipeMoveDirection.ALIGN
+var out_pipe_cooldown: int = 0          # 出管冷却，防止立即再次进入
+var pipe_in_cooldown: int = 0           # 进管冷却，防止立即误判出口
+var clear_pipe_blocked_counter: int = 0
+var previous_speed_x: float = 0.0
+var previous_speed_y: float = 0.0
+var pipe_origin_collision_layer: int
 var origin_scale: Vector2
 
 # 用于转向对齐时的原始方向暂存
-var is_origin_pipe_dir_set : bool = false
-var origin_pipe_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
+var is_origin_pipe_dir_set: bool = false
+var origin_pipe_dir: PipeMoveDirection = PipeMoveDirection.ALIGN
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
@@ -350,7 +350,7 @@ func enter_pipe(enter_direction: PipeMoveDirection) -> void:
 	pipe_origin_collision_layer = move_object.collision_layer
 	move_object.collision_layer = move_object.collision_layer & (1 << 4)
 	move_object.force_update_transform()
-	var pipe_move_vec : Vector2
+	var pipe_move_vec: Vector2
 	match enter_direction:
 		PipeMoveDirection.LEFT:
 			pipe_move_vec = Vector2(-1, 0)
@@ -395,7 +395,7 @@ func exit_pipe() -> void:
 	emit_signal("pipe_exited")
 
 func pipe_movement() -> void:
-	var moving_speed : float = 4.0
+	var moving_speed: float = 4.0
 	match pipe_moving_dir:
 		PipeMoveDirection.LEFT:
 			move_object.position = move_object.position + Vector2(-moving_speed, 0)

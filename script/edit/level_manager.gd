@@ -39,14 +39,14 @@ enum LevelThemeEnum {
 
 @export_category("References")
 @export var level_camera: LevelCamera
-@export var tile_map : TileMapLayer
-@export var tile_set_manager : TileSetManager
-@export var object_map : ObjectMapLayer
-@export var clear_pipe_draw : Node
-@export var pipe_builder : Node
-@export var bgp_manager : BgpManager
+@export var tile_map: TileMapLayer
+@export var tile_set_manager: TileSetManager
+@export var object_map: ObjectMapLayer
+@export var clear_pipe_draw: Node
+@export var pipe_builder: Node
+@export var bgp_manager: BgpManager
 
-@export var lives : int = 2:
+@export var lives: int = 2:
 	set(value):
 		value = clamp(value, 1, 3)
 		lives = value

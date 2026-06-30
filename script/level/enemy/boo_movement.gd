@@ -5,7 +5,7 @@ extends Node
 var _parent: Node2D
 var _origin_position_y: float
 var _player: Node2D
-var _player_animation_sprite : AnimatedSprite2D
+var _player_animation_sprite: AnimatedSprite2D
 var _move: bool
 var _phase: float
 

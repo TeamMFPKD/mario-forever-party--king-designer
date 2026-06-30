@@ -6,8 +6,8 @@ signal crushed_at(crush_position: Vector2)
 
 @export var path_to_basic_movement: NodePath = "../../BasicMovement"
 
-@export var is_crushable : bool = true
-@export var immune_to_crush : bool = false
+@export var is_crushable: bool = true
+@export var immune_to_crush: bool = false
 
 var basic_movement: BasicMovement
 

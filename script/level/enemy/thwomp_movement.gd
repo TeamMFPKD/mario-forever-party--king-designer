@@ -2,16 +2,16 @@ extends BasicMovement
 
 signal play_sound_stun
 
-@export var screen_notifier : VisibleOnScreenNotifier2D
-@export var safe_distance_x : float = 96.0
-@export var land_time : int = 72
-@export var thwomp_gravity : float = 2000.0
-@export var rising_speed : float = -60.0
+@export var screen_notifier: VisibleOnScreenNotifier2D
+@export var safe_distance_x: float = 96.0
+@export var land_time: int = 72
+@export var thwomp_gravity: float = 2000.0
+@export var rising_speed: float = -60.0
 
-var _origin_position_y : float
-var land_timer : int
+var _origin_position_y: float
+var land_timer: int
 
-var is_ready : bool = false
+var is_ready: bool = false
 
 enum ThwompState {
 	IDLE,

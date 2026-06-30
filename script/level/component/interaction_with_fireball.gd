@@ -4,9 +4,9 @@ class_name InteractionWithFireball
 
 signal fireball_hitted(hit_position: Vector2)
 
-@export var is_hittable : bool = true
-@export var immune_to_fireball : bool = false
-@export var fireball_explode : bool = true
+@export var is_hittable: bool = true
+@export var immune_to_fireball: bool = false
+@export var fireball_explode: bool = true
 
 func _ready() -> void:
 	metadata_inject()

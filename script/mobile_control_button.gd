@@ -2,7 +2,7 @@ extends Button
 
 @export var show_mode := MobileControl.ShowModeType.SHOW
 
-var mobile_control : MobileControl
+var mobile_control: MobileControl
 
 func _ready():
 	# 运行平台检测

@@ -1,9 +1,9 @@
 extends Node
 
-@export var path_to_bar : NodePath = ".."
+@export var path_to_bar: NodePath = ".."
 
 var config
-var bar : HScrollBar
+var bar: HScrollBar
 
 func _ready() -> void:
 	config = GameConfig.config

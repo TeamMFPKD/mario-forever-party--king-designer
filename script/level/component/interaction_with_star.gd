@@ -4,8 +4,8 @@ class_name InteractionWithStar
 
 signal star_hitted(hit_position: Vector2)
 
-@export var is_hittable : bool = true
-@export var immune_to_star : bool = false
+@export var is_hittable: bool = true
+@export var immune_to_star: bool = false
 
 func _ready() -> void:
 	metadata_inject()

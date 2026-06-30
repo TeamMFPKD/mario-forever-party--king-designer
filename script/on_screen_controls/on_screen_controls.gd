@@ -6,51 +6,51 @@ class_name MobileControl
 # 纹理配置：普通态 / 按下态，全部在编辑器里赋值
 # ──────────────────────────────────────────────
 @export_group("D-Pad Textures")
-@export var tex_left        : Texture2D
-@export var tex_left_held   : Texture2D
-@export var tex_right       : Texture2D
-@export var tex_right_held  : Texture2D
-@export var tex_up          : Texture2D
-@export var tex_up_held     : Texture2D
-@export var tex_down        : Texture2D
-@export var tex_down_held   : Texture2D
+@export var tex_left       : Texture2D
+@export var tex_left_held  : Texture2D
+@export var tex_right      : Texture2D
+@export var tex_right_held : Texture2D
+@export var tex_up         : Texture2D
+@export var tex_up_held    : Texture2D
+@export var tex_down       : Texture2D
+@export var tex_down_held  : Texture2D
 
 @export_group("Action Button Textures")
-@export var tex_a           : Texture2D
-@export var tex_a_held      : Texture2D
-@export var tex_b           : Texture2D
-@export var tex_b_held      : Texture2D
+@export var tex_a          : Texture2D
+@export var tex_a_held     : Texture2D
+@export var tex_b          : Texture2D
+@export var tex_b_held     : Texture2D
 
 @export_group("Menu Button Textures")
-@export var tex_start       : Texture2D
-@export var tex_start_held  : Texture2D
-@export var tex_select      : Texture2D
-@export var tex_select_held : Texture2D
-@export var tex_run_lock    : Texture2D
-@export var tex_run_lock_on : Texture2D
+@export var tex_start      : Texture2D
+@export var tex_start_held : Texture2D
+@export var tex_select     : Texture2D
+@export var tex_select_held: Texture2D
+@export var tex_run_lock   : Texture2D
+@export var tex_run_lock_on: Texture2D
 
 # ──────────────────────────────────────────────
 # 控件引用
 # ──────────────────────────────────────────────
 @export_group("Controls")
-@export var control_d_pad  : Control
-@export var control_button : Control
-@export var control_photo  : Node2D
+@export var control_d_pad : Control
+@export var control_button: Control
+@export var control_photo : Node2D
 
 @export_group("D-Pad Sprites")
-@export var left  : Sprite2D
-@export var right : Sprite2D
-@export var up    : Sprite2D
-@export var down  : Sprite2D
+@export var left : Sprite2D
+@export var right: Sprite2D
+@export var up   : Sprite2D
+@export var down : Sprite2D
 
 @export_group("Action Button Sprites")
-@export var a : Sprite2D
-@export var b : Sprite2D
+@export var a: Sprite2D
+@export var b: Sprite2D
 
 @export_group("Menu Button Sprites")
-@export var start    : Sprite2D
-@export var select   : Sprite2D
-@export var run_lock : Sprite2D
+@export var start   : Sprite2D
+@export var select  : Sprite2D
+@export var run_lock: Sprite2D
 
 # ──────────────────────────────────────────────
 # 显示模式
@@ -90,8 +90,8 @@ const BLACKLIST := ["uinput"]
 # 内部状态
 # ──────────────────────────────────────────────
 var run_lock_on       := false
-var vibration_thread  : Thread
-var should_show       : bool
+var vibration_thread : Thread
+var should_show      : bool
 var counter           := 300  # 约 5 秒（60 fps）
 
 # ──────────────────────────────────────────────
@@ -99,7 +99,7 @@ var counter           := 300  # 约 5 秒（60 fps）
 # 结构：{ sprite, tex_normal, tex_held, joy_button }
 # joy_button 为 -1 表示该按键有自定义逻辑，不走通用路径
 # ──────────────────────────────────────────────
-var _button_config : Dictionary
+var _button_config: Dictionary
 
 func _ready() -> void:
 	should_show = !PlatformUtils.is_desktop_platform()
@@ -121,7 +121,7 @@ func _build_button_config() -> void:
 # 通用按键处理（由场景中各按钮信号连接）
 # ──────────────────────────────────────────────
 func _on_button_pressed(key: String) -> void:
-	var cfg : Dictionary = _button_config.get(key, {})
+	var cfg: Dictionary = _button_config.get(key, {})
 	if cfg.is_empty():
 		return
 	cfg["sprite"].texture = cfg["held"]
@@ -130,7 +130,7 @@ func _on_button_pressed(key: String) -> void:
 		_virtual_key_press(cfg["joy"])
 
 func _on_button_released(key: String) -> void:
-	var cfg : Dictionary = _button_config.get(key, {})
+	var cfg: Dictionary = _button_config.get(key, {})
 	if cfg.is_empty():
 		return
 	cfg["sprite"].texture = cfg["normal"]

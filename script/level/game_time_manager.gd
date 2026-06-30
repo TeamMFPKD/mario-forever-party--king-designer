@@ -3,7 +3,7 @@ extends Node
 signal game_time_hud_visible
 
 @export var game_timer: Timer
-@export var game_time_label : Label
+@export var game_time_label: Label
 
 func _ready() -> void:
 	var game_mode = GameModeSingleton

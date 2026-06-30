@@ -1,10 +1,10 @@
 extends Node
 
-@export var warning_color : Color = Color.YELLOW
-@export var path_to_label : NodePath = "../EditTimeLabel"
+@export var warning_color: Color = Color.YELLOW
+@export var path_to_label: NodePath = "../EditTimeLabel"
 
-var timer : Timer
-var time_label : Label
+var timer: Timer
+var time_label: Label
 
 func _ready() -> void:
 	timer = get_tree().get_first_node_in_group("timer_singleton")

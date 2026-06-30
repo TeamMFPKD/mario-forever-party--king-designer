@@ -1,9 +1,9 @@
 extends Node
 
-@export var ani : AnimatedSprite2D
-@export var rot_speed : float = 15.0
+@export var ani: AnimatedSprite2D
+@export var rot_speed: float = 15.0
 
-var direction : int = 1
+var direction: int = 1
 
 func _ready():
 	var parent = get_parent()

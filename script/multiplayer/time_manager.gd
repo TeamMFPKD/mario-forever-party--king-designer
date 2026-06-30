@@ -1,8 +1,8 @@
 extends Node
 
-@export var left_time_label : Label
+@export var left_time_label: Label
 
-var timer : Timer
+var timer: Timer
 
 func _ready() -> void:
 	timer = TimerSingleton

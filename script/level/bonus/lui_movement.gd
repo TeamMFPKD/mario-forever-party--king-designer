@@ -2,10 +2,10 @@ extends BasicMovement
 
 signal jump_speed_set
 
-@export var path_to_visible_detect : NodePath = "../GeneralVisibleOnScreenEnabler2d"
+@export var path_to_visible_detect: NodePath = "../GeneralVisibleOnScreenEnabler2d"
 
-var is_in_screen : bool = true
-var visible_detect : VisibleOnScreenNotifier2D
+var is_in_screen: bool = true
+var visible_detect: VisibleOnScreenNotifier2D
 
 func _ready() -> void:
 	super._ready()

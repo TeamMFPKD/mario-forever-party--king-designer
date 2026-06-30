@@ -30,8 +30,8 @@ var _bump_state: BumpState = BumpState.IDLE
 var _bump_state_timer: int = 0
 var bumping: bool = false
 
-var player : Node
-var player_suit : PlayerSuit
+var player: Node
+var player_suit: PlayerSuit
 
 # 碎砖
 @export var _breakable: bool = false

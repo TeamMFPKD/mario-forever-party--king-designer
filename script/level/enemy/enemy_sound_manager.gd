@@ -70,11 +70,11 @@ func _ready() -> void:
 				#interaction.connect(signal_name, call.bind(sound_func))
 				interaction.connect(signal_name, Callable(self, sound_func))
 
-func play_stomped(_hit_position : Vector2) -> void:
+func play_stomped(_hit_position: Vector2) -> void:
 	sound_stomped.play()
 
-func play_kicked(_hit_position : Vector2) -> void:
+func play_kicked(_hit_position: Vector2) -> void:
 	sound_kicked.play()
 
-func play_bumped(_hit_position : Vector2) -> void:
+func play_bumped(_hit_position: Vector2) -> void:
 	sound_bumped.play()

@@ -10,7 +10,7 @@ var visibility: bool
 var flag_entered: bool = false
 var flag_exited: bool = false
 
-var player : Node2D
+var player: Node2D
 
 
 func _ready() -> void:

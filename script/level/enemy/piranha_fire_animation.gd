@@ -1,11 +1,11 @@
 extends Node
 
-@export var path_to_parent : NodePath = ".."
-@export var path_to_ani : NodePath = "../AnimatedSprite2D"
+@export var path_to_parent: NodePath = ".."
+@export var path_to_ani: NodePath = "../AnimatedSprite2D"
 
-var ani : AnimatedSprite2D
-var parent : Node2D
-var player : Node2D
+var ani: AnimatedSprite2D
+var parent: Node2D
+var player: Node2D
 
 func _ready():
 	parent = get_node(path_to_parent)
@@ -15,7 +15,7 @@ func _ready():
 	fc.call_deferred()
 	
 func _physics_process(_delta: float):
-	var look_up : bool = player.position.y > parent.position.y
+	var look_up: bool = player.position.y > parent.position.y
 	if ani.flip_v:
 		look_up = not look_up
 	ani.animation = "default" if look_up else "look_up"

@@ -1,10 +1,10 @@
 extends Control
 
-@export var path_to_texture_rect : NodePath = "/CaptureTextureRect"
+@export var path_to_texture_rect: NodePath = "/CaptureTextureRect"
 
-var texture_rect : TextureRect
-var level_path_node : Node
-var level_file_path : String
+var texture_rect: TextureRect
+var level_path_node: Node
+var level_file_path: String
 
 const LIKED_COURSE_FOLDER_NAME = "liked courses"
 

@@ -1,11 +1,11 @@
 extends BasicMovement
 
 @export var path_to_shell_status: NodePath = "../ShellStatus"
-@export var bump_speed_x : float = -45.0
+@export var bump_speed_x: float = -45.0
 
 var shell_status: ShellStatus
 
-var bumping : bool = false
+var bumping: bool = false
 
 func _ready() -> void:
 	super._ready()

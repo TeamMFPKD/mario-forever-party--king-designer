@@ -1,15 +1,15 @@
 extends Node2D
 
-@export var mp_ani_shadow_scene : PackedScene
+@export var mp_ani_shadow_scene: PackedScene
 
-var multiplayer_manager : MultiplayerManager
-var anis : Array
-var local_ani : AnimatedSprite2D
+var multiplayer_manager: MultiplayerManager
+var anis: Array
+var local_ani: AnimatedSprite2D
 
-var player_suit : PlayerSuit
-var player_hurt_and_die : PlayerHurtAndDie
+var player_suit: PlayerSuit
+var player_hurt_and_die: PlayerHurtAndDie
 
-var no_player_print_limit : int
+var no_player_print_limit: int
 
 func _ready() -> void:
 	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:

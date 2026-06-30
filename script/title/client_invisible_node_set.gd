@@ -1,6 +1,6 @@
 extends Node
 
-@export var invisible_node_set : Array[Node]
+@export var invisible_node_set: Array[Node]
 
 func _on_nodes_visible_set() -> void:
 	for node in invisible_node_set:

@@ -6,10 +6,10 @@ enum LifeLimitEnum {
 }
 @export var life_limit = LifeLimitEnum.DOWN
 
-@export var limit_down : int = 1
-@export var limit_up : int = 3
+@export var limit_down: int = 1
+@export var limit_up: int = 3
 
-var level_manager : LevelManager
+var level_manager: LevelManager
 
 func _ready() -> void:
 	level_manager = get_tree().get_first_node_in_group("level_manager")

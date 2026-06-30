@@ -2,10 +2,10 @@ extends Node
 
 signal timeout_save
 
-@export var level_transfer_scene_uid : String = "uid://brg4yepawdra3"
+@export var level_transfer_scene_uid: String = "uid://brg4yepawdra3"
 
-var timer_singleton : Timer
-var multiplayer_manager : MultiplayerManager
+var timer_singleton: Timer
+var multiplayer_manager: MultiplayerManager
 var fc = func():
 	get_tree().change_scene_to_file(level_transfer_scene_uid)
 

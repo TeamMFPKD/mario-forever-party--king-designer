@@ -15,4 +15,4 @@ enum Direction {
 	RIGHT_DOWN,
 }
 
-@export var direction : Direction = Direction.LEFT
+@export var direction: Direction = Direction.LEFT

@@ -1,9 +1,9 @@
 extends Node
 
-@export var path_to_tile_map_layer : NodePath = ".."
-@export var semi_solid_scene : PackedScene = preload("uid://b46odv7so3u8a")
+@export var path_to_tile_map_layer: NodePath = ".."
+@export var semi_solid_scene: PackedScene = preload("uid://b46odv7so3u8a")
 
-var tile_map : TileMapLayer
+var tile_map: TileMapLayer
 
 func _ready() -> void:
 	tile_map = get_node(path_to_tile_map_layer) as TileMapLayer

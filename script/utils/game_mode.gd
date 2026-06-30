@@ -14,7 +14,7 @@ enum GameModeType {
 	HISTORY_PLAY,
 }
 
-@export var game_mode : GameModeType = GameModeType.EDIT:
+@export var game_mode: GameModeType = GameModeType.EDIT:
 	set(value):
 		match value:
 			GameModeType.EDIT:
@@ -24,7 +24,7 @@ enum GameModeType {
 			GameModeType.PLAY:
 				emit_signal("mode_set_to_play")
 		game_mode = value
-@export var edit_scene_uid : String
+@export var edit_scene_uid: String
 
 func go_to_edit() -> void:
 	await get_tree().create_timer(0.5, true, true).timeout

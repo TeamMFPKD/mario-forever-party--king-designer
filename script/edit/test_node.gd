@@ -13,7 +13,7 @@ enum TileSetNames {
 	VOLCANO,
 }
 
-@export var level_data_node : LevelManager
+@export var level_data_node: LevelManager
 
 func _physics_process(_delta: float) -> void:
 	if (Input.is_key_pressed(KEY_1)):

@@ -3,7 +3,7 @@ extends Node
 var viewport
 var capture_texture
 var random_capture_manager
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 func _ready():
 	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:

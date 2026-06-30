@@ -3,10 +3,10 @@ extends Node
 signal play_sound_pipe_in
 signal play_sound_pipe_out
 
-@export var is_on_screen_node : VisibleOnScreenNotifier2D
-@export var basic_movement : BasicMovement
+@export var is_on_screen_node: VisibleOnScreenNotifier2D
+@export var basic_movement: BasicMovement
 
-var is_on_screen : bool = false
+var is_on_screen: bool = false
 
 func _play_sound_pipe_in() -> void:
 	if not is_on_screen:

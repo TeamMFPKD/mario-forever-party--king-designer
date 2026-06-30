@@ -2,15 +2,15 @@ extends Node
 
 signal play_sound_launch
 
-@export var path_to_cannon : NodePath = ".."
-@export var bullet_bill_scene : PackedScene = preload("uid://bak1mo1icnsxi")
-@export var explode_scene : PackedScene = preload("uid://bkp0cxcybg7s2")
-@export var shoot_time : int = 150
-@export var safe_distance : float = 80.0
+@export var path_to_cannon: NodePath = ".."
+@export var bullet_bill_scene: PackedScene = preload("uid://bak1mo1icnsxi")
+@export var explode_scene: PackedScene = preload("uid://bkp0cxcybg7s2")
+@export var shoot_time: int = 150
+@export var safe_distance: float = 80.0
 
-var cannon : Node2D
-var player : Node2D
-var shoot_timer : int
+var cannon: Node2D
+var player: Node2D
+var shoot_timer: int
 
 func _ready() -> void:
 	var fc = func():
@@ -19,7 +19,7 @@ func _ready() -> void:
 	cannon = get_node(path_to_cannon)
 
 func _physics_process(_delta: float) -> void:
-	var is_safe : bool
+	var is_safe: bool
 	if player.position.x > cannon.position.x - safe_distance \
 	and player.position.x < cannon.position.x + safe_distance:
 		is_safe = true
@@ -34,7 +34,7 @@ func _physics_process(_delta: float) -> void:
 		launch()
 
 func launch() -> void:
-	var left : bool = player.position.x < cannon.position.x
+	var left: bool = player.position.x < cannon.position.x
 
 	var bill = bullet_bill_scene.instantiate() as Node2D
 	bill.position = cannon.position

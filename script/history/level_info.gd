@@ -1,11 +1,11 @@
 extends MarginContainer
 
-@export var date_label : Label
-@export var author_label : Label
-@export var clear_rate_label : Label
+@export var date_label: Label
+@export var author_label: Label
+@export var clear_rate_label: Label
 
-var level_file_path : String = ""
-var level_path_set : Node
+var level_file_path: String = ""
+var level_path_set: Node
 
 func _ready():
 	# 等待一帧确保所有节点都已准备好

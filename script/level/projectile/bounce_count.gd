@@ -1,9 +1,9 @@
 extends Node
 
-@export var move_object : CharacterBody2D
-@export var bounce_count : int = 5
+@export var move_object: CharacterBody2D
+@export var bounce_count: int = 5
 
-var bounce_counter : int
+var bounce_counter: int
 
 func _bounce_count_add() -> void:
 	bounce_counter += 1

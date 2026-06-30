@@ -2,7 +2,7 @@ extends Node
 
 signal load_level
 
-@export var debug_load : bool = false
+@export var debug_load: bool = false
 
 func _ready() -> void:
 	if not debug_load:

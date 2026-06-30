@@ -1,7 +1,7 @@
 extends Node
 
-@export var player_left_label_scene : PackedScene
-@export var list_control_node : Control
+@export var player_left_label_scene: PackedScene
+@export var list_control_node: Control
 
 var multiplayer_manager: MultiplayerManager
 var players = []

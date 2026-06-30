@@ -1,9 +1,9 @@
 extends Node
 
-@export var load_level_node : LoadLevel
+@export var load_level_node: LoadLevel
 
-var level_path_name : String = ""
-var level_path_set : Node
+var level_path_name: String = ""
+var level_path_set: Node
 
 func _ready() -> void:
 	level_path_set = get_tree().get_first_node_in_group("level_path_set")

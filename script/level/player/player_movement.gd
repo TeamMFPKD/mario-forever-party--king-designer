@@ -25,27 +25,27 @@ var _fragment_velocity_data: Array[Vector2] = [
 	Vector2(3.0, -6.0) * FRAMERATE_ORIGIN,
 ]
 
-@export var player : CharacterBody2D
-@export var player_suit : PlayerSuit
+@export var player: CharacterBody2D
+@export var player_suit: PlayerSuit
 
-@export var collision_shape : CollisionShape2D
-@export var cast : ShapeCast2D
+@export var collision_shape: CollisionShape2D
+@export var cast: ShapeCast2D
 
-@export var shape_small : Shape2D
-@export var shape_super : Shape2D
-@export var shape_big : Shape2D
+@export var shape_small: Shape2D
+@export var shape_super: Shape2D
+@export var shape_big: Shape2D
 @export var shape_big_crouch: Shape2D
 
-@export var crouch_head_area : Area2D
+@export var crouch_head_area: Area2D
 
-@export var max_speed_x : float = 400.0
-@export var acceleration : float = 600.0
-@export var deceleration_ground : float = 800.0
-@export var deceleration_air : float = 100.0
+@export var max_speed_x: float = 400.0
+@export var acceleration: float = 600.0
+@export var deceleration_ground: float = 800.0
+@export var deceleration_air: float = 100.0
 
-@export var jump_speed : float = 600
-@export var jump_speed_factor : float = 1.1
-@export var max_speed_y : float = 650
+@export var jump_speed: float = 600
+@export var jump_speed_factor: float = 1.1
+@export var max_speed_y: float = 650
 
 @export var gravity_normal = 2400
 @export var gravity_hold_jump = 1250
@@ -63,29 +63,29 @@ var _fragment_velocity_data: Array[Vector2] = [
 
 @export var triangle_speed_x_limit: float = 300.0
 
-var move_up : bool
-var move_down : bool
-var move_left : bool
-var move_right : bool
-var move_fire : bool
-var move_jump : bool
+var move_up: bool
+var move_down: bool
+var move_left: bool
+var move_right: bool
+var move_fire: bool
+var move_jump: bool
 
-var fire : String = "move_fire"
-var jump : String = "move_jump"
+var fire: String = "move_fire"
+var jump: String = "move_jump"
 
-var jumpable : bool
-var jumpable_time : int = 20
-var jumpable_timer : int
+var jumpable: bool
+var jumpable_time: int = 20
+var jumpable_timer: int
 
-var crouch : bool
+var crouch: bool
 
 # 传送中通用 flag
-var is_in_transport : bool = false
+var is_in_transport: bool = false
 
 # 透明水管
-var is_in_pipe : bool = false
-var out_pipe_cooldown : int = 0
-var pipe_in_cooldown : int = 0
+var is_in_pipe: bool = false
+var out_pipe_cooldown: int = 0
+var pipe_in_cooldown: int = 0
 
 enum PipeMoveDirection {
 	LEFT,
@@ -94,26 +94,26 @@ enum PipeMoveDirection {
 	DOWN,
 	ALIGN,
 }
-var pipe_moving_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
+var pipe_moving_dir: PipeMoveDirection = PipeMoveDirection.ALIGN
 
 # 门
-var is_in_door : bool = false
-var in_door_timer : int = 0
-var target_doors : Array
-var target_door : DoorComponent
+var is_in_door: bool = false
+var in_door_timer: int = 0
+var target_doors: Array
+var target_door: DoorComponent
 
 # 狼跳
-var langtiao : bool
-var langtiao_time : int = 10
-var langtiao_timer : int
+var langtiao: bool
+var langtiao_time: int = 10
+var langtiao_timer: int
 
-var speed_x : float
-var target_speed : float
-var speed_y : float
+var speed_x: float
+var target_speed: float
+var speed_y: float
 
 # 多重力
 var is_on_triangle: bool = false
-var target_gravity : float = 0.0
+var target_gravity: float = 0.0
 var is_switching_gravity: bool = false
 
 # 重力切换时保持输入锁（-1=未锁定, 0-3=锁定的局部方向ID）
@@ -296,14 +296,14 @@ func pipe_check() -> bool:
 		pipe_movement()
 	return is_in_pipe
 
-func enter_pipe(enter_direction : PipeMoveDirection) -> void:
+func enter_pipe(enter_direction: PipeMoveDirection) -> void:
 	crouch = true
 	pipe_moving_dir = enter_direction
 	is_in_pipe = true
 	pipe_in_cooldown = 5
 	player.set_meta("is_in_pipe", true)
 	speed_x = 0.0
-	var pipe_move_vec : Vector2
+	var pipe_move_vec: Vector2
 	match enter_direction:
 		PipeMoveDirection.LEFT:
 			pipe_move_vec = Vector2(-1, 0)
@@ -334,7 +334,7 @@ func exit_pipe() -> void:
 	emit_signal("pipe_exited")
 
 func pipe_movement() -> void:
-	var moving_speed : float = 4.0
+	var moving_speed: float = 4.0
 	match pipe_moving_dir:
 		PipeMoveDirection.LEFT:
 			player.position = player.position + Vector2(-moving_speed, 0)

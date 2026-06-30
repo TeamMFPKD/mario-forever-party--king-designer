@@ -1,9 +1,9 @@
 extends Button
 
-@export var room_scene_uid : String
-@export var target_mode : GameModeSingleton.GameModeType = GameModeSingleton.GameModeType.TEST
+@export var room_scene_uid: String
+@export var target_mode: GameModeSingleton.GameModeType = GameModeSingleton.GameModeType.TEST
 
-var game_mode : GameMode
+var game_mode: GameMode
 
 func _ready() -> void:
 	game_mode = GameModeSingleton

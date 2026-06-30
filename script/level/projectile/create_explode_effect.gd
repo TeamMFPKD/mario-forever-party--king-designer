@@ -2,11 +2,11 @@ extends Node
 
 class_name ExplodeEffectCreator
 
-@export var path_to_parent : NodePath = ".."
-@export var fireball_explode_scene : PackedScene
-@export var offset : Vector2 = Vector2(0, 0)
+@export var path_to_parent: NodePath = ".."
+@export var fireball_explode_scene: PackedScene
+@export var offset: Vector2 = Vector2(0, 0)
 
-var parent : Node2D
+var parent: Node2D
 
 func _ready() -> void:
 	parent = get_node(path_to_parent) as Node2D
