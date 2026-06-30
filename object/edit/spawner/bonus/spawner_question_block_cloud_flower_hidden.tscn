@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://x60i6jdes7wt"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_3l7kt"]
+[ext_resource type="PackedScene" uid="uid://nr83lg6ph4ub" path="res://object/level/block/question_block_cloud_flower_hidden.tscn" id="2_3l7kt"]
+[ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="3_4jd8b"]
+[ext_resource type="Texture2D" uid="uid://ow7gdiw8t5xt" path="res://sprite/bonus/cloud_flower.png" id="4_hps5a"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="5_6tsqk"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_vtelg"]
+
+[node name="SpawnerQuestionBlockCloudFlowerHidden" type="Node2D" unique_id=140604724]
+script = ExtResource("1_3l7kt")
+spawn_object_scene = ExtResource("2_3l7kt")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2015513562]
+texture = ExtResource("3_4jd8b")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D" unique_id=1311543507]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_hps5a")
+
+[node name="OffsetMarker" parent="." unique_id=398746336 instance=ExtResource("5_6tsqk")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_vtelg")]

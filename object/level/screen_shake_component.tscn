@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c17245kmmavwk"]
 
-[ext_resource type="Script" uid="uid://dnkryannbkpb6" path="res://object/level/screen_shake_component.gd" id="1_fy4eg"]
+[ext_resource type="Script" uid="uid://dnkryannbkpb6" path="res://script/level/screen_shake_component.gd" id="1_fy4eg"]
 
 [node name="ScreenShakeComponent" type="Node" unique_id=1543286777]
 script = ExtResource("1_fy4eg")

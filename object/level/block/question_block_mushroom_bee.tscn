@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://d238moi6epy16"]
+
+[ext_resource type="PackedScene" uid="uid://p05n5rqqxgeq" path="res://object/level/block/question_block_fire_flower.tscn" id="1_m2km7"]
+[ext_resource type="PackedScene" uid="uid://b751xjg8lwtym" path="res://object/level/bonus/mushroom_bee.tscn" id="2_mcnbb"]
+
+[node name="QuestionBlockMushroomBee" unique_id=2059396481 instance=ExtResource("1_m2km7")]
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+adv_sprout_item_scene = ExtResource("2_mcnbb")

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bkytbw4qu2w88"]
+
+[ext_resource type="PackedScene" uid="uid://d238moi6epy16" path="res://object/level/block/question_block_mushroom_bee.tscn" id="1_ewin1"]
+
+[node name="QuestionBlockMushroomBeeHidden" unique_id=2059396481 instance=ExtResource("1_ewin1")]
+
+[node name="BlockHit" parent="." index="2" unique_id=1771154776]
+hidden = true

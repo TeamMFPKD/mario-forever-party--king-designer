@@ -89,8 +89,10 @@
 [ext_resource type="Texture2D" uid="uid://b8m557ocjso34" path="res://sprite/facility/spring.png" id="77_pqowm"]
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="78_y05j1"]
 [ext_resource type="Texture2D" uid="uid://bmfmpypfx0mhw" path="res://sprite/facility/platform_sheet.png" id="79_7it4e"]
+[ext_resource type="Texture2D" uid="uid://n8ymiwm5hef" path="res://sprite/bonus/mushroom_bee.png" id="79_lq4t0"]
 [ext_resource type="PackedScene" uid="uid://gfkelnk0ovbl" path="res://object/edit/tile_set_style.tscn" id="79_pfkd6"]
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="80_h441a"]
+[ext_resource type="Texture2D" uid="uid://ow7gdiw8t5xt" path="res://sprite/bonus/cloud_flower.png" id="80_io63s"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/ui/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="81_cfmm2"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="85_g7up7"]
 [ext_resource type="Script" uid="uid://nrshekgp00wk" path="res://script/edit/mouse_pop.gd" id="85_ifctp"]
@@ -152,14 +154,6 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tdf2a"]
 atlas = ExtResource("46_bddyo")
 region = Rect2(0, 96, 33, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cvttd"]
-atlas = ExtResource("111_yebna")
-region = Rect2(448, 32, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qnirk"]
-atlas = ExtResource("112_cvttd")
-region = Rect2(0, 2, 32, 32)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lpuhj"]
 load_path = "res://.godot/imported/tile_overworld.png-5a05bcc1ebc7e76f19ba683f0c74b790.ctex"
@@ -294,27 +288,35 @@ region = Rect2(5, 37, 23, 29)
 atlas = ExtResource("90_kt6na")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_w23hq"]
-atlas = ExtResource("90_kt6na")
-region = Rect2(0, 192, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_h3g51"]
-atlas = ExtResource("111_yebna")
-region = Rect2(352, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_hfb1t"]
 atlas = ExtResource("111_yebna")
 region = Rect2(0, 64, 32, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bb1r4"]
-atlas = ExtResource("111_yebna")
-region = Rect2(192, 64, 32, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jnkuo"]
 atlas = ExtResource("111_yebna")
 region = Rect2(448, 32, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvttd"]
+atlas = ExtResource("111_yebna")
+region = Rect2(448, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3g51"]
+atlas = ExtResource("111_yebna")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w23hq"]
+atlas = ExtResource("90_kt6na")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bb1r4"]
+atlas = ExtResource("111_yebna")
+region = Rect2(192, 64, 32, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_bddyo"]
+atlas = ExtResource("112_cvttd")
+region = Rect2(0, 2, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qnirk"]
 atlas = ExtResource("112_cvttd")
 region = Rect2(0, 2, 32, 32)
 
@@ -1115,34 +1117,34 @@ position = Vector2(8, 8)
 texture = ExtResource("76_h71uv")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockKey" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=999192484 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBee" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=2084092384 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
-object_name = "question_block_key"
+object_name = "question_block_mushroom_bee"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockKey/ButtonTexture" parent_id_path=PackedInt32Array(999192484, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBee/ButtonTexture" parent_id_path=PackedInt32Array(2084092384, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockKey/ButtonTexture/ItemPreview" index="0" unique_id=325709532]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBee/ButtonTexture/ItemPreview" index="0" unique_id=378622978]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_cvttd")
+texture = ExtResource("79_lq4t0")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockCursedKey" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=1636533888 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockCloudFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" unique_id=99904214 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
-object_name = "question_block_cursed_key"
+object_name = "question_block_cloud_flower"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCursedKey/ButtonTexture" parent_id_path=PackedInt32Array(1636533888, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCloudFlower/ButtonTexture" parent_id_path=PackedInt32Array(99904214, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_1p3gc")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCursedKey/ButtonTexture/ItemPreview" index="0" unique_id=224650850]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCloudFlower/ButtonTexture/ItemPreview" index="0" unique_id=1779596797]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_qnirk")
+texture = ExtResource("80_io63s")
 metadata/_edit_lock_ = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=1246934112]
@@ -1234,48 +1236,48 @@ scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_tdf2a")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockSuperStarHidden2" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=1385715587 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBigHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=1385715587 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_mushroom_big_hidden"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden2/ButtonTexture" parent_id_path=PackedInt32Array(1385715587, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBigHidden/ButtonTexture" parent_id_path=PackedInt32Array(1385715587, 839201675) index="0" unique_id=1085479145]
 texture = ExtResource("47_gnq71")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden2/ButtonTexture/ItemPreview" index="0" unique_id=1269705083]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBigHidden/ButtonTexture/ItemPreview" index="0" unique_id=1269705083]
 position = Vector2(8, 8)
 texture = ExtResource("76_h71uv")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockKeyHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=496557379 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBeeHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=1840075432 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
-object_name = "question_block_key_hidden"
+object_name = "question_block_mushroom_bee_hidden"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockKeyHidden/ButtonTexture" parent_id_path=PackedInt32Array(496557379, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBeeHidden/ButtonTexture" parent_id_path=PackedInt32Array(1840075432, 839201675) index="0" unique_id=1085479145]
 texture = ExtResource("47_gnq71")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockKeyHidden/ButtonTexture/ItemPreview" index="0" unique_id=503562768]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBeeHidden/ButtonTexture/ItemPreview" index="0" unique_id=1606243516]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_cvttd")
+texture = ExtResource("79_lq4t0")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockCursedKeyHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=426526599 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockCloudFlowerHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" unique_id=1460012379 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
-object_name = "question_block_cursed_key_hidden"
+object_name = "question_block_cloud_flower_hidden"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCursedKeyHidden/ButtonTexture" parent_id_path=PackedInt32Array(426526599, 839201675) index="0" unique_id=1085479145]
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCloudFlowerHidden/ButtonTexture" parent_id_path=PackedInt32Array(1460012379, 839201675) index="0" unique_id=1085479145]
 texture = ExtResource("47_gnq71")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCursedKeyHidden/ButtonTexture/ItemPreview" index="0" unique_id=989146689]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCloudFlowerHidden/ButtonTexture/ItemPreview" index="0" unique_id=1173671857]
 position = Vector2(8, 8)
 scale = Vector2(0.5, 0.5)
-texture = SubResource("AtlasTexture_qnirk")
+texture = ExtResource("80_io63s")
 metadata/_edit_lock_ = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus" unique_id=262018772]
@@ -1345,6 +1347,24 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBig/ButtonTexture" parent_id_path=PackedInt32Array(2128305627, 839201675) index="0" unique_id=1085479145]
 scale = Vector2(60, 60)
 texture = ExtResource("76_h71uv")
+
+[node name="ItemButtonMushroomBee" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=86214521 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "mushroom_bee"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBee/ButtonTexture" parent_id_path=PackedInt32Array(86214521, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("79_lq4t0")
+
+[node name="ItemButtonCloudFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3" unique_id=752845834 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "cloud_flower"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonCloudFlower/ButtonTexture" parent_id_path=PackedInt32Array(752845834, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("80_io63s")
 
 [node name="ItemButtonTile" parent="GameRoomSize/BottomItemGroups" unique_id=476318096 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1819,14 +1839,54 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock/ButtonTexture" parent_id_path=PackedInt32Array(1084113521, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_4a1yi")
 
-[node name="ItemButtonAtchiMuiteBlock2" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=991596989 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonDoor" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=684452163 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
-object_name = "atchi_muite_block_red_small"
+object_name = "door"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2/ButtonTexture" parent_id_path=PackedInt32Array(991596989, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_w23hq")
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonDoor/ButtonTexture" parent_id_path=PackedInt32Array(684452163, 839201675) index="0" unique_id=1085479145]
+scale = Vector2(15, 15)
+texture = SubResource("AtlasTexture_hfb1t")
+
+[node name="ItemButtonKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=415456035 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 1
+object_name = "key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonKey/ButtonTexture" parent_id_path=PackedInt32Array(415456035, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_jnkuo")
+
+[node name="ItemButtonQuestionBlockKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=999192484 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKey/ButtonTexture" parent_id_path=PackedInt32Array(999192484, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKey/ButtonTexture/ItemPreview" index="0" unique_id=325709532]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_cvttd")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockKeyHidden" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=496557379 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_key_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKeyHidden/ButtonTexture" parent_id_path=PackedInt32Array(496557379, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("47_gnq71")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKeyHidden/ButtonTexture/ItemPreview" index="0" unique_id=503562768]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_cvttd")
+metadata/_edit_lock_ = true
 
 [node name="ItemButtonPinkCoin" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4" unique_id=1381185012 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1840,15 +1900,14 @@ texture = SubResource("AtlasTexture_h3g51")
 [node name="HBoxContainer5" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=656989267]
 layout_mode = 2
 
-[node name="ItemButtonDoor" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=684452163 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonAtchiMuiteBlock2" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=991596989 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
-object_name = "door"
+object_name = "atchi_muite_block_red_small"
 metadata/_edit_lock_ = true
 
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoor/ButtonTexture" parent_id_path=PackedInt32Array(684452163, 839201675) index="0" unique_id=1085479145]
-scale = Vector2(15, 15)
-texture = SubResource("AtlasTexture_hfb1t")
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonAtchiMuiteBlock2/ButtonTexture" parent_id_path=PackedInt32Array(991596989, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_w23hq")
 
 [node name="ItemButtonDoorLocked" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=917639081 instance=ExtResource("41_cvttd")]
 layout_mode = 2
@@ -1860,15 +1919,6 @@ metadata/_edit_lock_ = true
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_bb1r4")
 
-[node name="ItemButtonKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=415456035 instance=ExtResource("41_cvttd")]
-layout_mode = 2
-size_flags_horizontal = 1
-object_name = "key"
-metadata/_edit_lock_ = true
-
-[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonKey/ButtonTexture" parent_id_path=PackedInt32Array(415456035, 839201675) index="0" unique_id=1085479145]
-texture = SubResource("AtlasTexture_jnkuo")
-
 [node name="ItemButtonCursedKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=935023006 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
@@ -1877,6 +1927,36 @@ metadata/_edit_lock_ = true
 
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey/ButtonTexture" parent_id_path=PackedInt32Array(935023006, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_bddyo")
+
+[node name="ItemButtonQuestionBlockCursedKey" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=1636533888 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_cursed_key"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKey/ButtonTexture" parent_id_path=PackedInt32Array(1636533888, 839201675) index="0" unique_id=1085479145]
+texture = SubResource("AtlasTexture_1p3gc")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKey/ButtonTexture/ItemPreview" index="0" unique_id=224650850]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_qnirk")
+metadata/_edit_lock_ = true
+
+[node name="ItemButtonQuestionBlockCursedKeyHidden" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5" unique_id=426526599 instance=ExtResource("41_cvttd")]
+layout_mode = 2
+size_flags_horizontal = 0
+object_name = "question_block_cursed_key_hidden"
+metadata/_edit_lock_ = true
+
+[node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKeyHidden/ButtonTexture" parent_id_path=PackedInt32Array(426526599, 839201675) index="0" unique_id=1085479145]
+texture = ExtResource("47_gnq71")
+
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKeyHidden/ButtonTexture/ItemPreview" index="0" unique_id=989146689]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_qnirk")
+metadata/_edit_lock_ = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=2048951371]
 layout_mode = 2
@@ -2149,17 +2229,17 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBig"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockKey"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCursedKey"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBee"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCloudFlower"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden2"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockKeyHidden"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCursedKeyHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBigHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBeeHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCloudFlowerHidden"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonFireFlower"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonBeetroot"]
@@ -2167,6 +2247,8 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonPoisonousMushroom"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonSuperStar"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBig"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBee"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonCloudFlower"]
 [editable path="GameRoomSize/BottomItemGroups/ItemButtonTile"]
 [editable path="GameRoomSize/BottomItemGroups/ItemButtonTileSingle"]
 [editable path="GameRoomSize/BottomItemGroups/ItemButtonTileSemiSolid"]
@@ -2201,12 +2283,16 @@ show_mode = 2
 [editable path="GameRoomSize/RightItemGroups/GroupButtonCameraEdge"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock2"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonDoor"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonKey"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKey"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKeyHidden"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonPinkCoin"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoor"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonAtchiMuiteBlock2"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoorLocked"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonKey"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKey"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKeyHidden"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]

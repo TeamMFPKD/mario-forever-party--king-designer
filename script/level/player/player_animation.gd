@@ -17,6 +17,8 @@ signal play_sound_skid
 @export var player_beetroot_spritesframe : SpriteFrames
 @export var player_lui_spritesframe : SpriteFrames
 @export var player_big_spritesframe: SpriteFrames
+@export var player_bee_spritesframe : SpriteFrames
+@export var player_cloud_spritesframe : SpriteFrames
 
 var current_state : String = "idle"
 var last_direction : int = 1  # 1表示向右，-1表示向左
@@ -95,6 +97,7 @@ func update_animation():
 	and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.LUI:
 		var lui_effect = player_lui_effect_scene.instantiate() as Node2D
 		lui_effect.position = player.position
+		lui_effect.rotation = player.rotation
 		var lui_ani = lui_effect.get_node("AnimatedSprite2D")
 		lui_ani.animation = new_state
 		lui_ani.frame = ani.frame
@@ -195,6 +198,10 @@ func _on_player_suit_changed():
 					ani.sprite_frames = player_lui_spritesframe
 				PlayerSuit.PowerupType.BIG:
 					ani.sprite_frames = player_big_spritesframe
+				PlayerSuit.PowerupType.BEE:
+					ani.sprite_frames = player_bee_spritesframe
+				PlayerSuit.PowerupType.CLOUD:
+					ani.sprite_frames = player_cloud_spritesframe
 	is_appearing = true
 
 func is_in_pipe() -> bool:

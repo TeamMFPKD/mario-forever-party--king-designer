@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://3mjxes8vmg0a"]
+
+[ext_resource type="Script" uid="uid://b23emkp2mb16s" path="res://script/edit/spawner_set.gd" id="1_tyeh6"]
+[ext_resource type="PackedScene" uid="uid://bkytbw4qu2w88" path="res://object/level/block/question_block_mushroom_bee_hidden.tscn" id="2_tyeh6"]
+[ext_resource type="Texture2D" uid="uid://bvqypjilofyfl" path="res://sprite/bonus/hidden_question_block.png" id="3_xpsyj"]
+[ext_resource type="Texture2D" uid="uid://n8ymiwm5hef" path="res://sprite/bonus/mushroom_bee.png" id="4_tyeh6"]
+[ext_resource type="PackedScene" uid="uid://cwhj0wm6uciv4" path="res://object/edit/spawner/offset_marker.tscn" id="5_8rts6"]
+[ext_resource type="PackedScene" uid="uid://bfjn6du2l5p7g" path="res://object/edit/spawner/spawner_property.tscn" id="6_53v05"]
+
+[node name="SpawnerQuestionBlockMushroomBeeHidden" type="Node2D" unique_id=1265032005]
+script = ExtResource("1_tyeh6")
+spawn_object_scene = ExtResource("2_tyeh6")
+metadata/_custom_type_script = "uid://b23emkp2mb16s"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=836816934]
+texture = ExtResource("3_xpsyj")
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D" unique_id=1895206878]
+position = Vector2(8, 8)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_tyeh6")
+
+[node name="OffsetMarker" parent="." unique_id=2069650528 instance=ExtResource("5_8rts6")]
+
+[node name="SpawnerProperty" parent="." unique_id=1302585872 instance=ExtResource("6_53v05")]

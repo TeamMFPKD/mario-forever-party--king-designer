@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://b751xjg8lwtym"]
+
+[ext_resource type="Texture2D" uid="uid://n8ymiwm5hef" path="res://sprite/bonus/mushroom_bee.png" id="1_kv51y"]
+[ext_resource type="Shape2D" uid="uid://buvcg3disdrbh" path="res://object/level/basic_move_object_collision_shape.tres" id="2_bfl7x"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_sww7k"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="4_oj2cw"]
+[ext_resource type="PackedScene" uid="uid://d2l5k3dpnx8v0" path="res://object/level/bonus/bonus_set.tscn" id="5_g6mii"]
+[ext_resource type="PackedScene" uid="uid://by4n1wyhrfm7s" path="res://object/level/bonus/bonus_sprout.tscn" id="6_4nqrq"]
+[ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="7_efdah"]
+[ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="8_6c04d"]
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="9_kdcwn"]
+[ext_resource type="AudioStream" uid="uid://ddjk3ekehbjgf" path="res://sound/level/powerup.se.wav" id="10_bk8bu"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bfl7x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kv51y")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="MushroomBee" type="CharacterBody2D" unique_id=114751985]
+collision_layer = 32
+collision_mask = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=657721335]
+sprite_frames = SubResource("SpriteFrames_bfl7x")
+autoplay = "default"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1893765268]
+shape = ExtResource("2_bfl7x")
+debug_color = Color(0.87058824, 0.4392157, 0, 0.41960785)
+
+[node name="BasicMovement" parent="." unique_id=1013180728 instance=ExtResource("3_sww7k")]
+overlap_turn = false
+is_clear_pipe_allowed = true
+
+[node name="BasicShapeCast2D" parent="." unique_id=219146726 instance=ExtResource("4_oj2cw")]
+
+[node name="BonusSet" parent="." unique_id=1977117179 instance=ExtResource("5_g6mii")]
+bonus_type = 6
+
+[node name="BonusSprout" parent="." unique_id=874087412 instance=ExtResource("6_4nqrq")]
+
+[node name="GeneralVisibleOnScreenEnabler2d" parent="." unique_id=331215067 instance=ExtResource("7_efdah")]
+
+[node name="OutOfBoundsQueueFree" type="Node" parent="." unique_id=2119868582]
+script = ExtResource("8_6c04d")
+metadata/_custom_type_script = "uid://c6okcp1eqai5v"
+
+[node name="PowerUp" parent="." unique_id=1715984441 instance=ExtResource("9_kdcwn")]
+stream = ExtResource("10_bk8bu")
+
+[connection signal="bonus_get" from="BonusSet" to="PowerUp" method="play"]

@@ -73,6 +73,8 @@ var is_in_game : bool = false:
 @export var player_beetroot_spritesframe : SpriteFrames
 @export var player_lui_spritesframe : SpriteFrames
 @export var player_big_spritesframe: SpriteFrames
+@export var player_bee_spritesframe : SpriteFrames
+@export var player_cloud_spritesframe : SpriteFrames
 
 var mp_ani_manager
 
@@ -452,6 +454,12 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 							ani.sprite_frames = player_beetroot_spritesframe
 						PlayerSuit.PowerupType.LUI:
 							ani.sprite_frames = player_lui_spritesframe
+						PlayerSuit.PowerupType.BIG:
+							ani.sprite_frames = player_big_spritesframe
+						PlayerSuit.PowerupType.BEE:
+							ani.sprite_frames = player_bee_spritesframe
+						PlayerSuit.PowerupType.CLOUD:
+							ani.sprite_frames = player_cloud_spritesframe
 			#print("来自玩家 ", player_id, " 的动画套装数据：", suit, power)
 			# 动画序列、帧、方向
 			ani.animation = animation
