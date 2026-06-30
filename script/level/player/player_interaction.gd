@@ -58,7 +58,8 @@ func _physics_process(_delta: float) -> void:
 
 	# 顶砖检测
 	var origin_pos = cast.position
-	cast.position += player.up_direction
+	# 这里不用到up_direction是因为cast是玩家的子节点
+	cast.position += Vector2(0.0, -1.0)
 	results = ShapeCastQuery.shape_query(player, cast)
 	block_hit_detect(results)
 	cast.position = origin_pos
@@ -115,6 +116,12 @@ func bonus_detect(results : Array[Node2D]) -> void:
 		if bonus_set_node.bonus_type == BonusSet.BonusType.BIG:
 			player_suit.suit = PlayerSuit.SuitType.POWERED
 			player_suit.power = PlayerSuit.PowerupType.BIG
+		if bonus_set_node.bonus_type == BonusSet.BonusType.BEE:
+			player_suit.suit = PlayerSuit.SuitType.POWERED
+			player_suit.power = PlayerSuit.PowerupType.BEE
+		if bonus_set_node.bonus_type == BonusSet.BonusType.CLOUD:
+			player_suit.suit = PlayerSuit.SuitType.POWERED
+			player_suit.power = PlayerSuit.PowerupType.CLOUD
 		if bonus_set_node.bonus_type == BonusSet.BonusType.STAR:
 			player_suit.starman_start()
 
