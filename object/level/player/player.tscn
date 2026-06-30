@@ -31,6 +31,7 @@
 [ext_resource type="AudioStream" uid="uid://b27o8ar12dxe6" path="res://sound/level/skid.wav" id="17_qe8py"]
 [ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="18_xbm7l"]
 [ext_resource type="AudioStream" uid="uid://dwse0hneii3ml" path="res://sound/level/fireball.se.wav" id="21_pdrg5"]
+[ext_resource type="PackedScene" uid="uid://da44fb4n2sw80" path="res://object/level/projectile/cloud_platform_player.tscn" id="24_1f27i"]
 [ext_resource type="PackedScene" uid="uid://cfsc6irqbbw3u" path="res://object/level/facility/level_edge_left.tscn" id="24_wtbdq"]
 [ext_resource type="PackedScene" uid="uid://dv8xpx6li48si" path="res://object/level/facility/level_edge_right.tscn" id="25_741uk"]
 [ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="27_q82rl"]
@@ -41,13 +42,53 @@
 [ext_resource type="AudioStream" uid="uid://jyh7p7upppu2" path="res://sound/level/door_and_key/SE_DoorOpenFC.wav" id="30_vh3yy"]
 [ext_resource type="AudioStream" uid="uid://bxa3jh2vdnit2" path="res://sound/level/door_and_key/SE_DoorCloseFC.wav" id="31_j733o"]
 [ext_resource type="PackedScene" uid="uid://bpywk88hnp1yw" path="res://object/level/dust_effect_creator.tscn" id="32_4thfq"]
+[ext_resource type="AudioStream" uid="uid://b45vxdpteewu5" path="res://sound/level/smw_spin.wav" id="37_tfbrn"]
 [ext_resource type="PackedScene" uid="uid://c17245kmmavwk" path="res://object/level/screen_shake_component.tscn" id="38_p8in0"]
+[ext_resource type="Texture2D" uid="uid://cinpu6acfygkq" path="res://sprite/projectile/player_bee_flying_time_bar.png" id="43_27nu0"]
+[ext_resource type="Texture2D" uid="uid://d05pk6uqo34k" path="res://sprite/projectile/cloudy_pet.png" id="45_t1hra"]
+[ext_resource type="Script" uid="uid://w33pqllaw2va" path="res://script/level/player/cloud_pet.gd" id="46_cloud_pet"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8p21p"]
 radius = 7.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hd7xv"]
+atlas = ExtResource("45_t1hra")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f27i"]
+atlas = ExtResource("45_t1hra")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ox2n6"]
+atlas = ExtResource("45_t1hra")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2327l"]
+atlas = ExtResource("45_t1hra")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6th27"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hd7xv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f27i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ox2n6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2327l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Player" type="CharacterBody2D" unique_id=1151748388 groups=["player"]]
 z_index = 10
@@ -62,8 +103,8 @@ platform_on_leave = 2
 safe_margin = 0.09
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
-sprite_frames = ExtResource("1_8csaa")
-animation = &"idle"
+sprite_frames = ExtResource("13_27nu0")
+animation = &"shoot"
 offset = Vector2(0, -20)
 
 [node name="InvincibleEffect" type="AnimatedSprite2D" parent="." unique_id=913106306]
@@ -160,6 +201,7 @@ player_movement = NodePath("../PlayerMovement")
 player_animation_sprite = NodePath("../../AnimatedSprite2D")
 fireball_scene = ExtResource("8_4q04d")
 beetroot_scene = ExtResource("9_pewnw")
+cloud_platform_scene = ExtResource("24_1f27i")
 
 [node name="Sounds" type="Node" parent="." unique_id=1593406129]
 
@@ -204,6 +246,9 @@ stream = ExtResource("31_j733o")
 [node name="BreakTileSE" parent="Sounds" unique_id=1066134224 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("27_q82rl")
 
+[node name="SpinSE" parent="Sounds" unique_id=1192977295 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("37_tfbrn")
+
 [node name="ExplodeEffectCreator" type="Node" parent="." unique_id=324919191]
 script = ExtResource("28_4r5tb")
 fireball_explode_scene = ExtResource("29_yslke")
@@ -221,6 +266,23 @@ position = Vector2(-640, 0)
 [node name="LevelEdgeRight" parent="LevelEdge" unique_id=1828755264 instance=ExtResource("25_741uk")]
 position = Vector2(640, 0)
 
+[node name="BeeStatusProgressBar" type="Node2D" parent="." unique_id=716241921]
+position = Vector2(0, -64)
+
+[node name="Sprite2D" type="Sprite2D" parent="BeeStatusProgressBar" unique_id=1522541797]
+texture = ExtResource("43_27nu0")
+vframes = 4
+metadata/_edit_lock_ = true
+
+[node name="CloudPet" type="Node2D" parent="." unique_id=1448460286 node_paths=PackedStringArray("player_sprite", "player_suit")]
+script = ExtResource("46_cloud_pet")
+player_sprite = NodePath("../AnimatedSprite2D")
+player_suit = NodePath("../PlayerMediator/PlayerSuit")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CloudPet" unique_id=1373045601]
+sprite_frames = SubResource("SpriteFrames_6th27")
+autoplay = "default"
+
 [connection signal="play_sound_skid" from="PlayerMediator/PlayerAnimation" to="Sounds/Skid" method="_on_player_skid"]
 [connection signal="door_entered" from="PlayerMediator/PlayerMovement" to="Sounds/DoorEnterSE" method="play"]
 [connection signal="door_exited" from="PlayerMediator/PlayerMovement" to="Sounds/DoorExitSE" method="play"]
@@ -236,10 +298,12 @@ position = Vector2(640, 0)
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="Sounds/PowerDown" method="play"]
 [connection signal="player_suicided" from="PlayerMediator/PlayerHurtAndDie" to="Sounds/Suicide" method="play"]
 [connection signal="player_suicided" from="PlayerMediator/PlayerHurtAndDie" to="ExplodeEffectCreator" method="explode"]
+[connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerShoot" method="_on_player_hurt"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerSuit" to="Sounds/PowerDown" method="play"]
 [connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="InvincibleEffect" method="_on_starman_end"]
 [connection signal="starman_ended" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_end"]
 [connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="InvincibleEffect" method="_on_starman_start"]
 [connection signal="starman_started" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerHurtAndDie" method="_on_starman_start"]
 [connection signal="suit_changed" from="PlayerMediator/PlayerSuit" to="PlayerMediator/PlayerAnimation" method="_on_player_suit_changed"]
+[connection signal="play_sound_cloud_platform" from="PlayerMediator/PlayerShoot" to="Sounds/SpinSE" method="play"]
 [connection signal="play_sound_shoot" from="PlayerMediator/PlayerShoot" to="Sounds/Shoot" method="play"]

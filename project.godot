@@ -106,6 +106,7 @@ door_locked=""
 pink_coin=""
 pink_coin_manager=""
 level_manager=""
+cloud_platform_player=""
 
 [input]
 

@@ -10,21 +10,6 @@ signal play_sound_jump
 signal play_sound_break_tile
 signal screen_shake
 
-@export var _block_fragment_scene: PackedScene = preload("uid://ct006nlnmf8dg")
-const FRAMERATE_ORIGIN: float = 60.0
-var _fragment_create_position: Array[Vector2] = [
-	Vector2(-8.0, -8.0),
-	Vector2(8.0, 8.0),
-	Vector2(-8.0, 8.0),
-	Vector2(8.0, -8.0),
-]
-var _fragment_velocity_data: Array[Vector2] = [
-	Vector2(-3.0, -6.0) * FRAMERATE_ORIGIN,
-	Vector2(-2.0, -4.0) * FRAMERATE_ORIGIN,
-	Vector2(2.0, -4.0) * FRAMERATE_ORIGIN,
-	Vector2(3.0, -6.0) * FRAMERATE_ORIGIN,
-]
-
 @export var player: CharacterBody2D
 @export var player_suit: PlayerSuit
 
@@ -124,6 +109,22 @@ var input_lock: Array[int] = [-1, -1, -1, -1]
 var break_tile_cd_floor: bool = false
 var break_tile_cd_ceil: bool = false
 var player_big_disable_jump: bool = false
+
+@export var _block_fragment_scene: PackedScene = preload("uid://ct006nlnmf8dg")
+const FRAMERATE_ORIGIN: float = 60.0
+var _fragment_create_position: Array[Vector2] = [
+	Vector2(-8.0, -8.0),
+	Vector2(8.0, 8.0),
+	Vector2(-8.0, 8.0),
+	Vector2(8.0, -8.0),
+]
+var _fragment_velocity_data: Array[Vector2] = [
+	Vector2(-3.0, -6.0) * FRAMERATE_ORIGIN,
+	Vector2(-2.0, -4.0) * FRAMERATE_ORIGIN,
+	Vector2(2.0, -4.0) * FRAMERATE_ORIGIN,
+	Vector2(3.0, -6.0) * FRAMERATE_ORIGIN,
+]
+
 
 
 func _physics_process(delta):
