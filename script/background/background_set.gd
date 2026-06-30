@@ -12,8 +12,10 @@ var room_right = 640;
 var room_bottom = 480;
 
 var level_camera : LevelCamera
+var _original_position: Vector2
 
 func _ready() -> void:
+	_original_position = position
 	# Get level size
 	level_camera = get_tree().get_first_node_in_group("level_camera") as LevelCamera
 	level_camera.limit_changed.connect(_on_level_camera_limit_changed)
@@ -24,6 +26,13 @@ func _ready() -> void:
 	room_bottom = level_camera.limit_bottom
 		
 	background_set()
+
+
+func _physics_process(_delta: float) -> void:
+	if level_camera and level_camera.offset != Vector2.ZERO:
+		position = _original_position + level_camera.offset
+	else:
+		position = _original_position
 	
 func _on_level_camera_limit_changed(top: int, left: int, right: int, bottom: int) -> void:
 	room_left = left

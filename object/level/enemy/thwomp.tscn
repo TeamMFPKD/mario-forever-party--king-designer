@@ -151,8 +151,6 @@ stream = ExtResource("12_o36fy")
 stream = ExtResource("13_k0bpb")
 
 [node name="ScreenShakeComponent" parent="." unique_id=1543286777 instance=ExtResource("17_nqldf")]
-shake_duration = 16
-shake_intensity = 8.0
 
 [connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
 [connection signal="play_sound_stun" from="BasicMovement" to="Stun" method="play"]
