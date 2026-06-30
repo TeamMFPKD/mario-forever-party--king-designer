@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_e5ojv"]
 [ext_resource type="AudioStream" uid="uid://27ewhxfwd0kl" path="res://sound/level/thwomp_grounded.se.wav" id="12_o36fy"]
 [ext_resource type="AudioStream" uid="uid://ct0oyhla53sh6" path="res://sound/level/thwomp_smile.se.wav" id="13_k0bpb"]
+[ext_resource type="PackedScene" uid="uid://c17245kmmavwk" path="res://object/level/screen_shake_component.tscn" id="17_nqldf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ga51d"]
 atlas = ExtResource("1_wd4pb")
@@ -149,8 +150,13 @@ stream = ExtResource("12_o36fy")
 [node name="Smile" parent="." unique_id=2125850400 instance=ExtResource("11_6pwjr")]
 stream = ExtResource("13_k0bpb")
 
+[node name="ScreenShakeComponent" parent="." unique_id=1543286777 instance=ExtResource("17_nqldf")]
+shake_duration = 16
+shake_intensity = 8.0
+
 [connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
 [connection signal="play_sound_stun" from="BasicMovement" to="Stun" method="play"]
+[connection signal="play_sound_stun" from="BasicMovement" to="ScreenShakeComponent" method="_on_screen_shake"]
 [connection signal="finished" from="Smile" to="Area2D" method="_on_stun_finished"]
 
 [editable path="EnemyInteraction"]

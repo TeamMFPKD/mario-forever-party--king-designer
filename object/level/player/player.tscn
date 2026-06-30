@@ -39,6 +39,7 @@
 [ext_resource type="AudioStream" uid="uid://jyh7p7upppu2" path="res://sound/level/door_and_key/SE_DoorOpenFC.wav" id="30_vh3yy"]
 [ext_resource type="AudioStream" uid="uid://bxa3jh2vdnit2" path="res://sound/level/door_and_key/SE_DoorCloseFC.wav" id="31_j733o"]
 [ext_resource type="PackedScene" uid="uid://bpywk88hnp1yw" path="res://object/level/dust_effect_creator.tscn" id="32_4thfq"]
+[ext_resource type="PackedScene" uid="uid://c17245kmmavwk" path="res://object/level/screen_shake_component.tscn" id="38_p8in0"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
@@ -204,6 +205,8 @@ offset = Vector2(0, 12)
 
 [node name="DustEffectCreator" parent="." unique_id=1311315102 instance=ExtResource("32_4thfq")]
 
+[node name="ScreenShakeComponent" parent="." unique_id=1543286777 instance=ExtResource("38_p8in0")]
+
 [node name="LevelEdge" type="Node" parent="." unique_id=1265488575]
 
 [node name="LevelEdgeLeft" parent="LevelEdge" unique_id=1748762059 instance=ExtResource("24_wtbdq")]
@@ -222,6 +225,7 @@ position = Vector2(640, 0)
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
 [connection signal="play_sound_break_tile" from="PlayerMediator/PlayerMovement" to="BreakTileSE" method="play"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Jump" method="play"]
+[connection signal="screen_shake" from="PlayerMediator/PlayerMovement" to="ScreenShakeComponent" method="_on_screen_shake"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_die"]
 [connection signal="player_die" from="PlayerMediator/PlayerInteraction" to="Die" method="play"]
 [connection signal="player_hurt" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_hurt"]
