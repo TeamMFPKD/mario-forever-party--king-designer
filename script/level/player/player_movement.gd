@@ -8,6 +8,7 @@ signal door_entered
 signal door_exited
 signal play_sound_jump
 signal play_sound_break_tile
+signal screen_shake
 
 @export var _block_fragment_scene: PackedScene = preload("uid://ct006nlnmf8dg")
 const FRAMERATE_ORIGIN: float = 60.0
@@ -560,6 +561,7 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 
 
 func _spawn_fragments(world_pos: Vector2, tex: Texture2D = null) -> void:
+	emit_signal("screen_shake")
 	for i in _fragment_velocity_data.size():
 		var f = _block_fragment_scene.instantiate()
 		if tex:

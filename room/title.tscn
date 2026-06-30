@@ -1189,7 +1189,7 @@ layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
 
-[node name="Control" type="Control" parent="GameRoomSize" unique_id=987626403]
+[node name="TitleDecoration" type="Control" parent="GameRoomSize" unique_id=987626403]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -1202,71 +1202,71 @@ offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Node2D" type="Node2D" parent="GameRoomSize/Control" unique_id=993007539]
+[node name="Node2D" type="Node2D" parent="GameRoomSize/TitleDecoration" unique_id=993007539]
 z_index = -10
 scale = Vector2(3, 3)
 
-[node name="Sprite2DPipe" type="Sprite2D" parent="GameRoomSize/Control/Node2D" unique_id=214733939]
+[node name="Sprite2DPipe" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D" unique_id=214733939]
 position = Vector2(-156.00002, -118.66666)
 rotation = -0.34906584
 texture = SubResource("AtlasTexture_4ndrp")
 
-[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe" unique_id=674446431]
+[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe" unique_id=674446431]
 z_index = -1
 position = Vector2(0, -40)
 texture = SubResource("AtlasTexture_lhxpi")
 flip_h = true
 metadata/_edit_lock_ = true
 
-[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe" unique_id=163928691]
+[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe" unique_id=163928691]
 repeat_size = Vector2(0, 32)
 repeat_times = 6
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe/Parallax2D" unique_id=1800957048]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe/Parallax2D" unique_id=1800957048]
 position = Vector2(0, 144)
 texture = SubResource("AtlasTexture_p8x2f")
 metadata/_edit_lock_ = true
 
-[node name="Sprite2DPipe2" type="Sprite2D" parent="GameRoomSize/Control/Node2D" unique_id=2073061778]
+[node name="Sprite2DPipe2" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D" unique_id=2073061778]
 position = Vector2(-3.9999998, -113.33333)
 texture = SubResource("AtlasTexture_yfoso")
 
-[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe2" unique_id=1176615393]
+[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe2" unique_id=1176615393]
 z_index = -1
 position = Vector2(0, -56)
 scale = Vector2(4, 4)
 texture = ExtResource("40_pwog8")
 metadata/_edit_lock_ = true
 
-[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe2" unique_id=1010591224]
+[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe2" unique_id=1010591224]
 repeat_size = Vector2(0, 32)
 repeat_times = 6
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe2/Parallax2D" unique_id=1516081178]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe2/Parallax2D" unique_id=1516081178]
 position = Vector2(0, 144)
 texture = SubResource("AtlasTexture_rowrn")
 metadata/_edit_lock_ = true
 
-[node name="Sprite2DPipe3" type="Sprite2D" parent="GameRoomSize/Control/Node2D" unique_id=725260187]
+[node name="Sprite2DPipe3" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D" unique_id=725260187]
 position = Vector2(172, -60.00002)
 rotation = 0.7853982
 texture = SubResource("AtlasTexture_pwog8")
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe3" unique_id=1364785631]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe3" unique_id=1364785631]
 z_index = -1
 position = Vector2(0, -40)
 texture = SubResource("AtlasTexture_37ha4")
 flip_h = true
 metadata/_edit_lock_ = true
 
-[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe3" unique_id=1747001236]
+[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe3" unique_id=1747001236]
 repeat_size = Vector2(0, 32)
 repeat_times = 6
 metadata/_edit_lock_ = true
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/Control/Node2D/Sprite2DPipe3/Parallax2D" unique_id=1424443759]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe3/Parallax2D" unique_id=1424443759]
 position = Vector2(0, 144)
 texture = SubResource("AtlasTexture_32xhp")
 metadata/_edit_lock_ = true
