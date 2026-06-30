@@ -1,7 +1,7 @@
 extends Node
 
-@export var play : bool
-@export var sound_effect : bool
+@export var play: bool
+@export var sound_effect: bool
 
 func _ready() -> void:
 	var bgm = get_tree().get_first_node_in_group("bgm") as BGM

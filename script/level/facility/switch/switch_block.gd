@@ -4,12 +4,12 @@ extends StaticBody2D
 
 signal free_of_overlap
 
-@export var is_dotted_at_start : bool = false
+@export var is_dotted_at_start: bool = false
 
-var origin_collision_layer : int
-var animated_sprite : AnimatedSprite2D
-var switch_status : SwitchStatus
-var overlapped_with_player : bool = false
+var origin_collision_layer: int
+var animated_sprite: AnimatedSprite2D
+var switch_status: SwitchStatus
+var overlapped_with_player: bool = false
 
 func _ready() -> void:
 	origin_collision_layer =  collision_layer

@@ -2,11 +2,11 @@ extends Node
 
 signal bump_block
 
-@export var basic_movement : BasicMovement
-@export var thwomp : CharacterBody2D
-@export var cast : ShapeCast2D
+@export var basic_movement: BasicMovement
+@export var thwomp: CharacterBody2D
+@export var cast: ShapeCast2D
 
-var hit : bool
+var hit: bool
 
 func _physics_process(_delta: float) -> void:
 	var origin_cast_pos_y = cast.position.y

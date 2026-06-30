@@ -2,9 +2,9 @@ extends AudioStreamPlayer
 
 class_name ContinuousAudioStream
 
-var parent : Node
-var viewport : Viewport
-var playing_detect : bool
+var parent: Node
+var viewport: Viewport
+var playing_detect: bool
 
 func _ready() -> void:
 	parent = get_parent()

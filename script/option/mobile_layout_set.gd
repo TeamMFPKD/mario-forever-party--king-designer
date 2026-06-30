@@ -4,7 +4,7 @@ var mobile_control
 var game_config
 var is_dragging    := false
 var drag_start_pos := Vector2.ZERO
-var drag_target    : Node = null  # Node2D 容器（D-pad）或 TouchScreenButton（右侧单按钮）
+var drag_target   : Node = null  # Node2D 容器（D-pad）或 TouchScreenButton（右侧单按钮）
 
 # 用于 _make_buttons_layout_default，在加载存档前记录场景初始值
 var _default_dpad_pos         := Vector2.ZERO
@@ -94,7 +94,7 @@ func _on_canvas_gui_input(event):
 func _get_target_from_position(pos: Vector2) -> Node:
 	# D-pad：检查子按钮的整体包围盒，命中则返回容器
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
-		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		var container: Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
 		if _get_children_bounding_rect(container).has_point(pos):
 			return container
 
@@ -136,7 +136,7 @@ func _save_positions() -> void:
 		return
 
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
-		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		var container: Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
 		game_config.config.set_value("mobile_layout", "dpad_position", var_to_str(container.position))
 
 	if mobile_control.control_button and mobile_control.control_button.has_node("ControlButton"):
@@ -154,7 +154,7 @@ func _load_positions() -> void:
 		return
 
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
-		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		var container: Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
 		var saved = game_config.config.get_value("mobile_layout", "dpad_position", "")
 		if saved != "":
 			var pos = str_to_var(saved)
@@ -179,7 +179,7 @@ func _save_default_layout_to_config() -> void:
 
 	# 保存D-pad默认位置
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
-		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		var container: Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
 		game_config.config.set_value("mobile_layout_default", "dpad_position", var_to_str(container.position))
 
 	# 保存右侧按钮默认位置
@@ -197,7 +197,7 @@ func _make_buttons_layout_default() -> void:
 	var use_default_from_config := false
 	
 	if mobile_control.control_d_pad and mobile_control.control_d_pad.has_node("ControlDPad"):
-		var container : Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
+		var container: Node2D = mobile_control.control_d_pad.get_node("ControlDPad")
 		var saved_default = game_config.config.get_value("mobile_layout_default", "dpad_position", "")
 		if saved_default != "":
 			var pos = str_to_var(saved_default)

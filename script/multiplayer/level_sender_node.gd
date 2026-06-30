@@ -2,10 +2,10 @@ extends Node
 
 signal lets_play_together
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
-var local_players_level_data_ready : bool = false
-var all_players_data_ready : bool = false
+var local_players_level_data_ready: bool = false
+var all_players_data_ready: bool = false
 var wait_time_initial = 1.0
 var wait_time_local = 1.0
 var wait_time_sever = 1.0

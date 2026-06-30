@@ -3,13 +3,13 @@ extends Node
 signal beetroot_bounce
 signal player_sound_bump
 
-@export var beetroot : CharacterBody2D
-@export var cast : ShapeCast2D
-@export var path_to_movement : NodePath = "../BeetrootMovement"
+@export var beetroot: CharacterBody2D
+@export var cast: ShapeCast2D
+@export var path_to_movement: NodePath = "../BeetrootMovement"
 
-var movement : BasicMovement
+var movement: BasicMovement
 
-var interacting_blocks : Array[Node]
+var interacting_blocks: Array[Node]
 
 func _ready():
 	movement = get_node(path_to_movement)

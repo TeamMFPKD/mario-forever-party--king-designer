@@ -3,7 +3,7 @@ extends Node
 signal trigger_bad_level
 signal skip_bad_level
 
-var is_bad_level : bool = false
+var is_bad_level: bool = false
 
 func _on_timeout():
 	bad_level_check()

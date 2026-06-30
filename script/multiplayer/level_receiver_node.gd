@@ -1,6 +1,6 @@
 extends Node
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 var saved_player_id = []
 

@@ -2,9 +2,9 @@ extends VBoxContainer
 
 signal result_list_updated
 
-@export var result_list_scene : PackedScene
+@export var result_list_scene: PackedScene
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 var random_capture_manager
 #var players
 

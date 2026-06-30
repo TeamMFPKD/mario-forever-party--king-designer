@@ -2,7 +2,7 @@ extends BasicMovement
 
 @export var teleport_offset: float = 32.0
 
-var level_camera : Camera2D
+var level_camera: Camera2D
 var limit_top
 var limit_bottom
 var origin_collision_layer

@@ -1,11 +1,11 @@
 extends Button
 
-var multiplayer_manager : MultiplayerManager
-var is_ready : bool = false
-var last_input_time : float = 0.0
-var total_time : float = 0.0
-var window_focused : bool = true
-var unfocused_time : float = 0.0  # 失焦持续时间
+var multiplayer_manager: MultiplayerManager
+var is_ready: bool = false
+var last_input_time: float = 0.0
+var total_time: float = 0.0
+var window_focused: bool = true
+var unfocused_time: float = 0.0  # 失焦持续时间
 var player
 
 func _ready() -> void:

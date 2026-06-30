@@ -41,7 +41,7 @@ enum PowerupType {
 			emit_signal("suit_changed")
 			emit_signal("play_sound_powerup")
 
-var is_starman : bool = false:
+var is_starman: bool = false:
 	set(value):
 		is_starman = value
 		starman_timer = 0
@@ -50,8 +50,8 @@ var is_starman : bool = false:
 		else:
 			emit_signal("starman_ended")
 
-@export var starman_time : int = 500
-var starman_timer : int
+@export var starman_time: int = 500
+var starman_timer: int
 
 func _physics_process(_delta: float) -> void:
 	if is_starman:

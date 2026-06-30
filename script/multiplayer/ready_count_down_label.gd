@@ -1,9 +1,9 @@
 extends Label
 
-@export var path_to_timer : NodePath
+@export var path_to_timer: NodePath
 
-var timer : Timer
-var smaller_font : bool
+var timer: Timer
+var smaller_font: bool
 
 func _ready() -> void:
 	timer = get_node(path_to_timer)

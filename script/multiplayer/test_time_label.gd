@@ -1,6 +1,6 @@
 extends Label
 
-var timer : Timer
+var timer: Timer
 
 func _ready() -> void:
 	visible = false

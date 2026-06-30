@@ -3,7 +3,7 @@ extends CharacterBody2D
 signal player_dead
 signal next_level
 
-var play_next_level_node : Node
+var play_next_level_node: Node
 
 func _ready() -> void:
 	play_next_level_node = get_tree().get_first_node_in_group("play_next_level_manager")

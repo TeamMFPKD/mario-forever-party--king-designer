@@ -2,11 +2,11 @@ extends Node
 
 class_name ShellStatus
 
-@export var path_to_shell : NodePath = ".."
-@export var path_to_shell_movement : NodePath = "../BasicMovement"
-@export var path_to_interaction_with_player : NodePath = "../EnemyInteraction/InteractionWithPlayer"
-@export var path_to_animated_sprite : NodePath = "../AnimatedSprite2D"
-@export var is_moving : bool = false:
+@export var path_to_shell: NodePath = ".."
+@export var path_to_shell_movement: NodePath = "../BasicMovement"
+@export var path_to_interaction_with_player: NodePath = "../EnemyInteraction/InteractionWithPlayer"
+@export var path_to_animated_sprite: NodePath = "../AnimatedSprite2D"
+@export var is_moving: bool = false:
 	set(value):
 		if value:
 			interaction_with_player_node.stomp_offset = -4.0
@@ -25,13 +25,13 @@ class_name ShellStatus
 			ani.stop()
 			set_interaction_delay()
 		is_moving = value
-@export var shell_move_speed_x : float = 200.0
-@export var interaction_delay_time : float = 0.3
+@export var shell_move_speed_x: float = 200.0
+@export var interaction_delay_time: float = 0.3
 
-var shell : CharacterBody2D
-var shell_movement : BasicMovement
-var interaction_with_player_node : InteractionWithPlayer
-var ani : AnimatedSprite2D
+var shell: CharacterBody2D
+var shell_movement: BasicMovement
+var interaction_with_player_node: InteractionWithPlayer
+var ani: AnimatedSprite2D
 
 func _ready() -> void:
 	shell = get_node(path_to_shell)
@@ -40,7 +40,7 @@ func _ready() -> void:
 	ani = get_node(path_to_animated_sprite)
 	set_interaction_delay()
 
-func _on_stomped(hit_position : Vector2) -> void:
+func _on_stomped(hit_position: Vector2) -> void:
 	if is_moving:
 		shell_movement.speed_x = 0.0
 	else:

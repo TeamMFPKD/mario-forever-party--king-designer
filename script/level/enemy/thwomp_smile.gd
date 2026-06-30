@@ -1,7 +1,7 @@
 extends Area2D
 
-@export var smile_sound : AudioStreamPlayer
-@export var ani : AnimatedSprite2D
+@export var smile_sound: AudioStreamPlayer
+@export var ani: AnimatedSprite2D
 
 func _on_body_entered(body):
 	if body.is_in_group("player"):

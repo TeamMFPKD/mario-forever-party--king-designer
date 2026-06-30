@@ -1,6 +1,6 @@
 extends Line2D
 
-var level_camera : Camera2D
+var level_camera: Camera2D
 
 func _ready() -> void:
 	level_camera = get_tree().get_first_node_in_group("level_camera") as LevelCamera

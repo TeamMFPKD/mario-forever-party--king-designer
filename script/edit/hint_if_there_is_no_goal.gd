@@ -1,9 +1,9 @@
 extends Node
 
-@export var ani_player : AnimationPlayer
-@export var hint_label : Label
+@export var ani_player: AnimationPlayer
+@export var hint_label: Label
 
-var timer : Timer
+var timer: Timer
 
 func _ready() -> void:
 	timer = get_tree().get_first_node_in_group("timer_singleton") as Timer

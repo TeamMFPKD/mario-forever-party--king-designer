@@ -1,6 +1,6 @@
 extends Area2D
 
-var timer : int = 0
+var timer: int = 0
 
 func _physics_process(_delta: float) -> void:
 	var bodies = get_overlapping_bodies()

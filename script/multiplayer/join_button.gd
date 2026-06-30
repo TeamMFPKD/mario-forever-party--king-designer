@@ -1,18 +1,18 @@
 extends Button
 
-@export var line_edit_frp_domain : LineEdit
-@export var line_edit_remote_port : LineEdit
-@export var line_edit_player_name : LineEdit
+@export var line_edit_frp_domain: LineEdit
+@export var line_edit_remote_port: LineEdit
+@export var line_edit_player_name: LineEdit
 
-@export var player_page : Control
+@export var player_page: Control
 
-@export var player_name_limit : int = 12
+@export var player_name_limit: int = 12
 
-var multiplayer_manager : MultiplayerManager
-var game_config : Node
-var frp_domain : String = ""
-var remote_port : int
-var player_name : String = ""
+var multiplayer_manager: MultiplayerManager
+var game_config: Node
+var frp_domain: String = ""
+var remote_port: int
+var player_name: String = ""
 
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)

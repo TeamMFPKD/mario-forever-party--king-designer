@@ -2,16 +2,16 @@ extends Node
 
 signal time_clock_got
 
-@export var time_to_increase : float = 3.0
-@export var ani : Node2D
+@export var time_to_increase: float = 3.0
+@export var ani: Node2D
 
-@export var time_clock_label_scene : PackedScene = preload("uid://du6kfdkecp8h0")
-@export var add_time_color : Color = Color(0.25, 1.0, 0.25)
-@export var sub_time_color : Color = Color(1.0, 0.25, 0.25)
+@export var time_clock_label_scene: PackedScene = preload("uid://du6kfdkecp8h0")
+@export var add_time_color: Color = Color(0.25, 1.0, 0.25)
+@export var sub_time_color: Color = Color(1.0, 0.25, 0.25)
 
-var game_timer : Timer
-var is_activated : bool = false
-var parent : Node2D
+var game_timer: Timer
+var is_activated: bool = false
+var parent: Node2D
 
 func _ready() -> void:
 	game_timer = get_tree().get_first_node_in_group("game_timer")

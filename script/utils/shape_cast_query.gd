@@ -18,7 +18,7 @@ static func shape_query(body: Node2D, cast: ShapeCast2D) -> Array[Node2D]:
 	
 	var results = space_state.intersect_shape(query, cast.max_results)
 	
-	var nodes : Array[Node2D] = []
+	var nodes: Array[Node2D] = []
 	for result in results:
 		var collider = result.get("collider")
 		if collider == null:

@@ -3,7 +3,7 @@ extends Node
 @export var target_container: Container
 @export var message_scene: PackedScene
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager

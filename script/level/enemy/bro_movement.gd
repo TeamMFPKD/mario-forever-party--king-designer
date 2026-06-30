@@ -2,17 +2,17 @@ extends BasicMovement
 
 signal play_sound_shoot
 
-@export var path_to_parent : NodePath = ".."
-@export var projectile_scene : PackedScene = preload("uid://3ieotv447ssg")
-@export var solid_area : Area2D
-@export var launch_offset : Vector2 = Vector2(0, 0)
+@export var path_to_parent: NodePath = ".."
+@export var projectile_scene: PackedScene = preload("uid://3ieotv447ssg")
+@export var solid_area: Area2D
+@export var launch_offset: Vector2 = Vector2(0, 0)
 
-@export var walk_time : int = 50
-@export var shoot_time : int = 36
-@export var wait_after_shoot_time : int = 36
-@export var bro_jump_speed : float = -700.0
-@export var bro_slight_jump_speed : float = -80.0
-@export var walking_distance : float = 48.0
+@export var walk_time: int = 50
+@export var shoot_time: int = 36
+@export var wait_after_shoot_time: int = 36
+@export var bro_jump_speed: float = -700.0
+@export var bro_slight_jump_speed: float = -80.0
+@export var walking_distance: float = 48.0
 
 enum BroState {
 	WALK,
@@ -23,22 +23,22 @@ enum BroState {
 	WAIT_AFTER_SHOOT,
 }
 
-var bro_state : BroState = BroState.WALK
+var bro_state: BroState = BroState.WALK
 
-var parent : Node2D
-var walk_timer : int
-var shoot_timer : int = 0
-var wait_after_shoot_timer : int = 0
+var parent: Node2D
+var walk_timer: int
+var shoot_timer: int = 0
+var wait_after_shoot_timer: int = 0
 var origin_collision_mask
-var origin_position_x : float
-var origin_speed_x : float
-var direction : int = -1
+var origin_position_x: float
+var origin_speed_x: float
+var direction: int = -1
 
-var slight_jumped : bool
-var jumped : bool
+var slight_jumped: bool
+var jumped: bool
 
-var previous_position_y : float
-var jump_level : int
+var previous_position_y: float
+var jump_level: int
 
 var rng = RandomNumberGenerator.new()
 
@@ -53,7 +53,7 @@ func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 
 	# Movement
-	var move_x : bool = bro_state == BroState.WALK or bro_state == BroState.SLIGHT_JUMP
+	var move_x: bool = bro_state == BroState.WALK or bro_state == BroState.SLIGHT_JUMP
 	speed_x = origin_speed_x * direction if move_x else 0.0
 
 	# Debug
@@ -139,7 +139,7 @@ func select_state() -> void:
 	bro_state = states[rng.randi_range(0, states.size() - 1)]
 
 func launch() -> void:
-	var left : bool = player.position.x < parent.position.x
+	var left: bool = player.position.x < parent.position.x
 
 	var projectile = projectile_scene.instantiate() as Node2D
 	projectile.position = parent.position + launch_offset

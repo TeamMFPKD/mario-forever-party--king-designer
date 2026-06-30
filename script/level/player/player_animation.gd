@@ -2,35 +2,35 @@ extends Node
 
 signal play_sound_skid
 
-@export var ani : AnimatedSprite2D
-@export var player_movement : PlayerMovement
-@export var player_suit : PlayerSuit
-@export var player : CharacterBody2D
-@export var player_hurt_and_die : PlayerHurtAndDie
+@export var ani: AnimatedSprite2D
+@export var player_movement: PlayerMovement
+@export var player_suit: PlayerSuit
+@export var player: CharacterBody2D
+@export var player_hurt_and_die: PlayerHurtAndDie
 
-@export var player_lui_effect_scene : PackedScene
+@export var player_lui_effect_scene: PackedScene
 
 @export_group("player_spritesframe")
-@export var player_small_spritesframe : SpriteFrames
-@export var player_super_spritesframe : SpriteFrames
-@export var player_fireball_spritesframe : SpriteFrames
-@export var player_beetroot_spritesframe : SpriteFrames
-@export var player_lui_spritesframe : SpriteFrames
+@export var player_small_spritesframe: SpriteFrames
+@export var player_super_spritesframe: SpriteFrames
+@export var player_fireball_spritesframe: SpriteFrames
+@export var player_beetroot_spritesframe: SpriteFrames
+@export var player_lui_spritesframe: SpriteFrames
 @export var player_big_spritesframe: SpriteFrames
-@export var player_bee_spritesframe : SpriteFrames
-@export var player_cloud_spritesframe : SpriteFrames
+@export var player_bee_spritesframe: SpriteFrames
+@export var player_cloud_spritesframe: SpriteFrames
 
-var current_state : String = "idle"
-var last_direction : int = 1  # 1表示向右，-1表示向左
-var walk_animation_frame : int = 0  # 记录walk动画的当前帧
+var current_state: String = "idle"
+var last_direction: int = 1  # 1表示向右，-1表示向左
+var walk_animation_frame: int = 0  # 记录walk动画的当前帧
 
-var turn : bool = false
+var turn: bool = false
 
-var hurt_timer : int = 0
+var hurt_timer: int = 0
 
-var is_appearing : bool = false
-@export var appear_time : int = 80
-var appear_timer : int = 0
+var is_appearing: bool = false
+@export var appear_time: int = 80
+var appear_timer: int = 0
 
 func _physics_process(_delta: float):
 	update_animation()
@@ -48,7 +48,7 @@ func update_animation():
 		hurt_timer = 0
 	
 	# Pipe Scale
-	var scale_speed : float = 0.1
+	var scale_speed: float = 0.1
 	ani.scale = ani.scale.move_toward(Vector2(0.5, 0.5) if is_in_pipe() else Vector2(1.0, 1.0), scale_speed)
 
 	if new_state != current_state or direction != last_direction:

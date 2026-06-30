@@ -4,9 +4,9 @@ class_name LevelCamera
 
 signal limit_changed(top: int, left: int, right: int, bottom: int)
 
-@export var max_speed : float = 960.0
+@export var max_speed: float = 960.0
 
-var speed : float = 0.0
+var speed: float = 0.0
 var direction := Vector2.ZERO
 
 var player

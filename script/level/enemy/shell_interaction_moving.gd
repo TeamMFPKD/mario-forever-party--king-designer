@@ -2,16 +2,16 @@ extends Node
 
 signal shell_harded
 
-@export var path_to_shell : NodePath = ".."
-@export var path_to_cast : NodePath = "../BasicShapeCast2D"
-@export var path_to_shell_status : NodePath = "../ShellStatus"
-@export var path_to_movement : NodePath = "../BasicMovement"
+@export var path_to_shell: NodePath = ".."
+@export var path_to_cast: NodePath = "../BasicShapeCast2D"
+@export var path_to_shell_status: NodePath = "../ShellStatus"
+@export var path_to_movement: NodePath = "../BasicMovement"
 
-var shell : CharacterBody2D
-var cast : ShapeCast2D
-var movement : BasicMovement
-var shell_status : ShellStatus
-var is_moving : bool = false
+var shell: CharacterBody2D
+var cast: ShapeCast2D
+var movement: BasicMovement
+var shell_status: ShellStatus
+var is_moving: bool = false
 
 func _ready() -> void:
 	shell = get_node(path_to_shell) as CharacterBody2D
@@ -50,7 +50,7 @@ func detect_enemy(results):
 				emit_signal("shell_harded")
 
 func detect_block(results):
-	var turned : bool = false
+	var turned: bool = false
 	for result in results:
 		if !result.has_meta("interaction_with_block"):
 			continue

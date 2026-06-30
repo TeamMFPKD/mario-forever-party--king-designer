@@ -3,8 +3,8 @@ extends Node
 signal play_sound_fireball_explode
 signal fireball_explode
 
-@export var fireball : CharacterBody2D
-@export var cast : ShapeCast2D
+@export var fireball: CharacterBody2D
+@export var cast: ShapeCast2D
 
 func _physics_process(_delta: float):
 	var results = ShapeCastQuery.shape_query(fireball, cast)

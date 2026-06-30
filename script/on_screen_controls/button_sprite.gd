@@ -1,13 +1,13 @@
 extends Sprite2D
 
-@export var path_to_button : NodePath = ".."
-@export var texture_pressed : Texture2D
+@export var path_to_button: NodePath = ".."
+@export var texture_pressed: Texture2D
 
-var button : TouchScreenButton
-var texture_normal : Texture2D
+var button: TouchScreenButton
+var texture_normal: Texture2D
 
-@export var pressed_color : Color = Color(1, 1, 1, 1)
-var origin_color : Color
+@export var pressed_color: Color = Color(1, 1, 1, 1)
+var origin_color: Color
 
 func _ready() -> void:
 	#texture_normal = texture.duplicate()

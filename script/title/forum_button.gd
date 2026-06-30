@@ -1,7 +1,7 @@
 extends TextureButton
 
-@export var forum_international_texture : Texture2D
-@export var forum_cn_texture : Texture2D
+@export var forum_international_texture: Texture2D
+@export var forum_cn_texture: Texture2D
 
 var language
 

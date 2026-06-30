@@ -5,8 +5,8 @@ signal photo_taken
 @export var take_photo_ani_spd = 0.2
 
 var viewport
-var level_path_node : Node
-var image : Image
+var level_path_node: Node
+var image: Image
 
 const LIKED_COURSE_FOLDER_NAME = "liked courses"
 

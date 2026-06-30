@@ -1,13 +1,13 @@
 extends Button
 
-@export var level_file_name_label : Label
-@export var path_to_ancestor : NodePath = "../../.."
+@export var level_file_name_label: Label
+@export var path_to_ancestor: NodePath = "../../.."
 
 const LIKED_COURSE_FOLDER_NAME = "liked courses"
 
-var level_path_name : String
-var level_path_set : Node
-var ancestor_node : Node
+var level_path_name: String
+var level_path_set: Node
+var ancestor_node: Node
 
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)

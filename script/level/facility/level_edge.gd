@@ -5,15 +5,15 @@ enum EgdeType {
 	RIGHT,
 }
 
-@export var edge_type : EgdeType = EgdeType.LEFT
+@export var edge_type: EgdeType = EgdeType.LEFT
 
 const LEVEL_EDGE_SHAPE_LEFT = preload("uid://qfpghfu13sn1")
 const LEVEL_EDGE_SHAPE_RIGHT = preload("uid://dia0apwqxvmgd")
 
-var level_camera : Camera2D
+var level_camera: Camera2D
 var origin_collision_layer
-var player_movement : PlayerMovement
-var edge_shape : WorldBoundaryShape2D
+var player_movement: PlayerMovement
+var edge_shape: WorldBoundaryShape2D
 
 const LEFT_NORMALS := [
 	Vector2(1, 0),

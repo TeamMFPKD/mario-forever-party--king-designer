@@ -1,13 +1,13 @@
 extends Node
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
-var all_players_reach_end : bool = false
-var wait_time : float = 1.5
+var all_players_reach_end: bool = false
+var wait_time: float = 1.5
 
 @export_category("Final Score Calculation")
-@export var a : float = 0.7
-@export var k : float = 5.0
+@export var a: float = 0.7
+@export var k: float = 5.0
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager

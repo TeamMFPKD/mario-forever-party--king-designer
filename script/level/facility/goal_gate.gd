@@ -3,16 +3,16 @@ extends Area2D
 signal goal_reached
 signal next_level
 
-@export var bar : Sprite2D
-@export var smoke_scene : PackedScene
+@export var bar: Sprite2D
+@export var smoke_scene: PackedScene
 
-var smoke : Node2D
+var smoke: Node2D
 
-var is_passed : bool = false
+var is_passed: bool = false
 
-var play_next_level_node : Node
+var play_next_level_node: Node
 
-var jump_to_scene_history_edit_node : Node
+var jump_to_scene_history_edit_node: Node
 
 func _ready() -> void:
 	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST:

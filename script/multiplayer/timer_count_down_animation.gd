@@ -2,12 +2,12 @@ extends Node
 
 signal new_second_passed(animation_name: StringName)
 
-@export var path_to_animation : NodePath = "../EditTimeLabel"
-@export var warning_phase : int = 10
+@export var path_to_animation: NodePath = "../EditTimeLabel"
+@export var warning_phase: int = 10
 
-var timer : Timer
-var previous_second : int = -1
-var current_second : int = -1
+var timer: Timer
+var previous_second: int = -1
+var current_second: int = -1
 
 func _ready() -> void:
 	timer = get_tree().get_first_node_in_group("timer_singleton")

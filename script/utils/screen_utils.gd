@@ -2,7 +2,7 @@ extends Node
 
 class_name ScreenUtils
 
-static func get_screen_rect(node : Node) -> Rect2:
+static func get_screen_rect(node: Node) -> Rect2:
 	var viewport := node.get_viewport()
 	var viewport_rect := viewport.get_visible_rect()
 	var canvas_transform := viewport.get_canvas_transform()

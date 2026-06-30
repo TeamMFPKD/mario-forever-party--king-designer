@@ -1,8 +1,8 @@
 extends StaticBody2D
 
-var origin_pos_y : float
-var player : Node2D
-var print_counter : int = 0
+var origin_pos_y: float
+var player: Node2D
+var print_counter: int = 0
 
 func _ready() -> void:
 	origin_pos_y = position.y

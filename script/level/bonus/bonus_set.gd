@@ -15,10 +15,10 @@ enum BonusType {
 	CLOUD,
 }
 
-@export var bonus_type : BonusType = BonusType.MUSHROOM
-@export var path_to_parent : NodePath = ".."
+@export var bonus_type: BonusType = BonusType.MUSHROOM
+@export var path_to_parent: NodePath = ".."
 
-var parent : Node2D
+var parent: Node2D
 
 func _ready():
 	parent = get_node(path_to_parent)

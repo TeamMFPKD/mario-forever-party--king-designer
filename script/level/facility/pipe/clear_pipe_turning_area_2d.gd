@@ -2,13 +2,13 @@ extends Area2D
 
 class_name ClearPipeTurningArea2D
 
-@export var path_to_clear_pipe_set : NodePath = "../PipeDirectionSet"
+@export var path_to_clear_pipe_set: NodePath = "../PipeDirectionSet"
 
-var pipe_set : ClearPipeSet
-var direction : ClearPipeSet.Direction = ClearPipeSet.Direction.LEFT
+var pipe_set: ClearPipeSet
+var direction: ClearPipeSet.Direction = ClearPipeSet.Direction.LEFT
 
 # 记录每个实体是否已处理过转向
-var processed_ids : Dictionary = {}
+var processed_ids: Dictionary = {}
 
 func _ready() -> void:
 	if has_meta("processed"):
@@ -20,7 +20,7 @@ func _ready() -> void:
 	if process_mode == ProcessMode.PROCESS_MODE_DISABLED or not visible:
 		queue_free()
 
-func _on_body_exited(body : Node2D) -> void:
+func _on_body_exited(body: Node2D) -> void:
 	var id = body.get_instance_id()
 	processed_ids.erase(id)
 

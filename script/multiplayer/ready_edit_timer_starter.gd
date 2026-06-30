@@ -3,7 +3,7 @@ extends Node
 signal jump_to_scene
 signal play_animation
 
-var edit_timer : Timer
+var edit_timer: Timer
 
 func _ready() -> void:
 	if not OS.has_feature("editor"):

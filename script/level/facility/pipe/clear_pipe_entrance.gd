@@ -2,8 +2,8 @@ extends Area2D
 
 class_name ClearPipeEntrance
 
-@export var path_to_clear_pipe_set : NodePath = "../PipeDirectionSet"
-@export var path_to_turning : NodePath = "../ClearPipeTurningArea2D"
+@export var path_to_clear_pipe_set: NodePath = "../PipeDirectionSet"
+@export var path_to_turning: NodePath = "../ClearPipeTurningArea2D"
 
 enum Direction {
 	LEFT,
@@ -11,15 +11,15 @@ enum Direction {
 	UP,
 	DOWN,
 }
-@export var entrance_direction : Direction = Direction.LEFT
+@export var entrance_direction: Direction = Direction.LEFT
 
-var clear_pipe_set : ClearPipeSet
-var turning_area : Area2D
-var entrance_shape : Shape2D
-var overlap_player_meta_cnt : int = 0
+var clear_pipe_set: ClearPipeSet
+var turning_area: Area2D
+var entrance_shape: Shape2D
+var overlap_player_meta_cnt: int = 0
 
 # 记录已进入该入口的实体 ID，避免重复触发
-var overlapped_ids : Dictionary = {}
+var overlapped_ids: Dictionary = {}
 
 func _ready() -> void:
 	clear_pipe_set = get_node(path_to_clear_pipe_set)
@@ -97,7 +97,7 @@ func _physics_process(_delta: float) -> void:
 
 
 
-func _on_body_entered(body : Node2D) -> void:
+func _on_body_entered(body: Node2D) -> void:
 	if not (body.is_in_group("player") or body.has_meta("basic_movement")):
 		return
 

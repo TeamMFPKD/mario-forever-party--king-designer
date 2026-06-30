@@ -1,13 +1,13 @@
 extends Node2D
 
-@export var animation_player : AnimationPlayer
+@export var animation_player: AnimationPlayer
 @onready var life_1 = $Life1
 @onready var life_2 = $Life2
 @onready var life_3 = $Life3
 
-var level_manager : LevelManager
-var is_cooldown : bool = false
-var lives : int = 2:
+var level_manager: LevelManager
+var is_cooldown: bool = false
+var lives: int = 2:
 	set(value):
 		if not is_cooldown:
 			lives = value

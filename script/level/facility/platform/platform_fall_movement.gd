@@ -5,10 +5,10 @@ class_name PlatformFallMovement
 @export var path_to_move_object: NodePath = ".."
 @export var fall_gravity: float = 350.0
 
-var move_object : Node2D
-var activated : bool = false
-var speed_y : float = 0.0
-var gravity : float = 0.0
+var move_object: Node2D
+var activated: bool = false
+var speed_y: float = 0.0
+var gravity: float = 0.0
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object)

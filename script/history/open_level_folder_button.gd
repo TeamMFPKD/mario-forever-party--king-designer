@@ -1,7 +1,7 @@
 extends Button
 
-var user_path : String = "user://"
-var absolute_path : String
+var user_path: String = "user://"
+var absolute_path: String
 
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)

@@ -15,7 +15,7 @@ signal play_sound_exited
 
 signal messages_updated
 
-@export var player_dead_spritesframe : SpriteFrames
+@export var player_dead_spritesframe: SpriteFrames
 
 var local_port
 # 端口使用Sakura Frp隧道配置的远程端口
@@ -24,7 +24,7 @@ var remote_port
 var frp_domain: String = ""
 var player_name: String = ""
 
-var game_start_time : String
+var game_start_time: String
 
 var messages = []
 var msg_cnt: int = 0
@@ -50,15 +50,15 @@ var players = []:
 			msg_cnt = 0
 
 var random_levels = []
-var current_level_count : int = 0
+var current_level_count: int = 0
 
-var total_levels : int = 0
+var total_levels: int = 0
 
 var level_results = []
 
 var _pending_disconnect_reasons = {}
 
-var is_in_game : bool = false:
+var is_in_game: bool = false:
 	set(value):
 		is_in_game = value
 		random_levels.clear()
@@ -67,14 +67,14 @@ var is_in_game : bool = false:
 		level_results.clear()
 		GameModeSingleton.game_mode = GameModeSingleton.GameModeType.EDIT
 
-@export var player_small_spritesframe : SpriteFrames
-@export var player_super_spritesframe : SpriteFrames
-@export var player_fireball_spritesframe : SpriteFrames
-@export var player_beetroot_spritesframe : SpriteFrames
-@export var player_lui_spritesframe : SpriteFrames
+@export var player_small_spritesframe: SpriteFrames
+@export var player_super_spritesframe: SpriteFrames
+@export var player_fireball_spritesframe: SpriteFrames
+@export var player_beetroot_spritesframe: SpriteFrames
+@export var player_lui_spritesframe: SpriteFrames
 @export var player_big_spritesframe: SpriteFrames
-@export var player_bee_spritesframe : SpriteFrames
-@export var player_cloud_spritesframe : SpriteFrames
+@export var player_bee_spritesframe: SpriteFrames
+@export var player_cloud_spritesframe: SpriteFrames
 
 var mp_ani_manager
 
@@ -334,7 +334,7 @@ func lets_play_together(rnd_levels: Array) -> void:
 	fc.call_deferred()
 
 @rpc("any_peer", "call_local")
-func level_add_pass_count(level, passed : bool, player_id: int) -> void:
+func level_add_pass_count(level, passed: bool, player_id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	for p_author in players:

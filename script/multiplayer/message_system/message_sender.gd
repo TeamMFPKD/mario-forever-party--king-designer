@@ -3,7 +3,7 @@ extends Node
 @export var line_edit: LineEdit
 @export var send_button: Button
 
-var multiplayer_manager : MultiplayerManager
+var multiplayer_manager: MultiplayerManager
 
 func _ready():
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager

@@ -4,16 +4,16 @@ signal player_hurt
 signal player_die
 signal player_pipe_blocked
 
-@export var player_movement : PlayerMovement
-@export var player_suit : PlayerSuit
-@export var player : CharacterBody2D
-@export var cast : ShapeCast2D
+@export var player_movement: PlayerMovement
+@export var player_suit: PlayerSuit
+@export var player: CharacterBody2D
+@export var cast: ShapeCast2D
 
-var starman : bool
-var pipe_get_close_timer : int = 0
-var is_origin_pipe_dir_set : bool = false
-var origin_player_pipe_dir : PlayerMovement.PipeMoveDirection
-var clear_pipe_blocked_counter : int = 0
+var starman: bool
+var pipe_get_close_timer: int = 0
+var is_origin_pipe_dir_set: bool = false
+var origin_player_pipe_dir: PlayerMovement.PipeMoveDirection
+var clear_pipe_blocked_counter: int = 0
 
 func _physics_process(_delta: float) -> void:
 	var results = ShapeCastQuery.shape_query(player, cast)
@@ -66,7 +66,7 @@ func _physics_process(_delta: float) -> void:
 
 	triangle_block_detect(results)
 	
-func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
+func hurt_and_stompable_detect(results: Array[Node2D]) -> void:
 	for result in results:
 		if not result.has_meta("interaction_with_player"):
 			continue
@@ -96,7 +96,7 @@ func hurt_and_stompable_detect(results : Array[Node2D]) -> void:
 				InteractionWithPlayer.HurtType.NOTHING:
 					pass
 
-func bonus_detect(results : Array[Node2D]) -> void:
+func bonus_detect(results: Array[Node2D]) -> void:
 	for result in results:
 		if not result.has_meta("bonus_set"):
 			continue
@@ -125,7 +125,7 @@ func bonus_detect(results : Array[Node2D]) -> void:
 		if bonus_set_node.bonus_type == BonusSet.BonusType.STAR:
 			player_suit.starman_start()
 
-func starman_detect(results : Array[Node2D]) -> bool:
+func starman_detect(results: Array[Node2D]) -> bool:
 	starman = is_starman()
 	if not starman:
 		return false
@@ -141,13 +141,13 @@ func starman_detect(results : Array[Node2D]) -> bool:
 func is_starman() -> bool:
 	return player_suit.is_starman
 
-func overlap_switch_detect(results : Array[Node2D]) -> void:
+func overlap_switch_detect(results: Array[Node2D]) -> void:
 	for result in results:
 		if not result is SwitchBlock:
 			continue
 		result.set_meta("overlapped_with_player", true)
 
-func block_hit_detect(results : Array[Node2D]) -> void:
+func block_hit_detect(results: Array[Node2D]) -> void:
 	#if not player.is_on_ceiling():
 	#	return
 	#print("block_hit_detect reuslts: ", results)
@@ -186,7 +186,7 @@ func block_hit_detect(results : Array[Node2D]) -> void:
 					break;
 		
 
-func pipe_detect(results : Array[Node2D]) -> void:
+func pipe_detect(results: Array[Node2D]) -> void:
 	if player_movement.out_pipe_cooldown > 0:
 		return
 	for result in results:
