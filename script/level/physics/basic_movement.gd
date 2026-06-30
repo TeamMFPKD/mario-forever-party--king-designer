@@ -22,6 +22,12 @@ var spring_bounce_speed_y: float = 0.0
 @export var gravity: float = 650.0
 @export var max_fall_speed: float = 999.0
 @export var jump_speed: float
+@export_range(-360.0, 360.0, 5.0) var rotate_with_up: float = 0.0:
+	set(value):
+		rotate_with_up = value
+		if is_instance_valid(move_object):
+			move_object.rotation_degrees = rotate_with_up
+			move_object.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 @export var edge_detect: bool = false
 
 @export var overlap_turn : bool = true
@@ -72,6 +78,9 @@ var origin_pipe_dir : PipeMoveDirection = PipeMoveDirection.ALIGN
 
 func _ready() -> void:
 	move_object = get_node(path_to_move_object) as CharacterBody2D
+	if rotate_with_up != 0.0:
+		move_object.rotation_degrees = rotate_with_up
+		move_object.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 	origin_scale = move_object.scale
 	player = get_tree().get_first_node_in_group("player") as Node2D
 	var fc = func():
@@ -157,9 +166,10 @@ func on_screen_entered() -> void:
 func turn_detect() -> void:
 	if edge_detect and move_object.is_on_floor():
 		var origin_position = move_object.position
-		move_object.position += Vector2(33.0 * sign(speed_x), 0.0)
+		var right = Vector2(-move_object.up_direction.y, move_object.up_direction.x)
+		move_object.position += right * 33.0 * sign(speed_x)
 		move_object.force_update_transform()
-		var collision = move_object.move_and_collide(Vector2.DOWN * 20.0, true, 0.05)
+		var collision = move_object.move_and_collide(-move_object.up_direction * 20.0, true, 0.05)
 		if collision == null:
 			speed_x *= -1.0
 		move_object.position = origin_position
@@ -203,7 +213,8 @@ func speed_y_process(delta: float) -> void:
 		speed_y = 0.0
 
 func apply_speed() -> void:
-	move_object.velocity = Vector2(speed_x + spring_bounce_speed_x, speed_y + spring_bounce_speed_y)
+	var right = Vector2(-move_object.up_direction.y, move_object.up_direction.x)
+	move_object.velocity = right * (speed_x + spring_bounce_speed_x) - move_object.up_direction * (speed_y + spring_bounce_speed_y)
 
 func move() -> void:
 	move_object.move_and_slide()
