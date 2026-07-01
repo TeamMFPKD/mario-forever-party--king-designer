@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="4_cast"]
 [ext_resource type="Script" uid="uid://dmypufhxlrhde" path="res://script/level/player/cloud_dust_movement.gd" id="4_xnnpi"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xnnpi"]
+size = Vector2(32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_d0"]
 atlas = ExtResource("1_dust")
 region = Rect2(0, 0, 32, 32)
@@ -45,14 +48,18 @@ animations = [{
 collision_layer = 0
 collision_mask = 0
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1852895948]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=902510159]
 position = Vector2(0, -16)
-sprite_frames = SubResource("SpriteFrames_dust")
-autoplay = "default"
+shape = SubResource("RectangleShape2D_xnnpi")
 
 [node name="BasicShapeCast2D" parent="." unique_id=1570449214 instance=ExtResource("4_cast")]
 position = Vector2(0, -16)
 collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1852895948]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_dust")
+autoplay = "default"
 
 [node name="BasicMovement" parent="." unique_id=1817084013 instance=ExtResource("3_bm")]
 script = ExtResource("4_xnnpi")
