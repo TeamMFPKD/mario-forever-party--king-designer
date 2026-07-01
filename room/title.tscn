@@ -180,7 +180,7 @@ script = ExtResource("7_4ndrp")
 
 [node name="UiAnimationFall" type="Node" parent="GameRoomSize/Title" unique_id=1885359486]
 script = ExtResource("7_rowrn")
-start = true
+start_at_begin = true
 
 [node name="AutoVersionMarginContainer" parent="GameRoomSize" unique_id=1579522722 instance=ExtResource("8_c2fru")]
 layout_mode = 1
