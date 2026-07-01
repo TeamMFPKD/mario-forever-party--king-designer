@@ -4,6 +4,8 @@ signal play_sound_shoot
 
 signal play_sound_cloud_platform
 
+signal shot_fired
+
 @export var player_suit: PlayerSuit
 @export var player: Node2D
 @export var player_movement: PlayerMovement
@@ -38,17 +40,20 @@ func _physics_process(_delta: float) -> void:
 					return
 				create_fireball()
 				emit_signal("play_sound_shoot")
+				emit_signal("shot_fired")
 			PlayerSuit.PowerupType.BEETROOT:
 				if get_tree().get_nodes_in_group("beetroot").size() >= 2:
 					return
 				create_beetroot()
 				emit_signal("play_sound_shoot")
+				emit_signal("shot_fired")
 			PlayerSuit.PowerupType.CLOUD:
 				if cloud_platform_cd_timer > 0:
 					return
 				create_cloud_platform()
 				cloud_platform_cd_timer = cloud_platform_cd
 				emit_signal("play_sound_cloud_platform")
+				emit_signal("shot_fired")
 
 
 
