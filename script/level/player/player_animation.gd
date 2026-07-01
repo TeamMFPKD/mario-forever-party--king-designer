@@ -171,7 +171,7 @@ func determine_state() -> String:
 		return "shoot"
 
 	# 蜜蜂飞行
-	if player_movement.is_bee_flying and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE:
+	if player_movement.is_bee_flying and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE and player_movement.move_jump:
 		return "fly"
 
 	# 检查是否在水管中

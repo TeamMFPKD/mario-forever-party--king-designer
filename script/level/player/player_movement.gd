@@ -244,7 +244,7 @@ func _physics_process(_delta):
 	# 蜜蜂飞行
 	if is_bee and is_bee_flying and move_jump and bee_fly_timer < bee_fly_time_max:
 		bee_fly_timer += 1.0
-		speed_y = maxf(-bee_max_rise_speed, speed_y - bee_max_rise_speed / FRAMERATE_ORIGIN)
+		speed_y = maxf(-bee_max_rise_speed, speed_y - bee_max_rise_speed * 0.3)
 
 	if not (is_bee and is_bee_flying and move_jump):
 		var current_gravity = gravity_hold_jump if move_jump else gravity_normal
