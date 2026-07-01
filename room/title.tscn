@@ -172,6 +172,9 @@ theme_override_fonts/font = ExtResource("11_gcvh4")
 theme_override_font_sizes/font_size = 48
 text = "GALAXY UPDATE"
 
+[node name="Timer" type="Timer" parent="GameRoomSize/Title/Title/Title" unique_id=223847635]
+one_shot = true
+
 [node name="UiAnimationScaleIn" type="Node" parent="GameRoomSize/Title/Title/Title" unique_id=1701114951]
 script = ExtResource("7_4ndrp")
 
@@ -1301,7 +1304,8 @@ invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginConta
 show_mode = 0
 
 [connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
-[connection signal="ui_animation_finished" from="GameRoomSize/Title/UiAnimationFall" to="GameRoomSize/Title/Title/Title/UiAnimationScaleIn" method="_on_ui_animation_start"]
+[connection signal="timeout" from="GameRoomSize/Title/Title/Title/Timer" to="GameRoomSize/Title/Title/Title/UiAnimationScaleIn" method="_on_ui_animation_start"]
+[connection signal="ui_animation_finished" from="GameRoomSize/Title/UiAnimationFall" to="GameRoomSize/Title/Title/Title/Timer" method="start"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene"]
