@@ -46,8 +46,8 @@
 [ext_resource type="PackedScene" uid="uid://c17245kmmavwk" path="res://object/level/screen_shake_component.tscn" id="38_p8in0"]
 [ext_resource type="Texture2D" uid="uid://cinpu6acfygkq" path="res://sprite/projectile/player_bee_flying_time_bar.png" id="43_27nu0"]
 [ext_resource type="Texture2D" uid="uid://d05pk6uqo34k" path="res://sprite/projectile/cloudy_pet.png" id="45_t1hra"]
+[ext_resource type="PackedScene" uid="uid://bae7b7ab0sn60" path="res://object/level/projectile/cloud_dust.tscn" id="46_cloud_dust"]
 [ext_resource type="Script" uid="uid://w33pqllaw2va" path="res://script/level/player/cloud_pet.gd" id="46_cloud_pet"]
-[ext_resource type="PackedScene" path="res://object/level/projectile/cloud_dust.tscn" id="46_cloud_dust"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
@@ -157,7 +157,6 @@ player_movement = NodePath("../PlayerMovement")
 player_suit = NodePath("../PlayerSuit")
 player = NodePath("../..")
 player_hurt_and_die = NodePath("../PlayerHurtAndDie")
-player_shoot = NodePath("../PlayerShoot")
 player_lui_effect_scene = ExtResource("11_4mpgj")
 player_small_spritesframe = ExtResource("1_8csaa")
 player_super_spritesframe = ExtResource("8_64xor")
@@ -167,6 +166,7 @@ player_lui_spritesframe = ExtResource("11_xbm7l")
 player_big_spritesframe = ExtResource("11_j733o")
 player_bee_spritesframe = ExtResource("12_j1dgc")
 player_cloud_spritesframe = ExtResource("13_27nu0")
+player_shoot = NodePath("../PlayerShoot")
 
 [node name="PlayerMovement" type="Node" parent="PlayerMediator" unique_id=870885337 node_paths=PackedStringArray("player", "player_suit", "collision_shape", "cast", "crouch_head_area")]
 script = ExtResource("2_d0xdx")
@@ -301,6 +301,7 @@ autoplay = "default"
 [connection signal="play_sound_break_tile" from="PlayerMediator/PlayerMovement" to="Sounds/BreakTileSE" method="play"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Sounds/Jump" method="play"]
 [connection signal="screen_shake" from="PlayerMediator/PlayerMovement" to="ScreenShakeComponent" method="_on_screen_shake"]
+[connection signal="player_hurt" from="PlayerMediator/PlayerInteraction" to="PlayerMediator/PlayerHurtAndDie" method="_on_player_hurt"]
 [connection signal="play_sound_die" from="PlayerMediator/PlayerHurtAndDie" to="Sounds/Die" method="play"]
 [connection signal="play_sound_powerdown" from="PlayerMediator/PlayerHurtAndDie" to="Sounds/PowerDown" method="play"]
 [connection signal="player_suicided" from="PlayerMediator/PlayerHurtAndDie" to="Sounds/Suicide" method="play"]
