@@ -44,6 +44,7 @@
 [ext_resource type="PackedScene" uid="uid://bpywk88hnp1yw" path="res://object/level/dust_effect_creator.tscn" id="32_4thfq"]
 [ext_resource type="AudioStream" uid="uid://b45vxdpteewu5" path="res://sound/level/smw_spin.wav" id="37_tfbrn"]
 [ext_resource type="PackedScene" uid="uid://c17245kmmavwk" path="res://object/level/screen_shake_component.tscn" id="38_p8in0"]
+[ext_resource type="AudioStream" uid="uid://b0qek3ymvvjuk" path="res://sound/level/smg_bee.ogg" id="40_2327l"]
 [ext_resource type="Texture2D" uid="uid://cinpu6acfygkq" path="res://sprite/projectile/player_bee_flying_time_bar.png" id="43_27nu0"]
 [ext_resource type="Texture2D" uid="uid://d05pk6uqo34k" path="res://sprite/projectile/cloudy_pet.png" id="45_t1hra"]
 [ext_resource type="PackedScene" uid="uid://bae7b7ab0sn60" path="res://object/level/projectile/cloud_dust.tscn" id="46_cloud_dust"]
@@ -253,6 +254,10 @@ stream = ExtResource("27_q82rl")
 [node name="SpinSE" parent="Sounds" unique_id=1192977295 instance=ExtResource("6_m6cu2")]
 stream = ExtResource("37_tfbrn")
 
+[node name="BeeSE" parent="Sounds" unique_id=489700892 instance=ExtResource("6_m6cu2")]
+stream = ExtResource("40_2327l")
+script = ExtResource("18_xbm7l")
+
 [node name="ExplodeEffectCreator" type="Node" parent="." unique_id=324919191]
 script = ExtResource("28_4r5tb")
 fireball_explode_scene = ExtResource("29_yslke")
@@ -298,6 +303,7 @@ autoplay = "default"
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="PlayerMediator/PlayerInteraction" method="_on_pipe_exited"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="Sounds/ClearPipeOut" method="play"]
 [connection signal="pipe_exited" from="PlayerMediator/PlayerMovement" to="DustEffectCreator" method="explode"]
+[connection signal="play_sound_bee" from="PlayerMediator/PlayerMovement" to="Sounds/BeeSE" method="_on_player_skid"]
 [connection signal="play_sound_break_tile" from="PlayerMediator/PlayerMovement" to="Sounds/BreakTileSE" method="play"]
 [connection signal="play_sound_jump" from="PlayerMediator/PlayerMovement" to="Sounds/Jump" method="play"]
 [connection signal="screen_shake" from="PlayerMediator/PlayerMovement" to="ScreenShakeComponent" method="_on_screen_shake"]

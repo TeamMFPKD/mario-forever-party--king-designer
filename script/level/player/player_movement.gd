@@ -8,6 +8,7 @@ signal door_entered
 signal door_exited
 signal play_sound_jump
 signal play_sound_break_tile
+signal play_sound_bee
 signal screen_shake
 
 @export var player: CharacterBody2D
@@ -245,6 +246,7 @@ func _physics_process(_delta):
 	if is_bee and is_bee_flying and move_jump and bee_fly_timer < bee_fly_time_max:
 		bee_fly_timer += 1.0
 		speed_y = maxf(-bee_max_rise_speed, speed_y - bee_max_rise_speed * 0.3)
+		emit_signal("play_sound_bee")
 
 	if not (is_bee and is_bee_flying and move_jump):
 		var current_gravity = gravity_hold_jump if move_jump else gravity_normal
