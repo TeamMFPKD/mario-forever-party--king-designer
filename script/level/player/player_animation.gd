@@ -20,6 +20,8 @@ signal play_sound_skid
 @export var player_bee_spritesframe: SpriteFrames
 @export var player_cloud_spritesframe: SpriteFrames
 
+@export var player_shoot: Node
+
 var current_state: String = "idle"
 var last_direction: int = 1  # 1表示向右，-1表示向左
 var walk_animation_frame: int = 0  # 记录walk动画的当前帧
@@ -31,6 +33,16 @@ var hurt_timer: int = 0
 var is_appearing: bool = false
 @export var appear_time: int = 80
 var appear_timer: int = 0
+
+var is_shooting: bool = false
+var _shoot_frame_timer: int = 0
+var _last_shoot_frame: int = -1
+var _shoot_frames_played: int = 0
+
+func _ready() -> void:
+	if player_shoot:
+		if not player_shoot.shot_fired.is_connected(_on_shot_fired):
+			player_shoot.shot_fired.connect(_on_shot_fired)
 
 func _physics_process(_delta: float):
 	update_animation()
@@ -103,6 +115,37 @@ func update_animation():
 		lui_ani.frame = ani.frame
 		lui_ani.flip_h = ani.flip_h
 		player.add_sibling(lui_effect)
+	
+	_update_shoot_progress()
+
+func _on_shot_fired() -> void:
+	is_shooting = true
+	_shoot_frame_timer = 0
+	_last_shoot_frame = -1
+	_shoot_frames_played = 0
+
+func _update_shoot_progress() -> void:
+	if not is_shooting:
+		return
+	if current_state != "shoot":
+		is_shooting = false
+		return
+	
+	var frame_count = ani.sprite_frames.get_frame_count("shoot")
+	
+	if frame_count <= 1:
+		_shoot_frame_timer += 1
+		if _shoot_frame_timer >= 8:
+			is_shooting = false
+		return
+	
+	var current_frame = ani.frame
+	if current_frame != _last_shoot_frame:
+		_shoot_frames_played += 1
+		_last_shoot_frame = current_frame
+	
+	if _shoot_frames_played >= frame_count:
+		is_shooting = false
 
 # 根据角色状态和速度更新动画播放速度
 func update_animation_speed():
@@ -123,6 +166,9 @@ func determine_state() -> String:
 			appear_timer = 0
 			is_appearing = false
 		return "appear"
+
+	if is_shooting and ani.sprite_frames.has_animation("shoot"):
+		return "shoot"
 
 	# 检查是否在水管中
 	if is_in_pipe():
