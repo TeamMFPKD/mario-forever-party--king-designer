@@ -49,6 +49,8 @@
 [ext_resource type="Texture2D" uid="uid://d05pk6uqo34k" path="res://sprite/projectile/cloudy_pet.png" id="45_t1hra"]
 [ext_resource type="PackedScene" uid="uid://bae7b7ab0sn60" path="res://object/level/projectile/cloud_dust.tscn" id="46_cloud_dust"]
 [ext_resource type="Script" uid="uid://w33pqllaw2va" path="res://script/level/player/cloud_pet.gd" id="46_cloud_pet"]
+[ext_resource type="Script" uid="uid://bxp8e4fhly1k" path="res://script/level/player/bee_status_progress_bar.gd" id="47_script"]
+[ext_resource type="Texture2D" uid="uid://cr2n3mccj4qcn" path="res://sprite/projectile/player_bee_flying_time_progress.png" id="48_beebar_progress"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
@@ -275,11 +277,19 @@ position = Vector2(-640, 0)
 [node name="LevelEdgeRight" parent="LevelEdge" unique_id=1828755264 instance=ExtResource("25_741uk")]
 position = Vector2(640, 0)
 
-[node name="BeeStatusProgressBar" type="Node2D" parent="." unique_id=716241921]
-visible = false
+[node name="BeeStatusProgressBar" type="Node2D" parent="." unique_id=716241921 node_paths=PackedStringArray("player_suit", "player_movement")]
 position = Vector2(0, -64)
+script = ExtResource("47_script")
+player_suit = NodePath("../PlayerMediator/PlayerSuit")
+player_movement = NodePath("../PlayerMediator/PlayerMovement")
 
-[node name="Sprite2D" type="Sprite2D" parent="BeeStatusProgressBar" unique_id=1522541797]
+[node name="Progress" type="Sprite2D" parent="BeeStatusProgressBar" unique_id=1152541797]
+position = Vector2(-24, -4)
+texture = ExtResource("48_beebar_progress")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Bar" type="Sprite2D" parent="BeeStatusProgressBar" unique_id=1522541797]
 texture = ExtResource("43_27nu0")
 vframes = 4
 metadata/_edit_lock_ = true
