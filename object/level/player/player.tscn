@@ -47,6 +47,7 @@
 [ext_resource type="Texture2D" uid="uid://cinpu6acfygkq" path="res://sprite/projectile/player_bee_flying_time_bar.png" id="43_27nu0"]
 [ext_resource type="Texture2D" uid="uid://d05pk6uqo34k" path="res://sprite/projectile/cloudy_pet.png" id="45_t1hra"]
 [ext_resource type="Script" uid="uid://w33pqllaw2va" path="res://script/level/player/cloud_pet.gd" id="46_cloud_pet"]
+[ext_resource type="PackedScene" path="res://object/level/projectile/cloud_dust.tscn" id="46_cloud_dust"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
 blend_mode = 1
@@ -203,6 +204,7 @@ player_animation_sprite = NodePath("../../AnimatedSprite2D")
 fireball_scene = ExtResource("8_4q04d")
 beetroot_scene = ExtResource("9_pewnw")
 cloud_platform_scene = ExtResource("24_1f27i")
+cloud_dust_scene = ExtResource("46_cloud_dust")
 cloud_platform_offset = Vector2(0, 48)
 
 [node name="Sounds" type="Node" parent="." unique_id=1593406129]

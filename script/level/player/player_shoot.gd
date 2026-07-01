@@ -16,6 +16,7 @@ signal shot_fired
 @export var offset: Vector2 = Vector2(0, -32.0)
 
 @export var cloud_platform_scene: PackedScene
+@export var cloud_dust_scene: PackedScene
 @export var cloud_platform_offset: Vector2 = Vector2(0, -60.0)
 @export var cloud_platform_cd: int = 252
 
@@ -81,6 +82,19 @@ func create_cloud_platform() -> void:
 	cloud_platform.position = player.position + cloud_platform_offset.rotated(player.rotation)
 	cloud_platform.rotation = player.rotation
 	player.add_sibling(cloud_platform)
+	_spawn_cloud_dusts()
+
+func _spawn_cloud_dusts() -> void:
+	if not cloud_dust_scene:
+		return
+	for dir in [-1, 1]:
+		var dust = cloud_dust_scene.instantiate() as CharacterBody2D
+		dust.position = player.position + Vector2(0.0, 32.0).rotated(player.rotation)
+		var bm = dust.get_node_or_null("BasicMovement") as BasicMovement
+		if bm:
+			bm.speed_x = abs(bm.speed_x) * dir
+			bm.rotate_with_up = player_movement.rotate_with_up
+		player.add_sibling(dust)
 
 func is_crouching() -> bool:
 	return player_movement.crouch

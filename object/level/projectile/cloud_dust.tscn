@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://bae7b7ab0sn60"]
+
+[ext_resource type="Texture2D" uid="uid://df2grak2ljpq3" path="res://sprite/projectile/cloudy_dust.png" id="1_dust"]
+[ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="3_bm"]
+[ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="4_cast"]
+[ext_resource type="Script" uid="uid://dmypufhxlrhde" path="res://script/level/player/cloud_dust_movement.gd" id="4_xnnpi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d0"]
+atlas = ExtResource("1_dust")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1"]
+atlas = ExtResource("1_dust")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2"]
+atlas = ExtResource("1_dust")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3"]
+atlas = ExtResource("1_dust")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dust"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
+
+[node name="CloudDust" type="CharacterBody2D" unique_id=138121756]
+collision_layer = 0
+collision_mask = 0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1852895948]
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_dust")
+autoplay = "default"
+
+[node name="BasicShapeCast2D" parent="." unique_id=1570449214 instance=ExtResource("4_cast")]
+position = Vector2(0, -16)
+collision_mask = 0
+
+[node name="BasicMovement" parent="." unique_id=1817084013 instance=ExtResource("3_bm")]
+script = ExtResource("4_xnnpi")
+initially_face_to_player = false
+speed_x = 480.0
+gravity = 0.0
+max_fall_speed = 0.0
+overlap_turn = false
