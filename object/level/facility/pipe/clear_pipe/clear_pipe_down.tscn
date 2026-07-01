@@ -16,5 +16,6 @@ texture = SubResource("AtlasTexture_dq0wb")
 direction = 5
 
 [node name="ClearPipeEntrance" parent="." index="4" unique_id=1594576635]
-position = Vector2(0, 24)
+position = Vector2(0, 22)
+rotation = 1.5707964
 entrance_direction = 2

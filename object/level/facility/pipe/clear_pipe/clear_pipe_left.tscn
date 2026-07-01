@@ -40,5 +40,5 @@ shape = SubResource("RectangleShape2D_svg6e")
 debug_color = Color(0.5019608, 0.5019608, 0.5019608, 0.41960785)
 
 [node name="ClearPipeEntrance" parent="." unique_id=1594576635 instance=ExtResource("4_r8wvf")]
-position = Vector2(-24, 16)
+position = Vector2(-22, 0)
 entrance_direction = 1
