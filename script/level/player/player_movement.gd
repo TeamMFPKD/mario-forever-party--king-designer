@@ -332,6 +332,8 @@ func enter_pipe(enter_direction: PipeMoveDirection) -> void:
 	pipe_in_cooldown = 5
 	player.set_meta("is_in_pipe", true)
 	speed_x = 0.0
+	speed_y = 0.0
+	is_switching_gravity = false
 	var pipe_move_vec: Vector2
 	match enter_direction:
 		PipeMoveDirection.LEFT:

@@ -200,6 +200,10 @@ func pipe_detect(results: Array[Node2D]) -> void:
 			if player_movement.pipe_in_cooldown > 0:
 				return
 
+			if clear_pipe_entrance.is_overlapped_with(player):
+				if clear_pipe_blocked_counter == 0:
+					continue
+
 			if clear_pipe_entrance.has_meta("overlapping_with_block"):
 				clear_pipe_blocked_counter += 1
 				if clear_pipe_blocked_counter >= 2:
@@ -221,25 +225,42 @@ func pipe_detect(results: Array[Node2D]) -> void:
 			player.position = clear_pipe_entrance.global_position
 			player.force_update_transform()
 			return
+		# 将世界坐标入口方向映射到玩家重力参考系下的方向，再应用对应的进入条件
+		var world_dir := Vector2.ZERO
+		var world_pipe_dir: PlayerMovement.PipeMoveDirection
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
-				if not player.is_on_wall() or not player.is_on_floor() or not Input.is_action_pressed("move_left") \
-				or player.global_position.y > clear_pipe_entrance.global_position.y + 24.0:
-					break
-				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.LEFT)
+				world_dir = Vector2(-1, 0)
+				world_pipe_dir = PlayerMovement.PipeMoveDirection.LEFT
 			ClearPipeEntrance.Direction.RIGHT:
-				if not player.is_on_wall() or not player.is_on_floor() or not Input.is_action_pressed("move_right") \
-				or player.global_position.y > clear_pipe_entrance.global_position.y + 24.0:
-					break
-				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.RIGHT)
+				world_dir = Vector2(1, 0)
+				world_pipe_dir = PlayerMovement.PipeMoveDirection.RIGHT
 			ClearPipeEntrance.Direction.UP:
-				if not player.is_on_ceiling() or not Input.is_action_pressed("move_up"):
-					break
-				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.UP)
+				world_dir = Vector2(0, -1)
+				world_pipe_dir = PlayerMovement.PipeMoveDirection.UP
 			ClearPipeEntrance.Direction.DOWN:
-				if not player.is_on_floor() or not Input.is_action_pressed("move_down"):
-					break
-				player_movement.enter_pipe(PlayerMovement.PipeMoveDirection.DOWN)
+				world_dir = Vector2(0, 1)
+				world_pipe_dir = PlayerMovement.PipeMoveDirection.DOWN
+		var angle := deg_to_rad(player_movement.rotate_with_up)
+		var sa := sin(-angle)
+		var ca := cos(-angle)
+		var player_local_x := world_dir.x * ca - world_dir.y * sa
+		var player_local_y := world_dir.x * sa + world_dir.y * ca
+
+		var can_enter := false
+		if abs(player_local_x) > abs(player_local_y):
+			if player_local_x < 0.0:
+				can_enter = player.is_on_floor() and player_movement.move_left
+			else:
+				can_enter = player.is_on_floor() and player_movement.move_right
+		else:
+			if player_local_y < 0.0:
+				can_enter = player.is_on_ceiling() and player_movement.move_up
+			else:
+				can_enter = player.is_on_floor() and player_movement.move_down
+		if not can_enter:
+			break
+		player_movement.enter_pipe(world_pipe_dir)
 		player.position = clear_pipe_entrance.turning_area.global_position if is_instance_valid(clear_pipe_entrance.turning_area) else clear_pipe_entrance.global_position
 		clear_pipe_entrance.overlapped_ids[player.get_instance_id()] = true
 		break
@@ -254,7 +275,7 @@ func clear_pipe_turning_detect(results: Array[Node2D]) -> void:
 		if area.is_processed(player):
 			continue
 
-		var target = area.global_position + Vector2(0, 8)
+		var target = area.global_position
 		var diff = target - player.global_position
 
 		# 如果需要位置对齐
