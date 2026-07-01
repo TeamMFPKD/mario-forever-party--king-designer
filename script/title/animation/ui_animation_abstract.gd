@@ -4,15 +4,17 @@ class_name UiAnimationAbstract extends Node
 signal ui_animation_finished
 
 @export var path_to_ui: NodePath = ".."
-@export var start: bool
+@export var start_at_begin: bool
 
+var start: bool = false
 var ui: Control
 
 
 func _ready() -> void:
 	ui = get_node(path_to_ui)
-	_ui_init()
-	if start and not TitleAnimationManager.is_played:
+	if not TitleAnimationManager.is_played:
+		_ui_init()
+	if start_at_begin and not TitleAnimationManager.is_played:
 		_on_ui_animation_start()
 
 
