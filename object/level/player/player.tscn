@@ -103,8 +103,8 @@ platform_on_leave = 2
 safe_margin = 0.09
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
-sprite_frames = ExtResource("13_27nu0")
-animation = &"shoot"
+sprite_frames = ExtResource("1_8csaa")
+animation = &"idle"
 offset = Vector2(0, -20)
 
 [node name="InvincibleEffect" type="AnimatedSprite2D" parent="." unique_id=913106306]
@@ -202,6 +202,7 @@ player_animation_sprite = NodePath("../../AnimatedSprite2D")
 fireball_scene = ExtResource("8_4q04d")
 beetroot_scene = ExtResource("9_pewnw")
 cloud_platform_scene = ExtResource("24_1f27i")
+cloud_platform_offset = Vector2(0, 48)
 
 [node name="Sounds" type="Node" parent="." unique_id=1593406129]
 
@@ -267,6 +268,7 @@ position = Vector2(-640, 0)
 position = Vector2(640, 0)
 
 [node name="BeeStatusProgressBar" type="Node2D" parent="." unique_id=716241921]
+visible = false
 position = Vector2(0, -64)
 
 [node name="Sprite2D" type="Sprite2D" parent="BeeStatusProgressBar" unique_id=1522541797]
@@ -274,12 +276,14 @@ texture = ExtResource("43_27nu0")
 vframes = 4
 metadata/_edit_lock_ = true
 
-[node name="CloudPet" type="Node2D" parent="." unique_id=1448460286 node_paths=PackedStringArray("player_sprite", "player_suit")]
+[node name="CloudPet" type="Node2D" parent="." unique_id=1448460286 node_paths=PackedStringArray("player_sprite", "player_suit", "player_shoot")]
 script = ExtResource("46_cloud_pet")
 player_sprite = NodePath("../AnimatedSprite2D")
 player_suit = NodePath("../PlayerMediator/PlayerSuit")
+player_shoot = NodePath("../PlayerMediator/PlayerShoot")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CloudPet" unique_id=1373045601]
+visible = false
 sprite_frames = SubResource("SpriteFrames_6th27")
 autoplay = "default"
 
