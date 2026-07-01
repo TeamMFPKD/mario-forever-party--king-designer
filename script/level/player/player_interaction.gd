@@ -86,6 +86,9 @@ func hurt_and_stompable_detect(results: Array[Node2D]) -> void:
 						player_movement.speed_y *= 1.2
 				else:
 					interaction_with_player_node.on_stomped(player)
+				# 蜜蜂马里奥踩踏恢复飞行时间
+				if player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE:
+					player_movement.bee_fly_timer = 1.0
 		else:
 			# 踩踏失败
 			match interaction_with_player_node.hurt_type:

@@ -24,19 +24,19 @@ signal screen_shake
 @export var crouch_head_area: Area2D
 
 @export var max_speed_x: float = 400.0
-@export var acceleration: float = 600.0
-@export var deceleration_ground: float = 800.0
-@export var deceleration_air: float = 100.0
+@export var acceleration: float = 10.0
+@export var deceleration_ground: float = 13.3
+@export var deceleration_air: float = 1.7
 
 @export var jump_speed: float = 600
 @export var jump_speed_factor: float = 1.1
 @export var max_speed_y: float = 650
 
-@export var gravity_normal = 2400
-@export var gravity_hold_jump = 1250
+@export var gravity_normal = 40
+@export var gravity_hold_jump = 20.8
 
-@export var gravity_normal_lui = 2300
-@export var gravity_hold_jump_lui = 1000
+@export var gravity_normal_lui = 38.3
+@export var gravity_hold_jump_lui = 16.7
 
 @export var horizontal_spring_bounce_speed_x: float = 500.0
 
@@ -110,6 +110,12 @@ var break_tile_cd_floor: bool = false
 var break_tile_cd_ceil: bool = false
 var player_big_disable_jump: bool = false
 
+# 蜜蜂马里奥飞行
+var is_bee_flying: bool = false
+@export var bee_fly_time_max: float = 65.0
+@export var bee_max_rise_speed: float = 216.0
+var bee_fly_timer: float = 0.0
+
 @export var _block_fragment_scene: PackedScene = preload("uid://ct006nlnmf8dg")
 const FRAMERATE_ORIGIN: float = 60.0
 var _fragment_create_position: Array[Vector2] = [
@@ -127,7 +133,7 @@ var _fragment_velocity_data: Array[Vector2] = [
 
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
 	if out_pipe_cooldown > 0:
 		out_pipe_cooldown -= 1
@@ -177,11 +183,11 @@ func _physics_process(delta):
 			var current_acceleration = acceleration
 			if sign(target_speed) != sign(speed_x):
 				current_acceleration *= 2
-			speed_x = move_toward(speed_x, target_speed, current_acceleration * delta)
+			speed_x = move_toward(speed_x, target_speed, current_acceleration)
 	else:
 		# 减速阶段
 		var current_deceleration = deceleration_ground if player.is_on_floor() else deceleration_air
-		speed_x = move_toward(speed_x, 0.0, current_deceleration * delta)
+		speed_x = move_toward(speed_x, 0.0, current_deceleration)
 
 
 	# 垂直运动
@@ -197,8 +203,22 @@ func _physics_process(delta):
 			speed_y = 0.0
 		langtiao_timer = 0
 
+	# 蜜蜂马里奥
+	var is_bee: bool = player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE
+	if not is_bee:
+		is_bee_flying = false
+	if is_bee:
+		if player.is_on_floor():
+			is_bee_flying = false
+			bee_fly_timer = 0.0
+		if bee_fly_timer >= bee_fly_time_max:
+			is_bee_flying = false
+		if not is_bee_flying and not player.is_on_floor() and bee_fly_timer < bee_fly_time_max:
+			if is_action_pressed("move_jump") or (move_jump and speed_y > 0.0):
+				is_bee_flying = true
+
 	if not player_big_disable_jump:
-		if speed_y >= 0.0 and is_action_pressed(jump):
+		if speed_y >= 0.0 and is_action_pressed(jump) and not is_bee_flying:
 			jumpable = true
 		if !player.is_on_floor():
 			langtiao_timer += 1
@@ -220,11 +240,17 @@ func _physics_process(delta):
 	if player.is_on_ceiling():
 		_player_big_break_tile_bump()
 		speed_y = 0.0
-	
-	var current_gravity = gravity_hold_jump if move_jump else gravity_normal
-	if player_suit.power == PlayerSuit.PowerupType.LUI and player_suit.suit == PlayerSuit.SuitType.POWERED:
-		current_gravity = gravity_hold_jump_lui if move_jump else gravity_normal_lui
-	speed_y += current_gravity * delta
+
+	# 蜜蜂飞行
+	if is_bee and is_bee_flying and move_jump and bee_fly_timer < bee_fly_time_max:
+		bee_fly_timer += 1.0
+		speed_y = maxf(-bee_max_rise_speed, speed_y - bee_max_rise_speed / FRAMERATE_ORIGIN)
+
+	if not (is_bee and is_bee_flying and move_jump):
+		var current_gravity = gravity_hold_jump if move_jump else gravity_normal
+		if player_suit.power == PlayerSuit.PowerupType.LUI and player_suit.suit == PlayerSuit.SuitType.POWERED:
+			current_gravity = gravity_hold_jump_lui if move_jump else gravity_normal_lui
+		speed_y += current_gravity
 
 	# 限制垂直速度
 	speed_y = minf(speed_y, max_speed_y)

@@ -170,6 +170,10 @@ func determine_state() -> String:
 	if is_shooting and ani.sprite_frames.has_animation("shoot"):
 		return "shoot"
 
+	# 蜜蜂飞行
+	if player_movement.is_bee_flying and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE:
+		return "fly"
+
 	# 检查是否在水管中
 	if is_in_pipe():
 		return "jump"
