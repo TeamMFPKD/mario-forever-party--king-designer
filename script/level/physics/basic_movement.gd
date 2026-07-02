@@ -322,6 +322,9 @@ func pipe_detect() -> void:
 		if not should_enter:
 			continue
 
+		if entrance.has_meta("overlapping_with_block"):
+			continue
+
 		# 进入管道
 		var enter_dir: PipeMoveDirection
 		match entrance.entrance_direction:
