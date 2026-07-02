@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://ch07v2yfii176"]
 
-[ext_resource type="Script" uid="uid://gbnonfrwc5va" path="res://script/level/facility/pink_coin_manager.gd" id="1_mgu57"]
+[ext_resource type="Script" uid="uid://gbnonfrwc5va" path="res://script/level/facility/pink_coin/pink_coin_manager.gd" id="1_mgu57"]
 [ext_resource type="Texture2D" uid="uid://cn7tcpj3773qo" path="res://sprite/facility/pink_coin_hud.png" id="1_wxv2u"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="3_q47ha"]
 [ext_resource type="PackedScene" uid="uid://cbp4yks2cibli" path="res://object/level/facility/key/key.tscn" id="3_qyv1u"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_sqj45"]
-[ext_resource type="Script" uid="uid://ccnnoo2cqs370" path="res://script/level/facility/pink_coin_get_sound.gd" id="6_oh4gc"]
+[ext_resource type="Script" uid="uid://ccnnoo2cqs370" path="res://script/level/facility/pink_coin/pink_coin_get_sound.gd" id="6_oh4gc"]
 [ext_resource type="AudioStream" uid="uid://b3me0koc08iy5" path="res://sound/level/door_and_key/pink_coin/SE_MW_pinkcoin_00000.wav" id="7_5p3dm"]
 [ext_resource type="AudioStream" uid="uid://cbapbu457lleb" path="res://sound/level/door_and_key/pink_coin/SE_MW_pinkcoin_00001.wav" id="8_l5rvb"]
 [ext_resource type="AudioStream" uid="uid://bp4wd2ybrr8er" path="res://sound/level/door_and_key/pink_coin/SE_MW_pinkcoin_00002.wav" id="9_3cc8i"]

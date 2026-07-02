@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://c3rvw6a2ucku8"]
 
-[ext_resource type="Script" uid="uid://beswresvmlchb" path="res://script/multiplayer/time_manager.gd" id="1_tlac8"]
+[ext_resource type="Script" uid="uid://beswresvmlchb" path="res://script/time_manager.gd" id="1_tlac8"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_65p34"]
-[ext_resource type="Script" uid="uid://d4l4vp1b12ow3" path="res://script/multiplayer/timer_count_down_color_set.gd" id="3_lrh7t"]
-[ext_resource type="Script" uid="uid://bfn7utvw6s6ie" path="res://script/multiplayer/timer_count_down_animation.gd" id="4_la8gt"]
+[ext_resource type="Script" uid="uid://d4l4vp1b12ow3" path="res://script/timer_count_down_color_set.gd" id="3_lrh7t"]
+[ext_resource type="Script" uid="uid://bfn7utvw6s6ie" path="res://script/timer_count_down_animation.gd" id="4_la8gt"]
 
 [sub_resource type="Animation" id="Animation_3b24p"]
 length = 0.001

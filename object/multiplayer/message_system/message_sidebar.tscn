@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_e54xg"]
 [ext_resource type="Script" uid="uid://h1kqnmx4icg8" path="res://script/multiplayer/message_system/message_siderbar_status.gd" id="6_ahly0"]
 [ext_resource type="Script" uid="uid://m2188uiv8pn8" path="res://script/multiplayer/message_system/message_sender.gd" id="7_cmo4g"]
-[ext_resource type="Script" uid="uid://3sv6koapfwdg" path="res://script/ui/str_limit.gd" id="7_x1bxs"]
+[ext_resource type="Script" uid="uid://3sv6koapfwdg" path="res://script/multiplayer/1_game_hall/str_limit.gd" id="7_x1bxs"]
 [ext_resource type="Texture2D" uid="uid://bqpkb13ttaame" path="res://sprite/ui/message.svg" id="8_ahly0"]
 [ext_resource type="Script" uid="uid://c2kchpvblbw3n" path="res://script/multiplayer/message_system/message_cache.gd" id="8_x2bgn"]
 [ext_resource type="Texture2D" uid="uid://db2o8kskdpwli" path="res://sprite/ui/new_msg_hint.svg" id="9_5me3d"]

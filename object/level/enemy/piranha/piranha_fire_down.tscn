@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://xajr12mm2qaf" path="res://object/level/enemy/piranha/piranha_green_down.tscn" id="1_syun4"]
 [ext_resource type="Texture2D" uid="uid://bg80yiox1vics" path="res://sprite/enemy/piranha_plant/piranha_fire.png" id="2_hdjpj"]
-[ext_resource type="Script" uid="uid://bsbk7ccjs30bv" path="res://script/level/enemy/piranha_shoot.gd" id="3_xx7go"]
-[ext_resource type="Script" uid="uid://c2855303v4jng" path="res://script/level/enemy/piranha_fire_animation.gd" id="4_kif5r"]
+[ext_resource type="Script" uid="uid://bsbk7ccjs30bv" path="res://script/level/enemy/piranha_plant/piranha_shoot.gd" id="3_xx7go"]
+[ext_resource type="Script" uid="uid://c2855303v4jng" path="res://script/level/enemy/piranha_plant/piranha_fire_animation.gd" id="4_kif5r"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_s0tac"]
 [ext_resource type="AudioStream" uid="uid://dwse0hneii3ml" path="res://sound/level/fireball.se.wav" id="6_5sdgx"]
 [ext_resource type="Script" uid="uid://cqhc3dfmk7kjt" path="res://script/level/player/sound_skid.gd" id="7_n5k34"]

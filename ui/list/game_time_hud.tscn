@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ctl8t18mclmft"]
 
-[ext_resource type="Script" uid="uid://drp4bg6no30k1" path="res://script/level/game_time_manager.gd" id="1_5vd2n"]
+[ext_resource type="Script" uid="uid://drp4bg6no30k1" path="res://script/game_time_manager.gd" id="1_5vd2n"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="1_pxo1b"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="3_kn437"]
 

@@ -2,11 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_f2jc8"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_tvc7b"]
-[ext_resource type="Script" uid="uid://bkxvwb21gvnao" path="res://script/history/capture_texture_setter.gd" id="3_7cyto"]
+[ext_resource type="Script" uid="uid://bkxvwb21gvnao" path="res://script/history/liked_courses/capture_texture_setter.gd" id="3_7cyto"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="3_7x4md"]
 [ext_resource type="Script" uid="uid://djpf3lsntxfdt" path="res://script/history/history_level_file_path_set_button.gd" id="4_7cyto"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="5_sg5bp"]
-[ext_resource type="Script" uid="uid://d34oa5sqso6ht" path="res://script/history/unlike_button.gd" id="5_tvc7b"]
+[ext_resource type="Script" uid="uid://d34oa5sqso6ht" path="res://script/history/liked_courses/unlike_button.gd" id="5_tvc7b"]
 
 [node name="LikedCourseInfo" type="HBoxContainer" unique_id=1814649642]
 offset_right = 448.0

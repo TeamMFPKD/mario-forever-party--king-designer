@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://djg5k4k7x4fnn" path="res://sprite/enemy/goomba_dead.png" id="1_fxcm7"]
 [ext_resource type="PackedScene" uid="uid://djo6om6obwpwa" path="res://object/level/basic_movement.tscn" id="2_vw0lh"]
 [ext_resource type="PackedScene" uid="uid://dex4a5qcd200a" path="res://object/level/basic_shape_cast_2d.tscn" id="3_vw0lh"]
-[ext_resource type="Script" uid="uid://df0tb5wt7qtbt" path="res://script/level/enemy/goomba_dead_fade_out.gd" id="4_vah71"]
+[ext_resource type="Script" uid="uid://df0tb5wt7qtbt" path="res://script/level/enemy/goomba/goomba_dead_fade_out.gd" id="4_vah71"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gfrlo"]
 size = Vector2(32, 16)

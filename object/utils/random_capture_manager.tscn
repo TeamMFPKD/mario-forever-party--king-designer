@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ba3qikd1k4jig"]
 
-[ext_resource type="Script" uid="uid://cvsp5artqtfwf" path="res://script/multiplayer/random_capture_manager.gd" id="1_fx0he"]
+[ext_resource type="Script" uid="uid://cvsp5artqtfwf" path="res://script/multiplayer/random_capture/random_capture_manager.gd" id="1_fx0he"]
 
 [node name="RandomCaptureManager" type="Node" unique_id=615755946 groups=["random_capture_manager"]]
 script = ExtResource("1_fx0he")

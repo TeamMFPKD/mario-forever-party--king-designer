@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0dbmhxo1wyy3"]
 
-[ext_resource type="Script" uid="uid://b85sxwa4q1qbw" path="res://script/liked_course_preview.gd" id="1_64crn"]
+[ext_resource type="Script" uid="uid://b85sxwa4q1qbw" path="res://script/history/liked_courses/liked_course_preview.gd" id="1_64crn"]
 
 [node name="LikedCoursePreview" type="Control" unique_id=735878133]
 custom_minimum_size = Vector2(200, 150)
