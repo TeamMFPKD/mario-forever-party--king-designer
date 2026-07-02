@@ -260,6 +260,8 @@ func pipe_detect(results: Array[Node2D]) -> void:
 				can_enter = player.is_on_floor() and player_movement.move_down
 		if not can_enter:
 			break
+		if clear_pipe_entrance.has_meta("overlapping_with_block"):
+			break
 		player_movement.enter_pipe(world_pipe_dir)
 		player.position = clear_pipe_entrance.turning_area.global_position if is_instance_valid(clear_pipe_entrance.turning_area) else clear_pipe_entrance.global_position
 		clear_pipe_entrance.overlapped_ids[player.get_instance_id()] = true
