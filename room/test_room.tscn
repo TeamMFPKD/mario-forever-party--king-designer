@@ -1,9 +1,9 @@
 [gd_scene format=4 uid="uid://bijt3ar5fx2ad"]
 
-[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://tileset/tileset_castle.tres" id="1_iaqfx"]
+[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://sprite/tileset_resource/tileset_castle.tres" id="1_iaqfx"]
 [ext_resource type="Script" uid="uid://cjkkhvnw3nf3g" path="res://script/level/tile_map_layer_semi_solid_creator.gd" id="2_vbo8m"]
 [ext_resource type="PackedScene" uid="uid://ckmp8d6mn8kmq" path="res://object/level/player/player.tscn" id="3_whgqe"]
-[ext_resource type="Script" uid="uid://brg4vg3v6dw2k" path="res://script/level/test_room_debug_label.gd" id="4_yujc7"]
+[ext_resource type="Script" uid="uid://brg4vg3v6dw2k" path="res://script/level/test_room/test_room_debug_label.gd" id="4_yujc7"]
 [ext_resource type="PackedScene" uid="uid://cw30nlxu2qg8n" path="res://object/level/enemy/goomba.tscn" id="5_mvtm3"]
 [ext_resource type="PackedScene" uid="uid://bbl8lvnjtvifa" path="res://object/level/facility/platform/platform_horizontal.tscn" id="6_jiyx1"]
 [ext_resource type="PackedScene" uid="uid://b2oexkna3nnjq" path="res://object/level/facility/platform/platform_vertical_up.tscn" id="7_ue3ck"]

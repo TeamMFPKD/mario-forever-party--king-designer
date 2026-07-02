@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ia0dcltb3dx"]
 
-[ext_resource type="Script" uid="uid://cq6fxh4ye1q1u" path="res://script/multiplayer/multiplayer_manager.gd" id="1_gx2pa"]
+[ext_resource type="Script" uid="uid://cq6fxh4ye1q1u" path="res://script/multiplayer/0_core/multiplayer_manager.gd" id="1_gx2pa"]
 [ext_resource type="Texture2D" uid="uid://bh4q2qvjkqdjk" path="res://sprite/player/mario_dead.png" id="2_hd2b7"]
 [ext_resource type="SpriteFrames" uid="uid://bs88b30blplhb" path="res://object/level/player/mario_small.tres" id="2_imvt4"]
 [ext_resource type="SpriteFrames" uid="uid://b85b6tckcoib1" path="res://object/level/player/mario_super.tres" id="3_5abiu"]
@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="7_mdd72"]
 [ext_resource type="AudioStream" uid="uid://cxqyd026s46gt" path="res://sound/SE_NetworkOK.wav" id="8_hd2b7"]
 [ext_resource type="SpriteFrames" uid="uid://de7ppmn5laego" path="res://object/level/player/mario_big.tres" id="8_nm32k"]
-[ext_resource type="Script" uid="uid://3kcdlygevs20" path="res://script/multiplayer/level_receiver_node.gd" id="8_x8ny5"]
+[ext_resource type="Script" uid="uid://3kcdlygevs20" path="res://script/multiplayer/4_level_transfer_room/level_receiver_node.gd" id="8_x8ny5"]
 [ext_resource type="SpriteFrames" uid="uid://ew0hi7le0ntc" path="res://object/level/player/mario_bee.tres" id="9_fia6t"]
 [ext_resource type="AudioStream" uid="uid://cpit5g3mvi7s8" path="res://sound/SE_NetworkLeft.wav" id="9_x8ny5"]
 [ext_resource type="SpriteFrames" uid="uid://ynxlcn01a0xr" path="res://object/level/player/mario_cloud.tres" id="10_n5mj1"]

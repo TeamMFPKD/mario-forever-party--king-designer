@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_jsr1u"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_hyiui"]
-[ext_resource type="Script" uid="uid://d32afrnh4ybhe" path="res://script/multiplayer/level_sender_node.gd" id="3_1lisc"]
+[ext_resource type="Script" uid="uid://d32afrnh4ybhe" path="res://script/multiplayer/4_level_transfer_room/level_sender_node.gd" id="3_1lisc"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_1m5ex"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_4tcn6"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_f0tgy"]
-[ext_resource type="Script" uid="uid://d2gdfdrdu0t5e" path="res://script/multiplayer/lets_play_together.gd" id="5_u7vct"]
+[ext_resource type="Script" uid="uid://d2gdfdrdu0t5e" path="res://script/multiplayer/4_level_transfer_room/lets_play_together.gd" id="5_u7vct"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="6_4tcn6"]
 [ext_resource type="Script" uid="uid://qpl1v6jjqf6e" path="res://script/multiplayer/force_continue_timer.gd" id="7_f0tgy"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="7_xgwxn"]

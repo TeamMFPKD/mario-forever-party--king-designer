@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bp6yibna84ei7"]
 
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="1_vrovx"]
-[ext_resource type="Script" uid="uid://dm2c7lgsrgxw0" path="res://script/ui/ui_line_edit_input_blocker.gd" id="2_wmmsu"]
+[ext_resource type="Script" uid="uid://dm2c7lgsrgxw0" path="res://script/multiplayer/message_system/ui_line_edit_input_blocker.gd" id="2_wmmsu"]
 
 [node name="UiLineEdit" type="LineEdit" unique_id=1796518527]
 offset_right = 100.0
