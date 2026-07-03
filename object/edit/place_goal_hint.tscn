@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://0qb3h74ek4st"]
 
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="1_48u7d"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_ttdes"]
-[ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/hint_if_there_is_no_goal.gd" id="2_orjoo"]
 
 [sub_resource type="Animation" id="Animation_qeskf"]
 length = 0.001
@@ -47,10 +47,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ControlVisibieSet" parent="." unique_id=416177451 instance=ExtResource("1_48u7d")]
+
 [node name="Node2D" type="Node2D" parent="." unique_id=1465148614]
 
 [node name="UiLabel" parent="Node2D" unique_id=1008498644 instance=ExtResource("1_ttdes")]
-visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -61,11 +62,6 @@ offset_bottom = 63.0
 grow_horizontal = 2
 theme_override_colors/font_outline_color = Color(0, 0.011764706, 1, 1)
 text = "警告：你还没有放置终点。"
-
-[node name="HintIfThereIsNoGoal" type="Node" parent="." unique_id=972488055 node_paths=PackedStringArray("ani_player", "hint_label")]
-script = ExtResource("2_orjoo")
-ani_player = NodePath("../AnimationPlayer")
-hint_label = NodePath("../Node2D/UiLabel")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=72868605]
 libraries/ = SubResource("AnimationLibrary_214sl")
