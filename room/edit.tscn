@@ -118,6 +118,7 @@
 [ext_resource type="Texture2D" uid="uid://cbqydv4ek0pae" path="res://sprite/facility/cursed_key.png" id="112_cvttd"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="112_oia1o"]
 [ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="116_hfb1t"]
+[ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/hint_if_there_is_no_goal.gd" id="117_io63s"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -1774,11 +1775,12 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_etydd")
 flip_v = true
 
-[node name="MousePop" type="Node" parent="GameRoomSize/BottomItemGroups" unique_id=75036855 node_paths=PackedStringArray("bottom_bar", "sub_viewport_container", "game_room_size")]
+[node name="MousePop" type="Node" parent="GameRoomSize/BottomItemGroups" unique_id=75036855 node_paths=PackedStringArray("bottom_bar", "sub_viewport_container", "game_room_size", "group_panels")]
 script = ExtResource("85_ifctp")
 bottom_bar = NodePath("..")
 sub_viewport_container = NodePath("../../SubViewportContainer")
 game_room_size = NodePath("../..")
+group_panels = [NodePath("../GroupButtonBonus/Bonus"), NodePath("../GroupButtonPipe/Pipe"), NodePath("../GroupButtonEnemy/Enemy")]
 
 [node name="RightItemGroups" type="VBoxContainer" parent="GameRoomSize" unique_id=1878352469]
 layout_mode = 1
@@ -1821,7 +1823,6 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
-visible = false
 layout_mode = 0
 offset_left = -1040.0
 offset_top = -698.0
@@ -2172,16 +2173,29 @@ offset_bottom = -96.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="PlaceGoalHint" parent="GameRoomSize" unique_id=1948189960 instance=ExtResource("100_g1j3t")]
+[node name="DebugLoad" type="Node" parent="GameRoomSize" unique_id=1259708372]
+script = ExtResource("88_amsrr")
+
+[node name="NoneGoalHint" type="Control" parent="GameRoomSize" unique_id=388481601]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HintIfThereIsNoGoal" type="Node" parent="GameRoomSize/NoneGoalHint" unique_id=1557047089]
+script = ExtResource("117_io63s")
+
+[node name="PlaceGoalHint" parent="GameRoomSize/NoneGoalHint" unique_id=1948189960 instance=ExtResource("100_g1j3t")]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.0
 grow_vertical = 1
-
-[node name="DebugLoad" type="Node" parent="GameRoomSize" unique_id=1259708372]
-script = ExtResource("88_amsrr")
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("89_b0qgs")]
 show_mode = 2
@@ -2196,6 +2210,9 @@ show_mode = 2
 [connection signal="pipe_drawn" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeDrag" method="play"]
 [connection signal="pipe_moved" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeMove" method="play_sound_when_not_playing"]
 [connection signal="load_level" from="GameRoomSize/DebugLoad" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_debug_load"]
+[connection signal="goal_exists" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/ControlVisibieSet" method="_set_invisible"]
+[connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/ControlVisibieSet" method="_set_visible"]
+[connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/AnimationPlayer" method="play" binds= [&"new_animation"]]
 
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonLeft"]
 [editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight"]
@@ -2310,3 +2327,4 @@ show_mode = 2
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTr"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTl"]
 [editable path="GameRoomSize/RightItemGroups/ItemButtonEraser"]
+[editable path="GameRoomSize/NoneGoalHint/PlaceGoalHint"]
