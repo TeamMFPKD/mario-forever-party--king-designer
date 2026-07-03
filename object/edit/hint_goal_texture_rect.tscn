@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bolneqgsi2qva"]
+
+[ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="1_38qtq"]
+[ext_resource type="Script" uid="uid://v1mid2r827w3" path="res://script/edit/goal_placement_hint/hint_goal_animation.gd" id="2_lwksv"]
+
+[node name="HintMarkTextureRect" type="TextureRect" unique_id=1242385408]
+offset_left = -24.0
+offset_top = -24.0
+offset_right = 24.0
+offset_bottom = 24.0
+scale = Vector2(2, 2)
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("1_38qtq")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="HintGoalAnimation" type="Node" parent="." unique_id=805457033]
+script = ExtResource("2_lwksv")
