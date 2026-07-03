@@ -1826,6 +1826,7 @@ texture = SubResource("AtlasTexture_uuoyo")
 texture = SubResource("AtlasTexture_em6xi")
 
 [node name="Mark" type="VBoxContainer" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=1761276002 groups=["item_group"]]
+visible = false
 layout_mode = 0
 offset_left = -1040.0
 offset_top = -698.0
@@ -2177,6 +2178,7 @@ hint_to_mark = NodePath("../../HintMarkTextureRect")
 hint_to_goal = NodePath("../HBoxContainer/ItemButtonGoalGate/HintGoalTextureRect")
 
 [node name="HintMarkTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=504208608 instance=ExtResource("111_cvttd")]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 0.45600003
