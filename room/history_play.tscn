@@ -24,7 +24,7 @@
 [ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="21_dbxtb"]
 [ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="22_yks77"]
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="23_ygfio"]
-[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="24_hbmxt"]
+[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="24_hbmxt"]
 [ext_resource type="Script" uid="uid://cw836hlngytf1" path="res://script/multiplayer/5_play/multiplayer_ani_sprite_manager.gd" id="25_vtonu"]
 [ext_resource type="PackedScene" uid="uid://bb3rl8fd2qhlq" path="res://object/multiplayer/multiplayer_player_shadow.tscn" id="26_m4oc0"]
 [ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture/random_capture.gd" id="27_rul26"]

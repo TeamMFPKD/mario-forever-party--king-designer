@@ -30,7 +30,7 @@
 [ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="20_w23hq"]
 [ext_resource type="Script" uid="uid://devgf5ccfvhwv" path="res://script/utils/input_handler.gd" id="21_oia1o"]
 [ext_resource type="Script" uid="uid://b3eup8yc4xvs5" path="res://script/edit/debug/test_node.gd" id="22_g1j3t"]
-[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/edit/level_camera.gd" id="23_rnw8m"]
+[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="23_rnw8m"]
 [ext_resource type="Script" uid="uid://dk55myiysb0lu" path="res://script/edit/camera_edge.gd" id="24_x0edr"]
 [ext_resource type="PackedScene" uid="uid://ch2w5yfycdtlk" path="res://object/edit/level_size_button.tscn" id="25_2yom2"]
 [ext_resource type="PackedScene" uid="uid://0xmx7bfg3xwu" path="res://object/edit/group_button.tscn" id="26_ve5w1"]
@@ -113,12 +113,14 @@
 [ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="108_oia1o"]
 [ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/clear_pipe/spawner_pipe_right_up.tscn" id="109_oia1o"]
 [ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/clear_pipe/spawner_pipe_left_up.tscn" id="110_oia1o"]
+[ext_resource type="PackedScene" uid="uid://bolneqgsi2qva" path="res://object/edit/hint_goal_texture_rect.tscn" id="111_cvttd"]
 [ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/clear_pipe/spawner_pipe_right_down.tscn" id="111_oia1o"]
 [ext_resource type="Texture2D" uid="uid://s3n0rd6wlh1" path="res://sprite/facility/door_and_key.png" id="111_yebna"]
 [ext_resource type="Texture2D" uid="uid://cbqydv4ek0pae" path="res://sprite/facility/cursed_key.png" id="112_cvttd"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="112_oia1o"]
+[ext_resource type="Script" uid="uid://c1igyhutb8ech" path="res://script/edit/goal_placement_hint/goal_object_hint.gd" id="114_yebna"]
 [ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="116_hfb1t"]
-[ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/hint_if_there_is_no_goal.gd" id="117_io63s"]
+[ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/goal_placement_hint/hint_if_there_is_no_goal.gd" id="117_io63s"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -1780,6 +1782,7 @@ script = ExtResource("85_ifctp")
 bottom_bar = NodePath("..")
 sub_viewport_container = NodePath("../../SubViewportContainer")
 game_room_size = NodePath("../..")
+pop_speed = 600.0
 group_panels = [NodePath("../GroupButtonBonus/Bonus"), NodePath("../GroupButtonPipe/Pipe"), NodePath("../GroupButtonEnemy/Enemy")]
 
 [node name="RightItemGroups" type="VBoxContainer" parent="GameRoomSize" unique_id=1878352469]
@@ -2021,6 +2024,19 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate/ButtonTexture" parent_id_path=PackedInt32Array(692983323, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_3ybyx")
 
+[node name="HintGoalTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate" unique_id=1242385408 instance=ExtResource("111_cvttd")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.47700003
+anchor_top = 0.47700003
+anchor_right = 0.47700003
+anchor_bottom = 0.47700003
+offset_left = -119.090004
+offset_top = -115.09001
+offset_right = -71.09527
+offset_bottom = -68.888336
+rotation = 0.7853982
+
 [node name="ItemButtonSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" unique_id=219218855 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
@@ -2153,6 +2169,23 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTl/ButtonTexture" parent_id_path=PackedInt32Array(1366001594, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_vunie")
 
+[node name="GoalObjectHint" type="Node" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark" unique_id=1049256690 node_paths=PackedStringArray("mark_button", "mark_panel", "hint_to_mark", "hint_to_goal")]
+script = ExtResource("114_yebna")
+mark_button = NodePath("../..")
+mark_panel = NodePath("..")
+hint_to_mark = NodePath("../../HintMarkTextureRect")
+hint_to_goal = NodePath("../HBoxContainer/ItemButtonGoalGate/HintGoalTextureRect")
+
+[node name="HintMarkTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=504208608 instance=ExtResource("111_cvttd")]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.45600003
+anchor_bottom = 0.45600003
+offset_left = -112.0
+offset_top = -23.976006
+offset_right = -64.0
+offset_bottom = 24.023994
+
 [node name="ItemButtonEraser" parent="GameRoomSize/RightItemGroups" unique_id=1818552784 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 item_type = 2
@@ -2184,6 +2217,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+metadata/_edit_lock_ = true
 
 [node name="HintIfThereIsNoGoal" type="Node" parent="GameRoomSize/NoneGoalHint" unique_id=1557047089]
 script = ExtResource("117_io63s")
@@ -2210,7 +2244,9 @@ show_mode = 2
 [connection signal="pipe_drawn" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeDrag" method="play"]
 [connection signal="pipe_moved" from="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" to="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw/PipeMove" method="play_sound_when_not_playing"]
 [connection signal="load_level" from="GameRoomSize/DebugLoad" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_debug_load"]
+[connection signal="goal_exists" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/GoalObjectHint" method="_on_goal_exists"]
 [connection signal="goal_exists" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/ControlVisibieSet" method="_set_invisible"]
+[connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/GoalObjectHint" method="_on_none_goal"]
 [connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/ControlVisibieSet" method="_set_visible"]
 [connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/AnimationPlayer" method="play" binds= [&"new_animation"]]
 
