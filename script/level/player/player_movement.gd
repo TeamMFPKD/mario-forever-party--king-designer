@@ -378,7 +378,8 @@ func pipe_movement() -> void:
 	player.force_update_transform()
 
 func on_horizontal_spring_bounce(spring: Node2D) -> void:
-	var dir = 1.0 if player.global_position.x > spring.global_position.x else -1.0
+	var dir = (1.0 if player.global_position.x > spring.global_position.x else -1.0) \
+			* (1.0 if int(round(target_gravity)) % 360 == 0 else -1.0)
 	speed_x = abs(horizontal_spring_bounce_speed_x) * dir
 
 func door_check() -> bool:
