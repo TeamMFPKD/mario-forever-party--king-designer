@@ -1,11 +1,10 @@
 extends Button
 
-
 var config: ConfigFile
 var current_language: String
 
+
 func _ready():
-	# 连接按钮点击信号
 	pressed.connect(_on_pressed)
 
 	config = GameConfig.config
@@ -19,6 +18,11 @@ func _ready():
 		"ja":
 			TranslationServer.set_locale("ja")
 
+		# Old version patch
+		"zh":
+			TranslationServer.set_locale("zh_CN")
+			current_language = "zh_CN"
+
 	# 更新按钮文字
 	update_button_text()
 
@@ -27,8 +31,10 @@ func _on_pressed():
 	if current_language == "en":
 		current_language = "zh_CN"
 	elif current_language == "zh_CN":
-		#current_language = "ja"
-	#elif current_language == "ja":
+		current_language = "en"
+	# 日本語の l10n 实装完了，但修改ini设置文件只能。
+	#	current_language = "ja"
+	elif current_language == "ja":
 		current_language = "en"
 		
 	TranslationServer.set_locale(current_language)
