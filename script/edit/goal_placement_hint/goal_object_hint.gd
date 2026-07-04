@@ -14,7 +14,7 @@ enum HintState {
 }
 
 var hint_state: HintState = HintState.NONE
-var is_there_a_goal: bool = false
+var is_there_a_goal: bool = true
 
 const GOAL_OBJECT_NAME: String = "goal_gate"
 
