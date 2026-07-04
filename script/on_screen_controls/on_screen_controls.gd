@@ -80,6 +80,10 @@ enum ShowModeType { HIDE, SHOW, DPADS, HISTORY_EDIT }
 					button.visible = false
 				# 拍摄键显示
 				control_photo.visible = true
+@export_group("")
+
+@export_category("Debug")
+@export var test_on_desktop: bool = false
 
 # ──────────────────────────────────────────────
 # 黑名单：已知的假手柄前缀
@@ -103,6 +107,9 @@ var _button_config: Dictionary
 
 func _ready() -> void:
 	should_show = !PlatformUtils.is_desktop_platform()
+	# 测试用，PC 上也显示
+	if test_on_desktop:
+		should_show = true
 	_build_button_config()
 
 func _build_button_config() -> void:
