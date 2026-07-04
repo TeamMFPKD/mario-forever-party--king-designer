@@ -105,6 +105,7 @@
 [ext_resource type="Texture2D" uid="uid://deprr83ndrthi" path="res://sprite/facility/ui_arrow.png" id="90_xucsr"]
 [ext_resource type="Texture2D" uid="uid://cq3m7ws38j4yg" path="res://sprite/ui/LayoutEdit-Edit_EraserBtn_00--Edit_EraserBtn_00-Icon_Eraser_02^u.png" id="91_yjwau"]
 [ext_resource type="Script" uid="uid://0c86f8ap20h5" path="res://script/edit/debug/debug_load.gd" id="92_o5be7"]
+[ext_resource type="Texture2D" uid="uid://b50tcb07h06xp" path="res://sprite/tile/tile_galaxy.png" id="94_6p7ex"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="93_bska7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
@@ -1033,7 +1034,8 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 6: ExtResource("63_l7p3w"),
 7: ExtResource("64_8477o"),
 8: ExtResource("65_qkxmx"),
-9: ExtResource("66_4y2bm")
+9: ExtResource("66_4y2bm"),
+10: ExtResource("94_6p7ex")
 })
 
 [node name="ItemButtonTileSingle" parent="GameRoomSize/BottomItemGroups" unique_id=981797274 instance=ExtResource("49_fygdj")]
@@ -1056,7 +1058,8 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 6: ExtResource("63_l7p3w"),
 7: ExtResource("64_8477o"),
 8: ExtResource("65_qkxmx"),
-9: ExtResource("66_4y2bm")
+9: ExtResource("66_4y2bm"),
+10: ExtResource("94_6p7ex")
 })
 
 [node name="ItemButtonTileSemiSolid" parent="GameRoomSize/BottomItemGroups" unique_id=398093930 instance=ExtResource("49_fygdj")]
@@ -1079,7 +1082,8 @@ theme_to_tile_preview = Dictionary[int, Texture2D]({
 6: ExtResource("63_l7p3w"),
 7: ExtResource("64_8477o"),
 8: ExtResource("65_qkxmx"),
-9: ExtResource("66_4y2bm")
+9: ExtResource("66_4y2bm"),
+10: ExtResource("94_6p7ex")
 })
 
 [node name="GroupButtonPipe" parent="GameRoomSize/BottomItemGroups" unique_id=1147622410 node_paths=PackedStringArray("item_group") instance=ExtResource("34_l2l3l")]
