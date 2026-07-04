@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c4pbvx5d881p0"]
 
 [ext_resource type="Script" uid="uid://ma43elfsxcae" path="res://script/on_screen_controls/button_sprite.gd" id="1_lneud"]
+[ext_resource type="Script" uid="uid://44iwdst4t86h" path="res://script/on_screen_controls/finger_input_holder.gd" id="2_r55mh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lneud"]
 size = Vector2(192, 192)
@@ -14,3 +15,15 @@ scale = Vector2(1.1, 1.1)
 script = ExtResource("1_lneud")
 pressed_color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
+
+[node name="FingerInputHolder" type="Control" parent="." unique_id=1471632347 node_paths=PackedStringArray("touch_button")]
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 3
+anchors_preset = 0
+offset_left = -102.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+pivot_offset_ratio = Vector2(0.5, 0.5)
+script = ExtResource("2_r55mh")
+touch_button = NodePath("..")
