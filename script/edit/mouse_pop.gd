@@ -37,10 +37,10 @@ func _update_target() -> void:
 
 	var scale_y = 1080.0 / bottom_bar.get_parent_control().size.y
 	var mouse_local_y = bottom_bar.get_parent_control().get_local_mouse_position().y * scale_y
-	var bar_top_y = 1080.0 + bottom_bar.offset_top
+	#var bar_top_y = 1080.0 + bottom_bar.offset_top
 	var viewport_bottom = sub_viewport_container.offset_bottom
 
-	if mouse_local_y >= bar_top_y - trigger_distance and are_all_buttons_invisible():
+	if mouse_local_y >= viewport_bottom - trigger_distance and are_all_buttons_invisible():
 		_target_offset = viewport_bottom - 1080.0 - _origin_offset_top + 32.0
 	else:
 		_target_offset = 0.0
