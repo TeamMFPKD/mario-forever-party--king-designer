@@ -1,5 +1,5 @@
 extends Node
-class_name 
+class_name FileDeleteHelper 
 
 var paths: Array[String] = []
 var thread: Thread
