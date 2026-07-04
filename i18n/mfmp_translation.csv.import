@@ -6,10 +6,10 @@ uid="uid://bpi1nf6yrbwhl"
 
 [deps]
 
-files=["res://i18n/mfmp_translation.en.translation", "res://i18n/mfmp_translation.zh.translation", "res://i18n/mfmp_translation.ja.translation"]
+files=["res://i18n/mfmp_translation.en.translation", "res://i18n/mfmp_translation.zh_CN.translation", "res://i18n/mfmp_translation.ja.translation"]
 
 source_file="res://i18n/mfmp_translation.csv"
-dest_files=["res://i18n/mfmp_translation.en.translation", "res://i18n/mfmp_translation.zh.translation", "res://i18n/mfmp_translation.ja.translation"]
+dest_files=["res://i18n/mfmp_translation.en.translation", "res://i18n/mfmp_translation.zh_CN.translation", "res://i18n/mfmp_translation.ja.translation"]
 
 [params]
 

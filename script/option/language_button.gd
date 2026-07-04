@@ -1,10 +1,5 @@
 extends Button
 
-enum LanguageType {
-	EN,
-	ZH,
-	ja,
-}
 
 var config: ConfigFile
 var current_language: String
@@ -19,8 +14,8 @@ func _ready():
 	match current_language:
 		"en":
 			TranslationServer.set_locale("en")
-		"zh":
-			TranslationServer.set_locale("zh")
+		"zh_CN":
+			TranslationServer.set_locale("zh_CN")
 		"ja":
 			TranslationServer.set_locale("ja")
 
@@ -30,8 +25,8 @@ func _ready():
 func _on_pressed():	
 	# 切换语言
 	if current_language == "en":
-		current_language = "zh"
-	elif current_language == "zh":
+		current_language = "zh_CN"
+	elif current_language == "zh_CN":
 		#current_language = "ja"
 	#elif current_language == "ja":
 		current_language = "en"
@@ -49,7 +44,7 @@ func update_button_text():
 	match current_language:
 		"en":
 			text = "English"
-		"zh":
+		"zh_CN":
 			text = "中文"
 		"ja":
 			text = "日本語"
