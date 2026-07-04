@@ -174,7 +174,7 @@ photo={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://i18n/mfmp_translation.en.translation", "res://i18n/mfmp_translation.ja.translation", "res://i18n/mfmp_translation.zh.translation")
+locale/translations=PackedStringArray("res://i18n/mfmp_translation.en.translation", "res://i18n/mfmp_translation.ja.translation", "res://i18n/mfmp_translation.zh_CN.translation")
 
 [layer_names]
 

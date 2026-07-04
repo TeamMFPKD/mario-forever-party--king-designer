@@ -10,7 +10,7 @@ func _ready() -> void:
 	
 func _process(_delta) -> void:
 	language = TranslationServer.get_locale()
-	if language == "zh":
+	if language == "zh_CN":
 		texture_normal = forum_cn_texture
 	else:
 		texture_normal = forum_international_texture
@@ -21,7 +21,7 @@ func _on_button_pressed():
 		"en":
 			# Mario Forever Space
 			OS.shell_open("https://marioforever.space/")
-		"zh":
+		"zh_CN":
 			# Mario Forever 社区
 			OS.shell_open("https://www.marioforever.net/")
 	
