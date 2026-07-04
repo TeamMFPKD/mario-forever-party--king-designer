@@ -8,10 +8,12 @@
 shader = ExtResource("3_mf0sm")
 shader_parameter/i_time = 0.0
 shader_parameter/i_time_total = 1.0
-shader_parameter/total = 0.0
 
 [node name="GlobalTransitionCanvasLayer" type="CanvasLayer" unique_id=853938428]
 layer = 10
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+copy_mode = 2
 
 [node name="GlobalTransition" type="Node" parent="." unique_id=1048549700 node_paths=PackedStringArray("rect_texture")]
 script = ExtResource("1_j48gu")
