@@ -1,4 +1,4 @@
 [gd_resource type="ConvexPolygonShape2D" format=3 uid="uid://1xg435m2mqxi"]
 
 [resource]
-points = PackedVector2Array(-6, -29, 6, -29, 12, -7, 12, 26, 11, 27, 5, 29, -5, 29, -11, 27, -12, 26, -12, -7)
+points = PackedVector2Array(-6, -29, 6, -29, 12, -7, 12, 26, 11, 27, 6, 29, -6, 29, -11, 27, -12, 26, -12, -7)
