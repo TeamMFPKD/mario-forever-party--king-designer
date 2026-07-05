@@ -11,17 +11,21 @@ animation = &"idle"
 speed_scale = 0.0
 offset = Vector2(0, -20)
 
-[node name="UiLabel" parent="." unique_id=1008498644 instance=ExtResource("2_vox5s")]
+[node name="WhyControlHasntGlobalRotation" type="Node2D" parent="." unique_id=1869922808]
+unique_name_in_owner = true
+
+[node name="PlayerNameLabel" parent="WhyControlHasntGlobalRotation" unique_id=1008498644 instance=ExtResource("2_vox5s")]
+unique_name_in_owner = true
 auto_translate_mode = 2
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -88.5
-offset_top = -103.0
-offset_right = 56.5
-offset_bottom = -63.0
+offset_left = -72.5
+offset_top = -70.0
+offset_right = 72.5
+offset_bottom = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/outline_size = 5
