@@ -432,7 +432,9 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			# 旋转
 			ani.rotation = rotation
 			# 名称
-			var label = ani.get_node("UiLabel") as Label
+			var why_control_hasnt_global_rotation = ani.get_node("%WhyControlHasntGlobalRotation") as Node2D
+			why_control_hasnt_global_rotation.global_rotation = 0.0		# 方便阅读
+			var label = ani.get_node("%PlayerNameLabel") as Label
 			for p in players:
 				if p.id == player_id:
 					label.text = p.name
@@ -440,7 +442,7 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			# 死亡
 			if is_dead:
 				ani.sprite_frames = player_dead_spritesframe
-				ani.position.y += 20.0
+				ani.position += Vector2(0.0, 20.0).rotated(rotation)
 				break
 			# 套装
 			match suit:
