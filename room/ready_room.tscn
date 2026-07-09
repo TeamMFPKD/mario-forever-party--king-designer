@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_2mukr"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_isefn"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="3_2mukr"]
-[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_isefn"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="4_isefn"]
 [ext_resource type="Script" uid="uid://5wjt7oab1rfx" path="res://script/multiplayer/2_ready_room/ready_count_down_label.gd" id="5_kov3k"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="5_w62s4"]
 [ext_resource type="Script" uid="uid://dgkl1lc8wyie3" path="res://script/multiplayer/2_ready_room/ready_edit_timer_starter.gd" id="6_enrps"]

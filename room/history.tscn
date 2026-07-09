@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="1_k6bla"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_tkg4x"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_csr0q"]
-[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="2_titf2"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="2_titf2"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_1d24y"]
 [ext_resource type="AudioStream" uid="uid://bdbunuf7yi8yp" path="res://sound/bgm/history/NSMBU - Coin Edit.ogg" id="3_b0n03"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_1x7xw"]
