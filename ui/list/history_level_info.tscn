@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_80agp"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="2_niv0i"]
 [ext_resource type="Script" uid="uid://djpf3lsntxfdt" path="res://script/history/history_level_file_path_set_button.gd" id="4_70hlu"]
-[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_niv0i"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="4_niv0i"]
 
 [node name="HistoryLevelInfo" type="HBoxContainer" unique_id=1814649642]
 offset_right = 1658.0

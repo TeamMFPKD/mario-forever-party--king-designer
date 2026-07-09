@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_74vcm"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="1_vr7n2"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_cdbaa"]
-[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="3_deglc"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="3_deglc"]
 [ext_resource type="Script" uid="uid://cpg24f471475s" path="res://script/history/liked_courses/load_liked_courses.gd" id="4_8xdir"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="4_hfxq8"]
 [ext_resource type="PackedScene" uid="uid://boi7abyxcv36r" path="res://ui/list/liked_course_info.tscn" id="5_7vfps"]

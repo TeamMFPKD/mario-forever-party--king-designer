@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://dfee8buxtsm0y" path="res://sound/bgm/title/ktkm-smm_title_screen_intro.wav" id="3_bj3by"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_xb41j"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
-[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="4_ikv4w"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="4_ikv4w"]
 [ext_resource type="AudioStream" uid="uid://b4uqeh2ldoc3w" path="res://sound/bgm/title/ktkm-smm_title_screen_main.wav" id="4_mavin"]
 [ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/title/user_notice.gd" id="4_ytxtj"]
 [ext_resource type="Script" uid="uid://62e2gryab40o" path="res://script/multiplayer/1_game_hall/game_start.gd" id="5_estsl"]

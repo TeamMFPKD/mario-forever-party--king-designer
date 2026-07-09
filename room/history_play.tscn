@@ -43,7 +43,7 @@
 [ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="33_21r08"]
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="33_o1hfa"]
 [ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/clear_pipe/spawner_pipe_vertical_middle.tscn" id="34_dbxtb"]
-[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/title/jump_to_scene.gd" id="34_me11v"]
+[ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="34_me11v"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="35_fb74i"]
 [ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/clear_pipe/spawner_pipe_right_up.tscn" id="35_yks77"]
 [ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/clear_pipe/spawner_pipe_left_up.tscn" id="36_ygfio"]
