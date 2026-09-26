@@ -107,7 +107,6 @@ folder_colors={
 [global_group]
 
 bgm=""
-multiplayer_manager=""
 timer_singleton=""
 mobile_control=""
 random_capture_manager=""

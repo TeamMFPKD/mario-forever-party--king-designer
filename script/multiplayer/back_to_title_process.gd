@@ -8,7 +8,7 @@ signal client_back_to_title
 var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	if multiplayer_manager.is_in_game:
 		multiplayer_manager.is_in_game = false
 		if multiplayer_manager.multiplayer.is_server():

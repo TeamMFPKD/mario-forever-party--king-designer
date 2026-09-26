@@ -9,15 +9,13 @@ var unfocused_time: float = 0.0  # 失焦持续时间
 var player: Variant
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager")
+	multiplayer_manager = MPManager
 	pressed.connect(_on_button_pressed)
 	last_input_time = Time.get_unix_time_from_system()
 	get_window().focus_entered.connect(_on_window_focus_entered)
 	get_window().focus_exited.connect(_on_window_focus_exited)
 
 func _process(_delta: float) -> void:
-	if not multiplayer_manager:
-		return
 	for p: Variant in multiplayer_manager.players:
 		if p.id == multiplayer_manager.player.id:
 			player = p

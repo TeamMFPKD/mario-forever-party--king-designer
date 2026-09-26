@@ -3,7 +3,7 @@ extends Node
 var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 
 func next_level_die() -> void:
 	# 向host发送 关卡名 - 死亡 数据

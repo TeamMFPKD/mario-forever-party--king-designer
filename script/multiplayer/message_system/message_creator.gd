@@ -6,13 +6,10 @@ extends Node
 var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	multiplayer_manager.messages_updated.connect(_on_messages_updated)
 
 func _on_messages_updated() -> void:
-	if not multiplayer_manager:
-		push_error("MultiplayerManager not found")
-		return
 	if not target_container:
 		push_error("TargetContainer not found")
 		return

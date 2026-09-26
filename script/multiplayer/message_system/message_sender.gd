@@ -6,7 +6,7 @@ extends Node
 var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	send_button.pressed.connect(_on_send_button_pressed)
 	line_edit.text_changed.connect(_on_line_edit_text_changed)
 
@@ -30,9 +30,6 @@ func _on_send_button_pressed() -> void:
 	send_message()
 
 func send_message() -> void:
-	if not multiplayer_manager:
-		push_error("MultiplayerManager not found")
-		return
 	if not line_edit:
 		push_error("LineEdit not found")
 		return

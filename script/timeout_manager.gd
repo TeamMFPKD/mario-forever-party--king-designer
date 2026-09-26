@@ -13,9 +13,8 @@ func _ready() -> void:
 	timer_singleton = get_tree().get_first_node_in_group("timer_singleton") as Timer
 	if timer_singleton:
 		timer_singleton.timeout.connect(_on_time_out)
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
-	if multiplayer_manager:
-		multiplayer_manager.timeout_save.connect(_on_edit_timeout_save)
+	multiplayer_manager = MPManager
+	multiplayer_manager.timeout_save.connect(_on_edit_timeout_save)
 
 func _on_time_out() -> void:
 	emit_signal("timeout_save")

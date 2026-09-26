@@ -4,8 +4,8 @@ const RandomCaptureManagerScript: GDScript = preload("res://script/multiplayer/r
 
 var viewport: Viewport
 var capture_texture: Texture2D
-var random_capture_manager: RandomCaptureManagerScript
 var multiplayer_manager: MultiplayerManager
+var random_capture_manager: RandomCaptureManagerScript
 
 func _ready() -> void:
 	var game_mode_singleton: GameMode = GameModeSingleton
@@ -14,7 +14,7 @@ func _ready() -> void:
 			queue_free()
 		fc.call_deferred()
 		return
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager")
+	multiplayer_manager = MPManager
 	viewport = get_viewport()
 	random_capture_manager = get_tree().get_first_node_in_group("random_capture_manager")
 	

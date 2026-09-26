@@ -11,7 +11,7 @@ var random_capture_manager: RandomCaptureManagerType
 #var players
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	multiplayer_manager.result_updated.connect(_on_result_list_updated)
 	random_capture_manager = RandomCaptureManager
 

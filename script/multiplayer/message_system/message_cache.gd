@@ -4,11 +4,7 @@ var multiplayer_manager: MultiplayerManager
 var _file_path: String = ""
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
-	if not multiplayer_manager:
-		push_error("MessageCache: MultiplayerManager not found")
-		return
-
+	multiplayer_manager = MPManager
 	multiplayer_manager.messages_updated.connect(_on_messages_updated)
 	multiplayer_manager.players_updated.connect(_on_players_updated)
 	if multiplayer_manager.players.size() >= 2:

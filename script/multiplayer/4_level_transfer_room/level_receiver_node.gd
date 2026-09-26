@@ -1,17 +1,14 @@
 extends Node
 
 var multiplayer_manager: MultiplayerManager
-
 var saved_player_id: Array = []
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	multiplayer_manager.players_updated.connect(self._players_updated)
 
 # 将非空关卡数据缓存到本地
 func _players_updated() -> void:
-	if not multiplayer_manager:
-		return
 	if not multiplayer_manager.is_in_game:
 		return
 	for player: Variant in multiplayer_manager.players:

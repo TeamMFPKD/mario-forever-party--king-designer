@@ -3,7 +3,7 @@ extends Node
 var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 
 func lets_play_together() -> void:
 	print("[%s] [lets_play_together.gd] Lets play together" % Time.get_time_string_from_system())
