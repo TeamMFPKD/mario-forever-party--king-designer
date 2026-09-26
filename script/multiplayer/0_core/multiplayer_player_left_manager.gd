@@ -8,7 +8,7 @@ var players: Array = []
 var previous_players: Array = []
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager")
+	multiplayer_manager = MPManager
 	multiplayer_manager.players_updated.connect(_on_players_updated)
 	multiplayer_manager.multiplayer.server_disconnected.connect(_on_server_disconnected)
 
@@ -34,7 +34,7 @@ func _on_players_changed() -> void:
 				var player_left_label: Label = player_left_label_scene.instantiate()
 				player_left_label.text = tr(player_left_label.text).format({"player_name": prev_player.name})
 				list_control_node.add_child(player_left_label)
-				#print("[%s] [玩家离开通知器] 玩家 %s 离开了游戏" % [Time.get_time_string_from_system(), MPManager.format_player(prev_player.name, prev_player.id)])
+				#print("[%s] [玩家离开通知器] 玩家 %s 离开了游戏" % [Time.get_time_string_from_system(), multiplayer_manager.format_player(prev_player.name, prev_player.id)])
 
 func _on_server_disconnected() -> void:
 	var player_left_label: Label = player_left_label_scene.instantiate()

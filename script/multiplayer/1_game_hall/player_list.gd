@@ -8,7 +8,7 @@ var players: Array
 var ready_sound_node: AudioStreamPlayer
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	multiplayer_manager.players_updated.connect(_on_players_updated)
 	ready_sound_node = get_node(path_to_ready_sound_node) as AudioStreamPlayer
 

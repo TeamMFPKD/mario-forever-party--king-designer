@@ -3,7 +3,6 @@ extends Node
 signal lets_play_together
 
 var multiplayer_manager: MultiplayerManager
-
 var local_players_level_data_ready: bool = false
 var all_players_data_ready: bool = false
 var wait_time_initial: float = 1.0
@@ -11,8 +10,7 @@ var wait_time_local: float = 1.0
 var wait_time_sever: float = 1.0
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
-	
+	multiplayer_manager = MPManager
 	# 检查原始 JSON 是否有效
 	var raw_json: String = multiplayer_manager.player.level_data
 	if raw_json.is_empty() or raw_json == "invalid":

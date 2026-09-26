@@ -12,10 +12,10 @@ var player_hurt_and_die: PlayerHurtAndDie
 var no_player_print_limit: int
 
 func _ready() -> void:
+	multiplayer_manager = MPManager
 	var game_mode_manager: GameMode = GameModeSingleton
 	if game_mode_manager.game_mode != GameMode.GameModeType.PLAY:
 		return
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	multiplayer_manager.mp_ani_manager = self
 	var multiplayer_count: int = multiplayer_manager.players.size() - 1
 	for i: int in range(multiplayer_count):

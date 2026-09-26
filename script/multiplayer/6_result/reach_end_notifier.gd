@@ -1,7 +1,6 @@
 extends Node
 
 var multiplayer_manager: MultiplayerManager
-
 var all_players_reach_end: bool = false
 var wait_time: float = 1.5
 
@@ -10,7 +9,7 @@ var wait_time: float = 1.5
 @export var k: float = 5.0
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	multiplayer_manager.reach_end.rpc_id(1, multiplayer_manager.player.id)
 
 	if not multiplayer_manager.multiplayer.is_server():

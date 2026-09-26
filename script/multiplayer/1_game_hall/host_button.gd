@@ -16,7 +16,7 @@ var player_name: String = ""
 
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	game_config = get_tree().get_first_node_in_group("game_config")
 	pressed.connect(multiplayer_manager._on_host_button_pressed)
 
