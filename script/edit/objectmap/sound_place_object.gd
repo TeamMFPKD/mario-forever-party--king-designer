@@ -6,7 +6,7 @@ extends AudioStreamPlayer
 # 所以这里加了一个帧末才连接信号的延迟
 
 func _ready() -> void:
-	var fc = func():
-		var level_control = get_parent() as LevelControl
+	var fc: Callable = func() -> void:
+		var level_control: LevelControl = get_parent()
 		level_control.play_sound_place.connect(play)
 	fc.call_deferred()

@@ -6,12 +6,12 @@ class_name ControlVisibieSet
 
 var control: Control
 
-func _ready():
+func _ready() -> void:
 	control = get_node(path_to_control) as Control
 
-func _set_visible():
+func _set_visible() -> void:
 	control.visible = true
 
-func _set_invisible():
+func _set_invisible() -> void:
 	control.visible = false
 	

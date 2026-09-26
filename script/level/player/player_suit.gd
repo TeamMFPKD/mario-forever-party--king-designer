@@ -59,7 +59,7 @@ func _physics_process(_delta: float) -> void:
 		if starman_timer >= starman_time:
 			is_starman = false
 
-func _on_player_powerdown():
+func _on_player_powerdown() -> void:
 	if suit == SuitType.POWERED:
 		suit = SuitType.SUPER
 	elif suit == SuitType.SUPER:
@@ -67,5 +67,5 @@ func _on_player_powerdown():
 	if suit == SuitType.SMALL:
 		power = PowerupType.FIREBALL
 
-func starman_start():
+func starman_start() -> void:
 	is_starman = true

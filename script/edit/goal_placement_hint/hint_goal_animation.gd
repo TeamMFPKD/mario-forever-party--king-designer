@@ -7,10 +7,10 @@ var speed: float = 100
 var timer: float = 0.0
 
 
-func _ready():
+func _ready() -> void:
 	hint = get_node(path_to_hint)
 
-func _process(delta: float):
+func _process(delta: float) -> void:
 	if not hint:
 		return
 		

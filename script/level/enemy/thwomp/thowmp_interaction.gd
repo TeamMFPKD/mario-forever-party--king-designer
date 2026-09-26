@@ -9,10 +9,10 @@ signal bump_block
 var hit: bool
 
 func _physics_process(_delta: float) -> void:
-	var origin_cast_pos_y = cast.position.y
+	var origin_cast_pos_y: float = cast.position.y
 	cast.position.y += 1.0
 	cast.force_update_transform()
-	var results = ShapeCastQuery.shape_query(thwomp, cast)
+	var results: Array[Node2D] = ShapeCastQuery.shape_query(thwomp, cast)
 	cast.position.y = origin_cast_pos_y
 
 	#print("thwomp interaction results: ", results)
@@ -21,10 +21,10 @@ func _physics_process(_delta: float) -> void:
 		return
 	if hit:
 		return
-	for result in results:
+	for result: Node2D in results:
 		if not result.has_meta("interaction_with_block"):
 			continue
-		var block_hit_node = result.get_meta("interaction_with_block")
+		var block_hit_node: BlockHit = result.get_meta("interaction_with_block")
 		# 不触发隐藏砖
 		if block_hit_node.hidden:
 			continue

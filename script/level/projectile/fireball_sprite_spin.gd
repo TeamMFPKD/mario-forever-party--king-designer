@@ -5,12 +5,12 @@ extends Node
 
 var direction: int = 1
 
-func _ready():
-	var parent = get_parent()
+func _ready() -> void:
+	var parent: Node = get_parent()
 	if parent.has_meta("fireball_direction"):
-		direction = get_parent().get_meta("fireball_direction") as int
+		direction = get_parent().get_meta("fireball_direction")
 	else:
 		push_warning("Fireball direction not set!")
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	ani.rotation += rot_speed * delta * direction

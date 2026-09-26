@@ -9,10 +9,10 @@ func start() -> void:
 	thread.start(_delete_thread)
 
 func _delete_thread() -> void:
-	for path in paths:
+	for path: String in paths:
 		if FileAccess.file_exists(path):
-			var real_path := ProjectSettings.globalize_path(path)
-			var err := OS.move_to_trash(real_path)
+			var real_path: String = ProjectSettings.globalize_path(path)
+			var err: Error = OS.move_to_trash(real_path)
 			if err != OK:
 				push_error("[FileDeleteHelper] 删除失败: %s，错误码: %d" % [real_path, err])
 			else:

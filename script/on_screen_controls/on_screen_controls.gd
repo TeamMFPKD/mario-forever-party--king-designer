@@ -57,11 +57,11 @@ class_name MobileControl
 # ──────────────────────────────────────────────
 enum ShowModeType { HIDE, SHOW, DPADS, HISTORY_EDIT }
 
-@export var show_mode := ShowModeType.SHOW:
+@export var show_mode: ShowModeType = ShowModeType.SHOW:
 	set(value):
 		show_mode = value
-		var control_buttons = control_button.get_node("ControlButton").get_children()
-		for button in control_buttons:
+		var control_buttons: Array[Node] = control_button.get_node("ControlButton").get_children()
+		for button: CanvasItem in control_buttons:
 			button.visible = true
 		match value:
 			ShowModeType.HIDE:
@@ -76,7 +76,7 @@ enum ShowModeType { HIDE, SHOW, DPADS, HISTORY_EDIT }
 			ShowModeType.HISTORY_EDIT:
 				control_d_pad.visible = true
 				control_button.visible = true
-				for button in control_buttons:
+				for button: CanvasItem in control_buttons:
 					button.visible = false
 				# 拍摄键显示
 				control_photo.visible = true
@@ -88,15 +88,15 @@ enum ShowModeType { HIDE, SHOW, DPADS, HISTORY_EDIT }
 # ──────────────────────────────────────────────
 # 黑名单：已知的假手柄前缀
 # ──────────────────────────────────────────────
-const BLACKLIST := ["uinput"]
+const BLACKLIST: Array = ["uinput"]
 
 # ──────────────────────────────────────────────
 # 内部状态
 # ──────────────────────────────────────────────
-var run_lock_on       := false
+var run_lock_on       : bool = false
 var vibration_thread : Thread
 var should_show      : bool
-var counter           := 300  # 约 5 秒（60 fps）
+var counter           : int = 300  # 约 5 秒（60 fps）
 
 # ──────────────────────────────────────────────
 # 按钮配置表
@@ -134,7 +134,8 @@ func _on_button_pressed(key: String) -> void:
 	cfg["sprite"].texture = cfg["held"]
 	vibrate_asynchronously()
 	if cfg["joy"] >= 0:
-		_virtual_key_press(cfg["joy"])
+		var joy_button: JoyButton = cfg["joy"]
+		_virtual_key_press(joy_button)
 
 func _on_button_released(key: String) -> void:
 	var cfg: Dictionary = _button_config.get(key, {})
@@ -142,7 +143,8 @@ func _on_button_released(key: String) -> void:
 		return
 	cfg["sprite"].texture = cfg["normal"]
 	if cfg["joy"] >= 0:
-		_virtual_key_release(cfg["joy"])
+		var joy_button: JoyButton = cfg["joy"]
+		_virtual_key_release(joy_button)
 
 # ──────────────────────────────────────────────
 # run_lock 保留独立逻辑（toggle 行为与其他键不同）
@@ -181,7 +183,7 @@ func on_select_released()-> void: _on_button_released("select")
 # 帧更新：检测真实手柄
 # ──────────────────────────────────────────────
 func _process(_delta: float) -> void:
-	var connected := _detect_real_joysticks()
+	var connected: Array = _detect_real_joysticks()
 	if connected.size() > 0 || !should_show:
 		hide()
 	else:
@@ -206,7 +208,7 @@ func _vibrate() -> void:
 # 虚拟手柄按键注入
 # ──────────────────────────────────────────────
 func _virtual_key(button_index: JoyButton, pressed: bool) -> void:
-	var event := InputEventJoypadButton.new()
+	var event: InputEventJoypadButton = InputEventJoypadButton.new()
 	event.button_index = button_index
 	event.pressed = pressed
 	Input.parse_input_event(event)
@@ -222,9 +224,9 @@ func _detect_real_joysticks() -> Array:
 		return []
 
 	var real_joysticks: Array = []
-	for i in Input.get_connected_joypads():
-		var joy_name := Input.get_joy_name(i)
-		var is_fake  := BLACKLIST.any(func(prefix): return joy_name.begins_with(prefix))
+	for i: int in Input.get_connected_joypads():
+		var joy_name: String = Input.get_joy_name(i)
+		var is_fake: bool = BLACKLIST.any(func(prefix: String) -> bool: return joy_name.begins_with(prefix))
 
 		if is_fake:
 			if counter == 300:

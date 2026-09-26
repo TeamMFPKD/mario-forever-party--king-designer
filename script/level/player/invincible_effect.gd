@@ -1,12 +1,12 @@
 extends AnimatedSprite2D
 
 var _animated_sprite_2d: AnimatedSprite2D
-var _rng = RandomNumberGenerator.new()
+var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
-func _ready():
+func _ready() -> void:
 	_animated_sprite_2d = get_parent().get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 
-func _physics_process(_delta: float):
+func _physics_process(_delta: float) -> void:
 	if _animated_sprite_2d == null:
 		return
 	if not visible:

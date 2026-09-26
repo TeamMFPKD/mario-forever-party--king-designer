@@ -21,15 +21,15 @@ func _ready() -> void:
 	jump_to_scene_history_edit_node = get_tree().get_first_node_in_group("jump_to_scene_history_edit")
 	if jump_to_scene_history_edit_node:
 		print("[%s] [GoalGate] 返回历史记录查看模式" % Time.get_time_string_from_system())
-		var fc = func() -> void:
-			var game_mode = GameModeSingleton
-			game_mode.game_mode = game_mode.GameModeType.HISTORY_EDIT
+		var fc: Callable = func() -> void:
+			var game_mode: GameMode = GameModeSingleton
+			game_mode.game_mode = GameMode.GameModeType.HISTORY_EDIT
 		next_level.connect(fc)
-		next_level.connect(jump_to_scene_history_edit_node.jump_to_scene)
+		next_level.connect(Callable(jump_to_scene_history_edit_node, "jump_to_scene"))
 	
 	play_next_level_node = get_tree().get_first_node_in_group("play_next_level_manager")
 	if play_next_level_node:
-		next_level.connect(play_next_level_node.next_level_pass)
+		next_level.connect(Callable(play_next_level_node, "next_level_pass"))
 	else:
 		push_warning("play_next_level_manager is not assigned in GoalGate")
 

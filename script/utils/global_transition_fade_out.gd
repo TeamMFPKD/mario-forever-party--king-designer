@@ -12,7 +12,7 @@ var _animating: bool = false
 var _time: float = 0.0
 
 func _ready() -> void:
-	for i in range(3):
+	for i: int in range(3):
 		await get_tree().process_frame
 	get_tree().scene_changed.connect(_on_scene_changed)
 	_connect_current_scene()
@@ -24,19 +24,19 @@ func _ready() -> void:
 		push_error("ShaderMaterial node is not assigned!")
 		return
 	texture_material.set_shader_parameter("i_time_total", duration)
-	var placeholder := Image.create(1920, 1080, false, Image.FORMAT_RGBA8)
+	var placeholder: Image = Image.create(1920, 1080, false, Image.FORMAT_RGBA8)
 	placeholder.fill(Color.BLACK)
 	_transition_texture = ImageTexture.create_from_image(placeholder)
 	rect_texture.texture = _transition_texture
 	rect_texture.modulate = Color(1, 1, 1, 0)
 
 func _connect_current_scene() -> void:
-	var scene = get_tree().current_scene
+	var scene: Node = get_tree().current_scene
 	if scene and not scene.tree_exiting.is_connected(_on_scene_exiting):
 		scene.tree_exiting.connect(_on_scene_exiting)
 
 func _on_scene_exiting() -> void:
-	var vp := get_viewport()
+	var vp: Viewport = get_viewport()
 	_captured_image = vp.get_texture().get_image()
 	if _captured_image and _transition_texture:
 		_transition_texture.update(_captured_image)

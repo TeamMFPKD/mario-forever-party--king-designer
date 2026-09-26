@@ -4,7 +4,7 @@ extends Button
 
 var is_waiting_for_input: bool = false
 
-const MAX_SLOTS = 3
+const MAX_SLOTS: int = 3
 
 func _ready() -> void:
     pressed.connect(_on_button_pressed)
@@ -23,11 +23,13 @@ func _input(event: InputEvent) -> void:
         return
 
     # Escape 取消绑定
-    if event is InputEventKey and event.keycode == KEY_ESCAPE:
-        is_waiting_for_input = false
-        _update_button_text()
-        get_viewport().set_input_as_handled()
-        return
+    if event is InputEventKey:
+        var key_event: InputEventKey = event
+        if key_event.keycode == KEY_ESCAPE:
+            is_waiting_for_input = false
+            _update_button_text()
+            get_viewport().set_input_as_handled()
+            return
 
     _append_or_overwrite(event)
     get_viewport().set_input_as_handled()
@@ -37,8 +39,8 @@ func _append_or_overwrite(event: InputEvent) -> void:
     var slots: Array = _load_slots()  # Array of InputEvent? (null = 空槽)
 
     # 找第一个空槽
-    var target_slot := -1
-    for i in range(MAX_SLOTS):
+    var target_slot: int = -1
+    for i: int in range(MAX_SLOTS):
         if slots[i] == null:
             target_slot = i
             break
@@ -58,14 +60,14 @@ func _append_or_overwrite(event: InputEvent) -> void:
 
 func _apply_to_input_map(slots: Array) -> void:
     InputMap.action_erase_events(input_map_name)
-    for ev in slots:
+    for ev: InputEvent in slots:
         if ev != null:
             InputMap.action_add_event(input_map_name, ev)
 
 func _save_slots(slots: Array) -> void:
-    var config = GameConfig.config
-    for i in range(MAX_SLOTS):
-        var key := "%s:%d" % [input_map_name, i]
+    var config: ConfigFile = GameConfig.config
+    for i: int in range(MAX_SLOTS):
+        var key: String = "%s:%d" % [input_map_name, i]
         if slots[i] != null:
             config.set_value("input_event", key, var_to_str(slots[i]))
         else:
@@ -75,27 +77,27 @@ func _save_slots(slots: Array) -> void:
 
 func _load_slots() -> Array:
     var slots: Array = [null, null, null]
-    var config = GameConfig.config
-    for i in range(MAX_SLOTS):
-        var key := "%s:%d" % [input_map_name, i]
+    var config: ConfigFile = GameConfig.config
+    for i: int in range(MAX_SLOTS):
+        var key: String = "%s:%d" % [input_map_name, i]
         var saved_str: String = config.get_value("input_event", key, "")
         if saved_str != "":
-            var ev = str_to_var(saved_str)
+            var ev: Variant = str_to_var(saved_str)
             if ev is InputEvent:
                 slots[i] = ev
     return slots
 
 func _update_button_text() -> void:
-    var slots := _load_slots()
+    var slots: Array = _load_slots()
     var labels: Array = []
 
-    for ev in slots:
+    for ev: InputEvent in slots:
         if ev != null:
             labels.append(_simplify_event_text(ev.as_text()))
 
     if labels.is_empty():
         # 配置里没有，从 InputMap 读默认值
-        for ev in InputMap.action_get_events(input_map_name):
+        for ev: InputEvent in InputMap.action_get_events(input_map_name):
             labels.append(_simplify_event_text(ev.as_text()))
 
     if labels.is_empty():
@@ -104,16 +106,16 @@ func _update_button_text() -> void:
         text = "  /  ".join(labels)
 
 func _simplify_event_text(raw: String) -> String:
-    var simplified := raw.replace(" (Physical)", "").replace(" - Physical", "")
+    var simplified: String = raw.replace(" (Physical)", "").replace(" - Physical", "")
     
     # 手柄摇杆
-    var axis_regex := RegEx.new()
+    var axis_regex: RegEx = RegEx.new()
     axis_regex.compile(r"Joypad Motion on Axis (\d+).*?Value ([-\d.]+)")
-    var axis_match := axis_regex.search(simplified)
+    var axis_match: RegExMatch = axis_regex.search(simplified)
     if axis_match:
-        var axis := axis_match.get_string(1).to_int()
-        var value := axis_match.get_string(2).to_float()
-        var axis_names := {
+        var axis: int = axis_match.get_string(1).to_int()
+        var value: float = axis_match.get_string(2).to_float()
+        var axis_names: Dictionary = {
             0: ["L-Stick ←", "L-Stick →"],
             1: ["L-Stick ↑", "L-Stick ↓"],
             2: ["R-Stick ←", "R-Stick →"],
@@ -126,12 +128,12 @@ func _simplify_event_text(raw: String) -> String:
         return "Axis%d %s" % [axis, "−" if value < 0 else "+"]
     
     # 手柄按钮
-    var btn_regex := RegEx.new()
+    var btn_regex: RegEx = RegEx.new()
     btn_regex.compile(r"Joypad Button (\d+).*")
-    var btn_match := btn_regex.search(simplified)
+    var btn_match: RegExMatch = btn_regex.search(simplified)
     if btn_match:
-        var idx := btn_match.get_string(1).to_int()
-        var btn_names := {
+        var idx: int = btn_match.get_string(1).to_int()
+        var btn_names: Dictionary = {
             0:  "A / ✕",
             1:  "B / ○",
             2:  "X / □",

@@ -1,22 +1,23 @@
 extends Node
 
-const LIKED_COURSE_FOLDER_NAME = "liked courses"
+const LIKED_COURSE_FOLDER_NAME: String = "liked courses"
 
 func set_photo(lvl_file_name: String) -> void:
-	var texture_rect := get_parent() as TextureRect
-	if not texture_rect:
+	var parent: Node = get_parent()
+	if not parent is TextureRect:
 		push_error("CaptureTextureSetter: parent is not a TextureRect")
 		return
+	var texture_rect: TextureRect = parent
 
-	var base_name := lvl_file_name.get_file().get_basename()
-	var photo_path := "user://" + LIKED_COURSE_FOLDER_NAME + "/" + base_name + ".png"
+	var base_name: String = lvl_file_name.get_file().get_basename()
+	var photo_path: String = "user://" + LIKED_COURSE_FOLDER_NAME + "/" + base_name + ".png"
 
-	WorkerThreadPool.add_task(func():
+	WorkerThreadPool.add_task(func() -> void:
 		if not FileAccess.file_exists(photo_path):
 			push_warning("CaptureTextureSetter: screenshot not found: %s" % photo_path)
 			return
 
-		var image := Image.new()
+		var image: Image = Image.new()
 		if image.load(photo_path) != OK:
 			push_error("CaptureTextureSetter: failed to load image: %s" % photo_path)
 			return
@@ -26,6 +27,7 @@ func set_photo(lvl_file_name: String) -> void:
 	)
 
 func _apply_texture(image: Image) -> void:
-	var texture_rect := get_parent() as TextureRect
-	if texture_rect:
+	var parent: Node = get_parent()
+	if parent is TextureRect:
+		var texture_rect: TextureRect = parent
 		texture_rect.texture = ImageTexture.create_from_image(image)

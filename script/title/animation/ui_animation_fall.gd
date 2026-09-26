@@ -5,8 +5,8 @@ var origin_pos: Vector2
 var speed_y: float = 0.0
 var is_bouncing: bool = false
 
-const DAMPING = 0.70         # 衰减系数 (0~1)，越小衰减越快
-const BOUNCE_STRENGTH = 8.0  # 反弹初始速度
+const DAMPING: float = 0.70         # 衰减系数 (0~1)，越小衰减越快
+const BOUNCE_STRENGTH: float = 8.0  # 反弹初始速度
 
 
 func _ui_init() -> void:

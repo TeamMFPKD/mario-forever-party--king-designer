@@ -6,7 +6,7 @@ var last_input_time: float = 0.0
 var total_time: float = 0.0
 var window_focused: bool = true
 var unfocused_time: float = 0.0  # 失焦持续时间
-var player
+var player: Variant
 
 func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager")
@@ -18,7 +18,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not multiplayer_manager:
 		return
-	for p in multiplayer_manager.players:
+	for p: Variant in multiplayer_manager.players:
 		if p.id == multiplayer_manager.player.id:
 			player = p
 	if not player:
@@ -52,7 +52,7 @@ func _on_window_focus_exited() -> void:
 	unfocused_time = 0.0  # 开始计时失焦时间
 
 func _check_timeout_conditions() -> void:
-	var current_time = Time.get_unix_time_from_system()
+	var current_time: float = Time.get_unix_time_from_system()
 	
 	# 检查输入超时
 	if current_time - last_input_time > 20.0:

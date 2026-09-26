@@ -17,7 +17,7 @@ func _ready() -> void:
 	_get_or_create_switch_status()
 
 func _physics_process(_delta: float) -> void:
-	var was_overlapped = overlapped_with_player
+	var was_overlapped: bool = overlapped_with_player
 	overlapped_with_player = get_meta("overlapped_with_player", false)
 	set_meta("overlapped_with_player", false)
 
@@ -25,7 +25,7 @@ func _physics_process(_delta: float) -> void:
 		emit_signal("free_of_overlap")
 
 func _get_or_create_switch_status() -> void:
-	var fc = func():
+	var fc: Callable = func() -> void:
 		switch_status = get_tree().get_first_node_in_group("switch_status")
 		if switch_status:
 			# Update switch status at start
@@ -49,7 +49,7 @@ func _on_switch_switched() -> void:
 
 	animated_sprite.animation = "off" if switch_status.is_on else "on"
 
-	var set_solid_status = switch_status.is_on != is_dotted_at_start
+	var set_solid_status: bool = switch_status.is_on != is_dotted_at_start
 	if set_solid_status:
 		_set_solid()
 	else:

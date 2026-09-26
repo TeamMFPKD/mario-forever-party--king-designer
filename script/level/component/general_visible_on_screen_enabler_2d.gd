@@ -7,10 +7,10 @@ class_name GeneralVisibleOnScreenEnabler2d
 
 var _parent: Node
 
-func _ready():
+func _ready() -> void:
 	_parent = get_node(enable_node_path)
 
-func _on_screen_entered():
+func _on_screen_entered() -> void:
 	if _parent == null:
 		push_error(str(get_path_to(get_tree().root)) + ": GeneralVisibleOnScreenEnabler2d: _parent is null!")
 		return

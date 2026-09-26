@@ -13,5 +13,6 @@ func _ready() -> void:
 	if not shape is RectangleShape2D:
 		push_error("TouchScreenButton's shape is not a RectangleShape2D.")
 		return
-	size = shape.size
+	var rect_shape: RectangleShape2D = shape
+	size = rect_shape.size
 	position = -size / 2

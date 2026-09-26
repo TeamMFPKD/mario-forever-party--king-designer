@@ -14,7 +14,7 @@ func _process(_delta: float) -> void:
 	if ceil(timer.time_left) > 10:
 		return
 
-	var goals = get_tree().get_nodes_in_group("spawner_goal_gate")
+	var goals: Array[Node] = get_tree().get_nodes_in_group("spawner_goal_gate")
 
 	if goals.size() == 0:
 		none_goal_hint.emit()

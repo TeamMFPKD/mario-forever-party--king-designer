@@ -1,13 +1,14 @@
 extends Area2D
 
-var speed_y = -8.0
+var speed_y: float = -8.0
 var obtained: bool = false:
 	set(value):
 		obtained = value
 		if obtained:
 			remove_from_group("pink_coin")
 			collision_mask =0
-			$AnimatedSprite2D.speed_scale = 8.0
+			var anim: AnimatedSprite2D = $AnimatedSprite2D
+			anim.speed_scale = 8.0
 var origin_pos_y: float
 
 var pink_coin_manager: PinkCoinManager
@@ -22,7 +23,7 @@ func _on_body_entered(_body: Node) -> void:
 	if pink_coin_manager:
 		pink_coin_manager.pink_coin_obtained()
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	if not obtained:
 		return
 	global_position.y += speed_y

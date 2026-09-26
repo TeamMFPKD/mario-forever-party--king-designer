@@ -4,8 +4,8 @@ extends Node
 @export var list_control_node: Control
 
 var multiplayer_manager: MultiplayerManager
-var players = []
-var previous_players = []
+var players: Array = []
+var previous_players: Array = []
 
 func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager")
@@ -24,19 +24,19 @@ func _on_players_changed() -> void:
 	# 只关注玩家离开的情况
 	if players.size() < previous_players.size():
 		# 找出离开的玩家
-		for prev_player in previous_players:
-			var found = false
-			for player in players:
+		for prev_player: Dictionary in previous_players:
+			var found: bool = false
+			for player: Dictionary in players:
 				if player.id == prev_player.id:
 					found = true
 					break
 			if not found:
-				var player_left_label = player_left_label_scene.instantiate() as Label
+				var player_left_label: Label = player_left_label_scene.instantiate()
 				player_left_label.text = tr(player_left_label.text).format({"player_name": prev_player.name})
 				list_control_node.add_child(player_left_label)
 				#print("[%s] [玩家离开通知器] 玩家 %s 离开了游戏" % [Time.get_time_string_from_system(), MPManager.format_player(prev_player.name, prev_player.id)])
 
 func _on_server_disconnected() -> void:
-	var player_left_label = player_left_label_scene.instantiate() as Label
+	var player_left_label: Label = player_left_label_scene.instantiate()
 	player_left_label.text = tr("与主机断开。")
 	list_control_node.add_child(player_left_label)

@@ -6,13 +6,13 @@ signal fireball_explode
 @export var fireball: CharacterBody2D
 @export var cast: ShapeCast2D
 
-func _physics_process(_delta: float):
-	var results = ShapeCastQuery.shape_query(fireball, cast)
+func _physics_process(_delta: float) -> void:
+	var results: Array[Node2D] = ShapeCastQuery.shape_query(fireball, cast)
 
-	for result in results:
+	for result: Node2D in results:
 		if !result.has_meta("interaction_with_fireball"):
 			continue
-		var interaction_with_fireball_node = result.get_meta("interaction_with_fireball") as InteractionWithFireball
+		var interaction_with_fireball_node: InteractionWithFireball = result.get_meta("interaction_with_fireball")
 		if !interaction_with_fireball_node.is_hittable:
 			continue
 		interaction_with_fireball_node.on_fireball_hit(fireball.position)

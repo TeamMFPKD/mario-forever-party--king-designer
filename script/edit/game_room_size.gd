@@ -1,7 +1,7 @@
 extends Control
 
 var viewport: Viewport
-var visible_rect
+var visible_rect: Rect2
 
 func _ready() -> void :
 
@@ -20,11 +20,11 @@ func _on_viewport_size_changed() -> void :
     viewport = get_viewport()
 
     #var room_node = get_parent()
-    var viewport_transform = viewport.get_canvas_transform()
+    var viewport_transform: Transform2D = viewport.get_canvas_transform()
 
     visible_rect = viewport.get_visible_rect()
 
-    var window = get_window()
+    var window: Window = get_window()
 
     if visible_rect.size.x < 1920 or visible_rect.size.y < 1080:
         position = Vector2(0, 0)
@@ -39,8 +39,8 @@ func _on_viewport_size_changed() -> void :
         print("[%s] [GameRoomSize] stretch mode" % Time.get_time_string_from_system()+ProjectSettings.get_setting("display/window/strech/mode"))
         return
 
-    var room_position = viewport_transform.affine_inverse() * visible_rect.position
-    var room_size = visible_rect.size / viewport_transform.get_scale()
+    var room_position: Vector2 = viewport_transform.affine_inverse() * visible_rect.position
+    var room_size: Vector2 = visible_rect.size / viewport_transform.get_scale()
 
     position = room_position
     size = room_size

@@ -1,9 +1,9 @@
 extends Node2D
 
 @export var animation_player: AnimationPlayer
-@onready var life_1 = $Life1
-@onready var life_2 = $Life2
-@onready var life_3 = $Life3
+@onready var life_1: Node2D = $Life1
+@onready var life_2: Node2D = $Life2
+@onready var life_3: Node2D = $Life3
 
 var level_manager: LevelManager
 var is_cooldown: bool = false
@@ -19,7 +19,7 @@ var lives: int = 2:
 		lives = value
 
 func _ready() -> void:
-	var fc = func():
+	var fc: Callable = func() -> void:
 		if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY:
 			lives = LifeManager.lives
 			_update_life_display()

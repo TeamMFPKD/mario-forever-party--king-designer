@@ -7,14 +7,14 @@ var ani: AnimatedSprite2D
 var parent: Node2D
 var player: Node2D
 
-func _ready():
+func _ready() -> void:
 	parent = get_node(path_to_parent)
 	ani = get_node(path_to_ani)
-	var fc = func():
+	var fc: Callable = func() -> void:
 		player = get_tree().get_first_node_in_group("player") as Node2D
 	fc.call_deferred()
 	
-func _physics_process(_delta: float):
+func _physics_process(_delta: float) -> void:
 	var look_up: bool = player.position.y > parent.position.y
 	if ani.flip_v:
 		look_up = not look_up

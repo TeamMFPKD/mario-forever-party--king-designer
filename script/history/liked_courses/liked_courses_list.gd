@@ -7,6 +7,6 @@ func _ready() -> void:
     _update_columns()
 
 func _update_columns() -> void:
-    var cols = max(1, ceil(size.x / item_width))
+    var cols: int = max(1, ceil(size.x / item_width))
     if columns != cols:
         columns = cols

@@ -2,14 +2,14 @@ extends BasicMovement
 
 signal beetroot_bounce
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	if get_parent().has_meta("beetroot_direction"):
-		var direction = get_parent().get_meta("beetroot_direction") as int
+		var direction: int = get_parent().get_meta("beetroot_direction")
 		if direction != 1:
 			speed_x = 0 - speed_x
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	if move_object.is_on_wall():
 		emit_signal("beetroot_bounce")

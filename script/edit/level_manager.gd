@@ -58,7 +58,7 @@ var _cached_pipe_line_data: Array = []
 func _ready() -> void:
 	#if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
 	#or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.EDIT:
-	var timer_singleton = get_tree().get_first_node_in_group("timer_singleton") as Timer
+	var timer_singleton: Timer = get_tree().get_first_node_in_group("timer_singleton")
 	time_used = int(timer_singleton.wait_time)
 	emit_signal("load_level")
 	update_theme()
@@ -69,16 +69,16 @@ func get_level_data_json() -> String:
 	tile_data = tile_map.tile_map_data
 
 	# 使用ObjectMapLayer的get_object_data方法获取正确的保存格式
-	var object_data = []
+	var object_data: Array = []
 	if object_map and object_map.has_method("get_object_data"):
 		object_data = object_map.get_object_data()
 	else:
 		push_warning("ObjectMapLayer not found or missing get_object_data method")
 
 	# 获取clear pipe线数据
-	var pipe_line_data = []
+	var pipe_line_data: Array = []
 	if clear_pipe_draw and clear_pipe_draw.has_method("get_pipe_line_data"):
-		pipe_line_data = clear_pipe_draw.get_pipe_line_data()
+		pipe_line_data = clear_pipe_draw.call("get_pipe_line_data")
 		_cached_pipe_line_data = pipe_line_data.duplicate(true)
 	else:
 		pipe_line_data = _cached_pipe_line_data
@@ -96,12 +96,12 @@ func get_level_data_json() -> String:
 		"lives": lives,
 	}
 	
-	var level_data_json = JSON.stringify(level_data_dict, "")
+	var level_data_json: String = JSON.stringify(level_data_dict, "")
 	return level_data_json
 
 func load_level_data_from_json(level_data_json: String) -> void:
-	var json = JSON.new()
-	var error = json.parse(level_data_json)
+	var json: JSON = JSON.new()
+	var error: Error = json.parse(level_data_json)
 	
 	if error != OK:
 		push_error("Failed to parse level data JSON.")
@@ -109,14 +109,19 @@ func load_level_data_from_json(level_data_json: String) -> void:
 
 	level_data_dict = json.data
 
-	version = int(level_data_dict.get("version", 1))
+	var version_value: int = type_convert(level_data_dict.get("version", 1), TYPE_INT)
+	version = version_value
 	time_used = level_data_dict.get("time_used", -1)
 
 	level_size = level_data_dict.get("level_size", [0, 0, 640, 480])
-	level_camera.set_limit_top(level_size[0])
-	level_camera.set_limit_left(level_size[1])
-	level_camera.set_limit_right(level_size[2])
-	level_camera.set_limit_bottom(level_size[3])
+	var level_size_top: int = level_size[0]
+	var level_size_left: int = level_size[1]
+	var level_size_right: int = level_size[2]
+	var level_size_bottom: int = level_size[3]
+	level_camera.set_limit_top(level_size_top)
+	level_camera.set_limit_left(level_size_left)
+	level_camera.set_limit_right(level_size_right)
+	level_camera.set_limit_bottom(level_size_bottom)
 
 	level_theme = level_data_dict.get("level_theme", LevelThemeEnum.OVERWORLD)
 
@@ -124,21 +129,22 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	death_count = level_data_dict.get("death_count", 0)
 
 	lives = level_data_dict.get("lives", 2)
-	if not LifeManager.is_lives_set_when_ready:
-		LifeManager.lives = lives
-		LifeManager.is_lives_set_when_ready = true
+	var lives_set_when_ready: bool = LifeManager.get("is_lives_set_when_ready")
+	if not lives_set_when_ready:
+		LifeManager.set("lives", lives)
+		LifeManager.set("is_lives_set_when_ready", true)
 	
 	# 加载瓦片数据
-	var tile_data_array = level_data_dict.get("tilemap_data", [])
+	var tile_data_array: Array = level_data_dict.get("tilemap_data", [])
 	if tile_data_array is Array and tile_data_array != []:
-		var tile_data_bytes_array = PackedByteArray(tile_data_array)
+		var tile_data_bytes_array: PackedByteArray = PackedByteArray(tile_data_array)
 		tile_map.tile_map_data = tile_data_bytes_array
 		print("[%s] [LevelManager] 瓦片数据加载完成" % Time.get_time_string_from_system())
 	else:
 		push_warning("No tile data found in level file")
 	
 	# 加载对象数据
-	var object_data_array = level_data_dict.get("object_data", [])
+	var object_data_array: Array = level_data_dict.get("object_data", [])
 	if object_data_array is Array:
 		if object_map and object_map.has_method("load_object_data"):
 			object_map.load_object_data(object_data_array)
@@ -149,32 +155,34 @@ func load_level_data_from_json(level_data_json: String) -> void:
 		push_warning("No object data found in level file")
 
 	# 加载clear pipe线数据
-	var pipe_line_data_array = level_data_dict.get("pipe_line_data", [])
+	var pipe_line_data_array: Array = level_data_dict.get("pipe_line_data", [])
 	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
 		_cached_pipe_line_data = pipe_line_data_array.duplicate(true)
 	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
 		_cached_pipe_line_data = pipe_line_data_array.duplicate(true)
 	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
 		if clear_pipe_draw and clear_pipe_draw.has_method("load_from_pipe_line_data"):
-			clear_pipe_draw.load_from_pipe_line_data(pipe_line_data_array)
+			clear_pipe_draw.call("load_from_pipe_line_data", pipe_line_data_array)
 			print("[%s] [LevelManager] 管道线数据加载完成，共加载 " % Time.get_time_string_from_system(), pipe_line_data_array.size(), " 条管道")
 		elif pipe_builder and pipe_builder.has_method("build_pipes_from_lines"):
 			var line_data_list: Array = []
-			for line_entry in pipe_line_data_array:
-				var pts_data = line_entry.get("points", [])
+			for line_entry: Dictionary in pipe_line_data_array:
+				var pts_data: Array = line_entry.get("points", [])
 				var points: Array[Vector2] = []
-				for p_dict in pts_data:
-					points.append(Vector2(p_dict.get("x", 0), p_dict.get("y", 0)))
+				for p_dict: Dictionary in pts_data:
+					var point_x: float = p_dict.get("x", 0)
+					var point_y: float = p_dict.get("y", 0)
+					points.append(Vector2(point_x, point_y))
 				if points.size() >= 2:
 					line_data_list.append({"points": points})
 			if line_data_list.size() > 0:
-				pipe_builder.build_pipes_from_lines(line_data_list)
+				pipe_builder.call("build_pipes_from_lines", line_data_list)
 				print("[%s] [LevelManager] 管道线数据加载完成，共加载 " % Time.get_time_string_from_system(), line_data_list.size(), " 条管道")
 	else:
 		if clear_pipe_draw and clear_pipe_draw.has_method("clear_all_lines"):
-			clear_pipe_draw.clear_all_lines()
+			clear_pipe_draw.call("clear_all_lines")
 		if pipe_builder and pipe_builder.has_method("clear_all_pipes"):
-			pipe_builder.clear_all_pipes()
+			pipe_builder.call("clear_all_pipes")
 
 	print("[%s] [LevelManager] Level loaded." % Time.get_time_string_from_system())
 

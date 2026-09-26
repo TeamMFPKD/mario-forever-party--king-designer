@@ -11,8 +11,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if not timer:
 		return
-	text = str(int(ceil(timer.time_left)))
-	if int(ceil(timer.time_left)) == 0:
+	var time_left: float = ceil(timer.time_left)
+	text = str(int(time_left))
+	if int(time_left) == 0:
 		text = "START!"
 		if not smaller_font:
 			smaller_font = true

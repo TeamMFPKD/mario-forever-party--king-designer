@@ -1,6 +1,6 @@
 extends Button
 
-@export var is_desktop_button = true
+@export var is_desktop_button: bool = true
 
 func _ready() -> void:
 	if PlatformUtils.is_desktop_platform() and not is_desktop_button:

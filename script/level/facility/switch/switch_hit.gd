@@ -6,7 +6,7 @@ var switch_status: SwitchStatus
 func _ready() -> void:
 	add_to_group("switch_hit")
 	super._ready()
-	var fc = func():
+	var fc: Callable = func() -> void:
 		switch_status = get_tree().get_first_node_in_group("switch_status")
 		if not switch_status:
 			switch_status = SwitchStatus.new()
@@ -44,14 +44,15 @@ func _on_switched() -> void:
 	_update_idle_animation()
 
 func _update_idle_animation() -> void:
-	var anim = "default_on" if switch_status.is_on else "default_off"
+	var anim: StringName = &"default_on" if switch_status.is_on else &"default_off"
 	sprite.play(anim)
 	# 同步到场景里其他 switch 的当前帧
-	var others = get_tree().get_nodes_in_group("switch_hit")
-	for other in others:
-		if other == self:
+	var others: Array[Node] = get_tree().get_nodes_in_group("switch_hit")
+	for other: Node in others:
+		var other_hit: SwitchHit = other
+		if other_hit == self:
 			continue
-		if other.sprite.animation == anim and not other.bumping:
-			sprite.frame = other.sprite.frame
-			sprite.frame_progress = other.sprite.frame_progress
+		if other_hit.sprite.animation == anim and not other_hit.bumping:
+			sprite.frame = other_hit.sprite.frame
+			sprite.frame_progress = other_hit.sprite.frame_progress
 			break

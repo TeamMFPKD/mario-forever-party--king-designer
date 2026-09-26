@@ -4,11 +4,11 @@ extends Node
 @export var shake_intensity: float = 4.0
 
 var timer: int = 0
-var rng = RandomNumberGenerator.new()
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var camera: Camera2D
 
 
-func _ready():
+func _ready() -> void:
 	camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
 
 

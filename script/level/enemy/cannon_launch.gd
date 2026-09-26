@@ -13,7 +13,7 @@ var player: Node2D
 var shoot_timer: int
 
 func _ready() -> void:
-	var fc = func():
+	var fc: Callable = func() -> void:
 		player = get_tree().get_first_node_in_group("player") as Node2D
 	fc.call_deferred()
 	cannon = get_node(path_to_cannon)
@@ -36,12 +36,12 @@ func _physics_process(_delta: float) -> void:
 func launch() -> void:
 	var left: bool = player.position.x < cannon.position.x
 
-	var bill = bullet_bill_scene.instantiate() as Node2D
+	var bill: Node2D = bullet_bill_scene.instantiate() as Node2D
 	bill.position = cannon.position
 	bill.set_meta("bill_direction", -1 if left else 1)
 	cannon.add_sibling(bill)
 
-	var explode = explode_scene.instantiate() as Node2D
+	var explode: Node2D = explode_scene.instantiate() as Node2D
 	explode.position = bill.position + Vector2(-16.0 if left else 16.0, 0)
 	cannon.add_sibling(explode)
 

@@ -15,10 +15,10 @@ enum ItemType {
 
 var level_control: LevelControl
 
-func _ready():
+func _ready() -> void:
 	level_control = get_tree().get_first_node_in_group("level_control") as LevelControl
 	pressed.connect(_on_button_pressed)
 
-func _on_button_pressed():
+func _on_button_pressed() -> void:
 	if level_control:
 		level_control._on_item_button_pressed(item_type, self)

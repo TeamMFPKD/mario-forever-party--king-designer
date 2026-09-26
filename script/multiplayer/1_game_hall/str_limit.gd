@@ -3,9 +3,9 @@ extends Node
 @export var path_to_text_node: NodePath = ".."
 @export var text_node: LineEdit
 
-const MAX_TEXT_LENGTH := 80
+const MAX_TEXT_LENGTH: int = 80
 
-func _ready():
+func _ready() -> void:
 	text_node = get_node(path_to_text_node) as LineEdit
 	if not text_node:
 		push_error("text_node is not found")
