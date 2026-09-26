@@ -6,7 +6,7 @@ var print_counter: int = 0
 
 func _ready() -> void:
 	origin_pos_y = position.y
-	var fc = func():
+	var fc: Callable = func() -> void:
 		player = get_tree().get_first_node_in_group("player") as Node2D
 	fc.call_deferred()
 

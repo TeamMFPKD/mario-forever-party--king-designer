@@ -1,10 +1,10 @@
 extends Button
 
-@export var show_mode := MobileControl.ShowModeType.SHOW
+@export var show_mode: MobileControl.ShowModeType = MobileControl.ShowModeType.SHOW
 
 var mobile_control: MobileControl
 
-func _ready():
+func _ready() -> void:
 	# 运行平台检测
 	if not (OS.has_feature("mobile")):
 		hide()
@@ -15,7 +15,7 @@ func _ready():
 	update_button_text()
 	pressed.connect(_on_pressed)
 
-func _on_pressed():
+func _on_pressed() -> void:
 	if mobile_control == null:
 		return
 	
@@ -26,7 +26,7 @@ func _on_pressed():
 	
 	update_button_text()
 
-func update_button_text():
+func update_button_text() -> void:
 	if mobile_control == null:
 		return
 	

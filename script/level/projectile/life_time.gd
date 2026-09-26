@@ -5,14 +5,14 @@ extends Node
 
 var timer: int = 0
 var is_blinking: bool = false
-var parent: Node
+var parent: CanvasItem
 
 
 func _ready() -> void:
-	parent = get_parent()
+	parent = get_parent() as CanvasItem
 
 
-func _physics_process(_delta) -> void:
+func _physics_process(_delta: float) -> void:
 	timer += 1
 	if timer >= life_time - blink_time and not is_blinking:
 		blink()

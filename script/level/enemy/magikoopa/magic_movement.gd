@@ -1,6 +1,6 @@
 extends BasicMovement
 
-func _ready():
+func _ready() -> void:
 	super()
 	gravity = 0.0
 	overlap_turn = false
@@ -8,10 +8,10 @@ func _ready():
 	is_clear_pipe_allowed = false
 	initially_face_to_player = false
 
-	var p = get_tree().get_first_node_in_group("player") as Node2D
+	var p: Node2D = get_tree().get_first_node_in_group("player") as Node2D
 	if p:
-		var dir = (p.global_position - move_object.global_position).normalized()
-		var base_speed = speed_x
+		var dir: Vector2 = (p.global_position - move_object.global_position).normalized()
+		var base_speed: float = speed_x
 		speed_x = dir.x * base_speed
 		speed_y = dir.y * base_speed
 	else:
@@ -19,7 +19,7 @@ func _ready():
 		return
 
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	apply_speed()
 	move()
 	if ani:

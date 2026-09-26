@@ -21,7 +21,7 @@ func _ready() -> void:
 		queue_free()
 
 func _on_body_exited(body: Node2D) -> void:
-	var id = body.get_instance_id()
+	var id: int = body.get_instance_id()
 	processed_ids.erase(id)
 
 func is_processed(body: Node2D) -> bool:

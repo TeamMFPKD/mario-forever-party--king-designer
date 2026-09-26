@@ -11,5 +11,6 @@ func _ready() -> void:
 	level_manager.level_theme_changed.connect(_on_theme_changed)
 
 func _on_theme_changed(theme: LevelManager.LevelThemeEnum) -> void:
-	tile_set_preview.texture.atlas = theme_to_tile_preview[theme]
+	var atlas_texture: AtlasTexture = tile_set_preview.texture
+	atlas_texture.atlas = theme_to_tile_preview[theme]
 	

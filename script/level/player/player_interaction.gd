@@ -16,7 +16,7 @@ var origin_player_pipe_dir: PlayerMovement.PipeMoveDirection
 var clear_pipe_blocked_counter: int = 0
 
 func _physics_process(_delta: float) -> void:
-	var results = ShapeCastQuery.shape_query(player, cast)
+	var results: Array[Node2D] = ShapeCastQuery.shape_query(player, cast)
 	
 	clear_pipe_turning_detect(results)
 
@@ -28,14 +28,14 @@ func _physics_process(_delta: float) -> void:
 
 	# 安全检测：管道内如果没有与墙体（碰撞层第1位）/TileMap重叠，说明已脱离管道
 	if player_movement.is_in_pipe and player_movement.pipe_in_cooldown <= 0:
-		var query = PhysicsShapeQueryParameters2D.new()
+		var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 		query.shape = cast.shape
 		query.transform = cast.global_transform
 		query.collision_mask = 1
 		query.collide_with_bodies = true
 		query.collide_with_areas = false
 		query.exclude = [player.get_rid()]
-		var block_results = player.get_world_2d().direct_space_state.intersect_shape(query)
+		var block_results: Array[Dictionary] = player.get_world_2d().direct_space_state.intersect_shape(query)
 		if block_results.is_empty():
 			player_movement.exit_pipe()
 			player.force_update_transform()
@@ -57,7 +57,7 @@ func _physics_process(_delta: float) -> void:
 	overlap_switch_detect(results)
 
 	# 顶砖检测
-	var origin_pos = cast.position
+	var origin_pos: Vector2 = cast.position
 	# 这里不用到up_direction是因为cast是玩家的子节点
 	cast.position += Vector2(0.0, -1.0)
 	results = ShapeCastQuery.shape_query(player, cast)
@@ -67,15 +67,15 @@ func _physics_process(_delta: float) -> void:
 	triangle_block_detect(results)
 	
 func hurt_and_stompable_detect(results: Array[Node2D]) -> void:
-	for result in results:
+	for result: Node2D in results:
 		if not result.has_meta("interaction_with_player"):
 			continue
-		var interaction_with_player_node = result.get_meta("interaction_with_player") as InteractionWithPlayer
+		var interaction_with_player_node: InteractionWithPlayer = result.get_meta("interaction_with_player")
 		if not interaction_with_player_node.interactable:
 			continue
 		# 在上方踩踏并且可以踩踏
 		interaction_with_player_node.on_overlap(player)
-		var up = player.up_direction
+		var up: Vector2 = player.up_direction
 		if player.global_position.dot(up) > result.global_position.dot(up) - interaction_with_player_node.stomp_offset \
 		and interaction_with_player_node.stompable:
 			# 踩踏成功
@@ -100,10 +100,10 @@ func hurt_and_stompable_detect(results: Array[Node2D]) -> void:
 					pass
 
 func bonus_detect(results: Array[Node2D]) -> void:
-	for result in results:
+	for result: Node2D in results:
 		if not result.has_meta("bonus_set"):
 			continue
-		var bonus_set_node = result.get_meta("bonus_set") as BonusSet
+		var bonus_set_node: BonusSet = result.get_meta("bonus_set")
 		bonus_set_node.on_bonus_get(player)
 		if player_suit.suit == PlayerSuit.SuitType.SMALL and bonus_set_node.bonus_type == BonusSet.BonusType.MUSHROOM:
 			player_suit.suit = PlayerSuit.SuitType.SUPER
@@ -132,10 +132,10 @@ func starman_detect(results: Array[Node2D]) -> bool:
 	starman = is_starman()
 	if not starman:
 		return false
-	for result in results:
+	for result: Node2D in results:
 		if not result.has_meta("interaction_with_star"):
 			continue
-		var interaction_with_star_node = result.get_meta("interaction_with_star") as InteractionWithStar
+		var interaction_with_star_node: InteractionWithStar = result.get_meta("interaction_with_star")
 		if not interaction_with_star_node.is_hittable:
 			continue
 		interaction_with_star_node.on_star_hit(player.position)
@@ -145,7 +145,7 @@ func is_starman() -> bool:
 	return player_suit.is_starman
 
 func overlap_switch_detect(results: Array[Node2D]) -> void:
-	for result in results:
+	for result: Node2D in results:
 		if not result is SwitchBlock:
 			continue
 		result.set_meta("overlapped_with_player", true)
@@ -155,10 +155,10 @@ func block_hit_detect(results: Array[Node2D]) -> void:
 	#	return
 	#print("block_hit_detect reuslts: ", results)
 
-	for result in results:
+	for result: Node2D in results:
 		if not result.has_meta("interaction_with_block"):
 			continue
-		var block_hit_node = result.get_meta("interaction_with_block") as BlockHit
+		var block_hit_node: BlockHit = result.get_meta("interaction_with_block")
 		
 		# 大马里奥特殊处理
 		if player_suit.suit == PlayerSuit.SuitType.POWERED \
@@ -182,7 +182,7 @@ func block_hit_detect(results: Array[Node2D]) -> void:
 		if player_suit.suit == PlayerSuit.SuitType.POWERED \
 		and player_suit.power == PlayerSuit.PowerupType.BIG:
 			player_movement.break_tile_cd_ceil = true
-			for i in range(6):
+			for i: int in range(6):
 				await get_tree().physics_frame
 				if player_movement.speed_y > 0.0:
 					player_movement.break_tile_cd_ceil = false
@@ -192,10 +192,10 @@ func block_hit_detect(results: Array[Node2D]) -> void:
 func pipe_detect(results: Array[Node2D]) -> void:
 	if player_movement.out_pipe_cooldown > 0:
 		return
-	for result in results:
+	for result: Node2D in results:
 		if not is_instance_valid(result) or not result is ClearPipeEntrance:
 			continue
-		var clear_pipe_entrance = result as ClearPipeEntrance
+		var clear_pipe_entrance: ClearPipeEntrance = result
 		if player_movement.is_in_pipe:
 			if player_movement.pipe_in_cooldown > 0:
 				return
@@ -226,7 +226,7 @@ func pipe_detect(results: Array[Node2D]) -> void:
 			player.force_update_transform()
 			return
 		# 将世界坐标入口方向映射到玩家重力参考系下的方向，再应用对应的进入条件
-		var world_dir := Vector2.ZERO
+		var world_dir: Vector2 = Vector2.ZERO
 		var world_pipe_dir: PlayerMovement.PipeMoveDirection
 		match clear_pipe_entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
@@ -241,13 +241,13 @@ func pipe_detect(results: Array[Node2D]) -> void:
 			ClearPipeEntrance.Direction.DOWN:
 				world_dir = Vector2(0, 1)
 				world_pipe_dir = PlayerMovement.PipeMoveDirection.DOWN
-		var angle := deg_to_rad(player_movement.rotate_with_up)
-		var sa := sin(-angle)
-		var ca := cos(-angle)
-		var player_local_x := world_dir.x * ca - world_dir.y * sa
-		var player_local_y := world_dir.x * sa + world_dir.y * ca
+		var angle: float = deg_to_rad(player_movement.rotate_with_up)
+		var sa: float = sin(-angle)
+		var ca: float = cos(-angle)
+		var player_local_x: float = world_dir.x * ca - world_dir.y * sa
+		var player_local_y: float = world_dir.x * sa + world_dir.y * ca
 
-		var can_enter := false
+		var can_enter: bool = false
 		if abs(player_local_x) > abs(player_local_y):
 			if player_local_x < 0.0:
 				can_enter = player.is_on_floor() and player_movement.move_left
@@ -268,17 +268,17 @@ func pipe_detect(results: Array[Node2D]) -> void:
 		break
 
 func clear_pipe_turning_detect(results: Array[Node2D]) -> void:
-	for result in results:
+	for result: Node2D in results:
 		if not is_instance_valid(result) or not result is ClearPipeTurningArea2D:
 			continue
-		var area = result as ClearPipeTurningArea2D
+		var area: ClearPipeTurningArea2D = result
 
 		# 已经处理过的区域不再重复转向
 		if area.is_processed(player):
 			continue
 
-		var target = area.global_position
-		var diff = target - player.global_position
+		var target: Vector2 = area.global_position
+		var diff: Vector2 = target - player.global_position
 
 		# 如果需要位置对齐
 		if abs(diff.x) > 0.5 or abs(diff.y) > 0.5:
@@ -338,10 +338,11 @@ func _on_pipe_exited() -> void:
 	clear_pipe_blocked_counter = 0
 
 func clear_turning_processed_for_reversal() -> void:
-	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
-	for turning in turnings:
+	var turnings: Array[Node] = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning: Node in turnings:
 		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
-			turning.clear_processed(player)
+			var turning_area: ClearPipeTurningArea2D = turning
+			turning_area.clear_processed(player)
 
 func door_detect(results: Array[Node2D]) -> void:
 	if not player_movement:
@@ -352,14 +353,14 @@ func door_detect(results: Array[Node2D]) -> void:
 		return
 	if not Input.is_action_pressed("move_up"):
 		return
-	if int(round(player_movement.rotate_with_up)) % 360 != 0:
+	if roundi(player_movement.rotate_with_up) % 360 != 0:
 		return
 	if player_movement.is_in_door:
 		return
-	for result in results:
+	for result: Node2D in results:
 		if not result.has_meta("door_component"):
 			continue
-		var door = result.get_meta("door_component")
+		var door: DoorComponent = result.get_meta("door_component")
 		if door is not DoorComponent:
 			continue
 		if player.global_position.y > door.global_position.y + 8.0 \
@@ -371,8 +372,8 @@ func door_detect(results: Array[Node2D]) -> void:
 
 func triangle_block_detect(results: Array[Node2D]) -> void:
 	player_movement.is_on_triangle = false
-	for result in results:
-		var triangle_block_settings = result.get_node_or_null("%TriangleBlockSettings")
+	for result: Node2D in results:
+		var triangle_block_settings: Node = result.get_node_or_null("%TriangleBlockSettings")
 		if not triangle_block_settings:
 			continue
 		

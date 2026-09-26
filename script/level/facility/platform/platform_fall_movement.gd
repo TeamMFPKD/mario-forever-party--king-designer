@@ -19,8 +19,9 @@ func _physics_process(delta: float) -> void:
 		return
 	speed_y += gravity * delta
 	if move_object is CharacterBody2D:
-		move_object.velocity = Vector2(0.0, speed_y)
-		move_object.move_and_slide()
+		var body: CharacterBody2D = move_object
+		body.velocity = Vector2(0.0, speed_y)
+		body.move_and_slide()
 	else:
 		move_object.position.y += speed_y * delta
 

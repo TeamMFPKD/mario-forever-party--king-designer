@@ -29,7 +29,7 @@ func _ready() -> void:
 	# 在编辑模式下显示ID
 	_update_id_label_visibility()
 
-func _create_id_label():
+func _create_id_label() -> void:
 	id_label = Label.new()
 	id_label.name = "DoorIdLabel"
 	id_label.text = str(id)
@@ -39,15 +39,16 @@ func _create_id_label():
 	id_label.add_to_group("door_id_label")
 	add_child(id_label)
 
-func set_door_id(new_id: int):
+func set_door_id(new_id: int) -> void:
 	id = new_id
 	if id_label:
 		id_label.text = str(new_id)
 
-func _update_id_label_visibility():
+func _update_id_label_visibility() -> void:
 	if id_label:
 		# 只在编辑模式下显示ID
-		id_label.visible = (GameModeSingleton.game_mode == GameModeSingleton.GameModeType.EDIT)
+		var gm: GameMode = GameModeSingleton
+		id_label.visible = (gm.game_mode == GameMode.GameModeType.EDIT)
 
 func play_animation_enter() -> void:
 	ani.play("enter")
@@ -70,25 +71,28 @@ func try_enter() -> bool:
 			return true
 		# 锁门未解锁
 		if not unlocked:
-			var keys = get_tree().get_nodes_in_group("key_following")
+			var keys: Array[Node] = get_tree().get_nodes_in_group("key_following")
 			# 没有钥匙
 			if keys.is_empty():
 				emit_signal("play_sound_locked")
 				return false
 			# 有钥匙
 			var max_key_id: int = 0
-			for key in keys:
-				if max_key_id < key.key_id:
-					max_key_id = key.key_id
-			for key in keys:
-				if key.key_id == max_key_id:
-					key.get_parent().queue_free()
+			for key: Node in keys:
+				var key_movement: KeyMovement = key
+				if max_key_id < key_movement.key_id:
+					max_key_id = key_movement.key_id
+			for key: Node in keys:
+				var key_movement: KeyMovement = key
+				if key_movement.key_id == max_key_id:
+					key_movement.get_parent().queue_free()
 					# 对面的门也解锁
-					var doors = get_tree().get_nodes_in_group("door")
-					for d in doors:
-						if d.id == id:
-							d.unlocked = true
-							d.remove_from_group("door_locked")
+					var doors: Array[Node] = get_tree().get_nodes_in_group("door")
+					for d: Node in doors:
+						var door: DoorComponent = d
+						if door.id == id:
+							door.unlocked = true
+							door.remove_from_group("door_locked")
 					remove_from_group("door_locked")
 					emit_signal("play_sound_unlock")
 					return true

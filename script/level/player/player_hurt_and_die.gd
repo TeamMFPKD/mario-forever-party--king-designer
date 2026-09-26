@@ -6,16 +6,16 @@ signal play_sound_powerdown
 signal play_sound_die
 signal player_suicided
 
-var is_hurting = false
-var is_dead = false
+var is_hurting: bool = false
+var is_dead: bool = false
 
-@export var invincible_time = 100
-var invincible_timer = 0
+@export var invincible_time: int = 100
+var invincible_timer: int = 0
 
 @export var player_dead_scene: PackedScene = preload("uid://034w35iv6qfh")
 
 @export var player_suit: PlayerSuit
-@export var player: Node2D
+@export var player: CharacterBody2D
 
 var level_camera: Camera2D
 
@@ -79,7 +79,7 @@ func _on_player_die() -> void:
 		return
 	is_dead = true
 
-	var dead = player_dead_scene.instantiate() as Node2D
+	var dead: Node2D = player_dead_scene.instantiate()
 	dead.position = player.position
 	dead.rotation = atan2(player.up_direction.x, -player.up_direction.y)
 	player.add_sibling(dead)

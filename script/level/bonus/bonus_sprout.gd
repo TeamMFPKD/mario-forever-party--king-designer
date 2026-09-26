@@ -4,7 +4,7 @@ class_name BonusSprout
 
 @export var path_to_bonus: NodePath = ".."
 @export var path_to_collision_shape: NodePath = "../CollisionShape2D"
-@export var sprout_speed = 50.0
+@export var sprout_speed: float = 50.0
 @export var path_to_basic_movement: NodePath = "../BasicMovement"
 
 var bonus: CharacterBody2D
@@ -109,7 +109,7 @@ func is_overlap() -> bool:
 	return ShapeCastQuery.shape_query(bonus, in_wall_cast).size() > 0
 
 func collision_recover() -> void:
-	for i in range(5):
+	for i: int in range(5):
 		#print("bonus waiting: %s frame" % i)
 		await get_tree().physics_frame
 	bonus.collision_layer = origin_bonus_collision_layer

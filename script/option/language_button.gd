@@ -4,7 +4,7 @@ var config: ConfigFile
 var current_language: String
 
 
-func _ready():
+func _ready() -> void:
 	pressed.connect(_on_pressed)
 
 	config = GameConfig.config
@@ -26,7 +26,7 @@ func _ready():
 	# 更新按钮文字
 	update_button_text()
 
-func _on_pressed():	
+func _on_pressed() -> void:	
 	# 切换语言
 	if current_language == "en":
 		current_language = "zh_CN"
@@ -45,7 +45,7 @@ func _on_pressed():
 
 	GameConfig.save()
 
-func update_button_text():
+func update_button_text() -> void:
 	#var current_language = TranslationServer.get_locale()
 	match current_language:
 		"en":

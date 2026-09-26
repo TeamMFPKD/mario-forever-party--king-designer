@@ -15,8 +15,9 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MF: MP"
-config/version="v20260704_2231"
+config/version="v20260709_2153"
 run/main_scene="uid://dcqf1c3m14b1f"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/bg_color=Color(1, 1, 1, 1)
 boot_splash/stretch_mode=0
@@ -46,6 +47,18 @@ MouseSpriteManager="*uid://bn1io84ug6xwb"
 MessageSidebar="*uid://wycwx4fbk27d"
 GlobalTransition="*uid://cwjt3obt14yfy"
 TitleAnimationManager="*uid://ba32rpxettui3"
+
+[debug]
+
+gdscript/warnings/unassigned_variable=2
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/inferred_declaration=2
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_method_access=2
+gdscript/warnings/unsafe_cast=2
+gdscript/warnings/unsafe_call_argument=2
+gdscript/warnings/unsafe_void_return=2
+gdscript/warnings/integer_division=2
 
 [display]
 

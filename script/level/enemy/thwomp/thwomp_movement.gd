@@ -20,18 +20,18 @@ enum ThwompState {
 	RISE,
 }
 
-var state = ThwompState.IDLE
+var state: ThwompState = ThwompState.IDLE
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	_origin_position_y = move_object.position.y
 	await screen_notifier.ready
-	for i in range(3):
+	for i: int in range(3):
 		await get_tree().physics_frame
 	is_ready = true
 	#print("is_ready: ", is_ready)
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	#print("state: ", state)
 	if not is_ready:
@@ -77,7 +77,7 @@ func _physics_process(delta):
 				speed_y = 0.0
 				state = ThwompState.IDLE
 
-func _on_bump_block():
+func _on_bump_block() -> void:
 	gravity = 0.0
 	speed_y = 0.0
 	land_timer = 0

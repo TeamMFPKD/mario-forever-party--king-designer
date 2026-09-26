@@ -34,8 +34,8 @@ func _on_all_process_finished() -> void:
 	parent.queue_free()
 
 func create_time_clock_label() -> void:
-	var time_clock_label_node = time_clock_label_scene.instantiate() as Node2D
-	var time_clock_label = time_clock_label_node.get_node("TimeClockLabel") as Label
+	var time_clock_label_node: Node2D = time_clock_label_scene.instantiate()
+	var time_clock_label: Label = time_clock_label_node.get_node("TimeClockLabel")
 	time_clock_label_node.position = parent.position
 	time_clock_label.text = ("+" if time_to_increase >= 0 else "") + str(int(time_to_increase)) + "s"
 	if time_to_increase >= 0:

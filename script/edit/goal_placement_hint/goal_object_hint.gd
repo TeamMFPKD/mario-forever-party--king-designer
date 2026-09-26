@@ -25,7 +25,7 @@ func _process(_delta: float) -> void:
 
 
 func _update_hint_state() -> void:
-	var level_control = get_tree().get_first_node_in_group("level_control") as LevelControl
+	var level_control: LevelControl = get_tree().get_first_node_in_group("level_control")
 	if is_there_a_goal or (level_control and level_control.current_object_name == GOAL_OBJECT_NAME):
 		hint_state = HintState.NONE
 	else:

@@ -7,7 +7,7 @@ signal client_back_to_title
 
 var multiplayer_manager: MultiplayerManager
 
-func _ready():
+func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	if multiplayer_manager.is_in_game:
 		multiplayer_manager.is_in_game = false
@@ -22,7 +22,7 @@ func _ready():
 			emit_signal("client_back_to_title")
 			multiplayer_manager.emit_signal("players_updated")
 		multiplayer_manager.is_in_game = false
-		var fc = func():
+		var fc: Callable = func() -> void:
 			emit_signal("back_to_title")
 			print("[%s] [BackToTitleProcessor] Player page should be shown now." % Time.get_time_string_from_system())
 		fc.call_deferred()

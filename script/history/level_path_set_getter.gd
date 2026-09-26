@@ -13,7 +13,7 @@ func _ready() -> void:
 	if not level_path_set.has_meta("level_path_name"):
 		push_error("Level path name not found")
 		return
-	level_path_name = level_path_set.get_meta("level_path_name") as String
+	level_path_name = level_path_set.get_meta("level_path_name")
 	load_level_node.file_name = level_path_name
 	# 不再直接调用加载方法，而是等待LevelManager的信号
 	# 这样可以避免重复加载

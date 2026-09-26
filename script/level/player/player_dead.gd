@@ -8,7 +8,7 @@ var play_next_level_node: Node
 func _ready() -> void:
 	play_next_level_node = get_tree().get_first_node_in_group("play_next_level_manager")
 	if play_next_level_node:
-		next_level.connect(play_next_level_node.next_level_die)
+		next_level.connect(Callable(play_next_level_node, "next_level_die"))
 	else:
 		push_warning("play_next_level_manager is not assigned in PlayerDead")
 	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST:

@@ -18,7 +18,7 @@ func _physics_process(_delta: float) -> void:
 func _on_parent_exiting() -> void:
 	if parent:
 		parent.remove_child(self)
-	var fn = func():
+	var fn: Callable = func() -> void:
 		if viewport:
 			viewport.add_child(self)
 		playing_detect = true

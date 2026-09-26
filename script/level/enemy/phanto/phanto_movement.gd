@@ -66,7 +66,7 @@ func _set_shader_enabled(enabled: bool) -> void:
 func _create_effect() -> void:
 	var effect_node: Node = move_object.get_node("PhantoEffect")
 	if effect_node and effect_node.has_method("trigger_effect"):
-		effect_node.trigger_effect()
+		effect_node.call("trigger_effect")
 
 
 func _ready() -> void:
@@ -99,7 +99,7 @@ func _physics_process(_delta: float) -> void:
 	if not move_object:
 		return
 
-	var cursed_keys = get_tree().get_nodes_in_group("key_following_cursed")
+	var cursed_keys: Array[Node] = get_tree().get_nodes_in_group("key_following_cursed")
 	tracking_enabled = (cursed_keys.size() != 0)
 
 	_update_blink()

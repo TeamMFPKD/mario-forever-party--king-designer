@@ -4,12 +4,12 @@ var screen_notifier: VisibleOnScreenEnabler2D
 
 
 func _enter_tree() -> void:
-	var level_manager = get_tree().get_first_node_in_group("level_manager") as LevelManager
+	var level_manager: LevelManager = get_tree().get_first_node_in_group("level_manager") as LevelManager
 	if not level_manager:
 		push_error("SpringVersionDiff: level_manager is null!")
 		return
 	screen_notifier = get_parent() as VisibleOnScreenEnabler2D
-	var target_node = screen_notifier.get_node_or_null(screen_notifier.enable_node_path)
+	var target_node: Node = screen_notifier.get_node_or_null(screen_notifier.enable_node_path)
 	if not target_node:
 		return
 	if level_manager.version < 2:

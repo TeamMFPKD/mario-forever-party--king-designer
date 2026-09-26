@@ -38,7 +38,7 @@ const PIRANHA_MOVE_DISTANCE: float = 64.0
 
 func _ready() -> void:
 	piranha = get_node(path_to_piranha)
-	var fc = func():
+	var fc: Callable = func() -> void:
 		player = get_tree().get_first_node_in_group("player") as Node2D
 	fc.call_deferred()
 	out_position_y = piranha.position.y

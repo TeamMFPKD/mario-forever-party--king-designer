@@ -22,8 +22,8 @@ func _ready() -> void:
 
 func _on_game_room_size_resized() -> void:
 	# game_room_size变化后，用实际全局坐标判断是否需要pop
-	var bar_global_top = bottom_bar.global_position.y
-	var viewport_global_bottom = sub_viewport_container.global_position.y + sub_viewport_container.size.y
+	var bar_global_top: float = bottom_bar.global_position.y
+	var viewport_global_bottom: float = sub_viewport_container.global_position.y + sub_viewport_container.size.y
 	_should_pop = bar_global_top < viewport_global_bottom
 
 func _process(delta: float) -> void:
@@ -35,10 +35,10 @@ func _update_target() -> void:
 		_target_offset = 0.0
 		return
 
-	var scale_y = 1080.0 / bottom_bar.get_parent_control().size.y
-	var mouse_local_y = bottom_bar.get_parent_control().get_local_mouse_position().y * scale_y
+	var scale_y: float = 1080.0 / bottom_bar.get_parent_control().size.y
+	var mouse_local_y: float = bottom_bar.get_parent_control().get_local_mouse_position().y * scale_y
 	#var bar_top_y = 1080.0 + bottom_bar.offset_top
-	var viewport_bottom = sub_viewport_container.offset_bottom
+	var viewport_bottom: float = sub_viewport_container.offset_bottom
 
 	if mouse_local_y >= viewport_bottom - trigger_distance and are_all_buttons_invisible():
 		_target_offset = viewport_bottom - 1080.0 - _origin_offset_top + 32.0
@@ -46,15 +46,15 @@ func _update_target() -> void:
 		_target_offset = 0.0
 
 func _move_toward_target(delta: float) -> void:
-	var current_offset = bottom_bar.offset_top - _origin_offset_top
+	var current_offset: float = bottom_bar.offset_top - _origin_offset_top
 	if is_equal_approx(current_offset, _target_offset):
 		return
-	var new_offset = move_toward(current_offset, _target_offset, pop_speed * delta)
+	var new_offset: float = move_toward(current_offset, _target_offset, pop_speed * delta)
 	bottom_bar.offset_top = _origin_offset_top + new_offset
 	bottom_bar.offset_bottom = _origin_offset_bottom + new_offset
 
 func are_all_buttons_invisible() -> bool:
-	for panel in group_panels:
+	for panel: Control in group_panels:
 		if panel.visible:
 			return false
 	return true

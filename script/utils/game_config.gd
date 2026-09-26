@@ -17,38 +17,40 @@ func _ready() -> void:
 func _load_input_mappings() -> void:
 	if not config.has_section("input_event"):
 		return
-	var input_events_section = config.get_section_keys("input_event")
+	var input_events_section: PackedStringArray = config.get_section_keys("input_event")
 	
 	# 收集所有动作及其槽位
-	var action_slots = {}
-	for key in input_events_section:
+	var action_slots: Dictionary = {}
+	for key: String in input_events_section:
 		# 解析键名格式："action_name:slot_index"
-		var parts = key.split(":")
+		var parts: PackedStringArray = key.split(":")
 		if parts.size() == 2 and parts[1].is_valid_int():
-			var base_action = parts[0]
-			var slot_index = parts[1].to_int()
+			var base_action: String = parts[0]
+			var slot_index: int = parts[1].to_int()
 			
 			if not action_slots.has(base_action):
 				action_slots[base_action] = []
 			
 			# 确保槽位数组足够大
-			while action_slots[base_action].size() <= slot_index:
-				action_slots[base_action].append(null)
+			var slots_for_action: Array = action_slots[base_action]
+			while slots_for_action.size() <= slot_index:
+				slots_for_action.append(null)
 			
-			var saved_event_str = config.get_value("input_event", key, "")
+			var saved_event_str: String = config.get_value("input_event", key, "")
 			if saved_event_str != "":
-				var saved_event = str_to_var(saved_event_str)
+				var saved_event: Variant = str_to_var(saved_event_str)
 				if saved_event is InputEvent:
-					action_slots[base_action][slot_index] = saved_event
+					slots_for_action[slot_index] = saved_event
 	
 	# 应用所有动作的槽位配置
-	for base_action in action_slots:
-		var slots = action_slots[base_action]
+	for base_action: String in action_slots.keys():
+		var slots: Array = action_slots[base_action]
 		InputMap.action_erase_events(base_action)
-		for ev in slots:
+		for ev: Variant in slots:
 			if ev != null:
-				InputMap.action_add_event(base_action, ev)
-				print("[%s] [设置] 加载输入映射: " % Time.get_time_string_from_system(), base_action, " -> ", ev.as_text())
+				var input_event: InputEvent = ev
+				InputMap.action_add_event(base_action, input_event)
+				print("[%s] [设置] 加载输入映射: " % Time.get_time_string_from_system(), base_action, " -> ", input_event.as_text())
 
 func save() -> void:
 	config.save("user://game_settings.cfg")
@@ -66,12 +68,12 @@ func _set_default_network_settings() -> void:
 	config.set_value("network", "player_name", DEFAULT_PLAYER_NAME)
 	save()
 
-func get_network_value(key: String, default_value = null):
+func get_network_value(key: String, default_value: Variant = null) -> Variant:
 	if not config.has_section("network"):
 		_set_default_network_settings()
 	return config.get_value("network", key, default_value)
 
-func set_network_value(key: String, value) -> void:
+func set_network_value(key: String, value: Variant) -> void:
 	config.set_value("network", key, value)
 	save()
 

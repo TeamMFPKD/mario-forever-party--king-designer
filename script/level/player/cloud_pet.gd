@@ -21,30 +21,31 @@ func _ready() -> void:
 	_setup_cooldown_animation()
 
 func _setup_cooldown_animation() -> void:
-	var ani = get_node_or_null("AnimatedSprite2D")
+	var ani: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
 	if not ani or not ani.sprite_frames:
 		return
 	if ani.sprite_frames.has_animation("cooldown"):
 		return
-	var frames = ani.sprite_frames
+	var frames: SpriteFrames = ani.sprite_frames
 	frames.add_animation("cooldown")
 	frames.set_animation_speed("cooldown", 2.5)
 	frames.set_animation_loop("cooldown", true)
-	for i in range(frames.get_frame_count("default")):
+	for i: int in range(frames.get_frame_count("default")):
 		frames.add_frame("cooldown", frames.get_frame_texture("default", i), frames.get_frame_duration("default", i))
 
 func _physics_process(_delta: float) -> void:
 	if not is_active:
 		return
 	
-	var ani = get_node_or_null("AnimatedSprite2D")
-	var platforms = get_tree().get_nodes_in_group("cloud_platform_player")
-	var platform_exists = platforms.size() > 0
-	var is_cd = _is_cooldown()
+	var ani: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
+	var platforms: Array[Node] = get_tree().get_nodes_in_group("cloud_platform_player")
+	var platform_exists: bool = platforms.size() > 0
+	var is_cd: bool = _is_cooldown()
 	
 	if platform_exists:
 		if platforms[0]:
-			_last_platform_global_pos = platforms[0].global_position
+			var platform_node: Node2D = platforms[0]
+			_last_platform_global_pos = platform_node.global_position
 		if ani:
 			ani.visible = false
 		_was_platform_exists = true
@@ -57,7 +58,7 @@ func _physics_process(_delta: float) -> void:
 	if ani:
 		ani.visible = true
 	
-	var target_scale := Vector2(0.5, 0.5) if is_cd else Vector2.ONE
+	var target_scale: Vector2 = Vector2(0.5, 0.5) if is_cd else Vector2.ONE
 	scale = scale.lerp(target_scale, 0.15)
 	
 	if is_cd and ani and ani.sprite_frames and ani.sprite_frames.has_animation("cooldown"):
@@ -66,7 +67,7 @@ func _physics_process(_delta: float) -> void:
 		ani.play("default")
 	
 	var facing_dir: int = -1 if _player_flip_h() else 1
-	var target_pos := Vector2(-facing_dir * offset_x, offset_y)
+	var target_pos: Vector2 = Vector2(-facing_dir * offset_x, offset_y)
 	
 	position.x = lerpf(position.x, target_pos.x, lerp_speed_x)
 	position.y = lerpf(position.y, target_pos.y, lerp_speed_y)
@@ -76,7 +77,8 @@ func _physics_process(_delta: float) -> void:
 func _is_cooldown() -> bool:
 	if not is_instance_valid(player_shoot):
 		return false
-	return player_shoot.cloud_platform_cd_timer > 0
+	var cd: int = player_shoot.get("cloud_platform_cd_timer")
+	return cd > 0
 
 func _player_flip_h() -> bool:
 	if is_instance_valid(player_sprite):
@@ -84,7 +86,7 @@ func _player_flip_h() -> bool:
 	return false
 
 func _update_sprite_direction(facing_dir: int) -> void:
-	var ani = get_node_or_null("AnimatedSprite2D")
+	var ani: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
 	if ani:
 		ani.flip_h = facing_dir == -1
 
@@ -92,12 +94,13 @@ func _on_suit_changed() -> void:
 	_update_active()
 
 func _update_active() -> void:
-	var active = player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.CLOUD
+	var active: bool = player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.CLOUD
 	if active != is_active:
 		is_active = active
-		for child in get_children():
+		for child: Node in get_children():
 			if child is CanvasItem:
-				child.visible = active
+				var canvas_child: CanvasItem = child
+				canvas_child.visible = active
 		if is_active:
 			position = Vector2.ZERO
 			_was_platform_exists = false

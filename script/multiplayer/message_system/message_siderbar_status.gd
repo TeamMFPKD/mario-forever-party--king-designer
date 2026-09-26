@@ -49,7 +49,7 @@ func _status_changed() -> void:
 	else:
 		status = Status.EXPANDED
 
-	var target_x := _get_x_for_status(status)
+	var target_x: float = _get_x_for_status(status)
 
 	if _tween and _tween.is_valid():
 		_tween.kill()

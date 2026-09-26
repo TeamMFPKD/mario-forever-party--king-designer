@@ -3,12 +3,12 @@ extends TextureButton
 @export var forum_international_texture: Texture2D
 @export var forum_cn_texture: Texture2D
 
-var language
+var language: String
 
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)
 	
-func _process(_delta) -> void:
+func _process(_delta: float) -> void:
 	language = TranslationServer.get_locale()
 	if language == "zh_CN":
 		texture_normal = forum_cn_texture
@@ -16,7 +16,7 @@ func _process(_delta) -> void:
 		texture_normal = forum_international_texture
 	
 	
-func _on_button_pressed():
+func _on_button_pressed() -> void:
 	match language:
 		"en":
 			# Mario Forever Space

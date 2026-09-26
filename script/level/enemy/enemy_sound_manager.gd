@@ -7,7 +7,7 @@ class_name EnemySoundManager
 @export var play_sound_bumped: bool = true
 
 # 声音配置映射表
-const SOUND_CONFIG := {
+const SOUND_CONFIG: Dictionary = {
 	"interaction_with_player": {
 		"signal": "stomped",
 		"sound_func": "play_stomped",
@@ -54,15 +54,15 @@ func _ready() -> void:
 	sound_kicked = get_node("Kicked") as AudioStreamPlayer
 	sound_bumped = get_node("Bumped") as AudioStreamPlayer
 
-	var parent = get_parent()
+	var parent: Node = get_parent()
 	
 	# 自动连接所有声音组件信号
-	for meta_name in SOUND_CONFIG:
-		var config = SOUND_CONFIG[meta_name]
-		var enabled: bool = get(config["enabled"])
+	for meta_name: String in SOUND_CONFIG:
+		var config: Dictionary = SOUND_CONFIG[meta_name]
+		var enabled: bool = get(str(config["enabled"]))
 		
 		if enabled and parent.has_meta(meta_name):
-			var interaction = parent.get_meta(meta_name)
+			var interaction: Node = parent.get_meta(meta_name)
 			var signal_name: String = config["signal"]
 			var sound_func: String = config["sound_func"]
 			

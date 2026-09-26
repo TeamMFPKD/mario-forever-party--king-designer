@@ -12,9 +12,10 @@ var ui: Control
 
 func _ready() -> void:
 	ui = get_node(path_to_ui)
-	if not TitleAnimationManager.is_played:
+	var played: bool = TitleAnimationManager.get("is_played")
+	if not played:
 		_ui_init()
-	if start_at_begin and not TitleAnimationManager.is_played:
+	if start_at_begin and not played:
 		_on_ui_animation_start()
 
 

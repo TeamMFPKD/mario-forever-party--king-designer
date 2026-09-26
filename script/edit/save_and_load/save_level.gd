@@ -13,14 +13,14 @@ func _ready() -> void:
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	if multiplayer_manager:
 		date_time = multiplayer_manager.game_start_time
-		var unique_id = OS.get_unique_id()
+		var unique_id: String = OS.get_unique_id()
 		unique_id = unique_id.replace("{", "")
 		unique_id = unique_id.substr(0, 5)
 		author = multiplayer_manager.player_name.validate_filename() + "_" + unique_id
 	file_name += date_time + "_" + author + ".lvl"
 
 func _on_save_button_pressed() -> void:
-	var level_data_json = level_data_node.get_level_data_json()
+	var level_data_json: String = level_data_node.get_level_data_json()
 	print("[%s] [save_level.gd] save path: " % Time.get_time_string_from_system(), file_name)
 	save_to_level(level_data_json)
 	print("[%s] [save_level.gd] Level saved." % Time.get_time_string_from_system())
@@ -30,21 +30,21 @@ func _on_save_button_pressed() -> void:
 		if Input.is_key_pressed(KEY_Q) and emulate_bad_level:
 			multiplayer_manager.player.level_data = "invalid"
 
-func save_to_level(content):
+func save_to_level(content: String) -> void:
 	if content.is_empty():
 		push_error("[%s] Cannot save empty level data" % Time.get_time_string_from_system())
 		return
-	var tmp_file_name = file_name + ".tmp"
-	var file = FileAccess.open(tmp_file_name, FileAccess.WRITE)
-	var err = FileAccess.get_open_error()
+	var tmp_file_name: String = file_name + ".tmp"
+	var file: FileAccess = FileAccess.open(tmp_file_name, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
 	if err != OK or not file:
 		print("[%s] [save_level.gd] Error saving file: %d" % [Time.get_time_string_from_system(), err])
 		return
 	file.store_string(content)
 	file.close()
-	var dir = DirAccess.open("user://")
+	var dir: DirAccess = DirAccess.open("user://")
 	if dir:
-		var rename_err = dir.rename(tmp_file_name, file_name)
+		var rename_err: Error = dir.rename(tmp_file_name, file_name)
 		if rename_err != OK:
 			push_error("[%s] Failed to rename temp file: %d" % [Time.get_time_string_from_system(), rename_err])
 	else:

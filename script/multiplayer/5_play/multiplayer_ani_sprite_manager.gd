@@ -12,21 +12,23 @@ var player_hurt_and_die: PlayerHurtAndDie
 var no_player_print_limit: int
 
 func _ready() -> void:
-	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:
+	var game_mode_manager: GameMode = GameModeSingleton
+	if game_mode_manager.game_mode != GameMode.GameModeType.PLAY:
 		return
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
 	multiplayer_manager.mp_ani_manager = self
-	var multiplayer_count = multiplayer_manager.players.size() - 1
-	for i in range(multiplayer_count):
-		var ani = mp_ani_shadow_scene.instantiate() as AnimatedSprite2D
+	var multiplayer_count: int = multiplayer_manager.players.size() - 1
+	for i: int in range(multiplayer_count):
+		var ani: AnimatedSprite2D = mp_ani_shadow_scene.instantiate() as AnimatedSprite2D
 		ani.position = Vector2(-999999, -999999)
 		anis.append(ani)
 		add_child(ani)
 
 func _physics_process(_delta: float) -> void:
-	if GameModeSingleton.game_mode != GameModeSingleton.GameModeType.PLAY:
+	var game_mode_manager: GameMode = GameModeSingleton
+	if game_mode_manager.game_mode != GameMode.GameModeType.PLAY:
 		return
-	var player = get_tree().get_first_node_in_group("player")
+	var player: Node = get_tree().get_first_node_in_group("player")
 	if not player:
 		if no_player_print_limit < 10:
 			no_player_print_limit += 1
@@ -37,11 +39,11 @@ func _physics_process(_delta: float) -> void:
 		print("[%s] [MultiplayerAniSpriteManager] No AnimatedSprite2D node found" % Time.get_time_string_from_system())
 		return
 	if not player_suit:
-		player_suit = player.get_meta("player_suit") as PlayerSuit
+		player_suit = player.get_meta("player_suit")
 		print("[%s] [MultiplayerAniSpriteManager] No player suit found" % Time.get_time_string_from_system())
 		return
 	if not player_hurt_and_die:
-		player_hurt_and_die = player.get_meta("player_hurt_and_die") as PlayerHurtAndDie
+		player_hurt_and_die = player.get_meta("player_hurt_and_die")
 		print("[%s] [MultiplayerAniSpriteManager] No player hurt and die found" % Time.get_time_string_from_system())
 		return
 	multiplayer_manager.send_ani_sprite_data.rpc(

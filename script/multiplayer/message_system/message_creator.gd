@@ -24,27 +24,31 @@ func _on_messages_updated() -> void:
 			continue
 		node.queue_free()
 	'''
-	var msg_amount = multiplayer_manager.messages.size()
-	for m in range(msg_amount):
-		var msg_instance = message_scene.instantiate()
-		var label = msg_instance.get_node("UiLabel") as Label
-		if multiplayer_manager.messages[m]["displayed"]:
+	var msg_amount: int = multiplayer_manager.messages.size()
+	for m: int in range(msg_amount):
+		var msg_instance: Node = message_scene.instantiate()
+		var label: Label = msg_instance.get_node("UiLabel") as Label
+		var message: Dictionary = multiplayer_manager.messages[m]
+		if message["displayed"]:
 			continue
-		multiplayer_manager.messages[m]["displayed"] = true
+		message["displayed"] = true
+		var player_name: String = message["player_name"]
+		var time_str: String = message.get("time", "")
+		var msg: String = message["msg"]
 		label.text = \
-			multiplayer_manager.messages[m]["player_name"] \
+			player_name \
 			+ " (" \
-			+ multiplayer_manager.messages[m].get("time", "") \
+			+ time_str \
 			+ "): " \
 			+"\n" \
-			+ multiplayer_manager.messages[m]["msg"]
+			+ msg
 
-		var fc = func():
+		var fc: Callable = func() -> void:
 			target_container.add_child(msg_instance)
 			label.custom_minimum_size.y = label.size.y + 8.0
 		fc.call_deferred()
 
 	await get_tree().process_frame
-	var scroll = get_parent() as ScrollContainer
+	var scroll: ScrollContainer = get_parent() as ScrollContainer
 	if scroll:
 		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)

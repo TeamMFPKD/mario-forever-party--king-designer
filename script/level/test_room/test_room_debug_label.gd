@@ -3,10 +3,10 @@ extends Label
 @export var player_mov: PlayerMovement
 @export var player_node: CharacterBody2D
 
-func _process(_delta) -> void:
-	var up = player_node.up_direction
-	var rot = rad_to_deg(up.angle()) + 90.0
-	var velocity = player_node.velocity
+func _process(_delta: float) -> void:
+	var up: Vector2 = player_node.up_direction
+	var rot: float = rad_to_deg(up.angle()) + 90.0
+	var velocity: Vector2 = player_node.velocity
 
 	text = \
 	"=== Position ===" + "\n" + \

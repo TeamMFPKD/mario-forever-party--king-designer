@@ -8,8 +8,10 @@ extends Button
 
 @export var player_name_limit: int = 12
 
+const GameConfigType: GDScript = preload("res://script/utils/game_config.gd")
+
 var multiplayer_manager: MultiplayerManager
-var game_config: Node
+var game_config: GameConfigType
 var frp_domain: String = ""
 var remote_port: int
 var player_name: String = ""
@@ -17,7 +19,7 @@ var player_name: String = ""
 func _ready() -> void:
 	pressed.connect(_on_button_pressed)
 	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
-	game_config = get_tree().get_first_node_in_group("game_config") as Node
+	game_config = get_tree().get_first_node_in_group("game_config")
 	pressed.connect(multiplayer_manager._on_join_button_pressed)
 	
 	game_config = GameConfig

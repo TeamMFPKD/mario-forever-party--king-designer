@@ -29,7 +29,7 @@ var parent: Node2D
 var walk_timer: int
 var shoot_timer: int = 0
 var wait_after_shoot_timer: int = 0
-var origin_collision_mask
+var origin_collision_mask: int
 var origin_position_x: float
 var origin_speed_x: float
 var direction: int = -1
@@ -40,7 +40,7 @@ var jumped: bool
 var previous_position_y: float
 var jump_level: int
 
-var rng = RandomNumberGenerator.new()
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _ready() -> void:
 	super._ready()
@@ -133,7 +133,7 @@ func _physics_process(delta: float) -> void:
 				select_state()
 
 func select_state() -> void:
-	var states = BroState.values()
+	var states: Array = BroState.values()
 	slight_jumped = false
 	jumped = false
 	bro_state = states[rng.randi_range(0, states.size() - 1)]
@@ -141,7 +141,7 @@ func select_state() -> void:
 func launch() -> void:
 	var left: bool = player.position.x < parent.position.x
 
-	var projectile = projectile_scene.instantiate() as Node2D
+	var projectile: Node2D = projectile_scene.instantiate() as Node2D
 	projectile.position = parent.position + launch_offset
 	projectile.set_meta("fireball_direction", -1 if left else 1)
 	parent.add_sibling(projectile)

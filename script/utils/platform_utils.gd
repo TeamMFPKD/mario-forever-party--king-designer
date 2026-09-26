@@ -4,10 +4,10 @@ class_name PlatformUtils
 
 # 判断是否为桌面端平台
 static func is_desktop_platform() -> bool:
-	var platform_name = OS.get_name()
+	var platform_name: String = OS.get_name()
 	
 	# 桌面端平台
-	var desktop_platforms = ["Windows", "Linux", "macOS", "X11"]
+	var desktop_platforms: Array[String] = ["Windows", "Linux", "macOS", "X11"]
 	
 	# 检查是否在桌面平台列表中
 	if platform_name in desktop_platforms:
@@ -23,10 +23,10 @@ static func is_desktop_platform() -> bool:
 
 # 判断是否为移动端平台
 static func is_mobile_platform() -> bool:
-	var platform_name = OS.get_name()
+	var platform_name: String = OS.get_name()
 	
 	# 移动端平台
-	var mobile_platforms = ["Android", "iOS"]
+	var mobile_platforms: Array[String] = ["Android", "iOS"]
 	
 	return platform_name in mobile_platforms
 
@@ -63,14 +63,14 @@ static func _is_web_desktop() -> bool:
 
 # 获取详细的平台信息
 static func get_platform_info() -> Dictionary:
-	var info = {
+	var info: Dictionary = {
 		"name": OS.get_name(),
 		"is_desktop": is_desktop_platform(),
 		"is_mobile": is_mobile_platform()
 	}
 	
 	# 添加Web平台的详细信息
-	if info.name == "Web":
+	if info["name"] == "Web":
 		info["web_platform"] = _get_web_platform_detail()
 	
 	return info

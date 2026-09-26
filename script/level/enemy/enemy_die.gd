@@ -45,7 +45,7 @@ var dead_texture: Texture2D
 @export var enable_interaction_with_crush: bool = true
 
 # 交互组件配置映射表
-const INTERACTION_CONFIG := {
+const INTERACTION_CONFIG: Dictionary = {
 	"interaction_with_player": {"signal": "stomped", "death_type": DeathType.STOMP},
 	"interaction_with_fireball": {"signal": "fireball_hitted", "death_type": DeathType.FIREBALL},
 	"interaction_with_beetroot": {"signal": "beetroot_hitted", "death_type": DeathType.BEETROOT},
@@ -65,15 +65,15 @@ func _ready() -> void:
 	dead_texture = ani.sprite_frames.get_frame_texture(ani.animation, ani.frame)
 	
 	# 自动连接所有交互组件信号
-	for meta_name in INTERACTION_CONFIG:
-		var config = INTERACTION_CONFIG[meta_name]
+	for meta_name: String in INTERACTION_CONFIG:
+		var config: Dictionary = INTERACTION_CONFIG[meta_name]
 		if get_parent().has_meta(meta_name):
-			var interaction = get_parent().get_meta(meta_name)
+			var interaction: Node = get_parent().get_meta(meta_name)
 			var signal_name: String = config["signal"]
 			var death_type: DeathType = config["death_type"]
 			
 			# 检查是否启用该交互
-			var enable_property = "enable_" + meta_name
+			var enable_property: String = "enable_" + meta_name
 			if has_method("get") and get(enable_property):
 				if interaction.has_signal(signal_name):
 					interaction.connect(signal_name, _on_interaction_hit.bind(death_type))
@@ -89,7 +89,7 @@ func die(hit_position: Vector2 = Vector2.ZERO, death_type: DeathType = DeathType
 	emit_signal("enemy_died")
 
 func dead_instantiate(hit_position: Vector2, death_type: DeathType = DeathType.DEFAULT) -> void:
-	var scene_map = {
+	var scene_map: Dictionary = {
 		DeathType.DEFAULT: dead_scene_default,
 		DeathType.STOMP: dead_scene_stomp,
 		DeathType.FIREBALL: dead_scene_fireball,
@@ -100,14 +100,14 @@ func dead_instantiate(hit_position: Vector2, death_type: DeathType = DeathType.D
 		DeathType.CRUSH: dead_scene_crush
 	}
 	
-	var scene = scene_map[death_type]
+	var scene: PackedScene = scene_map[death_type]
 	if not scene:
 		scene = dead_scene_default
 	
 	dead_instance = scene.instantiate() as Node2D
 	if scene == dead_scene_default:
 		dead_instance.set_meta("enemy_dead_direction", 1 if hit_position.x < parent.position.x else -1)
-		var dead_sprite_2d = dead_instance.get_node("Sprite2D") as Sprite2D
+		var dead_sprite_2d: Sprite2D = dead_instance.get_node("Sprite2D") as Sprite2D
 		dead_sprite_2d.texture = dead_texture
 		if dead_texture_override:
 			dead_sprite_2d.texture = dead_texture_override

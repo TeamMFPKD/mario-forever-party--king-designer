@@ -13,7 +13,7 @@ func _ui_init() -> void:
 
 func _animation_process(delta: float) -> void:
 	elapsed += delta
-	var t = minf(elapsed / duration, 1.0)
+	var t: float = minf(elapsed / duration, 1.0)
 	# ease-out cubic
 	t = 1.0 - pow(1.0 - t, 3.0)
 	ui.scale = target_scale * t

@@ -21,10 +21,10 @@ func _on_players_updated() -> void:
 		_file_path = ""
 
 func _init_file_path() -> void:
-	var now = Time.get_datetime_dict_from_system()
-	var time_str = "%04d-%02d-%02d_%02d-%02d-%02d" % [now.year, now.month, now.day, now.hour, now.minute, now.second]
+	var now: Dictionary = Time.get_datetime_dict_from_system()
+	var time_str: String = "%04d-%02d-%02d_%02d-%02d-%02d" % [now.year, now.month, now.day, now.hour, now.minute, now.second]
 
-	var dir = DirAccess.open("user://")
+	var dir: DirAccess = DirAccess.open("user://")
 	if not dir.dir_exists("messages"):
 		dir.make_dir("messages")
 
@@ -39,17 +39,17 @@ func _on_messages_updated() -> void:
 	_save()
 
 func _save() -> void:
-	var file = FileAccess.open(_file_path, FileAccess.WRITE)
+	var file: FileAccess = FileAccess.open(_file_path, FileAccess.WRITE)
 	if not file:
 		push_error("MessageCache: cannot open file: %s" % _file_path)
 		return
 
-	for m in multiplayer_manager.messages:
-		var cnt = m.get("cnt", 0)
-		var unique_id = m.get("unique_id", "")
-		var player_name = m.get("player_name", "")
-		var msg = m.get("msg", "")
-		var time_str = m.get("time", "")
+	for m: Dictionary in multiplayer_manager.messages:
+		var cnt: int = m.get("cnt", 0)
+		var unique_id: String = m.get("unique_id", "")
+		var player_name: String = m.get("player_name", "")
+		var msg: String = m.get("msg", "")
+		var time_str: String = m.get("time", "")
 		file.store_line("[=%d=] [%s] %s (%s)" % [cnt + 1, unique_id, player_name, time_str])
 		file.store_line(msg)
 		file.store_line("")
