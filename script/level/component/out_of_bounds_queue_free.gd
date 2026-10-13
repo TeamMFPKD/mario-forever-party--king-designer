@@ -30,17 +30,17 @@ var _room_bounds: Rect2
 var _target: Node2D
 var level_camera: Camera2D
 
-func _ready():
+func _ready() -> void:
 	_target = get_parent() as Node2D
 	level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
 	_room_bounds = Rect2(Vector2(level_camera.limit_left, level_camera.limit_top), Vector2(level_camera.limit_right - level_camera.limit_left, level_camera.limit_bottom - level_camera.limit_top))
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	var destroy: bool = false
 	
 	# 出屏检测
 	if out_of_screen_detection:
-		var screen_rect = ScreenUtils.get_screen_rect(_target)
+		var screen_rect: Rect2 = ScreenUtils.get_screen_rect(_target)
 		
 		if screen_up and _target.position.y < screen_rect.position.y - screen_up_offset:
 			destroy = true

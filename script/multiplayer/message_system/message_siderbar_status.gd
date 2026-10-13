@@ -19,8 +19,6 @@ var show: bool = true:
 		show = value
 		_status_changed()
 
-var multiplayer_manager: MultiplayerManager
-
 enum Status {
 	DISABLED,
 	COLLAPSED,
@@ -28,10 +26,11 @@ enum Status {
 }
 var status: Status = Status.DISABLED
 
+var multiplayer_manager: MultiplayerManager
 var _tween: Tween
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	multiplayer_manager.players_updated.connect(_on_players_updated)
 	multiplayer_manager.messages_updated.connect(_on_messages_updated)
 	sidebar_show_button.pressed.connect(_on_sidebar_show_button_pressed)
@@ -49,7 +48,7 @@ func _status_changed() -> void:
 	else:
 		status = Status.EXPANDED
 
-	var target_x := _get_x_for_status(status)
+	var target_x: float = _get_x_for_status(status)
 
 	if _tween and _tween.is_valid():
 		_tween.kill()

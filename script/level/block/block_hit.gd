@@ -75,19 +75,19 @@ func _ready() -> void:
 	if hidden:
 		set_hidden()
 
-	var fc = func():
+	var fc: Callable = func() -> void:
 		player = get_tree().get_first_node_in_group("player")
-		player_suit = player.get_meta("player_suit") as PlayerSuit
+		player_suit = player.get_meta("player_suit")
 	fc.call_deferred()
 
 func _physics_process(_delta: float) -> void:
 	# Hidden Block patch
 	if not hidden or not player:
 		return
-	var player_movement = player.get_meta("player_movement") as PlayerMovement if player.has_meta("player_movement") else null
+	var player_movement: PlayerMovement = player.get_meta("player_movement") if player.has_meta("player_movement") else null
 	if not player_movement:
 		return
-	if int(round(player_movement.target_gravity)) % 360 != 0:
+	if roundi(player_movement.target_gravity) % 360 != 0:
 		parent.collision_layer = 0
 	else:
 		parent.collision_layer = HIDDEN_LAYER
@@ -174,7 +174,7 @@ func on_block_break() -> void:
 		push_error(str(self) + ": Parent is null!")
 		return
 	
-	for i in range(_fragment_velocity_data.size()):
+	for i: int in range(_fragment_velocity_data.size()):
 		var block_fragment: BlockFragment = _block_fragment_scene.instantiate() as BlockFragment
 		parent.add_sibling(block_fragment)
 		block_fragment.global_position = Vector2(

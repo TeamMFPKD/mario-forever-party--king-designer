@@ -10,13 +10,13 @@ var shoot_position_marker: Node2D
 var parent: Node2D
 var player: Node2D
 
-func _ready():
+func _ready() -> void:
 	parent = get_node(path_to_parent)
 	shoot_position_marker = get_node(path_to_shoot_position_marker)
 	player = get_tree().get_first_node_in_group("player") as Node2D
 
-func _on_shoot():
-	var fireball = piranha_fireball_scene.instantiate() as Node2D
+func _on_shoot() -> void:
+	var fireball: Node2D = piranha_fireball_scene.instantiate() as Node2D
 	fireball.position = shoot_position_marker.global_position
 	if not player:
 		player = get_tree().get_first_node_in_group("player") as Node2D

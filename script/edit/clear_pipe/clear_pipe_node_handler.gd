@@ -14,7 +14,7 @@ var can_draw_down: bool = true
 var _original_shape: Shape2D = null
 
 func _ready() -> void:
-	var touch_screen_button = get_node_or_null("TouchScreenButton")
+	var touch_screen_button: TouchScreenButton = get_node_or_null("TouchScreenButton")
 	if touch_screen_button:
 		_original_shape = touch_screen_button.shape
 		touch_screen_button.pressed.connect(_on_pressed)
@@ -24,21 +24,24 @@ func _ready() -> void:
 	update_handler_color()
 
 func _event_to_world(event: InputEvent) -> Vector2:
-	var viewport = get_viewport()
+	var viewport: Viewport = get_viewport()
+	var event_pos: Vector2 = event.get("position")
 	if viewport:
-		return viewport.get_canvas_transform().affine_inverse() * event.position
-	return event.position
+		return viewport.get_canvas_transform().affine_inverse() * event_pos
+	return event_pos
 
 func _input(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton or event is InputEventScreenTouch):
 		return
-	if event is InputEventMouseButton and event.button_index != MOUSE_BUTTON_LEFT:
-		return
+	if event is InputEventMouseButton:
+		var mouse_event: InputEventMouseButton = event
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+			return
 
-	var pressed: bool = event.pressed
+	var pressed: bool = event.get("pressed")
 
-	var world_pos = _event_to_world(event)
-	var diff = world_pos - global_position
+	var world_pos: Vector2 = _event_to_world(event)
+	var diff: Vector2 = world_pos - global_position
 	if abs(diff.x) <= 20.0 and abs(diff.y) <= 20.0:
 		if pressed and not is_held:
 			is_held = true
@@ -82,13 +85,13 @@ func set_held(value: bool) -> void:
 	update_handler_color()
 
 func _apply_tail_state() -> void:
-	var touch_screen_button = get_node_or_null("TouchScreenButton")
+	var touch_screen_button: TouchScreenButton = get_node_or_null("TouchScreenButton")
 	if touch_screen_button:
 		touch_screen_button.visible = true
 		touch_screen_button.shape = _original_shape
 
 func update_handler_color() -> void:
-	var edit_handler = get_node_or_null("EditObjectHandler")
+	var edit_handler: Sprite2D = get_node_or_null("EditObjectHandler")
 	if not edit_handler:
 		return
 	
@@ -98,10 +101,10 @@ func update_handler_color() -> void:
 		edit_handler.modulate = Color.WHITE
 
 func hide_arrows() -> void:
-	var arrow_right = get_node_or_null("EditPipeArrowRight")
-	var arrow_left = get_node_or_null("EditPipeArrowLeft")
-	var arrow_up = get_node_or_null("EditPipeArrowUp")
-	var arrow_down = get_node_or_null("EditPipeArrowDown")
+	var arrow_right: Sprite2D = get_node_or_null("EditPipeArrowRight")
+	var arrow_left: Sprite2D = get_node_or_null("EditPipeArrowLeft")
+	var arrow_up: Sprite2D = get_node_or_null("EditPipeArrowUp")
+	var arrow_down: Sprite2D = get_node_or_null("EditPipeArrowDown")
 	
 	if arrow_right:
 		arrow_right.visible = false
@@ -117,10 +120,10 @@ func update_arrow_visibility() -> void:
 		hide_arrows()
 		return
 	
-	var arrow_right = get_node_or_null("EditPipeArrowRight")
-	var arrow_left = get_node_or_null("EditPipeArrowLeft")
-	var arrow_up = get_node_or_null("EditPipeArrowUp")
-	var arrow_down = get_node_or_null("EditPipeArrowDown")
+	var arrow_right: Sprite2D = get_node_or_null("EditPipeArrowRight")
+	var arrow_left: Sprite2D = get_node_or_null("EditPipeArrowLeft")
+	var arrow_up: Sprite2D = get_node_or_null("EditPipeArrowUp")
+	var arrow_down: Sprite2D = get_node_or_null("EditPipeArrowDown")
 	
 	if not arrow_right or not arrow_left or not arrow_up or not arrow_down:
 		return

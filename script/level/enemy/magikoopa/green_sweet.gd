@@ -5,12 +5,12 @@ class HelperTimer extends Timer:
 	var fun: Callable
 
 
-	func _physics_process(delta):
+	func _physics_process(delta: float) -> void:
 		fun.call(delta)
 
 
-static func wait_and_process(node: Node, time: float, process: Callable):
-	var timer = HelperTimer.new()
+static func wait_and_process(node: Node, time: float, process: Callable) -> void:
+	var timer: HelperTimer = HelperTimer.new()
 	timer.fun = process
 	timer.wait_time = time
 	timer.autostart = true

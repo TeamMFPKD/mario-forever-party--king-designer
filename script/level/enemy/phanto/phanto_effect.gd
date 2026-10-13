@@ -17,7 +17,6 @@ func _physics_process(_delta: float) -> void:
 	pass  # Effect creation is now controlled via trigger_effect()
 
 func trigger_effect() -> void:
-	var effect = effect_scene.instantiate() as Node2D
+	var effect: Node2D = effect_scene.instantiate() as Node2D
 	effect.position = parent.position
 	parent.add_sibling(effect)
-	

@@ -38,9 +38,9 @@ func _physics_process(_delta: float) -> void:
 		level_data_node.level_theme = LevelManager.LevelThemeEnum.VOLCANO
 		
 
-func _button_1_pressed():
+func _button_1_pressed() -> void:
 	print("[test_node.gd] Button 1 Pressed")
 
-func _button_2_pressed():
+func _button_2_pressed() -> void:
 	print("[test_node.gd] Button 2 Pressed")
 	

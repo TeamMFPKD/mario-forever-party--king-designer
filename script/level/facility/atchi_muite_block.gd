@@ -45,9 +45,9 @@ func _on_area_2d_body_exited(_body: Node2D) -> void:
 		_switch_status()
 		
 		
-func _switch_status():
+func _switch_status() -> void:
 	visibility = not visibility
-	var target_anim = &"visible" if visibility else &"invisible"
+	var target_anim: StringName = &"visible" if visibility else &"invisible"
 	if sprite.animation != target_anim:
 		sprite.play(target_anim)
 	solid.set_deferred(&"disabled", not visibility)

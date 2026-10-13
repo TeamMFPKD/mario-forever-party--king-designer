@@ -11,7 +11,7 @@ var _animating: bool = false
 var _time: float = 0.0
 
 func _ready() -> void:
-	for i in range(3):
+	for i: int in range(3):
 		await get_tree().process_frame
 	get_tree().scene_changed.connect(_on_scene_changed)
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
@@ -41,8 +41,8 @@ func _process(delta: float) -> void:
 		texture_material.set_shader_parameter("iTime", 0.0)
 
 func _on_scene_changed() -> void:
-	var vp := get_viewport()
-	var img := vp.get_texture().get_image()
+	var vp: Viewport = get_viewport()
+	var img: Image = vp.get_texture().get_image()
 	rect_texture.texture = ImageTexture.create_from_image(img)
 	_update_resolution(vp)
 

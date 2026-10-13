@@ -7,15 +7,15 @@ signal limit_changed(top: int, left: int, right: int, bottom: int)
 @export var max_speed: float = 960.0
 
 var speed: float = 0.0
-var direction := Vector2.ZERO
+var direction: Vector2 = Vector2.ZERO
 
-var player
+var player: Node2D
 var last_player_position: Vector2
 
-const TELEPORT_THRESHOLD = 64.0
+const TELEPORT_THRESHOLD: float = 64.0
 
 func _physics_process(delta: float) -> void:
-	var is_in_level = in_level_check()
+	var is_in_level: bool = in_level_check()
 	if is_in_level:
 		if not player:
 			player = get_tree().get_first_node_in_group("player")
@@ -52,23 +52,24 @@ func _physics_process(delta: float) -> void:
 	position.x = clamp(position.x, limit_left + 320, limit_right - 320)
 	position.y = clamp(position.y, limit_top + 240, limit_bottom - 240)
 
-func set_limit_top(value):
+func set_limit_top(value: int) -> void:
 	limit_top = min(value, limit_bottom - 480)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
-func set_limit_left(value):
+func set_limit_left(value: int) -> void:
 	limit_left = min(value, limit_right - 640)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
-func set_limit_right(value):
+func set_limit_right(value: int) -> void:
 	limit_right = max(value, limit_left + 640)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
-func set_limit_bottom(value):
+func set_limit_bottom(value: int) -> void:
 	limit_bottom = max(value, limit_top + 480)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
 func in_level_check() -> bool:
-	return GameModeSingleton.game_mode == GameModeSingleton.GameModeType.TEST \
-	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
-	or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_PLAY
+	var game_mode_node: GameMode = GameModeSingleton
+	return game_mode_node.game_mode == GameMode.GameModeType.TEST \
+	or game_mode_node.game_mode == GameMode.GameModeType.PLAY \
+	or game_mode_node.game_mode == GameMode.GameModeType.HISTORY_PLAY

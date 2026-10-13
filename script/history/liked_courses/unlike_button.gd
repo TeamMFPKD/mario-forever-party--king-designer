@@ -3,7 +3,7 @@ extends Button
 @export var level_file_name_label: Label
 @export var path_to_ancestor: NodePath = "../../.."
 
-const LIKED_COURSE_FOLDER_NAME = "liked courses"
+const LIKED_COURSE_FOLDER_NAME: String = "liked courses"
 
 var level_path_name: String
 var level_path_set: Node
@@ -21,7 +21,7 @@ func _on_button_pressed() -> void:
 		return
 	
 	# 创建独立节点挂到根节点，生命周期不受 ancestor_node 影响
-	var helper := FileDeleteHelper.new()
+	var helper: FileDeleteHelper = FileDeleteHelper.new()
 	helper.paths = [level_path_name, level_path_name.replace(".lvl", ".png")]
 	get_tree().root.add_child(helper)
 	helper.start()

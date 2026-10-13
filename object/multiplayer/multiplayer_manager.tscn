@@ -30,7 +30,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="MultiplayerManager" type="Node" unique_id=1158865210 groups=["multiplayer_manager"]]
+[node name="MultiplayerManager" type="Node" unique_id=1158865210]
 script = ExtResource("1_gx2pa")
 player_dead_spritesframe = SubResource("SpriteFrames_q2fjb")
 player_small_spritesframe = ExtResource("2_imvt4")

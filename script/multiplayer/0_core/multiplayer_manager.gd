@@ -2,6 +2,8 @@ extends Node
 
 class_name MultiplayerManager
 
+const MpAniSpriteManagerScript: GDScript = preload("res://script/multiplayer/5_play/multiplayer_ani_sprite_manager.gd")
+
 signal players_updated
 
 signal game_in_progress_hint
@@ -17,20 +19,20 @@ signal messages_updated
 
 @export var player_dead_spritesframe: SpriteFrames
 
-var local_port
+var local_port: int
 # 端口使用Sakura Frp隧道配置的远程端口
-var remote_port
+var remote_port: int
 # Sakura Frp提供的域名
 var frp_domain: String = ""
 var player_name: String = ""
 
 var game_start_time: String
 
-var messages = []
+var messages: Array = []
 var msg_cnt: int = 0
 
 # 玩家列表，仅由主机(host)保持权威，直到传输关卡数据之前
-var players = []:
+var players: Array = []:
 	set(value):
 		#print("[%s] players set player size: " % Time.get_time_string_from_system(), players.size())
 		#for p in players:
@@ -49,14 +51,14 @@ var players = []:
 		if value.size() < 2 and multiplayer.is_server():
 			msg_cnt = 0
 
-var random_levels = []
+var random_levels: Array = []
 var current_level_count: int = 0
 
 var total_levels: int = 0
 
-var level_results = []
+var level_results: Array = []
 
-var _pending_disconnect_reasons = {}
+var _pending_disconnect_reasons: Dictionary = {}
 
 var is_in_game: bool = false:
 	set(value):
@@ -65,7 +67,8 @@ var is_in_game: bool = false:
 		current_level_count = 0
 		total_levels = 0
 		level_results.clear()
-		GameModeSingleton.game_mode = GameModeSingleton.GameModeType.EDIT
+		var game_mode_singleton: GameMode = GameModeSingleton
+		game_mode_singleton.game_mode = GameMode.GameModeType.EDIT
 
 @export var player_small_spritesframe: SpriteFrames
 @export var player_super_spritesframe: SpriteFrames
@@ -76,10 +79,10 @@ var is_in_game: bool = false:
 @export var player_bee_spritesframe: SpriteFrames
 @export var player_cloud_spritesframe: SpriteFrames
 
-var mp_ani_manager
+var mp_ani_manager: MpAniSpriteManagerScript
 
 # 自己的玩家信息
-var player = {
+var player: Dictionary = {
 	"id": "invalid",
 	"name": "invalid",
 	"is_ready_to_start": false,
@@ -97,20 +100,20 @@ var player = {
 var device_id: String = "invalid"
 
 
-func _ready():
+func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
-	multiplayer.connected_to_server.connect(func(): print("[%s] 连接成功" % Time.get_time_string_from_system()))
-	multiplayer.connection_failed.connect(func(): print("[%s] 连接失败" % Time.get_time_string_from_system()))
-	multiplayer.server_disconnected.connect(func(): print("[%s] 服务器断开" % Time.get_time_string_from_system()))
+	multiplayer.connected_to_server.connect(func() -> void: print("[%s] 连接成功" % Time.get_time_string_from_system()))
+	multiplayer.connection_failed.connect(func() -> void: print("[%s] 连接失败" % Time.get_time_string_from_system()))
+	multiplayer.server_disconnected.connect(func() -> void: print("[%s] 服务器断开" % Time.get_time_string_from_system()))
 
 	device_id = get_device_tag()
 
-func _on_host_button_pressed():
+func _on_host_button_pressed() -> void:
 	# 主机端代码通常不需要修改，仍监听本地端口
-	var peer = ENetMultiplayerPeer.new()
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	# 注意：这里监听的端口是本地端口，需要与FRP隧道配置的"本地端口"一致
 	peer.create_server(local_port, 20)
 	multiplayer.multiplayer_peer = peer
@@ -124,14 +127,14 @@ func _on_host_button_pressed():
 	print("[%s] 主机已启动。" % Time.get_time_string_from_system())
 	print("[%s] 主机玩家：%s" % [Time.get_time_string_from_system(), format_player(player_name, player.id)])
 
-func _on_join_button_pressed():
-	var peer = ENetMultiplayerPeer.new()
+func _on_join_button_pressed() -> void:
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	
 	print("[%s] 连接IP：" % Time.get_time_string_from_system(), frp_domain)
 	print("[%s] 连接端口：" % Time.get_time_string_from_system(), remote_port)
 	print("[%s] 本地玩家：%s" % [Time.get_time_string_from_system(), format_player(player_name, multiplayer.get_unique_id())])
 
-	var error = peer.create_client(frp_domain, remote_port)
+	var error: int = peer.create_client(frp_domain, remote_port)
 	
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
@@ -139,7 +142,7 @@ func _on_join_button_pressed():
 	else:
 		print("[%s] 连接失败，错误信息: " % Time.get_time_string_from_system(), error)
 
-func _on_connected_to_server():
+func _on_connected_to_server() -> void:
 	# 客户端连接成功后，向主机发送自己的玩家信息
 	player.id = multiplayer.get_unique_id()
 	player.name = player_name
@@ -148,19 +151,20 @@ func _on_connected_to_server():
 	register_player_on_host.rpc_id(1, player)
 
 @rpc("any_peer", "call_remote")
-func register_player_on_host(player_info):
+func register_player_on_host(player_info: Dictionary) -> void:
 	# 只有主机执行此函数
 	if not multiplayer.is_server():
 		return
 	
 	if is_in_game:
 		push_warning(player_info.id, player_info.name, "试图加入游戏，但是游戏开始了——")
-		inform_late_player.rpc_id(player_info.id)
+		var player_info_id: int = player_info["id"]
+		inform_late_player.rpc_id(player_info_id)
 		return
 
 	# 更新主机本地的玩家列表
 	# 这样写是为了触发 players 的 set 方法，因为 Array.append() 不会触发 set 方法
-	var p_list = players.duplicate()
+	var p_list: Array = players.duplicate()
 	p_list.append(player_info)
 	
 	# 通知所有对等体有新玩家加入
@@ -179,46 +183,48 @@ func inform_late_player() -> void:
 	disconnect_and_cleanup("游戏已开始，拒绝加入")
 
 @rpc("authority", "call_local")
-func player_joined(player_info):
-	var tag = _get_tag(player_info.get("device_id", ""))
+func player_joined(player_info: Dictionary) -> void:
+	var device_tag_id: String = player_info.get("device_id", "")
+	var tag: String = _get_tag(device_tag_id)
 	print("[%s] 玩家 [%s] %s (%s) 已加入" % [Time.get_time_string_from_system(), tag, player_info.name, player_info.id])
 
 @rpc("authority", "call_local")
-func sync_players_list(players_list):
+func sync_players_list(players_list: Array) -> void:
 	# 所有客户端接收并更新玩家列表
 	players = players_list
 	emit_signal("players_updated")
 	print_players()
 
-func _on_peer_connected(_id: int):
+func _on_peer_connected(_id: int) -> void:
 	# 当有新对等体连接时，如果是主机，不需要额外处理
 	# 因为 register_player_on_host 已经处理了逻辑
 	pass
 
-func _on_peer_disconnected(id: int):
+func _on_peer_disconnected(id: int) -> void:
 	# 当对等体断开连接时
 	if multiplayer.is_server():
-		var p_name = "?"
-		var p_device_id = ""
-		for p in players:
+		var p_name: String = "?"
+		var p_device_id: String = ""
+		for p: Dictionary in players:
 			if p.id == id:
-				p_name = p.name
-				p_device_id = p.get("device_id", "")
+				p_name = str(p.name)
+				p_device_id = str(p.get("device_id", ""))
 				break
 		
 		# 服务器：从 players 列表中移除离开的玩家
 		# 这样写是为了触发 players 的 set 方法，因为 Array.append() 不会触发 set 方法
-		var p_list = players.duplicate()
-		for i in range(p_list.size()):
-			if p_list[i].id == id:
+		var p_list: Array = players.duplicate()
+		for i: int in range(p_list.size()):
+			var p_item: Dictionary = p_list[i]
+			if p_item.id == id:
 				p_list.remove_at(i)
 				players = p_list
 				break
 		
 		emit_signal("players_updated")
-		var reason = _pending_disconnect_reasons.get(id, "意外断开连接")
+		var reason: Variant = _pending_disconnect_reasons.get(id, "意外断开连接")
 		_pending_disconnect_reasons.erase(id)
-		var tag = _get_tag(p_device_id)
+		var tag: String = _get_tag(p_device_id)
 		push_warning("[%s] 玩家 [%s] %s (%s) — %s" % [Time.get_time_string_from_system(), tag, p_name, id, reason])
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
@@ -226,10 +232,10 @@ func _on_peer_disconnected(id: int):
 
 # 服务器通知所有客户端退出房间
 @rpc("authority", "call_local")
-func server_closing():
+func server_closing() -> void:
 	print("[%s] 服务器即将关闭" % Time.get_time_string_from_system())
 	# 隐藏 PlayerPage
-	var player_page = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
+	var player_page: Control = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
 	if player_page:
 		player_page.visible = false
 	players = []
@@ -241,18 +247,18 @@ func server_closing():
 func notify_disconnect(reason: String) -> void:
 	if not multiplayer.is_server():
 		return
-	var sender_id = multiplayer.get_remote_sender_id()
+	var sender_id: int = multiplayer.get_remote_sender_id()
 	_pending_disconnect_reasons[sender_id] = reason
 
 # 断开连接并清理
-func disconnect_and_cleanup(reason := "意外断开连接") -> void:
-	var tag = format_player(player.name, player.id)
+func disconnect_and_cleanup(reason: String = "意外断开连接") -> void:
+	var tag: String = format_player(player.name, player.id)
 	if multiplayer.is_server():
 		print("[%s] 玩家 %s — %s" % [Time.get_time_string_from_system(), tag, reason])
 		server_closing.rpc()
 	else:
 		notify_disconnect.rpc_id(1, reason)
-		for i in range(2):
+		for i: int in range(2):
 			await get_tree().physics_frame
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	
@@ -266,7 +272,7 @@ func disconnect_and_cleanup(reason := "意外断开连接") -> void:
 	emit_signal("messages_updated")
 
 @rpc("authority")
-func edit_time_out():
+func edit_time_out() -> void:
 	emit_signal("timeout_save")
 
 @rpc("any_peer", "call_local")
@@ -277,12 +283,12 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 	if level_file_name == "invalid" or level_file_name.is_empty():
 		push_error("[%s] transfer_level_data received invalid file name" % Time.get_time_string_from_system())
 		return
-	for p in players:
+	for p: Dictionary in players:
 		if p.id == player_id:
 			p.level_file_name = level_file_name
 			
 			# 1. 解压
-			var level_data_bytes = level_data_bytes_compressed.decompress_dynamic(-1, FileAccess.CompressionMode.COMPRESSION_DEFLATE)
+			var level_data_bytes: PackedByteArray = level_data_bytes_compressed.decompress_dynamic(-1, FileAccess.CompressionMode.COMPRESSION_DEFLATE)
 			if level_data_bytes.is_empty():
 				push_error("[%s] 解压失败，压缩数据大小：%d 字节" % [Time.get_time_string_from_system(), level_data_bytes_compressed.size()])
 				p.level_data = "invalid"
@@ -291,7 +297,7 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 			print("[%s] 解压成功，字节数：%d" % [Time.get_time_string_from_system(), level_data_bytes.size()])
 			
 			# 2. 转 UTF-8 字符串
-			var level_json = level_data_bytes.get_string_from_utf8()
+			var level_json: String = level_data_bytes.get_string_from_utf8()
 			if level_json.is_empty():
 				push_error("[%s] UTF-8 转换失败，字节数据可能不是有效文本" % Time.get_time_string_from_system())
 				p.level_data = "invalid"
@@ -308,7 +314,7 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 
 @rpc("any_peer", "call_local")
 func my_players_data_are_ready(player_id: int) -> void:
-	for p in players:
+	for p: Dictionary in players:
 		if p.id == player_id:
 			p.ready = true
 			print("[%s] 玩家 %s 已准备就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
@@ -319,7 +325,7 @@ func lets_play_together(rnd_levels: Array) -> void:
 	self.random_levels = rnd_levels
 	if multiplayer.is_server():
 		level_results = []
-		for level in rnd_levels:
+		for level: Variant in rnd_levels:
 			level_results.append({
 				"level": level,
 				"pass_count": 0,
@@ -327,28 +333,28 @@ func lets_play_together(rnd_levels: Array) -> void:
 			})
 	current_level_count = 0
 	total_levels = rnd_levels.size()
-	var game_mode = GameModeSingleton
-	game_mode.game_mode = GameModeSingleton.GameModeType.PLAY
-	var fc = func():
+	var game_mode: GameMode = GameModeSingleton
+	game_mode.game_mode = GameMode.GameModeType.PLAY
+	var fc: Callable = func() -> void:
 		get_tree().change_scene_to_file("uid://cxvueju65b3qv")
 	fc.call_deferred()
 
 @rpc("any_peer", "call_local")
-func level_add_pass_count(level, passed: bool, player_id: int) -> void:
+func level_add_pass_count(level: Variant, passed: bool, player_id: int) -> void:
 	if not multiplayer.is_server():
 		return
-	for p_author in players:
+	for p_author: Dictionary in players:
 		if p_author["level_file_name"] != level:
 			continue
 		if passed:
 			p_author["level_cause_pass"] += 1
-			for p_player in players:
+			for p_player: Dictionary in players:
 				if p_player.id == player_id:
 					p_player["level_pass_count"] += 1
 					print("[%s] Player %s passed %s's level." % [Time.get_time_string_from_system(), format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
 		else:
 			p_author["level_cause_death"] += 1
-			for p_player in players:
+			for p_player: Dictionary in players:
 				if p_player.id == player_id:
 					print("[%s] Player %s died in %s's level." % [Time.get_time_string_from_system(), format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
 
@@ -357,61 +363,61 @@ func level_add_pass_count(level, passed: bool, player_id: int) -> void:
 func reach_end(player_id: int) -> void:
 	if not multiplayer.is_server():
 		return
-	for p in players:
+	for p: Dictionary in players:
 		if p.id == player_id:
 			p.reach_end = true
 			print("[%s] 玩家 %s 已经玩过了所有关卡！" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
 			break
 	
 @rpc("authority", "call_local")
-func store_level_results(players) -> void:
+func store_level_results(players: Array) -> void:
 	print("[%s] 开始展示结果！！" % Time.get_time_string_from_system())
-	for p in players:
+	for p: Dictionary in players:
 		print("[%s] %s 的关卡通过率：%s%%  关卡通过数：%d  总积分：%d" % [Time.get_time_string_from_system(), format_player(p["name"], p["id"]), str(round(p["clear_rate"] * 100000.0) / 1000.0), p["level_pass_count"], p["score"]])
 	emit_signal("result_updated", players)
-	for p in players:
-		var level_file_path = p["level_file_name"]
-		var pass_count = p["level_cause_pass"]
-		var death_count = p["level_cause_death"]
-		var file = FileAccess.open(level_file_path, FileAccess.READ)
+	for p: Dictionary in players:
+		var level_file_path: String = p["level_file_name"]
+		var pass_count: int = p["level_cause_pass"]
+		var death_count: int = p["level_cause_death"]
+		var file: FileAccess = FileAccess.open(level_file_path, FileAccess.READ)
 		if not file:
-			var err = FileAccess.get_open_error()
+			var err: int = FileAccess.get_open_error()
 			push_error("[%s] Failed to open level file: %s, error: %d" % [Time.get_time_string_from_system(), level_file_path, err])
 			continue
-		var content = file.get_as_text()
+		var content: String = file.get_as_text()
 		file.close()
 		if content.is_empty():
 			push_error("[%s] Level file is empty: %s" % [Time.get_time_string_from_system(), level_file_path])
 			continue
-		var json = JSON.new()
-		var error = json.parse(content)
+		var json: JSON = JSON.new()
+		var error: int = json.parse(content)
 		
 		if error != OK:
 			push_error("Failed to parse level data JSON: %s" % level_file_path)
 			continue
 		
-		var level_data_dict = json.data
+		var level_data_dict: Dictionary = json.data
 
 		level_data_dict["pass_count"] = pass_count
 		level_data_dict["death_count"] = death_count
 
-		var level_data_json = JSON.stringify(level_data_dict, "")
-		var tmp_file_path = level_file_path + ".tmp"
-		var write_file = FileAccess.open(tmp_file_path, FileAccess.WRITE)
+		var level_data_json: String = JSON.stringify(level_data_dict, "")
+		var tmp_file_path: String = level_file_path + ".tmp"
+		var write_file: FileAccess = FileAccess.open(tmp_file_path, FileAccess.WRITE)
 		if not write_file:
-			var wr_err = FileAccess.get_open_error()
+			var wr_err: int = FileAccess.get_open_error()
 			push_error("[%s] Failed to open file for writing: %s, error: %d" % [Time.get_time_string_from_system(), tmp_file_path, wr_err])
 			continue
 		write_file.store_string(level_data_json)
 		write_file.close()
-		var dir = DirAccess.open("user://")
+		var dir: DirAccess = DirAccess.open("user://")
 		if dir:
-			var rename_err = dir.rename(tmp_file_path, level_file_path)
+			var rename_err: int = dir.rename(tmp_file_path, level_file_path)
 			if rename_err != OK:
 				push_error("[%s] Rename failed: %s -> %s, error: %d" % [Time.get_time_string_from_system(), tmp_file_path, level_file_path, rename_err])
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
-func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit, power, animation, frame, flip_h, is_dead: bool, scale: Vector2, rotation: float) -> void:
+func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit: PlayerSuit.SuitType, power: PlayerSuit.PowerupType, animation: StringName, frame: int, flip_h: bool, is_dead: bool, scale: Vector2, rotation: float) -> void:
 	#print("[接收] 来自玩家 ", player_name, " 的动画坐标数据：", ani_pos)
 	if current_level_count != current_level:
 		return
@@ -421,7 +427,7 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 	if not is_instance_valid(mp_ani_manager):
 		print("[%s] mp_ani_manager is not valid" % Time.get_time_string_from_system())
 		return
-	for ani in mp_ani_manager.anis:
+	for ani: AnimatedSprite2D in mp_ani_manager.anis:
 		if ani.has_meta("player_id"):
 			if ani.get_meta("player_id") != player_id:
 				continue
@@ -432,12 +438,12 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 			# 旋转
 			ani.rotation = rotation
 			# 名称
-			var why_control_hasnt_global_rotation = ani.get_node("%WhyControlHasntGlobalRotation") as Node2D
+			var why_control_hasnt_global_rotation: Node2D = ani.get_node("%WhyControlHasntGlobalRotation")
 			why_control_hasnt_global_rotation.global_rotation = 0.0		# 方便阅读
-			var label = ani.get_node("%PlayerNameLabel") as Label
-			for p in players:
+			var label: Label = ani.get_node("%PlayerNameLabel")
+			for p: Dictionary in players:
 				if p.id == player_id:
-					label.text = p.name
+					label.text = str(p.name)
 					break
 			# 死亡
 			if is_dead:
@@ -481,25 +487,27 @@ func _get_tag(player_device_id: String) -> String:
 	return player_device_id.substr(0, 5)
 
 func get_device_tag() -> String:
-	var unique_id = OS.get_unique_id()
+	var unique_id: String = OS.get_unique_id()
 	if unique_id == "":
 		return "?????"
 	unique_id = unique_id.replace("{", "").replace("}", "").replace("-", "")
 	return unique_id.substr(0, 5)
 
-func format_player(p_name, p_id) -> String:
-	return "[%s] %s (%s)" % [get_player_device_tag(p_id), p_name, p_id]
+func format_player(p_name: Variant, p_id: Variant) -> String:
+	var pid: int = p_id
+	return "[%s] %s (%s)" % [get_player_device_tag(pid), p_name, p_id]
 
 func get_player_device_tag(player_id: int) -> String:
-	for p in players:
+	for p: Dictionary in players:
 		if p.id == player_id:
-			return p.device_id
+			var p_device_id: String = p.device_id
+			return p_device_id
 	return "?????"
 
 func print_players() -> void:
-	for p in players:
-		var lv = p.level_data
-		var lv_len = lv.length()
+	for p: Dictionary in players:
+		var lv: String = p.level_data
+		var lv_len: int = lv.length()
 		if lv_len > 100:
 			lv = lv.substr(0, 100) + "..."
 		print("[%s]  %s" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
@@ -508,7 +516,7 @@ func print_players() -> void:
 		print("")
 
 func restore_origin_player_data() -> void:
-	for p in players:
+	for p: Dictionary in players:
 		p.level_file_name = "invalid"
 		p.level_data = "invalid"
 		p.is_ready_to_start = false
@@ -544,7 +552,7 @@ func sync_origin_player_data() -> void:
 func get_ready(p_id: int, is_ready: bool) -> void:
 	if not multiplayer.is_server():
 		return
-	for p in players:
+	for p: Dictionary in players:
 		if p.id == p_id:
 			p.is_ready_to_start = is_ready
 			if is_ready:
@@ -558,12 +566,12 @@ func get_ready(p_id: int, is_ready: bool) -> void:
 func send_message(p_id: int, unique_id: String, msg: String) -> void:
 	if not multiplayer.is_server():
 		return
-	var p_name = "invalid_name"
-	for p in players:
+	var p_name: String = "invalid_name"
+	for p: Dictionary in players:
 		if p.id == p_id:
-			p_name = p.name
+			p_name = str(p.name)
 			break
-	var time_str = Time.get_time_string_from_system(false)
+	var time_str: String = Time.get_time_string_from_system(false)
 	messages.append(
 		{
 			"cnt": msg_cnt,

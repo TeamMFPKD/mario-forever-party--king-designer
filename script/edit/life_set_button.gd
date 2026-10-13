@@ -4,7 +4,7 @@ enum LifeLimitEnum {
 	DOWN,
 	UP,
 }
-@export var life_limit = LifeLimitEnum.DOWN
+@export var life_limit: LifeLimitEnum = LifeLimitEnum.DOWN
 
 @export var limit_down: int = 1
 @export var limit_up: int = 3
@@ -16,7 +16,7 @@ func _ready() -> void:
 	level_manager.lives_changed.connect(_on_lives_changed)
 
 func _on_lives_changed() -> void:
-	var lives = level_manager.lives
+	var lives: int = level_manager.lives
 	match life_limit:
 		LifeLimitEnum.DOWN:
 			if lives == limit_down:

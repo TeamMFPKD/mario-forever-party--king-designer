@@ -83,7 +83,7 @@ func _ready() -> void:
 		move_object.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 	origin_scale = move_object.scale
 	player = get_tree().get_first_node_in_group("player") as Node2D
-	var fc = func():
+	var fc: Callable = func() -> void:
 		player = get_tree().get_first_node_in_group("player") as Node2D
 		if initially_face_to_player:
 			set_movement_direction()
@@ -91,7 +91,7 @@ func _ready() -> void:
 	if overlap_turn or is_clear_pipe_allowed:
 		shape_cast = get_node_or_null(path_to_shape_cast) as ShapeCast2D
 		if not shape_cast:
-			for child in move_object.get_children():
+			for child: Node in move_object.get_children():
 				if child is ShapeCast2D:
 					shape_cast = child
 					break
@@ -102,7 +102,7 @@ func _ready() -> void:
 
 	ani = get_node_or_null(path_to_ani) as AnimatedSprite2D
 	if not ani:
-		for child in move_object.get_children():
+		for child: Node in move_object.get_children():
 			if child is AnimatedSprite2D:
 				ani = child
 				break
@@ -110,7 +110,7 @@ func _ready() -> void:
 			push_error("[%s] BasicMovement: AnimatedSprite2D not found." % move_object.name)
 			
 	if is_clear_pipe_allowed:
-		var dusk_creator = dust_creator_scene.instantiate()
+		var dusk_creator: ExplodeEffectCreator = dust_creator_scene.instantiate()
 		dusk_creator.parent = move_object
 		pipe_entered.connect(dusk_creator.explode)
 		pipe_exited.connect(dusk_creator.explode)
@@ -133,14 +133,14 @@ func _physics_process(delta: float) -> void:
 
 		# 安全检测：管道运动后如果没有与墙体（碰撞层第1位）/TileMap重叠，说明已脱离管道
 		if pipe_in_cooldown <= 0:
-			var query = PhysicsShapeQueryParameters2D.new()
+			var query: PhysicsShapeQueryParameters2D = PhysicsShapeQueryParameters2D.new()
 			query.shape = shape_cast.shape
 			query.transform = move_object.global_transform
 			query.collision_mask = 1
 			query.collide_with_bodies = true
 			query.collide_with_areas = false
 			query.exclude = [move_object.get_rid()]
-			var block_results = move_object.get_world_2d().direct_space_state.intersect_shape(query)
+			var block_results: Array[Dictionary] = move_object.get_world_2d().direct_space_state.intersect_shape(query)
 			if block_results.is_empty():
 				exit_pipe()
 				move_object.force_update_transform()
@@ -165,11 +165,11 @@ func on_screen_entered() -> void:
 
 func turn_detect() -> void:
 	if edge_detect and move_object.is_on_floor():
-		var origin_position = move_object.position
-		var right = Vector2(-move_object.up_direction.y, move_object.up_direction.x)
+		var origin_position: Vector2 = move_object.position
+		var right: Vector2 = Vector2(-move_object.up_direction.y, move_object.up_direction.x)
 		move_object.position += right * 33.0 * sign(speed_x)
 		move_object.force_update_transform()
-		var collision = move_object.move_and_collide(-move_object.up_direction * 20.0, true, 0.05)
+		var collision: KinematicCollision2D = move_object.move_and_collide(-move_object.up_direction * 20.0, true, 0.05)
 		if collision == null:
 			speed_x *= -1.0
 		move_object.position = origin_position
@@ -180,11 +180,11 @@ func overlap_turn_detect() -> void:
 		return
 	if spring_bounce_speed_x != 0.0 or spring_bounce_speed_y != 0.0:
 		return
-	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
+	var results: Array[Node2D] = ShapeCastQuery.shape_query(move_object, shape_cast)
 	if results.size() <= 1:
 		overlap_turn_detect_objects.clear()
 		return
-	for result in results:
+	for result: Node2D in results:
 		if not is_instance_valid(result):
 			continue
 		if result is ClearPipeEntrance:
@@ -192,7 +192,7 @@ func overlap_turn_detect() -> void:
 		if result == move_object:
 			continue
 		if result.has_meta("basic_movement"):
-			var other_basic_movement_node = result.get_meta("basic_movement") as BasicMovement
+			var other_basic_movement_node: BasicMovement = result.get_meta("basic_movement")
 			if not is_instance_valid(other_basic_movement_node) or not other_basic_movement_node.can_be_turn_overlap_detected:
 				continue
 		if !(result in overlap_turn_detect_objects):
@@ -213,7 +213,7 @@ func speed_y_process(delta: float) -> void:
 		speed_y = 0.0
 
 func apply_speed() -> void:
-	var right = Vector2(-move_object.up_direction.y, move_object.up_direction.x)
+	var right: Vector2 = Vector2(-move_object.up_direction.y, move_object.up_direction.x)
 	move_object.velocity = right * (speed_x + spring_bounce_speed_x) - move_object.up_direction * (speed_y + spring_bounce_speed_y)
 
 func move() -> void:
@@ -256,14 +256,14 @@ func pipe_detect() -> void:
 	if out_pipe_cooldown > 0:
 		return
 
-	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
-	for result in results:
+	var results: Array[Node2D] = ShapeCastQuery.shape_query(move_object, shape_cast)
+	for result: Node2D in results:
 		if not is_instance_valid(result) or not result is ClearPipeEntrance:
 			continue
 		if result == move_object:
 			continue
 
-		var entrance := result as ClearPipeEntrance
+		var entrance: ClearPipeEntrance = result
 
 		# 已在管道内：处理出口检测和阻塞反转
 		if is_in_pipe:
@@ -303,8 +303,8 @@ func pipe_detect() -> void:
 			return
 
 		# 不在管道内：检查进入条件
-		var should_enter := false
-		var move_dir = Vector2(speed_x, speed_y).normalized()
+		var should_enter: bool = false
+		var move_dir: Vector2 = Vector2(speed_x, speed_y).normalized()
 		match entrance.entrance_direction:
 			ClearPipeEntrance.Direction.LEFT:
 				if move_dir.x < 0 and is_clear_pipe_allowed_left:
@@ -378,17 +378,19 @@ func exit_pipe() -> void:
 	move_object.collision_layer = pipe_origin_collision_layer
 
 	# 清除所有 turning area 的 processed 标记
-	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
-	for turning in turnings:
+	var turnings: Array[Node] = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning: Node in turnings:
 		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
-			turning.clear_processed(move_object)
+			var turning_area: ClearPipeTurningArea2D = turning
+			turning_area.clear_processed(move_object)
 	# 清除所有 entrance 的 overlapped 标记
-	var entrances = get_tree().get_nodes_in_group("clear_pipe_entrance")
-	for entrance in entrances:
+	var entrances: Array[Node] = get_tree().get_nodes_in_group("clear_pipe_entrance")
+	for entrance: Node in entrances:
 		if is_instance_valid(entrance) and entrance is ClearPipeEntrance:
-			entrance.clear_overlapped(move_object)
+			var entrance_node: ClearPipeEntrance = entrance
+			entrance_node.clear_overlapped(move_object)
 
-	for i in range(5):
+	for i: int in range(5):
 		move_object.velocity = Vector2.ZERO
 		move_object.move_and_slide()
 		move_object.force_update_transform()
@@ -415,18 +417,18 @@ func pipe_movement() -> void:
 	move_object.force_update_transform()
 
 func clear_pipe_turning_detect() -> void:
-	var results = ShapeCastQuery.shape_query(move_object, shape_cast)
-	for result in results:
+	var results: Array[Node2D] = ShapeCastQuery.shape_query(move_object, shape_cast)
+	for result: Node2D in results:
 		if not is_instance_valid(result) or not result is ClearPipeTurningArea2D:
 			continue
-		var area := result as ClearPipeTurningArea2D
+		var area: ClearPipeTurningArea2D = result
 
 		# 已处理过的转向区域不再重复转向
 		if area.is_processed(move_object):
 			continue
 
-		var target := area.global_position + Vector2(0, 8)
-		var diff := target - move_object.global_position
+		var target: Vector2 = area.global_position + Vector2(0, 8)
+		var diff: Vector2 = target - move_object.global_position
 
 		# 如果需要位置对齐
 		if abs(diff.x) > 0.5 or abs(diff.y) > 0.5:
@@ -479,13 +481,14 @@ func clear_pipe_turning_detect() -> void:
 		area.mark_processed(move_object)
 
 func clear_turning_processed_for_reversal() -> void:
-	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
-	for turning in turnings:
+	var turnings: Array[Node] = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning: Node in turnings:
 		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
-			turning.clear_processed(move_object)
+			var turning_area: ClearPipeTurningArea2D = turning
+			turning_area.clear_processed(move_object)
 
 func on_horizontal_spring_bounce(spring: Node2D) -> void:
-	var dir = 1.0 if move_object.global_position.x > spring.global_position.x else -1.0
+	var dir: float = 1.0 if move_object.global_position.x > spring.global_position.x else -1.0
 	spring_bounce_speed_x = abs(horizontal_spring_bounce_speed_x) * dir
 	spring_bounce_speed_y = horizontal_spring_bounce_speed_y
 	speed_x = abs(speed_x) * dir

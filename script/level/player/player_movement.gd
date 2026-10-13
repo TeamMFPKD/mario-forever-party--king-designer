@@ -33,11 +33,11 @@ signal screen_shake
 @export var jump_speed_factor: float = 1.1
 @export var max_speed_y: float = 650
 
-@export var gravity_normal = 40
-@export var gravity_hold_jump = 20.8
+@export var gravity_normal: float = 40
+@export var gravity_hold_jump: float = 20.8
 
-@export var gravity_normal_lui = 38.3
-@export var gravity_hold_jump_lui = 16.7
+@export var gravity_normal_lui: float = 38.3
+@export var gravity_hold_jump_lui: float = 16.7
 
 @export var horizontal_spring_bounce_speed_x: float = 500.0
 
@@ -134,7 +134,7 @@ var _fragment_velocity_data: Array[Vector2] = [
 
 
 
-func _physics_process(_delta):
+func _physics_process(_delta: float) -> void:
 	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
 	if out_pipe_cooldown > 0:
 		out_pipe_cooldown -= 1
@@ -181,13 +181,13 @@ func _physics_process(_delta):
 	if target_speed != 0.0:
 		# 加速阶段
 		if speed_x != target_speed:
-			var current_acceleration = acceleration
+			var current_acceleration: float = acceleration
 			if sign(target_speed) != sign(speed_x):
 				current_acceleration *= 2
 			speed_x = move_toward(speed_x, target_speed, current_acceleration)
 	else:
 		# 减速阶段
-		var current_deceleration = deceleration_ground if player.is_on_floor() else deceleration_air
+		var current_deceleration: float = deceleration_ground if player.is_on_floor() else deceleration_air
 		speed_x = move_toward(speed_x, 0.0, current_deceleration)
 
 
@@ -249,7 +249,7 @@ func _physics_process(_delta):
 		emit_signal("play_sound_bee")
 
 	if not (is_bee and is_bee_flying and move_jump):
-		var current_gravity = gravity_hold_jump if move_jump else gravity_normal
+		var current_gravity: float = gravity_hold_jump if move_jump else gravity_normal
 		if player_suit.power == PlayerSuit.PowerupType.LUI and player_suit.suit == PlayerSuit.SuitType.POWERED:
 			current_gravity = gravity_hold_jump_lui if move_jump else gravity_normal_lui
 		speed_y += current_gravity
@@ -278,12 +278,12 @@ func is_action_pressed(action: String) -> bool:
 func platform_fall_detect() -> void:
 	if !player.is_on_floor():
 		return
-	var result = player.move_and_collide(Vector2.DOWN, true)
+	var result: KinematicCollision2D = player.move_and_collide(Vector2.DOWN, true)
 	#print(result)
 	if not result:
 		return
 	if result.get_collider().has_meta("platform_fall_movement"):
-		var platform_fall_movement = result.get_collider().get_meta("platform_fall_movement") as PlatformFallMovement
+		var platform_fall_movement: PlatformFallMovement = result.get_collider().get_meta("platform_fall_movement")
 		#print(platform_fall_movement)
 		platform_fall_movement.fall()
 
@@ -352,14 +352,16 @@ func exit_pipe() -> void:
 	player.remove_meta("is_in_pipe")
 	out_pipe_cooldown = 10
 	pipe_in_cooldown = 0
-	var turnings = get_tree().get_nodes_in_group("clear_pipe_turning_area")
-	for turning in turnings:
+	var turnings: Array[Node] = get_tree().get_nodes_in_group("clear_pipe_turning_area")
+	for turning: Node in turnings:
 		if is_instance_valid(turning) and turning is ClearPipeTurningArea2D:
-			turning.clear_processed(player)
-	var entrances = get_tree().get_nodes_in_group("clear_pipe_entrance")
-	for entrance in entrances:
+			var turning_area: ClearPipeTurningArea2D = turning
+			turning_area.clear_processed(player)
+	var entrances: Array[Node] = get_tree().get_nodes_in_group("clear_pipe_entrance")
+	for entrance: Node in entrances:
 		if is_instance_valid(entrance) and entrance is ClearPipeEntrance:
-			entrance.clear_overlapped(player)
+			var entrance_node: ClearPipeEntrance = entrance
+			entrance_node.clear_overlapped(player)
 	
 	pipe_moving_dir = PipeMoveDirection.ALIGN
 	emit_signal("pipe_exited")
@@ -378,8 +380,8 @@ func pipe_movement() -> void:
 	player.force_update_transform()
 
 func on_horizontal_spring_bounce(spring: Node2D) -> void:
-	var dir = (1.0 if player.global_position.x > spring.global_position.x else -1.0) \
-			* (1.0 if int(round(target_gravity)) % 360 == 0 else -1.0)
+	var dir: float = (1.0 if player.global_position.x > spring.global_position.x else -1.0) \
+			* (1.0 if roundi(target_gravity) % 360 == 0 else -1.0)
 	speed_x = abs(horizontal_spring_bounce_speed_x) * dir
 
 func door_check() -> bool:
@@ -392,15 +394,17 @@ func enter_door(door_id: int, door: DoorComponent) -> void:
 		return
 	is_in_door = true
 	target_doors.clear()
-	var all_doors = get_tree().get_nodes_in_group("door")
-	for d in all_doors:
-		if d.id == door_id and target_doors.size() < 2:
-			target_doors.append(d)
-	for d in target_doors:
-		d.play_animation_enter()
-		if d == door:
+	var all_doors: Array[Node] = get_tree().get_nodes_in_group("door")
+	for d: Node in all_doors:
+		var door_node: DoorComponent = d
+		if door_node.id == door_id and target_doors.size() < 2:
+			target_doors.append(door_node)
+	for d: Variant in target_doors:
+		var target_enter_door: DoorComponent = d
+		target_enter_door.play_animation_enter()
+		if target_enter_door == door:
 			continue
-		target_door = d
+		target_door = target_enter_door
 	speed_x = 0.0
 	in_door_timer = 0
 	emit_signal("door_entered")
@@ -415,13 +419,14 @@ func door_movement() -> void:
 		50:
 			player.global_position = target_door.global_position + Vector2(0, 3.5)
 			player.reset_physics_interpolation()
-			for d in target_doors:
-				d.play_animation_exit()
+			for d: Variant in target_doors:
+				var target_exit_door: DoorComponent = d
+				target_exit_door.play_animation_exit()
 		100:
 			exit_door()
 
 func _snap_to_ground() -> void:
-	var snap = player.move_and_collide(-player.up_direction * 32.0)
+	var snap: KinematicCollision2D = player.move_and_collide(-player.up_direction * 32.0)
 	if snap:
 		speed_y = 0.0
 
@@ -449,15 +454,15 @@ func on_triangle_block() -> void:
 			_lock_current_input()
 
 func _lock_current_input() -> void:
-	var raw = [
+	var raw: Array[bool] = [
 		Input.is_action_pressed("move_right"),
 		Input.is_action_pressed("move_up"),
 		Input.is_action_pressed("move_left"),
 		Input.is_action_pressed("move_down"),
 	]
-	var step = wrapi(int(round(-rotate_with_up / 90.0)), 0, 4)
-	var grav = _INPUT_ID_MAP[step]
-	for key_idx in range(4):
+	var step: int = wrapi(roundi(-rotate_with_up / 90.0), 0, 4)
+	var grav: Array = _INPUT_ID_MAP[step]
+	for key_idx: int in range(4):
 		if raw[key_idx]:
 			if input_lock[key_idx] == -1:
 				input_lock[key_idx] = grav[key_idx]
@@ -479,28 +484,29 @@ func _set_move_dir(idx: int, val: bool) -> void:
 		3: move_down = val
 
 func _update_directional_input() -> void:
-	var raw = [
+	var raw: Array[bool] = [
 		Input.is_action_pressed("move_right"),  # 0
 		Input.is_action_pressed("move_up"),     # 1
 		Input.is_action_pressed("move_left"),   # 2
 		Input.is_action_pressed("move_down"),   # 3
 	]
 
-	var step = wrapi(int(round(-rotate_with_up / 90.0)), 0, 4)
-	var grav = _INPUT_ID_MAP[step]
+	var step: int = wrapi(roundi(-rotate_with_up / 90.0), 0, 4)
+	var grav: Array = _INPUT_ID_MAP[step]
 
 	move_right = false
 	move_up = false
 	move_left = false
 	move_down = false
 
-	for key_idx in range(4):
+	for key_idx: int in range(4):
 		if not raw[key_idx]:
 			input_lock[key_idx] = -1
 		elif input_lock[key_idx] != -1:
 			_set_move_dir(input_lock[key_idx], true)
 		else:
-			_set_move_dir(grav[key_idx], true)
+			var grav_id: int = grav[key_idx]
+			_set_move_dir(grav_id, true)
 
 # 大马里奥踩硬砖
 func _player_big_break_tile_pound() -> void:
@@ -508,21 +514,21 @@ func _player_big_break_tile_pound() -> void:
 		return
 	break_tile_cd_floor = true
 
-	var motion = Vector2(-player.up_direction * 8.0)
-	var collision = player.move_and_collide(motion, true)
+	var motion: Vector2 = Vector2(-player.up_direction * 8.0)
+	var collision: KinematicCollision2D = player.move_and_collide(motion, true)
 	_hard_breakable_block_collide(collision, motion)
 
 func _player_big_break_tile_bump() -> void:
 	if break_tile_cd_ceil:
 		return
 	break_tile_cd_ceil = true
-	var motion = Vector2(player.up_direction * 8.0)
-	var collision = player.move_and_collide(motion, true)
+	var motion: Vector2 = Vector2(player.up_direction * 8.0)
+	var collision: KinematicCollision2D = player.move_and_collide(motion, true)
 	_hard_breakable_block_collide(collision, motion)
 
 func _player_big_break_tile_wall() -> void:
-	var motion = Vector2(player.velocity.normalized() * 2.0)
-	var collision = player.move_and_collide(motion, true)
+	var motion: Vector2 = Vector2(player.velocity.normalized() * 2.0)
+	var collision: KinematicCollision2D = player.move_and_collide(motion, true)
 	_hard_breakable_block_collide(collision, motion)
 
 func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vector2) -> void:
@@ -531,30 +537,31 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 			return
 	if not collision:
 		return
-	var collider = collision.get_collider()
+	var collider: Node2D = collision.get_collider()
 	if collider is TileMapLayer:
-		var tilemap = collision.get_collider() as TileMapLayer
+		var tilemap: TileMapLayer = collider
 		
-		var offsets = [Vector2(0.5, 0), Vector2(-0.5, 0), Vector2(0, 0.5), Vector2(0, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5), Vector2(0.5, -0.5), Vector2(-0.5, -0.5)]
-		var hit_cell = null
-		for off in offsets:
-			var pt = collision.get_position() + off
-			var local_pt = tilemap.to_local(pt)
-			var cell = tilemap.local_to_map(local_pt)
-			var td = tilemap.get_cell_tile_data(cell)
+		var offsets: Array[Vector2] = [Vector2(0.5, 0), Vector2(-0.5, 0), Vector2(0, 0.5), Vector2(0, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5), Vector2(0.5, -0.5), Vector2(-0.5, -0.5)]
+		var hit_cell: Variant = null
+		for off: Vector2 in offsets:
+			var pt: Vector2 = collision.get_position() + off
+			var local_pt: Vector2 = tilemap.to_local(pt)
+			var cell: Vector2i = tilemap.local_to_map(local_pt)
+			var td: TileData = tilemap.get_cell_tile_data(cell)
 			if td and td.get_custom_data("big_breakable"):
 				hit_cell = cell
 				break
 
 		if hit_cell != null:
-			var cp = Vector2i(hit_cell.x, hit_cell.y)
+			var hit_cell_v: Vector2i = hit_cell
+			var cp: Vector2i = Vector2i(hit_cell_v.x, hit_cell_v.y)
 			var tile_tex: Texture2D = null
-			var source_id = tilemap.get_cell_source_id(cp)
-			var atlas_coords = tilemap.get_cell_atlas_coords(cp)
+			var source_id: int = tilemap.get_cell_source_id(cp)
+			var atlas_coords: Vector2i = tilemap.get_cell_atlas_coords(cp)
 			if source_id >= 0 and atlas_coords != Vector2i(-1, -1):
-				var source = tilemap.tile_set.get_source(source_id) as TileSetAtlasSource
+				var source: TileSetAtlasSource = tilemap.tile_set.get_source(source_id)
 				if source:
-					var atlas_tex = AtlasTexture.new()
+					var atlas_tex: AtlasTexture = AtlasTexture.new()
 					atlas_tex.atlas = source.texture
 					atlas_tex.region = source.get_tile_texture_region(atlas_coords)
 					tile_tex = atlas_tex
@@ -566,20 +573,22 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 			emit_signal("play_sound_break_tile")
 			
 			# 递归检测连续碰撞
-			var collision2 = player.move_and_collide(motion, true)
+			var collision2: KinematicCollision2D = player.move_and_collide(motion, true)
 			_hard_breakable_block_collide(collision2, motion)
 
 
 	if collider.has_meta("hard_breakable_block"):
 		var block_tex: Texture2D = null
-		for child in collider.get_children():
+		for child: Node in collider.get_children():
 			if child is Sprite2D:
-				block_tex = child.texture
+				var sprite_child: Sprite2D = child
+				block_tex = sprite_child.texture
 				break
 			elif child is AnimatedSprite2D:
-				var anim = child.animation
-				if anim and child.sprite_frames.has_animation(anim):
-					block_tex = child.sprite_frames.get_frame_texture(anim, child.frame)
+				var anim_child: AnimatedSprite2D = child
+				var anim: StringName = anim_child.animation
+				if anim and anim_child.sprite_frames.has_animation(anim):
+					block_tex = anim_child.sprite_frames.get_frame_texture(anim, anim_child.frame)
 				break
 		_spawn_fragments(collider.global_position, block_tex)
 		collider.free()
@@ -588,14 +597,14 @@ func _hard_breakable_block_collide(collision: KinematicCollision2D, motion: Vect
 		emit_signal("play_sound_break_tile")
 
 		# 神秘递归
-		var collision2 = player.move_and_collide(motion, true)
+		var collision2: KinematicCollision2D = player.move_and_collide(motion, true)
 		_hard_breakable_block_collide(collision2, motion)
 
 
 func _spawn_fragments(world_pos: Vector2, tex: Texture2D = null) -> void:
 	emit_signal("screen_shake")
-	for i in _fragment_velocity_data.size():
-		var f = _block_fragment_scene.instantiate()
+	for i: int in _fragment_velocity_data.size():
+		var f: BlockFragment = _block_fragment_scene.instantiate()
 		if tex:
 			f.sprite.texture = tex
 		f.global_position = world_pos + _fragment_create_position[i]

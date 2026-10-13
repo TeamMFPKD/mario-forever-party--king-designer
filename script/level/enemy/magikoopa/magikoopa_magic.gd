@@ -4,19 +4,20 @@ extends Node2D
 @export_range(0, 192, 16) var safe_range: float
 @export var magic_scene: PackedScene
 
-@onready var shape_cast_2d = $ShapeCast2D
-@onready var shape_cast_2d2 = $ShapeCast2D2
-@onready var magikoopa = get_parent()
-@onready var sprite = get_parent().get_node("AnimatedSprite2D")
-@onready var collision = $"../CollisionShape2D"
+@onready var shape_cast_2d: ShapeCast2D = $ShapeCast2D
+@onready var shape_cast_2d2: ShapeCast2D = $ShapeCast2D2
+@onready var magikoopa: CharacterBody2D = get_parent()
+@onready var sprite: AnimatedSprite2D = get_parent().get_node("AnimatedSprite2D")
+@onready var collision: CollisionShape2D = $"../CollisionShape2D"
+@onready var magic_se: AudioStreamPlayer = $MagicSE
 
 var player: Node2D
 var player_position: Vector2
-var place = []
+var place: Array[Vector2] = []
 var processing: bool = false
 
 
-func _ready():
+func _ready() -> void:
 	sprite.modulate.a = 0
 	player = get_tree().get_first_node_in_group("player") as Node2D
 
@@ -30,31 +31,31 @@ func _physics_process(_delta: float) -> void:
 		sprite.flip_h = magikoopa.global_position.x > player.global_position.x
 
 
-func attack():
-	var tween_1 = create_tween().tween_property(sprite, "modulate:a", 1, 0.34)
+func attack() -> void:
+	var tween_1: PropertyTweener = create_tween().tween_property(sprite, "modulate:a", 1, 0.34)
 	await tween_1.finished
 	collision.disabled = false
 
 	await get_tree().create_timer(1.0, false, true).timeout
 
-	var magic = magic_scene.instantiate()
-	magic.connect("tree_entered", func(): magic.global_position = magikoopa.global_position)
+	var magic: Node2D = magic_scene.instantiate()
+	magic.connect("tree_entered", func() -> void: magic.global_position = magikoopa.global_position)
 	get_parent().add_sibling(magic)
-	$MagicSE.play()
+	magic_se.play()
 
 	await get_tree().create_timer(1.0, false, true).timeout
 
 	collision.disabled = true
-	var tween_2 = create_tween().tween_property(sprite, "modulate:a", 0, 0.34)
+	var tween_2: PropertyTweener = create_tween().tween_property(sprite, "modulate:a", 0, 0.34)
 	await tween_2.finished
 
 	await get_tree().create_timer(1.0, false, true).timeout
 
-	var canvas = get_canvas_transform()
-	var top_left = snapped(-canvas.origin / canvas.get_scale(), Vector2(32, 32))
-	var size = snapped(get_viewport_rect().size / canvas.get_scale(), Vector2(32, 32))
+	var canvas: Transform2D = get_canvas_transform()
+	var top_left: Vector2 = snapped(-canvas.origin / canvas.get_scale(), Vector2(32, 32))
+	var size: Vector2 = snapped(get_viewport_rect().size / canvas.get_scale(), Vector2(32, 32))
 
-	magikoopa.global_position = Vector2i(top_left.x + 16, top_left.y + 16)
+	magikoopa.global_position = Vector2i(int(top_left.x + 16.0), int(top_left.y + 16.0))
 	place.clear()
 
 	if is_instance_valid(player):

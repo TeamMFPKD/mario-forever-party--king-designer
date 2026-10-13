@@ -9,11 +9,11 @@ class_name AutoSpriteFlipH
 
 var _detected_direction_x: int = 0
 var _last_position_x: float = 0.0
-var sprite
+var sprite: Node2D
 var _flip_h: bool = false
 
 
-func _ready():
+func _ready() -> void:
 	# 确定使用哪个精灵
 	var sprite2d: Sprite2D = get_node_or_null(_sprite2d_path) as Sprite2D
 	var animated_sprite2d: AnimatedSprite2D = get_node_or_null(_animated_sprite2d_path) as AnimatedSprite2D
@@ -26,7 +26,7 @@ func _ready():
 	if sprite != null:
 		_last_position_x = sprite.global_position.x
 
-func _physics_process(_delta: float):
+func _physics_process(_delta: float) -> void:
 	if sprite == null:
 		return
 
@@ -41,7 +41,7 @@ func _physics_process(_delta: float):
 			_flip_h = true
 	
 		if sprite != null:
-			sprite.flip_h = _flip_h
+			sprite.set("flip_h", _flip_h)
 			return
 	
 	# 检测X方向的变化
@@ -54,5 +54,5 @@ func _physics_process(_delta: float):
 	
 	# 根据精灵类型设置FlipH	
 	if sprite != null:
-		sprite.flip_h = (_detected_direction_x == -1)
+		sprite.set("flip_h", _detected_direction_x == -1)
 		

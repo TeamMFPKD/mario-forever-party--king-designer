@@ -11,7 +11,7 @@ signal overflow
 @export var cursed: bool = false
 @export var phanto_scene: PackedScene
 
-var key: Node2D
+var key: Area2D
 var ani: AnimatedSprite2D
 var past_player_status: Array = []
 
@@ -28,15 +28,15 @@ var state: KeyState = KeyState.IDLE:
 			emit_signal("play_sound_get")
 			if not is_in_group("key_following"):
 				add_to_group("key_following")
-			var following_keys = get_tree().get_nodes_in_group("key_following")
+			var following_keys: Array = get_tree().get_nodes_in_group("key_following")
 			key_id = following_keys.size()
-			var player = get_tree().get_first_node_in_group("player") as Node2D
+			var player: CharacterBody2D = get_tree().get_first_node_in_group("player") as CharacterBody2D
 			if player:
 				last_player_position = player.position
 			if cursed:
 				add_to_group("key_following_cursed")
-				var got_cursed_keys = get_tree().get_nodes_in_group("key_following_cursed")
-				var phantos = get_tree().get_nodes_in_group("phanto")
+				var got_cursed_keys: Array = get_tree().get_nodes_in_group("key_following_cursed")
+				var phantos: Array = get_tree().get_nodes_in_group("phanto")
 				if phantos.size() < got_cursed_keys.size():
 					_create_phanto(player)
 		if value == KeyState.GOT:
@@ -47,7 +47,7 @@ var state: KeyState = KeyState.IDLE:
 				_got_tween = create_tween()
 				_got_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
 				_got_tween.tween_property(key, "position:y", key.position.y - 80.0, 0.4)
-				_got_tween.finished.connect(func():
+				_got_tween.finished.connect(func() -> void:
 					state = KeyState.FOLLOWING
 					_got_tween = null
 				)
@@ -62,13 +62,13 @@ var offset_x: float = 0.0
 
 var _got_tween: Tween
 
-const MAX_PAST_STATUS = 200
-const TELEPORT_THRESHOLD = 64.0
+const MAX_PAST_STATUS: int = 200
+const TELEPORT_THRESHOLD: float = 64.0
 
 var last_player_position: Vector2
 
 func _ready() -> void:
-	key = get_node(path_to_key) as Node2D
+	key = get_node(path_to_key) as Area2D
 	key.body_entered.connect(_on_body_entered)
 	ani = get_node(path_to_ani) as AnimatedSprite2D
 
@@ -101,8 +101,8 @@ func try_to_get_key(body: Node2D = null) -> void:
 		return
 
 func try_follow() -> bool:
-	var locked_doors = round(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
-	var got_keys = get_tree().get_nodes_in_group("key_following").size()
+	var locked_doors: int = roundi(get_tree().get_nodes_in_group("door_locked").size() / 2.0)
+	var got_keys: int = get_tree().get_nodes_in_group("key_following").size()
 	if got_keys >= locked_doors:
 		emit_signal("overflow")
 		return false
@@ -125,18 +125,18 @@ func _physics_process(delta: float) -> void:
 			_follow_player()
 
 func _follow_player() -> void:
-	var player = get_tree().get_first_node_in_group("player") as Node2D
+	var player: CharacterBody2D = get_tree().get_first_node_in_group("player") as CharacterBody2D
 	if not player:
 		return
 
-	var player_movement = player.get_meta("player_movement") as PlayerMovement
+	var player_movement: PlayerMovement = player.get_meta("player_movement")
 	if player_movement.speed_x != 0.0:
 		dir = sign(player_movement.speed_x)
-	var target_offset = -(16.0 + (key_id - 1) * 8.0) * dir
+	var target_offset: float = -(16.0 + (key_id - 1) * 8.0) * dir
 
-	var teleported = last_player_position.distance_to(player.position) > TELEPORT_THRESHOLD
+	var teleported: bool = last_player_position.distance_to(player.position) > TELEPORT_THRESHOLD
 	if teleported:
-		var entry = {"position": player.position, "is_on_floor": player.is_on_floor()}
+		var entry: Dictionary = {"position": player.position, "is_on_floor": player.is_on_floor()}
 		past_player_status.fill(entry)
 		key.position = player.position + Vector2(0, -8)
 		track_frame = 0
@@ -184,15 +184,15 @@ func _follow_player() -> void:
 	offset_x += (target_offset - offset_x) * 0.02
 	key.position.x += offset_x
 
-func _create_phanto(body: Node) -> void:
-	var phanto = phanto_scene.instantiate() as Node2D
-	var spawn_vector = body.position - key.position
-	var angle = Vector2.ZERO.angle_to(spawn_vector)
+func _create_phanto(body: Node2D) -> void:
+	var phanto: Node2D = phanto_scene.instantiate() as Node2D
+	var spawn_vector: Vector2 = body.position - key.position
+	var angle: float = Vector2.ZERO.angle_to(spawn_vector)
 	# Phanto will not spawn at the same position as the player, but a bit away
 	angle -= PI / 4.0
 	spawn_vector = Vector2.from_angle(angle)
-	var spawn_position = spawn_vector * (640.0 + 64.0)
+	var spawn_position: Vector2 = spawn_vector * (640.0 + 64.0)
 	phanto.position = key.position + spawn_position
-	var fc = func():
+	var fc: Callable = func() -> void:
 		key.add_sibling(phanto)
 	fc.call_deferred()

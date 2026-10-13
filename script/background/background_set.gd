@@ -6,10 +6,10 @@ class_name BackgroundSet
 @export var background_bottom: Node2D
 @export var cloud_top: Node2D
 
-var room_left = 0;
-var room_top = 0;
-var room_right = 640;
-var room_bottom = 480;
+var room_left: int = 0;
+var room_top: int = 0;
+var room_right: int = 640;
+var room_bottom: int = 480;
 
 var level_camera: LevelCamera
 var _original_position: Vector2
@@ -45,7 +45,7 @@ func _on_level_camera_limit_changed(top: int, left: int, right: int, bottom: int
 func background_set() -> void:
 	# 渐变色背景
 	if (gradient != null):
-		var gradient_texture_2d = gradient.texture as GradientTexture2D
+		var gradient_texture_2d: GradientTexture2D = gradient.texture as GradientTexture2D
 		gradient_texture_2d.height = int(room_bottom - room_top)
 		gradient.position.y = (floor)((room_bottom + room_top) / 2.0)
 

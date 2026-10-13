@@ -7,8 +7,8 @@ var timer: Timer
 var time_label: Label
 
 func _ready() -> void:
-	timer = get_tree().get_first_node_in_group("timer_singleton")
-	time_label = get_node(path_to_label)
+	timer = get_tree().get_first_node_in_group("timer_singleton") as Timer
+	time_label = get_node(path_to_label) as Label
 
 func _process(_delta: float) -> void:
 	if not timer:

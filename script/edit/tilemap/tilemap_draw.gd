@@ -4,39 +4,39 @@ class_name TileMapDraw
 
 @export var tile_map: TileMapLayer
 
-var is_drawing = false
-var brush_mode = true # true for drawing, false for erasing
-var drawing_enabled = true
+var is_drawing: bool = false
+var brush_mode: bool = true # true for drawing, false for erasing
+var drawing_enabled: bool = true
 var custom_atlas_coords: Vector2i = Vector2i(-1, -1) # 自定义图块坐标，默认为(-1,-1)表示使用默认
 
-func _ready():
+func _ready() -> void:
 	# 延迟设置输入处理器，避免竞争条件
 	call_deferred("setup_input_handler")
 
-func setup_input_handler():
+func setup_input_handler() -> void:
 	# 检查是否已有输入处理器
-	var input_handler = null
+	var input_handler: InputHandler = null
 	
 	# 首先尝试在场景树中查找InputHandler节点
 	# 由于InputHandler位于Level节点下，而TileMapDraw位于Level/TileMapLayer/TileMapDraw
 	# 所以应该向上查找两级到Level节点，然后查找其子节点
-	var level_node = get_parent().get_parent()  # 获取Level节点
+	var level_node: Node = get_parent().get_parent()  # 获取Level节点
 	if level_node:
-		for child in level_node.get_children():
+		for child: Node in level_node.get_children():
 			if child is InputHandler:
 				input_handler = child
 				break
 	
 	if not input_handler:
 		# 如果没有找到，尝试在整个场景树中查找
-		for child in get_tree().root.get_children():
+		for child: Node in get_tree().root.get_children():
 			if child is InputHandler:
 				input_handler = child
 				break
 	
 	if not input_handler:
 		# 如果还是没有，创建并添加到Level节点中
-		var input_handler_script = preload("uid://devgf5ccfvhwv")
+		var input_handler_script: GDScript = preload("uid://devgf5ccfvhwv")
 		input_handler = input_handler_script.new()
 		input_handler.name = "InputHandler"
 		if level_node:
@@ -60,21 +60,21 @@ func setup_input_handler():
 	else:
 		print("[%s] TileMapDraw: Error: Failed to find or create InputHandler" % Time.get_time_string_from_system())
 
-func _on_input_clicked(input_pos: Vector2):
+func _on_input_clicked(input_pos: Vector2) -> void:
 	if drawing_enabled and tile_map:
 		# 点击时开始绘图
 		is_drawing = true
 		place_tile_at_cursor(input_pos)
 
-func _on_input_released(_input_pos: Vector2):
+func _on_input_released(_input_pos: Vector2) -> void:
 	is_drawing = false
 
-func _on_input_dragged(input_pos: Vector2):
+func _on_input_dragged(input_pos: Vector2) -> void:
 	if drawing_enabled and is_drawing and tile_map:
 		place_tile_at_cursor(input_pos)
 
 # 设置绘图启用状态
-func set_drawing_enabled(enabled: bool):
+func set_drawing_enabled(enabled: bool) -> void:
 	drawing_enabled = enabled
 	if not enabled:
 		is_drawing = false
@@ -84,25 +84,25 @@ func is_drawing_enabled() -> bool:
 	return drawing_enabled
 
 # 开始绘图
-func start_drawing():
+func start_drawing() -> void:
 	is_drawing = true
 
 # 停止绘图
-func stop_drawing():
+func stop_drawing() -> void:
 	is_drawing = false
 
-func place_tile_at_cursor(cursor_pos):
+func place_tile_at_cursor(cursor_pos: Vector2) -> void:
 	if not tile_map:
 		return
 	
 	# 将世界坐标转换为本地坐标
-	var local_pos = to_local(cursor_pos)
+	var local_pos: Vector2 = to_local(cursor_pos)
 	
 	# 获取单元格坐标
-	var cell_size = tile_map.tile_set.tile_size
-	var cell_coords = Vector2i(
-		floor(local_pos.x / cell_size.x),
-		floor(local_pos.y / cell_size.y)
+	var cell_size: Vector2i = tile_map.tile_set.tile_size
+	var cell_coords: Vector2i = Vector2i(
+		floori(local_pos.x / cell_size.x),
+		floori(local_pos.y / cell_size.y)
 	)
 
 	var cell_coords_array: Array = [cell_coords]
@@ -125,7 +125,7 @@ func place_tile_at_cursor(cursor_pos):
 	else:
 		# 擦除瓦片
 		# 检查该位置是否有瓦片
-		var has_tile = tile_map.get_cell_source_id(cell_coords) != -1
+		var has_tile: bool = tile_map.get_cell_source_id(cell_coords) != -1
 		
 		# 只有当存在瓦片时才擦除并播放音效
 		if has_tile:
@@ -140,38 +140,39 @@ func place_tile_at_cursor(cursor_pos):
 		call_level_control_erase(cursor_pos)
 
 # 新增：发射放置音效的函数
-func emit_place_sound():
+func emit_place_sound() -> void:
 	# 获取LevelControl节点并发射信号
-	var level_node = get_parent().get_parent()  # 获取Level节点
+	var level_node: Node = get_parent().get_parent()  # 获取Level节点
 	if level_node:
-		for child in level_node.get_children():
+		for child: Node in level_node.get_children():
 			if child is LevelControl:
 				child.emit_signal("play_sound_place")
 				break
 
 # 新增：发射擦除音效的函数
-func emit_erase_sound():
+func emit_erase_sound() -> void:
 	# 获取LevelControl节点并发射信号
-	var level_node = get_parent().get_parent()  # 获取Level节点
+	var level_node: Node = get_parent().get_parent()  # 获取Level节点
 	if level_node:
-		for child in level_node.get_children():
+		for child: Node in level_node.get_children():
 			if child is LevelControl:
 				child.emit_signal("play_sound_erase")
 				break
 
 # 在橡皮擦模式下调用LevelControl的擦除功能
-func call_level_control_erase(input_pos: Vector2):
+func call_level_control_erase(input_pos: Vector2) -> void:
 	# 获取LevelControl节点
-	var level_node = get_parent().get_parent()  # 获取Level节点
+	var level_node: Node = get_parent().get_parent()  # 获取Level节点
 	if level_node:
-		for child in level_node.get_children():
+		for child: Node in level_node.get_children():
 			if child is LevelControl:
 				# 调用LevelControl的擦除方法
-				child.erase_at_position(input_pos)
+				var level_control: LevelControl = child
+				level_control.erase_at_position(input_pos)
 				break
 
 # 设置画笔模式（true为绘制，false为擦除）
-func set_brush_mode(mode: bool):
+func set_brush_mode(mode: bool) -> void:
 	brush_mode = mode
 
 # 获取当前画笔模式
@@ -179,24 +180,24 @@ func get_brush_mode() -> bool:
 	return brush_mode
 
 # 橡皮擦功能：在指定位置擦除瓦片
-func erase_tile_at_position(input_pos: Vector2):
+func erase_tile_at_position(input_pos: Vector2) -> void:
 	if not tile_map:
 		return
 	
 	# 将世界坐标转换为本地坐标
-	var local_pos = to_local(input_pos)
+	var local_pos: Vector2 = to_local(input_pos)
 	
 	# 获取单元格坐标
-	var cell_size = tile_map.tile_set.tile_size
-	var cell_coords = Vector2i(
-		floor(local_pos.x / cell_size.x),
-		floor(local_pos.y / cell_size.y)
+	var cell_size: Vector2i = tile_map.tile_set.tile_size
+	var cell_coords: Vector2i = Vector2i(
+		floori(local_pos.x / cell_size.x),
+		floori(local_pos.y / cell_size.y)
 	)
 
 	var cell_coords_array: Array = [cell_coords]
 	
 	# 检查该位置是否有瓦片
-	var has_tile = tile_map.get_cell_source_id(cell_coords) != -1
+	var has_tile: bool = tile_map.get_cell_source_id(cell_coords) != -1
 	
 	# 只有当存在瓦片时才擦除并播放音效
 	if has_tile:
@@ -209,30 +210,30 @@ func erase_tile_at_position(input_pos: Vector2):
 		check_and_erase_border_terrain(cell_coords)
 
 # 检查并擦除边界terrain（与check_and_draw_border_terrain对应的删除逻辑）
-func check_and_erase_border_terrain(cell_coords: Vector2i):
+func check_and_erase_border_terrain(cell_coords: Vector2i) -> void:
 	# 获取Camera2D
-	var level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
+	var level_camera: Camera2D = get_tree().get_first_node_in_group("level_camera")
 	if not level_camera:
 		return
 	
 	# 获取Camera的边界限制
-	var camera_left = level_camera.limit_left
-	var camera_right = level_camera.limit_right
-	var camera_top = level_camera.limit_top
-	var camera_bottom = level_camera.limit_bottom
+	var camera_left: int = level_camera.limit_left
+	var camera_right: int = level_camera.limit_right
+	var camera_top: int = level_camera.limit_top
+	var camera_bottom: int = level_camera.limit_bottom
 	
 	# 获取单元格的世界坐标
-	var cell_size = tile_map.tile_set.tile_size
-	var cell_world_pos = Vector2(
+	var cell_size: Vector2i = tile_map.tile_set.tile_size
+	var cell_world_pos: Vector2 = Vector2(
 		cell_coords.x * cell_size.x,
 		cell_coords.y * cell_size.y
 	)
 	
 	# 检查是否在边界上
-	var is_on_left_border = abs(cell_world_pos.x - camera_left) < cell_size.x
-	var is_on_right_border = abs((cell_world_pos.x + cell_size.x) - camera_right) < cell_size.x
-	var is_on_top_border = abs(cell_world_pos.y - camera_top) < cell_size.y
-	var is_on_bottom_border = abs((cell_world_pos.y + cell_size.y) - camera_bottom) < cell_size.x
+	var is_on_left_border: bool = abs(cell_world_pos.x - camera_left) < cell_size.x
+	var is_on_right_border: bool = abs((cell_world_pos.x + cell_size.x) - camera_right) < cell_size.x
+	var is_on_top_border: bool = abs(cell_world_pos.y - camera_top) < cell_size.y
+	var is_on_bottom_border: bool = abs((cell_world_pos.y + cell_size.y) - camera_bottom) < cell_size.x
 	
 	# 存储需要额外擦除的单元格坐标
 	var extra_cells: Array[Vector2i] = []
@@ -271,37 +272,37 @@ func check_and_erase_border_terrain(cell_coords: Vector2i):
 		extra_cells.append(Vector2i(cell_coords.x, cell_coords.y + 1))
 	
 	# 擦除额外的terrain单元格
-	for extra_cell in extra_cells:
+	for extra_cell: Vector2i in extra_cells:
 		# 检查该位置是否有瓦片，如果有则擦除
 		if tile_map.get_cell_source_id(extra_cell) != -1:
 			tile_map.set_cells_terrain_connect([extra_cell], 0, -1)
 			print("[%s] TileMapDraw: 在边界额外擦除terrain，坐标: " % Time.get_time_string_from_system(), extra_cell)
 
 # 检查并绘制边界terrain
-func check_and_draw_border_terrain(cell_coords: Vector2i):
+func check_and_draw_border_terrain(cell_coords: Vector2i) -> void:
 	# 获取Camera2D
-	var level_camera = get_tree().get_first_node_in_group("level_camera") as Camera2D
+	var level_camera: Camera2D = get_tree().get_first_node_in_group("level_camera")
 	if not level_camera:
 		return
 	
 	# 获取Camera的边界限制
-	var camera_left = level_camera.limit_left
-	var camera_right = level_camera.limit_right
-	var camera_top = level_camera.limit_top
-	var camera_bottom = level_camera.limit_bottom
+	var camera_left: int = level_camera.limit_left
+	var camera_right: int = level_camera.limit_right
+	var camera_top: int = level_camera.limit_top
+	var camera_bottom: int = level_camera.limit_bottom
 	
 	# 获取单元格的世界坐标
-	var cell_size = tile_map.tile_set.tile_size
-	var cell_world_pos = Vector2(
+	var cell_size: Vector2i = tile_map.tile_set.tile_size
+	var cell_world_pos: Vector2 = Vector2(
 		cell_coords.x * cell_size.x,
 		cell_coords.y * cell_size.y
 	)
 	
 	# 检查是否在边界上
-	var is_on_left_border = abs(cell_world_pos.x - camera_left) < cell_size.x
-	var is_on_right_border = abs((cell_world_pos.x + cell_size.x) - camera_right) < cell_size.x
-	var is_on_top_border = abs(cell_world_pos.y - camera_top) < cell_size.y
-	var is_on_bottom_border = abs((cell_world_pos.y + cell_size.y) - camera_bottom) < cell_size.x
+	var is_on_left_border: bool = abs(cell_world_pos.x - camera_left) < cell_size.x
+	var is_on_right_border: bool = abs((cell_world_pos.x + cell_size.x) - camera_right) < cell_size.x
+	var is_on_top_border: bool = abs(cell_world_pos.y - camera_top) < cell_size.y
+	var is_on_bottom_border: bool = abs((cell_world_pos.y + cell_size.y) - camera_bottom) < cell_size.x
 	
 	# 存储需要额外绘制的单元格坐标
 	var extra_cells: Array[Vector2i] = []
@@ -340,18 +341,18 @@ func check_and_draw_border_terrain(cell_coords: Vector2i):
 		extra_cells.append(Vector2i(cell_coords.x, cell_coords.y + 1))
 	
 	# 绘制额外的terrain单元格
-	for extra_cell in extra_cells:
+	for extra_cell: Vector2i in extra_cells:
 		# 检查该位置是否已经有瓦片，如果没有则绘制
 		if tile_map.get_cell_source_id(extra_cell) == -1:
 			tile_map.set_cells_terrain_connect([extra_cell], 0, 0)
 			print("[%s] TileMapDraw: 在边界额外绘制terrain，坐标: " % Time.get_time_string_from_system(), extra_cell)
 
 # 设置自定义图块坐标
-func set_custom_atlas_coords(coords: Vector2i):
+func set_custom_atlas_coords(coords: Vector2i) -> void:
 	custom_atlas_coords = coords
 	print("[%s] TileMapDraw: 设置自定义图块坐标为: " % Time.get_time_string_from_system(), coords)
 
 # 清除自定义图块坐标，恢复默认行为
-func clear_custom_atlas_coords():
+func clear_custom_atlas_coords() -> void:
 	custom_atlas_coords = Vector2i(-1, -1)
 	print("[%s] TileMapDraw: 清除自定义图块坐标，恢复默认行为" % Time.get_time_string_from_system())

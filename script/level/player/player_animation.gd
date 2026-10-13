@@ -41,15 +41,15 @@ var _shoot_frames_played: int = 0
 
 func _ready() -> void:
 	if player_shoot:
-		if not player_shoot.shot_fired.is_connected(_on_shot_fired):
-			player_shoot.shot_fired.connect(_on_shot_fired)
+		if not player_shoot.is_connected("shot_fired", _on_shot_fired):
+			player_shoot.connect("shot_fired", _on_shot_fired)
 
-func _physics_process(_delta: float):
+func _physics_process(_delta: float) -> void:
 	update_animation()
 
-func update_animation():
-	var new_state = determine_state()
-	var direction = determine_direction()
+func update_animation() -> void:
+	var new_state: String = determine_state()
+	var direction: int = determine_direction()
 
 	# Hurt Effect
 	if player_hurt_and_die.is_hurting:
@@ -107,10 +107,10 @@ func update_animation():
 	if (new_state == "jump" or new_state == "crouch") \
 	and !player.is_on_floor() \
 	and player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.LUI:
-		var lui_effect = player_lui_effect_scene.instantiate() as Node2D
+		var lui_effect: Node2D = player_lui_effect_scene.instantiate()
 		lui_effect.position = player.position
 		lui_effect.rotation = player.rotation
-		var lui_ani = lui_effect.get_node("AnimatedSprite2D")
+		var lui_ani: AnimatedSprite2D = lui_effect.get_node("AnimatedSprite2D")
 		lui_ani.animation = new_state
 		lui_ani.frame = ani.frame
 		lui_ani.flip_h = ani.flip_h
@@ -131,7 +131,7 @@ func _update_shoot_progress() -> void:
 		is_shooting = false
 		return
 	
-	var frame_count = ani.sprite_frames.get_frame_count("shoot")
+	var frame_count: int = ani.sprite_frames.get_frame_count("shoot")
 	
 	if frame_count <= 1:
 		_shoot_frame_timer += 1
@@ -139,7 +139,7 @@ func _update_shoot_progress() -> void:
 			is_shooting = false
 		return
 	
-	var current_frame = ani.frame
+	var current_frame: int = ani.frame
 	if current_frame != _last_shoot_frame:
 		_shoot_frames_played += 1
 		_last_shoot_frame = current_frame
@@ -148,11 +148,11 @@ func _update_shoot_progress() -> void:
 		is_shooting = false
 
 # 根据角色状态和速度更新动画播放速度
-func update_animation_speed():
+func update_animation_speed() -> void:
 	match current_state:
 		"walk":
 			# 行走动画速度与水平速度挂钩
-			var speed_factor = abs(player_movement.speed_x) / player_movement.max_speed_x
+			var speed_factor: float = abs(player_movement.speed_x) / player_movement.max_speed_x
 			# 基础速度 + 速度比例，确保最小播放速度
 			ani.speed_scale = 1.0 + speed_factor * 5.0
 		_:
@@ -232,7 +232,7 @@ func is_in_water() -> bool:
 	# 暂时返回false
 	return false
 
-func _on_player_suit_changed():
+func _on_player_suit_changed() -> void:
 	match player_suit.suit:
 		PlayerSuit.SuitType.SMALL:
 			ani.sprite_frames = player_small_spritesframe

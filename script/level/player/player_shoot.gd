@@ -7,7 +7,7 @@ signal play_sound_cloud_platform
 signal shot_fired
 
 @export var player_suit: PlayerSuit
-@export var player: Node2D
+@export var player: CharacterBody2D
 @export var player_movement: PlayerMovement
 @export var player_animation_sprite: AnimatedSprite2D
 
@@ -59,7 +59,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func create_fireball() -> void:
-	var fireball = fireball_scene.instantiate() as CharacterBody2D
+	var fireball: CharacterBody2D = fireball_scene.instantiate()
 	fireball.position = player.position + offset.rotated(player.rotation)
 	fireball.rotation = player.rotation
 	fireball.up_direction = player.up_direction
@@ -67,7 +67,7 @@ func create_fireball() -> void:
 	player.add_sibling(fireball)
 
 func create_beetroot() -> void:
-	var beetroot = beetroot_scene.instantiate() as CharacterBody2D
+	var beetroot: CharacterBody2D = beetroot_scene.instantiate()
 	beetroot.position = player.position + offset.rotated(player.rotation)
 	beetroot.rotation = player.rotation
 	beetroot.up_direction = player.up_direction
@@ -78,7 +78,7 @@ func _on_player_hurt() -> void:
 	cloud_platform_cd_timer = 0
 
 func create_cloud_platform() -> void:
-	var cloud_platform = cloud_platform_scene.instantiate() as Node2D
+	var cloud_platform: Node2D = cloud_platform_scene.instantiate()
 	cloud_platform.position = player.position + cloud_platform_offset.rotated(player.rotation)
 	cloud_platform.rotation = player.rotation
 	player.add_sibling(cloud_platform)
@@ -87,10 +87,10 @@ func create_cloud_platform() -> void:
 func _spawn_cloud_dusts() -> void:
 	if not cloud_dust_scene:
 		return
-	for dir in [-1, 1]:
-		var dust = cloud_dust_scene.instantiate() as CharacterBody2D
+	for dir: int in [-1, 1]:
+		var dust: CharacterBody2D = cloud_dust_scene.instantiate()
 		dust.position = player.position + Vector2(0.0, 32.0).rotated(player.rotation)
-		var bm = dust.get_node_or_null("BasicMovement") as BasicMovement
+		var bm: BasicMovement = dust.get_node_or_null("BasicMovement")
 		if bm:
 			bm.speed_x = abs(bm.speed_x) * dir
 			bm.rotate_with_up = player_movement.rotate_with_up

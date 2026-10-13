@@ -6,10 +6,10 @@ signal game_started
 
 var multiplayer_manager: MultiplayerManager
 
-var config
+var config: ConfigFile
 
 func _ready() -> void:
-	multiplayer_manager = get_tree().get_first_node_in_group("multiplayer_manager") as MultiplayerManager
+	multiplayer_manager = MPManager
 	config = GameConfig.config
 
 func _on_start_button_pressed() -> void:
@@ -25,12 +25,13 @@ func game_start(game_edit_time: int) -> void:
 	print("[%s] [game_start.gd] 要开始了哟~" % Time.get_datetime_string_from_system())
 	print("[%s] [game_start.gd] 本局游戏时长：" % Time.get_datetime_string_from_system(), game_edit_time)
 	# 记录游戏开始时间作为文件名的时间部分
-	var current_time = Time.get_datetime_string_from_system(false, true)
+	var current_time: String = Time.get_datetime_string_from_system(false, true)
 	current_time = current_time.replace(":", "-")
 	current_time = current_time.replace(" ", "_")
-	MPManager.game_start_time = current_time
-	MPManager.is_in_game = true
-	TimerSingleton.wait_time = game_edit_time
+	multiplayer_manager.game_start_time = current_time
+	multiplayer_manager.is_in_game = true
+	var timer: Timer = TimerSingleton
+	timer.wait_time = game_edit_time
 	# 倒计时缓冲结束后计时开始
 	#TimerSingleton.start()
 	if multiplayer_manager.multiplayer.is_server():

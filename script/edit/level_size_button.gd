@@ -11,11 +11,11 @@ enum LevelSizeExpandDirection {
 	BOTTOM
 }
 
-@export var expand_mode = LevelSizeExpandMode.IN
-@export var expand_direction = LevelSizeExpandDirection.LEFT
+@export var expand_mode: LevelSizeExpandMode = LevelSizeExpandMode.IN
+@export var expand_direction: LevelSizeExpandDirection = LevelSizeExpandDirection.LEFT
 
 var level_camera: LevelCamera
-var expand_distance = 32
+var expand_distance: int = 32
 
 func _ready() -> void:
 	#pressed.connect(_on_button_pressed)

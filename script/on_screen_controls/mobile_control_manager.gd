@@ -1,6 +1,6 @@
 extends Node
 
-@export var show_mode := MobileControl.ShowModeType.SHOW
+@export var show_mode: MobileControl.ShowModeType = MobileControl.ShowModeType.SHOW
 
 var mobile_control: MobileControl
 

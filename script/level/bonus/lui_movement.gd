@@ -11,7 +11,7 @@ func _ready() -> void:
 	super._ready()
 	visible_detect = get_node(path_to_visible_detect)
 
-func set_jump_speed():
+func set_jump_speed() -> void:
 	if move_object.is_on_floor() and is_in_screen:
 		emit_signal("jump_speed_set")
 	super.set_jump_speed()

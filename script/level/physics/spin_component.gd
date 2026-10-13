@@ -5,7 +5,7 @@ extends Node
 
 var sprite: Node2D
 
-func _ready():
+func _ready() -> void:
 	sprite = get_node(path_to_sprite) as Node2D
 
 func _physics_process(delta: float) -> void:

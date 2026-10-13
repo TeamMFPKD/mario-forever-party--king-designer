@@ -22,7 +22,7 @@ func _process(_delta: float) -> void:
 	_update()
 
 func _update_active() -> void:
-	var active = player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE
+	var active: bool = player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BEE
 	visible = active
 
 func _is_active() -> bool:
@@ -37,7 +37,7 @@ func _update() -> void:
 	if not is_instance_valid(player_movement):
 		return
 
-	var ratio = 1.0 - (player_movement.bee_fly_timer / maxf(player_movement.bee_fly_time_max, 0.001))
+	var ratio: float = 1.0 - (player_movement.bee_fly_timer / maxf(player_movement.bee_fly_time_max, 0.001))
 	ratio = clampf(ratio, 0.0, 1.0)
 
 	if _bar_sprite:
