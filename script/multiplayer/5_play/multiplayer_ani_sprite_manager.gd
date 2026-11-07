@@ -32,19 +32,19 @@ func _physics_process(_delta: float) -> void:
 	if not player:
 		if no_player_print_limit < 10:
 			no_player_print_limit += 1
-			print("[%s] [MultiplayerAniSpriteManager] No player node found" % Time.get_time_string_from_system())
+			Log.i("MultiplayerAniSpriteManager", "No player node found")
 		return
 	if not local_ani:
 		local_ani = player.get_node("AnimatedSprite2D") as AnimatedSprite2D
-		print("[%s] [MultiplayerAniSpriteManager] No AnimatedSprite2D node found" % Time.get_time_string_from_system())
+		Log.i("MultiplayerAniSpriteManager", "No AnimatedSprite2D node found")
 		return
 	if not player_suit:
 		player_suit = player.get_meta("player_suit")
-		print("[%s] [MultiplayerAniSpriteManager] No player suit found" % Time.get_time_string_from_system())
+		Log.i("MultiplayerAniSpriteManager", "No player suit found")
 		return
 	if not player_hurt_and_die:
 		player_hurt_and_die = player.get_meta("player_hurt_and_die")
-		print("[%s] [MultiplayerAniSpriteManager] No player hurt and die found" % Time.get_time_string_from_system())
+		Log.i("MultiplayerAniSpriteManager", "No player hurt and die found")
 		return
 	multiplayer_manager.send_ani_sprite_data.rpc(
 		multiplayer_manager.player.id, multiplayer_manager.current_level_count, 

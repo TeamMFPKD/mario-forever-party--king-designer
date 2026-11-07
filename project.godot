@@ -31,6 +31,7 @@ buses/default_bus_layout="uid://c8eu6kekkwwe1"
 
 [autoload]
 
+Log="*res://object/utils/logger.tscn"
 InputHandlerSingleton="*res://object/utils/input_handler.tscn"
 PlatformUtilsSingleton="*res://object/utils/platform_utils.tscn"
 OnScreenControls="*uid://dnm3ffgulmrea"

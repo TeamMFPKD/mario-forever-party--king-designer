@@ -17,11 +17,11 @@ func _ready() -> void:
 func _on_time_out() -> void:
 	emit_signal("timeout_save")
 	if multiplayer_manager.multiplayer.is_server():
-		print("[%s] [主机] 倒计时结束！进入等待房间。开始收集关卡……" % Time.get_time_string_from_system())
+		Log.i("主机", "倒计时结束！进入等待房间。开始收集关卡……")
 		multiplayer_manager.edit_time_out.rpc()
 	GlobalTransition.change_scene_to_file(level_transfer_scene_uid)
 
 func _on_edit_timeout_save() -> void:
 	emit_signal("timeout_save")
-	print("[%s] [客户端] 倒计时结束！进入等待房间。开始收集关卡……" % Time.get_time_string_from_system())
+	Log.i("客户端", "倒计时结束！进入等待房间。开始收集关卡……")
 	GlobalTransition.change_scene_to_file(level_transfer_scene_uid)

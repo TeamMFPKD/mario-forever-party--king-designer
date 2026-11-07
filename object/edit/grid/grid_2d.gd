@@ -57,7 +57,7 @@ func _process_line_progress() -> void:
 	if all_lines_added and all_completed:
 		animation_active = false
 		timer.stop()
-		print("[%s] 网格绘制完成！" % Time.get_time_string_from_system())
+		Log.i("网格绘制完成！")
 	
 	if updated:
 		queue_redraw()

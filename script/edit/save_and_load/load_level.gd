@@ -38,7 +38,7 @@ func load_from_level() -> String:
 		print("[load_level.gd] Failed to open file or this is a new file.")
 		var err: Error = FileAccess.get_open_error()
 		if err != OK:
-			push_error("[%s] [load_level.gd] Error loading file:" % Time.get_time_string_from_system(), err)
+			Log.e("load_level.gd", ["Error loading file:", err])
 			return ""
 	var content: String = file.get_as_text()
 	file.close()

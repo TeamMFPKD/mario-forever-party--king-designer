@@ -22,7 +22,7 @@ func _players_updated() -> void:
 		var file: FileAccess = FileAccess.open(tmp_file_name, FileAccess.WRITE)
 		if not file:
 			var err: int = FileAccess.get_open_error()
-			push_error("[%s] 无法打开文件写入：%s, error: %d" % [Time.get_time_string_from_system(), tmp_file_name, err])
+			Log.e("无法打开文件写入：%s, error: %d" % [tmp_file_name, err])
 			saved_player_id.erase(player.id)
 			continue
 		file.store_string(level_data)
@@ -30,8 +30,8 @@ func _players_updated() -> void:
 		var dir: DirAccess = DirAccess.open("user://")
 		if dir:
 			dir.rename(tmp_file_name, level_file_name)
-		print("[%s] [LevelReceiver] 玩家 %s 的关卡 %s 的数据大小：%d" % [Time.get_time_string_from_system(), multiplayer_manager.format_player(player.name, player.id), level_file_name, level_data.length()])
-		print("[%s] [LevelReceiver] 玩家 %s 的关卡数据已缓存到本地" % [Time.get_time_string_from_system(), multiplayer_manager.format_player(player.name, player.id)])
+		Log.i("LevelReceiver", "玩家 %s 的关卡 %s 的数据大小：%d" % [multiplayer_manager.format_player(player.name, player.id), level_file_name, level_data.length()])
+		Log.i("LevelReceiver", "玩家 %s 的关卡数据已缓存到本地" % [multiplayer_manager.format_player(player.name, player.id)])
 		#print("[%s] [LevelReceiver] 关卡预览：" % Time.get_time_string_from_system(), player.level_data)
 
 		if saved_player_id.size() >= multiplayer_manager.players.size():

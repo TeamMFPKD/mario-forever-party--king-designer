@@ -23,7 +23,7 @@ func next_level() -> void:
 	LifeManager.is_lives_set_when_ready = false
 	if multiplayer_manager.current_level_count < multiplayer_manager.total_levels - 1:
 		multiplayer_manager.current_level_count += 1
-		print("[%s] [PlayNextLevelManager] player dead and should go to next level" % Time.get_time_string_from_system())
+		Log.i("PlayNextLevelManager", "player dead and should go to next level")
 		GlobalTransition.reload_current_scene()
 	else:
 		GlobalTransition.change_scene_to_file("uid://c0civs02iqoki")

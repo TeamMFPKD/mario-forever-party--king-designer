@@ -36,7 +36,7 @@ func _on_viewport_size_changed() -> void :
 
         window.content_scale_size = Vector2i(1920, 1080)
         ProjectSettings.set_setting("display/window/strech/mode", "visible_rect")
-        print("[%s] [GameRoomSize] stretch mode" % Time.get_time_string_from_system()+ProjectSettings.get_setting("display/window/strech/mode"))
+        Log.i("GameRoomSize", ["stretch mode", ProjectSettings.get_setting("display/window/strech/mode")])
         return
 
     var room_position: Vector2 = viewport_transform.affine_inverse() * visible_rect.position

@@ -20,5 +20,5 @@ func _on_force_continue_button_pressed() -> void:
 	bad_level_process()
 
 func bad_level_process() -> void:
-	print("[%s] [bad_level_detect.gd] 手动跳过坏关" % Time.get_time_string_from_system())
+	Log.i("bad_level_detect.gd", "手动跳过坏关")
 	emit_signal("skip_bad_level")

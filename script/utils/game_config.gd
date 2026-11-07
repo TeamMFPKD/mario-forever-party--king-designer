@@ -50,7 +50,7 @@ func _load_input_mappings() -> void:
 			if ev != null:
 				var input_event: InputEvent = ev
 				InputMap.action_add_event(base_action, input_event)
-				print("[%s] [设置] 加载输入映射: " % Time.get_time_string_from_system(), base_action, " -> ", input_event.as_text())
+				Log.i("设置", ["加载输入映射: ", base_action, " -> ", input_event.as_text()])
 
 func save() -> void:
 	config.save("user://game_settings.cfg")
