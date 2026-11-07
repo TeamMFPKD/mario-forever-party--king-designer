@@ -335,9 +335,7 @@ func lets_play_together(rnd_levels: Array) -> void:
 	total_levels = rnd_levels.size()
 	var game_mode: GameMode = GameModeSingleton
 	game_mode.game_mode = GameMode.GameModeType.PLAY
-	var fc: Callable = func() -> void:
-		get_tree().change_scene_to_file("uid://cxvueju65b3qv")
-	fc.call_deferred()
+	GlobalTransition.change_scene_to_file("uid://cxvueju65b3qv")
 
 @rpc("any_peer", "call_local")
 func level_add_pass_count(level: Variant, passed: bool, player_id: int) -> void:

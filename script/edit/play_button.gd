@@ -10,7 +10,5 @@ func _ready() -> void:
 	pressed.connect(_on_button_pressed)
 
 func _on_button_pressed() -> void:
-	var fc: Callable = func() -> void:
-		game_mode.game_mode = target_mode
-		get_tree().change_scene_to_file(room_scene_uid)
-	fc.call_deferred()
+	game_mode.game_mode = target_mode
+	GlobalTransition.change_scene_to_file(room_scene_uid)

@@ -20,5 +20,5 @@ func _ready() -> void:
 	elif GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_PLAY:
 		await get_tree().create_timer(1.0).timeout
 		if is_instance_valid(self) and is_inside_tree():
-			get_tree().reload_current_scene()
+			GlobalTransition.reload_current_scene()
 	emit_signal("player_dead")
