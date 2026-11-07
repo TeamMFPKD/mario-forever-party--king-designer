@@ -26,6 +26,8 @@ var current_object_name: String = ""
 @export var button_eraser: Button
 
 func _ready() -> void:
+	_ensure_command_stack()
+
 	if tile_button:
 		tile_button.pressed.connect(_on_tile_button_pressed)
 
@@ -33,6 +35,18 @@ func _ready() -> void:
 		button_eraser.pressed.connect(_on_eraser_button_pressed)
 
 	switch_to_tilemap_mode()
+
+## 编辑器撤销栈：挂在 LevelControl 下，随场景一起销毁。
+## 已存在（例如场景里手动添加）时直接复用，并绑定当前 TileMapLayer。
+func _ensure_command_stack() -> CommandStack:
+	var stack: CommandStack = CommandStack.find_in(get_tree())
+	if stack == null:
+		stack = CommandStack.new()
+		stack.name = "CommandStack"
+		add_child(stack)
+	if tile_map_draw and tile_map_draw.tile_map:
+		stack.bind_tile_map(tile_map_draw.tile_map)
+	return stack
 
 func switch_to_tilemap_mode() -> void:
 	current_drawing_mode = DrawingMode.TILEMAP

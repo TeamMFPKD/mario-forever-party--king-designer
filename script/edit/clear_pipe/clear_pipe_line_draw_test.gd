@@ -19,6 +19,9 @@ var dragging_line_index: int = -1
 var drag_start_pos: Vector2 = Vector2.ZERO
 var drag_original_points: Array[Vector2] = []
 
+## 编辑已有折线（拖端点）开始时的点集，用于生成撤销命令。
+var _editing_original_points: Array[Vector2] = []
+
 var drawing_enabled: bool = false
 
 var handlers_node: Node2D
@@ -197,7 +200,8 @@ func update_dragging(current_pos: Vector2) -> void:
 func finish_dragging() -> void:
 	if dragging_line_index >= 0:
 		var line_data: Dictionary = line_data_list[dragging_line_index]
-		var new_points: Array[Vector2] = line_data.points
+		var dragged_points: Array[Vector2] = line_data.points
+		var new_points: Array[Vector2] = dragged_points.duplicate()
 		var delta: Vector2 = new_points[0] - drag_original_points[0] if new_points.size() > 0 else Vector2.ZERO
 
 		if delta != Vector2.ZERO:
@@ -207,6 +211,7 @@ func finish_dragging() -> void:
 				update_handlers_for_line(dragging_line_index)
 			else:
 				rebuild_pipes()
+				_push_pipe_command(drag_original_points, new_points)
 
 	dragging_line_index = -1
 	drag_original_points.clear()
@@ -397,6 +402,11 @@ func _on_handler_pressed(handler: Node2D) -> void:
 	editing_line_index = handler.get("line_index")
 	var handler_is_tail: bool = handler.get("is_tail")
 	editing_from_head = not handler_is_tail
+	_editing_original_points.clear()
+	if editing_line_index >= 0 and editing_line_index < line_data_list.size():
+		var source_points: Array[Vector2] = line_data_list[editing_line_index].points
+		for point: Vector2 in source_points:
+			_editing_original_points.append(point)
 	handler.call("set_held", true)
 	drawing = true
 
@@ -409,10 +419,13 @@ func stop_drawing() -> void:
 	print("[ClearPipeDraw] stop_drawing: drawing set to false, active_idx=", editing_line_index if editing_line_index >= 0 else current_line_index)
 
 	var active_idx: int = editing_line_index if editing_line_index >= 0 else current_line_index
+	var edited_index: int = editing_line_index
+	var empty_points: Array[Vector2] = []
 
 	if active_idx >= 0 and active_idx < line_data_list.size():
 		var line_data: Dictionary = line_data_list[active_idx]
-		var points: Array[Vector2] = line_data.points
+		var source_points: Array[Vector2] = line_data.points
+		var points: Array[Vector2] = source_points.duplicate()
 
 		if debug_mode:
 			var pts_str: String = ""
@@ -422,6 +435,8 @@ func stop_drawing() -> void:
 
 		if points.size() < 3:
 			remove_line(active_idx)
+			if edited_index >= 0:
+				_push_pipe_command(_editing_original_points, empty_points)
 		else:
 			if editing_from_head and line_data.start_handler:
 				var start_handler: Node2D = line_data.start_handler
@@ -435,6 +450,12 @@ func stop_drawing() -> void:
 
 			rebuild_pipes()
 
+			if edited_index >= 0:
+				_push_pipe_command(_editing_original_points, points)
+			else:
+				_push_pipe_command(empty_points, points)
+
+	_editing_original_points.clear()
 	current_line_index = -1
 	editing_line_index = -1
 	editing_from_head = false
@@ -933,6 +954,67 @@ func get_all_points() -> Array[Vector2]:
 func get_line_data_list() -> Array[Dictionary]:
 	return line_data_list
 
+# 把一次折线改动写入撤销栈（命令已执行，只记录）
+func _push_pipe_command(before_points: Array[Vector2], after_points: Array[Vector2]) -> void:
+	var command: CmdPipeLine = CmdPipeLine.create(self, before_points, after_points)
+	if command == null:
+		return
+	var stack: CommandStack = CommandStack.find_in(get_tree())
+	if stack != null:
+		stack.push_executed_command(command)
+
+# 用点集查找折线索引（命令 undo/redo 时定位用）
+func find_line_index_by_points(points: Array[Vector2]) -> int:
+	for i: int in range(line_data_list.size()):
+		var other_points: Array[Vector2] = line_data_list[i].points
+		if other_points.size() != points.size():
+			continue
+		var is_same: bool = true
+		for j: int in range(points.size()):
+			if other_points[j] != points[j]:
+				is_same = false
+				break
+		if is_same:
+			return i
+	return -1
+
+# 按点集重建一条折线（undo 恢复删除 / redo 恢复新建时用）
+func add_line_from_points(points: Array[Vector2]) -> int:
+	if points.size() < 2:
+		return -1
+	var line: Line2D = Line2D.new()
+	line.width = LINE_WIDTH
+	line.default_color = Color(1, 1, 1, 0.1)
+	line.joint_mode = Line2D.LINE_JOINT_ROUND
+	line.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	line.end_cap_mode = Line2D.LINE_CAP_ROUND
+	lines_node.add_child(line)
+	line.points = points
+	var last_direction: Vector2 = get_orthogonal_direction(points[-2], points[-1])
+	var start_handler: Node2D = create_handler(points[0], line_data_list.size(), false)
+	var end_handler: Node2D = create_handler(points[points.size() - 1], line_data_list.size(), true)
+	line_data_list.append({
+		"line": line,
+		"points": points.duplicate(),
+		"last_direction": last_direction,
+		"start_handler": start_handler,
+		"end_handler": end_handler
+	})
+	var index: int = line_data_list.size() - 1
+	update_handler_directions(index)
+	return index
+
+# 设置某条折线的点集（命令 undo/redo 时用）
+func set_line_points_at(index: int, points: Array[Vector2]) -> bool:
+	if index < 0 or index >= line_data_list.size() or points.size() < 2:
+		return false
+	var line_data: Dictionary = line_data_list[index]
+	line_data.points = points.duplicate()
+	line_data.line.points = points
+	update_handlers_for_line(index)
+	update_handler_directions(index)
+	return true
+
 func get_pipe_line_data() -> Array:
 	var data: Array = []
 	for line_data: Dictionary in line_data_list:
@@ -1002,11 +1084,16 @@ func clear_all_lines() -> void:
 func erase_line_at_world_position(world_pos: Vector2) -> bool:
 	var local_pos: Vector2 = to_local(world_pos)
 	var line_idx: int = get_line_at_position(local_pos)
-	if line_idx >= 0:
-		remove_line(line_idx)
-		rebuild_pipes()
-		return true
-	return false
+	if line_idx < 0:
+		return false
+	var erased_line: Dictionary = line_data_list[line_idx]
+	var erased_points: Array[Vector2] = erased_line.points
+	var line_points: Array[Vector2] = erased_points.duplicate()
+	remove_line(line_idx)
+	rebuild_pipes()
+	var empty_points: Array[Vector2] = []
+	_push_pipe_command(line_points, empty_points)
+	return true
 
 func _process(_delta: float) -> void:
 	if drawing and not Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):

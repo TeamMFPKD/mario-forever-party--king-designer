@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="5_iq0jw"]
 [ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="6_0b6sj"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="6_io5w1"]
+[ext_resource type="Script" uid="uid://b8yk2psxgyimm" path="res://script/edit/command/history_buttons.gd" id="history_btn"]
 [ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="7_io5w1"]
 [ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="8_amsrr"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_8ebhj"]
@@ -2232,6 +2233,40 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.0
 grow_vertical = 1
+
+[node name="HistoryButtons" type="HBoxContainer" parent="GameRoomSize" node_paths=PackedStringArray("undo_button", "redo_button")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -420.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 104.0
+grow_horizontal = 0
+grow_vertical = 1
+theme_override_constants/separation = 12
+script = ExtResource("history_btn")
+undo_button = NodePath("UndoButton")
+redo_button = NodePath("RedoButton")
+
+[node name="UndoButton" type="Button" parent="GameRoomSize/HistoryButtons"]
+custom_minimum_size = Vector2(180, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("6_io5w1")
+theme_override_font_sizes/font_size = 32
+text = "撤销"
+
+[node name="RedoButton" type="Button" parent="GameRoomSize/HistoryButtons"]
+custom_minimum_size = Vector2(180, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("6_io5w1")
+theme_override_font_sizes/font_size = 32
+text = "重做"
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("89_b0qgs")]
 show_mode = 2

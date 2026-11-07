@@ -107,6 +107,11 @@ func load_level_data_from_json(level_data_json: String) -> void:
 		push_error("Failed to parse level data JSON.")
 		return
 
+	# 加载过程中会重建全部数据源，旧历史全部失效：先停止记录，加载完清空。
+	var stack: CommandStack = CommandStack.find_in(get_tree())
+	if stack != null:
+		stack.set_recording_enabled(false)
+
 	level_data_dict = json.data
 
 	var version_value: int = type_convert(level_data_dict.get("version", 1), TYPE_INT)
@@ -139,7 +144,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	if tile_data_array is Array and tile_data_array != []:
 		var tile_data_bytes_array: PackedByteArray = PackedByteArray(tile_data_array)
 		tile_map.tile_map_data = tile_data_bytes_array
-		print("[%s] [LevelManager] 瓦片数据加载完成" % Time.get_time_string_from_system())
+		Log.i("LevelManager", "瓦片数据加载完成")
 	else:
 		push_warning("No tile data found in level file")
 	
@@ -148,7 +153,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	if object_data_array is Array:
 		if object_map and object_map.has_method("load_object_data"):
 			object_map.load_object_data(object_data_array)
-			print("[%s] [LevelManager] 对象数据加载完成，共加载 " % Time.get_time_string_from_system(), object_data_array.size(), " 个对象")
+			Log.i("LevelManager", ["对象数据加载完成，共加载 ", object_data_array.size(), " 个对象"])
 		else:
 			push_warning("ObjectMapLayer not found or missing load_object_data method")
 	else:
@@ -163,7 +168,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	if pipe_line_data_array is Array and pipe_line_data_array.size() > 0:
 		if clear_pipe_draw and clear_pipe_draw.has_method("load_from_pipe_line_data"):
 			clear_pipe_draw.call("load_from_pipe_line_data", pipe_line_data_array)
-			print("[%s] [LevelManager] 管道线数据加载完成，共加载 " % Time.get_time_string_from_system(), pipe_line_data_array.size(), " 条管道")
+			Log.i("LevelManager", ["管道线数据加载完成，共加载 ", pipe_line_data_array.size(), " 条管道"])
 		elif pipe_builder and pipe_builder.has_method("build_pipes_from_lines"):
 			var line_data_list: Array = []
 			for line_entry: Dictionary in pipe_line_data_array:
@@ -177,18 +182,27 @@ func load_level_data_from_json(level_data_json: String) -> void:
 					line_data_list.append({"points": points})
 			if line_data_list.size() > 0:
 				pipe_builder.call("build_pipes_from_lines", line_data_list)
-				print("[%s] [LevelManager] 管道线数据加载完成，共加载 " % Time.get_time_string_from_system(), line_data_list.size(), " 条管道")
+				Log.i("LevelManager", ["管道线数据加载完成，共加载 ", line_data_list.size(), " 条管道"])
 	else:
 		if clear_pipe_draw and clear_pipe_draw.has_method("clear_all_lines"):
 			clear_pipe_draw.call("clear_all_lines")
 		if pipe_builder and pipe_builder.has_method("clear_all_pipes"):
 			pipe_builder.call("clear_all_pipes")
 
-	print("[%s] [LevelManager] Level loaded." % Time.get_time_string_from_system())
+	Log.i("LevelManager", "Level loaded.")
+
+	if stack != null:
+		stack.clear()
+		stack.set_recording_enabled(true)
 
 	
 	
 func update_theme() -> void:
+	# 换主题会整体替换 TileSet，旧的瓦片快照不再对应，直接清空历史。
+	var stack: CommandStack = CommandStack.find_in(get_tree())
+	if stack != null:
+		stack.clear()
+
 	# Update TileMap and Background
 	if tile_set_manager != null:
 		tile_set_manager.update_tile_set(level_theme)

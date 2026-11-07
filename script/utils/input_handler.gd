@@ -102,9 +102,11 @@ func handle_click_event(pressed: bool, position: Vector2) -> void:
 	if pressed:
 		last_click_position = position
 		last_operation_grid_pos = Vector2i(-1, -1)  # 重置网格位置跟踪
+		_begin_command_group("LeftClick")
 		input_clicked.emit(position)
 	else:
 		input_released.emit(position)
+		_end_command_group()
 
 func handle_right_click_event(pressed: bool, position: Vector2) -> void:
 	is_right_clicking = pressed
@@ -112,11 +114,26 @@ func handle_right_click_event(pressed: bool, position: Vector2) -> void:
 	
 	if pressed:
 		last_operation_grid_pos = Vector2i(-1, -1)  # 重置网格位置跟踪
+		_begin_command_group("RightClickErase")
 		# 右键按下时立即清除一次
 		input_right_clicked.emit(position)
 		var level_control: LevelControl = get_tree().get_first_node_in_group("level_control") as LevelControl
 		if level_control:
 			level_control.erase_at_position_immediate(position)
+	else:
+		_end_command_group()
+
+## 把一次鼠标按下~松开之间的所有编辑操作合并成一条撤销记录。
+## 编辑器场景没有 CommandStack 时（play 等场景）静默跳过。
+func _begin_command_group(label: String) -> void:
+	var stack: CommandStack = CommandStack.find_in(get_tree())
+	if stack != null:
+		stack.begin_group(label)
+
+func _end_command_group() -> void:
+	var stack: CommandStack = CommandStack.find_in(get_tree())
+	if stack != null:
+		stack.end_group()
 
 func handle_right_click_hold(position: Vector2) -> void:
 	# 在右键按住状态下移动时持续清除
