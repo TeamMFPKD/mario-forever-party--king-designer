@@ -1,4 +1,4 @@
-extends Node
+extends PlayerDependent
 
 class_name PinkCoinManager
 
@@ -55,7 +55,7 @@ func pink_coin_obtained() -> void:
 func _create_key() -> void:
 	var key_instance: Node2D = key_scene.instantiate() as Node2D
 	var key_movement: KeyMovement = key_instance.get_node("KeyMovement") as KeyMovement
-	var player: Node2D = get_tree().get_first_node_in_group("player") as Node2D
+	var player: Node2D = get_player_body()
 	if player:
 		key_instance.global_position = player.global_position
 	add_sibling(key_instance)

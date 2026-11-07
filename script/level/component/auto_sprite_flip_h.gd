@@ -1,4 +1,4 @@
-extends Node
+extends PlayerDependent
 
 class_name AutoSpriteFlipH
 
@@ -34,7 +34,9 @@ func _physics_process(_delta: float) -> void:
 	
 	# 永远面朝玩家
 	if _always_face_to_player:
-		var player: Node2D = get_tree().get_first_node_in_group("player") as Node2D
+		var player: Node2D = get_player_body()
+		if player == null:
+			return
 		if current_x < player.global_position.x:
 			_flip_h = false
 		elif current_x > player.global_position.x:

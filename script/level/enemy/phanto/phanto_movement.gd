@@ -1,7 +1,7 @@
-extends Node
+extends PlayerDependent
 ## Controller that moves a parent Node2D towards a target (Mario).
 ## Attach this to a child of the object you want to move.
-## Target priority: exported path > "player" group.
+## Target priority: exported path > injected player.
 
 # The object we actually move (its parent)
 @export var path_to_move_obj: NodePath = ".."
@@ -84,11 +84,11 @@ func _ready() -> void:
 		_shader_material = sprite.material.duplicate() as ShaderMaterial
 		sprite.material = _shader_material
 
-	# Target resolution: explicit path first, then "player" group
+	# Target resolution: explicit path first, then injected player
 	if not path_to_target.is_empty():
 		target_node = get_node_or_null(path_to_target) as Node2D
 	else:
-		target_node = get_tree().get_first_node_in_group("player") as Node2D
+		target_node = get_player_body()
 
 	# Initial position from the actual object
 	pos = move_object.global_position

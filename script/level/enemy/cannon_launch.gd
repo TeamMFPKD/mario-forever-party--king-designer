@@ -1,4 +1,4 @@
-extends Node
+extends PlayerDependent
 
 signal play_sound_launch
 
@@ -9,19 +9,21 @@ signal play_sound_launch
 @export var safe_distance: float = 80.0
 
 var cannon: Node2D
-var player: Node2D
+var player: Node2D:
+	get:
+		return get_player_body()
 var shoot_timer: int
 
 func _ready() -> void:
-	var fc: Callable = func() -> void:
-		player = get_tree().get_first_node_in_group("player") as Node2D
-	fc.call_deferred()
 	cannon = get_node(path_to_cannon)
 
 func _physics_process(_delta: float) -> void:
+	var target: Node2D = player
+	if target == null:
+		return
 	var is_safe: bool
-	if player.position.x > cannon.position.x - safe_distance \
-	and player.position.x < cannon.position.x + safe_distance:
+	if target.position.x > cannon.position.x - safe_distance \
+	and target.position.x < cannon.position.x + safe_distance:
 		is_safe = true
 	else:
 		is_safe = false
@@ -34,7 +36,10 @@ func _physics_process(_delta: float) -> void:
 		launch()
 
 func launch() -> void:
-	var left: bool = player.position.x < cannon.position.x
+	var target: Node2D = player
+	if target == null:
+		return
+	var left: bool = target.position.x < cannon.position.x
 
 	var bill: Node2D = bullet_bill_scene.instantiate() as Node2D
 	bill.position = cannon.position

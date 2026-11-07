@@ -1,5 +1,5 @@
 class_name BlockHit
-extends Node
+extends PlayerDependent
 
 signal block_bump
 signal block_bump_ended
@@ -30,7 +30,9 @@ var _bump_state: BumpState = BumpState.IDLE
 var _bump_state_timer: int = 0
 var bumping: bool = false
 
-var player: Node
+var player: Node:
+	get:
+		return get_player_body()
 var player_suit: PlayerSuit
 
 # 碎砖
@@ -75,10 +77,10 @@ func _ready() -> void:
 	if hidden:
 		set_hidden()
 
-	var fc: Callable = func() -> void:
-		player = get_tree().get_first_node_in_group("player")
-		player_suit = player.get_meta("player_suit")
-	fc.call_deferred()
+func _on_player_injected(body: Node2D) -> void:
+	var suit: Variant = body.get_meta("player_suit", null)
+	if suit is PlayerSuit:
+		player_suit = suit
 
 func _physics_process(_delta: float) -> void:
 	# Hidden Block patch

@@ -8,7 +8,7 @@ func _ready() -> void:
 	is_clear_pipe_allowed = false
 	initially_face_to_player = false
 
-	var p: Node2D = get_tree().get_first_node_in_group("player") as Node2D
+	var p: Node2D = player
 	if p:
 		var dir: Vector2 = (p.global_position - move_object.global_position).normalized()
 		var base_speed: float = speed_x

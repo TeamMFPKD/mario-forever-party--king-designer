@@ -1,4 +1,4 @@
-extends Node
+extends PlayerDependent
 
 class_name BasicMovement
 
@@ -48,7 +48,9 @@ const FRAMERATE_ORIGIN: float = 50.0
 const CRUSHED_FRAMES: int = 1
 
 var move_object: CharacterBody2D
-var player: CharacterBody2D
+var player: CharacterBody2D:
+	get:
+		return get_player_body() as CharacterBody2D
 var shape_cast: ShapeCast2D
 var overlap_turn_detect_objects: Array[Node2D] = []
 
@@ -82,12 +84,6 @@ func _ready() -> void:
 		move_object.rotation_degrees = rotate_with_up
 		move_object.up_direction = Vector2(sin(deg_to_rad(rotate_with_up)), -cos(deg_to_rad(rotate_with_up)))
 	origin_scale = move_object.scale
-	player = get_tree().get_first_node_in_group("player") as Node2D
-	var fc: Callable = func() -> void:
-		player = get_tree().get_first_node_in_group("player") as Node2D
-		if initially_face_to_player:
-			set_movement_direction()
-	fc.call_deferred()
 	if overlap_turn or is_clear_pipe_allowed:
 		shape_cast = get_node_or_null(path_to_shape_cast) as ShapeCast2D
 		if not shape_cast:
@@ -114,6 +110,10 @@ func _ready() -> void:
 		dusk_creator.parent = move_object
 		pipe_entered.connect(dusk_creator.explode)
 		pipe_exited.connect(dusk_creator.explode)
+
+func _on_player_injected(_body: Node2D) -> void:
+	if initially_face_to_player:
+		set_movement_direction()
 
 func _physics_process(delta: float) -> void:
 	# 更新冷却计时器

@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://csoxem5nghgom" path="res://object/level/enemy/enemy_sound_manager.tscn" id="9_0s6xr"]
 [ext_resource type="PackedScene" uid="uid://baq2ha1qr7oy0" path="res://object/level/general_visible_on_screen_enabler_2d.tscn" id="10_cpr46"]
 [ext_resource type="Script" uid="uid://c6okcp1eqai5v" path="res://script/level/component/out_of_bounds_queue_free.gd" id="11_npbmr"]
+[ext_resource type="Script" path="res://script/level/component/player_body_injector.gd" id="12_injector"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iymh1"]
 atlas = ExtResource("1_koc6n")
@@ -61,6 +62,9 @@ metadata/_custom_type_script = "uid://chvbcq7uttlml"
 [node name="BooMovement" type="Node" parent="." unique_id=703693417 node_paths=PackedStringArray("_animated_sprite_2d")]
 script = ExtResource("3_wdbyc")
 _animated_sprite_2d = NodePath("../AnimatedSprite2D")
+
+[node name="PlayerBodyInjector" type="Node" parent="BooMovement"]
+script = ExtResource("12_injector")
 
 [node name="EnemyInteraction" parent="." unique_id=1317140342 instance=ExtResource("5_ryson")]
 

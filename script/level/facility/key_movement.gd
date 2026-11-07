@@ -1,4 +1,4 @@
-extends Node
+extends PlayerDependent
 
 class_name KeyMovement
 
@@ -30,7 +30,7 @@ var state: KeyState = KeyState.IDLE:
 				add_to_group("key_following")
 			var following_keys: Array = get_tree().get_nodes_in_group("key_following")
 			key_id = following_keys.size()
-			var player: CharacterBody2D = get_tree().get_first_node_in_group("player") as CharacterBody2D
+			var player: CharacterBody2D = get_player_body() as CharacterBody2D
 			if player:
 				last_player_position = player.position
 			if cursed:
@@ -95,7 +95,7 @@ func _on_body_entered(body: Node) -> void:
 
 func try_to_get_key(body: Node2D = null) -> void:
 	if not body:
-		body = get_tree().get_first_node_in_group("player") as Node2D
+		body = get_player_body()
 	if not body:
 		push_error("KeyMovement: No player found to get the key!")
 		return
@@ -125,7 +125,7 @@ func _physics_process(delta: float) -> void:
 			_follow_player()
 
 func _follow_player() -> void:
-	var player: CharacterBody2D = get_tree().get_first_node_in_group("player") as CharacterBody2D
+	var player: CharacterBody2D = get_player_body() as CharacterBody2D
 	if not player:
 		return
 

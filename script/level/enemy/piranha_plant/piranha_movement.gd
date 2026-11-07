@@ -1,4 +1,4 @@
-extends Node
+extends PlayerDependent
 
 class_name PiranhaMovement
 
@@ -30,7 +30,9 @@ var state: State = State.IN
 @export var fire: bool
 
 var wait_timer: int = 0
-var player: Node2D
+var player: Node2D:
+	get:
+		return get_player_body()
 var out_position_y: float
 var in_position_y: float
 
@@ -38,9 +40,6 @@ const PIRANHA_MOVE_DISTANCE: float = 64.0
 
 func _ready() -> void:
 	piranha = get_node(path_to_piranha)
-	var fc: Callable = func() -> void:
-		player = get_tree().get_first_node_in_group("player") as Node2D
-	fc.call_deferred()
 	out_position_y = piranha.position.y
 	match move_direction:
 		MoveDirection.UP:
@@ -50,9 +49,12 @@ func _ready() -> void:
 	in_position_y = piranha.position.y
 
 func _physics_process(delta: float) -> void:
+	var target: Node2D = player
+	if target == null:
+		return
 	var is_shy: bool
-	if player.position.x < piranha.position.x + shy_distance \
-	and player.position.x > piranha.position.x - shy_distance:
+	if target.position.x < piranha.position.x + shy_distance \
+	and target.position.x > piranha.position.x - shy_distance:
 		is_shy = true
 	else:
 		is_shy = false
