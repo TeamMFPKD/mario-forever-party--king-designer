@@ -21,6 +21,9 @@ const TRANSITION_SHADER: Shader = preload("res://object/utils/global_transition_
 ## 淡出时长（秒）
 @export var duration: float = 0.25
 
+## 等待上一个过渡结束的最长时间（毫秒），超时后强制放行，避免请求永远卡死
+const PREVIOUS_TRANSITION_TIMEOUT_MSEC: int = 3000
+
 var rect_texture: TextureRect
 var texture_material: ShaderMaterial
 
@@ -39,9 +42,7 @@ func _ready() -> void:
 
 ## 带过渡地切换到指定场景（支持 res:// 与 uid://）
 func change_scene_to_file(path: String) -> void:
-	if _busy:
-		Log.w("GlobalTransition", "transition in progress, ignore change_scene_to_file: %s" % path)
-		return
+	await _wait_previous_transition()
 	var capture: Image = await _capture_screen()
 	var shown: bool = _show_capture(capture)
 	_busy = true
@@ -51,9 +52,7 @@ func change_scene_to_file(path: String) -> void:
 
 ## 带过渡地切换到已加载的场景资源
 func change_scene_to_packed(packed: PackedScene) -> void:
-	if _busy:
-		Log.w("GlobalTransition", "transition in progress, ignore change_scene_to_packed")
-		return
+	await _wait_previous_transition()
 	var capture: Image = await _capture_screen()
 	var shown: bool = _show_capture(capture)
 	_busy = true
@@ -63,14 +62,31 @@ func change_scene_to_packed(packed: PackedScene) -> void:
 
 ## 带过渡地重新加载当前场景
 func reload_current_scene() -> void:
-	if _busy:
-		Log.w("GlobalTransition", "transition in progress, ignore reload_current_scene")
-		return
+	await _wait_previous_transition()
 	var capture: Image = await _capture_screen()
 	var shown: bool = _show_capture(capture)
 	_busy = true
 	var err: int = get_tree().reload_current_scene()
 	await _play_fade_out(err, shown)
+
+
+## 上一个过渡还在播放时等待它结束，而不是把这次请求丢掉。
+## 典型场景：新场景在自己的 _ready() 里立刻请求再次切换（例如 ready_room 直接跳 edit），
+## 请求会正好落在上一个过渡的淡出窗口里，旧实现会静默忽略导致卡在上一屏。
+func _wait_previous_transition() -> void:
+	if not _busy:
+		return
+	Log.i("GlobalTransition", "上一个过渡尚未结束，等待后再切换")
+	var start_msec: int = Time.get_ticks_msec()
+	while _busy:
+		if Time.get_ticks_msec() - start_msec > PREVIOUS_TRANSITION_TIMEOUT_MSEC:
+			Log.e("GlobalTransition", "上一个过渡超时未结束，强制继续")
+			_animating = false
+			_busy = false
+			if rect_texture != null:
+				rect_texture.visible = false
+			break
+		await get_tree().process_frame
 
 
 ## 用代码搭建覆盖层，避免把 autoload 指向场景资源
