@@ -250,6 +250,7 @@ custom_minimum_size = Vector2(0, 144)
 layout_mode = 2
 mouse_filter = 2
 script = ExtResource("123_burst")
+fill_color = Color(0.99, 0.89925, 0.495, 1)
 
 [node name="ReadyButton" type="Button" parent="GameRoomSize/SaveLoad/VBoxContainer/Burst" index="0" unique_id=1916274385]
 custom_minimum_size = Vector2(260, 100)
