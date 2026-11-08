@@ -68,6 +68,19 @@ func set_limit_bottom(value: int) -> void:
 	limit_bottom = max(value, limit_top + 480)
 	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
 
+## 一次性应用四个边界（撤销 / 重做关卡尺寸时使用），只发一次 limit_changed。
+## 约束与四个 set_limit_* 逐个调用一致：可视区最小 640 x 480。
+func apply_limits(top: int, left: int, right: int, bottom: int) -> void:
+	limit_top = top
+	limit_left = left
+	limit_right = right
+	limit_bottom = bottom
+	limit_top = min(limit_top, limit_bottom - 480)
+	limit_left = min(limit_left, limit_right - 640)
+	limit_right = max(limit_right, limit_left + 640)
+	limit_bottom = max(limit_bottom, limit_top + 480)
+	emit_signal("limit_changed", limit_top, limit_left, limit_right, limit_bottom)
+
 func in_level_check() -> bool:
 	var game_mode_node: GameMode = GameModeSingleton
 	return game_mode_node.game_mode == GameMode.GameModeType.TEST \

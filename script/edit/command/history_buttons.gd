@@ -5,6 +5,11 @@ extends HBoxContainer
 ## 绑定场景中的 CommandStack，按历史状态自动切换按钮可用性。
 ## CommandStack 由 LevelControl 在场景初始化时创建，本节点位于 UI 层，
 ## _ready 通常已晚于它；若仍找不到则延迟一帧重试。
+##
+## PC 端快捷键：Ctrl+Z 撤销、Ctrl+Y / Ctrl+Shift+Z 重做。
+## 键盘事件必须在本节点（主视口 UI 层）处理：编辑器的关卡运行在
+## SubViewport 里（handle_input_locally = false），SubViewport 内的节点
+## 收不到键盘事件，快捷键写在那里会静默失效。
 
 @export var undo_button: Button
 @export var redo_button: Button
@@ -16,7 +21,31 @@ func _ready() -> void:
 		undo_button.pressed.connect(_on_undo_pressed)
 	if redo_button != null:
 		redo_button.pressed.connect(_on_redo_pressed)
+	# 移动端没有物理键盘，不注册快捷键。
+	set_process_unhandled_input(_supports_keyboard_shortcuts())
 	_bind_command_stack()
+
+func _supports_keyboard_shortcuts() -> bool:
+	return OS.has_feature("pc")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not (event is InputEventKey):
+		return
+	var key_event: InputEventKey = event
+	if not key_event.pressed or key_event.echo:
+		return
+	if not (key_event.ctrl_pressed or key_event.meta_pressed):
+		return
+	if key_event.keycode == KEY_Z:
+		if key_event.shift_pressed:
+			_redo()
+		else:
+			_undo()
+	elif key_event.keycode == KEY_Y:
+		_redo()
+	else:
+		return
+	get_viewport().set_input_as_handled()
 
 func _bind_command_stack() -> void:
 	_command_stack = CommandStack.find_in(get_tree())
@@ -28,12 +57,18 @@ func _bind_command_stack() -> void:
 	_update_buttons()
 
 func _on_undo_pressed() -> void:
+	_undo()
+
+func _on_redo_pressed() -> void:
+	_redo()
+
+func _undo() -> void:
 	if _command_stack == null:
 		_command_stack = CommandStack.find_in(get_tree())
 	if _command_stack != null:
 		_command_stack.undo()
 
-func _on_redo_pressed() -> void:
+func _redo() -> void:
 	if _command_stack == null:
 		_command_stack = CommandStack.find_in(get_tree())
 	if _command_stack != null:

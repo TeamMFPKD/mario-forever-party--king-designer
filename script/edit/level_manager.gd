@@ -198,10 +198,11 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	
 	
 func update_theme() -> void:
-	# 换主题会整体替换 TileSet，旧的瓦片快照不再对应，直接清空历史。
-	var stack: CommandStack = CommandStack.find_in(get_tree())
-	if stack != null:
-		stack.clear()
+	# 主题切换本身是可撤销命令（CmdChangeLevelTheme），这里不能清空历史，
+	# 否则命令刚压栈就被清掉、重做栈也一起丢失。
+	# 换主题虽然会替换 TileSet，但撤销顺序保证“先撤新主题的瓦片操作、
+	# 再回到旧主题”，瓦片快照始终与当时的 TileSet 对应。
+	# 关卡加载会重建全部数据源，已由 load_level_data_from_json() 显式 clear()。
 
 	# Update TileMap and Background
 	if tile_set_manager != null:

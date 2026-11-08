@@ -11,6 +11,10 @@ extends Node
 ##
 ## 关卡加载、主题切换等会重建数据源的操作必须调用 clear()，
 ## 否则历史命令会操作已经不存在的节点。
+##
+## 键盘快捷键（Ctrl+Z / Ctrl+Y）不在本节点处理：编辑器的关卡运行在
+## SubViewport 里（handle_input_locally = false），内部节点收不到键盘事件，
+## 因此交给主视口 UI 层的 history_buttons.gd。
 
 signal stack_changed
 
@@ -161,22 +165,3 @@ func _capture_tile_snapshot() -> PackedByteArray:
 	if _tile_map == null or not is_instance_valid(_tile_map):
 		return PackedByteArray()
 	return _tile_map.tile_map_data.duplicate()
-
-func _unhandled_input(event: InputEvent) -> void:
-	if not (event is InputEventKey):
-		return
-	var key_event: InputEventKey = event
-	if not key_event.pressed or key_event.echo:
-		return
-	var control_pressed: bool = key_event.ctrl_pressed or key_event.meta_pressed
-	if not control_pressed:
-		return
-	if key_event.keycode == KEY_Z:
-		if key_event.shift_pressed:
-			redo()
-		else:
-			undo()
-		get_viewport().set_input_as_handled()
-	elif key_event.keycode == KEY_Y:
-		redo()
-		get_viewport().set_input_as_handled()
