@@ -105,9 +105,9 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
-	multiplayer.connected_to_server.connect(func() -> void: print("[%s] 连接成功" % Time.get_time_string_from_system()))
-	multiplayer.connection_failed.connect(func() -> void: print("[%s] 连接失败" % Time.get_time_string_from_system()))
-	multiplayer.server_disconnected.connect(func() -> void: print("[%s] 服务器断开" % Time.get_time_string_from_system()))
+	multiplayer.connected_to_server.connect(func() -> void: Log.i("连接成功"))
+	multiplayer.connection_failed.connect(func() -> void: Log.i("连接失败"))
+	multiplayer.server_disconnected.connect(func() -> void: Log.i("服务器断开"))
 
 	device_id = get_device_tag()
 
@@ -124,23 +124,23 @@ func _on_host_button_pressed() -> void:
 
 	players.append(player)
 	emit_signal("players_updated")
-	print("[%s] 主机已启动。" % Time.get_time_string_from_system())
-	print("[%s] 主机玩家：%s" % [Time.get_time_string_from_system(), format_player(player_name, player.id)])
+	Log.i("主机已启动。")
+	Log.i("主机玩家：%s" % [format_player(player_name, player.id)])
 
 func _on_join_button_pressed() -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	
-	print("[%s] 连接IP：" % Time.get_time_string_from_system(), frp_domain)
-	print("[%s] 连接端口：" % Time.get_time_string_from_system(), remote_port)
-	print("[%s] 本地玩家：%s" % [Time.get_time_string_from_system(), format_player(player_name, multiplayer.get_unique_id())])
+	Log.i(["连接IP：", frp_domain])
+	Log.i(["连接端口：", remote_port])
+	Log.i("本地玩家：%s" % [format_player(player_name, multiplayer.get_unique_id())])
 
 	var error: int = peer.create_client(frp_domain, remote_port)
 	
 	if error == OK:
 		multiplayer.multiplayer_peer = peer
-		print("[%s] 正在连接到服务器: " % Time.get_time_string_from_system(), frp_domain)
+		Log.i(["正在连接到服务器: ", frp_domain])
 	else:
-		print("[%s] 连接失败，错误信息: " % Time.get_time_string_from_system(), error)
+		Log.i(["连接失败，错误信息: ", error])
 
 func _on_connected_to_server() -> void:
 	# 客户端连接成功后，向主机发送自己的玩家信息
@@ -186,7 +186,7 @@ func inform_late_player() -> void:
 func player_joined(player_info: Dictionary) -> void:
 	var device_tag_id: String = player_info.get("device_id", "")
 	var tag: String = _get_tag(device_tag_id)
-	print("[%s] 玩家 [%s] %s (%s) 已加入" % [Time.get_time_string_from_system(), tag, player_info.name, player_info.id])
+	Log.i("玩家 [%s] %s (%s) 已加入" % [tag, player_info.name, player_info.id])
 
 @rpc("authority", "call_local")
 func sync_players_list(players_list: Array) -> void:
@@ -225,7 +225,7 @@ func _on_peer_disconnected(id: int) -> void:
 		var reason: Variant = _pending_disconnect_reasons.get(id, "意外断开连接")
 		_pending_disconnect_reasons.erase(id)
 		var tag: String = _get_tag(p_device_id)
-		push_warning("[%s] 玩家 [%s] %s (%s) — %s" % [Time.get_time_string_from_system(), tag, p_name, id, reason])
+		Log.w("玩家 [%s] %s (%s) — %s" % [tag, p_name, id, reason])
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
 			sync_players_list.rpc(players)
@@ -233,7 +233,7 @@ func _on_peer_disconnected(id: int) -> void:
 # 服务器通知所有客户端退出房间
 @rpc("authority", "call_local")
 func server_closing() -> void:
-	print("[%s] 服务器即将关闭" % Time.get_time_string_from_system())
+	Log.i("服务器即将关闭")
 	# 隐藏 PlayerPage
 	var player_page: Control = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
 	if player_page:
@@ -254,7 +254,7 @@ func notify_disconnect(reason: String) -> void:
 func disconnect_and_cleanup(reason: String = "意外断开连接") -> void:
 	var tag: String = format_player(player.name, player.id)
 	if multiplayer.is_server():
-		print("[%s] 玩家 %s — %s" % [Time.get_time_string_from_system(), tag, reason])
+		Log.i("玩家 %s — %s" % [tag, reason])
 		server_closing.rpc()
 	else:
 		notify_disconnect.rpc_id(1, reason)
@@ -281,7 +281,7 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 	if player.reach_end:
 		return
 	if level_file_name == "invalid" or level_file_name.is_empty():
-		push_error("[%s] transfer_level_data received invalid file name" % Time.get_time_string_from_system())
+		Log.e("transfer_level_data received invalid file name")
 		return
 	for p: Dictionary in players:
 		if p.id == player_id:
@@ -290,16 +290,16 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 			# 1. 解压
 			var level_data_bytes: PackedByteArray = level_data_bytes_compressed.decompress_dynamic(-1, FileAccess.CompressionMode.COMPRESSION_DEFLATE)
 			if level_data_bytes.is_empty():
-				push_error("[%s] 解压失败，压缩数据大小：%d 字节" % [Time.get_time_string_from_system(), level_data_bytes_compressed.size()])
+				Log.e("解压失败，压缩数据大小：%d 字节" % [level_data_bytes_compressed.size()])
 				p.level_data = "invalid"
 				return
 			
-			print("[%s] 解压成功，字节数：%d" % [Time.get_time_string_from_system(), level_data_bytes.size()])
+			Log.i("解压成功，字节数：%d" % [level_data_bytes.size()])
 			
 			# 2. 转 UTF-8 字符串
 			var level_json: String = level_data_bytes.get_string_from_utf8()
 			if level_json.is_empty():
-				push_error("[%s] UTF-8 转换失败，字节数据可能不是有效文本" % Time.get_time_string_from_system())
+				Log.e("UTF-8 转换失败，字节数据可能不是有效文本")
 				p.level_data = "invalid"
 				return
 			
@@ -307,9 +307,9 @@ func transfer_level_data(player_id: int, level_file_name: String, level_data_byt
 			emit_signal("players_updated")
 			
 			if p.id == player.id:
-				print("[%s] 已将自己的关卡数据加入玩家列表数据" % Time.get_time_string_from_system())
+				Log.i("已将自己的关卡数据加入玩家列表数据")
 			else:
-				print("[%s] 已接收玩家 %s 的关卡数据，JSON 长度：%d" % [Time.get_time_string_from_system(), format_player(p.name, p.id), level_json.length()])
+				Log.i("已接收玩家 %s 的关卡数据，JSON 长度：%d" % [format_player(p.name, p.id), level_json.length()])
 			break
 
 @rpc("any_peer", "call_local")
@@ -317,7 +317,7 @@ func my_players_data_are_ready(player_id: int) -> void:
 	for p: Dictionary in players:
 		if p.id == player_id:
 			p.ready = true
-			print("[%s] 玩家 %s 已准备就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
+			Log.i("玩家 %s 已准备就绪" % [format_player(p.name, p.id)])
 			break
 
 @rpc("authority", "call_local")
@@ -349,12 +349,12 @@ func level_add_pass_count(level: Variant, passed: bool, player_id: int) -> void:
 			for p_player: Dictionary in players:
 				if p_player.id == player_id:
 					p_player["level_pass_count"] += 1
-					print("[%s] Player %s passed %s's level." % [Time.get_time_string_from_system(), format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
+					Log.i("Player %s passed %s's level." % [format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
 		else:
 			p_author["level_cause_death"] += 1
 			for p_player: Dictionary in players:
 				if p_player.id == player_id:
-					print("[%s] Player %s died in %s's level." % [Time.get_time_string_from_system(), format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
+					Log.i("Player %s died in %s's level." % [format_player(p_player.name, p_player.id), format_player(p_author["name"], p_author["id"])])
 
 
 @rpc("any_peer", "call_local")
@@ -364,14 +364,14 @@ func reach_end(player_id: int) -> void:
 	for p: Dictionary in players:
 		if p.id == player_id:
 			p.reach_end = true
-			print("[%s] 玩家 %s 已经玩过了所有关卡！" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
+			Log.i("玩家 %s 已经玩过了所有关卡！" % [format_player(p.name, p.id)])
 			break
 	
 @rpc("authority", "call_local")
 func store_level_results(players: Array) -> void:
-	print("[%s] 开始展示结果！！" % Time.get_time_string_from_system())
+	Log.i("开始展示结果！！")
 	for p: Dictionary in players:
-		print("[%s] %s 的关卡通过率：%s%%  关卡通过数：%d  总积分：%d" % [Time.get_time_string_from_system(), format_player(p["name"], p["id"]), str(round(p["clear_rate"] * 100000.0) / 1000.0), p["level_pass_count"], p["score"]])
+		Log.i("%s 的关卡通过率：%s%%  关卡通过数：%d  总积分：%d" % [format_player(p["name"], p["id"]), str(round(p["clear_rate"] * 100000.0) / 1000.0), p["level_pass_count"], p["score"]])
 	emit_signal("result_updated", players)
 	for p: Dictionary in players:
 		var level_file_path: String = p["level_file_name"]
@@ -380,12 +380,12 @@ func store_level_results(players: Array) -> void:
 		var file: FileAccess = FileAccess.open(level_file_path, FileAccess.READ)
 		if not file:
 			var err: int = FileAccess.get_open_error()
-			push_error("[%s] Failed to open level file: %s, error: %d" % [Time.get_time_string_from_system(), level_file_path, err])
+			Log.e("Failed to open level file: %s, error: %d" % [level_file_path, err])
 			continue
 		var content: String = file.get_as_text()
 		file.close()
 		if content.is_empty():
-			push_error("[%s] Level file is empty: %s" % [Time.get_time_string_from_system(), level_file_path])
+			Log.e("Level file is empty: %s" % [level_file_path])
 			continue
 		var json: JSON = JSON.new()
 		var error: int = json.parse(content)
@@ -404,7 +404,7 @@ func store_level_results(players: Array) -> void:
 		var write_file: FileAccess = FileAccess.open(tmp_file_path, FileAccess.WRITE)
 		if not write_file:
 			var wr_err: int = FileAccess.get_open_error()
-			push_error("[%s] Failed to open file for writing: %s, error: %d" % [Time.get_time_string_from_system(), tmp_file_path, wr_err])
+			Log.e("Failed to open file for writing: %s, error: %d" % [tmp_file_path, wr_err])
 			continue
 		write_file.store_string(level_data_json)
 		write_file.close()
@@ -412,7 +412,7 @@ func store_level_results(players: Array) -> void:
 		if dir:
 			var rename_err: int = dir.rename(tmp_file_path, level_file_path)
 			if rename_err != OK:
-				push_error("[%s] Rename failed: %s -> %s, error: %d" % [Time.get_time_string_from_system(), tmp_file_path, level_file_path, rename_err])
+				Log.e("Rename failed: %s -> %s, error: %d" % [tmp_file_path, level_file_path, rename_err])
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
 func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, suit: PlayerSuit.SuitType, power: PlayerSuit.PowerupType, animation: StringName, frame: int, flip_h: bool, is_dead: bool, scale: Vector2, rotation: float) -> void:
@@ -423,7 +423,7 @@ func send_ani_sprite_data(player_id: int, current_level: int, ani_pos: Vector2, 
 		#print("mp_ani_manager is null")
 		return
 	if not is_instance_valid(mp_ani_manager):
-		print("[%s] mp_ani_manager is not valid" % Time.get_time_string_from_system())
+		Log.i("mp_ani_manager is not valid")
 		return
 	for ani: AnimatedSprite2D in mp_ani_manager.anis:
 		if ani.has_meta("player_id"):
@@ -492,14 +492,12 @@ func get_device_tag() -> String:
 	return unique_id.substr(0, 5)
 
 func format_player(p_name: Variant, p_id: Variant) -> String:
-	var pid: int = p_id
-	return "[%s] %s (%s)" % [get_player_device_tag(pid), p_name, p_id]
+	return "[%s] %s (%s)" % [get_player_device_tag(p_id), p_name, p_id]
 
-func get_player_device_tag(player_id: int) -> String:
+func get_player_device_tag(player_id: Variant) -> String:
 	for p: Dictionary in players:
-		if p.id == player_id:
-			var p_device_id: String = p.device_id
-			return p_device_id
+		if p.get("id") == player_id:
+			return _get_tag(str(p.get("device_id", "")))
 	return "?????"
 
 func print_players() -> void:
@@ -508,9 +506,9 @@ func print_players() -> void:
 		var lv_len: int = lv.length()
 		if lv_len > 100:
 			lv = lv.substr(0, 100) + "..."
-		print("[%s]  %s" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
-		print("[%s]    ready=%s  end=%s  file=%s" % [Time.get_time_string_from_system(), p.is_ready_to_start, p.reach_end, p.level_file_name])
-		print("[%s]    level_data[%d]: %s" % [Time.get_time_string_from_system(), lv_len, lv])
+		Log.i(" %s" % [format_player(p.name, p.id)])
+		Log.i("   ready=%s  end=%s  file=%s" % [p.is_ready_to_start, p.reach_end, p.level_file_name])
+		Log.i("   level_data[%d]: %s" % [lv_len, lv])
 		print("")
 
 func restore_origin_player_data() -> void:
@@ -543,7 +541,7 @@ func sync_origin_player_data() -> void:
 	# 同步完整的玩家列表给所有客户端
 	sync_players_list.rpc(players)
 	emit_signal("players_updated")
-	print("[%s] 已返回标题界面，并重新同步玩家列表数据：" % Time.get_time_string_from_system())
+	Log.i("已返回标题界面，并重新同步玩家列表数据：")
 	print_players()
 
 @rpc("any_peer", "call_local")
@@ -554,9 +552,9 @@ func get_ready(p_id: int, is_ready: bool) -> void:
 		if p.id == p_id:
 			p.is_ready_to_start = is_ready
 			if is_ready:
-				print("[%s] 玩家 %s 已就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
+				Log.i("玩家 %s 已就绪" % [format_player(p.name, p.id)])
 			else:
-				print("[%s] 玩家 %s 未就绪" % [Time.get_time_string_from_system(), format_player(p.name, p.id)])
+				Log.i("玩家 %s 未就绪" % [format_player(p.name, p.id)])
 			sync_players_list.rpc(players)
 			break
 
