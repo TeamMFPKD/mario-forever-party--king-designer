@@ -1,22 +1,81 @@
+@tool
 extends Control
+class_name ReadyBurst
 
 ## 编辑器“制作完毕！”按钮的爆炸星底板（对应玩家列表 Ready 的星形）。
 ##
 ## 不贴图、也不拉伸贴图：按控件当前宽高实时计算星形轮廓，
 ## 尖刺长度固定为短边的比例、尖刺数量随周长变化，因此任意长宽比都不会被压扁。
 ## 三层叠画（黑边 / 白圈 / 黄面）共用同一套顶点角度，保证描边均匀。
+##
+## 状态：默认金黄；悬停更亮并微放大；已完成换成灰色。
+## 脚本是 @tool：在编辑器里也能直接看到星形；选中节点可调整参数与预览状态。
 
-@export var edge_color: Color = Color(0.06, 0.06, 0.06, 1)
-@export var ring_color: Color = Color(1, 1, 1, 1)
-@export var fill_color: Color = Color(0.988, 0.796, 0, 1)
+enum State {
+	NORMAL,
+	HOVER,
+	DONE,
+}
+
+@export var edge_color: Color = Color(0.06, 0.06, 0.06, 1):
+	set(value):
+		edge_color = value
+		queue_redraw()
+@export var ring_color: Color = Color(1, 1, 1, 1):
+	set(value):
+		ring_color = value
+		queue_redraw()
+@export var fill_color: Color = Color(0.988, 0.796, 0, 1):
+	set(value):
+		fill_color = value
+		queue_redraw()
+## 悬停时的面色：只提亮，不改色相
+@export var hover_fill_color: Color = Color(1, 0.871, 0.2, 1):
+	set(value):
+		hover_fill_color = value
+		queue_redraw()
+## 悬停时整体放大的比例（以控件中心为基准）
+@export_range(1.0, 1.12, 0.01) var hover_scale: float = 1.04:
+	set(value):
+		hover_scale = value
+		queue_redraw()
+## 已完成（按钮禁用）时的灰色面色
+@export var done_fill_color: Color = Color(0.784, 0.784, 0.784, 1):
+	set(value):
+		done_fill_color = value
+		queue_redraw()
+@export var done_edge_color: Color = Color(0.2, 0.2, 0.2, 1):
+	set(value):
+		done_edge_color = value
+		queue_redraw()
 ## 尖刺长度占控件短边的比例
-@export_range(0.04, 0.3, 0.01) var spike_length_ratio: float = 0.16
+@export_range(0.04, 0.3, 0.01) var spike_length_ratio: float = 0.16:
+	set(value):
+		spike_length_ratio = value
+		_rebuild_layout()
+		queue_redraw()
 ## 相邻尖刺的弧长间距（像素），越小尖刺越密
-@export_range(10.0, 48.0, 1.0) var spike_spacing: float = 22.0
+@export_range(10.0, 48.0, 1.0) var spike_spacing: float = 22.0:
+	set(value):
+		spike_spacing = value
+		_rebuild_layout()
+		queue_redraw()
 ## 白圈与黄面相对黑边的内缩宽度（像素）
-@export_range(1.0, 10.0, 0.5) var ring_width: float = 4.0
+@export_range(1.0, 10.0, 0.5) var ring_width: float = 4.0:
+	set(value):
+		ring_width = value
+		queue_redraw()
 ## 尖刺长度的随机浮动，避免过于机械
-@export_range(0.0, 0.3, 0.01) var tip_variation: float = 0.1
+@export_range(0.0, 0.3, 0.01) var tip_variation: float = 0.1:
+	set(value):
+		tip_variation = value
+		_rebuild_layout()
+		queue_redraw()
+## 仅编辑器预览用：在场景里切换 NORMAL / HOVER / DONE 查看三种配色
+@export var editor_preview_state: State = State.NORMAL:
+	set(value):
+		editor_preview_state = value
+		queue_redraw()
 
 const SAMPLE_COUNT: int = 480
 
@@ -24,6 +83,18 @@ const SAMPLE_COUNT: int = 480
 var _angles: PackedFloat32Array = PackedFloat32Array()
 ## 每个顶点的外拉系数：0 = 内圈凹点，>0 = 尖刺顶点（含随机浮动）
 var _factors: PackedFloat32Array = PackedFloat32Array()
+## 上次计算布局时使用的尺寸，尺寸变化后需要重算角度
+var _layout_size: Vector2 = Vector2.ZERO
+
+var _state: State = State.NORMAL
+## 当前绘制使用的状态（编辑器里取 editor_preview_state）
+var _draw_state: State = State.NORMAL
+
+func set_state(state: State) -> void:
+	if _state == state:
+		return
+	_state = state
+	queue_redraw()
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -35,11 +106,24 @@ func _on_resized() -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	if size.x < 8.0 or size.y < 8.0 or _angles.is_empty():
+	_draw_state = editor_preview_state if Engine.is_editor_hint() else _state
+	if size.x < 8.0 or size.y < 8.0:
 		return
-	_draw_star(0.0, edge_color)
+	if _layout_size != size or _angles.is_empty():
+		_rebuild_layout()
+	if _angles.is_empty():
+		return
+	var edge: Color = edge_color
+	var fill: Color = fill_color
+	match _draw_state:
+		State.HOVER:
+			fill = hover_fill_color
+		State.DONE:
+			fill = done_fill_color
+			edge = done_edge_color
+	_draw_star(0.0, edge)
 	_draw_star(ring_width, ring_color)
-	_draw_star(ring_width * 2.0, fill_color)
+	_draw_star(ring_width * 2.0, fill)
 
 func _draw_star(inset: float, color: Color) -> void:
 	var points: PackedVector2Array = _build_star(inset)
@@ -55,6 +139,7 @@ func _draw_star(inset: float, color: Color) -> void:
 func _rebuild_layout() -> void:
 	_angles = PackedFloat32Array()
 	_factors = PackedFloat32Array()
+	_layout_size = size
 	if size.x < 8.0 or size.y < 8.0:
 		return
 
@@ -96,9 +181,10 @@ func _rebuild_layout() -> void:
 
 func _build_star(inset: float) -> PackedVector2Array:
 	var center: Vector2 = size * 0.5
-	var tip_rx: float = maxf(center.x - inset, 1.0)
-	var tip_ry: float = maxf(center.y - inset, 1.0)
-	var spike_length: float = maxf(minf(size.x, size.y) * spike_length_ratio, 2.0)
+	var scale_factor: float = hover_scale if _draw_state == State.HOVER else 1.0
+	var tip_rx: float = maxf(center.x - inset, 1.0) * scale_factor
+	var tip_ry: float = maxf(center.y - inset, 1.0) * scale_factor
+	var spike_length: float = maxf(minf(size.x, size.y) * spike_length_ratio, 2.0) * scale_factor
 	var base_rx: float = maxf(tip_rx - spike_length, tip_rx * 0.45)
 	var base_ry: float = maxf(tip_ry - spike_length, tip_ry * 0.45)
 

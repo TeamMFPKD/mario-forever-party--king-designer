@@ -1,10 +1,9 @@
-[gd_scene format=4 load_steps=87 uid="uid://bnx7r3slvtcdt"]
+[gd_scene format=3 uid="uid://bnx7r3slvtcdt"]
 
 [ext_resource type="PackedScene" path="res://room/base/edit_room_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_and_load/save_level.gd" id="3_s2wk4"]
 [ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="4_2mwga"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="6_io5w1"]
-[ext_resource type="Script" uid="uid://b8yk2psxgyimm" path="res://script/edit/command/history_buttons.gd" id="history_btn"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="9_8ebhj"]
 [ext_resource type="Script" uid="uid://dl0jbge2cmsy8" path="res://script/edit/level_control.gd" id="10_g7up7"]
 [ext_resource type="Script" uid="uid://cx3wpfh1e5nl2" path="res://script/edit/mobile_control_button.gd" id="10_nkg8u"]
@@ -51,12 +50,11 @@
 [ext_resource type="Script" uid="uid://c1igyhutb8ech" path="res://script/edit/goal_placement_hint/goal_object_hint.gd" id="114_yebna"]
 [ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="116_hfb1t"]
 [ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/goal_placement_hint/hint_if_there_is_no_goal.gd" id="117_io63s"]
-[ext_resource type="Script" path="res://script/multiplayer/3_edit_room/edit_ready_button.gd" id="121_editready"]
-[ext_resource type="Script" path="res://script/multiplayer/3_edit_room/ready_burst.gd" id="123_burst"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
-atlas = ExtResource("39_io63s")
-region = Rect2(0, 32, 32, 32)
+[ext_resource type="Script" uid="uid://dmn0tem2abusb" path="res://script/multiplayer/3_edit_room/edit_ready_button.gd" id="121_editready"]
+[ext_resource type="Script" uid="uid://kgtbk75sxucx" path="res://script/multiplayer/3_edit_room/ready_burst.gd" id="123_burst"]
+[ext_resource type="Script" uid="uid://b8yk2psxgyimm" path="res://script/edit/command/history_buttons.gd" id="history_btn"]
+[ext_resource type="Texture2D" uid="uid://cs6en2pg2wn0c" path="res://sprite/ui/redo.svg" id="redo_svg"]
+[ext_resource type="Texture2D" uid="uid://cl5pau1nm5k4g" path="res://sprite/ui/undo.svg" id="undo_svg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
 atlas = ExtResource("40_yebna")
@@ -69,6 +67,10 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_hlwyj"]
 atlas = ExtResource("51_w23hq")
 region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
+atlas = ExtResource("39_io63s")
+region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4fasx"]
 atlas = ExtResource("42_qnirk")
@@ -185,14 +187,14 @@ load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9
 atlas = SubResource("CompressedTexture2D_gotbk")
 region = Rect2(96, 32, 32, 32)
 
-[node name="Room" instance=ExtResource("1_base")]
+[node name="Room" unique_id=1128540770 instance=ExtResource("1_base")]
 
-[node name="GameRoomSize" parent="." groups=["game_room_size"]]
+[node name="GameRoomSize" parent="." index="3" unique_id=294304425 groups=["game_room_size"]]
 
 [node name="SaveLoad" type="MarginContainer" parent="GameRoomSize" index="1" unique_id=773497609]
 layout_mode = 0
 offset_right = 328.0
-offset_bottom = 428.0
+offset_bottom = 484.0
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 30
@@ -238,45 +240,45 @@ metadata/_edit_lock_ = true
 [node name="MobileControlButton" parent="GameRoomSize/SaveLoad/VBoxContainer" index="3" unique_id=1210628054 instance=ExtResource("9_8ebhj")]
 custom_minimum_size = Vector2(260, 136)
 layout_mode = 2
-focus_mode = 0
 text = "移动端触控"
 autowrap_mode = 3
 script = ExtResource("10_nkg8u")
 
-[node name="ReadyButton" type="Button" parent="GameRoomSize/SaveLoad/VBoxContainer" index="4" unique_id=1916274385]
-custom_minimum_size = Vector2(260, 100)
-layout_mode = 2
-size_flags_horizontal = 13
-size_flags_vertical = 13
-focus_mode = 0
-flat = true
-theme = ExtResource("6_io5w1")
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
-theme_override_colors/font_pressed_color = Color(0.12, 0.12, 0.12, 1)
-theme_override_colors/font_disabled_color = Color(0.2, 0.2, 0.2, 0.85)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 22
-text = "制作完毕！（0/0）"
-script = ExtResource("121_editready")
-
-[node name="Burst" type="Control" parent="GameRoomSize/SaveLoad/VBoxContainer/ReadyButton" index="0"]
+[node name="Burst" type="Control" parent="GameRoomSize/SaveLoad/VBoxContainer" index="4" unique_id=37632707]
 show_behind_parent = true
+custom_minimum_size = Vector2(0, 144)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("123_burst")
+
+[node name="ReadyButton" type="Button" parent="GameRoomSize/SaveLoad/VBoxContainer/Burst" index="0" unique_id=1916274385]
+custom_minimum_size = Vector2(260, 100)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("123_burst")
+size_flags_horizontal = 13
+size_flags_vertical = 13
+focus_mode = 0
+theme = ExtResource("6_io5w1")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.12, 0.12, 0.12, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "制作完毕！（0/0）"
+flat = true
+script = ExtResource("121_editready")
 
-[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="2" unique_id=578186261 node_paths=PackedStringArray("level_data_node")]
+[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" parent_id_path=PackedInt32Array(968429229) index="2" unique_id=578186261 node_paths=PackedStringArray("level_data_node")]
 script = ExtResource("3_s2wk4")
 level_data_node = NodePath("../LevelManager")
 
-[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="4" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "clear_pipe_draw", "tile_button", "button_eraser") groups=["level_control"]]
+[node name="LevelControl" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" parent_id_path=PackedInt32Array(968429229) index="4" unique_id=1390875576 node_paths=PackedStringArray("tile_map_draw", "object_map_layer", "object_map_draw", "clear_pipe_draw", "tile_button", "button_eraser") groups=["level_control"]]
 script = ExtResource("10_g7up7")
 tile_map_draw = NodePath("../TileMapLayer/TileMapDraw")
 object_map_layer = NodePath("../ObjectMapLayer")
@@ -297,38 +299,38 @@ volume_db = -5.0
 bus = &"Sound"
 script = ExtResource("15_e6mtu")
 
-[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" index="1" unique_id=866892443 node_paths=PackedStringArray("tile_map")]
+[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" parent_id_path=PackedInt32Array(1411860041) index="1" unique_id=866892443 node_paths=PackedStringArray("tile_map")]
 script = ExtResource("16_ifctp")
 tile_map = NodePath("..")
 
-[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" index="0" unique_id=87589930 node_paths=PackedStringArray("object_map_layer")]
+[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" parent_id_path=PackedInt32Array(295788680) index="0" unique_id=87589930 node_paths=PackedStringArray("object_map_layer")]
 script = ExtResource("19_xo7f2")
 object_map_layer = NodePath("..")
 
-[node name="ObjectDrag" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" index="1" unique_id=1715984441 instance=ExtResource("45_jdcwv")]
+[node name="ObjectDrag" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" parent_id_path=PackedInt32Array(295788680) index="1" unique_id=1715984441 instance=ExtResource("45_jdcwv")]
 stream = ExtResource("46_io63s")
 script = ExtResource("47_lq4t0")
 
-[node name="PipeDrag" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" index="1" unique_id=1191868969 instance=ExtResource("45_jdcwv")]
+[node name="PipeDrag" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" parent_id_path=PackedInt32Array(2076543210) index="1" unique_id=1191868969 instance=ExtResource("45_jdcwv")]
 stream = ExtResource("46_lq4t0")
 volume_db = -5.0
 script = ExtResource("47_lq4t0")
 
-[node name="PipeMove" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" index="2" unique_id=716592356 instance=ExtResource("45_jdcwv")]
+[node name="PipeMove" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" parent_id_path=PackedInt32Array(2076543210) index="2" unique_id=716592356 instance=ExtResource("45_jdcwv")]
 stream = ExtResource("46_io63s")
 script = ExtResource("47_lq4t0")
 
-[node name="GroupButtonTheme" parent="GameRoomSize"]
+[node name="GroupButtonTheme" parent="GameRoomSize" index="4" unique_id=1805699780]
 offset_left = 16.0
 offset_top = -164.0
 offset_right = 169.0
 offset_bottom = -10.0
 
-[node name="LevelTheme" parent="GameRoomSize/GroupButtonTheme"]
+[node name="LevelTheme" parent="GameRoomSize/GroupButtonTheme" index="3" unique_id=870500736]
 visible = false
 offset_right = 1720.0
 
-[node name="ItemPreview" parent="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB/ButtonTexture" parent_id_path=PackedInt32Array(1292653546, 1856562228)]
+[node name="ItemPreview" parent="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB/ButtonTexture" parent_id_path=PackedInt32Array(1292653546, 1856562228) index="0" unique_id=2057330280]
 texture = ExtResource("45_oia1o")
 
 [node name="ThemeButtonGalaxy" parent="GameRoomSize/GroupButtonTheme/LevelTheme" index="10" unique_id=2080035385 instance=ExtResource("29_7jwj4")]
@@ -340,7 +342,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonGalaxy/ButtonTexture" parent_id_path=PackedInt32Array(2080035385, 1856562228) index="0" unique_id=2057330280]
 texture = ExtResource("63_bb1r4")
 
-[node name="Bonus" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus"]
+[node name="Bonus" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus" parent_id_path=PackedInt32Array(802795878) index="3" unique_id=1299550030]
 visible = false
 offset_left = -264.0
 offset_top = -698.0
@@ -387,25 +389,25 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClockDecrease/ButtonTexture" parent_id_path=PackedInt32Array(983334583, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_hlwyj")
 
-[node name="ItemButtonQuestionBlock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer"]
+[node name="ItemButtonQuestionBlock" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="0" unique_id=1975092214]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockFireFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer"]
+[node name="ItemButtonQuestionBlockFireFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="1" unique_id=2019905473]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockBeetroot" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer"]
+[node name="ItemButtonQuestionBlockBeetroot" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="2" unique_id=2111346889]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockLui" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer"]
+[node name="ItemButtonQuestionBlockLui" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="3" unique_id=1959775024]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockPoisonousMushroom" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer"]
+[node name="ItemButtonQuestionBlockPoisonousMushroom" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="4" unique_id=398520902]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockSuperStar" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer"]
+[node name="ItemButtonQuestionBlockSuperStar" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="5" unique_id=1521461808]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockMushroomBig" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" index="6" unique_id=1882846130 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBig" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="6" unique_id=1882846130 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_mushroom_big"
@@ -419,7 +421,7 @@ position = Vector2(8, 8)
 texture = ExtResource("76_h71uv")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockMushroomBee" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" index="7" unique_id=2084092384 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBee" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="7" unique_id=2084092384 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_mushroom_bee"
@@ -434,7 +436,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("79_lq4t0")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockCloudFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" index="8" unique_id=99904214 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockCloudFlower" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer" parent_id_path=PackedInt32Array(1445714692) index="8" unique_id=99904214 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_cloud_flower"
@@ -449,25 +451,25 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("80_io63s")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2"]
+[node name="ItemButtonQuestionBlockHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="0" unique_id=1798484599]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockFireFlowerHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2"]
+[node name="ItemButtonQuestionBlockFireFlowerHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="1" unique_id=1591443830]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockBeetrootHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2"]
+[node name="ItemButtonQuestionBlockBeetrootHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="2" unique_id=545522843]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockLuiHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2"]
+[node name="ItemButtonQuestionBlockLuiHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="3" unique_id=1676451903]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockPoisonousMushroomLuiHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2"]
+[node name="ItemButtonQuestionBlockPoisonousMushroomLuiHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="4" unique_id=1189222515]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockSuperStarHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2"]
+[node name="ItemButtonQuestionBlockSuperStarHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="5" unique_id=1781424821]
 size_flags_horizontal = 0
 
-[node name="ItemButtonQuestionBlockMushroomBigHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" index="6" unique_id=1385715587 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBigHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="6" unique_id=1385715587 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_mushroom_big_hidden"
@@ -481,7 +483,7 @@ position = Vector2(8, 8)
 texture = ExtResource("76_h71uv")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockMushroomBeeHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" index="7" unique_id=1840075432 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockMushroomBeeHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="7" unique_id=1840075432 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_mushroom_bee_hidden"
@@ -496,7 +498,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("79_lq4t0")
 metadata/_edit_lock_ = true
 
-[node name="ItemButtonQuestionBlockCloudFlowerHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" index="8" unique_id=1460012379 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonQuestionBlockCloudFlowerHidden" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2" parent_id_path=PackedInt32Array(1246934112) index="8" unique_id=1460012379 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 0
 object_name = "question_block_cloud_flower_hidden"
@@ -597,16 +599,16 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonCloudFlower/ButtonTexture" parent_id_path=PackedInt32Array(752845834, 839201675) index="0" unique_id=1085479145]
 texture = ExtResource("80_io63s")
 
-[node name="ItemButtonTile" parent="GameRoomSize/BottomItemGroups"]
+[node name="ItemButtonTile" parent="GameRoomSize/BottomItemGroups" parent_id_path=PackedInt32Array(340307882) index="1" unique_id=476318096]
 size_flags_horizontal = 1
 
-[node name="ItemButtonTileSingle" parent="GameRoomSize/BottomItemGroups"]
+[node name="ItemButtonTileSingle" parent="GameRoomSize/BottomItemGroups" parent_id_path=PackedInt32Array(340307882) index="2" unique_id=981797274]
 size_flags_horizontal = 1
 
-[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/BottomItemGroups"]
+[node name="ItemButtonTileSemiSolid" parent="GameRoomSize/BottomItemGroups" parent_id_path=PackedInt32Array(340307882) index="3" unique_id=398093930]
 size_flags_horizontal = 1
 
-[node name="Pipe" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe"]
+[node name="Pipe" parent="GameRoomSize/BottomItemGroups/GroupButtonPipe" parent_id_path=PackedInt32Array(1147622410) index="3" unique_id=1994847249]
 visible = false
 offset_left = -176.0
 offset_top = -530.0
@@ -627,14 +629,14 @@ metadata/_edit_lock_ = true
 scale = Vector2(15, 15)
 texture = SubResource("AtlasTexture_x0edr")
 
-[node name="Enemy" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy"]
+[node name="Enemy" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy" parent_id_path=PackedInt32Array(33528519) index="3" unique_id=777588406]
 visible = false
 offset_left = -951.0
 offset_top = -706.0
 offset_right = 297.0
 offset_bottom = -14.0
 
-[node name="ItemButtonMagikoopa" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2" index="3" unique_id=720774010 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonMagikoopa" parent="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2" parent_id_path=PackedInt32Array(3468937) index="3" unique_id=720774010 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "magikoopa"
@@ -644,7 +646,7 @@ metadata/_edit_lock_ = true
 texture = SubResource("AtlasTexture_gnq71")
 flip_h = true
 
-[node name="MousePop" type="Node" parent="GameRoomSize/BottomItemGroups" index="6" unique_id=75036855 node_paths=PackedStringArray("bottom_bar", "sub_viewport_container", "game_room_size", "group_panels")]
+[node name="MousePop" type="Node" parent="GameRoomSize/BottomItemGroups" parent_id_path=PackedInt32Array(340307882) index="6" unique_id=75036855 node_paths=PackedStringArray("bottom_bar", "sub_viewport_container", "game_room_size", "group_panels")]
 script = ExtResource("85_ifctp")
 bottom_bar = NodePath("..")
 sub_viewport_container = NodePath("../../SubViewportContainer")
@@ -652,7 +654,7 @@ game_room_size = NodePath("../..")
 pop_speed = 600.0
 group_panels = [NodePath("../GroupButtonBonus/Bonus"), NodePath("../GroupButtonPipe/Pipe"), NodePath("../GroupButtonEnemy/Enemy")]
 
-[node name="Mark" parent="GameRoomSize/RightItemGroups/GroupButtonMark"]
+[node name="Mark" parent="GameRoomSize/RightItemGroups/GroupButtonMark" parent_id_path=PackedInt32Array(1978539704) index="3" unique_id=1761276002]
 visible = false
 offset_left = -1040.0
 offset_top = -698.0
@@ -828,13 +830,13 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSolidSpike/ButtonTexture" parent_id_path=PackedInt32Array(226230677, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_1nixq")
 
-[node name="ItemButtonPlayer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer"]
+[node name="ItemButtonPlayer" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" parent_id_path=PackedInt32Array(2056440720) index="0" unique_id=142157797]
 size_flags_horizontal = 1
 
-[node name="ItemButtonGoalGate" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer"]
+[node name="ItemButtonGoalGate" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" parent_id_path=PackedInt32Array(2056440720) index="1" unique_id=692983323]
 size_flags_horizontal = 1
 
-[node name="HintGoalTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate" unique_id=1242385408 instance=ExtResource("111_cvttd")]
+[node name="HintGoalTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate" index="3" unique_id=1242385408 instance=ExtResource("111_cvttd")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.47700003
@@ -847,10 +849,10 @@ offset_right = -71.09527
 offset_bottom = -68.888336
 rotation = 0.7853982
 
-[node name="ItemButtonSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer"]
+[node name="ItemButtonSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" parent_id_path=PackedInt32Array(2056440720) index="2" unique_id=219218855]
 size_flags_horizontal = 1
 
-[node name="ItemButtonHorizontalSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" index="3" unique_id=2015388323 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonHorizontalSpring" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" parent_id_path=PackedInt32Array(2056440720) index="3" unique_id=2015388323 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "horizontal_spring"
@@ -860,7 +862,7 @@ metadata/_edit_lock_ = true
 rotation = 1.5707964
 texture = SubResource("AtlasTexture_io63s")
 
-[node name="ItemButtonTriangleBr" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" index="4" unique_id=1944762327 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonTriangleBr" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" parent_id_path=PackedInt32Array(2056440720) index="4" unique_id=1944762327 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "triangle_br"
@@ -869,7 +871,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBr/ButtonTexture" parent_id_path=PackedInt32Array(1944762327, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_3p3ro")
 
-[node name="ItemButtonTriangleBl" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" index="5" unique_id=853311435 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonTriangleBl" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer" parent_id_path=PackedInt32Array(2056440720) index="5" unique_id=853311435 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "triangle_bl"
@@ -878,19 +880,19 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBl/ButtonTexture" parent_id_path=PackedInt32Array(853311435, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_d7pwa")
 
-[node name="ItemButtonMovingPlatformHorizontal" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2"]
+[node name="ItemButtonMovingPlatformHorizontal" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" parent_id_path=PackedInt32Array(1014086319) index="0" unique_id=736352240]
 size_flags_horizontal = 1
 
-[node name="ItemButtonMovingPlatformVerticalDown" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2"]
+[node name="ItemButtonMovingPlatformVerticalDown" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" parent_id_path=PackedInt32Array(1014086319) index="1" unique_id=1555604510]
 size_flags_horizontal = 1
 
-[node name="ItemButtonMovingPlatformVerticalUp" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2"]
+[node name="ItemButtonMovingPlatformVerticalUp" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" parent_id_path=PackedInt32Array(1014086319) index="2" unique_id=1361017568]
 size_flags_horizontal = 1
 
-[node name="ItemButtonPlatformFall" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2"]
+[node name="ItemButtonPlatformFall" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" parent_id_path=PackedInt32Array(1014086319) index="3" unique_id=281232860]
 size_flags_horizontal = 1
 
-[node name="ItemButtonTriangleTr" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" index="4" unique_id=1894089872 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonTriangleTr" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" parent_id_path=PackedInt32Array(1014086319) index="4" unique_id=1894089872 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "triangle_tr"
@@ -899,7 +901,7 @@ metadata/_edit_lock_ = true
 [node name="ItemPreview" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTr/ButtonTexture" parent_id_path=PackedInt32Array(1894089872, 839201675) index="0" unique_id=1085479145]
 texture = SubResource("AtlasTexture_8o126")
 
-[node name="ItemButtonTriangleTl" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" index="5" unique_id=1366001594 instance=ExtResource("41_cvttd")]
+[node name="ItemButtonTriangleTl" parent="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2" parent_id_path=PackedInt32Array(1014086319) index="5" unique_id=1366001594 instance=ExtResource("41_cvttd")]
 layout_mode = 2
 size_flags_horizontal = 1
 object_name = "triangle_tl"
@@ -915,7 +917,7 @@ mark_panel = NodePath("..")
 hint_to_mark = NodePath("../../HintMarkTextureRect")
 hint_to_goal = NodePath("../HBoxContainer/ItemButtonGoalGate/HintGoalTextureRect")
 
-[node name="HintMarkTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark" unique_id=504208608 instance=ExtResource("111_cvttd")]
+[node name="HintMarkTextureRect" parent="GameRoomSize/RightItemGroups/GroupButtonMark" parent_id_path=PackedInt32Array(1978539704) index="4" unique_id=504208608 instance=ExtResource("111_cvttd")]
 visible = false
 layout_mode = 1
 anchors_preset = -1
@@ -933,8 +935,8 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -288.0
-offset_bottom = -96.0
+offset_top = -193.0
+offset_bottom = -1.0
 grow_horizontal = 0
 grow_vertical = 2
 
@@ -960,41 +962,43 @@ anchor_right = 0.5
 anchor_bottom = 0.0
 grow_vertical = 1
 
-[node name="HistoryButtons" type="HBoxContainer" parent="GameRoomSize" index="10" node_paths=PackedStringArray("undo_button", "redo_button")]
+[node name="HistoryButtons" type="HBoxContainer" parent="GameRoomSize" index="10" unique_id=138435362 node_paths=PackedStringArray("undo_button", "redo_button")]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -420.0
-offset_top = 24.0
-offset_right = -24.0
-offset_bottom = 104.0
+offset_left = -200.0
+offset_top = 243.0
+offset_bottom = 333.0
 grow_horizontal = 0
-grow_vertical = 1
 theme_override_constants/separation = 12
 script = ExtResource("history_btn")
 undo_button = NodePath("UndoButton")
 redo_button = NodePath("RedoButton")
 
-[node name="UndoButton" type="Button" parent="GameRoomSize/HistoryButtons" index="0"]
-custom_minimum_size = Vector2(180, 80)
+[node name="UndoButton" type="Button" parent="GameRoomSize/HistoryButtons" index="0" unique_id=1379790476]
+custom_minimum_size = Vector2(94, 90)
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "撤销 (Ctrl+Z)"
 focus_mode = 0
 theme = ExtResource("6_io5w1")
-theme_override_font_sizes/font_size = 32
-text = "撤销"
+icon = ExtResource("undo_svg")
+icon_alignment = 1
+expand_icon = true
 
-[node name="RedoButton" type="Button" parent="GameRoomSize/HistoryButtons" index="1"]
-custom_minimum_size = Vector2(180, 80)
+[node name="RedoButton" type="Button" parent="GameRoomSize/HistoryButtons" index="1" unique_id=946477258]
+custom_minimum_size = Vector2(94, 90)
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "重做 (Ctrl+Y)"
 focus_mode = 0
 theme = ExtResource("6_io5w1")
-theme_override_font_sizes/font_size = 32
-text = "重做"
+icon = ExtResource("redo_svg")
+icon_alignment = 1
+expand_icon = true
 
-[node name="MobileControlManager" parent="."]
+[node name="MobileControlManager" parent="." index="4" unique_id=666185208]
 show_mode = 2
 
 [connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
@@ -1010,52 +1014,114 @@ show_mode = 2
 [connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/GoalObjectHint" method="_on_none_goal"]
 [connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/ControlVisibieSet" method="_set_visible"]
 [connection signal="none_goal_hint" from="GameRoomSize/NoneGoalHint/HintIfThereIsNoGoal" to="GameRoomSize/NoneGoalHint/PlaceGoalHint/AnimationPlayer" method="play" binds= [&"new_animation"]]
+
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonRight"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonUp"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeOut/LevelSizeButtonDown"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonLeft"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonUp"]
+[editable path="GameRoomSize/LevelSizeGroup/LevelSizeIn/LevelSizeButtonDown"]
+[editable path="GameRoomSize/GroupButtonTheme"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonCastle"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonCastleB"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonCave"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonDusk"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonNight"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSand"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnow"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonVolcano"]
+[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonGalaxy"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCloudFlower"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBee"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBig"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCloudFlowerHidden"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBeeHidden"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBigHidden"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonBeetroot"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonCloudFlower"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonFireFlower"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonLui"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBee"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBig"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonPoisonousMushroom"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonSuperStar"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonBrick"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonCoin"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonBrick"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClock"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer4/ItemButtonTimeClockDecrease"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy"]
-[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonMagikoopa"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlock"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockFireFlower"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockBeetroot"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockLui"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockPoisonousMushroom"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockSuperStar"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBig"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockMushroomBee"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer/ItemButtonQuestionBlockCloudFlower"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockFireFlowerHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockBeetrootHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockLuiHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockPoisonousMushroomLuiHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockSuperStarHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBigHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockMushroomBeeHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer2/ItemButtonQuestionBlockCloudFlowerHidden"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroom"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonFireFlower"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonBeetroot"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonLui"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonPoisonousMushroom"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonSuperStar"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBig"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonMushroomBee"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonBonus/Bonus/HBoxContainer3/ItemButtonCloudFlower"]
+[editable path="GameRoomSize/BottomItemGroups/ItemButtonTile"]
+[editable path="GameRoomSize/BottomItemGroups/ItemButtonTileSingle"]
+[editable path="GameRoomSize/BottomItemGroups/ItemButtonTileSemiSolid"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer3/ItemButtonPipeHorizontalLeft"]
-[editable path="GameRoomSize/GroupButtonTheme"]
-[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonGalaxy"]
-[editable path="GameRoomSize/GroupButtonTheme/LevelTheme/ThemeButtonSnowB"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalUp"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalMiddle"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer/ItemButtonPipeVerticalDown"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2/ItemButtonPipeHorizontalLeft"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2/ItemButtonPipeHorizontalMiddle"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonPipe/Pipe/HBoxContainer2/ItemButtonPipeHorizontalRight"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonGoomba"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonTroopaGreen"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonTroopaRed"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonSpiny"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonBeetle"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonHammerBro"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal1/ItemButtonFireBro"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonCannon"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonThwomp"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonBoo"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/EnemyNormal2/ItemButtonMagikoopa"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaGreenUp"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaFireUp"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaBlueUp"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer/ItemButtonPiranhaStoneUp"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaGreenDown"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown"]
+[editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonCameraEdge"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonHorizontalSpring"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBl"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBr"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTl"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTr"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSolidSpike"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonDoor"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonKey"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonPinkCoin"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKey"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonQuestionBlockKeyHidden"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonPinkCoin"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonAtchiMuiteBlock2"]
-[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonDoorLocked"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonCursedKey"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKey"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer5/ItemButtonQuestionBlockCursedKeyHidden"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlock"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchRed"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSwitchBlue"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer3/ItemButtonSolidSpike"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonPlayer"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonGoalGate"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonSpring"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonHorizontalSpring"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBr"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer/ItemButtonTriangleBl"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformHorizontal"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalDown"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonMovingPlatformVerticalUp"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonPlatformFall"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTr"]
+[editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer2/ItemButtonTriangleTl"]
+[editable path="GameRoomSize/RightItemGroups/ItemButtonEraser"]
