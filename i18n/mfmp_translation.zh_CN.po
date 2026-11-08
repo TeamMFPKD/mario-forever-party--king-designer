@@ -66,8 +66,11 @@ msgstr "编辑"
 msgid "传输 / 接收关卡数据中……"
 msgstr "传输 / 接收关卡数据中……"
 
-msgid "传输 / 接收关卡数据中……（%d/%d关；准备完毕人数 %d/%d人）"
-msgstr "传输 / 接收关卡数据中……（%d/%d关；准备完毕人数 %d/%d人）"
+msgid "接收关卡（%d/%d）"
+msgstr "接收关卡（%d/%d）"
+
+msgid "准备人数（%d/%d）"
+msgstr "准备人数（%d/%d）"
 
 msgid "强制继续"
 msgstr "强制继续"

@@ -319,6 +319,17 @@ func my_players_data_are_ready(player_id: int) -> void:
 			p.ready = true
 			Log.i("玩家 %s 已准备就绪" % [format_player(p.name, p.id)])
 			break
+	if multiplayer.is_server():
+		# 只广播就绪状态，避免把体积庞大的关卡数据再同步一遍
+		sync_player_ready.rpc(player_id)
+
+@rpc("authority", "call_local")
+func sync_player_ready(player_id: int) -> void:
+	for p: Dictionary in players:
+		if p.id == player_id:
+			p.ready = true
+			break
+	emit_signal("players_updated")
 
 @rpc("authority", "call_local")
 func lets_play_together(rnd_levels: Array) -> void:

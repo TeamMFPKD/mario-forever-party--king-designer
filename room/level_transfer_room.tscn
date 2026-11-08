@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="7_xgwxn"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="12_u7vct"]
 [ext_resource type="AudioStream" uid="uid://brgw80bbwq265" path="res://sound/level_transfer_hint.wav" id="14_kfofx"]
+[ext_resource type="Script" path="res://script/multiplayer/4_level_transfer_room/level_transfer_progress_label.gd" id="15_prog"]
 
 [node name="LevelTransferRoom" type="Node2D" unique_id=574478413]
 
@@ -47,21 +48,48 @@ offset_bottom = 540.0
 script = ExtResource("3_1m5ex")
 metadata/_edit_lock_ = true
 
-[node name="UiLabel" parent="GameRoomSize" unique_id=1008498644 instance=ExtResource("7_xgwxn")]
+[node name="ProgressBox" type="VBoxContainer" parent="GameRoomSize" unique_id=1008498645]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -259.5
-offset_top = -31.5
-offset_right = 259.5
-offset_bottom = 31.5
+offset_left = -720.0
+offset_top = -80.0
+offset_right = 720.0
+offset_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 10
+script = ExtResource("15_prog")
+
+[node name="UiLabel" parent="GameRoomSize/ProgressBox" unique_id=1008498644 instance=ExtResource("7_xgwxn")]
+layout_mode = 2
 theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
 text = "传输 / 接收关卡数据中……"
+horizontal_alignment = 1
+
+[node name="ProgressRow" type="HBoxContainer" parent="GameRoomSize/ProgressBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 200
+
+[node name="LevelCountLabel" parent="GameRoomSize/ProgressBox/ProgressRow" instance=ExtResource("7_xgwxn")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "接收关卡（0/0）"
+horizontal_alignment = 1
+
+[node name="ReadyCountLabel" parent="GameRoomSize/ProgressBox/ProgressRow" instance=ExtResource("7_xgwxn")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "准备人数（0/0）"
 horizontal_alignment = 1
 
 [node name="UiMarginContainer" parent="GameRoomSize" unique_id=1510288836 instance=ExtResource("4_4tcn6")]

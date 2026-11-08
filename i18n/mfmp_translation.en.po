@@ -66,8 +66,11 @@ msgstr "Edit"
 msgid "传输 / 接收关卡数据中……"
 msgstr "Transferring / Receiving level data..."
 
-msgid "传输 / 接收关卡数据中……（%d/%d关；准备完毕人数 %d/%d人）"
-msgstr "Transferring / Receiving level data... (%d/%d levels; %d/%d players ready)"
+msgid "接收关卡（%d/%d）"
+msgstr "Levels received (%d/%d)"
+
+msgid "准备人数（%d/%d）"
+msgstr "Ready players (%d/%d)"
 
 msgid "强制继续"
 msgstr "Force Continue"
