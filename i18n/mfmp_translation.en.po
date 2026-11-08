@@ -1,0 +1,316 @@
+# English translation for MF: MP.
+# This file is distributed under the same license as the game.
+msgid ""
+msgstr ""
+"Project-Id-Version: MF: MP\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "使用须知"
+msgstr "User Notice"
+
+msgid "使用须知文本"
+msgstr "Welcome to Mario Forever: Maker Party!\n\nMario Forever: Maker Party is a game with DIY features. Please ensure the following during gameplay:\n· The levels you create shall comply with public order and good morals, and must not contain inappropriate, illegal or non-compliant content such as violence, pornography, vulgarity, discrimination or horror.\n· Abide by local laws and regulations.\n· Do not use the level creation function to produce or spread malicious code, viruses, or design malicious levels that may induce device malfunctions or information leakage for players.\n\nLevel Storage Notice:\n· For level reuse purposes, the levels you create will be automatically cached to other players' local devices during online gameplay; similarly, levels created by other players will also be automatically cached to your local device.\n\nMessage System Notice:\n· For security reasons, please do not send sensitive information. Communicate respectfully.\n· Messages sent are visible to all players in the current room. Messages may be saved by others."
+
+msgid "拒绝并退出"
+msgstr "Decline"
+
+msgid "同意"
+msgstr "Accept"
+
+msgid "组织游戏"
+msgstr "Host"
+
+msgid "加入游戏"
+msgstr "Join"
+
+msgid "本地端口"
+msgstr "Local Port"
+
+msgid "玩家名称"
+msgstr "Name"
+
+msgid "组织"
+msgstr "Host"
+
+msgid "组织方 IP"
+msgstr "Host IP"
+
+msgid "端口"
+msgstr "Port"
+
+msgid "加入"
+msgstr "Join"
+
+msgid "玩家列表"
+msgstr "Players"
+
+msgid "退出"
+msgstr "Quit"
+
+msgid "开始"
+msgstr "Start"
+
+msgid "设定编辑时限"
+msgstr "Edit Time Limit"
+
+msgid "游玩"
+msgstr "Play"
+
+msgid "编辑"
+msgstr "Edit"
+
+msgid "传输 / 接收关卡数据中……"
+msgstr "Transferring / Receiving level data..."
+
+msgid "传输 / 接收关卡数据中……（%d/%d关；准备完毕人数 %d/%d人）"
+msgstr "Transferring / Receiving level data... (%d/%d levels; %d/%d players ready)"
+
+msgid "强制继续"
+msgstr "Force Continue"
+
+msgid "结果"
+msgstr "Results"
+
+msgid "返回标题画面"
+msgstr "Back to title"
+
+msgid "名称"
+msgstr "Name"
+
+msgid "关卡被通过数"
+msgstr "Times Completed"
+
+msgid "关卡死亡数"
+msgstr "Times Died"
+
+msgid "通过率"
+msgstr "Clear Rate"
+
+msgid "个人通关总数"
+msgstr "Your Completions"
+
+msgid "总积分"
+msgstr "Score"
+
+msgid "游戏进行中"
+msgstr "Game in progress"
+
+msgid "确认"
+msgstr "OK"
+
+msgid "关卡回顾"
+msgstr "Capture"
+
+msgid "等待其他玩家游玩所有关卡……"
+msgstr "Waiting for others to finish..."
+
+msgid "隐藏触控"
+msgstr "Hide Touch"
+
+msgid "显示触控"
+msgstr "Show Touch"
+
+msgid "游玩记录"
+msgstr "History"
+
+msgid "设置界面"
+msgstr "Options"
+
+msgid "全局音量"
+msgstr "Master Volume"
+
+msgid "背景音乐"
+msgstr "Music Volume"
+
+msgid "音效音量"
+msgstr "Sound Volume"
+
+msgid "返回"
+msgstr "Back"
+
+msgid "制作人员"
+msgstr "Staff"
+
+msgid "输入映射"
+msgstr "Input Map"
+
+msgid "设置按键"
+msgstr "Set"
+
+msgid "返回主设置"
+msgstr "Main Option"
+
+msgid "上"
+msgstr "Move Up"
+
+msgid "下"
+msgstr "Move Down"
+
+msgid "左"
+msgstr "Move Left"
+
+msgid "右"
+msgstr "Move Right"
+
+msgid "跳跃"
+msgstr "Jump"
+
+msgid "射击"
+msgstr "Shoot"
+
+msgid "快速重开"
+msgstr "Restart"
+
+msgid "拍摄"
+msgstr "Photo"
+
+msgid "请按下一个键"
+msgstr "Press any key"
+
+msgid "未设置"
+msgstr "Not Set"
+
+msgid "打开关卡目录"
+msgstr "Open Level Folder"
+
+msgid "查看"
+msgstr "View"
+
+msgid "日期"
+msgstr "Date"
+
+msgid "作者"
+msgstr "Author"
+
+msgid "喜欢的关卡"
+msgstr "Liked Courses"
+
+msgid "取消收藏"
+msgstr "Unlike"
+
+msgid "读取中……"
+msgstr "Loading..."
+
+msgid "虚拟按键布局"
+msgstr "Buttons Layout"
+
+msgid "重置布局"
+msgstr "Default"
+
+msgid "分辨率"
+msgstr "Resolution"
+
+msgid "玩家离开提示"
+msgstr "{player_name} left the room."
+
+msgid "与主机断开。"
+msgstr "Disconnected from server."
+
+msgid "准备完毕"
+msgstr "I'm ready"
+
+msgid "警告：你还没有放置终点。"
+msgstr "Warning: You haven't placed the goal."
+
+msgid "消息"
+msgstr "Messages"
+
+msgid "发送"
+msgstr "Send"
+
+msgid "[系统] 文明交流，请不要发送敏感信息"
+msgstr "[SYS] Please be respectful. Do not send sensitive messages."
+
+msgid "导出成功"
+msgstr "Export Complete"
+
+msgid "导出失败"
+msgstr "Export Failed"
+
+msgid "导入成功"
+msgstr "Import Complete"
+
+msgid "导入失败"
+msgstr "Import Failed"
+
+msgid "导出已取消"
+msgstr "Export Cancelled"
+
+msgid "导入已取消"
+msgstr "Import Cancelled"
+
+msgid "导出"
+msgstr "Export"
+
+msgid "导入"
+msgstr "Import"
+
+msgid "MSG_QUICK_01"
+msgstr "Thanks!"
+
+msgid "MSG_QUICK_02"
+msgstr "Here we go!"
+
+msgid "MSG_QUICK_03"
+msgstr "Nice work."
+
+msgid "MSG_QUICK_04"
+msgstr "I'm done for..."
+
+msgid "MSG_QUICK_05"
+msgstr "Sorry!"
+
+msgid "MSG_QUICK_06"
+msgstr "No worries!"
+
+msgid "MSG_QUICK_07"
+msgstr "Nice!"
+
+msgid "MSG_QUICK_08"
+msgstr "How?!"
+
+msgid "MSG_QUICK_09"
+msgstr "Gotcha."
+
+msgid "MSG_QUICK_10"
+msgstr "So tough!"
+
+msgid "MSG_QUICK_11"
+msgstr "OOPS!"
+
+msgid "MSG_QUICK_12"
+msgstr "WAHOO!"
+
+msgid "MSG_QUICK_13"
+msgstr "Oh no..."
+
+msgid "MSG_QUICK_14"
+msgstr "We've got this."
+
+msgid "MSG_QUICK_15"
+msgstr "Teamwork!"
+
+msgid "MSG_QUICK_16"
+msgstr "Follow me."
+
+msgid "MSG_QUICK_17"
+msgstr "HELP!"
+
+msgid "MSG_QUICK_18"
+msgstr "Run for it!"
+
+msgid "MSG_QUICK_19"
+msgstr "Juuuuump!"
+
+msgid "MSG_QUICK_20"
+msgstr "Hop on!"
+
+msgid "MSG_QUICK_21"
+msgstr "Throw!"
+
+msgid "快捷用语"
+msgstr "Quick Messages"

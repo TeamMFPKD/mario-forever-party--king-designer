@@ -1,0 +1,316 @@
+# 简体中文 translation for MF: MP.
+# This file is distributed under the same license as the game.
+msgid ""
+msgstr ""
+"Project-Id-Version: MF: MP\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "使用须知"
+msgstr "使用须知"
+
+msgid "使用须知文本"
+msgstr "欢迎游玩 Mario Forever: Maker Party！\n\nMario Forever: Maker Party 是有 DIY 属性的游戏，因此，在游玩过程中，请确保：\n· 创作的关卡内容符合公序良俗，不得包含暴力、色情、低俗、歧视、恐怖等不良及违法违规内容\n· 遵守当地法律法规\n· 不得利用关卡创作功能制作、传播恶意代码、病毒，或设计诱导玩家设备故障、信息泄露的恶意关卡\n\n关卡存储说明：\n· 考虑到关卡复用，你创作的关卡在联机游玩过程中会被其他玩家自动缓存至其本地设备；同样地，其他玩家创作的关卡也会被自动缓存至你的本地设备。\n\n消息系统说明：\n· 考虑到信息安全等因素，请勿发送敏感信息。请文明交流。\n· 发送的消息在当前房间中所有玩家可见。消息可能会被别人保存。"
+
+msgid "拒绝并退出"
+msgstr "拒绝并退出"
+
+msgid "同意"
+msgstr "同意"
+
+msgid "组织游戏"
+msgstr "组织游戏"
+
+msgid "加入游戏"
+msgstr "加入游戏"
+
+msgid "本地端口"
+msgstr "本地端口"
+
+msgid "玩家名称"
+msgstr "玩家名称"
+
+msgid "组织"
+msgstr "组织"
+
+msgid "组织方 IP"
+msgstr "组织方 IP"
+
+msgid "端口"
+msgstr "端口"
+
+msgid "加入"
+msgstr "加入"
+
+msgid "玩家列表"
+msgstr "玩家列表"
+
+msgid "退出"
+msgstr "退出"
+
+msgid "开始"
+msgstr "开始"
+
+msgid "设定编辑时限"
+msgstr "设定编辑时限"
+
+msgid "游玩"
+msgstr "游玩"
+
+msgid "编辑"
+msgstr "编辑"
+
+msgid "传输 / 接收关卡数据中……"
+msgstr "传输 / 接收关卡数据中……"
+
+msgid "传输 / 接收关卡数据中……（%d/%d关；准备完毕人数 %d/%d人）"
+msgstr "传输 / 接收关卡数据中……（%d/%d关；准备完毕人数 %d/%d人）"
+
+msgid "强制继续"
+msgstr "强制继续"
+
+msgid "结果"
+msgstr "结果"
+
+msgid "返回标题画面"
+msgstr "返回标题画面"
+
+msgid "名称"
+msgstr "名称"
+
+msgid "关卡被通过数"
+msgstr "关卡被通过数"
+
+msgid "关卡死亡数"
+msgstr "关卡死亡数"
+
+msgid "通过率"
+msgstr "通过率"
+
+msgid "个人通关总数"
+msgstr "个人通关总数"
+
+msgid "总积分"
+msgstr "总积分"
+
+msgid "游戏进行中"
+msgstr "游戏进行中"
+
+msgid "确认"
+msgstr "确认"
+
+msgid "关卡回顾"
+msgstr "关卡回顾"
+
+msgid "等待其他玩家游玩所有关卡……"
+msgstr "等待其他玩家游玩所有关卡……"
+
+msgid "隐藏触控"
+msgstr "隐藏触控"
+
+msgid "显示触控"
+msgstr "显示触控"
+
+msgid "游玩记录"
+msgstr "游玩记录"
+
+msgid "设置界面"
+msgstr "设置界面"
+
+msgid "全局音量"
+msgstr "全局音量"
+
+msgid "背景音乐"
+msgstr "背景音乐"
+
+msgid "音效音量"
+msgstr "音效音量"
+
+msgid "返回"
+msgstr "返回"
+
+msgid "制作人员"
+msgstr "制作人员"
+
+msgid "输入映射"
+msgstr "输入映射"
+
+msgid "设置按键"
+msgstr "设置按键"
+
+msgid "返回主设置"
+msgstr "返回主设置"
+
+msgid "上"
+msgstr "上"
+
+msgid "下"
+msgstr "下"
+
+msgid "左"
+msgstr "左"
+
+msgid "右"
+msgstr "右"
+
+msgid "跳跃"
+msgstr "跳跃"
+
+msgid "射击"
+msgstr "射击"
+
+msgid "快速重开"
+msgstr "快速重开"
+
+msgid "拍摄"
+msgstr "拍摄"
+
+msgid "请按下一个键"
+msgstr "请按下一个键"
+
+msgid "未设置"
+msgstr "未设置"
+
+msgid "打开关卡目录"
+msgstr "打开关卡目录"
+
+msgid "查看"
+msgstr "查看"
+
+msgid "日期"
+msgstr "日期"
+
+msgid "作者"
+msgstr "作者"
+
+msgid "喜欢的关卡"
+msgstr "喜欢的关卡"
+
+msgid "取消收藏"
+msgstr "取消收藏"
+
+msgid "读取中……"
+msgstr "读取中……"
+
+msgid "虚拟按键布局"
+msgstr "虚拟按键布局"
+
+msgid "重置布局"
+msgstr "重置布局"
+
+msgid "分辨率"
+msgstr "分辨率"
+
+msgid "玩家离开提示"
+msgstr "{player_name} 离开了房间。"
+
+msgid "与主机断开。"
+msgstr "与主机断开。"
+
+msgid "准备完毕"
+msgstr "准备完毕"
+
+msgid "警告：你还没有放置终点。"
+msgstr "警告：你还没有放置终点。"
+
+msgid "消息"
+msgstr "消息"
+
+msgid "发送"
+msgstr "发送"
+
+msgid "[系统] 文明交流，请不要发送敏感信息"
+msgstr "[系统] 文明交流，请不要发送敏感信息"
+
+msgid "导出成功"
+msgstr "导出成功"
+
+msgid "导出失败"
+msgstr "导出失败"
+
+msgid "导入成功"
+msgstr "导入成功"
+
+msgid "导入失败"
+msgstr "导入失败"
+
+msgid "导出已取消"
+msgstr "导出已取消"
+
+msgid "导入已取消"
+msgstr "导入已取消"
+
+msgid "导出"
+msgstr "导出"
+
+msgid "导入"
+msgstr "导入"
+
+msgid "MSG_QUICK_01"
+msgstr "谢谢"
+
+msgid "MSG_QUICK_02"
+msgstr "拜托了"
+
+msgid "MSG_QUICK_03"
+msgstr "辛苦了！"
+
+msgid "MSG_QUICK_04"
+msgstr "输掉了……"
+
+msgid "MSG_QUICK_05"
+msgstr "不好意思"
+
+msgid "MSG_QUICK_06"
+msgstr "不要在意！"
+
+msgid "MSG_QUICK_07"
+msgstr "赞！"
+
+msgid "MSG_QUICK_08"
+msgstr "你是怎么办到的！？"
+
+msgid "MSG_QUICK_09"
+msgstr "原来如此！"
+
+msgid "MSG_QUICK_10"
+msgstr "好难！"
+
+msgid "MSG_QUICK_11"
+msgstr "被打败了！"
+
+msgid "MSG_QUICK_12"
+msgstr "太好了！"
+
+msgid "MSG_QUICK_13"
+msgstr "糟糕！"
+
+msgid "MSG_QUICK_14"
+msgstr "加油吧！"
+
+msgid "MSG_QUICK_15"
+msgstr "一起合作吧！"
+
+msgid "MSG_QUICK_16"
+msgstr "请到这边来！"
+
+msgid "MSG_QUICK_17"
+msgstr "请帮帮我！"
+
+msgid "MSG_QUICK_18"
+msgstr "请冲刺！"
+
+msgid "MSG_QUICK_19"
+msgstr "请跳跃！"
+
+msgid "MSG_QUICK_20"
+msgstr "请到上面来！"
+
+msgid "MSG_QUICK_21"
+msgstr "请投掷。"
+
+msgid "快捷用语"
+msgstr "快捷用语"
