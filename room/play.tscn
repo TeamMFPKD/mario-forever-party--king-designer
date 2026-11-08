@@ -1,38 +1,11 @@
-[gd_scene format=4 uid="uid://cxvueju65b3qv"]
+[gd_scene format=4 load_steps=20 uid="uid://cxvueju65b3qv"]
 
-[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pleqj"]
-[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_aqvbr"]
-[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_pei5v"]
-[ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="3_aqvbr"]
-[ext_resource type="Script" uid="uid://bbclvf51lqvk3" path="res://script/timeout_manager.gd" id="3_d6wjp"]
+[ext_resource type="PackedScene" path="res://room/base/play_room_base.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/list/time_hud.tscn" id="4_aqvbr"]
-[ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="4_d6wjp"]
 [ext_resource type="Script" uid="uid://c0c51hxssdln3" path="res://script/multiplayer/5_play/play_next_level_manager.gd" id="4_orh2l"]
-[ext_resource type="Script" uid="uid://cw836hlngytf1" path="res://script/multiplayer/5_play/multiplayer_ani_sprite_manager.gd" id="5_27ofe"]
-[ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="5_dhd6j"]
-[ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="6_2q1y6"]
-[ext_resource type="PackedScene" uid="uid://ctl8t18mclmft" path="res://ui/list/game_time_hud.tscn" id="6_dhd6j"]
-[ext_resource type="PackedScene" uid="uid://bb3rl8fd2qhlq" path="res://object/multiplayer/multiplayer_player_shadow.tscn" id="6_uf5c5"]
-[ext_resource type="Script" uid="uid://dcj1u3dweru3n" path="res://script/edit/level_manager.gd" id="7_orh2l"]
-[ext_resource type="Script" uid="uid://bxr56am1ei327" path="res://script/edit/save_and_load/save_level.gd" id="8_pt5fk"]
-[ext_resource type="Script" uid="uid://dn10ucflwh721" path="res://script/edit/save_and_load/load_level.gd" id="9_27ofe"]
 [ext_resource type="Script" uid="uid://f3xmjyss4rde" path="res://script/test_time_label.gd" id="9_w44qo"]
-[ext_resource type="Script" uid="uid://cjkkhvnw3nf3g" path="res://script/level/tile_map_layer_semi_solid_creator.gd" id="12_e5c0k"]
-[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://sprite/tileset_resource/tileset_castle.tres" id="13_3lia6"]
-[ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="14_snsbp"]
-[ext_resource type="Script" uid="uid://dsxnmb6j7dool" path="res://script/edit/tilemap/tilemap_draw.gd" id="15_ala55"]
-[ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="16_aot2p"]
-[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="17_dywku"]
-[ext_resource type="Script" uid="uid://cl7hrnyw23sp6" path="res://script/edit/objectmap/object_map_draw.gd" id="18_6r670"]
-[ext_resource type="Script" uid="uid://bksavtsppyqt2" path="res://script/edit/play_button.gd" id="18_e5c0k"]
-[ext_resource type="Script" uid="uid://8on5k6ry2q04" path="res://script/level/facility/sealer_creator.gd" id="19_6r670"]
-[ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="19_w44qo"]
-[ext_resource type="PackedScene" uid="uid://m4r4e2hft3og" path="res://object/level/facility/sealer.tscn" id="20_w44qo"]
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="24_pt5fk"]
-[ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture/random_capture.gd" id="25_3lia6"]
-[ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="26_cpu0x"]
-[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="29_chuop"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="30_aot2p"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="31_jpn7p"]
 [ext_resource type="Script" uid="uid://bspetuap5iapy" path="res://script/multiplayer/5_play/bad_level_detect.gd" id="32_6r670"]
@@ -41,19 +14,6 @@
 [ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="37_dbsph"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="38_yf3j4"]
 [ext_resource type="AudioStream" uid="uid://c213arfckrjmd" path="res://sound/ready.wav" id="39_k06ju"]
-[ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="40_k06ju"]
-[ext_resource type="PackedScene" uid="uid://ch07v2yfii176" path="res://object/level/facility/key/pink_coin_canvas_layer.tscn" id="41_b1rav"]
-[ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/clear_pipe/spawner_pipe_vertical_up.tscn" id="41_k06ju"]
-[ext_resource type="PackedScene" uid="uid://b5q0xo0c7h8ss" path="res://object/edit/clear_pipe/spawner_pipe_vertical_down.tscn" id="42_k06ju"]
-[ext_resource type="PackedScene" uid="uid://dv5iakrxqbntf" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_left.tscn" id="43_k06ju"]
-[ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="43_oe7au"]
-[ext_resource type="PackedScene" uid="uid://jupmf5uffo3k" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_right.tscn" id="44_k06ju"]
-[ext_resource type="PackedScene" uid="uid://civmj3qwsngyc" path="res://object/edit/clear_pipe/spawner_pipe_vertical_middle.tscn" id="45_k06ju"]
-[ext_resource type="PackedScene" uid="uid://bcg3r6pqocoyj" path="res://object/edit/clear_pipe/spawner_pipe_horizontal_middle.tscn" id="46_k06ju"]
-[ext_resource type="PackedScene" uid="uid://cv5jf3dgvbiir" path="res://object/edit/clear_pipe/spawner_pipe_right_up.tscn" id="47_k06ju"]
-[ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/clear_pipe/spawner_pipe_left_up.tscn" id="48_k06ju"]
-[ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/clear_pipe/spawner_pipe_right_down.tscn" id="49_k06ju"]
-[ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="50_k06ju"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rugdn"]
 atlas = ExtResource("37_dbsph")
@@ -113,40 +73,12 @@ _data = {
 &"life_up": SubResource("Animation_cgfdo")
 }
 
-[node name="Play" type="Node2D" unique_id=1958081526]
+[node name="Play" instance=ExtResource("1_base")]
 
-[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=1193585656]
-z_index = -800
-repeat_size = Vector2(1920, 1080)
-autoscroll = Vector2(0, 150)
-repeat_times = 6
-metadata/_edit_lock_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=2000367316]
-self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
-texture = ExtResource("1_pleqj")
-metadata/_edit_lock_ = true
-
-[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_aqvbr")]
-play = true
-
-[node name="TimeoutManager" type="Node" parent="." unique_id=39996069]
-script = ExtResource("3_d6wjp")
-
-[node name="PlayNextLevelManager" type="Node" parent="." unique_id=1033946254 groups=["play_next_level_manager"]]
+[node name="PlayNextLevelManager" type="Node" parent="." index="3" unique_id=1033946254 groups=["play_next_level_manager"]]
 script = ExtResource("4_orh2l")
 
-[node name="GameRoomSize" type="Control" parent="." unique_id=1663788830]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -960.0
-offset_top = -540.0
-offset_right = 960.0
-offset_bottom = 540.0
-script = ExtResource("2_pei5v")
-metadata/_edit_lock_ = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize" unique_id=2068984517]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize" index="0" unique_id=2068984517]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -155,10 +87,10 @@ offset_left = -233.0
 offset_bottom = 341.0
 grow_horizontal = 0
 
-[node name="TimeHUD" parent="GameRoomSize/VBoxContainer" unique_id=277085813 instance=ExtResource("4_aqvbr")]
+[node name="TimeHUD" parent="GameRoomSize/VBoxContainer" index="0" unique_id=277085813 instance=ExtResource("4_aqvbr")]
 layout_mode = 2
 
-[node name="TestTimeHUD" parent="GameRoomSize/VBoxContainer" unique_id=1510288836 instance=ExtResource("30_aot2p")]
+[node name="TestTimeHUD" parent="GameRoomSize/VBoxContainer" index="1" unique_id=1510288836 instance=ExtResource("30_aot2p")]
 layout_mode = 2
 
 [node name="TestTimeLabel" type="Label" parent="GameRoomSize/VBoxContainer/TestTimeHUD" unique_id=166882572]
@@ -171,165 +103,15 @@ text = "30"
 horizontal_alignment = 1
 script = ExtResource("9_w44qo")
 
-[node name="GameTimeHUD" parent="GameRoomSize" unique_id=912064384 instance=ExtResource("6_dhd6j")]
-layout_mode = 1
-offset_left = -233.0
-offset_bottom = 233.0
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1823801948]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -640.0
-offset_top = 32.0
-offset_right = 640.0
-offset_bottom = 960.0
-grow_horizontal = 2
-metadata/_edit_lock_ = true
-
-[node name="SubViewport" type="SubViewport" parent="GameRoomSize/SubViewportContainer" unique_id=1425804192]
-disable_3d = true
-handle_input_locally = false
-canvas_item_default_texture_filter = 0
-size = Vector2i(1280, 960)
-size_2d_override = Vector2i(640, 480)
-size_2d_override_stretch = true
-render_target_update_mode = 4
-
-[node name="Level" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=448209138]
-
-[node name="DatabaseHolder" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1895931798]
-script = ExtResource("3_aqvbr")
-tile_map_block_database = ExtResource("4_d6wjp")
-background_database = ExtResource("5_dhd6j")
-object_database = ExtResource("6_2q1y6")
-metadata/_custom_type_script = "uid://324h4vpgb0rx"
-
-[node name="LevelManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=280531488 node_paths=PackedStringArray("level_camera", "tile_map", "tile_set_manager", "object_map", "pipe_builder", "bgp_manager") groups=["level_manager"]]
-script = ExtResource("7_orh2l")
-level_camera = NodePath("../LevelCamera")
-tile_map = NodePath("../TileMapLayer")
-tile_set_manager = NodePath("../TileMapLayer/TileSetManager")
-object_map = NodePath("../ObjectMapLayer")
-pipe_builder = NodePath("../PipeBuilder")
-bgp_manager = NodePath("../BgpManager")
-metadata/_custom_type_script = "uid://dcj1u3dweru3n"
-
-[node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1922304214 node_paths=PackedStringArray("level_data_node")]
-script = ExtResource("8_pt5fk")
-level_data_node = NodePath("../LevelManager")
-
-[node name="LoadLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1104087247 node_paths=PackedStringArray("level_data_node")]
-script = ExtResource("9_27ofe")
-level_data_node = NodePath("../LevelManager")
-
-[node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1149645205]
+[node name="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level"]
 tile_map_data = PackedByteArray("AAADAA8AAAALAAMAAAADAA4AAAALAAIAAAADAA0AAAALAAAAAAACAA8AAAAJAAMAAAACAA4AAAAJAAIAAAACAA0AAAAKAAAAAAABAA8AAAAJAAMAAAABAA4AAAAJAAIAAAABAA0AAAAKAAAAAAAAAA8AAAAJAAMAAAAAAA4AAAAJAAIAAAAAAA0AAAAKAAAAAAD//w8AAAAIAAMAAAD//w4AAAAIAAEAAAD//w0AAAAIAAAAAAD2/wEAAAAKAAAAAAD2/wIAAAAJAAMAAAD3/wEAAAAKAAAAAAD3/wIAAAAJAAMAAAD4/wEAAAAKAAAAAAD4/wIAAAAJAAMAAAD5/wEAAAAKAAAAAAD5/wIAAAAJAAMAAAD6/wEAAAAKAAAAAAD6/wIAAAAJAAMAAAD7//7/AAAKAAAAAAD7////AAAJAAMAAAD7/wEAAAAKAAAAAAD7/wIAAAAJAAMAAAD8//7/AAAKAAAAAAD8////AAAJAAMAAAD8/wEAAAAKAAAAAAD8/wIAAAAJAAMAAAD9//7/AAAKAAAAAAD9////AAAJAAMAAAD9/wEAAAAKAAAAAAD9/wIAAAAJAAMAAAD+//7/AAAKAAAAAAD+////AAAJAAMAAAD+/wEAAAAKAAAAAAD+/wIAAAAJAAMAAAD///7/AAAKAAAAAAD/////AAAJAAMAAAD//wEAAAAKAAAAAAD//wIAAAAJAAMAAAAAAP7/AAAKAAAAAAAAAP//AAAJAAMAAAAAAAEAAAAKAAAAAAAAAAIAAAAJAAMAAAABAP7/AAAKAAAAAAABAP//AAAJAAMAAAABAAEAAAAKAAAAAAABAAIAAAAJAAMAAAACAP7/AAAKAAAAAAACAP//AAAJAAMAAAACAAEAAAALAAAAAAACAAIAAAALAAMAAAADAP7/AAAKAAAAAAADAP//AAAJAAMAAAAEAP7/AAAKAAAAAAAEAP//AAAJAAMAAAAFAP7/AAAKAAAAAAAFAP//AAAJAAMAAAAGAP7/AAALAAAAAAAGAP//AAALAAMAAAD1/wEAAAAIAAAAAAD1/wIAAAAIAAMAAAD6//7/AAAIAAAAAAD6////AAAIAAMAAAA=")
-tile_set = ExtResource("13_3lia6")
 
-[node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=9746541 node_paths=PackedStringArray("database_holder", "tile_map")]
-script = ExtResource("14_snsbp")
-database_holder = NodePath("../../DatabaseHolder")
-tile_map = NodePath("..")
-
-[node name="TileMapLayerSemiSolidCreator" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=1412037727]
-script = ExtResource("12_e5c0k")
-
-[node name="TileMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=315803961 node_paths=PackedStringArray("tile_map")]
-script = ExtResource("15_ala55")
-tile_map = NodePath("..")
-
-[node name="SealerCreator" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=586523572]
-script = ExtResource("19_6r670")
-sealer_scene = ExtResource("20_w44qo")
-
-[node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=97720409 node_paths=PackedStringArray("database_holder")]
-script = ExtResource("16_aot2p")
-database_holder = NodePath("../DatabaseHolder")
-metadata/_custom_type_script = "uid://omfdsevbgrom"
-
-[node name="ObjectMapDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ObjectMapLayer" unique_id=1800973672 node_paths=PackedStringArray("object_map_layer")]
-script = ExtResource("18_6r670")
-object_map_layer = NodePath("..")
-
-[node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1560694673 node_paths=PackedStringArray("database_holder")]
-script = ExtResource("19_w44qo")
-database_holder = NodePath("../DatabaseHolder")
-
-[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=487963708 groups=["level_camera"]]
-process_callback = 0
-script = ExtResource("17_dywku")
-metadata/_edit_lock_ = true
-
-[node name="MultiplayerAniSpriteManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1918431650]
-script = ExtResource("5_27ofe")
-mp_ani_shadow_scene = ExtResource("6_uf5c5")
-
-[node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=2076543212]
-script = ExtResource("40_k06ju")
-cap_up_scene = ExtResource("41_k06ju")
-cap_down_scene = ExtResource("42_k06ju")
-cap_left_scene = ExtResource("43_k06ju")
-cap_right_scene = ExtResource("44_k06ju")
-straight_horizontal_scene = ExtResource("46_k06ju")
-straight_vertical_scene = ExtResource("45_k06ju")
-corner_ur_scene = ExtResource("47_k06ju")
-corner_ul_scene = ExtResource("48_k06ju")
-corner_dr_scene = ExtResource("49_k06ju")
-corner_dl_scene = ExtResource("50_k06ju")
-
-[node name="PinkCoinCanvasLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=338551298 instance=ExtResource("41_b1rav")]
-
-[node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=1870457232]
-process_mode = 3
-script = ExtResource("25_3lia6")
-
-[node name="Timer" type="Timer" parent="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" unique_id=2061231054]
-wait_time = 0.5
-autostart = true
-
-[node name="Timer2" type="Timer" parent="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" unique_id=635336636]
-wait_time = 0.1
-one_shot = true
-autostart = true
-
-[node name="Node2D" type="Node2D" parent="GameRoomSize/SubViewportContainer" unique_id=776712122]
-
-[node name="GameBorderTextureRect" type="TextureRect" parent="GameRoomSize/SubViewportContainer/Node2D" unique_id=2015560352]
-custom_minimum_size = Vector2(660, 500)
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 1300.0
-offset_bottom = 980.0
-texture = ExtResource("43_oe7au")
-expand_mode = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize" unique_id=1176533708]
-layout_mode = 0
-offset_right = 320.0
-offset_bottom = 196.0
-theme_override_constants/margin_left = 30
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 30
-theme_override_constants/margin_bottom = 30
-
-[node name="ControlVisibieSet" parent="GameRoomSize/MarginContainer" unique_id=416177451 instance=ExtResource("24_pt5fk")]
-
-[node name="Button" type="Button" parent="GameRoomSize/MarginContainer" unique_id=998423911]
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("26_cpu0x")
-theme_override_font_sizes/font_size = 50
+[node name="Button" parent="GameRoomSize/MarginContainer"]
 text = "编辑"
-script = ExtResource("18_e5c0k")
 room_scene_uid = "uid://bnx7r3slvtcdt"
 target_mode = 0
 
-[node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" unique_id=1790741609]
-script = ExtResource("25_pt5fk")
-
-[node name="UiMarginContainer" parent="GameRoomSize" unique_id=1121669055 instance=ExtResource("30_aot2p")]
+[node name="UiMarginContainer" parent="GameRoomSize" index="4" unique_id=1121669055 instance=ExtResource("30_aot2p")]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -359,7 +141,7 @@ ignore_time_scale = true
 [node name="BadLevelDetect" type="Node" parent="GameRoomSize/UiMarginContainer" unique_id=1137221623]
 script = ExtResource("32_6r670")
 
-[node name="LifeSet" type="Control" parent="GameRoomSize" unique_id=2066267448]
+[node name="LifeSet" type="Control" parent="GameRoomSize" index="5" unique_id=2066267448]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -371,7 +153,7 @@ offset_top = -192.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="UiMarginContainer" parent="GameRoomSize/LifeSet" unique_id=360521915 instance=ExtResource("30_aot2p")]
+[node name="UiMarginContainer" parent="GameRoomSize/LifeSet" index="0" unique_id=360521915 instance=ExtResource("30_aot2p")]
 custom_minimum_size = Vector2(200, 192)
 layout_mode = 1
 anchors_preset = 15
@@ -385,7 +167,7 @@ theme_override_constants/margin_right = 16
 [node name="UiPanel" parent="GameRoomSize/LifeSet/UiMarginContainer" unique_id=1563157272 instance=ExtResource("36_dbsph")]
 layout_mode = 2
 
-[node name="LifeDisplay" type="Control" parent="GameRoomSize/LifeSet" unique_id=1217583463]
+[node name="LifeDisplay" type="Control" parent="GameRoomSize/LifeSet" index="1" unique_id=1217583463]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -397,72 +179,68 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LifeDisplay" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay" unique_id=2007301511 node_paths=PackedStringArray("animation_player")]
+[node name="LifeDisplay" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay" index="0" unique_id=2007301511 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("36_k3g0h")
 animation_player = NodePath("../../AnimationPlayer")
 
-[node name="Life1" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" unique_id=952654988]
+[node name="Life1" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" index="0" unique_id=952654988]
 visible = false
 position = Vector2(0, 16)
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life1" unique_id=563154187]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life1" index="0" unique_id=563154187]
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="Life2" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" unique_id=1221756175]
+[node name="Life2" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" index="1" unique_id=1221756175]
 position = Vector2(0, 16)
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life2" unique_id=1028039850]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life2" index="0" unique_id=1028039850]
 position = Vector2(27, 0)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life2" unique_id=1420580711]
+[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life2" index="1" unique_id=1420580711]
 position = Vector2(-21, 0)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="Life3" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" unique_id=461110579]
+[node name="Life3" type="Node2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" index="2" unique_id=461110579]
 visible = false
 position = Vector2(0, 16)
 
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life3" unique_id=476750507]
+[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life3" index="0" unique_id=476750507]
 position = Vector2(35, 0)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life3" unique_id=345903415]
+[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life3" index="1" unique_id=345903415]
 position = Vector2(-29, 0)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="Sprite2D3" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life3" unique_id=1103001154]
+[node name="Sprite2D3" type="Sprite2D" parent="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay/Life3" index="2" unique_id=1103001154]
 position = Vector2(3, 0)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="LifeChangeSound" parent="GameRoomSize/LifeSet" unique_id=1715984441 instance=ExtResource("38_yf3j4")]
+[node name="LifeChangeSound" parent="GameRoomSize/LifeSet" index="2" unique_id=1715984441 instance=ExtResource("38_yf3j4")]
 stream = ExtResource("39_k06ju")
 
-[node name="AniCooldownTimer" type="Timer" parent="GameRoomSize/LifeSet" unique_id=1274871739]
+[node name="AniCooldownTimer" type="Timer" parent="GameRoomSize/LifeSet" index="3" unique_id=1274871739]
 wait_time = 0.5
 one_shot = true
 autostart = true
 ignore_time_scale = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="GameRoomSize/LifeSet" unique_id=1110445639]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="GameRoomSize/LifeSet" index="4" unique_id=1110445639]
 libraries/ = SubResource("AnimationLibrary_bmt0n")
 
-[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("29_chuop")]
-
-[connection signal="timeout_save" from="TimeoutManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel" method="_on_save_button_pressed"]
-[connection signal="load_level" from="GameRoomSize/SubViewportContainer/SubViewport/Level/LevelManager" to="GameRoomSize/SubViewportContainer/SubViewport/Level/LoadLevel" method="_on_load_button_pressed" flags=3]
-[connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
-[connection signal="timeout" from="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture/Timer2" to="GameRoomSize/SubViewportContainer/SubViewport/RandomCapture" method="capture"]
-[connection signal="game_time_hud_invisible" from="GameRoomSize/MarginContainer/GameModeDetect" to="GameRoomSize/MarginContainer/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/UiMarginContainer/ForceContinueButton" to="GameRoomSize/UiMarginContainer/BadLevelDetect" method="_on_force_continue_button_pressed"]
 [connection signal="ready" from="GameRoomSize/UiMarginContainer/ControlVisibieSet" to="GameRoomSize/UiMarginContainer/ControlVisibieSet" method="_set_invisible"]
 [connection signal="timeout" from="GameRoomSize/UiMarginContainer/ForceContinueTimer" to="GameRoomSize/UiMarginContainer/BadLevelDetect" method="_on_timeout"]
 [connection signal="skip_bad_level" from="GameRoomSize/UiMarginContainer/BadLevelDetect" to="PlayNextLevelManager" method="next_level"]
 [connection signal="trigger_bad_level" from="GameRoomSize/UiMarginContainer/BadLevelDetect" to="GameRoomSize/UiMarginContainer/ControlVisibieSet" method="_set_visible"]
 [connection signal="timeout" from="GameRoomSize/LifeSet/AniCooldownTimer" to="GameRoomSize/LifeSet/LifeDisplay/LifeDisplay" method="_on_ani_cooldown_finished"]
+[editable path="GameRoomSize/LifeSet/UiMarginContainer"]
+[editable path="GameRoomSize/UiMarginContainer"]
+[editable path="GameRoomSize/VBoxContainer/TestTimeHUD"]

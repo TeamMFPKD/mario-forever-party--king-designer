@@ -1,0 +1,110 @@
+[gd_scene format=4 load_steps=16]
+
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_pxk7y"]
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="2_2mwga"]
+[ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_s2wk4"]
+[ext_resource type="Script" uid="uid://bbclvf51lqvk3" path="res://script/timeout_manager.gd" id="3_0b6sj"]
+[ext_resource type="Script" uid="uid://324h4vpgb0rx" path="res://script/edit/database_holder.gd" id="4_e6mtu"]
+[ext_resource type="Resource" uid="uid://djxsjh4om7cvk" path="res://database/tile_block_database.tres" id="5_iq0jw"]
+[ext_resource type="Resource" uid="uid://y6cupcof3uqw" path="res://database/background_database.tres" id="6_0b6sj"]
+[ext_resource type="Resource" uid="uid://bts1hfa763775" path="res://database/object_database.tres" id="7_io5w1"]
+[ext_resource type="TileSet" uid="uid://bfqavnu2fnta1" path="res://sprite/tileset_resource/tileset_castle.tres" id="14_qjgk7"]
+[ext_resource type="Script" uid="uid://0x3s28sup7dk" path="res://script/edit/tilemap/tile_set_manager.gd" id="15_aiw0b"]
+[ext_resource type="Script" uid="uid://omfdsevbgrom" path="res://script/edit/objectmap/object_map_layer.gd" id="17_kt6na"]
+[ext_resource type="Script" uid="uid://cibfjtywwbo0c" path="res://script/background/bgp_manager.gd" id="20_w23hq"]
+[ext_resource type="Script" uid="uid://gdm6pnxphuv1" path="res://script/level_camera.gd" id="23_rnw8m"]
+[ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="49_kiwdd"]
+[ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="89_b0qgs"]
+
+[node name="Room" type="Node2D" unique_id=513281532]
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=18426732]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=2038605631]
+self_modulate = Color(0.35063666, 0.17020002, 0.74, 1)
+texture = ExtResource("1_pxk7y")
+metadata/_edit_lock_ = true
+
+[node name="BgmManager" parent="." unique_id=1532458801 instance=ExtResource("2_s2wk4")]
+play = true
+
+[node name="TimeoutManager" type="Node" parent="." unique_id=963214289]
+script = ExtResource("3_0b6sj")
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=294304425]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+script = ExtResource("2_2mwga")
+metadata/_edit_lock_ = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="GameRoomSize" unique_id=1725420938]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -640.0
+offset_top = 32.0
+offset_right = 640.0
+offset_bottom = 960.0
+grow_horizontal = 2
+metadata/_edit_lock_ = true
+
+[node name="SubViewport" type="SubViewport" parent="GameRoomSize/SubViewportContainer" unique_id=591046673]
+disable_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(1280, 960)
+size_2d_override = Vector2i(640, 480)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Level" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport" unique_id=968429229]
+
+[node name="DatabaseHolder" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=597880169]
+script = ExtResource("4_e6mtu")
+tile_map_block_database = ExtResource("5_iq0jw")
+background_database = ExtResource("6_0b6sj")
+object_database = ExtResource("7_io5w1")
+metadata/_custom_type_script = "uid://324h4vpgb0rx"
+
+[node name="TileMapLayer" type="TileMapLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1411860041]
+tile_set = ExtResource("14_qjgk7")
+
+[node name="TileSetManager" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/TileMapLayer" unique_id=899878520 node_paths=PackedStringArray("database_holder", "tile_map")]
+script = ExtResource("15_aiw0b")
+database_holder = NodePath("../../DatabaseHolder")
+tile_map = NodePath("..")
+
+[node name="ObjectMapLayer" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=295788680 node_paths=PackedStringArray("database_holder")]
+script = ExtResource("17_kt6na")
+database_holder = NodePath("../DatabaseHolder")
+metadata/_custom_type_script = "uid://omfdsevbgrom"
+
+[node name="BgpManager" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1317430190 node_paths=PackedStringArray("database_holder")]
+script = ExtResource("20_w23hq")
+database_holder = NodePath("../DatabaseHolder")
+
+[node name="LevelCamera" type="Camera2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" unique_id=1326728474 groups=["level_camera"]]
+script = ExtResource("23_rnw8m")
+
+[node name="Node2D" type="Node2D" parent="GameRoomSize/SubViewportContainer" unique_id=442967601]
+
+[node name="GameBorderTextureRect" type="TextureRect" parent="GameRoomSize/SubViewportContainer/Node2D" unique_id=1131902600]
+custom_minimum_size = Vector2(660, 500)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 1300.0
+offset_bottom = 980.0
+texture = ExtResource("49_kiwdd")
+expand_mode = 1
+
+[node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("89_b0qgs")]
