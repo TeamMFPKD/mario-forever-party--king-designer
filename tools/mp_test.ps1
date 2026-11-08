@@ -15,6 +15,13 @@
       tools\mp_test.bat human -WinSize 800x450
       tools\mp_test.bat -Stop                    # kill instances started by this script
 
+    Editor multi-instance
+      With Debug -> Customize Run Instances (3 instances) you need no arguments at all:
+      every editor-launched instance claims a loopback slot port and names itself
+      test1 / test2 / test3. A single F5 run is left untouched (it releases the slot
+      and keeps the configured name). Use per-instance "--mp-slot=1|2|3" only if you
+      want deterministic naming.
+
     The very same per-instance arguments can be used in the editor
     (Debug -> Customize Run Instances, per-instance "override main run args"):
 
@@ -154,12 +161,12 @@ function Show-LogTail {
     }
 }
 
-function Assert-PortFree {
+function Test-PortFree {
     $listeners = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
-    if ($listeners) {
-        $owners = ($listeners | Select-Object -ExpandProperty OwningProcess -Unique) -join ', '
-        Write-Warning "Port $Port is already in use (PID: $owners). The host instance will fail to listen."
-    }
+    if (-not $listeners) { return $true }
+    $owners = ($listeners | Select-Object -ExpandProperty OwningProcess -Unique) -join ', '
+    Write-Host "port $Port is already in use (PID: $owners)" -ForegroundColor Yellow
+    return $false
 }
 
 # ---------------------------------------------------------------- entry point
@@ -200,7 +207,14 @@ Write-Host "logs    : $LogDir"
 $stopped = Stop-TestInstances
 if ($stopped -gt 0) { Write-Host "stopped $stopped leftover instance(s)" -ForegroundColor DarkYellow }
 Clear-TestLogs
-Assert-PortFree
+$portFree = Test-PortFree
+if (-not $portFree) {
+    if ($Mode -eq 'auto') {
+        Write-Host 'FAIL: port busy, stop the other instance or pass -Port <n>.' -ForegroundColor Red
+        exit 1
+    }
+    Write-Warning 'The host instance will fail to listen. Stop the other instance or pass -Port <n>.'
+}
 Write-Host ''
 
 $positions = @(
@@ -260,7 +274,9 @@ if ($Mode -eq 'human') {
     Write-Host '  2. In the host window press "开始".'
     Write-Host '  3. Click a window to give it keyboard focus; use -Pads 0,1,2 for three gamepads.'
     Write-Host ''
-    Write-Host 'Editor equivalent (Debug -> Customize Run Instances, per-instance args):'
+    Write-Host 'Editor multi-instance (Customize Run Instances, 3 instances) needs NO args:'
+    Write-Host 'each instance auto-names itself test1/test2/test3; a single F5 run is untouched.'
+    Write-Host 'Optional deterministic per-instance args (--mp-slot=1/2/3):'
     for ($i = 0; $i -lt 3; $i++) {
         $role = if ($i -eq 0) { 'host' } else { 'join' }
         $name = $TestNames[$i]

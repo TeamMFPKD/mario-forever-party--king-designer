@@ -8,6 +8,7 @@ extends Node
 ## 约定参数：
 ##   --mp-role=host|join
 ##   --mp-name=<玩家名>
+##   --mp-slot=1|2|3   （仅命名：强制 test1/2/3）
 ##   --mp-ip=<主机地址>
 ##   --mp-port=<端口>
 ##   --mp-win=<宽>x<高>+<x>+<y>

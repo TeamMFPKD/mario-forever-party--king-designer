@@ -2,9 +2,11 @@ extends Node
 
 ## 本机多开联机测试启动器（autoload 名：MpTestBoot）。
 ##
-## 不传 --mp-role 时立即返回，对正常启动零影响。
-## 传了之后按参数自动完成「组织 / 加入 → 准备完毕 → 开始」，
-## 供 tools/mp_test.ps1 做三实例联调（人类测试与自动测试共用同一套参数）。
+## 三种用法：
+## 1. 显式角色（tools/mp_test.ps1 使用）：--mp-role=host|join + --mp-name=...
+## 2. 编辑器多实例（F5 / 自定义运行实例，不带参数）：自动按启动顺序命名为
+##    test1 / test2 / test3；只有同时存在 2 个以上实例才生效，单个 F5 不受影响。
+## 3. 显式槽位：--mp-slot=1|2|3 直接命名为 test1/2/3。
 ##
 ## 完整参数表见 script/debug/mp_test_flags.gd 文件头。
 
@@ -12,6 +14,13 @@ const HOST_PAGE: String = "GameRoomSize/HostPage"
 const JOIN_PAGE: String = "GameRoomSize/JoinPage"
 const CHOOSE_BOX: String = "GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer"
 const PLAYER_BOX: String = "GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer"
+
+## 编辑器多实例自动命名：用回环端口占位代替进程枚举。
+## 端口绑定是原子的，进程退出/崩溃时由操作系统自动释放，不残留任何文件。
+const SLOT_PORT_BASE: int = 39731
+const SLOT_MAX: int = 3
+## 等同批实例全部占位的最长时间，人齐就提前继续。
+const SLOT_SETTLE_SECONDS: float = 2.5
 
 ## 输入动作：--mp-pad 过滤手柄时只处理这些动作。
 var _pad_actions: PackedStringArray = PackedStringArray([
@@ -29,16 +38,31 @@ var _role: String = ""
 var _player_name: String = "player"
 var _host_ip: String = "127.0.0.1"
 var _port: int = 8914
+var _slot_server: TCPServer = null
+var _slot_index: int = 0
 
 func _ready() -> void:
 	_role = MpTest.get_value("--mp-role")
-	if _role != "host" and _role != "join":
+	if _role == "host" or _role == "join":
+		_player_name = MpTest.get_value("--mp-name", "player")
+		_host_ip = MpTest.get_value("--mp-ip", "127.0.0.1")
+		_port = MpTest.get_value("--mp-port", "8914").to_int()
+		Log.i("MPTEST", "boot role=%s name=%s port=%d" % [_role, _player_name, _port])
+		_bootstrap()
 		return
-	_player_name = MpTest.get_value("--mp-name", "player")
-	_host_ip = MpTest.get_value("--mp-ip", "127.0.0.1")
-	_port = MpTest.get_value("--mp-port", "8914").to_int()
-	Log.i("MPTEST", "boot role=%s name=%s port=%d" % [_role, _player_name, _port])
-	_bootstrap()
+
+	var slot_value: String = MpTest.get_value("--mp-slot")
+	if slot_value.is_valid_int():
+		var slot_index: int = slot_value.to_int()
+		if slot_index >= 1 and slot_index <= SLOT_MAX:
+			_start_explicit_slot(slot_index)
+			return
+
+	# 显式给了名字就尊重它，不再自动编号
+	if not MpTest.get_value("--mp-name").is_empty():
+		return
+	if _is_editor_launch():
+		_start_editor_slots()
 
 func _bootstrap() -> void:
 	var title: Node = await _wait_for_title()
@@ -63,6 +87,100 @@ func _bootstrap() -> void:
 		_auto_ready_loop(title)
 	if _role == "host" and MpTest.has("--mp-auto-start"):
 		_auto_start(title)
+
+## 编辑器多实例：不带参数时的自动命名。
+## 编辑器不会给实例编号，这里让实例抢 127.0.0.1 上的槽位端口，
+## 抢到第几个端口就叫 test几；只有同时跑 2 个以上实例时才改名，
+## 单个 F5 会释放端口、保持配置里的原名字。
+func _start_editor_slots() -> void:
+	var title: Node = await _wait_for_title()
+	if title == null:
+		return
+	await get_tree().process_frame
+	_apply_window(MpTest.get_value("--mp-win"))
+	_apply_pad(MpTest.get_value("--mp-pad"))
+	_override_edit_seconds(title)
+	if not _claim_editor_slot():
+		return
+	var deadline: int = Time.get_ticks_msec() + int(SLOT_SETTLE_SECONDS * 1000.0)
+	while Time.get_ticks_msec() < deadline:
+		if _used_slot_count() >= SLOT_MAX:
+			break
+		await get_tree().create_timer(0.1).timeout
+	var used: int = _used_slot_count()
+	if used < 2:
+		Log.i("MPTEST", "editor slots=1, keep normal player name")
+		_release_editor_slot()
+		return
+	_apply_player_name(title, "test%d" % _slot_index)
+	Log.i("MPTEST", "editor slots=%d slot=%d" % [used, _slot_index])
+
+## --mp-slot=N：跳过抢槽位，直接命名为 testN。
+func _start_explicit_slot(slot_index: int) -> void:
+	var title: Node = await _wait_for_title()
+	if title == null:
+		return
+	await get_tree().process_frame
+	_apply_window(MpTest.get_value("--mp-win"))
+	_apply_pad(MpTest.get_value("--mp-pad"))
+	_override_edit_seconds(title)
+	_apply_player_name(title, "test%d" % slot_index)
+	Log.i("MPTEST", "explicit slot=%d" % slot_index)
+
+## 只有编辑器拉起的实例才满足这两个条件：
+## 1. 运行的是编辑器构建（导出版为 false）；
+## 2. 编辑器在启动前会设置 GODOT_EDITOR_CUSTOM_FEATURES（哪怕是空串），
+##    命令行直接跑编辑器二进制不会设置它。
+func _is_editor_launch() -> bool:
+	if not OS.has_feature("editor"):
+		return false
+	return OS.has_environment("GODOT_EDITOR_CUSTOM_FEATURES")
+
+## 依次尝试绑定槽位端口，抢到第几个就用第几个槽位。
+func _claim_editor_slot() -> bool:
+	for index: int in range(SLOT_MAX):
+		var port: int = SLOT_PORT_BASE + index
+		var server: TCPServer = TCPServer.new()
+		if server.listen(port, "127.0.0.1") == OK:
+			_slot_server = server
+			_slot_index = index + 1
+			Log.i("MPTEST", "editor slot=%d port=%d" % [_slot_index, port])
+			return true
+	return false
+
+## 探测当前有几个槽位被占：能绑定就是空闲，绑不上就是被别的实例占着。
+func _used_slot_count() -> int:
+	var used: int = 0
+	for index: int in range(SLOT_MAX):
+		var server: TCPServer = TCPServer.new()
+		if server.listen(SLOT_PORT_BASE + index, "127.0.0.1") == OK:
+			server.stop()
+		else:
+			used += 1
+	return used
+
+func _release_editor_slot() -> void:
+	if _slot_server != null:
+		_slot_server.stop()
+		_slot_server = null
+	_slot_index = 0
+
+## 把名字同时写进组织页和加入页的输入框，用户点哪个都带上 testN。
+func _apply_player_name(title: Node, player_name: String) -> void:
+	var host_edit: LineEdit = title.get_node_or_null(HOST_PAGE + "/MfpkdPanel/UiMarginContainer/VBoxContainer/UiLineEdit2") as LineEdit
+	if host_edit != null:
+		host_edit.text = player_name
+	var join_edit: LineEdit = title.get_node_or_null(JOIN_PAGE + "/MfpkdPanel/UiMarginContainer/VBoxContainer/UiLineEdit3") as LineEdit
+	if join_edit != null:
+		join_edit.text = player_name
+	MPManager.player_name = player_name
+	if DisplayServer.get_name() != "headless":
+		var base_title: String = str(ProjectSettings.get_setting("application/config/name", "MF: MP"))
+		get_window().title = "%s [%s]" % [base_title, player_name]
+	Log.i("MPTEST", "player name = %s" % player_name)
+
+func _exit_tree() -> void:
+	_release_editor_slot()
 
 ## 等主场景 title.tscn 的根节点（名为 Title）完全就绪。
 func _wait_for_title() -> Node:
@@ -144,7 +262,9 @@ func _do_host(title: Node) -> bool:
 
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if _peer_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+	# 注意：不能只看 get_connection_status()。OfflineMultiplayerPeer 的状态恒为 CONNECTED，
+	# 必须确认当前 peer 已经是 ENet 且真的是 server。
+	if _is_enet_connected() and multiplayer.is_server():
 		Log.i("MPTEST", "host listening port=%d name=%s" % [_port, _player_name])
 		return true
 	Log.e("MPTEST", "host listen FAILED port=%d (port already in use?)" % _port)
@@ -171,22 +291,23 @@ func _do_join(title: Node) -> bool:
 	# 不再走按钮，避免反复写 user://game_settings.cfg。
 	var attempts: int = maxi(1, MpTest.get_value("--mp-join-retries", "40").to_int())
 	for index: int in attempts:
-		var status: MultiplayerPeer.ConnectionStatus = _peer_status()
-		if status == MultiplayerPeer.CONNECTION_CONNECTED:
+		if _is_enet_connected():
 			Log.i("MPTEST", "joined id=%s name=%s" % [str(MPManager.player.id), _player_name])
 			return true
-		if status == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		var peer: MultiplayerPeer = multiplayer.multiplayer_peer
+		if peer == null or not (peer is ENetMultiplayerPeer) or peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 			Log.w("MPTEST", "connect retry %d/%d" % [index + 1, attempts])
 			MPManager._on_join_button_pressed()
 		await get_tree().create_timer(1.0).timeout
 	Log.e("MPTEST", "join FAILED ip=%s port=%d" % [_host_ip, _port])
 	return false
 
-func _peer_status() -> MultiplayerPeer.ConnectionStatus:
+## OfflineMultiplayerPeer 的 connection_status 恒为 CONNECTED，必须限定 ENet。
+func _is_enet_connected() -> bool:
 	var peer: MultiplayerPeer = multiplayer.multiplayer_peer
-	if peer == null:
-		return MultiplayerPeer.CONNECTION_DISCONNECTED
-	return peer.get_connection_status()
+	if not (peer is ENetMultiplayerPeer):
+		return false
+	return peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
 
 func _find_local_player() -> Dictionary:
 	var local_id: Variant = MPManager.player.id
@@ -211,7 +332,7 @@ func _auto_ready_loop(title: Node) -> void:
 		Log.e("MPTEST", "ReadyButton not found")
 		return
 	while is_instance_valid(title) and is_instance_valid(ready_button):
-		if _peer_status() == MultiplayerPeer.CONNECTION_CONNECTED and not _find_local_player().is_empty():
+		if _is_enet_connected() and not _find_local_player().is_empty():
 			if not _is_local_ready():
 				ready_button.emit_signal("pressed")
 				Log.i("MPTEST", "ready sent name=%s" % _player_name)
