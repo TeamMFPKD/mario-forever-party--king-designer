@@ -5,6 +5,7 @@
 [node name="UiButton" type="Button" unique_id=1210628054]
 offset_right = 300.0
 offset_bottom = 140.0
+focus_mode = 0
 theme = ExtResource("1_3tkkc")
 theme_override_font_sizes/font_size = 50
 text = "请输入文本"
