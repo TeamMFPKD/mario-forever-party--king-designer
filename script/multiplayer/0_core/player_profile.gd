@@ -117,10 +117,12 @@ static func from_wire(data: Dictionary) -> PlayerProfile:
 
 
 ## 返回一份可以直接放进 JSON / 结算界面的轻量字典。
+## avatar_id 一并下发，结算行才能显示各玩家自己的头像（身份色仍由玩家 id 的位置现算）。
 func to_result_dict() -> Dictionary:
 	return {
 		"id": id,
 		"name": name,
+		"avatar_id": avatar_id,
 		"cause_pass": cause_pass,
 		"cause_death": cause_death,
 		"pass_count": pass_count,

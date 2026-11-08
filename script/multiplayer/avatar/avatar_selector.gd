@@ -14,6 +14,7 @@ const GameConfigType: GDScript = preload("res://script/utils/game_config.gd")
 @export var next_button: Button
 @export var avatar_texture: TextureRect
 @export var avatar_initial: Label
+@export var preview_ring: Panel
 
 var _multiplayer_manager: MultiplayerManager
 var _game_config: GameConfigType
@@ -25,6 +26,8 @@ func _ready() -> void:
 	prev_button.pressed.connect(_on_prev_pressed)
 	next_button.pressed.connect(_on_next_pressed)
 	visibility_changed.connect(_refresh)
+	# 名单变化时自己的排位可能变（有人进出房间），预览圆环颜色要跟着刷新
+	_multiplayer_manager.players_updated.connect(_refresh)
 	_ensure_local_avatar()
 	_refresh()
 
@@ -76,6 +79,8 @@ func _refresh() -> void:
 	avatar_texture.texture = texture
 	avatar_texture.visible = texture != null
 	avatar_initial.visible = texture == null
+	# 预览的圆环用自己在本局的身份色（1P 白 / 2P 红 …，见 PlayerColor）
+	AvatarRing.paint(preview_ring, _multiplayer_manager.player_color(_multiplayer_manager.player.id))
 	# 0 或 1 个头像时没有可切换的对象
 	var switchable: bool = Avatars.count() > 1
 	prev_button.disabled = not switchable

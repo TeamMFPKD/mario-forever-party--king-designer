@@ -38,8 +38,10 @@ func _on_result_list_updated(results: Array) -> void:
 		var capture_rect: TextureRect = result_list_line.get_node("CaptureTextureRect") as TextureRect
 		capture_rect.texture = random_capture_manager.get_capture(player_id)
 
-		var player_name_label: Label = result_list_line.get_node("PlayerNameLabel") as Label
-		player_name_label.text = str(result.get("name", ""))
+		var player_name: String = str(result.get("name", ""))
+		var player_name_label: Label = result_list_line.get_node("NameBox/PlayerNameLabel") as Label
+		player_name_label.text = player_name
+		_paint_avatar(result_list_line, player_id, str(result.get("avatar_id", "")), player_name)
 
 		var level_cause_pass_label: Label = result_list_line.get_node("LevelCausePassLabel") as Label
 		level_cause_pass_label.text = str(result.get("cause_pass", 0))
@@ -61,3 +63,17 @@ func _on_result_list_updated(results: Array) -> void:
 	random_capture_manager.clear_captures()
 
 	emit_signal("result_list_updated")
+
+
+## 结算行左侧头像：内置头像按 id 取，取不到回退名字首字；外圈用玩家身份色。
+func _paint_avatar(line: Node, player_id: int, avatar_id: String, player_name: String) -> void:
+	var avatar_texture: Texture2D = Avatars.get_texture_by_id(avatar_id)
+	var avatar_rect: TextureRect = line.get_node("NameBox/PlayerAvatar/Texture") as TextureRect
+	avatar_rect.texture = avatar_texture
+	avatar_rect.visible = avatar_texture != null
+	var avatar_initial: Label = line.get_node("NameBox/PlayerAvatar/Initial") as Label
+	avatar_initial.visible = avatar_texture == null
+	if avatar_texture == null:
+		avatar_initial.text = "?" if player_name.is_empty() else player_name.substr(0, 1)
+	var avatar_ring: Panel = line.get_node("NameBox/PlayerAvatar/Ring") as Panel
+	AvatarRing.paint(avatar_ring, MPManager.player_color(player_id))

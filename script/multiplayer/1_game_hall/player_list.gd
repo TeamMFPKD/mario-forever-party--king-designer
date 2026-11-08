@@ -61,6 +61,10 @@ func _on_players_updated() -> void:
 		avatar_initial.visible = avatar_texture == null
 		avatar_initial.text = profile.name.substr(0, 1)
 
+		# 头像外圈用玩家身份色，与消息气泡同一套分配（见 PlayerColor）
+		var avatar_ring: Panel = player_list_line.get_node("PlayerAvatar/Ring") as Panel
+		AvatarRing.paint(avatar_ring, MPManager.player_color(profile.id))
+
 		var player_ready_node: Control = player_list_line.get_node("PlayerReady") as Control
 		player_ready_node.visible = profile.lobby_ready
 		if profile.lobby_ready:

@@ -67,12 +67,25 @@
 
 ## 头像
 
-气泡左侧是 84×84 的圆形头像槽，显示顺序：
+气泡左侧是头像槽：头像本体仍是 84×84 的圆形，外面再套一圈 8 像素的玩家身份色圆环（槽位整体 100×100，头像尺寸不变）。显示顺序：
 
 1. 按玩家同步过来的 `avatar_id` 从内置头像库取贴图；
 2. 取不到（旧消息、素材缺失）时回退到玩家名首字。
 
 圆形效果由 `shader/avatar_circle.gdshader` 把头像 `TextureRect` 裁成圆形，所以素材只要画在正方形里即可，画到圆外也不会溢出。
+
+### 玩家身份色
+
+头像外圈与消息气泡描边共用一套身份色，按玩家在房间名单里的位置（也就是玩家列表里的 1P / 2P …）分配：
+
+| 位置 | 1P | 2P | 3P | 4P | 5P | 6P | 7P | 8P | 9P 起 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 颜色 | 白 | 红 | 绿 | 蓝 | 橙 | 青 | 黄 | 紫 | 回到红，7 色循环 |
+
+- 位置是各端一致的确定信息，所以颜色完全由本地计算（`PlayerColor.for_index()` / `MPManager.player_color()`），**不进网络包**；
+- 有人进出房间时名单顺序会变，颜色随位置重新排（这是位置分配的必然结果）；
+- 头像槽的场景结构都一样：`Ring(Panel)` 铺满整个槽位当彩色圆底，头像本体（白底圆 + 贴图 / 名字首字）内缩后居中，露出来的一圈就是身份色；
+- 已应用的位置：玩家列表每行（48 + 6）、头像选择器预览（84 + 8）、消息气泡（84 + 8）、结算页每行名字左侧（64 + 8，结算数据里的 `avatar_id` 由 `PlayerProfile.to_result_dict()` 下发）。
 
 ### 内置头像（不开放用户上传）
 
@@ -81,6 +94,8 @@
 | `sprite/avatar/avatar_pack.tres` | 头像清单：把 PNG 拖进 `textures` 数组就等于内置一个头像 |
 | `script/multiplayer/avatar/avatar_pack.gd` | 清单资源定义（`AvatarPack`） |
 | `script/multiplayer/avatar/avatar_library.gd` | autoload `Avatars`，把清单读成「id → 贴图」查表 |
+| `script/multiplayer/avatar/player_color.gd` | `PlayerColor`：身份色色表（1P 白，2P 起红绿蓝橙青黄紫循环） |
+| `script/multiplayer/avatar/avatar_ring.gd` | `AvatarRing`：把头像槽里的 `Ring(Panel)` 染成玩家色（消息气泡与玩家列表共用） |
 | `object/multiplayer/avatar/avatar_selector.tscn` | 头像选择器 `(<) 头像预览 (>)` |
 | `script/multiplayer/avatar/avatar_selector.gd` | 选择器逻辑 |
 

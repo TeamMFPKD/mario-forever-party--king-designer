@@ -20,6 +20,7 @@ const SYSTEM_HEIGHT: float = 40.0
 @export var avatar_texture: TextureRect
 @export var avatar_initial: Label
 @export var avatar_root: Control
+@export var avatar_ring: Panel
 @export var name_label: Label
 @export var message_label: Label
 @export var bubble_panel: PanelContainer
@@ -28,9 +29,12 @@ var _tween: Tween
 var _finished: bool = false
 
 
-func setup(player_name: String, message: String, avatar_id: String = "") -> void:
+## color 是发送者的身份色（见 PlayerColor）：头像外圈与气泡描边都用它。
+func setup(player_name: String, message: String, avatar_id: String = "", color: Color = Color.WHITE) -> void:
 	name_label.text = player_name
 	message_label.text = message
+	AvatarRing.paint(avatar_ring, color)
+	_paint_bubble_border(color)
 	# 内置头像按 id 取（见 AvatarLibrary）；取不到时回退到名字首字
 	var texture: Texture2D = Avatars.get_texture_by_id(avatar_id)
 	avatar_texture.texture = texture
@@ -43,6 +47,17 @@ func setup(player_name: String, message: String, avatar_id: String = "") -> void
 		avatar_initial.text = player_name.substr(0, 1)
 	else:
 		avatar_initial.text = "?"
+
+
+## 气泡描边染成发送者身份色。
+## 样式盒是场景级 sub_resource，多个气泡共用一份，必须 duplicate 后再改颜色。
+func _paint_bubble_border(color: Color) -> void:
+	var source: StyleBox = bubble_panel.get_theme_stylebox("panel")
+	if not (source is StyleBoxFlat):
+		return
+	var style: StyleBoxFlat = (source as StyleBoxFlat).duplicate() as StyleBoxFlat
+	style.border_color = color
+	bubble_panel.add_theme_stylebox_override("panel", style)
 
 
 ## 系统消息：无头像、无名称、无白色底板，仅保留原来的白字黑描边外观。

@@ -193,12 +193,17 @@ func _spawn_bubble(message: Dictionary) -> void:
 		return
 	var player_name: String = str(message.get("player_name", ""))
 	var avatar_id: String = str(message.get("avatar_id", ""))
+	# 身份色按发送者在房间名单里的位置算，各端一致，不需要同步
+	var player_id: int = 0
+	var player_id_variant: Variant = message.get("player_id", 0)
+	if player_id_variant is int:
+		player_id = player_id_variant
 	var bubble: MessageBubble = bubble_scene.instantiate() as MessageBubble
 	if not bubble:
 		push_error("MessageOverlay: bubble_scene is not a MessageBubble")
 		return
 	bubble_layer.add_child(bubble)
-	bubble.setup(player_name, QuickMessageTable.text_of(quick_id), avatar_id)
+	bubble.setup(player_name, QuickMessageTable.text_of(quick_id), avatar_id, MPManager.player_color(player_id))
 	bubble.finished.connect(_on_bubble_finished)
 	_bubbles.append(bubble)
 	_trim_bubbles()

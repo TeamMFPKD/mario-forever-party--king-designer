@@ -261,6 +261,18 @@ func get_lobby_page() -> int:
 	return _lobby_page
 
 
+## 玩家身份色（头像外圈 / 消息气泡描边）。
+##
+## 只看玩家在房间名单里的位置，各端算出来一致，所以不走网络同步。
+## 不在名单里（还没进房、或消息发送者已经离开）时按 1P 的白色处理。
+func player_color(player_id: int) -> Color:
+	if registry != null:
+		var index: int = registry.ids().find(player_id)
+		if index >= 0:
+			return PlayerColor.for_index(index)
+	return PlayerColor.for_index(0)
+
+
 func is_server() -> bool:
 	return net != null and net.is_server()
 

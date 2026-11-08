@@ -1,6 +1,31 @@
 [gd_scene format=3 uid="uid://dryy3w7a58217"]
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_qgqhr"]
+[ext_resource type="Shader" uid="uid://bxy65noklqais" path="res://shader/avatar_circle.gdshader" id="2_shader"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.25, 0.35)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+anti_aliasing = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+anti_aliasing = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_avatar"]
+shader = ExtResource("2_shader")
 
 [node name="ResultListLine" type="HBoxContainer" unique_id=723223620]
 auto_translate_mode = 2
@@ -12,7 +37,80 @@ layout_mode = 2
 size_flags_horizontal = 6
 stretch_mode = 2
 
-[node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_qgqhr")]
+[node name="NameBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="PlayerAvatar" type="Control" parent="NameBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Ring" type="Panel" parent="NameBox/PlayerAvatar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
+
+[node name="Circle" type="Panel" parent="NameBox/PlayerAvatar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avatar")
+
+[node name="Initial" type="Label" parent="NameBox/PlayerAvatar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.25, 1)
+theme_override_font_sizes/font_size = 30
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+
+[node name="Texture" type="TextureRect" parent="NameBox/PlayerAvatar"]
+visible = false
+material = SubResource("ShaderMaterial_avatar")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="PlayerNameLabel" parent="NameBox" unique_id=1180843724 instance=ExtResource("1_qgqhr")]
 auto_translate_mode = 2
 custom_minimum_size = Vector2(128, 64)
 layout_mode = 2
@@ -20,6 +118,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 35
 text = "俊贵"
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 1
 
 [node name="LevelCausePassLabel" parent="." unique_id=1008498644 instance=ExtResource("1_qgqhr")]

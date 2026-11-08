@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Theme" path="res://mfmp_theme.tres" id="1_theme"]
 [ext_resource type="Script" path="res://script/multiplayer/message_system/message_bubble.gd" id="2_bubble"]
@@ -10,6 +10,11 @@ content_margin_top = 8.0
 content_margin_right = 16.0
 content_margin_bottom = 10.0
 bg_color = Color(1, 1, 1, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
@@ -32,14 +37,23 @@ anti_aliasing = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_avatar"]
 shader = ExtResource("3_avatar_shader")
 
-[node name="MessageBubble" type="Control" node_paths=PackedStringArray("avatar_texture", "avatar_initial", "avatar_root", "name_label", "message_label", "bubble_panel")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+anti_aliasing = true
+
+[node name="MessageBubble" type="Control" node_paths=PackedStringArray("avatar_texture", "avatar_initial", "avatar_root", "avatar_ring", "name_label", "message_label", "bubble_panel")]
 offset_right = 520.0
-offset_bottom = 92.0
+offset_bottom = 108.0
 mouse_filter = 2
 script = ExtResource("2_bubble")
 avatar_texture = NodePath("HBoxContainer/Avatar/AvatarTexture")
 avatar_initial = NodePath("HBoxContainer/Avatar/AvatarInitial")
 avatar_root = NodePath("HBoxContainer/Avatar")
+avatar_ring = NodePath("HBoxContainer/Avatar/AvatarRing")
 name_label = NodePath("HBoxContainer/Content/NameLabel")
 message_label = NodePath("HBoxContainer/Content/Bubble/VBoxContainer/MessageLabel")
 bubble_panel = NodePath("HBoxContainer/Content/Bubble")
@@ -55,16 +69,30 @@ mouse_filter = 2
 theme_override_constants/separation = 12
 
 [node name="Avatar" type="Control" parent="HBoxContainer"]
-custom_minimum_size = Vector2(84, 84)
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
+
+[node name="AvatarRing" type="Panel" parent="HBoxContainer/Avatar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
 
 [node name="AvatarCircle" type="Panel" parent="HBoxContainer/Avatar"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -75,6 +103,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -93,6 +125,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
