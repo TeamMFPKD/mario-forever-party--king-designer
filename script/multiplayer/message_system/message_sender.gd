@@ -1,11 +1,19 @@
 extends Node
 
+## 已封存：自定义消息输入。当前版本只允许预置快捷用语（见 message_quick_sender.gd）。
+## 恢复方式：把 archived 设为 false，并在 message_sidebar.tscn 里显示 MsgInput 节点。
+
+@export var archived: bool = true
+
 @export var line_edit: LineEdit
 @export var send_button: Button
 
 var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
+	if archived:
+		set_process_input(false)
+		return
 	multiplayer_manager = MPManager
 	send_button.pressed.connect(_on_send_button_pressed)
 	line_edit.text_changed.connect(_on_line_edit_text_changed)
@@ -30,6 +38,8 @@ func _on_send_button_pressed() -> void:
 	send_message()
 
 func send_message() -> void:
+	if archived:
+		return
 	if not line_edit:
 		push_error("LineEdit not found")
 		return

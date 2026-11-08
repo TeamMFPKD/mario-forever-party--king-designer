@@ -1,9 +1,17 @@
 extends Node
 
+## 已封存：消息记录落盘（user://messages）。当前版本只允许预置快捷用语，
+## 不再保存聊天记录；已有记录文件保持原样、不做删除。
+## 恢复方式：把 archived 设为 false。
+
+@export var archived: bool = true
+
 var multiplayer_manager: MultiplayerManager
 var _file_path: String = ""
 
 func _ready() -> void:
+	if archived:
+		return
 	multiplayer_manager = MPManager
 	multiplayer_manager.messages_updated.connect(_on_messages_updated)
 	multiplayer_manager.players_updated.connect(_on_players_updated)

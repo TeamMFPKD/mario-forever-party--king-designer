@@ -769,6 +769,37 @@ func _check_all_edit_ready() -> void:
 	Log.i("所有玩家都已完成关卡编辑，提前结束倒计时。")
 	edit_all_ready.emit()
 
+## 快捷用语：只同步用语序号，各端按自己的语言渲染（见 QuickMessageTable）。
+@rpc("any_peer", "call_local", "reliable", 10)
+func send_quick_message(p_id: int, unique_id: String, quick_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+	if not QuickMessageTable.is_valid_id(quick_id):
+		push_warning("收到无效的快捷用语序号：%d" % quick_id)
+		return
+	var p_name: String = "invalid_name"
+	for p: Dictionary in players:
+		if p.id == p_id:
+			p_name = str(p.name)
+			break
+	var time_str: String = Time.get_time_string_from_system(false)
+	messages.append(
+		{
+			"cnt": msg_cnt,
+			"player_id": p_id, "message": "",
+			"unique_id": unique_id,
+			"player_name": p_name,
+			"msg": "",
+			"quick_id": quick_id,
+			"time": time_str,
+			"displayed": false,
+		}
+	)
+	msg_cnt += 1
+	sync_messages.rpc(messages)
+
+## 已封存：自定义文本消息。当前版本只允许预置快捷用语，调用处已移除
+## （见 message_sender.gd），保留实现以便日后恢复。
 @rpc("any_peer", "call_local", "reliable", 10)
 func send_message(p_id: int, unique_id: String, msg: String) -> void:
 	if not multiplayer.is_server():
