@@ -1,40 +1,22 @@
 extends Node
 
-signal game_started
+## 大厅“开始游戏”按钮。
+## 只负责收集编辑时长并转交 LobbyService，场景切换由 MatchFlowService 统一处理。
 
 @export var bar: HScrollBar
 
-var multiplayer_manager: MultiplayerManager
-
 var config: ConfigFile
 
+
 func _ready() -> void:
-	multiplayer_manager = MPManager
 	config = GameConfig.config
 
-func _on_start_button_pressed() -> void:
-	if not multiplayer_manager.multiplayer.is_server():
-		return
-	game_start.rpc(int(bar.value))
-	
-func on_game_start() -> void:
-	emit_signal("game_started")
 
-@rpc("authority", "call_local")
-func game_start(game_edit_time: int) -> void:
-	Log.i("game_start.gd", "要开始了哟~")
-	Log.i("game_start.gd", ["本局游戏时长：", game_edit_time])
-	# 记录游戏开始时间作为文件名的时间部分
-	var current_time: String = Time.get_datetime_string_from_system(false, true)
-	current_time = current_time.replace(":", "-")
-	current_time = current_time.replace(" ", "_")
-	multiplayer_manager.game_start_time = current_time
-	multiplayer_manager.is_in_game = true
-	var timer: Timer = TimerSingleton
-	timer.wait_time = game_edit_time
-	# 倒计时缓冲结束后计时开始
-	#TimerSingleton.start()
-	if multiplayer_manager.multiplayer.is_server():
-		config.set_value("game_settings", "host_set_edit_time_limit", game_edit_time)
-		GameConfig.save()
-	on_game_start()
+func _on_start_button_pressed() -> void:
+	var manager: MultiplayerManager = MPManager
+	if not manager.net.is_server():
+		return
+	var edit_seconds: int = int(bar.value)
+	config.set_value("game_settings", "host_set_edit_time_limit", edit_seconds)
+	GameConfig.save()
+	manager.lobby.request_start(edit_seconds)

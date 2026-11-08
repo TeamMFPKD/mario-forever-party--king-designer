@@ -1,17 +1,15 @@
 extends Node
 
 ## 快捷用语发送组件。
-## 取代已封存的自定义消息输入（见 message_sender.gd）：运行时按 QuickMessageTable
-## 生成 21 个按钮，点击后只把用语序号同步给主机，由各端按自己的语言显示。
+## 运行时按 QuickMessageTable 生成 21 个按钮，点击后只把用语序号交给主机，
+## 由各端按自己的语言显示。
+
 
 @export var target_container: Container
 @export var button_scene: PackedScene
 
-var multiplayer_manager: MultiplayerManager
-
 
 func _ready() -> void:
-	multiplayer_manager = MPManager
 	if not target_container:
 		push_error("QuickMessageSender: target_container not found")
 		return
@@ -41,11 +39,4 @@ func _build_buttons() -> void:
 
 
 func _on_quick_button_pressed(quick_id: int) -> void:
-	if not multiplayer_manager:
-		return
-	multiplayer_manager.send_quick_message.rpc_id(
-		1,
-		multiplayer_manager.player.id,
-		multiplayer_manager.get_device_tag(),
-		quick_id,
-	)
+	MPManager.chat.send_quick(quick_id)

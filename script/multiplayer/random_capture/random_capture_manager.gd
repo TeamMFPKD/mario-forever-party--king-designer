@@ -14,6 +14,8 @@ func get_capture(player_id: int) -> Texture2D:
 	for capture: Dictionary in captures:
 		if capture["player_id"] == player_id:
 			player_captures.append(capture["capture"])
+	if player_captures.is_empty():
+		return null
 	player_captures.shuffle()
 	var result: Texture2D = player_captures[0]
 	return result

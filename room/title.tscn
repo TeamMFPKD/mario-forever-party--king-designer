@@ -30,13 +30,13 @@
 [ext_resource type="AudioStream" uid="uid://c213arfckrjmd" path="res://sound/ready.wav" id="20_1jeef"]
 [ext_resource type="Script" uid="uid://csw3tgckpyfah" path="res://script/title/load_edit_time_set.gd" id="20_qpsvf"]
 [ext_resource type="Texture2D" uid="uid://be8w71lkggf7h" path="res://sprite/mf_community.png" id="21_0r6on"]
-[ext_resource type="Script" uid="uid://cu20fwl7rsl7b" path="res://script/multiplayer/back_to_title_process.gd" id="22_p5b6p"]
 [ext_resource type="Script" uid="uid://bisaxylwbeu48" path="res://script/option/language_button.gd" id="23_e6ipe"]
 [ext_resource type="Script" uid="uid://mtfbr0vs3gmu" path="res://script/title/forum_button.gd" id="23_xg860"]
 [ext_resource type="Script" uid="uid://drmaecr4ttrkp" path="res://script/multiplayer/1_game_hall/ready_button.gd" id="24_1jeef"]
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="25_ssvsf"]
 [ext_resource type="Script" uid="uid://b863abvb5xbma" path="res://script/option/volume.gd" id="26_nl766"]
+[ext_resource type="Script" path="res://script/multiplayer/ui/title_net_bridge.gd" id="99_bridge"]
 [ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]
 [ext_resource type="PackedScene" uid="uid://b05l8y21x0q11" path="res://object/input_map_set.tscn" id="28_wphsk"]
 [ext_resource type="Script" uid="uid://cjmbnxdu46yvg" path="res://script/option/platform_control_set_button.gd" id="29_w12k4"]
@@ -1269,8 +1269,8 @@ bus = &"Music"
 stream = ExtResource("4_mavin")
 bus = &"Music"
 
-[node name="BackToTitleProcess" type="Node" parent="." unique_id=742432710]
-script = ExtResource("22_p5b6p")
+[node name="NetBridge" type="Node" parent="."]
+script = ExtResource("99_bridge")
 
 [node name="ClientInvisibleNodeSet" type="Node" parent="." unique_id=2001440291 node_paths=PackedStringArray("invisible_node_set")]
 script = ExtResource("24_if31c")
@@ -1279,7 +1279,6 @@ invisible_node_set = [NodePath("../GameRoomSize/PlayerPage/UiPanel/UiMarginConta
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("25_ssvsf")]
 show_mode = 0
 
-[connection signal="game_started" from="GameStart" to="JumpToScene" method="jump_to_scene" flags=3]
 [connection signal="timeout" from="GameRoomSize/Title/Title/SubTitle/Timer" to="GameRoomSize/Title/Title/SubTitle/UiAnimationScaleIn" method="_on_ui_animation_start"]
 [connection signal="ui_animation_finished" from="GameRoomSize/Title/UiAnimationFall" to="GameRoomSize/Title/Title/SubTitle/Timer" method="start"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
@@ -1317,10 +1316,6 @@ show_mode = 0
 [connection signal="timeout" from="BGMStartToPlayTimer" to="TitleScreenBGMP1" method="play"]
 [connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
 [connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
-[connection signal="back_to_title" from="BackToTitleProcess" to="GameRoomSize/PlayerPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="client_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_invisible_set"]
-[connection signal="sever_back_to_title" from="BackToTitleProcess" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
-
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Up"]
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down"]
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Left"]

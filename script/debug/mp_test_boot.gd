@@ -87,11 +87,17 @@ func _bootstrap() -> void:
 		_auto_ready_loop(title)
 	if _role == "host" and MpTest.has("--mp-auto-start"):
 		_auto_start(title)
+	if MpTest.has("--mp-auto-finish"):
+		_watch_full_loop()
 
 ## 编辑器多实例：不带参数时的自动命名。
 ## 编辑器不会给实例编号，这里让实例抢 127.0.0.1 上的槽位端口，
-## 抢到第几个端口就叫 test几；只有同时跑 2 个以上实例时才改名，
-## 单个 F5 会释放端口、保持配置里的原名字。
+## 抢到第几个端口就叫 test几。
+##
+## 名字必须**抢到槽位后立刻写**：如果等“确认同时有 2 个以上实例”再改名，
+## 玩家可能在等待窗口里就点了组织/加入，客户端会把旧名字发给主机，
+## 表现为房间里三个人都叫 test1。
+## 单个 F5 在确认只有自己后恢复原名字。
 func _start_editor_slots() -> void:
 	var title: Node = await _wait_for_title()
 	if title == null:
@@ -100,8 +106,10 @@ func _start_editor_slots() -> void:
 	_apply_window(MpTest.get_value("--mp-win"))
 	_apply_pad(MpTest.get_value("--mp-pad"))
 	_override_edit_seconds(title)
+	var original_name: String = _configured_player_name(title)
 	if not _claim_editor_slot():
 		return
+	_apply_player_name(title, "test%d" % _slot_index)
 	var deadline: int = Time.get_ticks_msec() + int(SLOT_SETTLE_SECONDS * 1000.0)
 	while Time.get_ticks_msec() < deadline:
 		if _used_slot_count() >= SLOT_MAX:
@@ -109,11 +117,22 @@ func _start_editor_slots() -> void:
 		await get_tree().create_timer(0.1).timeout
 	var used: int = _used_slot_count()
 	if used < 2:
-		Log.i("MPTEST", "editor slots=1, keep normal player name")
+		Log.i("MPTEST", "editor slots=1, restore normal player name")
+		_apply_player_name(title, original_name)
 		_release_editor_slot()
 		return
-	_apply_player_name(title, "test%d" % _slot_index)
 	Log.i("MPTEST", "editor slots=%d slot=%d" % [used, _slot_index])
+
+
+func _configured_player_name(title: Node) -> String:
+	if not MPManager.player_name.is_empty():
+		return MPManager.player_name
+	var host_edit: LineEdit = title.get_node_or_null(
+		HOST_PAGE + "/MfpkdPanel/UiMarginContainer/VBoxContainer/UiLineEdit2"
+	) as LineEdit
+	if host_edit != null and not host_edit.text.is_empty():
+		return host_edit.text
+	return "player"
 
 ## --mp-slot=N：跳过抢槽位，直接命名为 testN。
 func _start_explicit_slot(slot_index: int) -> void:
@@ -297,7 +316,7 @@ func _do_join(title: Node) -> bool:
 		var peer: MultiplayerPeer = multiplayer.multiplayer_peer
 		if peer == null or not (peer is ENetMultiplayerPeer) or peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 			Log.w("MPTEST", "connect retry %d/%d" % [index + 1, attempts])
-			MPManager._on_join_button_pressed()
+			MPManager.join_game(_host_ip, _port)
 		await get_tree().create_timer(1.0).timeout
 	Log.e("MPTEST", "join FAILED ip=%s port=%d" % [_host_ip, _port])
 	return false
@@ -309,20 +328,15 @@ func _is_enet_connected() -> bool:
 		return false
 	return peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
 
-func _find_local_player() -> Dictionary:
-	var local_id: Variant = MPManager.player.id
-	for entry: Dictionary in MPManager.players:
-		var entry_id: Variant = entry.get("id")
-		if entry_id == local_id:
-			return entry
-	return {}
+func _find_local_player() -> PlayerProfile:
+	return MPManager.registry.get_player(MPManager.player.id)
+
 
 func _is_local_ready() -> bool:
-	var data: Dictionary = _find_local_player()
-	if data.is_empty():
+	var data: PlayerProfile = _find_local_player()
+	if data == null:
 		return false
-	var is_ready: bool = data.get("is_ready_to_start", false)
-	return is_ready
+	return data.lobby_ready
 
 ## 自动准备：连接成功后立刻点一次“准备完毕”，之后每 3 秒补一次。
 ## 补发是为了顶掉 ready_button 的失焦/无输入自动取消（未加 --mp-no-ready-timeout 时）。
@@ -332,7 +346,7 @@ func _auto_ready_loop(title: Node) -> void:
 		Log.e("MPTEST", "ReadyButton not found")
 		return
 	while is_instance_valid(title) and is_instance_valid(ready_button):
-		if _is_enet_connected() and not _find_local_player().is_empty():
+		if _is_enet_connected() and _find_local_player() != null:
 			if not _is_local_ready():
 				ready_button.emit_signal("pressed")
 				Log.i("MPTEST", "ready sent name=%s" % _player_name)
@@ -358,17 +372,64 @@ func _auto_start(title: Node) -> void:
 	Log.e("MPTEST", "auto start TIMEOUT")
 
 func _all_ready(players: Array) -> bool:
-	for entry: Dictionary in players:
-		var is_ready: bool = entry.get("is_ready_to_start", false)
-		if not is_ready:
+	for entry: Variant in players:
+		if not (entry is PlayerProfile):
+			return false
+		var profile: PlayerProfile = entry
+		if not profile.lobby_ready:
 			return false
 	return true
+
+## 全链路自动化：编辑完成 -> 传输 -> 游玩 -> 结算，只用于 --mp-auto-finish。
+func _watch_full_loop() -> void:
+	if not MPManager.phase_changed.is_connected(_on_phase_changed_for_test):
+		MPManager.phase_changed.connect(_on_phase_changed_for_test)
+
+
+func _on_phase_changed_for_test(new_phase: int, _payload: Dictionary) -> void:
+	Log.i("MPTEST", "phase=%s" % RoomPhase.name_of(new_phase))
+	match new_phase:
+		RoomPhase.Phase.EDIT:
+			_auto_edit_finished()
+		RoomPhase.Phase.PLAY:
+			_auto_reach_end()
+		RoomPhase.Phase.RESULT:
+			Log.i("MPTEST", "result reached")
+
+
+func _auto_edit_finished() -> void:
+	await get_tree().create_timer(1.0).timeout
+	if MPManager.phase != RoomPhase.Phase.EDIT:
+		return
+	MPManager.lobby.set_edit_finished(true)
+	Log.i("MPTEST", "edit finished sent")
+
+
+func _auto_reach_end() -> void:
+	await get_tree().create_timer(2.0).timeout
+	if MPManager.phase != RoomPhase.Phase.PLAY:
+		return
+	MPManager.flow.notify_reach_end()
+	Log.i("MPTEST", "reach end sent")
+
 
 ## 自动测试收尾：房间开局后等场景切换完成再退出，让 --log-file 完整落盘。
 func _watch_auto_exit() -> void:
 	if not MpTest.has("--mp-auto-exit"):
 		return
 	var deadline: int = Time.get_ticks_msec() + 180000
+	if MpTest.has("--mp-auto-finish"):
+		while MPManager.phase != RoomPhase.Phase.RESULT and Time.get_ticks_msec() < deadline:
+			await get_tree().create_timer(0.5).timeout
+		if MPManager.phase != RoomPhase.Phase.RESULT:
+			Log.e("MPTEST", "auto exit: result never reached")
+			return
+		Log.i("MPTEST", "result reached, auto exit in 2s")
+		await get_tree().create_timer(2.0).timeout
+		Log.i("MPTEST", "quit after result")
+		get_tree().quit()
+		return
+
 	while not MPManager.is_in_game and Time.get_ticks_msec() < deadline:
 		await get_tree().create_timer(0.5).timeout
 	if not MPManager.is_in_game:

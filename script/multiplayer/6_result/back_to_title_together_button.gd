@@ -1,18 +1,12 @@
 extends Button
 
-signal back_to_title
+## 请求主机把整局拉回大厅。主机裁决后广播 LOBBY，各端统一切回标题页；
+## 不再由按钮自己 rpc 后切场景，避免两端各切一次。
 
-var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
-	multiplayer_manager = MPManager
 	pressed.connect(_on_pressed)
 
-func _on_pressed() -> void:
-	if multiplayer_manager.multiplayer.is_server():
-		back_to_title_together.rpc()
-	emit_signal("back_to_title")
 
-@rpc("authority", "call_remote")
-func back_to_title_together() -> void:
-	emit_signal("back_to_title")
+func _on_pressed() -> void:
+	MPManager.flow.request_return_to_lobby()

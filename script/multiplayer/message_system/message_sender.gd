@@ -8,21 +8,18 @@ extends Node
 @export var line_edit: LineEdit
 @export var send_button: Button
 
-var multiplayer_manager: MultiplayerManager
 
 func _ready() -> void:
 	if archived:
 		set_process_input(false)
 		return
-	multiplayer_manager = MPManager
 	send_button.pressed.connect(_on_send_button_pressed)
 	line_edit.text_changed.connect(_on_line_edit_text_changed)
 
+
 func _on_line_edit_text_changed(new_text: String) -> void:
-	if new_text == "":
-		send_button.set_disabled(true)
-	else:
-		send_button.set_disabled(false)
+	send_button.set_disabled(new_text == "")
+
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
@@ -34,26 +31,19 @@ func _input(event: InputEvent) -> void:
 				line_edit.grab_focus()
 				line_edit.edit()
 
+
 func _on_send_button_pressed() -> void:
 	send_message()
+
 
 func send_message() -> void:
 	if archived:
 		return
-	if not line_edit:
-		push_error("LineEdit not found")
+	if not line_edit or not send_button:
+		push_error("MessageSender: line_edit / send_button not found")
 		return
-	if not send_button:
-		push_error("SendButton not found")
+	if line_edit.text.is_empty():
 		return
-	if not line_edit.text:
-		push_error("Message is empty")
-		return
-	multiplayer_manager.send_message.rpc_id(
-		1,
-		multiplayer_manager.player.id,
-		multiplayer_manager.get_device_tag(),
-		line_edit.text,
-	)
+	MPManager.chat.send_custom_text(line_edit.text)
 	line_edit.clear()
 	send_button.set_disabled(true)

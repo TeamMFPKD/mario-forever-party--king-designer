@@ -4,8 +4,8 @@ const RandomCaptureManagerScript: GDScript = preload("res://script/multiplayer/r
 
 var viewport: Viewport
 var capture_texture: Texture2D
-var multiplayer_manager: MultiplayerManager
 var random_capture_manager: RandomCaptureManagerScript
+
 
 func _ready() -> void:
 	var game_mode_singleton: GameMode = GameModeSingleton
@@ -14,25 +14,26 @@ func _ready() -> void:
 			queue_free()
 		fc.call_deferred()
 		return
-	multiplayer_manager = MPManager
 	viewport = get_viewport()
 	random_capture_manager = get_tree().get_first_node_in_group("random_capture_manager")
-	
-# Capture test
-#func _physics_process(_delta: float) -> void:
-#	if not Input.is_key_pressed(KEY_0):
-#		return
-#	capture()
+
 
 func capture() -> void:
 	var viewport_texture: ViewportTexture = viewport.get_texture()
 	var image: Image = viewport_texture.get_image()
+	if image == null:
+		return
 	var tmp_texture: ImageTexture = ImageTexture.create_from_image(image)
+	if tmp_texture == null:
+		return
 	tmp_texture.set_size_override(Vector2i(160, 120))
-	# can be set to TextureRect node for preview
-	#texture = tmp_texture
-	for player: Dictionary in multiplayer_manager.players:
-		if not player["level_file_name"] == multiplayer_manager.random_levels[multiplayer_manager.current_level_count]:
+
+	var levels: Array[String] = MPManager.random_levels
+	var index: int = MPManager.current_level_count
+	if index < 0 or index >= levels.size():
+		return
+	var current_level: String = levels[index]
+	for profile: PlayerProfile in MPManager.players:
+		if profile.level_file_name != current_level:
 			continue
-		var current_level_player_id: Variant = player["id"]
-		random_capture_manager.set_captures(current_level_player_id, tmp_texture)
+		random_capture_manager.set_captures(profile.id, tmp_texture)

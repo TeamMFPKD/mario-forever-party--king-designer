@@ -35,8 +35,6 @@ const HIGHLIGHT_MODULATE: Color = Color(1, 1, 0, 1)
 ## 调试用：单人房间也显示消息按钮
 @export var debug: bool = false
 
-var multiplayer_manager: MultiplayerManager
-
 var _quick_buttons: Array[Button] = []
 var _highlighted_button: Button
 var _bubbles: Array[MessageBubble] = []
@@ -46,9 +44,8 @@ var _panel_tween: Tween
 
 
 func _ready() -> void:
-	multiplayer_manager = MPManager
-	multiplayer_manager.players_updated.connect(_on_players_updated)
-	multiplayer_manager.messages_updated.connect(_on_messages_updated)
+	MPManager.players_updated.connect(_on_players_updated)
+	MPManager.messages_updated.connect(_on_messages_updated)
 	open_button.pressed.connect(toggle_panel)
 	blocker.gui_input.connect(_on_blocker_gui_input)
 	bubble_layer.resized.connect(_layout_bubbles)
@@ -68,7 +65,7 @@ func _process(delta: float) -> void:
 
 func _on_players_updated() -> void:
 	var required: int = 1 if debug else 2
-	open_button.visible = multiplayer_manager.players.size() >= required
+	open_button.visible = MPManager.players.size() >= required
 	if not open_button.visible:
 		close_panel()
 
@@ -150,12 +147,7 @@ func _on_blocker_gui_input(event: InputEvent) -> void:
 func _on_quick_button_pressed(quick_id: int, button: Button) -> void:
 	if _cooldown_left > 0.0:
 		return
-	multiplayer_manager.send_quick_message.rpc_id(
-		1,
-		multiplayer_manager.player.id,
-		multiplayer_manager.get_device_tag(),
-		quick_id,
-	)
+	MPManager.chat.send_quick(quick_id)
 	if send_confirm_sound:
 		send_confirm_sound.play()
 	_highlighted_button = button
@@ -185,7 +177,7 @@ func _set_quick_buttons_disabled(disabled: bool) -> void:
 
 
 func _on_messages_updated() -> void:
-	for message: Dictionary in multiplayer_manager.messages:
+	for message: Dictionary in MPManager.messages:
 		if message.get("displayed", false):
 			continue
 		message["displayed"] = true

@@ -222,4 +222,3 @@ stream = ExtResource("16_kckux")
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ControlVisibieSet" method="_set_visible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="GameRoomSize/WaitingLabel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="result_list_updated" from="GameRoomSize/ResultTable/UiPanel/UiMarginContainer/VBoxContainer/ScrollContainer/ResultList" to="ResultShowSE" method="play"]
-[connection signal="back_to_title" from="GameRoomSize/Back/ToTitleButton" to="JumpToScene" method="jump_to_scene"]

@@ -26,23 +26,24 @@ enum Status {
 }
 var status: Status = Status.DISABLED
 
-var multiplayer_manager: MultiplayerManager
 var _tween: Tween
 
+
 func _ready() -> void:
-	multiplayer_manager = MPManager
-	multiplayer_manager.players_updated.connect(_on_players_updated)
-	multiplayer_manager.messages_updated.connect(_on_messages_updated)
+	MPManager.players_updated.connect(_on_players_updated)
+	MPManager.messages_updated.connect(_on_messages_updated)
 	sidebar_show_button.pressed.connect(_on_sidebar_show_button_pressed)
 	_status_changed()
 
+
 func _on_players_updated() -> void:
-	enabled = multiplayer_manager.players.size() >= (2 if not debug else 1)
+	enabled = MPManager.players.size() >= (2 if not debug else 1)
+
 
 func _status_changed() -> void:
 	if not enabled:
 		status = Status.DISABLED
-		multiplayer_manager.messages.clear()
+		MPManager.chat.clear()
 	elif not show:
 		status = Status.COLLAPSED
 	else:
@@ -57,6 +58,7 @@ func _status_changed() -> void:
 	_tween.set_ease(Tween.EASE_IN_OUT)
 	_tween.tween_property(control, "position:x", target_x, 0.3)
 
+
 func _get_x_for_status(s: Status) -> float:
 	match s:
 		Status.DISABLED:
@@ -67,9 +69,11 @@ func _get_x_for_status(s: Status) -> float:
 			return 504.0
 	return 0.0
 
+
 func _on_sidebar_show_button_pressed() -> void:
 	show = not show
 	emit_signal("play_sound_msg_open" if show else "play_sound_msg_close")
+
 
 func _on_messages_updated() -> void:
 	if status == Status.EXPANDED:

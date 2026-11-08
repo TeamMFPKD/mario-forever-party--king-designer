@@ -1,50 +1,42 @@
 extends Node
 
+## 编辑房间倒计时。本脚本只负责“到点 / 全员完成”两个事件；
+## 保存关卡与阶段推进分别交给 save_level_requested 与 MatchFlowService。
+
 signal timeout_save
 
-@export var level_transfer_scene_uid: String = "uid://brg4yepawdra3"
-
-var timer_singleton: Timer
-var multiplayer_manager: MultiplayerManager
-## 防止倒计时结束与“全员准备完毕”同时触发，重复切换场景
+var _timer: Timer
 var is_finishing: bool = false
 
+
 func _ready() -> void:
-	timer_singleton = get_tree().get_first_node_in_group("timer_singleton") as Timer
-	if timer_singleton:
-		timer_singleton.timeout.connect(_on_time_out)
-	multiplayer_manager = MPManager
-	multiplayer_manager.timeout_save.connect(_on_edit_timeout_save)
-	# 只有编辑房间才关心“全员准备完毕”；游玩房间复用本脚本，不能提前切场景
-	var game_mode: GameMode = GameModeSingleton
-	if game_mode.game_mode == GameMode.GameModeType.EDIT:
-		multiplayer_manager.edit_all_ready.connect(_on_edit_all_ready)
+	_timer = get_tree().get_first_node_in_group("timer_singleton") as Timer
+	if _timer:
+		_timer.timeout.connect(_on_time_out)
+	MPManager.edit_all_ready.connect(_on_edit_all_ready)
+
 
 func _on_time_out() -> void:
+	if MPManager.phase != RoomPhase.Phase.EDIT:
+		return
 	_finish_edit("倒计时结束")
+
 
 func _on_edit_all_ready() -> void:
 	if is_finishing:
 		return
-	# 提前结束倒计时，避免切换场景后计时器继续跑
-	if timer_singleton and not timer_singleton.is_stopped():
-		timer_singleton.stop()
+	if MPManager.phase != RoomPhase.Phase.EDIT:
+		return
+	if _timer and not _timer.is_stopped():
+		_timer.stop()
 	_finish_edit("所有玩家已准备完毕，提前结束倒计时")
+
 
 func _finish_edit(reason: String) -> void:
 	if is_finishing:
 		return
 	is_finishing = true
-	emit_signal("timeout_save")
-	if multiplayer_manager.multiplayer.is_server():
-		Log.i("主机", "%s！进入等待房间。开始收集关卡……" % [reason])
-		multiplayer_manager.edit_time_out.rpc()
-	GlobalTransition.change_scene_to_file(level_transfer_scene_uid)
-
-func _on_edit_timeout_save() -> void:
-	if is_finishing:
-		return
-	is_finishing = true
-	emit_signal("timeout_save")
-	Log.i("客户端", "倒计时结束！进入等待房间。开始收集关卡……")
-	GlobalTransition.change_scene_to_file(level_transfer_scene_uid)
+	Log.i("编辑阶段结束：%s" % reason)
+	MPManager.save_level_requested.emit()
+	if MPManager.net.is_server():
+		MPManager.flow.finish_edit(reason)

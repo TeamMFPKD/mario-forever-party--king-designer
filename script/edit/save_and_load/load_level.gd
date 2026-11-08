@@ -21,7 +21,12 @@ func _ready() -> void:
 			unique_id = unique_id.substr(0, 5)
 			author = MPManager.player_name.validate_filename() + "_" + unique_id
 		else:
-			file_name = MPManager.random_levels[MPManager.current_level_count]
+			var levels: Array[String] = MPManager.random_levels
+			if levels.is_empty():
+				Log.e("load_level.gd", "多人关卡列表为空，无法加载本关")
+				return
+			var index: int = clampi(MPManager.current_level_count, 0, levels.size() - 1)
+			file_name = levels[index]
 			return
 	file_name += date_time + "_" + author + ".lvl"
 
@@ -38,7 +43,7 @@ func load_from_level() -> String:
 		print("[load_level.gd] Failed to open file or this is a new file.")
 		var err: Error = FileAccess.get_open_error()
 		if err != OK:
-			Log.e("load_level.gd", ["Error loading file:", err])
+			Log.e("load_level.gd", ["Error loading file:", err, "path:", file_name, "mode:", GameModeSingleton.game_mode])
 			return ""
 	var content: String = file.get_as_text()
 	file.close()

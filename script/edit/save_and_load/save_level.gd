@@ -9,6 +9,7 @@ var author: String = "author"
 
 var multiplayer_manager: MultiplayerManager
 
+
 func _ready() -> void:
 	multiplayer_manager = MPManager
 	date_time = multiplayer_manager.game_start_time
@@ -17,16 +18,21 @@ func _ready() -> void:
 	unique_id = unique_id.substr(0, 5)
 	author = multiplayer_manager.player_name.validate_filename() + "_" + unique_id
 	file_name += date_time + "_" + author + ".lvl"
+	MPManager.save_level_requested.connect(_on_save_button_pressed)
+
 
 func _on_save_button_pressed() -> void:
+	if level_data_node == null:
+		return
 	var level_data_json: String = level_data_node.get_level_data_json()
 	Log.i("save_level.gd", ["save path: ", file_name])
 	save_to_level(level_data_json)
 	Log.i("save_level.gd", "Level saved.")
+	# 不再把整段关卡 JSON 留在玩家资料里，传输服务直接从磁盘读。
 	multiplayer_manager.player.level_file_name = file_name
-	multiplayer_manager.player.level_data = level_data_json
-	if Input.is_key_pressed(KEY_Q) and emulate_bad_level:
-		multiplayer_manager.player.level_data = "invalid"
+	if emulate_bad_level and Input.is_key_pressed(KEY_Q):
+		multiplayer_manager.player.level_file_name = ""
+
 
 func save_to_level(content: String) -> void:
 	if content.is_empty():

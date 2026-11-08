@@ -77,7 +77,7 @@ stretch_mode = 6
 auto_translate_mode = 2
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-text = "加入失败"
+text = "玩家名"
 
 [node name="PlayerReady" type="Control" parent="." unique_id=1776961063]
 visible = false

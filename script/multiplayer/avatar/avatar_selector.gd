@@ -2,7 +2,7 @@ extends HBoxContainer
 
 ## 内置头像选择器：(<) 头像预览 (>)
 ##
-## 选中结果直接写进 MPManager.player["avatar_id"]，开房 / 进房时随玩家信息一起同步，
+## 选中结果直接写进 MPManager.player.avatar_id，开房 / 进房时随玩家信息一起同步，
 ## 并保存到 GameConfig，下次启动沿用。
 ##
 ## 组织页与加入页各摆一份，两边都从 MPManager 读当前值，
@@ -52,8 +52,7 @@ func _step(direction: int) -> void:
 
 ## 本地玩家当前选中的头像 id（空串表示没有可选头像，或还没选过）
 func _current_id() -> String:
-	var value: Variant = _multiplayer_manager.player.get("avatar_id", "")
-	return str(value)
+	return _multiplayer_manager.player.avatar_id
 
 
 ## 选中的头像在本端清单里不存在时（首次启动、素材被替换）回落到默认头像
@@ -66,7 +65,7 @@ func _ensure_local_avatar() -> void:
 func _set_local_avatar(avatar_id: String) -> void:
 	if _current_id() == avatar_id:
 		return
-	_multiplayer_manager.player["avatar_id"] = avatar_id
+	_multiplayer_manager.player.avatar_id = avatar_id
 	# 测试启动不写全局配置：同机多实例会并发覆盖同一个 user://game_settings.cfg
 	if _game_config and not MpTest.is_test_launch():
 		_game_config.set_avatar_id(avatar_id)

@@ -7,9 +7,13 @@
       auto  : headless host + 2 headless clients, auto ready + auto start + auto exit,
               then this script checks markers in the per-instance logs and prints PASS/FAIL.
 
+    -Full runs the whole chain instead of stopping after the lobby:
+      ready -> edit -> level transfer -> play -> result -> exit.
+
     Examples
       tools\mp_test.bat                          # human mode (3 windows)
-      tools\mp_test.bat auto                     # automated smoke test
+      tools\mp_test.bat auto                     # automated lobby smoke test
+      tools\mp_test.bat auto -Full               # full multiplayer chain
       tools\mp_test.bat auto -ShowWindows        # automated test but keep windows visible
       tools\mp_test.bat human -Pads 0,1,2        # map gamepad device 0/1/2 to host/c1/c2
       tools\mp_test.bat human -WinSize 800x450
@@ -48,7 +52,8 @@ param(
     [string]$GodotPath = '',
     [switch]$ShowWindows,
     [switch]$KeepRunning,
-    [switch]$Stop
+    [switch]$Stop,
+    [switch]$Full
 )
 
 $ErrorActionPreference = 'Stop'
@@ -239,6 +244,10 @@ $autoArgs = @(
     '--mp-edit-seconds=10',
     '--mp-auto-exit'
 )
+if ($Full) {
+    # 完整链路：编辑完成 -> 关卡传输 -> 游玩 -> 结算 -> 退出
+    $autoArgs += '--mp-auto-finish'
+}
 $roleArgs = @()
 if ($Mode -eq 'auto') { $roleArgs = $autoArgs }
 
@@ -294,19 +303,36 @@ if ($Mode -eq 'human') {
 $client1Joined = Wait-LogText -Name 'test2' -Text 'MPTEST] joined' -TimeoutSeconds 60
 $client2Joined = Wait-LogText -Name 'test3' -Text 'MPTEST] joined' -TimeoutSeconds 60
 $started = Wait-LogText -Name 'test1' -Text 'MPTEST] all players ready' -TimeoutSeconds 90
+$transfer = $true
+$play = $true
+$result = $true
 $exited = $false
 if ($started) {
-    $exited = Wait-LogText -Name 'test1' -Text 'MPTEST] quit after game_start' -TimeoutSeconds 45
+    if ($Full) {
+        $transfer = Wait-LogText -Name 'test1' -Text 'MPTEST] transfer complete' -TimeoutSeconds 150
+        $play = Wait-LogText -Name 'test1' -Text 'MPTEST] phase PLAY' -TimeoutSeconds 60
+        $result = Wait-LogText -Name 'test1' -Text 'MPTEST] phase RESULT' -TimeoutSeconds 90
+        $exited = Wait-LogText -Name 'test1' -Text 'MPTEST] quit after result' -TimeoutSeconds 60
+    } else {
+        $exited = Wait-LogText -Name 'test1' -Text 'MPTEST] quit after game_start' -TimeoutSeconds 45
+    }
 }
 
-$allPass = $client1Joined -and $client2Joined -and $started -and $exited
+$allPass = $client1Joined -and $client2Joined -and $started -and $transfer -and $play -and $result -and $exited
 
 Write-Host ''
 Write-Host '--- auto test result ---'
 Write-Host ("test2 joined      : {0}" -f $(if ($client1Joined) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($client1Joined) { 'Green' } else { 'Red' })
 Write-Host ("test3 joined      : {0}" -f $(if ($client2Joined) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($client2Joined) { 'Green' } else { 'Red' })
 Write-Host ("3 players ready   : {0}" -f $(if ($started) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($started) { 'Green' } else { 'Red' })
-Write-Host ("game started/exit : {0}" -f $(if ($exited) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($exited) { 'Green' } else { 'Red' })
+if ($Full) {
+    Write-Host ("level transfer    : {0}" -f $(if ($transfer) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($transfer) { 'Green' } else { 'Red' })
+    Write-Host ("play phase        : {0}" -f $(if ($play) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($play) { 'Green' } else { 'Red' })
+    Write-Host ("result phase      : {0}" -f $(if ($result) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($result) { 'Green' } else { 'Red' })
+    Write-Host ("result/exit       : {0}" -f $(if ($exited) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($exited) { 'Green' } else { 'Red' })
+} else {
+    Write-Host ("game started/exit : {0}" -f $(if ($exited) { 'PASS' } else { 'FAIL' })) -ForegroundColor $(if ($exited) { 'Green' } else { 'Red' })
+}
 
 if (-not $allPass) {
     foreach ($name in $TestNames) { Show-LogTail -Name $name }
