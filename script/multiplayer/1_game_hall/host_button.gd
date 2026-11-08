@@ -34,7 +34,9 @@ func _on_button_pressed() -> void:
 	multiplayer_manager.player_name = player_name
 	
 	# 保存配置到GameConfig
-	if game_config:
+	# 测试启动不写全局配置：同机三份实例会并发写同一个 user://game_settings.cfg，
+	# 既可能互相覆盖，也会污染开发机上的默认端口/玩家名。
+	if game_config and not MpTest.is_test_launch():
 		game_config.set_local_port(local_port)
 		game_config.set_player_name(player_name)
 	

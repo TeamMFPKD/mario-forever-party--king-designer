@@ -41,7 +41,8 @@ func _on_button_pressed() -> void:
 	multiplayer_manager.player_name = player_name
 	
 	# 保存配置到GameConfig
-	if game_config:
+	# 测试启动不写全局配置，避免同机多实例并发覆盖 user://game_settings.cfg。
+	if game_config and not MpTest.is_test_launch():
 		game_config.set_frp_domain(frp_domain)
 		game_config.set_remote_port(remote_port)
 		game_config.set_player_name(player_name)

@@ -78,3 +78,6 @@ addons/ridiculous_coding/gravity_bold_8.ttf.import
 addons/ridiculous_coding/gravity_bold_8.ttf
 addons/ridiculous_coding/font.tres
 /.vscode
+
+# Local multiplayer test logs
+tools/mp_test_logs/

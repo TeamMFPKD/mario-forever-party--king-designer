@@ -7,9 +7,13 @@ var total_time: float = 0.0
 var window_focused: bool = true
 var unfocused_time: float = 0.0  # 失焦持续时间
 var player: Variant
+# 本机多开测试时跳过“失焦/无输入/总时长自动取消准备”，
+# 否则同一时间只有一个窗口在前台，其余窗口 10 秒后会被自动取消准备。
+var skip_auto_unready: bool = false
 
 func _ready() -> void:
 	multiplayer_manager = MPManager
+	skip_auto_unready = MpTest.has("--mp-no-ready-timeout")
 	pressed.connect(_on_button_pressed)
 	last_input_time = Time.get_unix_time_from_system()
 	get_window().focus_entered.connect(_on_window_focus_entered)
@@ -25,8 +29,9 @@ func _process(_delta: float) -> void:
 	if is_ready:
 		set_disabled(true)
 		
-		# 检查超时条件
-		_check_timeout_conditions()
+		# 检查超时条件（测试启动可用 --mp-no-ready-timeout 关闭）
+		if not skip_auto_unready:
+			_check_timeout_conditions()
 	else:
 		set_disabled(false)
 
