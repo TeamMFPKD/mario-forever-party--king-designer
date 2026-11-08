@@ -317,3 +317,30 @@ msgstr "Throw!"
 
 msgid "快捷用语"
 msgstr "Quick Messages"
+
+msgid "提示"
+msgstr "Notice"
+
+msgid "创建房间失败"
+msgstr "Failed to Create Room"
+
+msgid "端口 %d 已被占用，房间未能创建。\n请关闭占用该端口的程序，或更换端口后重试。"
+msgstr "Port %d is already in use, so the room could not be created.\nClose the program using that port, or try a different port and retry."
+
+msgid "游戏已经开始，无法加入该房间。"
+msgstr "The game has already started, so you cannot join this room."
+
+msgid "加入房间失败"
+msgstr "Failed to Join Room"
+
+msgid "连接断开"
+msgstr "Connection Lost"
+
+msgid "端口需为 %d~%d 之间的数字，请检查后重试。"
+msgstr "The port must be a number between %d and %d. Please check it and try again."
+
+msgid "请填写组织方 IP 或域名。"
+msgstr "Please enter the host's IP address or domain."
+
+msgid "无法连接到 %s:%d。\n请确认地址与端口正确，且房主已经创建房间。"
+msgstr "Could not connect to %s:%d.\nMake sure the address and port are correct and that the host has created the room."

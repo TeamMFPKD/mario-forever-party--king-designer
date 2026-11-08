@@ -4,9 +4,19 @@ class_name MultiplayerManager
 
 const MpAniSpriteManagerScript: GDScript = preload("res://script/multiplayer/5_play/multiplayer_ani_sprite_manager.gd")
 
-signal players_updated
+## 端口合法范围（ENet 只接受 1~65535）
+const PORT_MIN: int = 1
+const PORT_MAX: int = 65535
 
-signal game_in_progress_hint
+## msgid：端口填错（开房与进房共用）
+const PORT_INVALID_MESSAGE: String = "端口需为 %d~%d 之间的数字，请检查后重试。"
+## msgid：连不上主机（create_client 失败、连接超时共用）
+const CONNECT_FAILED_MESSAGE: String = "无法连接到 %s:%d。\n请确认地址与端口正确，且房主已经创建房间。"
+
+## 连接主机的超时（毫秒）。ENet 自己要 30 秒以上才判定失败，玩家会以为“点了没反应”。
+const JOIN_TIMEOUT_MSEC: int = 10000
+
+signal players_updated
 
 signal timeout_save
 
@@ -63,6 +73,20 @@ var level_results: Array = []
 
 var _pending_disconnect_reasons: Dictionary = {}
 
+## 标题界面里最近一次尝试的开房 / 进房方式：失败或掉线后据此退回对应的设置页
+enum LobbyPage {
+	NONE,
+	HOST,
+	JOIN,
+}
+var _lobby_page: LobbyPage = LobbyPage.NONE
+
+## 主动退出 / 房主主动关房时，短暂屏蔽“与主机断开”提示
+var _suppress_disconnect_notice: bool = false
+
+## 本次等待进房的截止时间（0 表示没有正在等待的连接）
+var _join_deadline_msec: int = 0
+
 var is_in_game: bool = false:
 	set(value):
 		is_in_game = value
@@ -108,20 +132,42 @@ var device_id: String = "invalid"
 
 func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	multiplayer.connection_failed.connect(_on_connection_failed)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
-	
-	multiplayer.connected_to_server.connect(func() -> void: Log.i("连接成功"))
-	multiplayer.connection_failed.connect(func() -> void: Log.i("连接失败"))
-	multiplayer.server_disconnected.connect(func() -> void: Log.i("服务器断开"))
 
 	device_id = get_device_tag()
 
 func _on_host_button_pressed() -> void:
+	_lobby_page = LobbyPage.HOST
+	# 换去开房时，把还没到期的进房超时作废
+	_join_deadline_msec = 0
+
+	# 端口填错时不必去调 ENet——它要么拒绝，要么真的绑一个别的端口，两种都让人一头雾水
+	if not _is_valid_port(local_port):
+		Log.w("创建房间失败：本地端口无效（%d）" % local_port)
+		_restore_lobby_page()
+		Notice.show_notice(PORT_INVALID_MESSAGE, "创建房间失败", "确认", [PORT_MIN, PORT_MAX])
+		return
+
 	# 主机端代码通常不需要修改，仍监听本地端口
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	# 注意：这里监听的端口是本地端口，需要与FRP隧道配置的"本地端口"一致
-	peer.create_server(local_port, 20)
+	var error: int = peer.create_server(local_port, 20)
+	if error != OK:
+		# 端口被占用（常见于上一次测试的 host 进程没退干净）时绝不能继续设置
+		# multiplayer_peer，否则主机会停留在“看似已开服、实际没人连得上”的假状态。
+		Log.e("创建服务器失败（本地端口 %d）：%s" % [local_port, error_string(error)])
+		_restore_lobby_page()
+		Notice.show_notice(
+			"端口 %d 已被占用，房间未能创建。\n请关闭占用该端口的程序，或更换端口后重试。",
+			"创建房间失败",
+			"确认",
+			[local_port],
+		)
+		return
+
 	multiplayer.multiplayer_peer = peer
 
 	player.id = multiplayer.get_unique_id()
@@ -130,31 +176,144 @@ func _on_host_button_pressed() -> void:
 
 	players.append(player)
 	emit_signal("players_updated")
+	_show_player_page()
 	Log.i("主机已启动。")
 	Log.i("主机玩家：%s" % [format_player(player_name, player.id)])
 
+func _is_valid_port(port: int) -> bool:
+	return port >= PORT_MIN and port <= PORT_MAX
+
+## 失败 / 掉线后回到最近一次使用的开房页或进房页，让玩家能直接改参数重试。
+## 标题界面不在场（已经进游戏）时什么也不做。
+func _restore_lobby_page() -> void:
+	var title: Node = get_node_or_null("/root/Title")
+	if title == null:
+		return
+	var player_page: Control = title.get_node_or_null("GameRoomSize/PlayerPage") as Control
+	if player_page:
+		player_page.visible = false
+	var host_page: Control = title.get_node_or_null("GameRoomSize/HostPage") as Control
+	if host_page:
+		host_page.visible = _lobby_page == LobbyPage.HOST
+	var join_page: Control = title.get_node_or_null("GameRoomSize/JoinPage") as Control
+	if join_page:
+		join_page.visible = _lobby_page == LobbyPage.JOIN
+
+## 开房 / 进房成功后切到玩家列表页。
+## 正常走按钮时按钮自己会切，MpTestBoot 之类直接调本类的路径也要保证界面一致。
+func _show_player_page() -> void:
+	var title: Node = get_node_or_null("/root/Title")
+	if title == null:
+		return
+	var host_page: Control = title.get_node_or_null("GameRoomSize/HostPage") as Control
+	if host_page:
+		host_page.visible = false
+	var join_page: Control = title.get_node_or_null("GameRoomSize/JoinPage") as Control
+	if join_page:
+		join_page.visible = false
+	var player_page: Control = title.get_node_or_null("GameRoomSize/PlayerPage") as Control
+	if player_page:
+		player_page.visible = true
+
+## 主动退出 / 房主主动关房时，0.5 秒内不把随之而来的 server_disconnected 当成错误。
+func _hold_disconnect_notice() -> void:
+	_suppress_disconnect_notice = true
+	await get_tree().create_timer(0.5).timeout
+	_suppress_disconnect_notice = false
+
 func _on_join_button_pressed() -> void:
-	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	
-	Log.i(["连接IP：", frp_domain])
+	_lobby_page = LobbyPage.JOIN
+
+	var domain: String = frp_domain.strip_edges()
+	if domain.is_empty():
+		Log.w("加入房间失败：未填写组织方 IP / 域名")
+		_restore_lobby_page()
+		Notice.show_notice("请填写组织方 IP 或域名。", "加入房间失败")
+		return
+	if not _is_valid_port(remote_port):
+		Log.w("加入房间失败：远程端口无效（%d）" % remote_port)
+		_restore_lobby_page()
+		Notice.show_notice(PORT_INVALID_MESSAGE, "加入房间失败", "确认", [PORT_MIN, PORT_MAX])
+		return
+
+	Log.i(["连接IP：", domain])
 	Log.i(["连接端口：", remote_port])
 	Log.i("本地玩家：%s" % [format_player(player_name, multiplayer.get_unique_id())])
 
-	var error: int = peer.create_client(frp_domain, remote_port)
-	
-	if error == OK:
-		multiplayer.multiplayer_peer = peer
-		Log.i(["正在连接到服务器: ", frp_domain])
-	else:
-		Log.i(["连接失败，错误信息: ", error])
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	var error: int = peer.create_client(domain, remote_port)
+	if error != OK:
+		# 地址 / 端口本身就不合法（例如带空格、端口越界），ENet 会直接拒绝
+		Log.e("加入房间失败（%s:%d）：%s" % [domain, remote_port, error_string(error)])
+		_restore_lobby_page()
+		Notice.show_notice(CONNECT_FAILED_MESSAGE, "加入房间失败", "确认", [domain, remote_port])
+		return
+
+	multiplayer.multiplayer_peer = peer
+	_join_deadline_msec = Time.get_ticks_msec() + JOIN_TIMEOUT_MSEC
+	Log.i(["正在连接到服务器: ", domain])
+
+## 自己盯一个比 ENet 更短的进房超时，超时后主动断开并提示。
+func _process(_delta: float) -> void:
+	if _join_deadline_msec == 0:
+		return
+	var peer: MultiplayerPeer = multiplayer.multiplayer_peer
+	if peer == null or peer.get_connection_status() != MultiplayerPeer.CONNECTION_CONNECTING:
+		_join_deadline_msec = 0
+		return
+	if Time.get_ticks_msec() < _join_deadline_msec:
+		return
+	_join_deadline_msec = 0
+	Log.w("连接主机超时（%d 毫秒），主动放弃本次连接" % JOIN_TIMEOUT_MSEC)
+	# 置空比 close() 干净：连接状态确定回到“未连接”，玩家再点一次就是全新尝试
+	multiplayer.multiplayer_peer = null
+	_notify_join_failed()
 
 func _on_connected_to_server() -> void:
+	Log.i("连接成功")
+	_join_deadline_msec = 0
 	# 客户端连接成功后，向主机发送自己的玩家信息
 	player.id = multiplayer.get_unique_id()
 	player.name = player_name
 	player.device_id = device_id
 	# 仅向主机发送加入请求
 	register_player_on_host.rpc_id(1, player)
+	_show_player_page()
+
+## 客户端连接失败（主机没开、地址不通、超时被拒）。
+func _on_connection_failed() -> void:
+	_join_deadline_msec = 0
+	Log.e("连接服务器失败：%s:%d" % [frp_domain, remote_port])
+	_notify_join_failed()
+
+## 进房失败的统一提示：退回进房页，告诉玩家可能的原因。
+func _notify_join_failed() -> void:
+	if _lobby_page != LobbyPage.JOIN:
+		return
+	_restore_lobby_page()
+	Notice.show_notice(
+		CONNECT_FAILED_MESSAGE,
+		"加入房间失败",
+		"确认",
+		[frp_domain.strip_edges(), remote_port],
+	)
+
+## 客户端与主机断开（房主关房、房主崩溃、网络中断）。
+func _on_server_disconnected() -> void:
+	if _suppress_disconnect_notice:
+		Log.i("与主机断开（主动退出，不提示）")
+		return
+	Log.w("与主机断开")
+	if not is_in_game:
+		# 还在标题的房间里：清空房间数据，并退回进房页方便重试
+		restore_origin_player_data()
+		players.clear()
+		messages.clear()
+		emit_signal("players_updated")
+		emit_signal("messages_updated")
+		_lobby_page = LobbyPage.JOIN
+		_restore_lobby_page()
+	Notice.show_notice("与主机断开。", "连接断开")
 
 @rpc("any_peer", "call_remote")
 func register_player_on_host(player_info: Dictionary) -> void:
@@ -184,8 +343,8 @@ func register_player_on_host(player_info: Dictionary) -> void:
 
 @rpc("authority", "call_remote")
 func inform_late_player() -> void:
-	push_warning("已连接主机。但该房间游戏已经开始。即将断开连接。")
-	emit_signal("game_in_progress_hint")
+	Log.w("已连接主机。但该房间游戏已经开始。即将断开连接。")
+	Notice.show_notice("游戏已经开始，无法加入该房间。", "游戏进行中")
 	disconnect_and_cleanup("游戏已开始，拒绝加入")
 
 @rpc("authority", "call_local")
@@ -242,6 +401,9 @@ func _on_peer_disconnected(id: int) -> void:
 @rpc("authority", "call_local")
 func server_closing() -> void:
 	Log.i("服务器即将关闭")
+	# 客户端是被动退出房间，别把随之而来的 server_disconnected 当成错误弹出来
+	if not multiplayer.is_server():
+		_hold_disconnect_notice()
 	# 隐藏 PlayerPage
 	var player_page: Control = get_node_or_null("/root/Title/GameRoomSize/PlayerPage")
 	if player_page:
@@ -260,6 +422,7 @@ func notify_disconnect(reason: String) -> void:
 
 # 断开连接并清理
 func disconnect_and_cleanup(reason: String = "意外断开连接") -> void:
+	_hold_disconnect_notice()
 	var tag: String = format_player(player.name, player.id)
 	if multiplayer.is_server():
 		Log.i("玩家 %s — %s" % [tag, reason])
