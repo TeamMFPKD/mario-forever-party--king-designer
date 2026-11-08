@@ -200,12 +200,13 @@ func _spawn_bubble(message: Dictionary) -> void:
 	if not QuickMessageTable.is_valid_id(quick_id):
 		return
 	var player_name: String = str(message.get("player_name", ""))
+	var avatar_id: String = str(message.get("avatar_id", ""))
 	var bubble: MessageBubble = bubble_scene.instantiate() as MessageBubble
 	if not bubble:
 		push_error("MessageOverlay: bubble_scene is not a MessageBubble")
 		return
 	bubble_layer.add_child(bubble)
-	bubble.setup(player_name, QuickMessageTable.text_of(quick_id))
+	bubble.setup(player_name, QuickMessageTable.text_of(quick_id), avatar_id)
 	bubble.finished.connect(_on_bubble_finished)
 	_bubbles.append(bubble)
 	_trim_bubbles()

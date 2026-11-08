@@ -28,10 +28,13 @@ var _tween: Tween
 var _finished: bool = false
 
 
-func setup(player_name: String, message: String) -> void:
+func setup(player_name: String, message: String, avatar_id: String = "") -> void:
 	name_label.text = player_name
 	message_label.text = message
-	var has_texture: bool = avatar_texture.texture != null
+	# 内置头像按 id 取（见 AvatarLibrary）；取不到时回退到名字首字
+	var texture: Texture2D = Avatars.get_texture_by_id(avatar_id)
+	avatar_texture.texture = texture
+	var has_texture: bool = texture != null
 	avatar_texture.visible = has_texture
 	avatar_initial.visible = not has_texture
 	if has_texture:

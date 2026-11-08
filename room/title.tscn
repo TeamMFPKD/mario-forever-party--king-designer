@@ -46,6 +46,7 @@
 [ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa/troopa_green.png" id="38_rowrn"]
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="39_pwog8"]
 [ext_resource type="Texture2D" uid="uid://vwi8pqa2xavj" path="res://sprite/bonus/mushroom_big.png" id="40_pwog8"]
+[ext_resource type="PackedScene" path="res://object/multiplayer/avatar/avatar_selector.tscn" id="41_avatar"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]
 atlas = ExtResource("37_yfoso")
@@ -285,7 +286,7 @@ text = "设置界面"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(680, 480)
+custom_minimum_size = Vector2(680, 620)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -293,9 +294,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -325.0
-offset_top = -240.0
+offset_top = -310.0
 offset_right = 325.0
-offset_bottom = 240.0
+offset_bottom = 310.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -342,6 +343,16 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 text = "Mario"
+
+[node name="UiLabel3" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000011 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "玩家头像"
+vertical_alignment = 1
+
+[node name="AvatarSelector" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000012 instance=ExtResource("41_avatar")]
+layout_mode = 2
+size_flags_vertical = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1021602914]
 layout_mode = 2
@@ -434,6 +445,16 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 text = "Luigi"
+
+[node name="UiLabel4" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000013 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "玩家头像"
+vertical_alignment = 1
+
+[node name="AvatarSelector" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000014 instance=ExtResource("41_avatar")]
+layout_mode = 2
+size_flags_vertical = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=46304367]
 layout_mode = 2

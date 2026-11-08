@@ -22,7 +22,7 @@ func _on_players_updated() -> void:
 
 	# Re-add
 	var player_number: int = 1
-	for player: Variant in players:
+	for player: Dictionary in players:
 		var player_list_line: Node = player_list_scene.instantiate()
 		var player_id_label: Label = player_list_line.get_node("PlayerIdLabel") as Label
 		player_id_label.text = str(player_number)
@@ -31,6 +31,16 @@ func _on_players_updated() -> void:
 
 		var player_name_label: Label = player_list_line.get_node("PlayerNameLabel") as Label
 		player_name_label.text = str(player["name"])
+
+		# 内置头像：取不到时回退到名字首字（与消息气泡一致）
+		var avatar_id: String = str(player.get("avatar_id", ""))
+		var avatar_texture: Texture2D = Avatars.get_texture_by_id(avatar_id)
+		var avatar_rect: TextureRect = player_list_line.get_node("PlayerAvatar/Texture") as TextureRect
+		avatar_rect.texture = avatar_texture
+		avatar_rect.visible = avatar_texture != null
+		var avatar_initial: Label = player_list_line.get_node("PlayerAvatar/Initial") as Label
+		avatar_initial.visible = avatar_texture == null
+		avatar_initial.text = str(player["name"]).substr(0, 1)
 
 		var player_ready_node: Control = player_list_line.get_node("PlayerReady") as Control
 		var is_ready: bool = player.is_ready_to_start

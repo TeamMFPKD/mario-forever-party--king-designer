@@ -52,6 +52,7 @@ TitleAnimationManager="*uid://ba32rpxettui3"
 MpTestBoot="*res://script/debug/mp_test_boot.gd"
 Notice="*res://script/ui/notice_manager.gd"
 NoButtonFocus="*res://script/utils/button_focus_blocker.gd"
+Avatars="*res://script/multiplayer/avatar/avatar_library.gd"
 
 [debug]
 

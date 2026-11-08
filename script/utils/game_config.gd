@@ -7,6 +7,7 @@ const DEFAULT_FRP_DOMAIN: String = ""
 const DEFAULT_REMOTE_PORT: int = 8914
 const DEFAULT_LOCAL_PORT: int = 8914
 const DEFAULT_PLAYER_NAME: String = "Player"
+const DEFAULT_AVATAR_ID: String = ""
 
 func _ready() -> void:
 	config = ConfigFile.new()
@@ -66,6 +67,7 @@ func _set_default_network_settings() -> void:
 	config.set_value("network", "remote_port", DEFAULT_REMOTE_PORT)
 	config.set_value("network", "local_port", DEFAULT_LOCAL_PORT)
 	config.set_value("network", "player_name", DEFAULT_PLAYER_NAME)
+	config.set_value("network", "avatar_id", DEFAULT_AVATAR_ID)
 	save()
 
 func get_network_value(key: String, default_value: Variant = null) -> Variant:
@@ -90,6 +92,10 @@ func get_local_port() -> int:
 func get_player_name() -> String:
 	return get_network_value("player_name", DEFAULT_PLAYER_NAME)
 
+func get_avatar_id() -> String:
+	var value: Variant = get_network_value("avatar_id", DEFAULT_AVATAR_ID)
+	return str(value)
+
 func set_frp_domain(value: String) -> void:
 	set_network_value("frp_domain", value)
 
@@ -101,3 +107,6 @@ func set_local_port(value: int) -> void:
 
 func set_player_name(value: String) -> void:
 	set_network_value("player_name", value)
+
+func set_avatar_id(value: String) -> void:
+	set_network_value("avatar_id", value)

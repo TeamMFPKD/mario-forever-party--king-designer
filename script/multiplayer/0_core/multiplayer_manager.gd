@@ -114,6 +114,8 @@ var mp_ani_manager: MpAniSpriteManagerScript
 var player: Dictionary = {
 	"id": "invalid",
 	"name": "invalid",
+	# 内置头像 id（见 script/multiplayer/avatar/avatar_library.gd），随玩家信息一起同步
+	"avatar_id": "",
 	"is_ready_to_start": false,
 	"is_ready_to_finish": false,
 	"level_file_name": "invalid",
@@ -778,9 +780,11 @@ func send_quick_message(p_id: int, unique_id: String, quick_id: int) -> void:
 		push_warning("收到无效的快捷用语序号：%d" % quick_id)
 		return
 	var p_name: String = "invalid_name"
+	var p_avatar_id: String = ""
 	for p: Dictionary in players:
 		if p.id == p_id:
 			p_name = str(p.name)
+			p_avatar_id = str(p.get("avatar_id", ""))
 			break
 	var time_str: String = Time.get_time_string_from_system(false)
 	messages.append(
@@ -789,6 +793,7 @@ func send_quick_message(p_id: int, unique_id: String, quick_id: int) -> void:
 			"player_id": p_id, "message": "",
 			"unique_id": unique_id,
 			"player_name": p_name,
+			"avatar_id": p_avatar_id,
 			"msg": "",
 			"quick_id": quick_id,
 			"time": time_str,

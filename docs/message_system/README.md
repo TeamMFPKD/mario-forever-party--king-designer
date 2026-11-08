@@ -8,7 +8,7 @@
 
 ![快捷用语面板](ref_smm2_quick_panel.png)
 
-消息气泡（左下角：头像 + 玩家名 + 消息文本）：
+消息气泡（左下角：头像 + 气泡上方的玩家名 + 白色气泡内的消息文本）：
 
 ![消息气泡](ref_smm2_message_bubble.png)
 
@@ -67,7 +67,46 @@
 
 ## 头像
 
-气泡左侧是 84×84 的圆形头像槽：`avatar_texture` 有贴图时显示图片，否则显示玩家名首字。后续提供头像素材时，在 `message_bubble.tscn` 或运行时给 `AvatarTexture.texture` 赋值即可。
+气泡左侧是 84×84 的圆形头像槽，显示顺序：
+
+1. 按玩家同步过来的 `avatar_id` 从内置头像库取贴图；
+2. 取不到（旧消息、素材缺失）时回退到玩家名首字。
+
+圆形效果由 `shader/avatar_circle.gdshader` 把头像 `TextureRect` 裁成圆形，所以素材只要画在正方形里即可，画到圆外也不会溢出。
+
+### 内置头像（不开放用户上传）
+
+| 文件 | 作用 |
+| --- | --- |
+| `sprite/avatar/avatar_pack.tres` | 头像清单：把 PNG 拖进 `textures` 数组就等于内置一个头像 |
+| `script/multiplayer/avatar/avatar_pack.gd` | 清单资源定义（`AvatarPack`） |
+| `script/multiplayer/avatar/avatar_library.gd` | autoload `Avatars`，把清单读成「id → 贴图」查表 |
+| `object/multiplayer/avatar/avatar_selector.tscn` | 头像选择器 `(<) 头像预览 (>)` |
+| `script/multiplayer/avatar/avatar_selector.gd` | 选择器逻辑 |
+
+新增头像的步骤：
+
+1. 准备正方形 PNG（现有占位素材是 84×84，正好等于气泡里的显示尺寸，1:1 显示不会有缩放锯齿）；
+2. 放进 `sprite/avatar/`；
+3. 打开 `sprite/avatar/avatar_pack.tres`，把 PNG 拖进 `textures` 数组，**追加到末尾**。
+
+约定：
+
+- 头像 id 由数组序号决定（`avatar_00`、`avatar_01`……）。联机只同步这个 id，各端用自己那份清单还原贴图，所以改了素材要一起更新；
+- 插在数组中间会让已保存的玩家选择整体后移，新增请追加到末尾；
+- **素材改名 / 删除后要同步从数组里移除**：`.tres` 里残留旧路径会让整份清单解析失败（早先表现为选择器只剩 `?`、左右不可切换）。`Avatars` 已带文本兜底，清单解析失败时会按文本里的路径重新读一遍，跳过失效项，日志里会打 `按文本兜底加载 N 个头像`；
+- 选中结果保存在 `user://game_settings.cfg` 的 `network/avatar_id`，同时写进 `MPManager.player["avatar_id"]` 随玩家信息同步；
+- 快捷消息会带上发送者的 `avatar_id`，气泡据此显示头像。
+
+### 选择入口
+
+标题界面「组织游戏」「加入游戏」两个页面里，玩家名称下方各有一个头像选择器：
+
+```
+(<)  头像预览  (>)
+```
+
+左右按钮循环切换；两份选择器共用 `MPManager.player["avatar_id"]`，页面重新显示时会自动同步。玩家列表每行也会显示对应头像。
 
 ## 封存内容
 

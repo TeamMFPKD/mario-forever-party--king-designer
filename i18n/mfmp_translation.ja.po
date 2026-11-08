@@ -33,6 +33,9 @@ msgstr "ローカルポート"
 msgid "玩家名称"
 msgstr "プレイヤー名"
 
+msgid "玩家头像"
+msgstr "アバター"
+
 msgid "组织"
 msgstr "主催"
 

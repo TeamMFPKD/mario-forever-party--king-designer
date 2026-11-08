@@ -33,6 +33,9 @@ msgstr "本地端口"
 msgid "玩家名称"
 msgstr "玩家名称"
 
+msgid "玩家头像"
+msgstr "玩家头像"
+
 msgid "组织"
 msgstr "组织"
 

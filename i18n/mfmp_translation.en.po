@@ -33,6 +33,9 @@ msgstr "Local Port"
 msgid "玩家名称"
 msgstr "Name"
 
+msgid "玩家头像"
+msgstr "Avatar"
+
 msgid "组织"
 msgstr "Host"
 

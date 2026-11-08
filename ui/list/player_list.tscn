@@ -2,6 +2,23 @@
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
 [ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/ui/new_bottom.png" id="2_xwl44"]
+[ext_resource type="Shader" path="res://shader/avatar_circle.gdshader" id="3_shader"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.25, 0.35)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+anti_aliasing = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_avatar"]
+shader = ExtResource("3_shader")
 
 [node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
 custom_minimum_size = Vector2(550, 0)
@@ -11,6 +28,50 @@ custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "1"
+
+[node name="PlayerAvatar" type="Control" parent="." unique_id=1249000021]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Circle" type="Panel" parent="PlayerAvatar" unique_id=1249000022]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avatar")
+
+[node name="Initial" type="Label" parent="PlayerAvatar" unique_id=1249000023]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.25, 1)
+theme_override_font_sizes/font_size = 22
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+
+[node name="Texture" type="TextureRect" parent="PlayerAvatar" unique_id=1249000024]
+visible = false
+material = SubResource("ShaderMaterial_avatar")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_nfru4")]
 auto_translate_mode = 2

@@ -1,0 +1,94 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_selector.gd" id="2_script"]
+[ext_resource type="Shader" path="res://shader/avatar_circle.gdshader" id="3_shader"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_circle"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.2, 0.25, 0.35)
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+anti_aliasing = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_circle"]
+shader = ExtResource("3_shader")
+
+[node name="AvatarSelector" type="HBoxContainer" node_paths=PackedStringArray("prev_button", "next_button", "avatar_texture", "avatar_initial")]
+theme = ExtResource("1_theme")
+theme_override_constants/separation = 24
+alignment = 1
+script = ExtResource("2_script")
+prev_button = NodePath("PrevButton")
+next_button = NodePath("NextButton")
+avatar_texture = NodePath("Preview/Texture")
+avatar_initial = NodePath("Preview/Initial")
+
+[node name="PrevButton" type="Button" parent="."]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 45
+text = "<"
+
+[node name="Preview" type="Control" parent="."]
+custom_minimum_size = Vector2(84, 84)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Circle" type="Panel" parent="Preview"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_circle")
+
+[node name="Initial" type="Label" parent="Preview"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_theme")
+theme_override_colors/font_color = Color(0.2, 0.2, 0.25, 1)
+theme_override_font_sizes/font_size = 36
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+auto_translate_mode = 2
+
+[node name="Texture" type="TextureRect" parent="Preview"]
+visible = false
+material = SubResource("ShaderMaterial_circle")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="NextButton" type="Button" parent="."]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 45
+text = ">"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AvatarPack" format=3 uid="uid://bvfndsoicrojr"]
+
+[ext_resource type="Script" uid="uid://bpo85cyrfj6ga" path="res://script/multiplayer/avatar/avatar_pack.gd" id="1_pack"]
+[ext_resource type="Texture2D" uid="uid://d4ngao7dwtga3" path="res://sprite/avatar/placeholder_1.png" id="2_a1"]
+[ext_resource type="Texture2D" uid="uid://cn0qsmol5kadp" path="res://sprite/avatar/placeholder_2.png" id="3_a2"]
+[ext_resource type="Texture2D" uid="uid://h1e15po6rvon" path="res://sprite/avatar/placeholder_3.png" id="4_a3"]
+[ext_resource type="Texture2D" uid="uid://dlykscr56d2d4" path="res://sprite/avatar/placeholder_4.png" id="5_a4"]
+[ext_resource type="Texture2D" uid="uid://65ligcp52md7" path="res://sprite/avatar/no_goomba.png" id="6_kawr2"]
+[ext_resource type="Texture2D" uid="uid://b20e73fhgqnda" path="res://sprite/avatar/funny.png" id="6_yx1jx"]
+[ext_resource type="Texture2D" uid="uid://ijucaae3nold" path="res://sprite/avatar/wu.png" id="7_kgllt"]
+[ext_resource type="Texture2D" uid="uid://da5kpxc5ut4fj" path="res://sprite/avatar/cp_lui.png" id="8_2yrl1"]
+
+[resource]
+script = ExtResource("1_pack")
+textures = Array[Texture2D]([ExtResource("2_a1"), ExtResource("3_a2"), ExtResource("4_a3"), ExtResource("5_a4"), ExtResource("6_yx1jx"), ExtResource("6_kawr2"), ExtResource("8_2yrl1"), ExtResource("7_kgllt")])
