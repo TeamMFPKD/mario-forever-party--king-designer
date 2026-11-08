@@ -344,3 +344,48 @@ msgstr "Please enter the host's IP address or domain."
 
 msgid "无法连接到 %s:%d。\n请确认地址与端口正确，且房主已经创建房间。"
 msgstr "Could not connect to %s:%d.\nMake sure the address and port are correct and that the host has created the room."
+
+msgid "剪切"
+msgstr "Cut"
+
+msgid "复制"
+msgstr "Copy"
+
+msgid "粘贴"
+msgstr "Paste"
+
+msgid "全选"
+msgstr "Select All"
+
+msgid "清除"
+msgstr "Clear"
+
+msgid "撤销"
+msgstr "Undo"
+
+msgid "重做"
+msgstr "Redo"
+
+msgid "文本书写方向"
+msgstr "Text Writing Direction"
+
+msgid "跟随布局方向"
+msgstr "Same as Layout Direction"
+
+msgid "自动检测方向"
+msgstr "Auto-Detect Direction"
+
+msgid "从左到右"
+msgstr "Left-to-Right"
+
+msgid "从右到左"
+msgstr "Right-to-Left"
+
+msgid "显示控制字符"
+msgstr "Display Control Characters"
+
+msgid "插入控制字符"
+msgstr "Insert Control Character"
+
+msgid "表情与符号"
+msgstr "Emoji & Symbols"

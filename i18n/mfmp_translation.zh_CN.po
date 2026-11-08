@@ -344,3 +344,48 @@ msgstr "请填写组织方 IP 或域名。"
 
 msgid "无法连接到 %s:%d。\n请确认地址与端口正确，且房主已经创建房间。"
 msgstr "无法连接到 %s:%d。\n请确认地址与端口正确，且房主已经创建房间。"
+
+msgid "剪切"
+msgstr "剪切"
+
+msgid "复制"
+msgstr "复制"
+
+msgid "粘贴"
+msgstr "粘贴"
+
+msgid "全选"
+msgstr "全选"
+
+msgid "清除"
+msgstr "清除"
+
+msgid "撤销"
+msgstr "撤销"
+
+msgid "重做"
+msgstr "重做"
+
+msgid "文本书写方向"
+msgstr "文本书写方向"
+
+msgid "跟随布局方向"
+msgstr "跟随布局方向"
+
+msgid "自动检测方向"
+msgstr "自动检测方向"
+
+msgid "从左到右"
+msgstr "从左到右"
+
+msgid "从右到左"
+msgstr "从右到左"
+
+msgid "显示控制字符"
+msgstr "显示控制字符"
+
+msgid "插入控制字符"
+msgstr "插入控制字符"
+
+msgid "表情与符号"
+msgstr "表情与符号"

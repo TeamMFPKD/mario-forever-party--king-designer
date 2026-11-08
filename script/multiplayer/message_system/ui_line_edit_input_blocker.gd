@@ -7,6 +7,8 @@ const PLAYER_ACTIONS: Array[String] = ["move_up", "move_down", "move_left", "mov
 var _saved_events: Dictionary = {}
 
 func _ready() -> void:
+	# Godot 内置右键菜单默认 16px，这里让它跟随本控件的字号（见 TextContextMenu）
+	TextContextMenu.apply(self)
 	focus_entered.connect(_block)
 	focus_exited.connect(_restore)
 	tree_exiting.connect(_restore)
