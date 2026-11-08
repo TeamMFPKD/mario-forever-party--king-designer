@@ -52,7 +52,7 @@
 [ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="116_hfb1t"]
 [ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/goal_placement_hint/hint_if_there_is_no_goal.gd" id="117_io63s"]
 [ext_resource type="Script" path="res://script/multiplayer/3_edit_room/edit_ready_button.gd" id="121_editready"]
-[ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/ui/new_bottom.png" id="122_readytex"]
+[ext_resource type="Script" path="res://script/multiplayer/3_edit_room/ready_burst.gd" id="123_burst"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -185,21 +185,6 @@ load_path = "res://.godot/imported/triangle_blocks_smb2.png-bab10f3935febdf4b4b9
 atlas = SubResource("CompressedTexture2D_gotbk")
 region = Rect2(96, 32, 32, 32)
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_normal"]
-texture = ExtResource("122_readytex")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_hover"]
-texture = ExtResource("122_readytex")
-modulate_color = Color(1.1, 1.1, 1.1, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_pressed"]
-texture = ExtResource("122_readytex")
-modulate_color = Color(0.8, 0.8, 0.8, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_disabled"]
-texture = ExtResource("122_readytex")
-modulate_color = Color(0.65, 0.65, 0.65, 0.6)
-
 [node name="Room" instance=ExtResource("1_base")]
 
 [node name="GameRoomSize" parent="." groups=["game_room_size"]]
@@ -264,18 +249,28 @@ layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 13
 focus_mode = 0
+flat = true
 theme = ExtResource("6_io5w1")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0.12, 0.12, 0.12, 1)
 theme_override_colors/font_disabled_color = Color(0.2, 0.2, 0.2, 0.85)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxTexture_ready_normal")
-theme_override_styles/hover = SubResource("StyleBoxTexture_ready_hover")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_ready_pressed")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ready_disabled")
+theme_override_font_sizes/font_size = 22
 text = "制作完毕！（0/0）"
 script = ExtResource("121_editready")
+
+[node name="Burst" type="Control" parent="GameRoomSize/SaveLoad/VBoxContainer/ReadyButton" index="0"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("123_burst")
 
 [node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="2" unique_id=578186261 node_paths=PackedStringArray("level_data_node")]
 script = ExtResource("3_s2wk4")

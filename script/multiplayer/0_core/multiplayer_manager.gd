@@ -10,6 +10,9 @@ signal game_in_progress_hint
 
 signal timeout_save
 
+## 所有玩家都完成关卡编辑（编辑房间按下“准备完毕”），可提前结束倒计时
+signal edit_all_ready
+
 signal result_updated
 
 signal play_sound_joined
@@ -67,6 +70,8 @@ var is_in_game: bool = false:
 		current_level_count = 0
 		total_levels = 0
 		level_results.clear()
+		for p: Dictionary in players:
+			p.is_ready_to_finish = false
 		var game_mode_singleton: GameMode = GameModeSingleton
 		game_mode_singleton.game_mode = GameMode.GameModeType.EDIT
 
@@ -86,6 +91,7 @@ var player: Dictionary = {
 	"id": "invalid",
 	"name": "invalid",
 	"is_ready_to_start": false,
+	"is_ready_to_finish": false,
 	"level_file_name": "invalid",
 	"level_data": "invalid",
 	"ready": false,
@@ -229,6 +235,8 @@ func _on_peer_disconnected(id: int) -> void:
 		# 通知其他客户端更新玩家列表
 		if players.size() > 0:
 			sync_players_list.rpc(players)
+		# 掉线的是唯一还没完成编辑的玩家时，剩余玩家可以立刻开始
+		_check_all_edit_ready()
 
 # 服务器通知所有客户端退出房间
 @rpc("authority", "call_local")
@@ -527,6 +535,7 @@ func restore_origin_player_data() -> void:
 		p.level_file_name = "invalid"
 		p.level_data = "invalid"
 		p.is_ready_to_start = false
+		p.is_ready_to_finish = false
 		p.ready = false
 		p.reach_end = false
 		p.level_cause_pass = 0
@@ -537,6 +546,7 @@ func restore_origin_player_data() -> void:
 	player.level_file_name = "invalid"
 	player.level_data = "invalid"
 	player.is_ready_to_start = false
+	player.is_ready_to_finish = false
 	player.ready = false
 	player.reach_end = false
 	player.level_cause_pass = 0
@@ -568,6 +578,33 @@ func get_ready(p_id: int, is_ready: bool) -> void:
 				Log.i("玩家 %s 未就绪" % [format_player(p.name, p.id)])
 			sync_players_list.rpc(players)
 			break
+
+## 编辑房间：某个玩家按下“准备完毕”（本局编辑器时间结束前的提前量）
+@rpc("any_peer", "call_local")
+func set_edit_ready(p_id: int, is_ready: bool) -> void:
+	if not multiplayer.is_server():
+		return
+	for p: Dictionary in players:
+		if p.id == p_id:
+			p.is_ready_to_finish = is_ready
+			if is_ready:
+				Log.i("玩家 %s 已完成关卡编辑" % [format_player(p.name, p.id)])
+			else:
+				Log.i("玩家 %s 取消了完成编辑状态" % [format_player(p.name, p.id)])
+			sync_players_list.rpc(players)
+			break
+	_check_all_edit_ready()
+
+## 仅主机有效：所有玩家都完成编辑时通知提前结束倒计时
+func _check_all_edit_ready() -> void:
+	if not multiplayer.is_server() or not is_in_game or players.is_empty():
+		return
+	for p: Dictionary in players:
+		var player_finished: bool = p.get("is_ready_to_finish", false)
+		if not player_finished:
+			return
+	Log.i("所有玩家都已完成关卡编辑，提前结束倒计时。")
+	edit_all_ready.emit()
 
 @rpc("any_peer", "call_local", "reliable", 10)
 func send_message(p_id: int, unique_id: String, msg: String) -> void:
