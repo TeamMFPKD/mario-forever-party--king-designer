@@ -148,6 +148,17 @@ func handle_drag_event(position: Vector2) -> void:
 
 # 公共方法 - 其他脚本可以调用的接口
 
+## 鼠标是否还在游戏视口内（桌面端悬停预览用）
+## 视口外的鼠标事件不会更新坐标，预览需要据此隐藏，避免停在边缘。
+static func is_pointer_inside_game_viewport(viewport: Viewport) -> bool:
+	if viewport == null:
+		return false
+	var container: Node = viewport.get_parent()
+	if not (container is Control):
+		return true
+	var container_control: Control = container
+	return Rect2(Vector2.ZERO, container_control.size).has_point(container_control.get_local_mouse_position())
+
 ## 检查是否正在点击
 func is_input_active() -> bool:
 	return is_clicking

@@ -9,6 +9,17 @@ var brush_mode: bool = true # true for drawing, false for erasing
 var drawing_enabled: bool = true
 var custom_atlas_coords: Vector2i = Vector2i(-1, -1) # 自定义图块坐标，默认为(-1,-1)表示使用默认
 
+# 地形笔刷预览（仅桌面端：鼠标悬停的格子上显示半透明图块）
+const PREVIEW_ALPHA: float = 0.5
+const PREVIEW_Z_INDEX: int = 10
+const PREVIEW_NONE_CELL: Vector2i = Vector2i(-99999, -99999)
+# InputHandler 用这个坐标表示“事件不在游戏视口内”
+const INVALID_INPUT_POSITION: Vector2 = Vector2(-9999.0, -9999.0)
+
+var _input_handler: InputHandler = null
+var _preview_layer: TileMapLayer = null
+var _preview_cell: Vector2i = PREVIEW_NONE_CELL
+
 func _ready() -> void:
 	# 延迟设置输入处理器，避免竞争条件
 	call_deferred("setup_input_handler")
@@ -56,9 +67,110 @@ func setup_input_handler() -> void:
 			input_handler.input_released.connect(_on_input_released)
 		if not input_handler.input_dragged.is_connected(_on_input_dragged):
 			input_handler.input_dragged.connect(_on_input_dragged)
+		_input_handler = input_handler
 		Log.i("TileMapDraw: InputHandler signals connected successfully")
 	else:
 		Log.i("TileMapDraw: Error: Failed to find or create InputHandler")
+
+# ---------------------------------------------------------------------------
+# 地形笔刷预览（仅桌面端）
+# 鼠标悬停的格子上显示将要放置的图块；地形使用自动连接时，
+# 复制 3x3 邻域后交给引擎复算，预览与实际放下的图块一致。
+# ---------------------------------------------------------------------------
+func _process(_delta: float) -> void:
+	var game_mode_node: GameMode = GameModeSingleton
+	if game_mode_node.game_mode != GameMode.GameModeType.EDIT:
+		_hide_preview()
+		return
+	if not PlatformUtils.is_desktop_platform():
+		return
+	if not drawing_enabled or not brush_mode or tile_map == null or tile_map.tile_set == null:
+		_hide_preview()
+		return
+	if not InputHandler.is_pointer_inside_game_viewport(get_viewport()):
+		_hide_preview()
+		return
+
+	var hover_position: Vector2 = INVALID_INPUT_POSITION
+	if _input_handler:
+		hover_position = _input_handler.current_position
+	if hover_position == INVALID_INPUT_POSITION:
+		_hide_preview()
+		return
+
+	var cell_size: Vector2i = tile_map.tile_set.tile_size
+	var local_pos: Vector2 = to_local(hover_position)
+	var cell: Vector2i = Vector2i(floori(local_pos.x / cell_size.x), floori(local_pos.y / cell_size.y))
+
+	# 已经有图块的格子不会再放图块，不显示预览
+	if tile_map.get_cell_source_id(cell) != -1:
+		_hide_preview()
+		return
+
+	var preview: TileMapLayer = _get_preview_layer()
+	if preview.tile_set != tile_map.tile_set:
+		preview.tile_set = tile_map.tile_set
+		_preview_cell = PREVIEW_NONE_CELL
+
+	if cell == _preview_cell and preview.visible:
+		return
+
+	_preview_cell = cell
+	_refresh_preview_cell(cell)
+	preview.visible = true
+
+func _get_preview_layer() -> TileMapLayer:
+	if _preview_layer != null and is_instance_valid(_preview_layer):
+		return _preview_layer
+
+	_preview_layer = TileMapLayer.new()
+	_preview_layer.name = "TilePlacementPreview"
+	_preview_layer.z_index = PREVIEW_Z_INDEX
+	_preview_layer.z_as_relative = false
+	_preview_layer.modulate = Color(1.0, 1.0, 1.0, PREVIEW_ALPHA)
+	_preview_layer.process_mode = Node.PROCESS_MODE_DISABLED
+	# 预览格子逐帧瞬移，不参与物理插值，避免拖影
+	_preview_layer.physics_interpolation_mode = CanvasItem.PHYSICS_INTERPOLATION_MODE_OFF
+	_preview_layer.visible = false
+	add_child(_preview_layer)
+	return _preview_layer
+
+func _hide_preview() -> void:
+	if _preview_layer != null and is_instance_valid(_preview_layer):
+		_preview_layer.visible = false
+
+# 计算并显示悬停格子的预览图块：有自定义图块时直接使用；
+# 否则用 3x3 邻域复算地形自动连接结果，只保留该格。
+func _refresh_preview_cell(cell: Vector2i) -> void:
+	if tile_map == null or tile_map.tile_set == null:
+		return
+	var preview: TileMapLayer = _get_preview_layer()
+	if preview.tile_set != tile_map.tile_set:
+		preview.tile_set = tile_map.tile_set
+	preview.clear()
+
+	if custom_atlas_coords != Vector2i(-1, -1):
+		preview.set_cell(cell, 0, custom_atlas_coords)
+		preview.reset_physics_interpolation()
+		return
+
+	for dx: int in range(-1, 2):
+		for dy: int in range(-1, 2):
+			var neighbor: Vector2i = cell + Vector2i(dx, dy)
+			var neighbor_source: int = tile_map.get_cell_source_id(neighbor)
+			if neighbor_source == -1:
+				continue
+			preview.set_cell(neighbor, neighbor_source, tile_map.get_cell_atlas_coords(neighbor), tile_map.get_cell_alternative_tile(neighbor))
+
+	preview.set_cells_terrain_connect([cell], 0, 0)
+	var source_id: int = preview.get_cell_source_id(cell)
+	var atlas_coords: Vector2i = preview.get_cell_atlas_coords(cell)
+	var alternative: int = preview.get_cell_alternative_tile(cell)
+
+	preview.clear()
+	if source_id != -1:
+		preview.set_cell(cell, source_id, atlas_coords, alternative)
+	preview.reset_physics_interpolation()
 
 func _on_input_clicked(input_pos: Vector2) -> void:
 	if drawing_enabled and tile_map:

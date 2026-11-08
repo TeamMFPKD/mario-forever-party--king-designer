@@ -27,6 +27,20 @@ var _drag_start_pos: Vector2 = Vector2.ZERO
 var _drag_original_pos: Vector2 = Vector2.ZERO
 var _is_dragging: bool = false
 
+# 放置预览相关变量（仅桌面端：鼠标悬停时显示待放置物件的半透明预览）
+# 移动端没有鼠标悬停，不创建预览。
+const PREVIEW_ALPHA: float = 0.55
+const PREVIEW_Z_INDEX: int = 10
+const PREVIEW_MODULATE: Color = Color(1.0, 1.0, 1.0, PREVIEW_ALPHA)
+const PREVIEW_NONE_GRID: Vector2 = Vector2(-99999.0, -99999.0)
+# InputHandler 用这个坐标表示“事件不在游戏视口内”
+const INVALID_INPUT_POSITION: Vector2 = Vector2(-9999.0, -9999.0)
+
+var _input_handler: InputHandler = null
+var _preview_root: Node2D = null
+var _preview_nodes: Array[Node2D] = []
+var _preview_grid_position: Vector2 = PREVIEW_NONE_GRID
+
 func _ready() -> void:
 	# 确保有输入处理器
 	setup_input_handler()
@@ -104,9 +118,148 @@ func setup_input_handler() -> void:
 		# 新增：连接拖拽信号
 		if not input_handler.input_dragged.is_connected(_on_input_dragged):
 			input_handler.input_dragged.connect(_on_input_dragged)
+		_input_handler = input_handler
 		Log.i("ObjectMapLayer", "InputHandler signals connected successfully")
 	else:
 		Log.i("ObjectMapLayer", "Error: Failed to find or create InputHandler")
+
+# ---------------------------------------------------------------------------
+# 放置预览（仅桌面端）
+# 选中物件后，鼠标悬停处显示半透明预览，方便在落点前确认位置。
+# 预览节点不参与放置/保存/碰撞，切换物件或退出放置模式后销毁。
+# ---------------------------------------------------------------------------
+func _process(_delta: float) -> void:
+	if _preview_nodes.is_empty():
+		return
+
+	var game_mode_node: GameMode = GameModeSingleton
+	if game_mode_node.game_mode != GameMode.GameModeType.EDIT:
+		_set_preview_visible(false)
+		return
+
+	if not drawing_enabled or current_object_name == "" or _is_dragging:
+		_set_preview_visible(false)
+		return
+
+	if not _is_pointer_inside_level_viewport():
+		_set_preview_visible(false)
+		return
+
+	var hover_position: Vector2 = INVALID_INPUT_POSITION
+	if _input_handler:
+		hover_position = _input_handler.current_position
+	if hover_position == INVALID_INPUT_POSITION:
+		_set_preview_visible(false)
+		return
+
+	var grid_position: Vector2 = align_to_grid(hover_position)
+	if grid_position != _preview_grid_position:
+		_preview_grid_position = grid_position
+		_update_preview_positions(grid_position)
+
+	_set_preview_visible(true)
+
+# 鼠标是否还在游戏视口内（视口外的坐标不会更新，避免预览停在边缘）
+func _is_pointer_inside_level_viewport() -> bool:
+	return InputHandler.is_pointer_inside_game_viewport(get_viewport())
+
+# 按当前选中的物件创建预览实例（门会成对显示）
+func _create_placement_preview(object_name: String) -> void:
+	if not PlatformUtils.is_desktop_platform():
+		return
+
+	_clear_placement_preview()
+
+	if object_name == "":
+		return
+	var entry: ObjectDatabaseEntry = find_object_by_name(object_name)
+	if not entry or not entry.object_scene:
+		return
+
+	var preview_root: Node2D = _get_preview_root()
+	var preview_count: int = 1
+	if object_name == "door" or object_name == "door_locked":
+		preview_count = 2
+
+	for i: int in range(preview_count):
+		var scene_instance: Node = entry.object_scene.instantiate()
+		if not (scene_instance is Node2D):
+			scene_instance.queue_free()
+			continue
+		var scene_2d: Node2D = scene_instance
+		_disable_preview_interaction(scene_2d)
+		preview_root.add_child(scene_2d)
+		_preview_nodes.append(scene_2d)
+
+	_preview_grid_position = PREVIEW_NONE_GRID
+	preview_root.modulate = PREVIEW_MODULATE
+	preview_root.visible = false
+
+# 预览容器：抬高绘制层级，避免被已放置物件/地形遮住
+func _get_preview_root() -> Node2D:
+	if _preview_root != null and is_instance_valid(_preview_root):
+		return _preview_root
+
+	_preview_root = Node2D.new()
+	_preview_root.name = "PlacementPreview"
+	_preview_root.z_index = PREVIEW_Z_INDEX
+	_preview_root.z_as_relative = false
+	_preview_root.process_mode = Node.PROCESS_MODE_DISABLED
+	# 鼠标跟随是逐帧瞬移，不能参与物理插值，否则会拖影/滞后
+	_preview_root.physics_interpolation_mode = CanvasItem.PHYSICS_INTERPOLATION_MODE_OFF
+	_preview_root.visible = false
+	add_child(_preview_root)
+	return _preview_root
+
+# 销毁当前预览实例（只保留容器，下次选中物件时复用）
+func _clear_placement_preview() -> void:
+	for preview_node: Node2D in _preview_nodes:
+		if is_instance_valid(preview_node):
+			preview_node.visible = false
+			preview_node.queue_free()
+	_preview_nodes.clear()
+	_preview_grid_position = PREVIEW_NONE_GRID
+
+	if _preview_root != null and is_instance_valid(_preview_root):
+		_preview_root.visible = false
+
+# 预览实例只做显示：停掉处理逻辑、禁用碰撞，避免影响编辑器
+func _disable_preview_interaction(node: Node) -> void:
+	node.process_mode = Node.PROCESS_MODE_DISABLED
+
+	if node is CollisionObject2D:
+		var collision_object: CollisionObject2D = node
+		collision_object.collision_layer = 0
+		collision_object.collision_mask = 0
+		if collision_object is Area2D:
+			var area: Area2D = collision_object
+			area.monitoring = false
+			area.monitorable = false
+	elif node is CollisionShape2D:
+		var collision_shape: CollisionShape2D = node
+		collision_shape.disabled = true
+
+	for child: Node in node.get_children():
+		_disable_preview_interaction(child)
+
+# 把预览摆到网格位置（门会同时显示配对位置）
+func _update_preview_positions(grid_position: Vector2) -> void:
+	var preview_positions: Array[Vector2] = [grid_position]
+	if current_object_name == "door" or current_object_name == "door_locked":
+		preview_positions.append(_find_door_pair_position(grid_position))
+
+	for i: int in range(_preview_nodes.size()):
+		var preview_node: Node2D = _preview_nodes[i]
+		if i < preview_positions.size():
+			preview_node.global_position = preview_positions[i]
+			preview_node.reset_physics_interpolation()
+			preview_node.visible = true
+		else:
+			preview_node.visible = false
+
+func _set_preview_visible(value: bool) -> void:
+	if _preview_root != null and is_instance_valid(_preview_root):
+		_preview_root.visible = value
 
 func _update_drag(world_pos: Vector2) -> void:
 	if not _is_dragging or _dragging_object.is_empty():
@@ -370,6 +523,7 @@ func start_placing_object(object_name: String) -> void:
 		current_object_name = object_name
 		is_placing = true
 		drawing_enabled = true
+		_create_placement_preview(object_name)
 		Log.i("ObjectMapLayer", ["开始放置对象: ", object_name])
 
 # 公共方法：停止放置对象
@@ -377,6 +531,7 @@ func stop_placing_object() -> void:
 	is_placing = false
 	drawing_enabled = false
 	current_object_name = ""
+	_clear_placement_preview()
 	Log.i("ObjectMapLayer", "停止放置对象")
 
 # 将位置对齐到32x32网格
