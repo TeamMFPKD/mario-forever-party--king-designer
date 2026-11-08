@@ -76,7 +76,7 @@ func _on_files_scanned(names: Array[String]) -> void:
 
 		add_sibling(level_list_line)
 
-		var texture_rect: TextureRect = level_list_line.get_node("UiMarginContainer/VBoxContainer/CaptureTextureRect")
+		var texture_rect: TextureRect = level_list_line.get_node("CoverRoot/CaptureTextureRect")
 		if texture_rect:
 			var setter: Node = texture_rect.get_node("CaptureTextureSetter")
 			if setter:
