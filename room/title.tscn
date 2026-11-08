@@ -47,6 +47,7 @@
 [ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="39_pwog8"]
 [ext_resource type="Texture2D" uid="uid://vwi8pqa2xavj" path="res://sprite/bonus/mushroom_big.png" id="40_pwog8"]
 [ext_resource type="PackedScene" path="res://object/multiplayer/avatar/avatar_selector.tscn" id="41_avatar"]
+[ext_resource type="Script" uid="uid://bfuqiopjih0j2" path="res://script/option/input_map_reset_button.gd" id="42_reset"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]
 atlas = ExtResource("37_yfoso")
@@ -1008,11 +1009,21 @@ text = "拍摄"
 [node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Photo" index="1" unique_id=1210628054]
 input_map_name = "photo"
 
-[node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=26128048 instance=ExtResource("2_w52fc")]
-custom_minimum_size = Vector2(450, 0)
+[node name="Buttons" type="HBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=26128049]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
+theme_override_constants/separation = 64
+
+[node name="ResetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons" unique_id=26128050 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+text = "重置按键"
+script = ExtResource("42_reset")
+
+[node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons" unique_id=26128048 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
 text = "返回主设置"
 
 [node name="ControlsPanelMobile" parent="GameRoomSize/Options" unique_id=1978154676 instance=ExtResource("4_i3lsm")]
@@ -1307,8 +1318,8 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/StaffButton/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/MainOptionButton/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
-[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons/MainOptionButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/DefaultLayoutButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_make_buttons_layout_default"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]

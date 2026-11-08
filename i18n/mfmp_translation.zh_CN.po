@@ -207,6 +207,9 @@ msgstr "虚拟按键布局"
 msgid "重置布局"
 msgstr "重置布局"
 
+msgid "重置按键"
+msgstr "重置按键"
+
 msgid "分辨率"
 msgstr "分辨率"
 

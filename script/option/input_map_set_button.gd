@@ -7,7 +7,12 @@ var is_waiting_for_input: bool = false
 const MAX_SLOTS: int = 3
 
 func _ready() -> void:
+    add_to_group("input_map_set_button")
     pressed.connect(_on_button_pressed)
+    _update_button_text()
+
+## 供“重置按键”按钮调用：重新读取配置/InputMap 后刷新显示
+func refresh_display() -> void:
     _update_button_text()
 
 func _on_button_pressed() -> void:

@@ -207,6 +207,9 @@ msgstr "ボタン配置"
 msgid "重置布局"
 msgstr "リセット"
 
+msgid "重置按键"
+msgstr "キーをリセット"
+
 msgid "分辨率"
 msgstr "解像度"
 

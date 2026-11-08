@@ -207,6 +207,9 @@ msgstr "Buttons Layout"
 msgid "重置布局"
 msgstr "Default"
 
+msgid "重置按键"
+msgstr "Reset Keys"
+
 msgid "分辨率"
 msgstr "Resolution"
 
