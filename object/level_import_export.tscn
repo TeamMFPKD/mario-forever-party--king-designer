@@ -54,9 +54,10 @@ position = Vector2(36, 36)
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("4_jm58v")
 
-[node name="ImportExportManager" type="Node" parent="." unique_id=1161052426 node_paths=PackedStringArray("hint_lable")]
+[node name="ImportExportManager" type="Node" parent="." unique_id=1161052426 node_paths=PackedStringArray("hint_lable", "export_mode_dialog")]
 script = ExtResource("5_dpuln")
 hint_lable = NodePath("../ImportExportHint/UiPanel/UiMarginContainer/VBoxContainer/UiLabel")
+export_mode_dialog = NodePath("../ExportModeDialog")
 
 [node name="ImportExportHint" parent="." unique_id=1342954559 instance=ExtResource("1_g823o")]
 visible = false
@@ -101,6 +102,75 @@ layout_mode = 2
 size_flags_vertical = 6
 text = "确认"
 
+[node name="ExportModeDialog" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="ExportModeDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="DialogPanel" type="PanelContainer" parent="ExportModeDialog/CenterContainer"]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="ExportModeDialog/CenterContainer/DialogPanel" instance=ExtResource("1_g823o")]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("9_bxv88")]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 56
+text = "选择导出模式"
+horizontal_alignment = 1
+
+[node name="AllWithLikedButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "导出所有关卡（含收藏）"
+
+[node name="LikedOnlyButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "仅导出收藏的关卡"
+
+[node name="AllOnlyButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "仅导出所有关卡"
+
+[node name="CancelButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "取消"
+
 [connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton" to="ImportExportManager" method="_on_import_button_pressed"]
 [connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton2" to="ImportExportManager" method="_on_export_button_pressed"]
 [connection signal="export_failed" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
@@ -108,3 +178,7 @@ text = "确认"
 [connection signal="import_failed" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
 [connection signal="import_succeeded" from="ImportExportManager" to="ImportExportHint/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="ImportExportHint/UiPanel/UiMarginContainer/VBoxContainer/UiButton" to="ImportExportHint/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/AllWithLikedButton" to="ImportExportManager" method="_on_export_mode_all_with_liked"]
+[connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/LikedOnlyButton" to="ImportExportManager" method="_on_export_mode_liked_only"]
+[connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/AllOnlyButton" to="ImportExportManager" method="_on_export_mode_all_only"]
+[connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/CancelButton" to="ImportExportManager" method="hide_export_mode_dialog"]

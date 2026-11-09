@@ -407,3 +407,24 @@ msgstr "显示"
 
 msgid "隐藏"
 msgstr "隐藏"
+
+msgid "选择导出模式"
+msgstr "选择导出模式"
+
+msgid "导出所有关卡（含收藏）"
+msgstr "导出所有关卡（含收藏）"
+
+msgid "仅导出收藏的关卡"
+msgstr "仅导出收藏的关卡"
+
+msgid "仅导出所有关卡"
+msgstr "仅导出所有关卡"
+
+msgid "取消"
+msgstr "取消"
+
+msgid "未找到历史关卡。"
+msgstr "未找到历史关卡。"
+
+msgid "未找到喜欢的关卡。"
+msgstr "未找到喜欢的关卡。"

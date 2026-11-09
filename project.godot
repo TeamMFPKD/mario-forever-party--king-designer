@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MF: MP"
-config/version="v20261108_2233"
+config/version="v20261109_2238"
 run/main_scene="uid://dcqf1c3m14b1f"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "GL Compatibility")
@@ -53,6 +53,7 @@ MpTestBoot="*res://script/debug/mp_test_boot.gd"
 Notice="*res://script/ui/notice_manager.gd"
 NoButtonFocus="*res://script/utils/button_focus_blocker.gd"
 Avatars="*res://script/multiplayer/avatar/avatar_library.gd"
+LikedCourses="*res://script/history/liked_courses/liked_courses_store.gd"
 
 [debug]
 

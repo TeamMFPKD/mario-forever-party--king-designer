@@ -407,3 +407,24 @@ msgstr "Show"
 
 msgid "隐藏"
 msgstr "Hide"
+
+msgid "选择导出模式"
+msgstr "Choose Export Mode"
+
+msgid "导出所有关卡（含收藏）"
+msgstr "Export All Levels (with Liked)"
+
+msgid "仅导出收藏的关卡"
+msgstr "Export Liked Levels Only"
+
+msgid "仅导出所有关卡"
+msgstr "Export All Levels Only"
+
+msgid "取消"
+msgstr "Cancel"
+
+msgid "未找到历史关卡。"
+msgstr "No history levels found."
+
+msgid "未找到喜欢的关卡。"
+msgstr "No liked levels found."

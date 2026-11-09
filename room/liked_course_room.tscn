@@ -104,10 +104,11 @@ size_flags_vertical = 3
 columns = 4
 script = ExtResource("8_deglc")
 
-[node name="LoadLikedCourses" type="Node" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/LikedCoursesList" unique_id=339807070 node_paths=PackedStringArray("scroll_container")]
+[node name="LoadLikedCourses" type="Node" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/LikedCoursesList" unique_id=339807070 node_paths=PackedStringArray("scroll_container", "no_file_hint_label")]
 script = ExtResource("4_8xdir")
 level_list_line_scene = ExtResource("5_7vfps")
 scroll_container = NodePath("../..")
+no_file_hint_label = NodePath("../../../../LoadingLabel")
 
 [node name="Back" parent="GameRoomSize" unique_id=2085501668 instance=ExtResource("4_hfxq8")]
 layout_mode = 1

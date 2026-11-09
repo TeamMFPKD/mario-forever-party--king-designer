@@ -19,5 +19,6 @@ func _delete_thread() -> void:
 				print("[FileDeleteHelper] 已删除: ", real_path)
 		else:
 			push_warning("[FileDeleteHelper] 文件不存在，跳过: %s" % path)
-	# 删完后回主线程清理自身
-	call_deferred("queue_free")
+	# 删完后回主线程清理自身；节点可能已随场景退出被释放，先校验
+	if is_instance_valid(self):
+		call_deferred("queue_free")

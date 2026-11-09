@@ -4,12 +4,12 @@ signal all_files_loaded
 
 @export var level_list_line_scene: PackedScene
 @export var scroll_container: ScrollContainer  # 在场景里把ScrollContainer拖进来
+@export var no_file_hint_label: Label
 
 @export var history_file_date_line_scene: PackedScene
 
 var file_names: Array[String] = []
 var load_thread: Thread
-var thread_done: bool = false
 
 var mutex: Mutex
 var should_exit: bool = false
@@ -21,53 +21,62 @@ const SCROLL_KEY: String = "v_scroll"
 
 func _ready() -> void:
 	scene_tree = get_tree()
-	mutex = Mutex.new()
+	if not OS.has_feature("web"):
+		mutex = Mutex.new()
 	if scroll_container:
 		scroll_container.visible = false  # 读取完成前隐藏
 	start_loading()
 
 func start_loading() -> void:
+	# Web 导出没有 Thread 支持，退回主线程扫描；
+	# 其它平台保持异步扫描，避免阻塞主线程。
+	if OS.has_feature("web"):
+		_on_files_scanned(_scan_files(false))
+		return
 	load_thread = Thread.new()
 	load_thread.start(_scan_files_thread)
 
 func _scan_files_thread() -> void:
-	var dir: DirAccess = DirAccess.open("user://")
-	if dir == null:
-		push_error("无法打开 user:// 目录")
-		return
-
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	var temp_names: Array[String] = []
-
-	while file_name != "":
-		mutex.lock()
-		var exit: bool = should_exit
-		mutex.unlock()
-		if exit:
-			dir.list_dir_end()
-			return
-
-		if not dir.current_is_dir() and file_name.ends_with(".lvl"):
-			temp_names.append(file_name)
-		file_name = dir.get_next()
-	dir.list_dir_end()
-
+	var names: Array[String] = _scan_files(true)
 	mutex.lock()
 	var exit: bool = should_exit
 	mutex.unlock()
 	if exit:
 		return
+	call_deferred_thread_group("_on_files_scanned", names)
 
-	call_deferred_thread_group("_on_files_scanned", temp_names)
+func _scan_files(check_exit: bool) -> Array[String]:
+	var result: Array[String] = []
+	var dir: DirAccess = DirAccess.open("user://")
+	if dir == null:
+		push_error("无法打开 user:// 目录")
+		return result
+
+	dir.list_dir_begin()
+	var file_name: String = dir.get_next()
+	while file_name != "":
+		if check_exit:
+			mutex.lock()
+			var exit: bool = should_exit
+			mutex.unlock()
+			if exit:
+				dir.list_dir_end()
+				return result
+		if not dir.current_is_dir() and file_name.ends_with(".lvl"):
+			result.append(file_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	return result
 
 func _on_files_scanned(names: Array[String]) -> void:
 	file_names = names
-	thread_done = true
-	load_thread.wait_to_finish()
+
+	if file_names.is_empty():
+		_show_no_file_hint("未找到历史关卡。")
+		return
 
 	var last_date: String = ""
-	
+
 	for i: int in range(file_names.size()):
 		# 从文件名中提取日期部分（假设文件名格式为：关卡名_YYYY-MM-DD.lvl）
 		var file_name: String = file_names[i]
@@ -104,6 +113,12 @@ func _on_files_scanned(names: Array[String]) -> void:
 	await scene_tree.process_frame  # 等visible生效、布局重算完毕
 	_restore_scroll()
 	emit_signal("all_files_loaded")
+
+func _show_no_file_hint(message: String) -> void:
+	if no_file_hint_label == null:
+		return
+	no_file_hint_label.text = tr(message)
+	no_file_hint_label.visible = true
 
 func _save_scroll() -> void:
 	if scroll_container == null:
@@ -150,9 +165,10 @@ func _extract_date_from_filename(filename: String) -> String:
 func _exit_tree() -> void:
 	_save_scroll()  # 离开场景时保存
 
+	if OS.has_feature("web") or mutex == null:
+		return
 	mutex.lock()
 	should_exit = true
 	mutex.unlock()
-
 	if load_thread and load_thread.is_started():
 		load_thread.wait_to_finish()
