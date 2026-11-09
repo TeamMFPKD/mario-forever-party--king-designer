@@ -70,6 +70,9 @@ func _bootstrap() -> void:
 		return
 	# 让 resolution_button 等 _ready 里的窗口操作先跑完，再覆盖窗口尺寸
 	await get_tree().process_frame
+	if not is_instance_valid(title):
+		Log.w("MPTEST", "title freed before bootstrap")
+		return
 	_apply_window(MpTest.get_value("--mp-win"))
 	_apply_pad(MpTest.get_value("--mp-pad"))
 	_override_edit_seconds(title)
@@ -112,13 +115,21 @@ func _start_editor_slots() -> void:
 	_apply_player_name(title, "test%d" % _slot_index)
 	var deadline: int = Time.get_ticks_msec() + int(SLOT_SETTLE_SECONDS * 1000.0)
 	while Time.get_ticks_msec() < deadline:
+		# 等待期间玩家可能已经离开标题界面，及时收手
+		if not is_instance_valid(title):
+			break
 		if _used_slot_count() >= SLOT_MAX:
 			break
 		await get_tree().create_timer(0.1).timeout
 	var used: int = _used_slot_count()
 	if used < 2:
 		Log.i("MPTEST", "editor slots=1, restore normal player name")
-		_apply_player_name(title, original_name)
+		if is_instance_valid(title):
+			_apply_player_name(title, original_name)
+		else:
+			# 标题界面已释放，无法改输入框；至少把会话里的名字恢复，避免残留 testN
+			MPManager.player_name = original_name
+			Log.w("MPTEST", "title freed during slot settle, restore player name without UI")
 		_release_editor_slot()
 		return
 	Log.i("MPTEST", "editor slots=%d slot=%d" % [used, _slot_index])
@@ -140,6 +151,9 @@ func _start_explicit_slot(slot_index: int) -> void:
 	if title == null:
 		return
 	await get_tree().process_frame
+	if not is_instance_valid(title):
+		Log.w("MPTEST", "title freed before explicit slot naming")
+		return
 	_apply_window(MpTest.get_value("--mp-win"))
 	_apply_pad(MpTest.get_value("--mp-pad"))
 	_override_edit_seconds(title)
@@ -185,7 +199,11 @@ func _release_editor_slot() -> void:
 	_slot_index = 0
 
 ## 把名字同时写进组织页和加入页的输入框，用户点哪个都带上 testN。
+## 注意：调用前必须保证 title 仍有效；已释放的 Node 传进函数会在参数检查阶段就报错。
 func _apply_player_name(title: Node, player_name: String) -> void:
+	if not is_instance_valid(title):
+		MPManager.player_name = player_name
+		return
 	var host_edit: LineEdit = title.get_node_or_null(HOST_PAGE + "/MfpkdPanel/UiMarginContainer/VBoxContainer/UiLineEdit2") as LineEdit
 	if host_edit != null:
 		host_edit.text = player_name
