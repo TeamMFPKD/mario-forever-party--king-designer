@@ -52,9 +52,42 @@
 [ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/goal_placement_hint/hint_if_there_is_no_goal.gd" id="117_io63s"]
 [ext_resource type="Script" uid="uid://dmn0tem2abusb" path="res://script/multiplayer/3_edit_room/edit_ready_button.gd" id="121_editready"]
 [ext_resource type="Script" uid="uid://kgtbk75sxucx" path="res://script/multiplayer/3_edit_room/ready_burst.gd" id="123_burst"]
+[ext_resource type="Texture2D" uid="uid://cexchs3e3fi05" path="res://sprite/ui/Cmn_CheckBtn_00--Cmn_CheckBtn_00-DrawingBtnLine_00^t.png" id="124_readybg"]
 [ext_resource type="Script" uid="uid://b8yk2psxgyimm" path="res://script/edit/command/history_buttons.gd" id="history_btn"]
 [ext_resource type="Texture2D" uid="uid://cs6en2pg2wn0c" path="res://sprite/ui/redo.svg" id="redo_svg"]
 [ext_resource type="Texture2D" uid="uid://cl5pau1nm5k4g" path="res://sprite/ui/undo.svg" id="undo_svg"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready"]
+texture = ExtResource("124_readybg")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(0.99, 0.899, 0.495, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_pressed"]
+texture = ExtResource("124_readybg")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(0.93, 0.82, 0.42, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_hover"]
+texture = ExtResource("124_readybg")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(1, 0.945, 0.68, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ready_done"]
+texture = ExtResource("124_readybg")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+modulate_color = Color(0.84, 0.84, 0.82, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
 atlas = ExtResource("40_yebna")
@@ -245,6 +278,7 @@ autowrap_mode = 3
 script = ExtResource("10_nkg8u")
 
 [node name="Burst" type="Control" parent="GameRoomSize/SaveLoad/VBoxContainer" index="4" unique_id=37632707]
+visible = false
 show_behind_parent = true
 custom_minimum_size = Vector2(0, 144)
 layout_mode = 2
@@ -252,14 +286,9 @@ mouse_filter = 2
 script = ExtResource("123_burst")
 fill_color = Color(0.99, 0.89925, 0.495, 1)
 
-[node name="ReadyButton" type="Button" parent="GameRoomSize/SaveLoad/VBoxContainer/Burst" index="0" unique_id=1916274385]
-custom_minimum_size = Vector2(260, 100)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ReadyButton" type="Button" parent="GameRoomSize/SaveLoad/VBoxContainer" index="5" unique_id=1916274385]
+custom_minimum_size = Vector2(260, 136)
+layout_mode = 2
 size_flags_horizontal = 13
 size_flags_vertical = 13
 focus_mode = 0
@@ -270,9 +299,12 @@ theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_disabled_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxTexture_ready")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_ready_pressed")
+theme_override_styles/hover = SubResource("StyleBoxTexture_ready_hover")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_ready_done")
 text = "制作完毕！（0/0）"
-flat = true
 script = ExtResource("121_editready")
 
 [node name="SaveLevel" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" parent_id_path=PackedInt32Array(968429229) index="2" unique_id=578186261 node_paths=PackedStringArray("level_data_node")]
