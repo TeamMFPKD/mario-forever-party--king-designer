@@ -85,3 +85,7 @@ tools/mp_test_logs/
 # Optional native WebRTC plugin (run tools/fetch_webrtc_native.ps1)
 addons/webrtc_native/
 tools/.webrtc_native_download/
+
+# GDExtension temp copies
+addons/godot_secp256k1/
+addons/webrtc_native/
