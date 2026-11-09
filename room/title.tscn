@@ -48,6 +48,7 @@
 [ext_resource type="Texture2D" uid="uid://vwi8pqa2xavj" path="res://sprite/bonus/mushroom_big.png" id="40_pwog8"]
 [ext_resource type="PackedScene" path="res://object/multiplayer/avatar/avatar_selector.tscn" id="41_avatar"]
 [ext_resource type="Script" uid="uid://bfuqiopjih0j2" path="res://script/option/input_map_reset_button.gd" id="42_reset"]
+[ext_resource type="Script" path="res://script/option/history_ghost_toggle.gd" id="43_ghost"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]
 atlas = ExtResource("37_yfoso")
@@ -752,6 +753,21 @@ size_flags_horizontal = 10
 theme_override_font_sizes/font_size = 35
 text = "1920 × 1080"
 script = ExtResource("30_01vp3")
+
+[node name="HistoryGhost" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=1900240345]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="HistoryGhostLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/HistoryGhost" unique_id=1900240346 instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "游玩记录中显示玩家幽灵"
+
+[node name="HistoryGhostButton" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/HistoryGhost" unique_id=1900240347 instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(270, 96)
+layout_mode = 2
+size_flags_horizontal = 10
+text = "显示"
+script = ExtResource("43_ghost")
 
 [node name="Staff" parent="GameRoomSize/Options/BasicPanel" unique_id=1510288836 instance=ExtResource("8_c2fru")]
 visible = false

@@ -38,6 +38,7 @@
 [ext_resource type="SpriteFrames" uid="uid://de7ppmn5laego" path="res://object/level/player/mario_big.tres" id="60_ani_big"]
 [ext_resource type="SpriteFrames" uid="uid://ew0hi7le0ntc" path="res://object/level/player/mario_bee.tres" id="60_ani_bee"]
 [ext_resource type="SpriteFrames" uid="uid://ynxlcn01a0xr" path="res://object/level/player/mario_cloud.tres" id="60_ani_cloud"]
+[ext_resource type="PackedScene" path="res://object/multiplayer/history_ghost_view.tscn" id="62_ghost"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ani_dead"]
 atlas = ExtResource("60_ani_dead_tex")
@@ -125,6 +126,8 @@ corner_dr_scene = ExtResource("49_k06ju")
 corner_dl_scene = ExtResource("50_k06ju")
 
 [node name="PinkCoinCanvasLayer" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="10" unique_id=338551298 instance=ExtResource("41_b1rav")]
+
+[node name="HistoryGhostView" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="11" instance=ExtResource("62_ghost")]
 
 [node name="RandomCapture" type="Node" parent="GameRoomSize/SubViewportContainer/SubViewport" index="1" unique_id=1870457232]
 process_mode = 3

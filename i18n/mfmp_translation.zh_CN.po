@@ -398,3 +398,12 @@ msgstr "表情与符号"
 
 msgid "正在发送消息中……"
 msgstr "正在发送消息中……"
+
+msgid "游玩记录中显示玩家幽灵"
+msgstr "游玩记录中显示玩家幽灵"
+
+msgid "显示"
+msgstr "显示"
+
+msgid "隐藏"
+msgstr "隐藏"

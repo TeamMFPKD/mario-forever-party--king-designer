@@ -26,6 +26,7 @@ var anis: Array[AnimatedSprite2D] = []
 var local_ani: AnimatedSprite2D
 var player_suit: PlayerSuit
 var player_hurt_and_die: PlayerHurtAndDie
+var history_ghost_view: HistoryGhostView
 
 var _send_accum: float = 0.0
 var _no_player_print_limit: int = 0
@@ -35,6 +36,7 @@ func _ready() -> void:
 	var game_mode_manager: GameMode = GameModeSingleton
 	if game_mode_manager.game_mode != GameMode.GameModeType.PLAY:
 		return
+	history_ghost_view = get_node_or_null("../HistoryGhostView") as HistoryGhostView
 	var multiplayer_count: int = MPManager.players.size() - 1
 	for _index: int in range(multiplayer_count):
 		var ani: AnimatedSprite2D = mp_ani_shadow_scene.instantiate() as AnimatedSprite2D
@@ -71,6 +73,19 @@ func _physics_process(delta: float) -> void:
 		return
 	_send_accum = 0.0
 
+	if history_ghost_view != null:
+		history_ghost_view.record_local(
+			player_suit.suit,
+			player_suit.power,
+			local_ani.animation,
+			local_ani.frame,
+			local_ani.flip_h,
+			player_hurt_and_die.is_dead,
+			local_ani.global_position,
+			local_ani.scale,
+			local_ani.global_rotation
+		)
+
 	send_ani_sprite_data.rpc(
 		MPManager.player.id,
 		MPManager.current_level_count,
@@ -104,6 +119,20 @@ func send_ani_sprite_data(
 		return
 	if not MPManager.registry.has_player(player_id):
 		return
+
+	if history_ghost_view != null:
+		history_ghost_view.record_remote(
+			player_id,
+			ani_pos,
+			suit,
+			power,
+			animation,
+			frame,
+			flip_h,
+			is_dead,
+			sprite_scale,
+			rotation
+		)
 
 	var target: AnimatedSprite2D = null
 	for ani: AnimatedSprite2D in anis:

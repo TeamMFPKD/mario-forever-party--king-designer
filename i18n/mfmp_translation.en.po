@@ -398,3 +398,12 @@ msgstr "Emoji & Symbols"
 
 msgid "正在发送消息中……"
 msgstr "Sending message..."
+
+msgid "游玩记录中显示玩家幽灵"
+msgstr "Show Player Ghosts in History"
+
+msgid "显示"
+msgstr "Show"
+
+msgid "隐藏"
+msgstr "Hide"

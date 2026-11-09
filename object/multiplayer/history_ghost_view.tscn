@@ -1,0 +1,41 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://script/history/history_ghost_view.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://bb3rl8fd2qhlq" path="res://object/multiplayer/multiplayer_player_shadow.tscn" id="2_shadow"]
+[ext_resource type="SpriteFrames" uid="uid://bs88b30blplhb" path="res://object/level/player/mario_small.tres" id="3_small"]
+[ext_resource type="SpriteFrames" uid="uid://b85b6tckcoib1" path="res://object/level/player/mario_super.tres" id="4_super"]
+[ext_resource type="SpriteFrames" uid="uid://d11sjnlbqehpu" path="res://object/level/player/mario_fireball.tres" id="5_fireball"]
+[ext_resource type="SpriteFrames" uid="uid://dg3ftfs0smrbt" path="res://object/level/player/mario_beetroot.tres" id="6_beetroot"]
+[ext_resource type="SpriteFrames" uid="uid://v113q2c6k865" path="res://object/level/player/mario_lui.tres" id="7_lui"]
+[ext_resource type="SpriteFrames" uid="uid://de7ppmn5laego" path="res://object/level/player/mario_big.tres" id="8_big"]
+[ext_resource type="SpriteFrames" uid="uid://ew0hi7le0ntc" path="res://object/level/player/mario_bee.tres" id="9_bee"]
+[ext_resource type="SpriteFrames" uid="uid://ynxlcn01a0xr" path="res://object/level/player/mario_cloud.tres" id="10_cloud"]
+[ext_resource type="Texture2D" uid="uid://bh4q2qvjkqdjk" path="res://sprite/player/mario_dead.png" id="11_dead_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dead"]
+atlas = ExtResource("11_dead_tex")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dead"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dead")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="HistoryGhostView" type="Node2D"]
+script = ExtResource("1_script")
+shadow_scene = ExtResource("2_shadow")
+player_dead_spritesframe = SubResource("SpriteFrames_dead")
+player_small_spritesframe = ExtResource("3_small")
+player_super_spritesframe = ExtResource("4_super")
+player_fireball_spritesframe = ExtResource("5_fireball")
+player_beetroot_spritesframe = ExtResource("6_beetroot")
+player_lui_spritesframe = ExtResource("7_lui")
+player_big_spritesframe = ExtResource("8_big")
+player_bee_spritesframe = ExtResource("9_bee")
+player_cloud_spritesframe = ExtResource("10_cloud")

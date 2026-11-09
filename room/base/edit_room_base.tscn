@@ -70,6 +70,7 @@
 [ext_resource type="PackedScene" uid="uid://cvw2x8ahbkaui" path="res://object/edit/clear_pipe/spawner_pipe_left_up.tscn" id="110_oia1o"]
 [ext_resource type="PackedScene" uid="uid://mucqxrefen4b" path="res://object/edit/clear_pipe/spawner_pipe_right_down.tscn" id="111_oia1o"]
 [ext_resource type="PackedScene" uid="uid://cqwwdqb0bhsh4" path="res://object/edit/clear_pipe/spawner_pipe_left_down.tscn" id="112_oia1o"]
+[ext_resource type="PackedScene" path="res://object/multiplayer/history_ghost_view.tscn" id="63_ghost"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p3gc"]
 atlas = ExtResource("39_io63s")
@@ -297,6 +298,8 @@ script = ExtResource("24_x0edr")
 
 [node name="ClearPipeLineDraw" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="12" unique_id=2076543210]
 script = ExtResource("101_oia1o")
+
+[node name="HistoryGhostView" parent="GameRoomSize/SubViewportContainer/SubViewport/Level" index="13" instance=ExtResource("63_ghost")]
 
 [node name="PipeBuilder" type="Node2D" parent="GameRoomSize/SubViewportContainer/SubViewport/Level/ClearPipeLineDraw" index="0" unique_id=2076543211]
 script = ExtResource("102_oia1o")

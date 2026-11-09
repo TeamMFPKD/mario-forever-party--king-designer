@@ -398,3 +398,12 @@ msgstr "絵文字・記号"
 
 msgid "正在发送消息中……"
 msgstr "メッセージを送信中……"
+
+msgid "游玩记录中显示玩家幽灵"
+msgstr "プレイ記録にプレイヤーのゴーストを表示"
+
+msgid "显示"
+msgstr "表示"
+
+msgid "隐藏"
+msgstr "非表示"
