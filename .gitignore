@@ -81,3 +81,7 @@ addons/ridiculous_coding/font.tres
 
 # Local multiplayer test logs
 tools/mp_test_logs/
+
+# Optional native WebRTC plugin (run tools/fetch_webrtc_native.ps1)
+addons/webrtc_native/
+tools/.webrtc_native_download/

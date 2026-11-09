@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MF: MP"
-config/version="v20260709_2153"
+config/version="v20261108_2233"
 run/main_scene="uid://dcqf1c3m14b1f"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "GL Compatibility")
@@ -207,6 +207,10 @@ locale/translations=PackedStringArray("res://i18n/mfmp_translation.en.po", "res:
 2d_physics/layer_9="Switch"
 2d_physics/layer_10="Door"
 2d_physics/layer_11="Triangle Block"
+
+[multiplayer]
+
+transport="enet"
 
 [physics]
 
