@@ -54,15 +54,15 @@ func _on_players_updated() -> void:
 
 		# 内置头像：取不到时回退到名字首字（与消息气泡一致）
 		var avatar_texture: Texture2D = Avatars.get_texture_by_id(profile.avatar_id)
-		var avatar_rect: TextureRect = player_list_line.get_node("PlayerAvatar/Texture") as TextureRect
+		var avatar_rect: TextureRect = player_list_line.get_node("PlayerAvatarRect/PlayerAvatar/Texture") as TextureRect
 		avatar_rect.texture = avatar_texture
 		avatar_rect.visible = avatar_texture != null
-		var avatar_initial: Label = player_list_line.get_node("PlayerAvatar/Initial") as Label
+		var avatar_initial: Label = player_list_line.get_node("PlayerAvatarRect/PlayerAvatar/Initial") as Label
 		avatar_initial.visible = avatar_texture == null
 		avatar_initial.text = profile.name.substr(0, 1)
 
 		# 头像外圈用玩家身份色，与消息气泡同一套分配（见 PlayerColor）
-		var avatar_ring: Panel = player_list_line.get_node("PlayerAvatar/Ring") as Panel
+		var avatar_ring: Panel = player_list_line.get_node("PlayerAvatarRect/PlayerAvatar/Ring") as Panel
 		AvatarRing.paint(avatar_ring, MPManager.player_color(profile.id))
 
 		var player_ready_node: Control = player_list_line.get_node("PlayerReady") as Control

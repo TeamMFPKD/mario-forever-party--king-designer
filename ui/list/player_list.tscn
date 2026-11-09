@@ -2,7 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
 [ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/ui/new_bottom.png" id="2_xwl44"]
-[ext_resource type="Shader" path="res://shader/avatar_circle.gdshader" id="3_shader"]
+[ext_resource type="Shader" uid="uid://bxy65noklqais" path="res://shader/avatar_circle.gdshader" id="3_shader"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avatar"]
 bg_color = Color(1, 1, 1, 1)
@@ -15,18 +22,9 @@ corner_radius_top_left = 24
 corner_radius_top_right = 24
 corner_radius_bottom_right = 24
 corner_radius_bottom_left = 24
-anti_aliasing = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_avatar"]
 shader = ExtResource("3_shader")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-anti_aliasing = true
 
 [node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
 custom_minimum_size = Vector2(550, 0)
@@ -37,13 +35,24 @@ layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "1"
 
-[node name="PlayerAvatar" type="Control" parent="." unique_id=1249000021]
-custom_minimum_size = Vector2(60, 60)
+[node name="PlayerAvatarRect" type="Control" parent="." unique_id=168139109]
+custom_minimum_size = Vector2(74, 60)
 layout_mode = 2
+
+[node name="PlayerAvatar" type="Control" parent="PlayerAvatarRect" unique_id=1249000021]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -30.0
+offset_right = 60.0
+offset_bottom = 30.0
+grow_vertical = 2
 size_flags_vertical = 4
 mouse_filter = 2
 
-[node name="Ring" type="Panel" parent="PlayerAvatar"]
+[node name="Ring" type="Panel" parent="PlayerAvatarRect/PlayerAvatar" unique_id=517345714]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -53,7 +62,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ring")
 
-[node name="Circle" type="Panel" parent="PlayerAvatar" unique_id=1249000022]
+[node name="Circle" type="Panel" parent="PlayerAvatarRect/PlayerAvatar" unique_id=1249000022]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,7 +76,8 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_avatar")
 
-[node name="Initial" type="Label" parent="PlayerAvatar" unique_id=1249000023]
+[node name="Initial" type="Label" parent="PlayerAvatarRect/PlayerAvatar" unique_id=1249000023]
+auto_translate_mode = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,15 +88,13 @@ offset_right = -6.0
 offset_bottom = -6.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.2, 0.2, 0.25, 1)
 theme_override_font_sizes/font_size = 22
 text = "?"
 horizontal_alignment = 1
 vertical_alignment = 1
-auto_translate_mode = 2
 
-[node name="Texture" type="TextureRect" parent="PlayerAvatar" unique_id=1249000024]
+[node name="Texture" type="TextureRect" parent="PlayerAvatarRect/PlayerAvatar" unique_id=1249000024]
 visible = false
 material = SubResource("ShaderMaterial_avatar")
 layout_mode = 1
