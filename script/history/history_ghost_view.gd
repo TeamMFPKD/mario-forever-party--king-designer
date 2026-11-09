@@ -3,14 +3,14 @@ extends Node2D
 
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument", "unsafe_method_access", "unsafe_property_access", "integer_division")
 
-## 历史记录里的联机幽灵。
+## 历史记录里的联机幽灵回放。
 ##
-## 录制：MultiplayerAniSpriteManager 每 12 Hz 发送/接收玩家状态时调用
-## record_local() / record_remote()，离开关卡时写入 user://ghosts/。
+## 录制在常驻的 GhostCacheService（MPManager.ghosts）里完成，因此玩家分散在
+## 不同关卡时也能缓存彼此在各自关卡的轨迹。
 ## 回放：HISTORY_PLAY 顺序播放，HISTORY_EDIT 循环播放；只显示非本地玩家，
 ## 纯视觉、不参与碰撞，也不写入关卡数据。
 ##
-## 采样字段与 MultiplayerAniSpriteManager.send_ani_sprite_data 一致：
+## 采样字段与 MpAniSpriteManager 的 send_ani_sprite_data 一致：
 ##   [t, x, y, suit, power, anim_index, frame, flip_h, scale_x, scale_y, rotation, dead]
 
 @export var shadow_scene: PackedScene
@@ -27,8 +27,6 @@ extends Node2D
 ## 在阴影贴图（默认 0.25 透明）基础上再乘的透明度。
 @export_range(0.0, 1.0, 0.01) var ghost_alpha: float = 1.0
 
-const MAX_PLAYERS: int = 8
-const MAX_SAMPLES_PER_PLAYER: int = 12000
 const SETTINGS_SECTION: String = "options"
 const SETTINGS_KEY: String = "history_ghost_enabled"
 
@@ -50,16 +48,11 @@ const SAMPLE_SCALE_Y: int = 9
 const SAMPLE_ROTATION: int = 10
 const SAMPLE_DEAD: int = 11
 
-var _recording: bool = false
 var _replaying: bool = false
 var _loop: bool = false
 var _level_path: String = ""
 var _elapsed: float = 0.0
-var _record_clock: float = 0.0
 var _duration: float = 0.0
-var _local_id: int = 0
-
-var _record_players: Dictionary = {}
 
 var _play_players: Array = []
 var _sprites: Array[AnimatedSprite2D] = []
@@ -71,8 +64,6 @@ var _last_positions: Array[Vector2] = []
 func _ready() -> void:
 	var mode: GameMode = GameModeSingleton
 	match mode.game_mode:
-		GameMode.GameModeType.PLAY:
-			call_deferred("_setup_recording")
 		GameMode.GameModeType.HISTORY_PLAY:
 			_setup_replay(false)
 		GameMode.GameModeType.HISTORY_EDIT:
@@ -82,9 +73,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if _recording:
-		_record_clock += delta
-		return
 	if not _replaying:
 		return
 	_elapsed += delta
@@ -96,147 +84,9 @@ func _physics_process(delta: float) -> void:
 	_update_sprites()
 
 
-func _exit_tree() -> void:
-	if not _recording:
-		return
-	var has_remote: bool = false
-	var players: Array = []
-	for value: Variant in _record_players.values():
-		var entry: Dictionary = value
-		if not bool(entry.get("local", false)):
-			has_remote = true
-		players.append(entry)
-	# 单人房间只录到自己，history 回放又隐藏自己，没有保存价值。
-	if not has_remote or players.is_empty():
-		return
-	HistoryGhostCache.save_ghost(_level_path, _record_clock, players)
-
-
-# ---------------------------------------------------------------------------
-# 录制（由 MultiplayerAniSpriteManager 调用）
-# ---------------------------------------------------------------------------
-
-func record_local(
-	suit: PlayerSuit.SuitType,
-	power: PlayerSuit.PowerupType,
-	animation: StringName,
-	frame: int,
-	flip_h: bool,
-	is_dead: bool,
-	position: Vector2,
-	sprite_scale: Vector2,
-	rotation: float
-) -> void:
-	if not _recording:
-		return
-	var player_name: String = str(MPManager.player_name)
-	if player_name.is_empty():
-		player_name = str(MPManager.player.name)
-	_record_sample(
-		_local_id, player_name, true,
-		suit, power, animation, frame, flip_h, is_dead,
-		position, sprite_scale, rotation
-	)
-
-
-func record_remote(
-	player_id: int,
-	position: Vector2,
-	suit: PlayerSuit.SuitType,
-	power: PlayerSuit.PowerupType,
-	animation: StringName,
-	frame: int,
-	flip_h: bool,
-	is_dead: bool,
-	sprite_scale: Vector2,
-	rotation: float
-) -> void:
-	if not _recording:
-		return
-	var player_name: String = ""
-	var profile: PlayerProfile = MPManager.registry.get_player(player_id)
-	if profile != null:
-		player_name = profile.name
-	if player_name.is_empty():
-		player_name = "Player %d" % player_id
-	_record_sample(
-		player_id, player_name, false,
-		suit, power, animation, frame, flip_h, is_dead,
-		position, sprite_scale, rotation
-	)
-
-
-func _record_sample(
-	player_id: int,
-	player_name: String,
-	is_local: bool,
-	suit: PlayerSuit.SuitType,
-	power: PlayerSuit.PowerupType,
-	animation: StringName,
-	frame: int,
-	flip_h: bool,
-	is_dead: bool,
-	position: Vector2,
-	sprite_scale: Vector2,
-	rotation: float
-) -> void:
-	var entry: Dictionary = _record_players.get(player_id, {})
-	if entry.is_empty():
-		if _record_players.size() >= MAX_PLAYERS:
-			return
-		entry = {
-			"id": player_id,
-			"name": player_name,
-			"local": is_local,
-			"animations": [],
-			"samples": [],
-		}
-		_record_players[player_id] = entry
-	var samples: Array = entry["samples"]
-	if samples.size() >= MAX_SAMPLES_PER_PLAYER:
-		return
-	var animations: Array = entry["animations"]
-	var anim_name: String = String(animation)
-	var anim_index: int = animations.find(anim_name)
-	if anim_index < 0:
-		if animations.size() >= 64:
-			anim_index = 0
-		else:
-			animations.append(anim_name)
-			anim_index = animations.size() - 1
-	samples.append([
-		snappedf(_record_clock, 0.01),
-		snappedf(position.x, 0.1),
-		snappedf(position.y, 0.1),
-		int(suit),
-		int(power),
-		anim_index,
-		frame,
-		flip_h,
-		snappedf(sprite_scale.x, 0.001),
-		snappedf(sprite_scale.y, 0.001),
-		snappedf(rotation, 0.001),
-		is_dead,
-	])
-
-
 # ---------------------------------------------------------------------------
 # 回放
 # ---------------------------------------------------------------------------
-
-func _setup_recording() -> void:
-	if shadow_scene == null:
-		return
-	var level_path: String = _current_play_level_path()
-	if level_path.is_empty():
-		set_physics_process(false)
-		return
-	_level_path = level_path
-	_local_id = int(MPManager.player.id)
-	_record_players.clear()
-	_record_clock = 0.0
-	_recording = true
-
 
 func _setup_replay(loop_mode: bool) -> void:
 	if shadow_scene == null or not _is_enabled_in_config():
@@ -399,14 +249,6 @@ func _frames_for(suit: int, power: int, dead: bool) -> SpriteFrames:
 # ---------------------------------------------------------------------------
 # 路径与设置
 # ---------------------------------------------------------------------------
-
-func _current_play_level_path() -> String:
-	var levels: Array[String] = MPManager.random_levels
-	if levels.is_empty():
-		return ""
-	var index: int = clampi(MPManager.current_level_count, 0, levels.size() - 1)
-	return levels[index]
-
 
 func _history_level_path() -> String:
 	var setter: Node = get_node_or_null("/root/LevelPathSet")

@@ -1,11 +1,14 @@
 extends Node2D
 
+class_name MpAniSpriteManager
+
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
 
 ## 远端玩家动画同步（游玩场景内自包含）。
 ##
-## 发送频率从“每个物理帧”降到 12 Hz；RPC 仍走 unreliable_ordered 通道 1。
-## 套装贴图配置也从 MultiplayerManager 搬到这里，网络门面不再持有表现资源。
+## 发送频率从“每个物理帧”降到 12 Hz；RPC 走 GhostCacheService
+## （常驻 MPManager，跨关也能录制幽灵）。套装贴图配置也从
+## MultiplayerManager 搬到这里，网络门面不再持有表现资源。
 
 @export var mp_ani_shadow_scene: PackedScene
 
@@ -26,7 +29,6 @@ var anis: Array[AnimatedSprite2D] = []
 var local_ani: AnimatedSprite2D
 var player_suit: PlayerSuit
 var player_hurt_and_die: PlayerHurtAndDie
-var history_ghost_view: HistoryGhostView
 
 var _send_accum: float = 0.0
 var _no_player_print_limit: int = 0
@@ -36,7 +38,8 @@ func _ready() -> void:
 	var game_mode_manager: GameMode = GameModeSingleton
 	if game_mode_manager.game_mode != GameMode.GameModeType.PLAY:
 		return
-	history_ghost_view = get_node_or_null("../HistoryGhostView") as HistoryGhostView
+	if MPManager.ghosts != null:
+		MPManager.ghosts.attach_manager(self)
 	var multiplayer_count: int = MPManager.players.size() - 1
 	for _index: int in range(multiplayer_count):
 		var ani: AnimatedSprite2D = mp_ani_shadow_scene.instantiate() as AnimatedSprite2D
@@ -73,8 +76,8 @@ func _physics_process(delta: float) -> void:
 		return
 	_send_accum = 0.0
 
-	if history_ghost_view != null:
-		history_ghost_view.record_local(
+	if MPManager.ghosts != null:
+		MPManager.ghosts.record_local(
 			player_suit.suit,
 			player_suit.power,
 			local_ani.animation,
@@ -86,25 +89,30 @@ func _physics_process(delta: float) -> void:
 			local_ani.global_rotation
 		)
 
-	send_ani_sprite_data.rpc(
-		MPManager.player.id,
-		MPManager.current_level_count,
-		local_ani.global_position,
-		player_suit.suit,
-		player_suit.power,
-		local_ani.animation,
-		local_ani.frame,
-		local_ani.flip_h,
-		player_hurt_and_die.is_dead,
-		local_ani.scale,
-		local_ani.global_rotation
-	)
+	if MPManager.ghosts != null:
+		MPManager.ghosts.send_ani_sprite_data.rpc(
+			MPManager.player.id,
+			MPManager.current_level_count,
+			local_ani.global_position,
+			player_suit.suit,
+			player_suit.power,
+			local_ani.animation,
+			local_ani.frame,
+			local_ani.flip_h,
+			player_hurt_and_die.is_dead,
+			local_ani.scale,
+			local_ani.global_rotation
+		)
 
 
-@rpc("any_peer", "call_remote", "unreliable_ordered", 1)
-func send_ani_sprite_data(
+func _exit_tree() -> void:
+	if is_instance_valid(MPManager) and MPManager.ghosts != null:
+		MPManager.ghosts.detach_manager(self)
+
+
+## 由 GhostCacheService 在“发送端与本机在同一关卡”时调用。
+func apply_remote_state(
 	player_id: int,
-	current_level: int,
 	ani_pos: Vector2,
 	suit: PlayerSuit.SuitType,
 	power: PlayerSuit.PowerupType,
@@ -115,25 +123,6 @@ func send_ani_sprite_data(
 	sprite_scale: Vector2,
 	rotation: float
 ) -> void:
-	if MPManager.current_level_count != current_level:
-		return
-	if not MPManager.registry.has_player(player_id):
-		return
-
-	if history_ghost_view != null:
-		history_ghost_view.record_remote(
-			player_id,
-			ani_pos,
-			suit,
-			power,
-			animation,
-			frame,
-			flip_h,
-			is_dead,
-			sprite_scale,
-			rotation
-		)
-
 	var target: AnimatedSprite2D = null
 	for ani: AnimatedSprite2D in anis:
 		if ani.has_meta("player_id") and int(ani.get_meta("player_id")) == player_id:

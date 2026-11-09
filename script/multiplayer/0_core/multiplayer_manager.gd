@@ -44,6 +44,7 @@ var lobby: LobbyService
 var levels: LevelTransferService
 var flow: MatchFlowService
 var chat: ChatService
+var ghosts: GhostCacheService
 
 var local_port: int = 8914
 var remote_port: int = 0
@@ -88,6 +89,10 @@ func _ready() -> void:
 	chat.name = "ChatService"
 	add_child(chat)
 
+	ghosts = GhostCacheService.new()
+	ghosts.name = "GhostCacheService"
+	add_child(ghosts)
+
 	device_id = get_device_tag()
 	player.device_id = device_id
 
@@ -95,6 +100,7 @@ func _ready() -> void:
 	levels.setup(self, registry, net, lobby)
 	flow.setup(self, registry, net, lobby)
 	chat.setup(self)
+	ghosts.setup(self)
 
 	registry.player_added.connect(_on_player_added)
 	registry.player_removed.connect(_on_player_removed)
