@@ -22,7 +22,7 @@ const PANEL_PADDING_BOTTOM: float = 40.0
 ## 选中的用语按钮：从点击到该消息展示结束一直保持黄色
 const HIGHLIGHT_MODULATE: Color = Color(1, 1, 0, 1)
 
-@export var open_button: Button
+@export var open_button: MessageOpenButton
 @export var panel_root: Control
 @export var backdrop: Panel
 @export var blocker: Control
@@ -52,7 +52,7 @@ var _panel_tween: Tween
 func _ready() -> void:
 	MPManager.players_updated.connect(_on_players_updated)
 	MPManager.messages_updated.connect(_on_messages_updated)
-	open_button.pressed.connect(toggle_panel)
+	open_button.open_requested.connect(toggle_panel)
 	blocker.gui_input.connect(_on_blocker_gui_input)
 	bubble_layer.resized.connect(_layout_bubbles)
 	_build_quick_buttons()
