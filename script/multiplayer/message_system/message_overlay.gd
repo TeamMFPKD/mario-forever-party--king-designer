@@ -2,9 +2,10 @@ extends CanvasLayer
 
 ## 《超级马力欧创作家 2》风格快捷消息：
 ## - 右侧按钮打开全屏面板，顶部 3×7 网格展示 21 条预置用语；
+## - 灰色底板贴住屏幕上边缘（左右上满宽），高度自动包住整个按钮网格并留白；
 ## - 面板打开期间拦截玩家输入，点击空白区域淡出；
 ## - 选中用语后关闭面板，左下角弹出「头像 + 玩家名 + 消息」气泡，约 2 秒后淡出；
-## - 发送后进入约 2 秒冷却，自己的气泡淡出前无法再次发送。
+## - 发送后进入约 2 秒冷却，冷却期间按钮不可按，面板上盖一层「正在发送消息中……」。
 
 ## 气泡弹出时发出，用于播放音效（音效素材待补充）。
 signal message_popped(player_name: String, quick_id: int)
@@ -15,13 +16,18 @@ const BUBBLE_MARGIN_LEFT: float = 24.0
 const BUBBLE_MARGIN_BOTTOM: float = 24.0
 const SEND_COOLDOWN: float = 2.3
 const PANEL_FADE_TIME: float = 0.15
+## 灰色底板相对按钮网格的上下外扩留白（左右留白写在场景偏移里）
+const PANEL_PADDING_TOP: float = 32.0
+const PANEL_PADDING_BOTTOM: float = 40.0
 ## 选中的用语按钮：从点击到该消息展示结束一直保持黄色
 const HIGHLIGHT_MODULATE: Color = Color(1, 1, 0, 1)
 
 @export var open_button: Button
 @export var panel_root: Control
+@export var backdrop: Panel
 @export var blocker: Control
 @export var quick_grid: GridContainer
+@export var sending_layer: Control
 @export var quick_button_scene: PackedScene
 @export var bubble_layer: Control
 @export var bubble_scene: PackedScene
@@ -50,8 +56,12 @@ func _ready() -> void:
 	blocker.gui_input.connect(_on_blocker_gui_input)
 	bubble_layer.resized.connect(_layout_bubbles)
 	_build_quick_buttons()
+	_fit_panel_to_grid()
+	if quick_grid:
+		quick_grid.minimum_size_changed.connect(_fit_panel_to_grid)
 	panel_root.visible = false
 	panel_root.modulate.a = 0.0
+	_set_sending_overlay(false)
 	_on_players_updated()
 
 
@@ -61,6 +71,7 @@ func _process(delta: float) -> void:
 	_cooldown_left = maxf(_cooldown_left - delta, 0.0)
 	if _cooldown_left <= 0.0:
 		_set_quick_buttons_disabled(false)
+		_set_sending_overlay(false)
 
 
 func _on_players_updated() -> void:
@@ -98,6 +109,8 @@ func open_panel() -> void:
 	_is_open = true
 	panel_root.visible = true
 	panel_root.modulate.a = 0.0
+	# 冷却期间重新打开面板：按钮是禁用状态，同时保留「正在发送消息中……」提示
+	_set_sending_overlay(_cooldown_left > 0.0)
 	if input_blocker:
 		input_blocker.block()
 	if panel_open_sound:
@@ -153,7 +166,22 @@ func _on_quick_button_pressed(quick_id: int, button: Button) -> void:
 	_highlighted_button = button
 	_cooldown_left = SEND_COOLDOWN
 	_set_quick_buttons_disabled(true)
+	_set_sending_overlay(true)
 	close_panel(false)
+
+
+## 冷却期间在按钮上盖一层「正在发送消息中……」；冷却结束或面板重开时同步刷新。
+func _set_sending_overlay(sending: bool) -> void:
+	if sending_layer:
+		sending_layer.visible = sending
+
+
+## 灰色底板高度跟随按钮网格：网格多一行，底板就跟着长高，始终包住全部按钮并留出边距。
+func _fit_panel_to_grid() -> void:
+	if not backdrop or not quick_grid:
+		return
+	var content_height: float = quick_grid.get_combined_minimum_size().y
+	backdrop.offset_bottom = PANEL_PADDING_TOP + content_height + PANEL_PADDING_BOTTOM
 
 
 func _on_quick_button_hover() -> void:

@@ -1,5 +1,6 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="11_theme"]
 [ext_resource type="Script" path="res://script/multiplayer/message_system/message_overlay.gd" id="1_overlay"]
 [ext_resource type="Script" path="res://script/multiplayer/message_system/player_input_blocker.gd" id="2_blocker"]
 [ext_resource type="PackedScene" path="res://object/multiplayer/message_system/quick_message_button.tscn" id="3_quick"]
@@ -12,19 +13,19 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_backdrop"]
 bg_color = Color(0.12, 0.12, 0.14, 0.42)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
 corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
 anti_aliasing = true
 
-[node name="MessageOverlay" type="CanvasLayer" node_paths=PackedStringArray("open_button", "panel_root", "blocker", "quick_grid", "bubble_layer", "input_blocker", "message_sound", "panel_open_sound", "panel_close_sound", "send_confirm_sound", "cursor_sound")]
+[node name="MessageOverlay" type="CanvasLayer" node_paths=PackedStringArray("open_button", "panel_root", "backdrop", "blocker", "quick_grid", "sending_layer", "bubble_layer", "input_blocker", "message_sound", "panel_open_sound", "panel_close_sound", "send_confirm_sound", "cursor_sound")]
 layer = 110
 script = ExtResource("1_overlay")
 open_button = NodePath("OpenButton")
 panel_root = NodePath("PanelRoot")
+backdrop = NodePath("PanelRoot/Backdrop")
 blocker = NodePath("PanelRoot/Blocker")
-quick_grid = NodePath("PanelRoot/TopArea/QuickGrid")
+quick_grid = NodePath("PanelRoot/Backdrop/QuickGrid")
+sending_layer = NodePath("PanelRoot/Backdrop/SendingLayer")
 bubble_layer = NodePath("BubbleLayer")
 input_blocker = NodePath("InputBlocker")
 message_sound = NodePath("MessageSound")
@@ -58,24 +59,29 @@ mouse_filter = 0
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 28.0
-offset_bottom = 600.0
+offset_bottom = 598.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_backdrop")
 
-[node name="TopArea" type="Control" parent="PanelRoot"]
+[node name="QuickGrid" type="GridContainer" parent="PanelRoot/Backdrop"]
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 48.0
-offset_top = 28.0
+offset_top = 32.0
 offset_right = -48.0
-offset_bottom = 600.0
+offset_bottom = -40.0
 grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 14
+columns = 4
 
-[node name="QuickGrid" type="GridContainer" parent="PanelRoot/TopArea"]
+[node name="SendingLayer" type="Control" parent="PanelRoot/Backdrop"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,9 +89,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/h_separation = 16
-theme_override_constants/v_separation = 14
-columns = 4
+
+[node name="SendingLabel" type="Label" parent="PanelRoot/Backdrop/SendingLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("11_theme")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 56
+text = "正在发送消息中……"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="BubbleLayer" type="Control" parent="."]
 layout_mode = 3

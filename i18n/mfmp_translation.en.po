@@ -395,3 +395,6 @@ msgstr "Insert Control Character"
 
 msgid "表情与符号"
 msgstr "Emoji & Symbols"
+
+msgid "正在发送消息中……"
+msgstr "Sending message..."

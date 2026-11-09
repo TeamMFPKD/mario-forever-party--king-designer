@@ -395,3 +395,6 @@ msgstr "插入控制字符"
 
 msgid "表情与符号"
 msgstr "表情与符号"
+
+msgid "正在发送消息中……"
+msgstr "正在发送消息中……"
