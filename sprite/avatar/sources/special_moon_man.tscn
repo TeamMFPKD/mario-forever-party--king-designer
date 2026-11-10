@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://ddmmfflj8b241"]
+
+[ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_source.gd" id="1_76ka4"]
+[ext_resource type="Texture2D" uid="uid://cph7g2uhwyon1" path="res://sprite/avatar/moon_man_lighted.jpg" id="2_76ka4"]
+
+[node name="Avatar_special_moon_man" type="Control" unique_id=223586562]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 144.0
+offset_bottom = 144.0
+script = ExtResource("1_76ka4")
+avatar_id = "special_moon_man"
+
+[node name="Background" type="ColorRect" parent="." unique_id=904209095]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 144.0
+
+[node name="Base" type="TextureRect" parent="." unique_id=400009926]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 144.0
+mouse_filter = 2
+texture = ExtResource("2_76ka4")
+expand_mode = 1
+stretch_mode = 5

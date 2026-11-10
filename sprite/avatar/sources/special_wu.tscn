@@ -1,25 +1,25 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cf1rh1nbud5aq"]
 
 [ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_source.gd" id="1_src"]
 [ext_resource type="Texture2D" uid="uid://ijucaae3nold" path="res://sprite/avatar/wu.png" id="2_tex"]
 
-[node name="Avatar_special_wu" type="Control"]
+[node name="Avatar_special_wu" type="Control" unique_id=223586562]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 144.0
 offset_bottom = 144.0
 script = ExtResource("1_src")
 avatar_id = "special_wu"
-canvas_size = 144
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=904209095]
+layout_mode = 0
 offset_right = 144.0
 offset_bottom = 144.0
-color = Color(1, 1, 1, 1)
 
-[node name="Base" type="TextureRect" parent="."]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 136.0
-offset_bottom = 136.0
+[node name="Base" type="TextureRect" parent="." unique_id=400009926]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 144.0
 mouse_filter = 2
 texture = ExtResource("2_tex")
 expand_mode = 1

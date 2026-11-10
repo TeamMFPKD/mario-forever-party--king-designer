@@ -1,25 +1,25 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://rd1u0lpm24ve"]
 
 [ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_source.gd" id="1_src"]
 [ext_resource type="Texture2D" uid="uid://da5kpxc5ut4fj" path="res://sprite/avatar/cp_lui.png" id="2_tex"]
 
-[node name="Avatar_special_cp_lui" type="Control"]
+[node name="Avatar_special_cp_lui" type="Control" unique_id=8827075]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 144.0
 offset_bottom = 144.0
 script = ExtResource("1_src")
 avatar_id = "special_cp_lui"
-canvas_size = 144
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1112206514]
+layout_mode = 0
 offset_right = 144.0
 offset_bottom = 144.0
-color = Color(1, 1, 1, 1)
 
-[node name="Base" type="TextureRect" parent="."]
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 136.0
-offset_bottom = 136.0
+[node name="Base" type="TextureRect" parent="." unique_id=977822503]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 144.0
 mouse_filter = 2
 texture = ExtResource("2_tex")
 expand_mode = 1

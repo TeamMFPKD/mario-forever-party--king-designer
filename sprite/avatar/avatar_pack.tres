@@ -17,11 +17,12 @@
 [ext_resource type="PackedScene" path="res://sprite/avatar/sources/piranha_green.tscn" id="14_piranha_green"]
 [ext_resource type="PackedScene" path="res://sprite/avatar/sources/spiny.tscn" id="15_spiny"]
 [ext_resource type="PackedScene" path="res://sprite/avatar/sources/spiny_stone.tscn" id="16_spiny_stone"]
-[ext_resource type="PackedScene" path="res://sprite/avatar/sources/special_cp_lui.tscn" id="17_special_cp_lui"]
-[ext_resource type="PackedScene" path="res://sprite/avatar/sources/special_funny.tscn" id="18_special_funny"]
-[ext_resource type="PackedScene" path="res://sprite/avatar/sources/special_no_goomba.tscn" id="19_special_no_goomba"]
-[ext_resource type="PackedScene" path="res://sprite/avatar/sources/special_wu.tscn" id="20_special_wu"]
+[ext_resource type="PackedScene" uid="uid://rd1u0lpm24ve" path="res://sprite/avatar/sources/special_cp_lui.tscn" id="17_special_cp_lui"]
+[ext_resource type="PackedScene" uid="uid://cxmt53tisj0bp" path="res://sprite/avatar/sources/special_funny.tscn" id="18_special_funny"]
+[ext_resource type="PackedScene" uid="uid://dkhfeibwm2x5k" path="res://sprite/avatar/sources/special_no_goomba.tscn" id="19_special_no_goomba"]
+[ext_resource type="PackedScene" uid="uid://cf1rh1nbud5aq" path="res://sprite/avatar/sources/special_wu.tscn" id="20_special_wu"]
+[ext_resource type="PackedScene" uid="uid://ddmmfflj8b241" path="res://sprite/avatar/sources/special_moon_man.tscn" id="21_ibh6j"]
 
 [resource]
 script = ExtResource("1_pack")
-scenes = Array[PackedScene]([ExtResource("1_coin"), ExtResource("2_fire_flower"), ExtResource("3_hidden_question_block"), ExtResource("4_mushroom"), ExtResource("5_mushroom_life"), ExtResource("6_poison_mushroom"), ExtResource("7_question_block"), ExtResource("8_super_star"), ExtResource("9_boo"), ExtResource("10_bullet_bill"), ExtResource("11_buzzy_beetle"), ExtResource("12_goomba"), ExtResource("13_phanto"), ExtResource("14_piranha_green"), ExtResource("15_spiny"), ExtResource("16_spiny_stone"), ExtResource("17_special_cp_lui"), ExtResource("18_special_funny"), ExtResource("19_special_no_goomba"), ExtResource("20_special_wu")])
+scenes = Array[PackedScene]([ExtResource("1_coin"), ExtResource("2_fire_flower"), ExtResource("3_hidden_question_block"), ExtResource("4_mushroom"), ExtResource("5_mushroom_life"), ExtResource("6_poison_mushroom"), ExtResource("7_question_block"), ExtResource("8_super_star"), ExtResource("9_boo"), ExtResource("10_bullet_bill"), ExtResource("11_buzzy_beetle"), ExtResource("12_goomba"), ExtResource("13_phanto"), ExtResource("14_piranha_green"), ExtResource("15_spiny"), ExtResource("16_spiny_stone"), ExtResource("17_special_cp_lui"), ExtResource("18_special_funny"), ExtResource("19_special_no_goomba"), ExtResource("20_special_wu"), ExtResource("21_ibh6j")])
