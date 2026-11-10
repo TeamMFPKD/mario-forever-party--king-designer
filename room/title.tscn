@@ -49,6 +49,7 @@
 [ext_resource type="PackedScene" path="res://object/multiplayer/avatar/avatar_selector.tscn" id="41_avatar"]
 [ext_resource type="Script" uid="uid://bfuqiopjih0j2" path="res://script/option/input_map_reset_button.gd" id="42_reset"]
 [ext_resource type="Script" path="res://script/option/history_ghost_toggle.gd" id="43_ghost"]
+[ext_resource type="Script" path="res://script/title/fit_content_panel.gd" id="44_fit"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]
 atlas = ExtResource("37_yfoso")
@@ -108,6 +109,10 @@ scene_uid = &"uid://ci7x1alix6g2"
 [node name="JumpToSceneHistory" type="Node" parent="." unique_id=611137458]
 script = ExtResource("4_ikv4w")
 scene_uid = &"uid://de64xnukpa0re"
+
+[node name="JumpToSceneAdventure" type="Node" parent="."]
+script = ExtResource("4_ikv4w")
+scene_uid = &"res://room/adventure_stage.tscn"
 
 [node name="GameStart" type="Node" parent="." unique_id=2019232837 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_estsl")
@@ -217,7 +222,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -452.5
-offset_top = -460.0
+offset_top = -620.0
 offset_right = 452.5
 offset_bottom = -28.0
 grow_horizontal = 2
@@ -231,7 +236,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -401.0
-offset_top = -444.0
+offset_top = -604.0
 offset_right = 401.0
 offset_bottom = 28.0
 grow_horizontal = 2
@@ -279,6 +284,13 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "游玩记录"
 
+[node name="AdventureButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(320, 130)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "百人团"
+
 [node name="OptionsButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1658739772 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(320, 150)
 layout_mode = 2
@@ -288,17 +300,17 @@ text = "设置界面"
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(680, 620)
+script = ExtResource("44_fit")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -325.0
-offset_top = -310.0
-offset_right = 325.0
-offset_bottom = 310.0
+offset_left = -450.0
+offset_top = -500.0
+offset_right = 450.0
+offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -324,26 +336,22 @@ layout_mode = 2
 
 [node name="UiLabel" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1390167794 instance=ExtResource("5_qon3s")]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "本地端口"
 vertical_alignment = 1
 
 [node name="UiLineEdit" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=205965961 instance=ExtResource("9_qon3g")]
 layout_mode = 2
-size_flags_vertical = 3
 text = "5555"
 
 [node name="UiLabel2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1760568754 instance=ExtResource("5_qon3s")]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名称"
 vertical_alignment = 1
 
 [node name="UiLineEdit2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=160237167 instance=ExtResource("9_qon3g")]
 layout_mode = 2
-size_flags_vertical = 3
 text = "Mario"
 
 [node name="UiLabel3" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000011 instance=ExtResource("5_qon3s")]
@@ -354,11 +362,11 @@ vertical_alignment = 1
 
 [node name="AvatarSelector" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000012 instance=ExtResource("41_avatar")]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1021602914]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/separation = 32
 
 [node name="QuitButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=222617188 instance=ExtResource("2_w52fc")]
@@ -369,7 +377,6 @@ text = "退出"
 [node name="HostButton" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer" unique_id=1028450660 node_paths=PackedStringArray("line_edit_local_port", "line_edit_player_name", "player_page") instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 7
-size_flags_vertical = 3
 text = "组织"
 script = ExtResource("10_qon3g")
 line_edit_local_port = NodePath("../../UiLineEdit")
@@ -378,17 +385,17 @@ player_page = NodePath("../../../../../../PlayerPage")
 
 [node name="JoinPage" parent="GameRoomSize" unique_id=1961076983 instance=ExtResource("8_c2fru")]
 visible = false
-custom_minimum_size = Vector2(680, 640)
+script = ExtResource("44_fit")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -270.0
-offset_top = -320.0
-offset_right = 270.0
-offset_bottom = 320.0
+offset_left = -450.0
+offset_top = -500.0
+offset_right = 450.0
+offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -414,38 +421,32 @@ layout_mode = 2
 
 [node name="UiLabel" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1380680250 instance=ExtResource("5_qon3s")]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "组织方 IP"
 vertical_alignment = 1
 
 [node name="UiLineEdit" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1292918703 instance=ExtResource("9_qon3g")]
 layout_mode = 2
-size_flags_vertical = 3
 text = "localhost"
 
 [node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "端口"
 vertical_alignment = 1
 
 [node name="UiLineEdit2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1822439742 instance=ExtResource("9_qon3g")]
 layout_mode = 2
-size_flags_vertical = 3
 text = "5555"
 
 [node name="UiLabel3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=676152860 instance=ExtResource("5_qon3s")]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名称"
 vertical_alignment = 1
 
 [node name="UiLineEdit3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1533275822 instance=ExtResource("9_qon3g")]
 layout_mode = 2
-size_flags_vertical = 3
 text = "Luigi"
 
 [node name="UiLabel4" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000013 instance=ExtResource("5_qon3s")]
@@ -456,6 +457,7 @@ vertical_alignment = 1
 
 [node name="AvatarSelector" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000014 instance=ExtResource("41_avatar")]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=46304367]
@@ -515,7 +517,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家列表"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/PlayerPage/UiPanel/UiMarginContainer/VBoxContainer" unique_id=332855756]
-custom_minimum_size = Vector2(600, 600)
+custom_minimum_size = Vector2(800, 600)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -1311,6 +1313,7 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene"]
+[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/AdventureButton" to="JumpToSceneAdventure" method="jump_to_scene"]
 [connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/OptionsButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]

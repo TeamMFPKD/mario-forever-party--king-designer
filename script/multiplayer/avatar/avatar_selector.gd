@@ -1,6 +1,6 @@
-extends HBoxContainer
+extends Control
 
-## 内置头像选择器：(<) 头像预览 (>)
+## 内置头像选择器：只有一个头像预览，点它弹出选择面板（AvatarPicker）。
 ##
 ## 选中结果直接写进 MPManager.player.avatar_id，开房 / 进房时随玩家信息一起同步，
 ## 并保存到 GameConfig，下次启动沿用。
@@ -9,22 +9,24 @@ extends HBoxContainer
 ## 所以来回切页面时显示保持一致（页面重新可见时会自动同步一次）。
 
 const GameConfigType: GDScript = preload("res://script/utils/game_config.gd")
+const PICKER_SCENE: PackedScene = preload("res://object/multiplayer/avatar/avatar_picker.tscn")
 
-@export var prev_button: Button
-@export var next_button: Button
+## 盖在预览上方、负责接收点击的透明按钮（在场景里与 Preview 重叠摆放）。
+@export var avatar_button: Button
 @export var avatar_texture: TextureRect
 @export var avatar_initial: Label
 @export var preview_ring: Panel
 
 var _multiplayer_manager: MultiplayerManager
 var _game_config: GameConfigType
+var _picker: AvatarPicker
 
 
 func _ready() -> void:
 	_multiplayer_manager = MPManager
 	_game_config = get_tree().get_first_node_in_group("game_config")
-	prev_button.pressed.connect(_on_prev_pressed)
-	next_button.pressed.connect(_on_next_pressed)
+	if avatar_button != null:
+		avatar_button.pressed.connect(_open_picker)
 	visibility_changed.connect(_refresh)
 	# 名单变化时自己的排位可能变（有人进出房间），预览圆环颜色要跟着刷新
 	_multiplayer_manager.players_updated.connect(_refresh)
@@ -32,25 +34,38 @@ func _ready() -> void:
 	_refresh()
 
 
-func _on_prev_pressed() -> void:
-	_step(-1)
+## 点预览：弹出选择面板，所有头像从点击位置飞出来。
+func _open_picker() -> void:
+	if _picker != null and is_instance_valid(_picker):
+		_picker.queue_free()
+		_picker = null
+
+	# 挂到当前场景根，保证盖住整个界面（title.tscn 的根是 Node2D，用 Node 即可）。
+	# current_scene 在探针或手动 add_child 的场景里可能为 null，回退到 root。
+	var host: Node = get_tree().current_scene
+	if host == null:
+		host = get_tree().root
+
+	var picker: AvatarPicker = PICKER_SCENE.instantiate() as AvatarPicker
+	host.add_child(picker)
+	picker.z_index = 100
+	_picker = picker
+	_picker.avatar_chosen.connect(_on_avatar_chosen)
+	_picker.picker_closed.connect(_on_picker_closed)
+
+	var from: Vector2 = avatar_button.get_global_rect().get_center()
+	_picker.open(from, _current_id())
 
 
-func _on_next_pressed() -> void:
-	_step(1)
-
-
-func _step(direction: int) -> void:
-	var total: int = Avatars.count()
-	if total <= 0:
-		return
-	var index: int = Avatars.index_of(_current_id())
-	if index < 0:
-		index = 0
-	else:
-		index = wrapi(index + direction, 0, total)
-	_set_local_avatar(Avatars.get_id(index))
+func _on_avatar_chosen(avatar_id: String) -> void:
+	_set_local_avatar(avatar_id)
 	_refresh()
+
+
+func _on_picker_closed() -> void:
+	if _picker != null and is_instance_valid(_picker):
+		_picker.queue_free()
+	_picker = null
 
 
 ## 本地玩家当前选中的头像 id（空串表示没有可选头像，或还没选过）
@@ -81,7 +96,3 @@ func _refresh() -> void:
 	avatar_initial.visible = texture == null
 	# 预览的圆环用自己在本局的身份色（1P 白 / 2P 红 …，见 PlayerColor）
 	AvatarRing.paint(preview_ring, _multiplayer_manager.player_color(_multiplayer_manager.player.id))
-	# 0 或 1 个头像时没有可切换的对象
-	var switchable: bool = Avatars.count() > 1
-	prev_button.disabled = not switchable
-	next_button.disabled = not switchable
