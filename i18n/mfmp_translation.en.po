@@ -88,16 +88,16 @@ msgid "名称"
 msgstr "Name"
 
 msgid "关卡被通过数"
-msgstr "Times Completed"
+msgstr "Clears"
 
 msgid "关卡死亡数"
-msgstr "Times Died"
+msgstr "Deaths"
 
 msgid "通过率"
 msgstr "Clear Rate"
 
 msgid "个人通关总数"
-msgstr "Your Completions"
+msgstr "Personal Clears"
 
 msgid "总积分"
 msgstr "Score"
