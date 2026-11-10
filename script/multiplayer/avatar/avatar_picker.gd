@@ -32,8 +32,18 @@ var _selected_id: String = ""
 
 func _ready() -> void:
 	visible = false
+	# 父节点不一定是 Control（title 场景根是 Node2D），anchors 可能算不出铺满，
+	# 这里显式把面板拉到视口大小，避免居中锚点退化到左上角 (0,0)。
+	_fit_to_viewport()
+	get_viewport().size_changed.connect(_fit_to_viewport)
 	if _backdrop != null:
 		_backdrop.gui_input.connect(_on_backdrop_input)
+
+
+func _fit_to_viewport() -> void:
+	var rect: Rect2 = get_viewport_rect()
+	position = Vector2.ZERO
+	size = rect.size
 
 
 ## 打开面板：from_global 是点击位置，current_id 是当前已选头像。

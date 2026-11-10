@@ -53,8 +53,12 @@ func _open_picker() -> void:
 	_picker.avatar_chosen.connect(_on_avatar_chosen)
 	_picker.picker_closed.connect(_on_picker_closed)
 
-	var from: Vector2 = avatar_button.get_global_rect().get_center()
-	_picker.open(from, _current_id())
+	# avatar_button 的 global_position 是画布坐标；picker 在 root 下、用视口坐标，
+	# 两者在无缩放时一致，有缩放时需要用 canvas_transform 换算一次。
+	var from_canvas: Vector2 = avatar_button.get_global_rect().get_center()
+	var canvas_xform: Transform2D = get_viewport().get_canvas_transform()
+	var from_viewport: Vector2 = canvas_xform * from_canvas
+	_picker.open(from_viewport, _current_id())
 
 
 func _on_avatar_chosen(avatar_id: String) -> void:
