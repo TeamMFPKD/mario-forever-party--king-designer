@@ -82,6 +82,18 @@ func _on_player_injected(body: Node2D) -> void:
 	if suit is PlayerSuit:
 		player_suit = suit
 
+## 注入器缺失或注入时玩家尚未入场（关卡对象加载顺序）时，按玩家 meta 兜底解析
+func _resolve_player_suit() -> PlayerSuit:
+	if player_suit != null:
+		return player_suit
+	var body: Node2D = player as Node2D
+	if body == null:
+		return null
+	var suit: Variant = body.get_meta("player_suit", null)
+	if suit is PlayerSuit:
+		player_suit = suit
+	return player_suit
+
 func _physics_process(_delta: float) -> void:
 	# Hidden Block patch
 	if not hidden or not player:
@@ -135,15 +147,18 @@ func on_block_bump() -> void:
 		set_visible()
 
 	# 生成物品
+	var suit: PlayerSuit = _resolve_player_suit()
+	# 拿不到套装信息时按小马里奥处理，避免空引用崩溃
+	var is_small: bool = suit == null or suit.suit == PlayerSuit.SuitType.SMALL
 	if sprout_item_scene != null and \
-	(player_suit.suit == PlayerSuit.SuitType.SMALL or adv_sprout_item_scene == null):
+	(is_small or adv_sprout_item_scene == null):
 		var sprout_item: Node2D = sprout_item_scene.instantiate()
 		sprout_item.position = parent.position
 		if has_meta("sprout_down"):
 			sprout_item.set_meta("sprout_down", true)
 		sprout_item.set_meta("spawned_by_block", true)
 		parent.add_sibling(sprout_item)
-	if adv_sprout_item_scene != null and player_suit.suit != PlayerSuit.SuitType.SMALL:
+	if adv_sprout_item_scene != null and not is_small:
 		var adv_sprout_item: Node2D = adv_sprout_item_scene.instantiate()
 		adv_sprout_item.position = parent.position
 		if has_meta("sprout_down"):

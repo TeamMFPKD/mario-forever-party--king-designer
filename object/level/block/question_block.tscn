@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://d2eqnyy2qd0mg" path="res://object/level/block/coin_effect.tscn" id="4_alh4b"]
 [ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="4_uotgv"]
 [ext_resource type="AudioStream" uid="uid://dx5w7ruc3j6sd" path="res://sound/level/coin.se.wav" id="5_dnips"]
+[ext_resource type="Script" path="res://script/level/component/player_body_injector.gd" id="6_injector"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_alh4b"]
 atlas = ExtResource("1_dnips")
@@ -134,6 +135,9 @@ sprite = NodePath("../AnimatedSprite2D")
 sprout_item_scene = ExtResource("4_alh4b")
 _collision_shape_2d = NodePath("../CollisionShape2D")
 metadata/_custom_type_script = "uid://0kceldqbdgin"
+
+[node name="PlayerBodyInjector" type="Node" parent="BlockHit"]
+script = ExtResource("6_injector")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=973614777]
 libraries/ = SubResource("AnimationLibrary_w07n4")
