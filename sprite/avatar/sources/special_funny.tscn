@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_source.gd" id="1_src"]
+[ext_resource type="Texture2D" uid="uid://b20e73fhgqnda" path="res://sprite/avatar/funny.png" id="2_tex"]
+
+[node name="Avatar_special_funny" type="Control"]
+offset_right = 144.0
+offset_bottom = 144.0
+script = ExtResource("1_src")
+avatar_id = "special_funny"
+canvas_size = 144
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 144.0
+offset_bottom = 144.0
+color = Color(1, 1, 1, 1)
+
+[node name="Base" type="TextureRect" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 136.0
+offset_bottom = 136.0
+mouse_filter = 2
+texture = ExtResource("2_tex")
+expand_mode = 1
+stretch_mode = 5

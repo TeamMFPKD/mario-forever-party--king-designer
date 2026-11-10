@@ -2,12 +2,13 @@ extends Node
 
 ## 内置头像库（autoload 名：Avatars）。
 ##
-## 只做一件事：把 res://sprite/avatar/avatar_pack.tres 读成「id → 贴图」的查表，
-## 供头像选择器（avatar_selector.gd）与消息气泡（message_bubble.gd）使用。
-## 素材怎么加见 script/multiplayer/avatar/avatar_pack.gd 文件头。
+## 数据源：res://sprite/avatar/avatar_pack.tres
+##   - pack.scenes   ：分层头像场景，运行时用 AvatarBaker 合成成贴图（优先）
+##   - pack.textures ：单张贴图（旧数据，scenes 为空时回退）
 ##
-## id 由数组序号决定（avatar_00、avatar_01……），因此同一份工程里各端一定一致；
-## 新增头像请追加到 avatar_pack.tres 数组末尾，插在中间会让已有玩家的选择整体后移。
+## **头像 id 是字符串，由素材自身决定**（场景的 avatar_id 字段 / 贴图文件名），
+## 不再是数组序号。这样增删头像不会让已有玩家选中的 id 失效；
+## 数组顺序只用来决定选择器左右切换的顺序。
 
 const PACK_PATH: String = "res://sprite/avatar/avatar_pack.tres"
 
@@ -35,27 +36,76 @@ func reload() -> void:
 		Log.e("Avatars", "清单加载失败（可能引用了已被改名或删除的素材），改用文本兜底：%s" % PACK_PATH)
 		_load_from_text()
 		return
-	# 日志用：id(素材文件名)，方便对着 avatar_pack.tres 检查
+
+	if not pack.scenes.is_empty():
+		_load_from_scenes(pack)
+	else:
+		_load_from_textures(pack)
+
+
+## 首选：分层场景逐个烘焙成贴图。headless 下同样有效（纯 CPU，不依赖 GPU）。
+func _load_from_scenes(pack: AvatarPack) -> void:
+	var described: PackedStringArray = PackedStringArray()
+	for index: int in range(pack.scenes.size()):
+		var scene: PackedScene = pack.scenes[index]
+		if scene == null:
+			Log.w("Avatars", "第 %d 个场景为空，跳过" % index)
+			continue
+		var avatar_id: String = _peek_id(scene, index)
+		if avatar_id.is_empty():
+			Log.w("Avatars", "第 %d 个场景没有填 avatar_id，跳过" % index)
+			continue
+		if _textures.has(avatar_id):
+			Log.w("Avatars", "重复的头像 id：%s，跳过第 %d 个" % [avatar_id, index])
+			continue
+		var texture: ImageTexture = AvatarBaker.bake(scene)
+		if texture == null:
+			Log.w("Avatars", "烘焙失败：%s" % avatar_id)
+			continue
+		_textures[avatar_id] = texture
+		_order.append(avatar_id)
+		described.append(avatar_id)
+	Log.i("Avatars", "已加载 %d 个分层头像：%s" % [_order.size(), ", ".join(described)])
+
+
+## 从场景根节点读 avatar_id（不进入树，只实例化后立刻释放）。
+func _peek_id(scene: PackedScene, index: int) -> String:
+	var node: Node = scene.instantiate()
+	var id: String = ""
+	if node != null:
+		if "avatar_id" in node:
+			id = str(node.get("avatar_id"))
+		node.free()
+	if id.is_empty():
+		id = "scene_%02d" % index
+	return id
+
+
+## 旧数据：单张贴图，id 取文件名（不含扩展名）。
+func _load_from_textures(pack: AvatarPack) -> void:
 	var described: PackedStringArray = PackedStringArray()
 	for index: int in range(pack.textures.size()):
 		var texture: Texture2D = pack.textures[index]
 		if texture == null:
 			continue
-		var avatar_id: String = "avatar_%02d" % index
+		var avatar_id: String = texture.resource_path.get_file().get_basename()
+		if avatar_id.is_empty():
+			avatar_id = "avatar_%02d" % index
+		if _textures.has(avatar_id):
+			Log.w("Avatars", "重复的头像 id：%s，跳过" % avatar_id)
+			continue
 		_textures[avatar_id] = texture
 		_order.append(avatar_id)
 		described.append("%s(%s)" % [avatar_id, texture.resource_path.get_file()])
-	Log.i("Avatars", "已加载 %d 个内置头像：%s" % [_order.size(), ", ".join(described)])
+	Log.i("Avatars", "已加载 %d 个贴图头像：%s" % [_order.size(), ", ".join(described)])
 
 
 ## 兜底：从 .tres 文本里抓 type="Texture2D" path="res://..." 按出现顺序加载。
-## 顺序与 textures 数组一致，所以兜底后 id 仍然对得上。
 func _load_from_text() -> void:
 	var text: String = FileAccess.get_file_as_string(PACK_PATH)
 	if text.is_empty():
 		return
 	var regex: RegEx = RegEx.new()
-	# 兼容编辑器写出的 [ext_resource type="Texture2D" uid="..." path="..."] 形式
 	if regex.compile("\\[ext_resource type=\"Texture2D\"[^\\]]*path=\"(res://[^\"]+)\"") != OK:
 		return
 	var described: PackedStringArray = PackedStringArray()
@@ -68,7 +118,7 @@ func _load_from_text() -> void:
 		if texture == null:
 			Log.w("Avatars", "跳过无法加载的头像素材：%s" % path)
 			continue
-		var avatar_id: String = "avatar_%02d" % _order.size()
+		var avatar_id: String = path.get_file().get_basename()
 		_textures[avatar_id] = texture
 		_order.append(avatar_id)
 		described.append("%s(%s)" % [avatar_id, path.get_file()])

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://dytla7f0alrhr"]
+
+[ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_source.gd" id="1_src"]
+[ext_resource type="Texture2D" uid="uid://4lr60loieckk" path="res://sprite/bonus/super_star.png" id="2_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_frame"]
+atlas = ExtResource("2_tex")
+region = Rect2(0, 0, 33, 32)
+
+[node name="Avatar_super_star" type="Control" unique_id=1039259102]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 144.0
+offset_bottom = 144.0
+script = ExtResource("1_src")
+avatar_id = "super_star"
+
+[node name="Background" type="ColorRect" parent="." unique_id=160753537]
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 144.0
+
+[node name="Base" type="TextureRect" parent="." unique_id=1855346242]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 14.0
+offset_right = 132.0
+offset_bottom = 130.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_frame")
+expand_mode = 1
+stretch_mode = 5
