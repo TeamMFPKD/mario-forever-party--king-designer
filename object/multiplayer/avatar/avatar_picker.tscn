@@ -1,20 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_picker.gd" id="1_picker"]
-[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.13, 0.13, 0.16, 0.96)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.97, 0.78, 0.16, 1)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-anti_aliasing = true
+[ext_resource type="StyleBoxFlat" path="res://ui/theme/panel_large.tres" id="3_large"]
 
 [node name="AvatarPicker" type="Control"]
 layout_mode = 3
@@ -41,13 +28,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -330.0
-offset_right = 400.0
-offset_bottom = 330.0
+offset_left = -500.0
+offset_top = -520.0
+offset_right = 500.0
+offset_bottom = 520.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+theme_override_styles/panel = ExtResource("3_large")
 
 [node name="Margin" type="MarginContainer" parent="Panel"]
 layout_mode = 1
@@ -56,33 +43,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 18
 
-[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Title" type="Label" parent="Panel/Margin/VBox"]
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_constants/outline_size = 7
-theme_override_font_sizes/font_size = 45
-text = "选择头像"
-horizontal_alignment = 1
-
-[node name="Items" type="Control" parent="Panel/Margin/VBox"]
-clip_contents = true
+[node name="Items" type="Control" parent="Panel/Margin"]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
-
-[node name="Hint" type="Label" parent="Panel/Margin/VBox"]
-layout_mode = 2
-theme = ExtResource("2_theme")
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 24
-text = "点击头像选中，点空白处关闭"
-horizontal_alignment = 1
