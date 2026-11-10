@@ -20,10 +20,13 @@ func _ready() -> void:
 
 
 func _update_progress() -> void:
-	var total_count: int = MPManager.players.size()
+	var total_count: int = 0
 	var received_level_count: int = 0
 	var ready_count: int = 0
 	for profile: PlayerProfile in MPManager.players:
+		if profile.is_spectator:
+			continue
+		total_count += 1
 		if profile.has_level:
 			received_level_count += 1
 		if profile.level_ok:

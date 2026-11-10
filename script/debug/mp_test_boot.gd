@@ -359,6 +359,8 @@ func _is_local_ready() -> bool:
 ## 自动准备：连接成功后立刻点一次“准备完毕”，之后每 3 秒补一次。
 ## 补发是为了顶掉 ready_button 的失焦/无输入自动取消（未加 --mp-no-ready-timeout 时）。
 func _auto_ready_loop(title: Node) -> void:
+	if MPManager.player.is_spectator:
+		return
 	var ready_button: Button = title.get_node_or_null(PLAYER_BOX + "/HBoxContainer/ReadyButton") as Button
 	if ready_button == null:
 		Log.e("MPTEST", "ReadyButton not found")
@@ -376,15 +378,18 @@ func _auto_start(title: Node) -> void:
 	if start_button == null:
 		Log.e("MPTEST", "StartButton not found")
 		return
-	var expect: int = maxi(2, MpTest.get_value("--mp-expect", "3").to_int())
+	var expect: int = maxi(1, MpTest.get_value("--mp-expect", "3").to_int())
 	var deadline: int = Time.get_ticks_msec() + 120000
 	while is_instance_valid(title) and Time.get_ticks_msec() < deadline:
 		if MPManager.is_in_game:
 			return
 		var players: Array = MPManager.players
-		if players.size() >= expect and _all_ready(players):
+		if MPManager.lobby.playing_count() >= expect and _all_ready(players):
 			start_button.emit_signal("pressed")
-			Log.i("MPTEST", "all players ready (%d), start pressed" % players.size())
+			Log.i(
+				"MPTEST", "all players ready (%d), start pressed"
+				% MPManager.lobby.playing_count()
+			)
 			return
 		await get_tree().create_timer(0.5).timeout
 	Log.e("MPTEST", "auto start TIMEOUT")
@@ -394,6 +399,8 @@ func _all_ready(players: Array) -> bool:
 		if not (entry is PlayerProfile):
 			return false
 		var profile: PlayerProfile = entry
+		if profile.is_spectator:
+			continue
 		if not profile.lobby_ready:
 			return false
 	return true
@@ -426,6 +433,8 @@ func _auto_edit_finished() -> void:
 func _auto_reach_end() -> void:
 	await get_tree().create_timer(2.0).timeout
 	if MPManager.phase != RoomPhase.Phase.PLAY:
+		return
+	if MPManager.player.is_spectator:
 		return
 	MPManager.flow.notify_reach_end()
 	Log.i("MPTEST", "reach end sent")

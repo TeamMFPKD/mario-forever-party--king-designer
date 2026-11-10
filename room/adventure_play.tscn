@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://room/base/play_room_base.tscn" id="1_base"]
+[ext_resource type="Script" path="res://script/adventure/adventure_play.gd" id="2_play"]
+[ext_resource type="Script" path="res://script/adventure/adventure_run_controller.gd" id="3_ctrl"]
+[ext_resource type="Script" path="res://script/adventure/adventure_pause_menu.gd" id="4_pause"]
+
+[node name="Play" instance=ExtResource("1_base")]
+script = ExtResource("2_play")
+
+[node name="AdventureRunController" type="Node" parent="." groups=["play_next_level_manager"]]
+script = ExtResource("3_ctrl")
+
+[node name="AdventurePauseMenu" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 30
+script = ExtResource("4_pause")

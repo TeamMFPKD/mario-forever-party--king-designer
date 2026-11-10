@@ -65,8 +65,33 @@ func _on_players_updated() -> void:
 		var avatar_ring: Panel = player_list_line.get_node("PlayerAvatarRect/PlayerAvatar/Ring") as Panel
 		AvatarRing.paint(avatar_ring, MPManager.player_color(profile.id))
 
+		# 参与模式：矩形徽章 + 仅本地玩家可见的切换按钮
+		var role_badge: PanelContainer = player_list_line.get_node("PlayerRoleBadge") as PanelContainer
+		var role_label: Label = player_list_line.get_node("PlayerRoleBadge/PlayerRoleLabel") as Label
+		role_label.text = tr("观战") if profile.is_spectator else tr("游戏")
+		var role_style: StyleBoxFlat = StyleBoxFlat.new()
+		role_style.bg_color = Color("3d6fe0") if profile.is_spectator else Color("2f9e6e")
+		role_style.set_corner_radius_all(8)
+		role_style.content_margin_left = 10.0
+		role_style.content_margin_right = 10.0
+		role_badge.add_theme_stylebox_override("panel", role_style)
+
+		var role_button: Button = player_list_line.get_node("PlayerRoleButton") as Button
+		var is_local: bool = profile.id == MPManager.player.id
+		role_button.visible = is_local
+		role_button.disabled = MPManager.phase != RoomPhase.Phase.LOBBY
+		role_button.text = tr("切换为游戏") if profile.is_spectator else tr("切换为观战")
+		if is_local:
+			role_button.pressed.connect(_on_role_button_pressed)
+
 		var player_ready_node: Control = player_list_line.get_node("PlayerReady") as Control
-		player_ready_node.visible = profile.lobby_ready
-		if profile.lobby_ready:
-			ready_sound_node.play()
+		player_ready_node.visible = profile.lobby_ready and not profile.is_spectator
+		if profile.lobby_ready and not profile.is_spectator:
+			# 重连时名单快照可能在标题界面之外到达，节点不在树里不能播放。
+			if ready_sound_node != null and ready_sound_node.is_inside_tree():
+				ready_sound_node.play()
 		add_child(player_list_line)
+
+
+func _on_role_button_pressed() -> void:
+	MPManager.set_local_spectator(not MPManager.player.is_spectator)

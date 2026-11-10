@@ -20,6 +20,10 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var local: PlayerProfile = MPManager.get_local_player()
+	if local.is_spectator:
+		visible = false
+		return
+	visible = true
 	is_ready = local.lobby_ready
 	if is_ready:
 		set_disabled(true)

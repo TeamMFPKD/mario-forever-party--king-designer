@@ -45,14 +45,21 @@ func _refresh() -> void:
 		# 没有加入多人房间（例如直接运行编辑场景）时不需要准备
 		_set_shown(false)
 		return
+	if local_player.is_spectator:
+		_set_shown(false)
+		return
 	_set_shown(true)
+	var total_count: int = 0
 	var ready_count: int = 0
 	for profile: PlayerProfile in MPManager.players:
+		if profile.is_spectator:
+			continue
+		total_count += 1
 		if profile.edit_finished:
 			ready_count += 1
 	disabled = local_player.edit_finished
 	_update_burst_state()
-	text = "制作完毕！（%d/%d）" % [ready_count, MPManager.players.size()]
+	text = "制作完毕！（%d/%d）" % [ready_count, total_count]
 
 
 ## 底色三态：已完成 → 灰色；悬停 → 提亮 + 微放大；否则默认金黄

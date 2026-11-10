@@ -16,8 +16,12 @@ const SCENE_TRANSFER: String = "uid://brg4yepawdra3"
 const SCENE_PLAY: String = "uid://cxvueju65b3qv"
 const SCENE_RESULT: String = "uid://c0civs02iqoki"
 const SCENE_TITLE: String = "uid://dcqf1c3m14b1f"
+## 观战者不进入玩家房间，统一留在独立观战场景，按阶段刷新内容。
+const SCENE_SPECTATE: String = "res://room/spectate_room.tscn"
 
 const RESULT_TIMEOUT_SEC: float = 120.0
+## ready_room 的准备动画时长；主机侧权威计时必须把它算进去。
+const READY_COUNTDOWN_SEC: float = 5.5
 
 var phase: int = RoomPhase.Phase.NONE
 var random_levels: Array[String] = []
@@ -30,6 +34,9 @@ var _manager: MultiplayerManager
 var _registry: SessionRegistry
 var _net: NetPeer
 var _lobby: LobbyService
+## 主机权威的编辑阶段计时。房主自己观战时没有编辑房间，
+## 必须由本服务在超时后推进 TRANSFER。
+var _host_edit_timer: Timer
 
 
 func setup(
@@ -42,6 +49,19 @@ func setup(
 	_registry = registry
 	_net = net
 	_lobby = lobby
+	_host_edit_timer = Timer.new()
+	_host_edit_timer.name = "HostEditTimer"
+	_host_edit_timer.one_shot = true
+	_host_edit_timer.timeout.connect(_on_host_edit_timeout)
+	add_child(_host_edit_timer)
+
+
+func _on_host_edit_timeout() -> void:
+	if _net == null or not _net.is_server():
+		return
+	if phase != RoomPhase.Phase.EDIT:
+		return
+	finish_edit("倒计时结束")
 
 
 ## 主机在标题页点“开始”。
@@ -62,6 +82,11 @@ func start_edit(seconds: int) -> void:
 			"stamp": _manager.game_start_time,
 		}
 	)
+	if _net.is_server():
+		# 准备动画 5.5s 之后玩家才开始编辑；主机权威计时同样从 Start 开始算。
+		# 编辑器直接运行时 ready_room 会跳过动画，这里也要跳过这段等待。
+		var ready_sec: float = 0.0 if OS.has_feature("editor") else READY_COUNTDOWN_SEC
+		_host_edit_timer.start(ready_sec + float(seconds))
 
 
 ## 编辑倒计时结束或全员完成编辑（仅主机调用）。
@@ -70,6 +95,8 @@ func finish_edit(reason: String) -> void:
 		return
 	if phase != RoomPhase.Phase.EDIT:
 		return
+	if _host_edit_timer != null:
+		_host_edit_timer.stop()
 	var timer: Timer = TimerSingleton
 	if timer != null and not timer.is_stopped():
 		timer.stop()
@@ -86,6 +113,8 @@ func on_all_levels_ready() -> void:
 		return
 	var levels: Array[String] = []
 	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator:
+			continue
 		if profile.level_ok and not profile.level_file_name.is_empty():
 			levels.append(profile.level_file_name)
 	if levels.is_empty():
@@ -123,6 +152,16 @@ func notify_reach_end() -> void:
 		c2s_reach_end.rpc_id(1)
 
 
+## 本地关卡索引变化时上报，用于重连后从正确的关卡继续。
+func report_current_level(index: int) -> void:
+	if _net == null:
+		return
+	if _net.is_server():
+		_apply_current_level(_net.local_id(), index)
+	else:
+		c2s_report_level.rpc_id(1, index)
+
+
 func request_return_to_lobby() -> void:
 	if _net == null:
 		return
@@ -139,6 +178,8 @@ func request_return_to_lobby() -> void:
 func abort_to_lobby(reason: String) -> void:
 	if _net == null or not _net.is_server():
 		return
+	if _host_edit_timer != null:
+		_host_edit_timer.stop()
 	Log.w("中止本局：%s" % reason)
 	s2c_phase_changed.rpc(RoomPhase.Phase.LOBBY, {"reason": reason})
 
@@ -186,8 +227,20 @@ func _apply_reach_end(player_id: int) -> void:
 		return
 	if not profile.reach_end:
 		profile.reach_end = true
+		profile.is_in_result = true
 		Log.i("玩家 %s 已经玩过了所有关卡！" % _manager.format_player(profile.name, profile.id))
+		# 让其他客户端的观战目标列表知道他已经打完。
+		_lobby.broadcast_delta(profile)
 	_check_all_reached_end()
+
+
+func _apply_current_level(player_id: int, index: int) -> void:
+	var profile: PlayerProfile = _registry.get_player(player_id)
+	if profile == null:
+		return
+	profile.current_level = maxi(0, index)
+	# 只在换关时发，频率很低；观战者靠它知道目标在第几关。
+	_lobby.broadcast_delta(profile)
 
 
 func _check_all_reached_end() -> void:
@@ -196,6 +249,10 @@ func _check_all_reached_end() -> void:
 	if phase != RoomPhase.Phase.PLAY and phase != RoomPhase.Phase.RESULT:
 		return
 	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator:
+			continue
+		if profile.abandoned:
+			continue
 		if not profile.reach_end:
 			return
 	_finish_match()
@@ -210,6 +267,8 @@ func _finish_match() -> void:
 	_write_level_results_to_files()
 	var results: Array = []
 	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator:
+			continue
 		var total: int = profile.cause_pass + profile.cause_death
 		var clear_rate: float = 0.0
 		if total > 0:
@@ -227,7 +286,7 @@ func _score_for(profile: PlayerProfile, clear_rate: float) -> int:
 	var score_clear_rate: float = 100.0 \
 		* pow(clear_rate / A, K * A) \
 		* pow((1.0 - clear_rate) / (1.0 - A), K * (1.0 - A))
-	var total_players: int = maxi(1, _registry.size())
+	var total_players: int = maxi(1, _lobby.playing_count())
 	var score_level_pass: float = 100.0 * float(profile.pass_count) / float(total_players)
 	return int(round(score_clear_rate * 0.6 + score_level_pass * 0.4))
 
@@ -272,6 +331,8 @@ func _return_to_lobby() -> void:
 		return
 	if phase == RoomPhase.Phase.LOBBY:
 		return
+	if _host_edit_timer != null:
+		_host_edit_timer.stop()
 	_lobby.reset_roster_for_lobby()
 	random_levels.clear()
 	current_level_count = 0
@@ -320,7 +381,7 @@ func _apply_edit_phase(payload: Dictionary) -> void:
 	if edit_seconds > 0:
 		var timer: Timer = TimerSingleton
 		timer.wait_time = float(edit_seconds)
-	_switch_scene(SCENE_READY)
+	_switch_scene(SCENE_SPECTATE if _is_local_spectator() else SCENE_READY)
 
 
 func _apply_transfer_phase() -> void:
@@ -328,7 +389,7 @@ func _apply_transfer_phase() -> void:
 	mode.game_mode = GameMode.GameModeType.EDIT
 	# 切场景前让编辑房间把自己的关卡落盘，传输服务随后直接读文件。
 	_manager.save_level_requested.emit()
-	_switch_scene(SCENE_TRANSFER)
+	_switch_scene(SCENE_SPECTATE if _is_local_spectator() else SCENE_TRANSFER)
 	if _net.is_server():
 		_manager.levels.begin_collect()
 	else:
@@ -342,8 +403,8 @@ func _apply_play_phase(payload: Dictionary) -> void:
 	var levels: Array = payload.get("levels", [])
 	for entry: Variant in levels:
 		random_levels.append(str(entry))
-	current_level_count = 0
-	_switch_scene(SCENE_PLAY)
+	current_level_count = int(payload.get("current_level", 0))
+	_switch_scene(SCENE_SPECTATE if _is_local_spectator() else SCENE_PLAY)
 
 
 func _apply_result_phase(payload: Dictionary) -> void:
@@ -352,6 +413,7 @@ func _apply_result_phase(payload: Dictionary) -> void:
 	var results: Array = payload.get("results", [])
 	last_results = results
 	result_updated.emit(results)
+	# 结算阶段所有人（含观战者）都看结果页。
 	_switch_scene(SCENE_RESULT)
 
 
@@ -366,12 +428,43 @@ func _apply_lobby_phase(payload: Dictionary) -> void:
 	_switch_scene(SCENE_TITLE)
 
 
-func _switch_scene(uid: String) -> void:
-	var target_id: int = ResourceUID.text_to_id(uid)
-	if target_id == ResourceUID.INVALID_ID:
-		Log.e("无效场景 UID：%s" % uid)
+## 新加入的观战者 / 重连玩家：补发当前阶段与阶段载荷。
+func s2c_sync_phase_to(peer_id: int) -> void:
+	if _net == null or not _net.is_server():
 		return
-	var target_path: String = ResourceUID.get_id_path(target_id)
+	var payload: Dictionary = {}
+	match phase:
+		RoomPhase.Phase.EDIT:
+			payload = {
+				"edit_seconds": edit_seconds,
+				"stamp": _manager.game_start_time,
+			}
+		RoomPhase.Phase.PLAY:
+			var profile: PlayerProfile = _registry.get_player(peer_id)
+			payload = {
+				"levels": random_levels.duplicate(),
+				"current_level": 0 if profile == null else profile.current_level,
+			}
+		RoomPhase.Phase.RESULT:
+			payload = {"results": last_results.duplicate(true)}
+	s2c_phase_changed.rpc_id(peer_id, phase, payload)
+
+
+func _is_local_spectator() -> bool:
+	var local: PlayerProfile = _manager.get_local_player()
+	return local != null and local.is_spectator
+
+
+func _switch_scene(uid: String) -> void:
+	var target_path: String = ""
+	if uid.begins_with("res://"):
+		target_path = uid
+	else:
+		var target_id: int = ResourceUID.text_to_id(uid)
+		if target_id == ResourceUID.INVALID_ID:
+			Log.e("无效场景 UID：%s" % uid)
+			return
+		target_path = ResourceUID.get_id_path(target_id)
 	var current: Node = get_tree().current_scene
 	if current != null and current.scene_file_path == target_path:
 		return
@@ -396,5 +489,14 @@ func c2s_reach_end() -> void:
 	if _net == null or not _net.is_server():
 		return
 	_apply_reach_end(multiplayer.get_remote_sender_id())
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func c2s_report_level(index: int) -> void:
+	if _net == null or not _net.is_server():
+		return
+	if phase != RoomPhase.Phase.PLAY:
+		return
+	_apply_current_level(multiplayer.get_remote_sender_id(), index)
 
 

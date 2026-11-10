@@ -134,10 +134,11 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	death_count = level_data_dict.get("death_count", 0)
 
 	lives = level_data_dict.get("lives", 2)
-	var lives_set_when_ready: bool = LifeManager.get("is_lives_set_when_ready")
-	if not lives_set_when_ready:
-		LifeManager.set("lives", lives)
-		LifeManager.set("is_lives_set_when_ready", true)
+	if not GameMode.is_adventure():
+		var lives_set_when_ready: bool = LifeManager.get("is_lives_set_when_ready")
+		if not lives_set_when_ready:
+			LifeManager.set("lives", lives)
+			LifeManager.set("is_lives_set_when_ready", true)
 	
 	# 加载瓦片数据
 	var tile_data_array: Array = level_data_dict.get("tilemap_data", [])

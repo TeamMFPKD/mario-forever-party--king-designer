@@ -51,6 +51,7 @@
 [ext_resource type="Texture2D" uid="uid://cxsb5cli2xabh" path="res://sprite/facility/triangle_blocks_smb2.png" id="116_hfb1t"]
 [ext_resource type="Script" uid="uid://cbt5q4hbsil5u" path="res://script/edit/goal_placement_hint/hint_if_there_is_no_goal.gd" id="117_io63s"]
 [ext_resource type="Script" uid="uid://dmn0tem2abusb" path="res://script/multiplayer/3_edit_room/edit_ready_button.gd" id="121_editready"]
+[ext_resource type="Script" path="res://script/spectator/editor_streamer.gd" id="121_stream"]
 [ext_resource type="Script" uid="uid://kgtbk75sxucx" path="res://script/multiplayer/3_edit_room/ready_burst.gd" id="123_burst"]
 [ext_resource type="Texture2D" uid="uid://cexchs3e3fi05" path="res://sprite/ui/Cmn_CheckBtn_00--Cmn_CheckBtn_00-DrawingBtnLine_00^t.png" id="124_readybg"]
 [ext_resource type="Script" uid="uid://b8yk2psxgyimm" path="res://script/edit/command/history_buttons.gd" id="history_btn"]
@@ -1128,6 +1129,9 @@ show_mode = 2
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaFireDown"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaBlueDown"]
 [editable path="GameRoomSize/BottomItemGroups/GroupButtonEnemy/Enemy/PiranhaPlant/HBoxContainer2/ItemButtonPiranhaStoneDown"]
+[node name="EditorStreamer" type="Node" parent="."]
+script = ExtResource("121_stream")
+
 [editable path="GameRoomSize/RightItemGroups/GroupButtonCameraEdge"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark"]
 [editable path="GameRoomSize/RightItemGroups/GroupButtonMark/Mark/HBoxContainer4/ItemButtonAtchiMuiteBlock"]

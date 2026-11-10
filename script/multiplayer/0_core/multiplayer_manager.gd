@@ -19,6 +19,9 @@ const PORT_MIN: int = 1
 const PORT_MAX: int = 65535
 const JOIN_SOUND: AudioStream = preload("res://sound/SE_NetworkOK.wav")
 const EXIT_SOUND: AudioStream = preload("res://sound/SE_NetworkLeft.wav")
+const EDITOR_STREAM_SCRIPT: GDScript = preload(
+	"res://script/multiplayer/0_core/services/editor_stream_service.gd"
+)
 const PORT_INVALID_MESSAGE: String = "端口需为 %d~%d 之间的数字，请检查后重试。"
 const CONNECT_FAILED_MESSAGE: String = "无法连接到 %s:%d。\n请确认地址与端口正确，且房主已经创建房间。"
 
@@ -31,6 +34,8 @@ signal phase_changed(phase: int, payload: Dictionary)
 signal save_level_requested
 signal play_sound_joined
 signal play_sound_exited
+## 本地玩家的“游戏/观战”角色变化；大厅页与 player list 的切换按钮都监听它。
+signal local_role_changed(is_spectator: bool)
 
 enum LobbyPage {
 	NONE,
@@ -45,6 +50,8 @@ var levels: LevelTransferService
 var flow: MatchFlowService
 var chat: ChatService
 var ghosts: GhostCacheService
+## 编辑器观战截图流；用 Node + 动态调用，避免新增 class_name 的全局类缓存依赖。
+var editor_stream: Node
 
 var local_port: int = 8914
 var remote_port: int = 0
@@ -60,6 +67,13 @@ var _lobby_page: int = LobbyPage.NONE
 ## 上一次失败弹出的“加入失败”提示是否还开着；连上后要主动关掉，
 ## 否则它会盖住玩家列表（Notice 是全局模态面板）。
 var _join_failure_notice_open: bool = false
+## 最近一次加入的房间地址，用于意外掉线后的 20s 自动重连。
+var _reconnect_address: String = ""
+var _reconnect_port: int = 0
+var _is_reconnecting: bool = false
+
+## 本地观战者当前跟随的玩家 id；0 表示自动选第一个可观看玩家。
+var spectate_target_id: int = 0
 
 
 func _ready() -> void:
@@ -93,6 +107,10 @@ func _ready() -> void:
 	ghosts.name = "GhostCacheService"
 	add_child(ghosts)
 
+	editor_stream = EDITOR_STREAM_SCRIPT.new() as Node
+	editor_stream.name = "EditorStreamService"
+	add_child(editor_stream)
+
 	device_id = get_device_tag()
 	player.device_id = device_id
 
@@ -101,6 +119,7 @@ func _ready() -> void:
 	flow.setup(self, registry, net, lobby)
 	chat.setup(self)
 	ghosts.setup(self)
+	editor_stream.call("setup", self)
 
 	registry.player_added.connect(_on_player_added)
 	registry.player_removed.connect(_on_player_removed)
@@ -225,6 +244,8 @@ func join_game(address: String, port: int) -> void:
 
 	Log.i(["连接IP：", domain])
 	Log.i(["连接端口：", port])
+	_reconnect_address = domain
+	_reconnect_port = port
 	var error: int = net.join(domain, port)
 	if error != OK:
 		Log.e("加入房间失败（%s:%d）：%s" % [domain, port, error_string(error)])
@@ -235,6 +256,9 @@ func join_game(address: String, port: int) -> void:
 
 
 func leave_room(reason: String = "主动退出") -> void:
+	_reconnect_address = ""
+	_reconnect_port = 0
+	_is_reconnecting = false
 	if net == null or not net.is_online():
 		_cleanup_session()
 		return
@@ -261,6 +285,17 @@ func get_local_player() -> PlayerProfile:
 	if profile != null:
 		return profile
 	return player
+
+
+## 大厅里切换本地玩家的游戏/观战角色。
+## 未进房时只改本地预选；已进房且处于 LOBBY 时交给主机广播。
+func set_local_spectator(value: bool) -> void:
+	if player.is_spectator == value:
+		return
+	player.is_spectator = value
+	local_role_changed.emit(value)
+	if net != null and net.is_online() and phase == RoomPhase.Phase.LOBBY:
+		lobby.set_spectator(value)
 
 
 func get_lobby_page() -> int:
@@ -294,6 +329,11 @@ func restore_origin_player_data() -> void:
 
 func _on_joined() -> void:
 	Log.i("连接成功")
+	if _is_reconnecting:
+		_is_reconnecting = false
+		if Notice.is_notice_visible():
+			Notice.hide_notice()
+		Log.i("重连成功，正在恢复房间状态")
 	_dismiss_join_failure_notice()
 	player.id = net.local_id()
 	player.name = player_name.substr(0, PlayerProfile.NAME_LIMIT)
@@ -313,6 +353,9 @@ func _confirm_roster_after_join() -> void:
 
 func _on_connect_failed(reason: String) -> void:
 	Log.e("连接服务器失败：%s" % reason)
+	if _is_reconnecting:
+		# 自动重连循环会继续尝试，这里不弹正式失败提示。
+		return
 	if _lobby_page == LobbyPage.JOIN:
 		_join_failure_notice_open = true
 		Notice.show_notice(
@@ -331,13 +374,43 @@ func _on_server_lost() -> void:
 	Log.w("与主机断开")
 	var was_in_game: bool = is_in_game
 	_cleanup_session()
+	if was_in_game and not _is_reconnecting and not _reconnect_address.is_empty():
+		_try_reconnect()
+		return
 	Notice.show_notice("与主机断开。", "连接断开")
 	if was_in_game:
 		GlobalTransition.change_scene_to_file(flow.SCENE_TITLE)
 
 
+## 意外掉线后 20s 内自动重连；主机侧按 device_id + 同名恢复玩家记录。
+func _try_reconnect() -> void:
+	_is_reconnecting = true
+	Notice.show_notice("与主机断开，正在重连…", "连接断开")
+	var deadline: int = Time.get_ticks_msec() + 20000
+	while _is_reconnecting and Time.get_ticks_msec() < deadline:
+		if net.is_online():
+			return
+		if not net.is_connecting():
+			Log.i("重连尝试：%s:%d" % [_reconnect_address, _reconnect_port])
+			net.join(_reconnect_address, _reconnect_port)
+		await get_tree().create_timer(2.0).timeout
+	if not _is_reconnecting:
+		# 已连上（_on_joined）或被拒绝（_on_join_rejected），不再弹失败。
+		return
+	_is_reconnecting = false
+	_reconnect_address = ""
+	_reconnect_port = 0
+	if Notice.is_notice_visible():
+		Notice.hide_notice()
+	Notice.show_notice("重连失败，已返回标题。", "连接断开")
+	GlobalTransition.change_scene_to_file(flow.SCENE_TITLE)
+
+
 func _on_room_closed() -> void:
 	Log.i("服务器即将关闭")
+	_is_reconnecting = false
+	_reconnect_address = ""
+	_reconnect_port = 0
 	var was_in_game: bool = is_in_game
 	_cleanup_session()
 	if was_in_game:
@@ -345,6 +418,9 @@ func _on_room_closed() -> void:
 
 
 func _on_join_rejected(reason: String) -> void:
+	_is_reconnecting = false
+	_reconnect_address = ""
+	_reconnect_port = 0
 	_join_failure_notice_open = false
 	Notice.show_notice(reason, "无法加入房间")
 	_cleanup_session()
@@ -393,6 +469,8 @@ func _play_ui_sound(stream: AudioStream) -> void:
 
 func _on_player_changed(_id: int, _group: StringName) -> void:
 	emit_signal("players_updated")
+	if _id == player.id:
+		local_role_changed.emit(player.is_spectator)
 
 
 func _on_registry_reset() -> void:
@@ -429,6 +507,7 @@ func on_roster_replaced() -> void:
 		var profile: PlayerProfile = registry.get_player(net.local_id())
 		if profile != null:
 			player = profile
+			local_role_changed.emit(player.is_spectator)
 	# 无论主机还是客户端都要通知 UI；客户端之前就是漏了这一句，
 	# 快照收到了但玩家列表永远不刷新。
 	emit_signal("players_updated")
@@ -441,10 +520,12 @@ func _cleanup_session() -> void:
 		chat.clear()
 	var keep_name: String = player.name
 	var keep_avatar: String = player.avatar_id
+	var keep_spectator: bool = player.is_spectator
 	player = PlayerProfile.new()
 	player.name = keep_name
 	player.avatar_id = keep_avatar
 	player.device_id = device_id
+	player.is_spectator = keep_spectator
 	if flow != null:
 		flow.phase = RoomPhase.Phase.NONE
 		flow.random_levels.clear()

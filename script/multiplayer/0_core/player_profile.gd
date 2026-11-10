@@ -2,7 +2,7 @@ class_name PlayerProfile
 extends RefCounted
 
 # 网络字典的值都是 Variant，集中在这里显式转换；本项目把 unsafe_* 警告当成错误。
-@warning_ignore_start("unsafe_call_argument")
+@warning_ignore_start("unsafe_call_argument", "unsafe_cast")
 
 ## 房间内一名玩家的完整本地状态。
 ##
@@ -33,6 +33,12 @@ var name: String = ""
 var avatar_id: String = ""
 var device_id: String = ""
 var is_host: bool = false
+var is_spectator: bool = false
+## 网络连接是否仍在。掉线后先保留记录，20s 宽限内允许重连。
+var connected: bool = true
+## 宽限期已过，仍留在名单里用于结算展示，但不再等待其输入。
+var abandoned: bool = false
+var disconnected_at_msec: int = 0
 
 var lobby_ready: bool = false
 var edit_finished: bool = false
@@ -40,8 +46,14 @@ var edit_finished: bool = false
 var has_level: bool = false
 var level_file_name: String = ""
 var level_ok: bool = false
+## 关卡本身不可用（上传失败/超时）；该玩家仍可继续玩别人的关卡。
+var level_failed: bool = false
+## 本机缺失的关卡文件名；本地加载时直接跳过。
+var missing_levels: Array[String] = []
 
 var reach_end: bool = false
+var current_level: int = 0
+var is_in_result: bool = false
 var cause_pass: int = 0
 var cause_death: int = 0
 var pass_count: int = 0
@@ -57,6 +69,9 @@ func to_wire(group: StringName = GROUP_ALL) -> Dictionary:
 		data["avatar_id"] = avatar_id
 		data["device_id"] = device_id
 		data["is_host"] = is_host
+		data["is_spectator"] = is_spectator
+		data["connected"] = connected
+		data["abandoned"] = abandoned
 	if group == GROUP_ALL or group == GROUP_LOBBY:
 		data["lobby_ready"] = lobby_ready
 	if group == GROUP_ALL or group == GROUP_EDIT:
@@ -65,8 +80,12 @@ func to_wire(group: StringName = GROUP_ALL) -> Dictionary:
 		data["has_level"] = has_level
 		data["level_file_name"] = level_file_name
 		data["level_ok"] = level_ok
+		data["level_failed"] = level_failed
+		data["missing_levels"] = missing_levels.duplicate()
 	if group == GROUP_ALL or group == GROUP_MATCH:
 		data["reach_end"] = reach_end
+		data["current_level"] = current_level
+		data["is_in_result"] = is_in_result
 		data["cause_pass"] = cause_pass
 		data["cause_death"] = cause_death
 		data["pass_count"] = pass_count
@@ -86,6 +105,12 @@ func apply_wire(data: Dictionary) -> void:
 		device_id = str(data["device_id"])
 	if data.has("is_host"):
 		is_host = bool(data["is_host"])
+	if data.has("is_spectator"):
+		is_spectator = bool(data["is_spectator"])
+	if data.has("connected"):
+		connected = bool(data["connected"])
+	if data.has("abandoned"):
+		abandoned = bool(data["abandoned"])
 	if data.has("lobby_ready"):
 		lobby_ready = bool(data["lobby_ready"])
 	if data.has("edit_finished"):
@@ -96,8 +121,19 @@ func apply_wire(data: Dictionary) -> void:
 		level_file_name = str(data["level_file_name"])
 	if data.has("level_ok"):
 		level_ok = bool(data["level_ok"])
+	if data.has("level_failed"):
+		level_failed = bool(data["level_failed"])
+	if data.has("missing_levels"):
+		missing_levels.clear()
+		var entries: Array = data["missing_levels"]
+		for entry: Variant in entries:
+			missing_levels.append(str(entry))
 	if data.has("reach_end"):
 		reach_end = bool(data["reach_end"])
+	if data.has("current_level"):
+		current_level = int(data["current_level"])
+	if data.has("is_in_result"):
+		is_in_result = bool(data["is_in_result"])
 	if data.has("cause_pass"):
 		cause_pass = int(data["cause_pass"])
 	if data.has("cause_death"):
@@ -137,12 +173,20 @@ func reset_match_state() -> void:
 	has_level = false
 	level_file_name = ""
 	level_ok = false
+	level_failed = false
+	missing_levels.clear()
 	reach_end = false
+	current_level = 0
+	is_in_result = false
 	cause_pass = 0
 	cause_death = 0
 	pass_count = 0
 	score = 0
 	clear_rate = 0.0
+
+
+func is_playing() -> bool:
+	return not is_spectator
 
 
 func device_tag() -> String:

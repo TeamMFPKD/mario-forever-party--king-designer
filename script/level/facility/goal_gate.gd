@@ -40,6 +40,9 @@ func _on_body_entered(body: Node2D) -> void:
 
 		is_passed = true
 
+		if GameMode.is_history_play():
+			Adventure.on_level_passed()
+
 		smoke = smoke_scene.instantiate() as Node2D
 		smoke.position.x = position.x - 4
 		smoke.position.y = position.y + bar.position.y

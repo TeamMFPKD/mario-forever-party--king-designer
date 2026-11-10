@@ -11,6 +11,8 @@ class_name MpAniSpriteManager
 ## MultiplayerManager 搬到这里，网络门面不再持有表现资源。
 
 @export var mp_ani_shadow_scene: PackedScene
+## 观战视图：不发送本地数据，只显示远端幽灵。
+@export var spectate_mode: bool = false
 
 @export var player_dead_spritesframe: SpriteFrames
 @export var player_small_spritesframe: SpriteFrames
@@ -40,7 +42,14 @@ func _ready() -> void:
 		return
 	if MPManager.ghosts != null:
 		MPManager.ghosts.attach_manager(self)
-	var multiplayer_count: int = MPManager.players.size() - 1
+	# 观战者需要为每名游玩玩家各准备一个槽位；玩家则少一个自己。
+	var multiplayer_count: int = 0
+	for profile: PlayerProfile in MPManager.players:
+		if not profile.is_spectator:
+			multiplayer_count += 1
+	if not MPManager.player.is_spectator:
+		multiplayer_count -= 1
+	multiplayer_count = maxi(0, multiplayer_count)
 	for _index: int in range(multiplayer_count):
 		var ani: AnimatedSprite2D = mp_ani_shadow_scene.instantiate() as AnimatedSprite2D
 		ani.position = Vector2(-999999, -999999)
@@ -49,6 +58,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if spectate_mode:
+		return
 	var game_mode_manager: GameMode = GameModeSingleton
 	if game_mode_manager.game_mode != GameMode.GameModeType.PLAY:
 		return
@@ -108,6 +119,14 @@ func _physics_process(delta: float) -> void:
 func _exit_tree() -> void:
 	if is_instance_valid(MPManager) and MPManager.ghosts != null:
 		MPManager.ghosts.detach_manager(self)
+
+
+## 观战相机用来找目标的幽灵节点；还没收到第一帧时返回 null。
+func get_ghost(player_id: int) -> AnimatedSprite2D:
+	for ani: AnimatedSprite2D in anis:
+		if ani.has_meta("player_id") and int(ani.get_meta("player_id")) == player_id:
+			return ani
+	return null
 
 
 ## 由 GhostCacheService 在“发送端与本机在同一关卡”时调用。

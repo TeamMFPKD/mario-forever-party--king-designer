@@ -6,6 +6,8 @@ signal play_sound_drag
 
 @export var objects: Array = []
 @export var database_holder: DatabaseHolder
+## 观战视图设为 false：不生成可操作的 player，也不创建 InputHandler。
+@export var spawn_player: bool = true
 
 # 输入处理相关变量
 var is_placing: bool = false
@@ -42,6 +44,8 @@ var _preview_nodes: Array[Node2D] = []
 var _preview_grid_position: Vector2 = PREVIEW_NONE_GRID
 
 func _ready() -> void:
+	if not spawn_player:
+		return
 	# 确保有输入处理器
 	setup_input_handler()
 
@@ -659,6 +663,8 @@ func load_object_data(object_data: Array) -> void:
 	
 	for save_object: Dictionary in object_data:
 		var object_name: String = save_object["object_name"]
+		if object_name == "player" and not spawn_player:
+			continue
 		var pos_dict: Dictionary = save_object["position"]
 		var px: float = pos_dict["x"]
 		var py: float = pos_dict["y"]

@@ -11,10 +11,39 @@ extends Node
 signal all_edit_finished
 signal join_rejected(reason: String)
 
+## 掉线后保留玩家记录的宽限期。宽限内重连按 device_id 恢复；超时标记 abandoned。
+const RECONNECT_GRACE_MSEC: int = 20000
+
 var _manager: MultiplayerManager
 var _registry: SessionRegistry
 var _net: NetPeer
 var _last_roster_request_msec: int = 0
+var _abandoned_notified: Dictionary[int, bool] = {}
+
+
+func _process(_delta: float) -> void:
+	if _net == null or not _net.is_server():
+		return
+	var now: int = Time.get_ticks_msec()
+	for profile: PlayerProfile in _registry.all():
+		if profile.connected or profile.abandoned:
+			continue
+		if now - profile.disconnected_at_msec < RECONNECT_GRACE_MSEC:
+			continue
+		profile.abandoned = true
+		# 不再等待这名玩家的输入；结果页仍保留他的成绩行。
+		profile.reach_end = true
+		_registry.notify_changed(profile.id, PlayerProfile.GROUP_ALL)
+		broadcast_snapshot()
+		if _abandoned_notified.has(profile.id):
+			continue
+		_abandoned_notified[profile.id] = true
+		Log.w("玩家 %s 重连超时，已标记离线" % _manager.format_player(profile.name, profile.id))
+		if _manager.phase == RoomPhase.Phase.TRANSFER:
+			_manager.levels.on_player_left(profile.id)
+		elif _manager.phase == RoomPhase.Phase.PLAY \
+		or _manager.phase == RoomPhase.Phase.RESULT:
+			_manager.flow.on_player_left(profile.id)
 
 
 func setup(manager: MultiplayerManager, registry: SessionRegistry, net: NetPeer) -> void:
@@ -33,6 +62,7 @@ func send_join_request() -> void:
 		"name": _manager.player.name,
 		"avatar_id": _manager.player.avatar_id,
 		"device_id": _manager.player.device_id,
+		"is_spectator": _manager.player.is_spectator,
 	}
 	c2s_join_room.rpc_id(1, info)
 
@@ -46,6 +76,18 @@ func set_lobby_ready(value: bool) -> void:
 		_apply_lobby_ready(_net.local_id(), value)
 	else:
 		c2s_set_lobby_ready.rpc_id(1, value)
+
+
+## 大厅内切换“游戏 / 观战”。只有 LOBBY 阶段允许，开局后角色锁定。
+func set_spectator(value: bool) -> void:
+	if _net == null or _manager == null:
+		return
+	if _manager.phase != RoomPhase.Phase.LOBBY:
+		return
+	if _net.is_server():
+		_apply_spectator(_net.local_id(), value)
+	else:
+		c2s_set_spectator.rpc_id(1, value)
 
 
 func set_edit_finished(value: bool) -> void:
@@ -64,8 +106,11 @@ func request_start(edit_seconds: int) -> void:
 		return
 	if _manager.phase != RoomPhase.Phase.LOBBY:
 		return
+	if playing_count() <= 0:
+		Notice.show_notice("至少需要 1 名游玩玩家才能开始。", "无法开始")
+		return
 	Log.i(
-		"MPTEST] all players ready count=%d" % _registry.size()
+		"MPTEST] all players ready count=%d" % playing_count()
 	)
 	_manager.flow.start_edit(edit_seconds)
 
@@ -114,22 +159,48 @@ func request_roster() -> void:
 
 
 func all_lobby_ready() -> bool:
+	var count: int = 0
 	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator:
+			continue
+		count += 1
 		if not profile.lobby_ready:
 			return false
-	return not _registry.is_empty()
+	return count > 0
 
 
 func everyone_edit_finished() -> bool:
+	var count: int = 0
 	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator:
+			continue
+		count += 1
 		if not profile.edit_finished:
 			return false
-	return not _registry.is_empty()
+	return count > 0
+
+
+## 正式参与本局的玩家（不含观战者）。
+func playing_profiles() -> Array[PlayerProfile]:
+	var result: Array[PlayerProfile] = []
+	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator:
+			continue
+		result.append(profile)
+	return result
+
+
+func playing_count() -> int:
+	return playing_profiles().size()
+
+
+func spectator_count() -> int:
+	return _registry.size() - playing_count()
 
 
 func _apply_lobby_ready(id: int, value: bool) -> void:
 	var profile: PlayerProfile = _registry.get_player(id)
-	if profile == null:
+	if profile == null or profile.is_spectator:
 		return
 	profile.lobby_ready = value
 	if value:
@@ -141,9 +212,27 @@ func _apply_lobby_ready(id: int, value: bool) -> void:
 		Log.i("MPTEST] all players ready count=%d" % _registry.size())
 
 
-func _apply_edit_finished(id: int, value: bool) -> void:
+func _apply_spectator(id: int, value: bool) -> void:
 	var profile: PlayerProfile = _registry.get_player(id)
 	if profile == null:
+		return
+	if profile.is_spectator == value:
+		return
+	profile.is_spectator = value
+	if value:
+		# 转观战后不再占用准备/编辑名额。
+		profile.lobby_ready = false
+		profile.edit_finished = false
+	_broadcast_delta(profile)
+	Log.i(
+		"玩家 %s 切换为%s"
+		% [_manager.format_player(profile.name, profile.id), "观战" if value else "游戏"]
+	)
+
+
+func _apply_edit_finished(id: int, value: bool) -> void:
+	var profile: PlayerProfile = _registry.get_player(id)
+	if profile == null or profile.is_spectator:
 		return
 	profile.edit_finished = value
 	if value:
@@ -170,12 +259,71 @@ func _on_peer_left(id: int, reason: String) -> void:
 	if profile == null:
 		return
 	Log.w("玩家 %s — %s" % [_manager.format_player(profile.name, profile.id), reason])
-	_registry.remove(id)
+	# 主动退出：不保留 20s 宽限，立即清理。
+	if reason == "主动退出" or reason == "房主关闭房间":
+		_registry.remove(id)
+		_abandoned_notified.erase(id)
+		broadcast_snapshot()
+		if _manager.phase == RoomPhase.Phase.TRANSFER:
+			_manager.levels.on_player_left(id)
+		elif _manager.phase == RoomPhase.Phase.PLAY or _manager.phase == RoomPhase.Phase.RESULT:
+			_manager.flow.on_player_left(id)
+		return
+	# 意外断开：保留记录 20s，等待同 device_id 重连。
+	profile.connected = false
+	profile.disconnected_at_msec = Time.get_ticks_msec()
+	_registry.notify_changed(id, PlayerProfile.GROUP_ALL)
 	broadcast_snapshot()
+	Log.i("等待玩家 %s 在 %d 秒内重连" % [
+		profile.name, int(RECONNECT_GRACE_MSEC / 1000.0),
+	])
+
+
+func _find_disconnected(device_id: String, player_name: String) -> PlayerProfile:
+	if device_id.is_empty():
+		return null
+	for profile: PlayerProfile in _registry.all():
+		if profile.connected or profile.abandoned:
+			continue
+		if profile.device_id == device_id and profile.name == player_name:
+			return profile
+	return null
+
+
+func _make_profile(sender: int, info: Dictionary) -> PlayerProfile:
+	var profile: PlayerProfile = PlayerProfile.new()
+	profile.id = sender
+	profile.name = str(info.get("name", "player")).substr(0, PlayerProfile.NAME_LIMIT)
+	profile.avatar_id = str(info.get("avatar_id", ""))
+	profile.device_id = str(info.get("device_id", ""))
+	profile.is_spectator = bool(info.get("is_spectator", false))
+	profile.connected = true
+	return profile
+
+
+## 同 device_id 的玩家在 20s 内重新连上：换 peer id，保留关卡/成绩/角色。
+func _restore_profile(profile: PlayerProfile, sender: int) -> void:
+	var old_id: int = profile.id
+	_registry.remove(old_id)
+	_abandoned_notified.erase(old_id)
+	profile.id = sender
+	profile.connected = true
+	profile.abandoned = false
+	profile.disconnected_at_msec = 0
+	_registry.add(profile)
+	broadcast_snapshot()
+	Log.i(
+		"玩家 %s 已重连：%d -> %d（%s）"
+		% [
+			profile.name, old_id, sender,
+			"观战" if profile.is_spectator else "游玩",
+		]
+	)
+	_manager.flow.s2c_sync_phase_to(sender)
 	if _manager.phase == RoomPhase.Phase.TRANSFER:
-		_manager.levels.on_player_left(id)
-	elif _manager.phase == RoomPhase.Phase.PLAY or _manager.phase == RoomPhase.Phase.RESULT:
-		_manager.flow.on_player_left(id)
+		_manager.levels.resume_for(sender)
+	elif _manager.phase == RoomPhase.Phase.PLAY:
+		_manager.levels.relay_all_to(sender)
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -185,27 +333,44 @@ func c2s_join_room(info: Dictionary) -> void:
 	var sender: int = multiplayer.get_remote_sender_id()
 	if sender <= 1:
 		return
-	if _manager.phase != RoomPhase.Phase.LOBBY:
-		Log.w("拒绝加入：游戏已经开始")
-		s2c_join_rejected.rpc_id(sender, "游戏已经开始，无法加入该房间。")
-		_net.kick_peer(sender)
+	if _registry.has_player(sender):
 		return
 	if int(info.get("version", -1)) != NetPeer.PROTOCOL_VERSION:
 		Log.w("拒绝加入：协议版本不一致（%s）" % [str(info.get("version", -1))])
 		s2c_join_rejected.rpc_id(sender, "客户端版本不一致，请更新后再加入。")
 		_net.kick_peer(sender)
 		return
-	if _registry.has_player(sender):
+
+	var wants_spectator: bool = bool(info.get("is_spectator", false))
+	var device_id: String = str(info.get("device_id", ""))
+	var reconnect_name: String = str(info.get("name", ""))
+
+	# 1) 掉线重连：同 device_id + 同名、20s 宽限内，保留原角色与进度。
+	var disconnected: PlayerProfile = _find_disconnected(device_id, reconnect_name)
+	if disconnected != null:
+		_restore_profile(disconnected, sender)
 		return
 
-	var profile: PlayerProfile = PlayerProfile.new()
-	profile.id = sender
-	profile.name = str(info.get("name", "player")).substr(0, PlayerProfile.NAME_LIMIT)
-	profile.avatar_id = str(info.get("avatar_id", ""))
-	profile.device_id = str(info.get("device_id", ""))
+	# 2) 游戏已开始：只有观战角色可以加入；游玩角色请重连或等下一局。
+	if _manager.phase != RoomPhase.Phase.LOBBY and not wants_spectator:
+		Log.w("拒绝加入：游戏已经开始（name=%s）" % str(info.get("name", "?")))
+		s2c_join_rejected.rpc_id(sender, "游戏已开始，只能以观战身份加入。")
+		_net.kick_peer(sender)
+		return
+
+	var profile: PlayerProfile = _make_profile(sender, info)
 	_registry.add(profile)
-	Log.i("MPTEST] player joined name=%s id=%d" % [profile.name, profile.id])
+	Log.i(
+		"MPTEST] player joined name=%s id=%d role=%s"
+		% [profile.name, profile.id, "观战" if profile.is_spectator else "游玩"]
+	)
 	broadcast_snapshot()
+	if _manager.phase != RoomPhase.Phase.LOBBY:
+		# 中途加入的观战者：同步当前阶段；传输/游玩阶段顺手拿全量关卡。
+		_manager.flow.s2c_sync_phase_to(sender)
+		if _manager.phase == RoomPhase.Phase.TRANSFER \
+		or _manager.phase == RoomPhase.Phase.PLAY:
+			_manager.levels.relay_all_to(sender)
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -224,6 +389,15 @@ func c2s_set_edit_finished(value: bool) -> void:
 	if _manager.phase != RoomPhase.Phase.EDIT:
 		return
 	_apply_edit_finished(multiplayer.get_remote_sender_id(), value)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func c2s_set_spectator(value: bool) -> void:
+	if _net == null or not _net.is_server():
+		return
+	if _manager.phase != RoomPhase.Phase.LOBBY:
+		return
+	_apply_spectator(multiplayer.get_remote_sender_id(), value)
 
 
 @rpc("authority", "call_remote", "reliable")

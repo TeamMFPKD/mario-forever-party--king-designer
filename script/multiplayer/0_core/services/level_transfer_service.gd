@@ -70,6 +70,11 @@ func begin_collect() -> void:
 		return
 	_reset_transfer_state()
 	var local: PlayerProfile = _manager.player
+	if local.is_spectator:
+		# 房主自己观战：没有自己的关卡，只等玩家上传。
+		Log.i("房主为观战者，跳过本机关卡收集")
+		_check_all_levels_ready()
+		return
 	var bytes: PackedByteArray = _read_local_level_bytes(local)
 	if bytes.is_empty():
 		Log.e("房主关卡文件缺失，无法开始传输")
@@ -89,6 +94,12 @@ func submit_local_level() -> void:
 	if _net == null or _net.is_server():
 		return
 	var local: PlayerProfile = _manager.player
+	if local.is_spectator:
+		# 观战者不提供关卡，只接收主机中继。
+		return
+	if local.level_ok:
+		# 重连时主机已经持有这本关卡，不需要重复上传。
+		return
 	var bytes: PackedByteArray = _read_local_level_bytes(local)
 	if bytes.is_empty():
 		Log.e("本地关卡文件缺失，无法提交")
@@ -153,19 +164,21 @@ func _read_local_level_bytes(profile: PlayerProfile) -> PackedByteArray:
 	return bytes
 
 
-## 主机把某个玩家的关卡分块中继给其余所有客户端。
+## 主机把某个玩家的关卡分块中继给其余客户端。
+##
+## 只有“游玩玩家”会阻塞 level_ok；观战者属于尽力而为，失败也不影响开局。
 func _relay_level(owner: PlayerProfile, bytes: PackedByteArray) -> void:
 	var pending: Dictionary = {}
+	var spectators: Array[int] = []
 	for profile: PlayerProfile in _registry.all():
 		if profile.id == owner.id:
 			continue
 		if profile.id == _net.local_id() and _net.is_server():
 			continue
-		pending[profile.id] = true
-
-	if pending.is_empty():
-		_mark_level_ok(owner.id)
-		return
+		if profile.is_spectator:
+			spectators.append(profile.id)
+		else:
+			pending[profile.id] = true
 
 	var total_chunks: int = _chunk_count(bytes.size())
 	var sha: String = _sha256(bytes)
@@ -178,13 +191,53 @@ func _relay_level(owner: PlayerProfile, bytes: PackedByteArray) -> void:
 	_deadlines[owner.id] = Time.get_ticks_msec() + TRANSFER_TIMEOUT_MSEC
 
 	for peer_id: Variant in pending.keys():
-		var target: int = int(peer_id)
-		s2c_level_begin.rpc_id(target, owner.id, owner.level_file_name, total_chunks, sha)
-		for index: int in range(total_chunks):
-			var begin: int = index * CHUNK_SIZE
-			var end: int = mini(begin + CHUNK_SIZE, bytes.size())
-			s2c_level_chunk.rpc_id(target, owner.id, index, bytes.slice(begin, end))
-		s2c_level_end.rpc_id(target, owner.id)
+		_send_level_to(int(peer_id), owner, bytes, total_chunks, sha)
+	for spectator_id: int in spectators:
+		_send_level_to(spectator_id, owner, bytes, total_chunks, sha)
+
+	if pending.is_empty():
+		_mark_level_ok(owner.id)
+
+
+func _send_level_to(
+	target: int,
+	owner: PlayerProfile,
+	bytes: PackedByteArray,
+	total_chunks: int,
+	sha: String
+) -> void:
+	s2c_level_begin.rpc_id(target, owner.id, owner.level_file_name, total_chunks, sha)
+	for index: int in range(total_chunks):
+		var begin: int = index * CHUNK_SIZE
+		var end: int = mini(begin + CHUNK_SIZE, bytes.size())
+		s2c_level_chunk.rpc_id(target, owner.id, index, bytes.slice(begin, end))
+	s2c_level_end.rpc_id(target, owner.id)
+
+
+## 中途加入的观战者 / 重连玩家：把主机已有的全部关卡发给他。
+## 只用于 TRANSFER / PLAY，客户端接收端也会按阶段放行。
+func relay_all_to(peer_id: int) -> void:
+	if _net == null or not _net.is_server():
+		return
+	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator or not profile.level_ok:
+			continue
+		var path: String = profile.level_file_name
+		if not _is_safe_level_path(path) or not FileAccess.file_exists(path):
+			continue
+		var bytes: PackedByteArray = FileAccess.get_file_as_bytes(path)
+		if bytes.is_empty() or bytes.size() > MAX_LEVEL_SIZE:
+			continue
+		var total_chunks: int = _chunk_count(bytes.size())
+		_send_level_to(peer_id, profile, bytes, total_chunks, _sha256(bytes))
+
+
+## 重连玩家回到 TRANSFER：如果自己的关卡还没到主机，等他重新上传；
+## 其余关卡由 relay_all_to 补齐。
+func resume_for(peer_id: int) -> void:
+	if _net == null or not _net.is_server():
+		return
+	relay_all_to(peer_id)
 
 
 func _mark_level_ok(owner_id: int) -> void:
@@ -207,12 +260,17 @@ func _mark_level_ok(owner_id: int) -> void:
 func _check_all_levels_ready() -> void:
 	if _net == null or not _net.is_server():
 		return
-	if _registry.is_empty():
-		return
+	var count: int = 0
 	for profile: PlayerProfile in _registry.all():
-		if not profile.level_ok:
-			return
-	Log.i("MPTEST] transfer complete count=%d" % _registry.size())
+		if profile.is_spectator or profile.abandoned:
+			continue
+		count += 1
+		if profile.level_ok or profile.level_failed:
+			continue
+		return
+	if count <= 0:
+		return
+	Log.i("MPTEST] transfer complete players=%d" % count)
 	all_levels_ready.emit()
 
 
@@ -227,11 +285,17 @@ func _fail_owner(owner_id: int, reason: String) -> void:
 		_manager.flow.abort_to_lobby("房主关卡数据异常，已返回大厅。")
 		return
 	var profile: PlayerProfile = _registry.get_player(owner_id)
-	var display_name: String = "?" if profile == null else profile.name
-	Log.e("玩家 %s 关卡传输失败：%s" % [display_name, reason])
+	if profile == null:
+		_check_all_levels_ready()
+		return
+	Log.e("玩家 %s 关卡传输失败：%s" % [profile.name, reason])
+	# 不再踢人：该玩家的关卡记为不可用，其他人照常玩；
+	# 他本人仍然可以玩别人的关卡。
+	profile.level_failed = true
+	profile.level_ok = false
+	profile.has_level = false
+	_broadcast_delta(profile)
 	player_failed.emit(owner_id, reason)
-	_lobby.remove_player(owner_id)
-	_net.kick_peer(owner_id)
 	_check_all_levels_ready()
 
 
@@ -464,8 +528,13 @@ func c2s_level_relay_ack(owner_id: int, ok: bool, reason: String) -> void:
 	_relay[owner_id] = state
 	if not ok:
 		Log.e("客户端 %d 接收关卡 %d 失败：%s" % [sender, owner_id, reason])
-		_fail_owner(owner_id, "客户端接收失败")
-		return
+		# 只记录“这个接收者缺这一关”，不惩罚关卡作者。
+		var recipient: PlayerProfile = _registry.get_player(sender)
+		if recipient != null:
+			var file_name: String = str(state.get("file_name", ""))
+			if not file_name.is_empty() and not recipient.missing_levels.has(file_name):
+				recipient.missing_levels.append(file_name)
+			_broadcast_delta(recipient)
 	if pending.is_empty():
 		_mark_level_ok(owner_id)
 
@@ -490,7 +559,9 @@ func s2c_level_begin(
 ) -> void:
 	if _net == null or _net.is_server():
 		return
-	if _manager.phase != RoomPhase.Phase.TRANSFER:
+	# PLAY 阶段也允许：中途加入的观战者 / 重连玩家需要补关卡。
+	if _manager.phase != RoomPhase.Phase.TRANSFER \
+	and _manager.phase != RoomPhase.Phase.PLAY:
 		return
 	if not _is_safe_level_path(file_name):
 		c2s_level_relay_ack.rpc_id(1, owner_id, false, "路径不合法")

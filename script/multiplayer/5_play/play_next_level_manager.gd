@@ -22,10 +22,16 @@ func next_level() -> void:
 	LifeManager.is_lives_set_when_ready = false
 	if MPManager.current_level_count < MPManager.total_levels - 1:
 		MPManager.current_level_count += 1
+		MPManager.flow.report_current_level(MPManager.current_level_count)
 		Log.i("PlayNextLevelManager", "player dead and should go to next level")
 		GlobalTransition.reload_current_scene()
 	else:
-		GlobalTransition.change_scene_to_file("uid://c0civs02iqoki")
+		# 先上报 reach_end，再进入观战等待；否则其他人会一直等不到“全员完成”。
+		MPManager.flow.notify_reach_end()
+		if MPManager.phase == RoomPhase.Phase.PLAY:
+			GlobalTransition.change_scene_to_file(MatchFlowService.SCENE_SPECTATE)
+		else:
+			GlobalTransition.change_scene_to_file(MatchFlowService.SCENE_RESULT)
 
 
 func _report_current_level(passed: bool) -> void:

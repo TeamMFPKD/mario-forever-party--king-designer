@@ -26,8 +26,19 @@ corner_radius_bottom_left = 24
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_avatar"]
 shader = ExtResource("3_shader")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_role"]
+content_margin_left = 10.0
+content_margin_top = 2.0
+content_margin_right = 10.0
+content_margin_bottom = 2.0
+bg_color = Color(0.3, 0.3, 0.35, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="PlayerListLine" type="HBoxContainer" unique_id=723223620]
-custom_minimum_size = Vector2(550, 0)
+custom_minimum_size = Vector2(760, 0)
 
 [node name="PlayerIdLabel" parent="." unique_id=1008498644 instance=ExtResource("1_nfru4")]
 custom_minimum_size = Vector2(60, 0)
@@ -114,8 +125,25 @@ stretch_mode = 6
 [node name="PlayerNameLabel" parent="." unique_id=1180843724 instance=ExtResource("1_nfru4")]
 auto_translate_mode = 2
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名"
+
+[node name="PlayerRoleBadge" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(76, 32)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_role")
+
+[node name="PlayerRoleLabel" type="Label" parent="PlayerRoleBadge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 18
+text = "游戏"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PlayerReady" type="Control" parent="." unique_id=1776961063]
 visible = false
@@ -146,3 +174,12 @@ theme_override_font_sizes/font_size = 18
 text = "Ready"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PlayerRoleButton" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "切换为观战"
