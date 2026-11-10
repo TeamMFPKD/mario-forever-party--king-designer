@@ -986,7 +986,7 @@ func _ensure_level_available() -> bool:
 | `multiplayer_ani_sprite_manager.gd` | 新增 `spectate_mode`（观战视图只收不发）与 `get_ghost()`；幽灵槽位按游玩玩家数创建 |
 | `game_start.gd` | 开始按钮：非房主隐藏、0 游玩玩家禁用 |
 | `host_button.gd` / `join_button.gd` + `role_toggle_button.gd` | 运行时注入「参与模式」一行：Label + 角色按钮（显示当前角色，点击切换）；`--mp-spectate` 测试开关 |
-| `player_list.gd` + `ui/list/player_list.tscn` | 矩形角色徽章（绿「游戏」/ 蓝「观战」）；本地玩家行显示切换按钮；不再在名字后拼「（观战）」 |
+| `player_list.gd` + `ui/list/player_list.tscn` | 矩形角色按钮（绿「游戏」/ 蓝「观战」，固定 140×44，白字黑边、主题字体）；仅本地玩家可点击切换，准备后禁用；不再在名字后拼「（观战）」 |
 | `ready_button.gd` / `edit_ready_button.gd` / `level_transfer_progress_label.gd` | 观战者隐藏准备按钮、分母只数玩家 |
 | `script/spectator/spectate_room.gd` + `room/spectate_room.tscn` | PLAY 实际画面：实例化裁剪后的 `play_room_base`，加载目标当前关卡、显示幽灵、`LevelCamera` 跟随目标；左右键切换目标；目标换关重建；左上信息栏只显示「正在观看 / 玩家名 / 关卡进度 / x/y」，无描边、不随目标改色；EDIT 阶段把进度替换为「编辑中」，用 `Hud/EditorView` 显示目标的关卡画布截图；TRANSFER 仍显示中央传输提示；紫色 `psc.png` 视差背景 + `game_border.png` 边框；关卡边框使用目标玩家色；目标幽灵不透明、其他半透明 |
 | `script/multiplayer/0_core/services/editor_stream_service.gd` + `script/spectator/editor_streamer.gd` | EDIT 观战截图流：稳定 RPC 节点、主机订阅表、目标端订阅者集合、480×360 / JPEG 65 / 4fps、定向 `rpc_id`；只抓 `SubViewport`，无订阅者不抓屏 |

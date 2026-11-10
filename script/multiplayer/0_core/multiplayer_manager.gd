@@ -289,13 +289,21 @@ func get_local_player() -> PlayerProfile:
 
 ## 大厅里切换本地玩家的游戏/观战角色。
 ## 未进房时只改本地预选；已进房且处于 LOBBY 时交给主机广播。
+## 已准备时角色锁定，必须先在 ready 按钮上取消准备。
 func set_local_spectator(value: bool) -> void:
-	if player.is_spectator == value:
+	var local: PlayerProfile = get_local_player()
+	if local == null or local.is_spectator == value:
 		return
-	player.is_spectator = value
-	local_role_changed.emit(value)
-	if net != null and net.is_online() and phase == RoomPhase.Phase.LOBBY:
+	if net != null and net.is_online():
+		if phase != RoomPhase.Phase.LOBBY or local.lobby_ready:
+			return
+		# 等主机确认后再由 delta/快照更新本地角色，避免被拒绝后本地先行改坏。
 		lobby.set_spectator(value)
+		return
+	local.is_spectator = value
+	if player != null:
+		player.is_spectator = value
+	local_role_changed.emit(value)
 
 
 func get_lobby_page() -> int:

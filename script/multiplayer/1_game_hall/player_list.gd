@@ -65,22 +65,21 @@ func _on_players_updated() -> void:
 		var avatar_ring: Panel = player_list_line.get_node("PlayerAvatarRect/PlayerAvatar/Ring") as Panel
 		AvatarRing.paint(avatar_ring, MPManager.player_color(profile.id))
 
-		# 参与模式：矩形徽章 + 仅本地玩家可见的切换按钮
-		var role_badge: PanelContainer = player_list_line.get_node("PlayerRoleBadge") as PanelContainer
-		var role_label: Label = player_list_line.get_node("PlayerRoleBadge/PlayerRoleLabel") as Label
-		role_label.text = tr("观战") if profile.is_spectator else tr("游戏")
+		# 参与模式：角色徽章本身就是按钮；只有本地玩家可点击切换。
+		var role_button: Button = player_list_line.get_node("PlayerRoleButton") as Button
+		var is_local: bool = profile.id == MPManager.player.id
+		role_button.text = tr("观战") if profile.is_spectator else tr("游戏")
+		# 已准备后锁定参与模式；非本地玩家只作为徽章显示。
+		role_button.disabled = not is_local \
+			or MPManager.phase != RoomPhase.Phase.LOBBY \
+			or profile.lobby_ready
 		var role_style: StyleBoxFlat = StyleBoxFlat.new()
 		role_style.bg_color = Color("3d6fe0") if profile.is_spectator else Color("2f9e6e")
 		role_style.set_corner_radius_all(8)
 		role_style.content_margin_left = 10.0
 		role_style.content_margin_right = 10.0
-		role_badge.add_theme_stylebox_override("panel", role_style)
-
-		var role_button: Button = player_list_line.get_node("PlayerRoleButton") as Button
-		var is_local: bool = profile.id == MPManager.player.id
-		role_button.visible = is_local
-		role_button.disabled = MPManager.phase != RoomPhase.Phase.LOBBY
-		role_button.text = tr("切换为游戏") if profile.is_spectator else tr("切换为观战")
+		for state: String in ["normal", "hover", "pressed", "disabled"]:
+			role_button.add_theme_stylebox_override(state, role_style)
 		if is_local:
 			role_button.pressed.connect(_on_role_button_pressed)
 

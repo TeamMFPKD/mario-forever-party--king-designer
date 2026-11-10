@@ -13,11 +13,13 @@ func _ready() -> void:
 	pressed.connect(_on_pressed)
 	MPManager.local_role_changed.connect(_on_role_changed)
 	MPManager.phase_changed.connect(_on_phase_changed)
+	MPManager.players_updated.connect(_refresh)
 	_refresh()
 
 
 func _on_pressed() -> void:
-	MPManager.set_local_spectator(not MPManager.player.is_spectator)
+	var local: PlayerProfile = MPManager.get_local_player()
+	MPManager.set_local_spectator(local == null or not local.is_spectator)
 
 
 func _on_role_changed(_is_spectator: bool) -> void:
@@ -29,7 +31,12 @@ func _on_phase_changed(_phase: int, _payload: Dictionary) -> void:
 
 
 func _refresh() -> void:
-	text = tr("观战") if MPManager.player.is_spectator else tr("游戏")
-	disabled = MPManager.net != null \
-		and MPManager.net.is_online() \
-		and MPManager.phase != RoomPhase.Phase.LOBBY
+	var local: PlayerProfile = MPManager.get_local_player()
+	var is_spectator: bool = local != null and local.is_spectator
+	text = tr("观战") if is_spectator else tr("游戏")
+	var online: bool = MPManager.net != null and MPManager.net.is_online()
+	var locked: bool = online and (
+		MPManager.phase != RoomPhase.Phase.LOBBY
+		or (local != null and local.lobby_ready)
+	)
+	disabled = locked

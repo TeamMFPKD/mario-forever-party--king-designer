@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="1_nfru4"]
 [ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/ui/new_bottom.png" id="2_xwl44"]
 [ext_resource type="Shader" uid="uid://bxy65noklqais" path="res://shader/avatar_circle.gdshader" id="3_shader"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="4_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
 bg_color = Color(1, 1, 1, 1)
@@ -129,27 +130,11 @@ size_flags_horizontal = 3
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名"
 
-[node name="PlayerRoleBadge" type="PanelContainer" parent="."]
-custom_minimum_size = Vector2(76, 32)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/panel = SubResource("StyleBoxFlat_role")
-
-[node name="PlayerRoleLabel" type="Label" parent="PlayerRoleBadge"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 18
-text = "游戏"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="PlayerReady" type="Control" parent="." unique_id=1776961063]
 visible = false
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 8
 
 [node name="ReadySprite2D" type="Sprite2D" parent="PlayerReady" unique_id=1094595561]
 position = Vector2(60, 32)
@@ -176,10 +161,24 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PlayerRoleButton" type="Button" parent="."]
-visible = false
-custom_minimum_size = Vector2(150, 0)
+custom_minimum_size = Vector2(140, 44)
 layout_mode = 2
+size_flags_horizontal = 0
 size_flags_vertical = 4
 focus_mode = 0
-theme_override_font_sizes/font_size = 20
-text = "切换为观战"
+theme = ExtResource("4_theme")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_role")
+theme_override_styles/hover = SubResource("StyleBoxFlat_role")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_role")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_role")
+text = "游戏"
+
+

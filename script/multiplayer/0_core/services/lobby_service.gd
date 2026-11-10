@@ -218,6 +218,9 @@ func _apply_spectator(id: int, value: bool) -> void:
 		return
 	if profile.is_spectator == value:
 		return
+	# 已准备后锁定参与模式；必须先取消准备才能切观战/游戏。
+	if profile.lobby_ready:
+		return
 	profile.is_spectator = value
 	if value:
 		# 转观战后不再占用准备/编辑名额。
