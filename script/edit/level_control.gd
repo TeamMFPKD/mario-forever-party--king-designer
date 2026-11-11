@@ -287,13 +287,8 @@ func _on_item_button_pressed(item_type: ItemButton.ItemType, button: ItemButton)
 		ItemButton.ItemType.ERASER:
 			switch_to_eraser_mode()
 
-	var item_groups: Array[Node] = get_tree().get_nodes_in_group("item_group")
-	for node: Node in item_groups:
-		if node is Control:
-			var control: Control = node
-			var timer: SceneTreeTimer = get_tree().create_timer(0.1)
-			await timer.timeout
-			control.visible = false
+	# 物品栏的收起由 ItemButton / GroupButton 自行负责：先播完选中动画，
+	# 期间按钮已退出鼠标拾取，不会干扰后续操作。
 
 func reset_input_state() -> void:
 	var input_handler: InputHandler = null
