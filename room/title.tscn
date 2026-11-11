@@ -36,55 +36,17 @@
 [ext_resource type="Script" uid="uid://csepu2uwl85p0" path="res://script/title/client_invisible_node_set.gd" id="24_if31c"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="25_ssvsf"]
 [ext_resource type="Script" uid="uid://b863abvb5xbma" path="res://script/option/volume.gd" id="26_nl766"]
-[ext_resource type="Script" path="res://script/multiplayer/ui/title_net_bridge.gd" id="99_bridge"]
 [ext_resource type="PackedScene" uid="uid://do64dx5e3ok1q" path="res://ui/ui_h_slider.tscn" id="28_nmdgl"]
 [ext_resource type="PackedScene" uid="uid://b05l8y21x0q11" path="res://object/input_map_set.tscn" id="28_wphsk"]
 [ext_resource type="Script" uid="uid://cjmbnxdu46yvg" path="res://script/option/platform_control_set_button.gd" id="29_w12k4"]
 [ext_resource type="Script" uid="uid://cofxhxjig8glj" path="res://script/option/resolution_button.gd" id="30_01vp3"]
 [ext_resource type="Script" uid="uid://bi1hchn56a1i1" path="res://script/option/mobile_layout_set.gd" id="31_n7yan"]
-[ext_resource type="Texture2D" uid="uid://b2tlv1vmg08gv" path="res://sprite/pipe/pipe_vertical.png" id="37_yfoso"]
-[ext_resource type="Texture2D" uid="uid://dcxv3y55u505" path="res://sprite/enemy/troopa/troopa_green.png" id="38_rowrn"]
-[ext_resource type="Texture2D" uid="uid://che88fc21st5t" path="res://sprite/enemy/spiny.png" id="39_pwog8"]
-[ext_resource type="Texture2D" uid="uid://vwi8pqa2xavj" path="res://sprite/bonus/mushroom_big.png" id="40_pwog8"]
 [ext_resource type="PackedScene" path="res://object/multiplayer/avatar/avatar_selector.tscn" id="41_avatar"]
 [ext_resource type="Script" uid="uid://bfuqiopjih0j2" path="res://script/option/input_map_reset_button.gd" id="42_reset"]
-[ext_resource type="Script" path="res://script/option/history_ghost_toggle.gd" id="43_ghost"]
+[ext_resource type="Script" uid="uid://bu318c40ey0n7" path="res://script/option/history_ghost_toggle.gd" id="43_ghost"]
 [ext_resource type="Script" path="res://script/title/fit_content_panel.gd" id="44_fit"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4ndrp"]
-atlas = ExtResource("37_yfoso")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lhxpi"]
-atlas = ExtResource("38_rowrn")
-region = Rect2(1, 47, 31, 45)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8u7gm"]
-load_path = "res://.godot/imported/pipe_vertical.png-b57f65f2f0ed8a8a043d71fb97f897d8.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_p8x2f"]
-atlas = SubResource("CompressedTexture2D_8u7gm")
-region = Rect2(0, 64, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yfoso"]
-atlas = ExtResource("37_yfoso")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rowrn"]
-atlas = SubResource("CompressedTexture2D_8u7gm")
-region = Rect2(64, 64, 64, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pwog8"]
-atlas = ExtResource("37_yfoso")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_37ha4"]
-atlas = ExtResource("39_pwog8")
-region = Rect2(0, 0, 35, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_32xhp"]
-atlas = SubResource("CompressedTexture2D_8u7gm")
-region = Rect2(192, 64, 64, 32)
+[ext_resource type="PackedScene" path="res://ui/title/pipe_menu.tscn" id="50_pipe_menu"]
+[ext_resource type="Script" uid="uid://dre81e0pua38y" path="res://script/multiplayer/ui/title_net_bridge.gd" id="99_bridge"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -110,7 +72,7 @@ scene_uid = &"uid://ci7x1alix6g2"
 script = ExtResource("4_ikv4w")
 scene_uid = &"uid://de64xnukpa0re"
 
-[node name="JumpToSceneAdventure" type="Node" parent="."]
+[node name="JumpToSceneAdventure" type="Node" parent="." unique_id=204944670]
 script = ExtResource("4_ikv4w")
 scene_uid = &"res://room/adventure_stage.tscn"
 
@@ -143,18 +105,56 @@ theme_override_constants/margin_top = 96
 theme_override_constants/margin_right = 96
 theme_override_constants/margin_bottom = 96
 
-[node name="Title" type="Label" parent="GameRoomSize/Title" unique_id=1197774217]
+[node name="Title" type="Control" parent="GameRoomSize/Title" unique_id=1197774217]
+custom_minimum_size = Vector2(1400, 420)
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 15
-theme_override_constants/shadow_offset_y = 15
-theme_override_constants/outline_size = 20
-theme_override_constants/shadow_outline_size = 20
+
+[node name="Line1" type="HBoxContainer" parent="GameRoomSize/Title/Title" unique_id=180953161]
+layout_mode = 0
+offset_right = 1400.0
+offset_bottom = 200.0
+theme_override_constants/separation = 36
+alignment = 1
+
+[node name="Mario" type="Label" parent="GameRoomSize/Title/Title/Line1" unique_id=813859496]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.882353, 0.152941, 0.152941, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_colors/font_outline_color = Color(0.039216, 0.039216, 0.039216, 1)
+theme_override_constants/shadow_offset_x = 14
+theme_override_constants/shadow_offset_y = 14
+theme_override_constants/outline_size = 18
 theme_override_fonts/font = ExtResource("11_gcvh4")
 theme_override_font_sizes/font_size = 160
-text = "MARIO FOREVER
-MAKER PARTY"
+text = "MARIO"
+
+[node name="Forever" type="Label" parent="GameRoomSize/Title/Title/Line1" unique_id=1607249066]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.184314, 0.74902, 0.309804, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_colors/font_outline_color = Color(0.039216, 0.039216, 0.039216, 1)
+theme_override_constants/shadow_offset_x = 14
+theme_override_constants/shadow_offset_y = 14
+theme_override_constants/outline_size = 18
+theme_override_fonts/font = ExtResource("11_gcvh4")
+theme_override_font_sizes/font_size = 160
+text = "FOREVER"
+
+[node name="Line2" type="Label" parent="GameRoomSize/Title/Title" unique_id=2044917673]
+layout_mode = 0
+offset_top = 200.0
+offset_right = 1400.0
+offset_bottom = 400.0
+theme_override_colors/font_color = Color(1, 0.823529, 0.247059, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_colors/font_outline_color = Color(0.039216, 0.039216, 0.039216, 1)
+theme_override_constants/shadow_offset_x = 14
+theme_override_constants/shadow_offset_y = 14
+theme_override_constants/outline_size = 18
+theme_override_fonts/font = ExtResource("11_gcvh4")
+theme_override_font_sizes/font_size = 160
+text = "MAKER PARTY"
+horizontal_alignment = 1
 
 [node name="SubTitle" type="Label" parent="GameRoomSize/Title/Title" unique_id=718087178]
 layout_mode = 1
@@ -163,21 +163,22 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -353.0
-offset_top = -23.0
-offset_bottom = 31.0
+offset_left = -420.0
+offset_top = -74.0
+offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
 pivot_offset_ratio = Vector2(0.5, 0.5)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/shadow_offset_x = 15
-theme_override_constants/shadow_offset_y = 15
-theme_override_constants/outline_size = 20
-theme_override_constants/shadow_outline_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.4)
+theme_override_colors/font_outline_color = Color(0.039216, 0.039216, 0.039216, 1)
+theme_override_constants/shadow_offset_x = 8
+theme_override_constants/shadow_offset_y = 8
+theme_override_constants/outline_size = 12
 theme_override_fonts/font = ExtResource("11_gcvh4")
 theme_override_font_sizes/font_size = 48
-text = "GALAXY UPDATE"
+text = "CHALLENGE UPDATE"
+horizontal_alignment = 2
 
 [node name="Timer" type="Timer" parent="GameRoomSize/Title/Title/SubTitle" unique_id=223847635]
 one_shot = true
@@ -214,93 +215,16 @@ horizontal_alignment = 2
 vertical_alignment = 1
 script = ExtResource("9_4xy5l")
 
-[node name="ChooseModePanel" parent="GameRoomSize" unique_id=1563157272 instance=ExtResource("4_i3lsm")]
+[node name="PipeMenu" parent="GameRoomSize" unique_id=222113224 instance=ExtResource("50_pipe_menu")]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -452.5
-offset_top = -620.0
-offset_right = 452.5
-offset_bottom = -28.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="ChooseMode" type="MarginContainer" parent="GameRoomSize/ChooseModePanel" unique_id=683295364]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -401.0
-offset_top = -604.0
-offset_right = 401.0
-offset_bottom = 28.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 64
-
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/ChooseModePanel/ChooseMode" unique_id=758802449]
-layout_mode = 2
-theme_override_constants/separation = 128
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer" unique_id=847404174]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 0
-theme_override_constants/separation = 32
-
-[node name="ChooseHostButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer" unique_id=1763014009 instance=ExtResource("2_w52fc")]
-custom_minimum_size = Vector2(320, 150)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "组织游戏"
-icon_alignment = 1
-
-[node name="ChooseJoinButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer" unique_id=174238763 instance=ExtResource("2_w52fc")]
-custom_minimum_size = Vector2(320, 150)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "加入游戏"
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer" unique_id=2012226893]
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 0
-theme_override_constants/separation = 32
-
-[node name="HistoryButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1210628054 instance=ExtResource("2_w52fc")]
-custom_minimum_size = Vector2(320, 150)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "游玩记录"
-
-[node name="AdventureButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" instance=ExtResource("2_w52fc")]
-custom_minimum_size = Vector2(320, 130)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "百人团"
-
-[node name="OptionsButton" parent="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2" unique_id=1658739772 instance=ExtResource("2_w52fc")]
-custom_minimum_size = Vector2(320, 150)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "设置界面"
+host_visible_set = NodePath("../HostPage/ControlVisibieSet")
+join_visible_set = NodePath("../JoinPage/ControlVisibieSet")
+history_jump = NodePath("../../JumpToSceneHistory")
+raid_jump = NodePath("../../JumpToSceneAdventure")
+options_visible_set = NodePath("../Options/ControlVisibieSet")
 
 [node name="HostPage" parent="GameRoomSize" unique_id=1248373036 instance=ExtResource("8_c2fru")]
 visible = false
-script = ExtResource("44_fit")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -313,6 +237,7 @@ offset_right = 450.0
 offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("44_fit")
 
 [node name="ControlVisibieSet" parent="GameRoomSize/HostPage" unique_id=1005411227 instance=ExtResource("9_ty11l")]
 
@@ -385,7 +310,6 @@ player_page = NodePath("../../../../../../PlayerPage")
 
 [node name="JoinPage" parent="GameRoomSize" unique_id=1961076983 instance=ExtResource("8_c2fru")]
 visible = false
-script = ExtResource("44_fit")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -398,6 +322,7 @@ offset_right = 450.0
 offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("44_fit")
 
 [node name="ControlVisibieSet" parent="GameRoomSize/JoinPage" unique_id=514177840 instance=ExtResource("9_ty11l")]
 
@@ -1203,88 +1128,6 @@ layout_mode = 2
 text = "EN / 中文"
 script = ExtResource("23_e6ipe")
 
-[node name="TitleDecoration" type="Control" parent="GameRoomSize" unique_id=987626403]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -20.0
-offset_top = -40.0
-offset_right = 20.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Node2D" type="Node2D" parent="GameRoomSize/TitleDecoration" unique_id=993007539]
-z_index = -10
-scale = Vector2(3, 3)
-
-[node name="Sprite2DPipe" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D" unique_id=214733939]
-position = Vector2(-156.00002, -118.66666)
-rotation = -0.34906584
-texture = SubResource("AtlasTexture_4ndrp")
-
-[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe" unique_id=674446431]
-z_index = -1
-position = Vector2(0, -40)
-texture = SubResource("AtlasTexture_lhxpi")
-flip_h = true
-metadata/_edit_lock_ = true
-
-[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe" unique_id=163928691]
-repeat_size = Vector2(0, 32)
-repeat_times = 6
-metadata/_edit_lock_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe/Parallax2D" unique_id=1800957048]
-position = Vector2(0, 144)
-texture = SubResource("AtlasTexture_p8x2f")
-metadata/_edit_lock_ = true
-
-[node name="Sprite2DPipe2" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D" unique_id=2073061778]
-position = Vector2(-3.9999998, -113.33333)
-texture = SubResource("AtlasTexture_yfoso")
-
-[node name="Sprite2D2" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe2" unique_id=1176615393]
-z_index = -1
-position = Vector2(0, -56)
-scale = Vector2(4, 4)
-texture = ExtResource("40_pwog8")
-metadata/_edit_lock_ = true
-
-[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe2" unique_id=1010591224]
-repeat_size = Vector2(0, 32)
-repeat_times = 6
-metadata/_edit_lock_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe2/Parallax2D" unique_id=1516081178]
-position = Vector2(0, 144)
-texture = SubResource("AtlasTexture_rowrn")
-metadata/_edit_lock_ = true
-
-[node name="Sprite2DPipe3" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D" unique_id=725260187]
-position = Vector2(172, -60.00002)
-rotation = 0.7853982
-texture = SubResource("AtlasTexture_pwog8")
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe3" unique_id=1364785631]
-z_index = -1
-position = Vector2(0, -40)
-texture = SubResource("AtlasTexture_37ha4")
-flip_h = true
-metadata/_edit_lock_ = true
-
-[node name="Parallax2D" type="Parallax2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe3" unique_id=1747001236]
-repeat_size = Vector2(0, 32)
-repeat_times = 6
-metadata/_edit_lock_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="GameRoomSize/TitleDecoration/Node2D/Sprite2DPipe3/Parallax2D" unique_id=1424443759]
-position = Vector2(0, 144)
-texture = SubResource("AtlasTexture_32xhp")
-metadata/_edit_lock_ = true
-
 [node name="BGMStartToPlayTimer" type="Timer" parent="." unique_id=317060978]
 wait_time = 0.3
 one_shot = true
@@ -1298,7 +1141,7 @@ bus = &"Music"
 stream = ExtResource("4_mavin")
 bus = &"Music"
 
-[node name="NetBridge" type="Node" parent="."]
+[node name="NetBridge" type="Node" parent="." unique_id=505411436]
 script = ExtResource("99_bridge")
 
 [node name="ClientInvisibleNodeSet" type="Node" parent="." unique_id=2001440291 node_paths=PackedStringArray("invisible_node_set")]
@@ -1310,11 +1153,6 @@ show_mode = 0
 
 [connection signal="timeout" from="GameRoomSize/Title/Title/SubTitle/Timer" to="GameRoomSize/Title/Title/SubTitle/UiAnimationScaleIn" method="_on_ui_animation_start"]
 [connection signal="ui_animation_finished" from="GameRoomSize/Title/UiAnimationFall" to="GameRoomSize/Title/Title/SubTitle/Timer" method="start"]
-[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseHostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer/ChooseJoinButton" to="GameRoomSize/JoinPage/ControlVisibieSet" method="_set_visible"]
-[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/HistoryButton" to="JumpToSceneHistory" method="jump_to_scene"]
-[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/AdventureButton" to="JumpToSceneAdventure" method="jump_to_scene"]
-[connection signal="pressed" from="GameRoomSize/ChooseModePanel/ChooseMode/HBoxContainer/VBoxContainer2/OptionsButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="GameRoomSize/HostPage/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer/HBoxContainer/HostButton" to="ClientInvisibleNodeSet" method="_on_nodes_visible_set"]
@@ -1346,6 +1184,7 @@ show_mode = 0
 [connection signal="timeout" from="BGMStartToPlayTimer" to="TitleScreenBGMP1" method="play"]
 [connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
 [connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
+
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Up"]
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down"]
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Left"]

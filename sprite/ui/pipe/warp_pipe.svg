@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="338" height="400" viewBox="0 0 169 200">
+  <defs>
+    <linearGradient id="body" gradientUnits="userSpaceOnUse" x1="29" y1="0" x2="140" y2="0">
+      <stop offset="0.036" stop-color="#00aa63"/>
+      <stop offset="0.198" stop-color="#009e5c"/>
+      <stop offset="0.207" stop-color="#83c89e"/>
+      <stop offset="0.234" stop-color="#bde1cb"/>
+      <stop offset="0.252" stop-color="#ffffff"/>
+      <stop offset="0.378" stop-color="#ffffff"/>
+      <stop offset="0.387" stop-color="#d1ede1"/>
+      <stop offset="0.396" stop-color="#029e5a"/>
+      <stop offset="0.811" stop-color="#007e4f"/>
+      <stop offset="0.829" stop-color="#00a45f"/>
+      <stop offset="0.946" stop-color="#00aa63"/>
+      <stop offset="0.955" stop-color="#057b47"/>
+      <stop offset="1" stop-color="#057b47"/>
+    </linearGradient>
+    <linearGradient id="cap" gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="148" y2="0">
+      <stop offset="0" stop-color="#00a45f"/>
+      <stop offset="0.172" stop-color="#22a86a"/>
+      <stop offset="0.180" stop-color="#8ecba4"/>
+      <stop offset="0.210" stop-color="#c6e5d1"/>
+      <stop offset="0.219" stop-color="#ffffff"/>
+      <stop offset="0.328" stop-color="#ffffff"/>
+      <stop offset="0.336" stop-color="#a5dbc2"/>
+      <stop offset="0.344" stop-color="#009850"/>
+      <stop offset="0.773" stop-color="#008d55"/>
+      <stop offset="0.891" stop-color="#00a45f"/>
+      <stop offset="1" stop-color="#00ad65"/>
+    </linearGradient>
+    <linearGradient id="capShade" gradientUnits="userSpaceOnUse" x1="0" y1="4" x2="0" y2="45">
+      <stop offset="0" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0.09"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="25" y="44" width="119" height="156" fill="#170000"/>
+  <rect x="29" y="44" width="111" height="156" fill="url(#body)"/>
+  <rect x="29" y="49" width="111" height="3" fill="#00a85f"/>
+  <rect x="16" y="0" width="136" height="49" fill="#170000"/>
+  <rect x="20" y="4" width="128" height="41" fill="url(#cap)"/>
+  <rect x="20" y="4" width="128" height="41" fill="url(#capShade)"/>
+</svg>

@@ -1,0 +1,129 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://script/title/pipe_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://ui/title/pipe_button.tscn" id="2_pipe"]
+[ext_resource type="Texture2D" path="res://sprite/ui/pipe/variant_green.png" id="3_green"]
+[ext_resource type="Texture2D" path="res://sprite/ui/pipe/variant_yellow.png" id="4_yellow"]
+[ext_resource type="Texture2D" path="res://sprite/ui/pipe/variant_blue.png" id="5_blue"]
+[ext_resource type="Texture2D" path="res://sprite/ui/pipe/variant_red.png" id="6_red"]
+[ext_resource type="Texture2D" path="res://sprite/ui/pipe/variant_white.png" id="7_white"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cap_green"]
+atlas = ExtResource("3_green")
+region = Rect2(32, 0, 272, 98)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_body_green"]
+atlas = ExtResource("3_green")
+region = Rect2(32, 98, 272, 302)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cap_yellow"]
+atlas = ExtResource("4_yellow")
+region = Rect2(32, 0, 272, 98)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_body_yellow"]
+atlas = ExtResource("4_yellow")
+region = Rect2(32, 98, 272, 302)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cap_blue"]
+atlas = ExtResource("5_blue")
+region = Rect2(32, 0, 272, 98)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_body_blue"]
+atlas = ExtResource("5_blue")
+region = Rect2(32, 98, 272, 302)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cap_red"]
+atlas = ExtResource("6_red")
+region = Rect2(32, 0, 272, 98)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_body_red"]
+atlas = ExtResource("6_red")
+region = Rect2(32, 98, 272, 302)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cap_white"]
+atlas = ExtResource("7_white")
+region = Rect2(32, 0, 272, 98)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_body_white"]
+atlas = ExtResource("7_white")
+region = Rect2(32, 98, 272, 302)
+
+[node name="PipeMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_menu")
+
+[node name="Pipe0" parent="." instance=ExtResource("2_pipe")]
+offset_left = 437.0
+offset_top = 784.0
+offset_right = 627.0
+offset_bottom = 1080.0
+pipe_index = 0
+pipe_texture = ExtResource("3_green")
+
+[node name="Cap" parent="Pipe0" index="1"]
+texture = SubResource("AtlasTexture_cap_green")
+
+[node name="Body" parent="Pipe0" index="2"]
+texture = SubResource("AtlasTexture_body_green")
+
+[node name="Pipe1" parent="." instance=ExtResource("2_pipe")]
+offset_left = 651.0
+offset_top = 784.0
+offset_right = 841.0
+offset_bottom = 1080.0
+pipe_index = 1
+pipe_texture = ExtResource("4_yellow")
+
+[node name="Cap" parent="Pipe1" index="1"]
+texture = SubResource("AtlasTexture_cap_yellow")
+
+[node name="Body" parent="Pipe1" index="2"]
+texture = SubResource("AtlasTexture_body_yellow")
+
+[node name="Pipe2" parent="." instance=ExtResource("2_pipe")]
+offset_left = 865.0
+offset_top = 784.0
+offset_right = 1055.0
+offset_bottom = 1080.0
+pipe_index = 2
+pipe_texture = ExtResource("5_blue")
+
+[node name="Cap" parent="Pipe2" index="1"]
+texture = SubResource("AtlasTexture_cap_blue")
+
+[node name="Body" parent="Pipe2" index="2"]
+texture = SubResource("AtlasTexture_body_blue")
+
+[node name="Pipe3" parent="." instance=ExtResource("2_pipe")]
+offset_left = 1079.0
+offset_top = 784.0
+offset_right = 1269.0
+offset_bottom = 1080.0
+pipe_index = 3
+pipe_texture = ExtResource("6_red")
+
+[node name="Cap" parent="Pipe3" index="1"]
+texture = SubResource("AtlasTexture_cap_red")
+
+[node name="Body" parent="Pipe3" index="2"]
+texture = SubResource("AtlasTexture_body_red")
+
+[node name="Pipe4" parent="." instance=ExtResource("2_pipe")]
+offset_left = 1293.0
+offset_top = 784.0
+offset_right = 1483.0
+offset_bottom = 1080.0
+pipe_index = 4
+pipe_texture = ExtResource("7_white")
+
+[node name="Cap" parent="Pipe4" index="1"]
+texture = SubResource("AtlasTexture_cap_white")
+
+[node name="Body" parent="Pipe4" index="2"]
+texture = SubResource("AtlasTexture_body_white")

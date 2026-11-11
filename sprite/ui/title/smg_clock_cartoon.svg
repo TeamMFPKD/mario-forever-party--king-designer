@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250" width="100%" height="100%">
+  <defs>
+    <!-- Gradients for 3D effect -->
+    <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9bed33" />
+      <stop offset="100%" stop-color="#6bb31a" />
+    </linearGradient>
+    
+    <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a1ef38" />
+      <stop offset="100%" stop-color="#72bf1e" />
+    </linearGradient>
+
+    <linearGradient id="faceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#eef3ea" />
+    </linearGradient>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Drop Shadow for the whole clock -->
+  <g filter="url(#shadow)">
+    
+    <!-- Top Button (Neck) -->
+    <rect x="75" y="35" width="50" height="30" rx="6" fill="#529b10" />
+    
+    <!-- Top Button (Cap) -->
+    <rect x="55" y="10" width="90" height="30" rx="12" fill="url(#buttonGradient)" />
+    <!-- Button Highlight -->
+    <rect x="60" y="12" width="80" height="8" rx="4" fill="#b8ff6b" opacity="0.6" />
+
+    <!-- Main Green Casing (Outer Circle) -->
+    <circle cx="100" cy="145" r="95" fill="url(#bodyGradient)" />
+    
+    <!-- Inner Rim Shadow (To give it depth) -->
+    <circle cx="100" cy="145" r="80" fill="#5fa310" />
+    
+    <!-- White Clock Face -->
+    <circle cx="100" cy="145" r="75" fill="url(#faceGradient)" />
+
+  </g>
+
+  <!-- Clock Markers (Black Triangles) -->
+  <!-- Left Marker (9 o'clock) -->
+  <polygon points="35,145 50,133 50,157" fill="#333b35" />
+  
+  <!-- Right Marker (3 o'clock) -->
+  <polygon points="165,145 150,133 150,157" fill="#333b35" />
+  
+  <!-- Bottom Marker (6 o'clock) -->
+  <polygon points="100,210 88,195 112,195" fill="#333b35" />
+
+  <!-- Clock Hand (Red) -->
+  <!-- Main hand body and arrowhead -->
+  <path d="M 100 55 
+           L 80 90 
+           L 92 90 
+           L 92 135 
+           L 108 135 
+           L 108 90 
+           L 120 90 Z" 
+        fill="#e63c24" />
+        
+  <!-- Center Pivot (Red Circle) -->
+  <circle cx="100" cy="140" r="16" fill="#e63c24" />
+  
+  <!-- Center Pivot Highlight (Gives a slightly glossy 3D look) -->
+  <circle cx="95" cy="135" r="5" fill="#ff7a66" opacity="0.8" />
+
+</svg>
