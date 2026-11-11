@@ -6,6 +6,9 @@ signal level_theme_changed(level_theme: LevelThemeEnum)
 
 signal load_level
 
+## 关卡数据（瓦片/对象/管道）全部写进场景之后发出，供依赖地图内容的对象重建。
+signal level_data_loaded
+
 signal lives_changed
 
 @export_category("Level Data")
@@ -195,6 +198,8 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	if stack != null:
 		stack.clear()
 		stack.set_recording_enabled(true)
+
+	level_data_loaded.emit()
 
 	
 	
