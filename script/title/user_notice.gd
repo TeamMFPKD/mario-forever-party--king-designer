@@ -7,7 +7,7 @@ signal notice_accepted
 
 var config: ConfigFile
 
-const USER_NOTICE_SECTION: String = "user_notice_v2"
+const USER_NOTICE_SECTION: String = "user_notice_v3"
 
 func _ready() -> void:
 	visible = true
