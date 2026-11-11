@@ -81,6 +81,7 @@ scene_uid = &"uid://b2f2av134cwap"
 [node name="JumpToSceneHistory" type="Node" parent="." index="7" unique_id=464088894]
 script = ExtResource("34_me11v")
 scene_uid = &"uid://de64xnukpa0re"
+use_return_scene = true
 
 [connection signal="pressed" from="GameRoomSize/BackToHistory/BackToHistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
 [editable path="GameRoomSize/BackToHistory"]
