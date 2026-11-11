@@ -1,52 +1,28 @@
 extends Button
 
-var config: ConfigFile
+## 语言切换按钮。语言状态的读写统一走 GameConfig，
+## 这样初次运行的系统语言推断、设置保存、旧存档兼容都只有一处实现。
+
 var current_language: String
+## 可循环切换的语言顺序（日本語 l10n 已实装，但入口先保留注释状态）
+var cycle: PackedStringArray = ["en", "zh_CN"]
 
 
 func _ready() -> void:
 	pressed.connect(_on_pressed)
-
-	config = GameConfig.config
-
-	current_language = config.get_value("options", "language", "en")
-	match current_language:
-		"en":
-			TranslationServer.set_locale("en")
-		"zh_CN":
-			TranslationServer.set_locale("zh_CN")
-		"ja":
-			TranslationServer.set_locale("ja")
-
-		# Old version patch
-		"zh":
-			TranslationServer.set_locale("zh_CN")
-			current_language = "zh_CN"
-
-	# 更新按钮文字
-	update_button_text()
-
-func _on_pressed() -> void:	
-	# 切换语言
-	if current_language == "en":
-		current_language = "zh_CN"
-	elif current_language == "zh_CN":
-		current_language = "en"
-	# 日本語の l10n 实装完了，但修改ini设置文件只能。
-	#	current_language = "ja"
-	elif current_language == "ja":
-		current_language = "en"
-		
+	current_language = GameConfig.get_language()
 	TranslationServer.set_locale(current_language)
-	config.set_value("options", "language", current_language)
-	
-	# 更新按钮文字
 	update_button_text()
 
-	GameConfig.save()
+
+func _on_pressed() -> void:
+	var index: int = cycle.find(current_language)
+	current_language = cycle[(index + 1) % cycle.size()]
+	GameConfig.set_language(current_language)
+	update_button_text()
+
 
 func update_button_text() -> void:
-	#var current_language = TranslationServer.get_locale()
 	match current_language:
 		"en":
 			text = "English"

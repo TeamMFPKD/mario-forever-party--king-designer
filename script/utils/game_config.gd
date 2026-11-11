@@ -9,11 +9,71 @@ const DEFAULT_LOCAL_PORT: int = 8914
 const DEFAULT_PLAYER_NAME: String = "Player"
 const DEFAULT_AVATAR_ID: String = ""
 
+## 支持的语言，与 i18n/mfmp_translation.<locale>.po 一一对应
+const SUPPORTED_LANGUAGES: PackedStringArray = ["en", "zh_CN", "ja"]
+## 系统语言不受支持时的回退语言
+const DEFAULT_LANGUAGE: String = "en"
+const LANGUAGE_SECTION: String = "options"
+const LANGUAGE_KEY: String = "language"
+
 func _ready() -> void:
 	config = ConfigFile.new()
 	config.load("user://game_settings.cfg")
+	_setup_language()
 	_load_input_mappings()
 	_load_network_settings()
+
+# ---------------------------------------------------------------------------
+# 语言
+# ---------------------------------------------------------------------------
+
+## 语言初始化：存档里已有设置就用存档的；初次运行（配置里没有该项）时
+## 按本机系统语言选择，系统语言不在支持列表内则回退到 DEFAULT_LANGUAGE。
+func _setup_language() -> void:
+	var language: String
+	if config.has_section_key(LANGUAGE_SECTION, LANGUAGE_KEY):
+		language = normalize_language(str(config.get_value(LANGUAGE_SECTION, LANGUAGE_KEY, DEFAULT_LANGUAGE)))
+	else:
+		var system_locale: String = OS.get_locale()
+		language = normalize_language(system_locale)
+		config.set_value(LANGUAGE_SECTION, LANGUAGE_KEY, language)
+		save()
+		Log.i("设置", ["初次运行，按系统语言选择语言: ", system_locale, " -> ", language])
+	TranslationServer.set_locale(language)
+
+## 把任意语言标识归一化成受支持的 locale。
+## 先按完整 locale 匹配（大小写不敏感），再按主语言子标签匹配，
+## 例如 zh_TW / zh_HK / zh-SG → zh_CN，ja_JP → ja；都不匹配则回退 DEFAULT_LANGUAGE。
+## 同时兼容旧版存档里写过的 "zh"。
+static func normalize_language(raw: String) -> String:
+	if raw.is_empty():
+		return DEFAULT_LANGUAGE
+	var tag: String = raw.replace("-", "_")
+	for supported: String in SUPPORTED_LANGUAGES:
+		if supported.to_lower() == tag.to_lower():
+			return supported
+	var base: String = tag.split("_")[0].to_lower()
+	if base.is_empty():
+		return DEFAULT_LANGUAGE
+	for supported: String in SUPPORTED_LANGUAGES:
+		if supported.split("_")[0].to_lower() == base:
+			return supported
+	return DEFAULT_LANGUAGE
+
+## 本机系统语言归一化后的结果。
+static func detect_system_language() -> String:
+	return normalize_language(OS.get_locale())
+
+## 当前生效的语言（已归一化为受支持的 locale）。
+func get_language() -> String:
+	return normalize_language(str(config.get_value(LANGUAGE_SECTION, LANGUAGE_KEY, DEFAULT_LANGUAGE)))
+
+## 切换并保存语言，同时立即应用。
+func set_language(language: String) -> void:
+	var normalized: String = normalize_language(language)
+	config.set_value(LANGUAGE_SECTION, LANGUAGE_KEY, normalized)
+	TranslationServer.set_locale(normalized)
+	save()
 
 func _load_input_mappings() -> void:
 	if not config.has_section("input_event"):
