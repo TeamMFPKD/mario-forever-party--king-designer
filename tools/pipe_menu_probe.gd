@@ -22,11 +22,13 @@ func _ready() -> void:
 				continue
 			var cap: TextureRect = pipe.get_node_or_null("Cap") as TextureRect
 			var body: TextureRect = pipe.get_node_or_null("Body") as TextureRect
-			lines.append("Pipe%d cap=%s body=%s export=%s" % [
+			var label: Label = pipe.get_node_or_null("Label") as Label
+			lines.append("Pipe%d cap=%s body=%s export=%s label=%s" % [
 				index,
 				_atlas_path(cap),
 				_atlas_path(body),
 				_export_path(pipe),
+				label.text if label != null else "<missing>",
 			])
 		root.free()
 	var file: FileAccess = FileAccess.open(OUTPUT, FileAccess.WRITE)

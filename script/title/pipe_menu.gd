@@ -9,6 +9,10 @@ const PIPE_GAP: float = 24.0
 const PIPE_VISIBLE_H: float = 296.0
 const MIN_CANVAS: Vector2 = Vector2(1920.0, 1080.0)
 
+## 这些页面打开时把水管收起来：HostPage / JoinPage 的面板一直压到画面底部，
+## 会和贴底的水管叠在一起；Options 是整页设置，面板只占中间，不用动水管。
+const HIDDEN_BY: Array[String] = ["HostPage", "JoinPage"]
+
 @export var host_visible_set: NodePath
 @export var join_visible_set: NodePath
 @export var history_jump: NodePath
@@ -29,6 +33,21 @@ func _ready() -> void:
 			pipe.connect("pipe_pressed", _on_pipe_pressed)
 	_relayout()
 	resized.connect(_relayout)
+	for page_name: String in HIDDEN_BY:
+		var page: Node = get_node_or_null("../" + page_name)
+		if page is CanvasItem:
+			(page as CanvasItem).visibility_changed.connect(_refresh_visible)
+	_refresh_visible()
+
+
+## 有浮层面板打开时整排水管隐藏，关掉后恢复
+func _refresh_visible() -> void:
+	for page_name: String in HIDDEN_BY:
+		var page: CanvasItem = get_node_or_null("../" + page_name) as CanvasItem
+		if page != null and page.visible:
+			visible = false
+			return
+	visible = true
 
 
 ## 仅供截图/调试：把五根管口的道具一次性升起来

@@ -72,6 +72,9 @@ texture = SubResource("AtlasTexture_cap_green")
 [node name="Body" parent="Pipe0" index="2"]
 texture = SubResource("AtlasTexture_body_green")
 
+[node name="Label" parent="Pipe0" index="3"]
+text = "组织游戏"
+
 [node name="Pipe1" parent="." instance=ExtResource("2_pipe")]
 offset_left = 651.0
 offset_top = 784.0
@@ -86,33 +89,42 @@ texture = SubResource("AtlasTexture_cap_yellow")
 [node name="Body" parent="Pipe1" index="2"]
 texture = SubResource("AtlasTexture_body_yellow")
 
+[node name="Label" parent="Pipe1" index="3"]
+text = "加入游戏"
+
 [node name="Pipe2" parent="." instance=ExtResource("2_pipe")]
 offset_left = 865.0
 offset_top = 784.0
 offset_right = 1055.0
 offset_bottom = 1080.0
-pipe_index = 2
-pipe_texture = ExtResource("5_blue")
+pipe_index = 3
+pipe_texture = ExtResource("6_red")
 
 [node name="Cap" parent="Pipe2" index="1"]
-texture = SubResource("AtlasTexture_cap_blue")
+texture = SubResource("AtlasTexture_cap_red")
 
 [node name="Body" parent="Pipe2" index="2"]
-texture = SubResource("AtlasTexture_body_blue")
+texture = SubResource("AtlasTexture_body_red")
+
+[node name="Label" parent="Pipe2" index="3"]
+text = "百人团"
 
 [node name="Pipe3" parent="." instance=ExtResource("2_pipe")]
 offset_left = 1079.0
 offset_top = 784.0
 offset_right = 1269.0
 offset_bottom = 1080.0
-pipe_index = 3
-pipe_texture = ExtResource("6_red")
+pipe_index = 2
+pipe_texture = ExtResource("5_blue")
 
 [node name="Cap" parent="Pipe3" index="1"]
-texture = SubResource("AtlasTexture_cap_red")
+texture = SubResource("AtlasTexture_cap_blue")
 
 [node name="Body" parent="Pipe3" index="2"]
-texture = SubResource("AtlasTexture_body_red")
+texture = SubResource("AtlasTexture_body_blue")
+
+[node name="Label" parent="Pipe3" index="3"]
+text = "游玩记录"
 
 [node name="Pipe4" parent="." instance=ExtResource("2_pipe")]
 offset_left = 1293.0
@@ -127,3 +139,6 @@ texture = SubResource("AtlasTexture_cap_white")
 
 [node name="Body" parent="Pipe4" index="2"]
 texture = SubResource("AtlasTexture_body_white")
+
+[node name="Label" parent="Pipe4" index="3"]
+text = "设置界面"
