@@ -5,10 +5,14 @@
 [ext_resource type="Script" uid="uid://bbtguxvb2355i" path="res://script/level/sound/no_sound_if_not_on_screen.gd" id="2_ql7qy"]
 [ext_resource type="AudioStream" uid="uid://bfqjgj3r5qoiq" path="res://sound/level/clear_pipe_in.wav" id="3_ql7qy"]
 [ext_resource type="AudioStream" uid="uid://6tgb6rw0wpm7" path="res://sound/level/clear_pipe_out.wav" id="4_qe4mh"]
+[ext_resource type="Script" uid="uid://csx03ch15w0t" path="res://script/level/component/player_body_injector.gd" id="5_injector"]
 
 [node name="BasicMovement" type="Node" unique_id=1013180728]
 script = ExtResource("1_33rg5")
 metadata/_custom_type_script = "uid://cil2qphnaxkrl"
+
+[node name="PlayerBodyInjector" type="Node" parent="."]
+script = ExtResource("5_injector")
 
 [node name="NoSoundIfNotOnScreen" type="Node" parent="." unique_id=409263369 node_paths=PackedStringArray("is_on_screen_node", "basic_movement")]
 script = ExtResource("2_ql7qy")
