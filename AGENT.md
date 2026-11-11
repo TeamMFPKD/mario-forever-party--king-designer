@@ -78,7 +78,12 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_start_probe.tscn` | 开局参数校验 + 切到 `Adventure.PLAY_SCENE` | `tools/adventure_start_probe_result.txt` |
 | `tools/adventure_play_probe.tscn` | 真正加载游玩场景，检查 `player` 组、`run_active`、`run_index` | `tools/adventure_play_probe_result.txt` |
 | `tools/adventure_design_probe.tscn` | 四套百人团舞台 UI 方案能否构建 | `tools/design_probe.txt` |
-| `tools/title_design_probe.tscn` | 五套标题画面按钮方案能否构建 | `tools/title_design_probe_result.txt` |
+| `tools/title_pipe_probe.tscn` | 正式标题页的水管菜单：五个目标路径能否解析、点击「组织游戏」能否打开 HostPage | `tools/title_pipe_probe_result.txt` |
+| `tools/pipe_menu_probe.tscn` | `ui/title/pipe_menu.tscn` 里五根水管预设的贴图（编辑器里看到的颜色） | `tools/pipe_menu_probe_result.txt` |
+| `tools/pipe_diff.tscn` | 水管 SVG 与参考位图的逐像素差异 | `tools/pipe_diff_result.txt` |
+| `tools/theme_probe.tscn` | 全局主题 `mfmp_theme.tres` 的 Button / Label / Panel 实效值 | `tools/theme_probe_result.txt` |
+
+`tools/pipe_variant_bake.tscn` 不是探针：改过 `sprite/ui/pipe/warp_pipe.svg` 后跑它，刷新 `variant_*.png` 五色贴图。
 
 ### 3.2 截图脚本（shot，需窗口）
 
@@ -89,8 +94,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_pause_shot.tscn` | `tools/adventure_pause.png`（打开暂停菜单） |
 | `tools/adventure_transition_shot.tscn` | `tools/adventure_transition.png`（过关过渡动画中） |
 | `tools/adventure_design_shot.tscn` | `tools/design_a_paper.png` / `design_b_stage.png` / `design_c_neon.png` / `design_d_poster.png` |
-| `tools/title_design_shot.tscn` | `tools/title_design_a_arcade.png` / `b_rail` / `c_hero` / `d_ring` / `e_grid` |
-| `tools/title_shot.tscn` | `tools/title.png`（标题页依次点“组织”→切换角色→“开房”后） |
+| `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
 | `tools/spectate_shot.tscn` | `tools/spectate.png`（观战视图，读取 `user://` 最新 `.lvl`） |
 
 ### 3.3 交互演示（人工看）
@@ -98,7 +102,6 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | 场景 | 说明 |
 | --- | --- |
 | `tools/adventure_design_preview.tscn` | 四套舞台 UI 方案，按 `1~4` 或 `←/→` 切换 |
-| `tools/title_design_preview.tscn` | 五套标题按钮方案，按 `1~5` 或 `←/→` 切换；左上角浮层写方案名与要点 |
 | `tools/spectate_demo.tscn` | 无联机的观战界面演示，`1/2/3` 切 PLAY/EDIT/TRANSFER，`←/→` 切目标 |
 
 ### 3.4 联机三实例
@@ -231,7 +234,7 @@ SCHEME_3 OK children=35
 
 ```powershell
 $p = Start-Process -FilePath $Godot -PassThru `
-    -ArgumentList "--path `"$Project`" res://tools/title_shot.tscn"
+    -ArgumentList "--path `"$Project`" res://tools/title_pipe_shot.tscn"
 $p.WaitForExit(120000)
 ```
 
@@ -240,8 +243,7 @@ $p.WaitForExit(120000)
 - `adventure_pause_shot.tscn`：2s 后打开暂停菜单截图，退出前会 `get_tree().paused = false`。
 - `adventure_transition_shot.tscn`：2s 后触发 `play_transition("pass", "res://room/title.tscn")`，0.5s 时截过渡层。
 - `adventure_design_shot.tscn`：先把窗口设为 1920×1080（与四套方案的设计画布一致），再依次切换四套方案截图。
-- `title_design_shot.tscn`：同上，截五套标题按钮方案；截图前会 `set_badge_visible(false)` 隐藏左上角说明浮层，保证出图只有方案本身。
-- `title_shot.tscn`：按节点路径点击按钮。**标题页 UI 节点改名后必须同步改脚本里的路径**，否则按钮找不到，只会截到原始标题页。
+- `title_pipe_shot.tscn`：加载 `room/title.tscn`，2.5s 后截 1920×1080；再把窗口缩到 1120×640 截第二张，用于确认水管菜单在缩放窗口下仍贴底居中。截图前会把鼠标挪到角落，避免 hover 把管口道具顶出来。
 - `spectate_shot.tscn`：从 `user://` 找最新、且大于 128 字节的 `.lvl`，加载 `room/spectate_room.tscn`，3s 后截 `tools/spectate.png`。没有可用 `.lvl` 时 `push_error` 后直接退出，不出图。
 
 截图脚本的判据：**PNG 文件时间戳更新且不是全黑/全白**。Agent 可以直接用 `read_file` 打开 PNG 看布局、颜色、文字。

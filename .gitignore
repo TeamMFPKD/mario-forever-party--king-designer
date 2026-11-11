@@ -89,3 +89,10 @@ tools/.webrtc_native_download/
 # GDExtension temp copies
 addons/godot_secp256k1/
 addons/webrtc_native/
+# 本地验证产物（截图 / 探针结果），不入库
+tools/*.png
+tools/**/*.png
+tools/*.png.import
+tools/**/*.png.import
+tools/*_result.txt
+tools/**/*_result.txt
