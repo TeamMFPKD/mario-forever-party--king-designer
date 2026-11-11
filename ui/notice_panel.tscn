@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="PackedScene" path="res://ui/ui_margin_container.tscn" id="1_margin"]
-[ext_resource type="PackedScene" path="res://ui/ui_label.tscn" id="2_label"]
-[ext_resource type="PackedScene" path="res://ui/ui_button.tscn" id="3_button"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="1_margin"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="2_label"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="3_button"]
+[ext_resource type="Theme" uid="uid://bpkayogffk0um" path="res://ui/theme/theme_yellow_top.tres" id="4_yellow"]
+[ext_resource type="Script" path="res://script/ui/notice_panel.gd" id="5_panel"]
 
 [node name="NoticePanel" type="Control"]
 visible = false
@@ -13,8 +15,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+script = ExtResource("5_panel")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="DropRoot" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="DropRoot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,41 +35,44 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
-[node name="UiPanel" type="PanelContainer" parent="CenterContainer"]
+[node name="UiPanel" type="PanelContainer" parent="DropRoot/CenterContainer"]
 custom_minimum_size = Vector2(760, 0)
 layout_mode = 2
+theme = ExtResource("4_yellow")
 
-[node name="UiMarginContainer" parent="CenterContainer/UiPanel" instance=ExtResource("1_margin")]
+[node name="UiMarginContainer" parent="DropRoot/CenterContainer/UiPanel" instance=ExtResource("1_margin")]
 layout_mode = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/UiPanel/UiMarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 32
+theme_override_constants/separation = 24
 
-[node name="TitleLabel" parent="CenterContainer/UiPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_label")]
+[node name="TitleLabel" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_label")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme = ExtResource("4_yellow")
+theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 64
 text = "提示"
 horizontal_alignment = 1
 
-[node name="MessageLabel" parent="CenterContainer/UiPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_label")]
+[node name="MessageLabel" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_label")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme = ExtResource("4_yellow")
+theme_override_constants/outline_size = 0
 text = "通知内容"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="OkButton" parent="CenterContainer/UiPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("3_button")]
+[node name="OkButton" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("3_button")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2

@@ -58,12 +58,17 @@ func show_notice(message: String, title: String = "提示", ok_text: String = "�
 	_ok_button.text = tr(ok_text)
 
 	_panel.visible = true
+	# 掉落 + 两次反弹（动画在 notice_panel.gd 里）
+	if _panel.has_method("play_drop_in"):
+		_panel.call("play_drop_in")
 	# 按钮统一不接收键盘焦点（见 NoButtonFocus），这里不再 grab_focus
 
 ## 关闭通知面板（点确认或代码调用都会走这里）。
 func hide_notice() -> void:
 	if not is_instance_valid(_panel) or not _panel.visible:
 		return
+	if _panel.has_method("stop_animation"):
+		_panel.call("stop_animation")
 	_panel.visible = false
 	closed.emit()
 
