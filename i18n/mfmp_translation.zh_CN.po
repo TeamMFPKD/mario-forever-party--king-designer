@@ -447,8 +447,8 @@ msgstr "关卡进度"
 msgid "编辑中"
 msgstr "编辑中"
 
-msgid "观战中"
-msgstr "观战中"
+msgid "观看中"
+msgstr "观看中"
 
 msgid "等待下一阶段…"
 msgstr "等待下一阶段…"
@@ -462,11 +462,11 @@ msgstr "参与模式"
 msgid "游戏"
 msgstr "游戏"
 
-msgid "观战"
-msgstr "观战"
+msgid "观看"
+msgstr "观看"
 
-msgid "切换为观战"
-msgstr "切换为观战"
+msgid "切换为观看"
+msgstr "切换为观看"
 
 msgid "切换为游戏"
 msgstr "切换为游戏"
@@ -492,8 +492,8 @@ msgstr "等待房间开始…"
 msgid "暂时没有可观看的玩家"
 msgstr "暂时没有可观看的玩家"
 
-msgid "游戏已开始，只能以观战身份加入。"
-msgstr "游戏已开始，只能以观战身份加入。"
+msgid "游戏已开始，只能以观看身份加入。"
+msgstr "游戏已开始，只能以观看身份加入。"
 
 msgid "客户端版本不一致，请更新后再加入。"
 msgstr "客户端版本不一致，请更新后再加入。"

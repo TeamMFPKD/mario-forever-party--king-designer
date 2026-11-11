@@ -2,7 +2,7 @@ extends Control
 
 @warning_ignore_start("unsafe_call_argument")
 
-## 观战场景。
+## 观看场景。
 ##
 ## PLAY：实例化 play_room_base 的关卡视图，去掉玩家/计时/截图等玩家逻辑，
 ##       只保留地形、物件、幽灵和相机；相机跟随当前目标的幽灵。

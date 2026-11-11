@@ -3,7 +3,7 @@ extends Node
 class_name LoadLevel
 
 @export var level_data_node: LevelManager
-## 观战视图重演关卡时不要把自己的角色进度上报成目标的关卡。
+## 观看视图重演关卡时不要把自己的角色进度上报成目标的关卡。
 @export var report_progress: bool = true
 
 var file_name: String = "user://mfmp_"
@@ -36,7 +36,7 @@ func _ready() -> void:
 				Log.w("load_level.gd", "缺少关卡，跳过：%s" % levels[index])
 				index += 1
 			if index >= levels.size():
-				Log.w("load_level.gd", "没有可用关卡，进入观战/结果")
+				Log.w("load_level.gd", "没有可用关卡，进入观看/结果")
 				MPManager.current_level_count = levels.size()
 				MPManager.flow.notify_reach_end()
 				var target: String = MatchFlowService.SCENE_SPECTATE \

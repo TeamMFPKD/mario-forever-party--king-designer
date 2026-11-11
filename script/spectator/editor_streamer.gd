@@ -1,7 +1,7 @@
 extends Node
 
 ## 编辑房间里的抓屏节点：只抓关卡画布 SubViewport，降频交给
-## EditorStreamService 压缩/定向发送。没有观战者时不抓屏。
+## EditorStreamService 压缩/定向发送。没有观看者时不抓屏。
 
 const CAPTURE_INTERVAL_SEC: float = 0.25
 

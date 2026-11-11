@@ -83,7 +83,7 @@ func clear() -> void:
 ## 用主机下发的完整快照替换本地列表。
 ##
 ## 快照里消失、且新名单中也没有同名人物的玩家视为离开房间：名单替换完成后补发
-## player_removed，让非主机端（含观战者）也能弹「玩家离开」提示。同名的记录属于
+## player_removed，让非主机端（含观看者）也能弹「玩家离开」提示。同名的记录属于
 ## 掉线重连换了 peer id，不当作离开。
 func replace_from_wire(list: Array) -> void:
 	var previous: Array[PlayerProfile] = all()

@@ -16,7 +16,7 @@ const SCENE_TRANSFER: String = "uid://brg4yepawdra3"
 const SCENE_PLAY: String = "uid://cxvueju65b3qv"
 const SCENE_RESULT: String = "uid://c0civs02iqoki"
 const SCENE_TITLE: String = "uid://dcqf1c3m14b1f"
-## 观战者不进入玩家房间，统一留在独立观战场景，按阶段刷新内容。
+## 观看者不进入玩家房间，统一留在独立观看场景，按阶段刷新内容。
 const SCENE_SPECTATE: String = "res://room/spectate_room.tscn"
 
 const RESULT_TIMEOUT_SEC: float = 120.0
@@ -34,7 +34,7 @@ var _manager: MultiplayerManager
 var _registry: SessionRegistry
 var _net: NetPeer
 var _lobby: LobbyService
-## 主机权威的编辑阶段计时。房主自己观战时没有编辑房间，
+## 主机权威的编辑阶段计时。房主自己观看时没有编辑房间，
 ## 必须由本服务在超时后推进 TRANSFER。
 var _host_edit_timer: Timer
 
@@ -187,7 +187,7 @@ func abort_to_lobby(reason: String) -> void:
 
 
 ## 所有游玩玩家都已退出 / 掉线（宽限期已过）：整局没有继续的可能，
-## 主机把所有人（含观战者）拉回标题，并提示“游玩玩家已全部掉线”。
+## 主机把所有人（含观看者）拉回标题，并提示“游玩玩家已全部掉线”。
 func abort_all_playing_gone() -> void:
 	if _net == null or not _net.is_server():
 		return
@@ -254,7 +254,7 @@ func _apply_reach_end(player_id: int) -> void:
 		profile.reach_end = true
 		profile.is_in_result = true
 		Log.i("玩家 %s 已经玩过了所有关卡！" % _manager.format_player(profile.name, profile.id))
-		# 让其他客户端的观战目标列表知道他已经打完。
+		# 让其他客户端的观看目标列表知道他已经打完。
 		_lobby.broadcast_delta(profile)
 	_check_all_reached_end()
 
@@ -264,7 +264,7 @@ func _apply_current_level(player_id: int, index: int) -> void:
 	if profile == null:
 		return
 	profile.current_level = maxi(0, index)
-	# 只在换关时发，频率很低；观战者靠它知道目标在第几关。
+	# 只在换关时发，频率很低；观看者靠它知道目标在第几关。
 	_lobby.broadcast_delta(profile)
 
 
@@ -438,7 +438,7 @@ func _apply_result_phase(payload: Dictionary) -> void:
 	var results: Array = payload.get("results", [])
 	last_results = results
 	result_updated.emit(results)
-	# 结算阶段所有人（含观战者）都看结果页。
+	# 结算阶段所有人（含观看者）都看结果页。
 	_switch_scene(SCENE_RESULT)
 
 
@@ -458,7 +458,7 @@ func _apply_lobby_phase(payload: Dictionary) -> void:
 	_switch_scene(SCENE_TITLE)
 
 
-## 新加入的观战者 / 重连玩家：补发当前阶段与阶段载荷。
+## 新加入的观看者 / 重连玩家：补发当前阶段与阶段载荷。
 func s2c_sync_phase_to(peer_id: int) -> void:
 	if _net == null or not _net.is_server():
 		return

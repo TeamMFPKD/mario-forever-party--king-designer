@@ -72,7 +72,7 @@ func _on_players_updated() -> void:
 		# 参与模式：角色徽章本身就是按钮；只有本地玩家可点击切换。
 		var role_button: Button = player_list_line.get_node("PlayerRoleButton") as Button
 		var is_local: bool = profile.id == MPManager.player.id
-		role_button.text = tr("观战") if profile.is_spectator else tr("游戏")
+		role_button.text = tr("观看") if profile.is_spectator else tr("游戏")
 		# 已准备后锁定参与模式；非本地玩家只作为徽章显示。
 		role_button.disabled = not is_local \
 			or MPManager.phase != RoomPhase.Phase.LOBBY \

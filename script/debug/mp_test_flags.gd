@@ -19,7 +19,7 @@ extends Node
 ##   --mp-expect=<人数>
 ##   --mp-edit-seconds=<秒>
 ##   --mp-auto-exit
-##   --mp-spectate    本实例以观战身份加入/开房（不参与准备与关卡提供）
+##   --mp-spectate    本实例以观看身份加入/开房（不参与准备与关卡提供）
 ##   --mp-auto-finish   （全链路：自动完成编辑、发送通关，配合 -Full 使用）
 
 ## 合并引擎参数与 `--` 之后的用户参数，避免调用方关心参数从哪来。

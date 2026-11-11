@@ -6,7 +6,7 @@ signal play_sound_drag
 
 @export var objects: Array = []
 @export var database_holder: DatabaseHolder
-## 观战视图设为 false：不生成可操作的 player，也不创建 InputHandler。
+## 观看视图设为 false：不生成可操作的 player，也不创建 InputHandler。
 @export var spawn_player: bool = true
 
 # 输入处理相关变量

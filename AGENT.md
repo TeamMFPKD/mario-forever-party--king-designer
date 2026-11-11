@@ -95,14 +95,14 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_transition_shot.tscn` | `tools/adventure_transition.png`（过关过渡动画中） |
 | `tools/adventure_design_shot.tscn` | `tools/design_a_paper.png` / `design_b_stage.png` / `design_c_neon.png` / `design_d_poster.png` |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
-| `tools/spectate_shot.tscn` | `tools/spectate.png`（观战视图，读取 `user://` 最新 `.lvl`） |
+| `tools/spectate_shot.tscn` | `tools/spectate.png`（观看视图，读取 `user://` 最新 `.lvl`） |
 
 ### 3.3 交互演示（人工看）
 
 | 场景 | 说明 |
 | --- | --- |
 | `tools/adventure_design_preview.tscn` | 四套舞台 UI 方案，按 `1~4` 或 `←/→` 切换 |
-| `tools/spectate_demo.tscn` | 无联机的观战界面演示，`1/2/3` 切 PLAY/EDIT/TRANSFER，`←/→` 切目标 |
+| `tools/spectate_demo.tscn` | 无联机的观看界面演示，`1/2/3` 切 PLAY/EDIT/TRANSFER，`←/→` 切目标 |
 
 ### 3.4 联机三实例
 
@@ -259,7 +259,7 @@ $p.WaitForExit(120000)
 
 ### 6.2 spectate_demo
 
-无联机依赖的观战演示：`tools/spectate_demo.tscn`。
+无联机依赖的观看演示：`tools/spectate_demo.tscn`。
 自动生成两张演示关卡（`user://spectate_demo.lvl`、`user://spectate_demo_2.lvl`），四个假幽灵分处两关。
 
 可选启动参数（`--` 之后）：
@@ -345,7 +345,7 @@ tools\mp_test.bat -Stop           # 杀掉带 --mp-role= 的测试实例
 | `--mp-edit-seconds=<秒>` | 覆盖大厅编辑时限滑条（10~300） |
 | `--mp-auto-exit` | 开局后 8s 退出；配合 `--mp-auto-finish` 改为等结算 |
 | `--mp-auto-finish` | 自动完成编辑、自动 `notify_reach_end()`，配合 `-Full` 使用 |
-| `--mp-spectate` | 观战身份（不准备、不供关）；与 `--mp-role` 一起用 |
+| `--mp-spectate` | 观看身份（不准备、不供关）；与 `--mp-role` 一起用 |
 | `--mp-join-retries=<次>` | 加入重试次数，默认 40（每次间隔 1s） |
 
 ### 7.5 编辑器多实例（人工）
@@ -430,6 +430,6 @@ script = ExtResource("1_probe")
 
 - `docs/raid_mode/README.md`：百人团（adventure）模式设计与规则，探针里的数值期望以它为准。
 - `docs/ui/README.md`：UI 主题体系——全局 `mfmp_theme.tres`（内置 Panel + 白字黑描边）与 `ui/theme/theme_yellow_top.tres`（黄色顶块 + 深色无描边）的取值、字体 fallback 约定，改界面配色前先看它。
-- `docs/spectator_mode/README.md`：观战模式、演示场景参数、已实测截图。
+- `docs/spectator_mode/README.md`：观看模式、演示场景参数、已实测截图。
 - `docs/multiplayer_refactor_plan.md`：联机架构分期与每阶段验收命令（`mp_test.bat auto` / `auto -Full`）。
 - `script/debug/mp_test_flags.gd`、`script/debug/mp_test_boot.gd`：联机测试参数与自动流程的唯一实现，参数含义以文件头注释为准。

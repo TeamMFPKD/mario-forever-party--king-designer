@@ -86,7 +86,7 @@ func set_lobby_ready(value: bool) -> void:
 		c2s_set_lobby_ready.rpc_id(1, value)
 
 
-## 大厅内切换“游戏 / 观战”。只有 LOBBY 阶段允许，开局后角色锁定。
+## 大厅内切换“游戏 / 观看”。只有 LOBBY 阶段允许，开局后角色锁定。
 func set_spectator(value: bool) -> void:
 	if _net == null or _manager == null:
 		return
@@ -134,7 +134,7 @@ func remove_player(id: int) -> PlayerProfile:
 	return profile
 
 
-## 仍然占着游玩席位的人数：观战者不算；意外掉线但还在 20s 宽限期内的照算，
+## 仍然占着游玩席位的人数：观看者不算；意外掉线但还在 20s 宽限期内的照算，
 ## 只有宽限期结束（abandoned）才认为他真的走了，避免把“正在重连”误判成全员掉线。
 func active_playing_count() -> int:
 	var count: int = 0
@@ -230,7 +230,7 @@ func everyone_edit_finished() -> bool:
 	return count > 0
 
 
-## 正式参与本局的玩家（不含观战者）。
+## 正式参与本局的玩家（不含观看者）。
 func playing_profiles() -> Array[PlayerProfile]:
 	var result: Array[PlayerProfile] = []
 	for profile: PlayerProfile in _registry.all():
@@ -268,18 +268,18 @@ func _apply_spectator(id: int, value: bool) -> void:
 		return
 	if profile.is_spectator == value:
 		return
-	# 已准备后锁定参与模式；必须先取消准备才能切观战/游戏。
+	# 已准备后锁定参与模式；必须先取消准备才能切观看/游戏。
 	if profile.lobby_ready:
 		return
 	profile.is_spectator = value
 	if value:
-		# 转观战后不再占用准备/编辑名额。
+		# 转观看后不再占用准备/编辑名额。
 		profile.lobby_ready = false
 		profile.edit_finished = false
 	_broadcast_delta(profile)
 	Log.i(
 		"玩家 %s 切换为%s"
-		% [_manager.format_player(profile.name, profile.id), "观战" if value else "游戏"]
+		% [_manager.format_player(profile.name, profile.id), "观看" if value else "游戏"]
 	)
 
 
@@ -373,7 +373,7 @@ func _restore_profile(profile: PlayerProfile, sender: int) -> void:
 		"玩家 %s 已重连：%d -> %d（%s）"
 		% [
 			profile.name, old_id, sender,
-			"观战" if profile.is_spectator else "游玩",
+			"观看" if profile.is_spectator else "游玩",
 		]
 	)
 	_manager.flow.s2c_sync_phase_to(sender)
@@ -408,10 +408,10 @@ func c2s_join_room(info: Dictionary) -> void:
 		_restore_profile(disconnected, sender)
 		return
 
-	# 2) 游戏已开始：只有观战角色可以加入；游玩角色请重连或等下一局。
+	# 2) 游戏已开始：只有观看角色可以加入；游玩角色请重连或等下一局。
 	if _manager.phase != RoomPhase.Phase.LOBBY and not wants_spectator:
 		Log.w("拒绝加入：游戏已经开始（name=%s）" % str(info.get("name", "?")))
-		s2c_join_rejected.rpc_id(sender, "游戏已开始，只能以观战身份加入。")
+		s2c_join_rejected.rpc_id(sender, "游戏已开始，只能以观看身份加入。")
 		_net.kick_peer(sender)
 		return
 
@@ -419,11 +419,11 @@ func c2s_join_room(info: Dictionary) -> void:
 	_registry.add(profile)
 	Log.i(
 		"MPTEST] player joined name=%s id=%d role=%s"
-		% [profile.name, profile.id, "观战" if profile.is_spectator else "游玩"]
+		% [profile.name, profile.id, "观看" if profile.is_spectator else "游玩"]
 	)
 	broadcast_snapshot()
 	if _manager.phase != RoomPhase.Phase.LOBBY:
-		# 中途加入的观战者：同步当前阶段；传输/游玩阶段顺手拿全量关卡。
+		# 中途加入的观看者：同步当前阶段；传输/游玩阶段顺手拿全量关卡。
 		_manager.flow.s2c_sync_phase_to(sender)
 		if _manager.phase == RoomPhase.Phase.TRANSFER \
 		or _manager.phase == RoomPhase.Phase.PLAY:

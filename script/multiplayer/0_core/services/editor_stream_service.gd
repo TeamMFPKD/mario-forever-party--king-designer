@@ -2,10 +2,10 @@ extends Node
 
 @warning_ignore_start("unsafe_call_argument")
 
-## 编辑器观战截图流（方案 C）。
+## 编辑器观看截图流（方案 C）。
 ##
 ## 目标编辑器只抓关卡 SubViewport 的 480×360 / JPEG 画面；主机负责把
-## “观战者 -> 目标”的订阅关系转达给目标，目标只向订阅者 rpc_id 推帧。
+## “观看者 -> 目标”的订阅关系转达给目标，目标只向订阅者 rpc_id 推帧。
 ## 所有 RPC 都在 /root/MPManager/EditorStreamService 这个稳定节点上。
 
 signal frame_received(jpeg: PackedByteArray)
@@ -17,13 +17,13 @@ const MAX_FRAME_BYTES: int = 512 * 1024
 
 var _manager: MultiplayerManager
 
-## 目标端：正在看我编辑器的观战者 peer id。
+## 目标端：正在看我编辑器的观看者 peer id。
 var _subscribers: Dictionary[int, bool] = {}
-## 主机端：观战者 peer id -> 目标玩家 id。
+## 主机端：观看者 peer id -> 目标玩家 id。
 var _watch_targets: Dictionary[int, int] = {}
-## 观战端：当前订阅的玩家 id。
+## 观看端：当前订阅的玩家 id。
 var _remote_target_id: int = 0
-## 目标端：帧序号；观战端用它丢弃乱序的旧帧。
+## 目标端：帧序号；观看端用它丢弃乱序的旧帧。
 var _frame_id: int = 0
 var _last_frame_id: int = 0
 
@@ -38,7 +38,7 @@ func has_subscribers() -> bool:
 	return not _subscribers.is_empty()
 
 
-## 观战端调用：订阅/切换目标。target_id = 0 表示取消订阅。
+## 观看端调用：订阅/切换目标。target_id = 0 表示取消订阅。
 func request_watch(target_id: int) -> void:
 	_remote_target_id = target_id
 	_last_frame_id = 0
@@ -122,7 +122,7 @@ func _host_set_watch(spectator_id: int, target_id: int) -> void:
 		return
 	_watch_targets[spectator_id] = target_id
 	_add_subscriber(target_id, spectator_id)
-	Log.i("EditorStream", "观战者 %d 订阅玩家 %d 的编辑器" % [spectator_id, target_id])
+	Log.i("EditorStream", "观看者 %d 订阅玩家 %d 的编辑器" % [spectator_id, target_id])
 
 
 func _add_subscriber(target_id: int, spectator_id: int) -> void:

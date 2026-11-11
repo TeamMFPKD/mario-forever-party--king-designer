@@ -5,7 +5,7 @@ extends Node
 ## 动画与快捷消息共用同一套滑入、停留、淡出和 8 条上限。
 ##
 ## 名单变更（被移出房间）由 registry.player_removed 驱动：主机端在 remove 时发出，
-## 客户端（含观战者）由 SessionRegistry.replace_from_wire 的名称对比补发。
+## 客户端（含观看者）由 SessionRegistry.replace_from_wire 的名称对比补发。
 ## 意外掉线（记录还留在名单里、只把 connected 置 false）没有 remove 事件，
 ## 因此这里额外盯 connected 的跳变，保证所有人都能看到掉线文字。
 

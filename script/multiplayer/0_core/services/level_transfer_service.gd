@@ -71,8 +71,8 @@ func begin_collect() -> void:
 	_reset_transfer_state()
 	var local: PlayerProfile = _manager.player
 	if local.is_spectator:
-		# 房主自己观战：没有自己的关卡，只等玩家上传。
-		Log.i("房主为观战者，跳过本机关卡收集")
+		# 房主自己观看：没有自己的关卡，只等玩家上传。
+		Log.i("房主为观看者，跳过本机关卡收集")
 		_check_all_levels_ready()
 		return
 	var bytes: PackedByteArray = _read_local_level_bytes(local)
@@ -95,7 +95,7 @@ func submit_local_level() -> void:
 		return
 	var local: PlayerProfile = _manager.player
 	if local.is_spectator:
-		# 观战者不提供关卡，只接收主机中继。
+		# 观看者不提供关卡，只接收主机中继。
 		return
 	if local.level_ok:
 		# 重连时主机已经持有这本关卡，不需要重复上传。
@@ -166,7 +166,7 @@ func _read_local_level_bytes(profile: PlayerProfile) -> PackedByteArray:
 
 ## 主机把某个玩家的关卡分块中继给其余客户端。
 ##
-## 只有“游玩玩家”会阻塞 level_ok；观战者属于尽力而为，失败也不影响开局。
+## 只有“游玩玩家”会阻塞 level_ok；观看者属于尽力而为，失败也不影响开局。
 func _relay_level(owner: PlayerProfile, bytes: PackedByteArray) -> void:
 	var pending: Dictionary = {}
 	var spectators: Array[int] = []
@@ -214,7 +214,7 @@ func _send_level_to(
 	s2c_level_end.rpc_id(target, owner.id)
 
 
-## 中途加入的观战者 / 重连玩家：把主机已有的全部关卡发给他。
+## 中途加入的观看者 / 重连玩家：把主机已有的全部关卡发给他。
 ## 只用于 TRANSFER / PLAY，客户端接收端也会按阶段放行。
 func relay_all_to(peer_id: int) -> void:
 	if _net == null or not _net.is_server():
@@ -559,7 +559,7 @@ func s2c_level_begin(
 ) -> void:
 	if _net == null or _net.is_server():
 		return
-	# PLAY 阶段也允许：中途加入的观战者 / 重连玩家需要补关卡。
+	# PLAY 阶段也允许：中途加入的观看者 / 重连玩家需要补关卡。
 	if _manager.phase != RoomPhase.Phase.TRANSFER \
 	and _manager.phase != RoomPhase.Phase.PLAY:
 		return

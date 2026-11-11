@@ -47,37 +47,16 @@ func _add_role_row() -> void:
 	label.size_flags_vertical = Control.SIZE_FILL
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	row.add_child(label)
-	# 按钮字号、内边距、尺寸全部交给 mfmp_theme（与 Quit/Host 同源），撑满右半格。
+	# 与玩家列表里的角色徽章同一套外观（圆角矩形 + 白字描边），尺寸放大一号。
 	var button: Button = Button.new()
 	button.name = "RoleToggleButton"
 	button.set_script(ROLE_TOGGLE_SCRIPT)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.size_flags_vertical = Control.SIZE_FILL
-	# ui_button.tscn 里字号是 50 的 override，动态 new 出来的按钮不会继承，
-	# 这里补上同值，否则文字会比 Quit/Host 小一圈。
-	button.add_theme_font_size_override("font_size", 50)
+	@warning_ignore("unsafe_method_access")
+	ROLE_TOGGLE_SCRIPT.apply_badge_style(button)
 	row.add_child(button)
 	box.add_child.call_deferred(row)
 	# 放在头像选择器之后、底部按钮行之前。
 	box.move_child.call_deferred(row, hbox.get_index())
-	# 行高对齐下方 Quit/Host 那一行：等布局稳定后取同列按钮的实际高度。
-	_sync_role_row_height.call_deferred(button, hbox)
-
-
-## 把「参与模式」行的高度对齐到下方按钮行，避免两行一高一矮。
-func _sync_role_row_height(button: Button, hbox: Node) -> void:
-	await get_tree().process_frame
-	await get_tree().process_frame
-	if button == null or not is_instance_valid(button):
-		return
-	for child: Node in hbox.get_children():
-		var ref: Control = child as Control
-		if ref != null and ref != button:
-			# 用最小尺寸而不是 size：按钮行此刻可能还没完成布局，size 会取到 tscn 里的旧 offset。
-			var h: float = ref.get_combined_minimum_size().y
-			if h > 0.0:
-				button.custom_minimum_size.y = h
-				return
 
 
 func _on_button_pressed() -> void:
@@ -88,7 +67,7 @@ func _on_button_pressed() -> void:
 	manager.local_port = local_port
 	manager.player_name = player_name
 	manager.player.name = player_name
-	# 测试启动的观战身份由 role_toggle_button 在 _ready 里预选；
+	# 测试启动的观看身份由 role_toggle_button 在 _ready 里预选；
 	# 正常界面由“参与模式”按钮决定，这里不覆盖。
 	if MpTest.has("--mp-spectate"):
 		manager.player.is_spectator = true

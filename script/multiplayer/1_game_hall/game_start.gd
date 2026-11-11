@@ -29,7 +29,7 @@ func _on_phase_changed(_phase: int, _payload: Dictionary) -> void:
 	_refresh_start_button()
 
 
-## 0 名游玩玩家（全是观战者）时禁止开始；非房主不显示开始按钮。
+## 0 名游玩玩家（全是观看者）时禁止开始；非房主不显示开始按钮。
 func _refresh_start_button() -> void:
 	if _start_button == null:
 		return

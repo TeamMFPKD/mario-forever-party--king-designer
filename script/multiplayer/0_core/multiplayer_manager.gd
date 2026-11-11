@@ -34,7 +34,7 @@ signal phase_changed(phase: int, payload: Dictionary)
 signal save_level_requested
 signal play_sound_joined
 signal play_sound_exited
-## 本地玩家的“游戏/观战”角色变化；大厅页与 player list 的切换按钮都监听它。
+## 本地玩家的“游戏/观看”角色变化；大厅页与 player list 的切换按钮都监听它。
 signal local_role_changed(is_spectator: bool)
 
 enum LobbyPage {
@@ -50,7 +50,7 @@ var levels: LevelTransferService
 var flow: MatchFlowService
 var chat: ChatService
 var ghosts: GhostCacheService
-## 编辑器观战截图流；用 Node + 动态调用，避免新增 class_name 的全局类缓存依赖。
+## 编辑器观看截图流；用 Node + 动态调用，避免新增 class_name 的全局类缓存依赖。
 var editor_stream: Node
 
 var local_port: int = 8914
@@ -72,7 +72,7 @@ var _reconnect_address: String = ""
 var _reconnect_port: int = 0
 var _is_reconnecting: bool = false
 
-## 本地观战者当前跟随的玩家 id；0 表示自动选第一个可观看玩家。
+## 本地观看者当前跟随的玩家 id；0 表示自动选第一个可观看玩家。
 var spectate_target_id: int = 0
 
 
@@ -287,7 +287,7 @@ func get_local_player() -> PlayerProfile:
 	return player
 
 
-## 大厅里切换本地玩家的游戏/观战角色。
+## 大厅里切换本地玩家的游戏/观看角色。
 ## 未进房时只改本地预选；已进房且处于 LOBBY 时交给主机广播。
 ## 已准备时角色锁定，必须先在 ready 按钮上取消准备。
 func set_local_spectator(value: bool) -> void:

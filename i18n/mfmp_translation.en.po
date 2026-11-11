@@ -447,7 +447,7 @@ msgstr "Level Progress"
 msgid "编辑中"
 msgstr "Editing"
 
-msgid "观战中"
+msgid "观看中"
 msgstr "Spectating"
 
 msgid "等待下一阶段…"
@@ -462,10 +462,10 @@ msgstr "Play Mode"
 msgid "游戏"
 msgstr "Play"
 
-msgid "观战"
+msgid "观看"
 msgstr "Spectate"
 
-msgid "切换为观战"
+msgid "切换为观看"
 msgstr "Switch to Spectate"
 
 msgid "切换为游戏"
@@ -492,7 +492,7 @@ msgstr "Waiting for the room to start..."
 msgid "暂时没有可观看的玩家"
 msgstr "No players to watch right now."
 
-msgid "游戏已开始，只能以观战身份加入。"
+msgid "游戏已开始，只能以观看身份加入。"
 msgstr "The game has started; you can only join as a spectator."
 
 msgid "客户端版本不一致，请更新后再加入。"

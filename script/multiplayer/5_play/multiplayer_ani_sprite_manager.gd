@@ -11,7 +11,7 @@ class_name MpAniSpriteManager
 ## MultiplayerManager 搬到这里，网络门面不再持有表现资源。
 
 @export var mp_ani_shadow_scene: PackedScene
-## 观战视图：不发送本地数据，只显示远端幽灵。
+## 观看视图：不发送本地数据，只显示远端幽灵。
 @export var spectate_mode: bool = false
 
 @export var player_dead_spritesframe: SpriteFrames
@@ -42,7 +42,7 @@ func _ready() -> void:
 		return
 	if MPManager.ghosts != null:
 		MPManager.ghosts.attach_manager(self)
-	# 观战者需要为每名游玩玩家各准备一个槽位；玩家则少一个自己。
+	# 观看者需要为每名游玩玩家各准备一个槽位；玩家则少一个自己。
 	var multiplayer_count: int = 0
 	for profile: PlayerProfile in MPManager.players:
 		if not profile.is_spectator:
@@ -121,7 +121,7 @@ func _exit_tree() -> void:
 		MPManager.ghosts.detach_manager(self)
 
 
-## 观战相机用来找目标的幽灵节点；还没收到第一帧时返回 null。
+## 观看相机用来找目标的幽灵节点；还没收到第一帧时返回 null。
 func get_ghost(player_id: int) -> AnimatedSprite2D:
 	for ani: AnimatedSprite2D in anis:
 		if ani.has_meta("player_id") and int(ani.get_meta("player_id")) == player_id:
