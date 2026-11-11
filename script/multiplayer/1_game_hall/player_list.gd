@@ -44,6 +44,10 @@ func _on_players_updated() -> void:
 	# Re-add
 	var player_number: int = 1
 	for profile: PlayerProfile in players:
+		# 重连宽限期已过的记录不该出现在大厅列表里：主机回到大厅时会清掉，
+		# 这里先过滤一次，避免快照到达前列表短暂残留幽灵行。
+		if profile.abandoned:
+			continue
 		var player_list_line: Node = player_list_scene.instantiate()
 		var player_id_label: Label = player_list_line.get_node("PlayerIdLabel") as Label
 		player_id_label.text = str(player_number)

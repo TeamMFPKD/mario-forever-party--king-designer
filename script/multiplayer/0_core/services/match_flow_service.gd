@@ -181,7 +181,32 @@ func abort_to_lobby(reason: String) -> void:
 	if _host_edit_timer != null:
 		_host_edit_timer.stop()
 	Log.w("中止本局：%s" % reason)
+	# 回大厅前清掉重连超时的记录，避免标题的玩家列表残留。
+	_lobby.prune_abandoned()
 	s2c_phase_changed.rpc(RoomPhase.Phase.LOBBY, {"reason": reason})
+
+
+## 所有游玩玩家都已退出 / 掉线（宽限期已过）：整局没有继续的可能，
+## 主机把所有人（含观战者）拉回标题，并提示“游玩玩家已全部掉线”。
+func abort_all_playing_gone() -> void:
+	if _net == null or not _net.is_server():
+		return
+	if not RoomPhase.is_in_game(phase):
+		return
+	if _host_edit_timer != null:
+		_host_edit_timer.stop()
+	Log.w("所有游玩玩家都已离开，整局返回标题")
+	_lobby.reset_roster_for_lobby()
+	random_levels.clear()
+	current_level_count = 0
+	s2c_phase_changed.rpc(
+		RoomPhase.Phase.LOBBY,
+		{
+			"reason": "游玩玩家已全部掉线",
+			"reason_title": "连接断开",
+			"reason_ok": "返回标题画面",
+		}
+	)
 
 
 func on_player_left(_id: int) -> void:
@@ -424,7 +449,12 @@ func _apply_lobby_phase(payload: Dictionary) -> void:
 	current_level_count = 0
 	var reason: String = str(payload.get("reason", ""))
 	if not reason.is_empty():
-		Notice.show_notice(reason, "返回大厅")
+		# 标题与按钮文案可随载荷覆盖（例如“游玩玩家已全部掉线”/“返回标题画面”）。
+		Notice.show_notice(
+			reason,
+			str(payload.get("reason_title", "返回大厅")),
+			str(payload.get("reason_ok", "确认"))
+		)
 	_switch_scene(SCENE_TITLE)
 
 

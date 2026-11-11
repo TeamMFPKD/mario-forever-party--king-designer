@@ -216,6 +216,15 @@ msgstr "解像度"
 msgid "玩家离开提示"
 msgstr "{player_name} がルームを退出しました。"
 
+msgid "玩家掉线提示"
+msgstr "{player_name} の接続が切れました。再接続を待っています…"
+
+msgid "游玩玩家已全部掉线"
+msgstr "プレイヤーが全員切断されました。"
+
+msgid "返回标题画面"
+msgstr "タイトルへ戻る"
+
 msgid "与主机断开。"
 msgstr "ホストとの接続が切れました。"
 

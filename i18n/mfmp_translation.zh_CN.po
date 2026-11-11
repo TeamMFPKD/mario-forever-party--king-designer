@@ -216,6 +216,15 @@ msgstr "分辨率"
 msgid "玩家离开提示"
 msgstr "{player_name} 离开了房间。"
 
+msgid "玩家掉线提示"
+msgstr "{player_name} 掉线了，等待重连…"
+
+msgid "游玩玩家已全部掉线"
+msgstr "游玩玩家已全部掉线"
+
+msgid "返回标题画面"
+msgstr "返回标题画面"
+
 msgid "与主机断开。"
 msgstr "与主机断开。"
 

@@ -59,13 +59,16 @@ func add(profile: PlayerProfile) -> void:
 	player_added.emit(profile.id)
 
 
-func remove(id: int) -> PlayerProfile:
+## notify=false 用于掉线重连换 peer id：记录被移走但玩家没有离开房间，
+## 不能弹「玩家离开」提示。
+func remove(id: int, notify: bool = true) -> PlayerProfile:
 	if not _players.has(id):
 		return null
 	var profile: PlayerProfile = _players[id]
 	_players.erase(id)
 	_order.erase(id)
-	player_removed.emit(id, profile.name)
+	if notify:
+		player_removed.emit(id, profile.name)
 	return profile
 
 
@@ -78,9 +81,15 @@ func clear() -> void:
 
 
 ## 用主机下发的完整快照替换本地列表。
+##
+## 快照里消失、且新名单中也没有同名人物的玩家视为离开房间：名单替换完成后补发
+## player_removed，让非主机端（含观战者）也能弹「玩家离开」提示。同名的记录属于
+## 掉线重连换了 peer id，不当作离开。
 func replace_from_wire(list: Array) -> void:
-	_players.clear()
-	_order.clear()
+	var previous: Array[PlayerProfile] = all()
+	var next_players: Dictionary[int, PlayerProfile] = {}
+	var next_order: Array[int] = []
+	var next_names: Dictionary[String, bool] = {}
 	for entry: Variant in list:
 		if not (entry is Dictionary):
 			continue
@@ -88,11 +97,22 @@ func replace_from_wire(list: Array) -> void:
 		var profile: PlayerProfile = PlayerProfile.from_wire(data)
 		if profile.id == 0:
 			continue
-		if _players.has(profile.id):
+		if next_players.has(profile.id):
 			continue
-		_players[profile.id] = profile
-		_order.append(profile.id)
+		next_players[profile.id] = profile
+		next_order.append(profile.id)
+		next_names[profile.name] = true
+	var removed: Array[PlayerProfile] = []
+	for profile: PlayerProfile in previous:
+		if next_players.has(profile.id) or next_names.has(profile.name):
+			continue
+		removed.append(profile)
+	_players = next_players
+	_order = next_order
 	registry_reset.emit()
+	# 等名单切换完整后再补发离开事件，避免监听者在半空名单里重建界面。
+	for profile: PlayerProfile in removed:
+		player_removed.emit(profile.id, profile.name)
 
 
 ## 应用一条增量。找不到玩家时返回 false。

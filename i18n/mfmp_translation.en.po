@@ -216,6 +216,15 @@ msgstr "Resolution"
 msgid "玩家离开提示"
 msgstr "{player_name} left the room."
 
+msgid "玩家掉线提示"
+msgstr "{player_name} lost connection. Waiting for reconnection…"
+
+msgid "游玩玩家已全部掉线"
+msgstr "All players have disconnected."
+
+msgid "返回标题画面"
+msgstr "Back to Title"
+
 msgid "与主机断开。"
 msgstr "Disconnected from server."
 

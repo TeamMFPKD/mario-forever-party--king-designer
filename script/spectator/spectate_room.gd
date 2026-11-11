@@ -25,8 +25,9 @@ const STRIP_PATHS: Array[String] = [
 @onready var _progress: Label = $Hud/InfoPanel/VBox/Progress
 @onready var _background: Parallax2D = $Background
 @onready var _border: TextureRect = $BorderFrame
-@onready var _waiting: PanelContainer = $Hud/WaitingPanel
-@onready var _waiting_status: Label = $Hud/WaitingPanel/VBox/WaitingStatus
+@onready var _waiting: VBoxContainer = $Hud/ProgressBox
+@onready var _waiting_status: Label = $Hud/ProgressBox/StatusLabel
+@onready var _progress_row: HBoxContainer = $Hud/ProgressBox/ProgressRow
 @onready var _editor_view: TextureRect = $Hud/EditorView
 
 var _base: Node = null
@@ -111,12 +112,15 @@ func _rebuild() -> void:
 	_sync_editor_watch()
 	if MPManager.phase != RoomPhase.Phase.PLAY:
 		_waiting_status.text = _phase_text()
+		# 关卡接收进度与准备人数只在传输阶段显示（文案与数值复用传输房间）。
+		_progress_row.visible = MPManager.phase == RoomPhase.Phase.TRANSFER
 		_waiting.visible = true
 		return
 
 	var target: PlayerProfile = _current_target()
 	if target == null:
 		_waiting_status.text = tr("暂时没有可观看的玩家")
+		_progress_row.visible = false
 		_waiting.visible = true
 		return
 
@@ -187,9 +191,6 @@ func get_ghost_manager() -> MpAniSpriteManager:
 
 
 func _process(_delta: float) -> void:
-	if _waiting.visible and MPManager.phase != RoomPhase.Phase.PLAY:
-		var dots: String = ".".repeat(int(Time.get_ticks_msec() / 400.0) % 4)
-		_waiting_status.text = _phase_text() + dots
 	if _ghosts == null or _camera == null:
 		return
 	var target: PlayerProfile = _current_target()
@@ -212,7 +213,8 @@ func _phase_text() -> String:
 		RoomPhase.Phase.EDIT:
 			return tr("编辑中")
 		RoomPhase.Phase.TRANSFER:
-			return tr("关卡传输中…")
+			# 与关卡传输房间的提示文案保持一致。
+			return tr("传输 / 接收关卡数据中……")
 		RoomPhase.Phase.PLAY:
 			return tr("等待其他玩家完成…")
 		RoomPhase.Phase.RESULT:

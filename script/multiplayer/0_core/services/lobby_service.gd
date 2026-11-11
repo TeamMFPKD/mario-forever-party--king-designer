@@ -39,11 +39,19 @@ func _process(_delta: float) -> void:
 			continue
 		_abandoned_notified[profile.id] = true
 		Log.w("玩家 %s 重连超时，已标记离线" % _manager.format_player(profile.name, profile.id))
+		if _manager.phase == RoomPhase.Phase.LOBBY:
+			# 大厅里没有本局成绩要保留，超时直接清出名单，避免标题玩家列表残留。
+			_registry.remove(profile.id)
+			_abandoned_notified.erase(profile.id)
+			broadcast_snapshot()
+			continue
 		if _manager.phase == RoomPhase.Phase.TRANSFER:
 			_manager.levels.on_player_left(profile.id)
 		elif _manager.phase == RoomPhase.Phase.PLAY \
 		or _manager.phase == RoomPhase.Phase.RESULT:
 			_manager.flow.on_player_left(profile.id)
+		# 宽限期结束仍未回来：他可能已经是最后一个游玩玩家，整局收尾。
+		_check_all_playing_gone()
 
 
 func setup(manager: MultiplayerManager, registry: SessionRegistry, net: NetPeer) -> void:
@@ -122,15 +130,57 @@ func remove_player(id: int) -> PlayerProfile:
 	var profile: PlayerProfile = _registry.remove(id)
 	if profile != null:
 		broadcast_snapshot()
+		_check_all_playing_gone()
 	return profile
+
+
+## 仍然占着游玩席位的人数：观战者不算；意外掉线但还在 20s 宽限期内的照算，
+## 只有宽限期结束（abandoned）才认为他真的走了，避免把“正在重连”误判成全员掉线。
+func active_playing_count() -> int:
+	var count: int = 0
+	for profile: PlayerProfile in _registry.all():
+		if profile.is_spectator or profile.abandoned:
+			continue
+		count += 1
+	return count
+
+
+## 本局（EDIT 之后）一个游玩玩家都不剩时，整局已经没法继续：主机拉所有人回标题。
+func _check_all_playing_gone() -> void:
+	if _net == null or not _net.is_server():
+		return
+	if not RoomPhase.is_in_game(_manager.phase):
+		return
+	if active_playing_count() > 0:
+		return
+	_manager.flow.abort_all_playing_gone()
 
 
 ## 主机回到大厅时清空本局数据（保留身份）。客户端靠快照同步。
 func reset_roster_for_lobby() -> void:
 	if _net == null or not _net.is_server():
 		return
+	# 先清掉重连宽限期已过的记录，否则标题的玩家列表会残留已掉线的人。
+	prune_abandoned()
 	_registry.reset_match_state()
 	broadcast_snapshot()
+
+
+## 把已过重连宽限期（abandoned）的记录移出名单。
+## 这些人本局已经不会再回来，留着只会在玩家列表里变成幽灵行。
+func prune_abandoned() -> void:
+	if _net == null or not _net.is_server():
+		return
+	var removed: bool = false
+	for profile: PlayerProfile in _registry.all():
+		if not profile.abandoned:
+			continue
+		Log.i("清理重连超时的玩家 %s" % _manager.format_player(profile.name, profile.id))
+		_registry.remove(profile.id)
+		_abandoned_notified.erase(profile.id)
+		removed = true
+	if removed:
+		broadcast_snapshot()
 
 
 func broadcast_snapshot() -> void:
@@ -271,6 +321,9 @@ func _on_peer_left(id: int, reason: String) -> void:
 			_manager.levels.on_player_left(id)
 		elif _manager.phase == RoomPhase.Phase.PLAY or _manager.phase == RoomPhase.Phase.RESULT:
 			_manager.flow.on_player_left(id)
+		# 房主关闭房间时不用再管整局收尾，其余退出都检查一次游玩玩家是否清零。
+		if reason == "主动退出":
+			_check_all_playing_gone()
 		return
 	# 意外断开：保留记录 20s，等待同 device_id 重连。
 	profile.connected = false
@@ -307,7 +360,8 @@ func _make_profile(sender: int, info: Dictionary) -> PlayerProfile:
 ## 同 device_id 的玩家在 20s 内重新连上：换 peer id，保留关卡/成绩/角色。
 func _restore_profile(profile: PlayerProfile, sender: int) -> void:
 	var old_id: int = profile.id
-	_registry.remove(old_id)
+	# 静默移除：玩家只是换了 peer id，不能给其他人弹「离开了房间」。
+	_registry.remove(old_id, false)
 	_abandoned_notified.erase(old_id)
 	profile.id = sender
 	profile.connected = true

@@ -4,6 +4,7 @@
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="3_bg"]
 [ext_resource type="Texture2D" uid="uid://clbmj4qn1ly3m" path="res://sprite/game_border.png" id="4_border"]
+[ext_resource type="Script" uid="uid://dx4d3nxdamjo7" path="res://script/multiplayer/4_level_transfer_room/level_transfer_progress_label.gd" id="5_progress"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
 content_margin_left = 18.0
@@ -15,22 +16,6 @@ corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_waiting"]
-content_margin_left = 48.0
-content_margin_top = 36.0
-content_margin_right = 48.0
-content_margin_bottom = 36.0
-bg_color = Color(0.101961, 0.0588235, 0.180392, 0.960784)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
-border_color = Color(0.741176, 0.517647, 1, 1)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
 
 [node name="SpectateRoom" type="Control"]
 layout_mode = 3
@@ -50,23 +35,6 @@ repeat_times = 6
 [node name="Sprite2D" type="Sprite2D" parent="Background"]
 self_modulate = Color(0.350637, 0.1702, 0.74, 1)
 texture = ExtResource("3_bg")
-
-[node name="BorderFrame" type="TextureRect" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -650.0
-offset_top = -490.0
-offset_right = 650.0
-offset_bottom = 490.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("4_border")
-expand_mode = 1
 
 [node name="Hud" type="Control" parent="."]
 layout_mode = 1
@@ -145,49 +113,82 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 34
 text = "-/-"
 
-[node name="WaitingPanel" type="PanelContainer" parent="Hud"]
+[node name="ProgressBox" type="VBoxContainer" parent="Hud"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -380.0
-offset_top = -200.0
-offset_right = 380.0
-offset_bottom = 200.0
+offset_left = -720.0
+offset_top = -90.0
+offset_right = 720.0
+offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_waiting")
-
-[node name="VBox" type="VBoxContainer" parent="Hud/WaitingPanel"]
-layout_mode = 2
 theme = ExtResource("2_theme")
-theme_override_constants/separation = 18
+theme_override_constants/separation = 10
 alignment = 1
+script = ExtResource("5_progress")
 
-[node name="WaitingTitle" type="Label" parent="Hud/WaitingPanel/VBox"]
+[node name="TitleLabel" type="Label" parent="Hud/ProgressBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 64
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 45
 text = "观战中"
 horizontal_alignment = 1
 
-[node name="WaitingStatus" type="Label" parent="Hud/WaitingPanel/VBox"]
+[node name="StatusLabel" type="Label" parent="Hud/ProgressBox"]
+auto_translate_mode = 2
 layout_mode = 2
-theme_override_colors/font_color = Color(0.898039, 0.858824, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
 text = "等待下一阶段…"
 horizontal_alignment = 1
 
-[node name="WaitingHint" type="Label" parent="Hud/WaitingPanel/VBox"]
+[node name="ProgressRow" type="HBoxContainer" parent="Hud/ProgressBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.631373, 0.607843, 0.741176, 1)
-theme_override_font_sizes/font_size = 22
-text = "稍候，房主会推进阶段"
+theme_override_constants/separation = 125
+alignment = 1
+
+[node name="LevelCountLabel" type="Label" parent="Hud/ProgressBox/ProgressRow"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "接收关卡（0/0）"
 horizontal_alignment = 1
+
+[node name="ReadyCountLabel" type="Label" parent="Hud/ProgressBox/ProgressRow"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.3375001, 0.25, 1, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 32
+text = "准备人数（0/0）"
+horizontal_alignment = 1
+
+[node name="BorderFrame" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -660.0
+offset_top = -500.0
+offset_right = 660.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_border")
+expand_mode = 1
