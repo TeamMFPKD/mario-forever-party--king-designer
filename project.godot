@@ -112,6 +112,10 @@ folder_colors={
 "res://ui/": "green"
 }
 
+[gui]
+
+theme/custom="res://mfmp_theme.tres"
+
 [global_group]
 
 bgm=""
