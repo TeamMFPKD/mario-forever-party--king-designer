@@ -11,6 +11,8 @@ class_name AdventureManager
 signal run_started
 signal run_changed
 signal run_finished(summary: Dictionary)
+## 「暂停是否被禁止」发生变化（已过关 / 过关转场播放中），暂停按钮据此切换 Disabled。
+signal pause_blocked_changed
 
 const DEFAULT_RUN_LENGTH: int = 10
 const RUN_LENGTH_MIN: int = 5
@@ -45,6 +47,8 @@ var _transition_label: Label
 var _clear_transition: CanvasLayer
 ## 过关转场是否正在播放：防止加载期间玩家碰到下一关终点又触发一次转场。
 var _pass_transition_busy: bool = false
+## 本次关卡是否已经过关（碰到终点 → 下一关加载完成）。期间禁止暂停。
+var _level_passed_busy: bool = false
 
 
 func _ready() -> void:
@@ -136,6 +140,7 @@ func resume_run() -> bool:
 	current_run = saved
 	current_key = ""
 	resume_available = false
+	_set_level_passed_busy(false)
 	GameModeSingleton.set("game_mode", GameMode.GameModeType.ADVENTURE)
 	run_started.emit()
 	run_changed.emit()
@@ -260,6 +265,7 @@ func start_run(settings: Dictionary) -> bool:
 		"level_fingerprints": _fingerprints_for(keys),
 	}
 	current_key = ""
+	_set_level_passed_busy(false)
 	store.set_run(current_run)
 	GameModeSingleton.set("game_mode", GameMode.GameModeType.ADVENTURE)
 	run_started.emit()
@@ -269,6 +275,9 @@ func start_run(settings: Dictionary) -> bool:
 
 ## load_level.gd 在关卡成功加载后调用。只在百人团模式记录。
 func on_level_loaded(path: String) -> void:
+	# 新关卡就绪：上一关的「已过关」状态作废。
+	# 转场还没播完时仍由 _pass_transition_busy 挡住暂停，不会提前放开。
+	_set_level_passed_busy(false)
 	if not GameMode.is_adventure():
 		return
 	var key: String = path.get_file()
@@ -539,6 +548,24 @@ func is_pass_transition_running() -> bool:
 	return _pass_transition_busy
 
 
+## 暂停是否被禁止：已过关或过关转场播放中。
+## 暂停键与手机暂停按钮都以此为准，按钮同时置为 Disabled。
+func is_pause_blocked() -> bool:
+	return _level_passed_busy or _pass_transition_busy
+
+
+## GoalGate 碰到终点时调用：从这一刻起禁止暂停，直到下一关加载完成。
+func notify_level_passed() -> void:
+	_set_level_passed_busy(true)
+
+
+func _set_level_passed_busy(value: bool) -> void:
+	if _level_passed_busy == value:
+		return
+	_level_passed_busy = value
+	pause_blocked_changed.emit()
+
+
 ## 过关转场 + 下一关预热。
 ##
 ## 时序：
@@ -553,8 +580,10 @@ func _play_pass_transition(next_scene: String) -> void:
 		Log.w("Adventure", "过关转场尚未结束，忽略重复的过关请求")
 		return
 	_pass_transition_busy = true
+	pause_blocked_changed.emit()
 	await _run_pass_transition(next_scene)
 	_pass_transition_busy = false
+	pause_blocked_changed.emit()
 
 
 func _run_pass_transition(next_scene: String) -> void:
@@ -631,13 +660,7 @@ func _detach_and_load_next_level(transition: CanvasLayer) -> Dictionary:
 	if not bool(transition.call("detach_from_level_view", _game_view_rect())):
 		return failed
 
-	var next_scene: Node = await _load_next_play_scene()
-	if is_instance_valid(next_scene):
-		# 新场景就绪：把转场插回关卡视口内部（盖住关卡，但不盖边框/HUD）。
-		var container: Control = next_scene.get_node_or_null(
-			"GameRoomSize/SubViewportContainer"
-		) as Control
-		transition.call("attach_to_game_view", container, _game_view_rect())
+	var next_scene: Node = await _load_next_play_scene(transition)
 	return {"detached": true, "advanced": is_instance_valid(next_scene)}
 
 
@@ -654,38 +677,73 @@ func _game_view_rect() -> Rect2:
 
 
 ## 切到下一关游玩场景，等关卡数据完全写进场景后暂停（冻结）。
-func _load_next_play_scene() -> Node:
+##
+## 不用 change_scene_to_packed：它在帧末才把新场景挂进树，那一帧新场景会画在转场上面，
+## 而它的 SubViewport 第一帧还没渲染 —— 会看到关卡区域闪黑一下。
+## 这里手动换：新场景先隐藏着挂进树 → 把转场插进它的关卡视口 → 同一帧内显示新场景、
+## 设为当前场景、释放旧场景，整帧内两个场景都在，不会出现空档。
+func _load_next_play_scene(transition: CanvasLayer) -> Node:
 	var packed: PackedScene = load(PLAY_SCENE) as PackedScene
 	if packed == null:
 		Log.e("Adventure", ["下一关场景加载失败：", PLAY_SCENE])
 		return null
-	var previous: Node = get_tree().current_scene
-	if get_tree().change_scene_to_packed(packed) != OK:
-		Log.e("Adventure", "切换下一关场景失败")
-		return null
-
-	# change_scene_to_packed 在帧末生效：等新场景真正就位。
-	var waited: float = 0.0
-	var next_scene: Node = null
-	while waited < 3.0:
-		var scene: Node = get_tree().current_scene
-		if scene != null and scene != previous:
-			next_scene = scene
-			break
-		await get_tree().process_frame
-		waited += get_process_delta_time()
+	var next_scene: Node = packed.instantiate()
 	if next_scene == null:
-		Log.e("Adventure", "下一关场景没有出现")
 		return null
+	var previous: Node = get_tree().current_scene
 
-	# 新场景一出现就冻结：转场还在播，不能让玩家/敌人/计时器先跑，
-	# 否则玩家可能在加载期间碰到下一关的终点。
-	# LoadLevel 是 deferred 调用 + 同步解析，暂停不会阻断关卡加载。
+	# 先隐藏 + 冻结，避免新场景在转场插好之前先画一帧。
+	var canvas_item: CanvasItem = next_scene as CanvasItem
+	if canvas_item != null:
+		canvas_item.visible = false
+	next_scene.process_mode = Node.PROCESS_MODE_DISABLED
+
+	# 趁新场景还没入树，先把转场挂进它的关卡视口。
+	# 这样新场景入树的那一帧转场已经在容器里、直接能画出来；
+	# 如果等入树后再搬，CanvasItem 重新挂父节点要下一帧才生效，会闪一帧。
+	# 容器尺寸固定为 1280×960（SubViewport 的像素尺寸）。
+	if is_instance_valid(transition):
+		var container: Control = next_scene.get_node_or_null(
+			"GameRoomSize/SubViewportContainer"
+		) as Control
+		transition.call(
+			"attach_to_game_view",
+			container,
+			Rect2(Vector2.ZERO, Vector2(1280.0, 960.0))
+		)
+
+	# 挂新场景之前先把旧场景从树上摘掉：
+	# 否则新场景的 _ready 会从 level_camera / player 组里拿到旧场景的节点，
+	# 旧场景帧末释放后这些缓存就变成 previously freed。
+	# 同一帧内 remove + add，渲染帧末只有新场景，不会出现空档。
+	if previous != null and previous != next_scene:
+		var previous_parent: Node = previous.get_parent()
+		if previous_parent != null:
+			previous_parent.remove_child(previous)
+		previous.queue_free()
+
+	get_tree().root.add_child(next_scene)
+	get_tree().current_scene = next_scene
+
+	# _ready 里可能新建 CanvasLayer（暂停按钮），一并隐藏。
+	var hidden_layers: Array[CanvasLayer] = []
+	for child: Node in next_scene.get_children():
+		var layer: CanvasLayer = child as CanvasLayer
+		if layer != null and layer.visible:
+			layer.visible = false
+			hidden_layers.append(layer)
+
+	# 同一帧内显示新场景并冻结
+	if canvas_item != null:
+		canvas_item.visible = true
+	for layer: CanvasLayer in hidden_layers:
+		layer.visible = true
+	next_scene.process_mode = Node.PROCESS_MODE_INHERIT
 	get_tree().paused = true
 
 	# 等关卡文件解析、对象生成完成（LoadLevel 是 deferred 调用的）。
 	var manager: LevelManager = next_scene.find_child("LevelManager", true, false) as LevelManager
-	waited = 0.0
+	var waited: float = 0.0
 	while manager != null and manager.level_data_dict.is_empty() and waited < 5.0:
 		await get_tree().process_frame
 		waited += get_process_delta_time()

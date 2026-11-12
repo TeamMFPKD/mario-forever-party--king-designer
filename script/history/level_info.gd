@@ -8,14 +8,17 @@ var level_file_path: String = ""
 var level_path_set: Node
 
 func _ready() -> void:
-	# 等待一帧确保所有节点都已准备好
+	# 百人团：当前关卡在加载场景前就确定了，同步填好。
+	# 否则换场景的那一帧会先露出场景里预置的 "Invalid Date / Invalid Author Name / Invalid Rate"。
+	if GameMode.is_adventure() and Adventure.is_running():
+		level_file_path = Adventure.current_level_path()
+		_update_level_info()
+		return
+	# 其他模式等待一帧确保所有节点都已准备好
 	await get_tree().process_frame
 	level_path_set = get_tree().get_first_node_in_group("level_path_set")
 	if level_path_set != null:
 		level_file_path = str(level_path_set.get_meta("level_path_name", ""))
-	# 百人团游玩场景没有 LevelPathSetGetter，直接读当前团关卡。
-	if level_file_path.is_empty() and GameMode.is_adventure() and Adventure.is_running():
-		level_file_path = Adventure.current_level_path()
 	_update_level_info()
 
 # 解析关卡文件名并更新Label

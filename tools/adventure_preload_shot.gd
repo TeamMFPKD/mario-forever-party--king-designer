@@ -51,6 +51,8 @@ func _ready() -> void:
 	}
 	GameModeSingleton.set("game_mode", GameMode.GameModeType.ADVENTURE)
 
+	# _ready 期间 root 还在 setup children，直接 add_child 会被拒绝，等一帧再挂。
+	await get_tree().process_frame
 	var packed: PackedScene = load(Adventure.PLAY_SCENE) as PackedScene
 	if packed == null:
 		_lines.append("PLAY_SCENE LOAD_FAIL")

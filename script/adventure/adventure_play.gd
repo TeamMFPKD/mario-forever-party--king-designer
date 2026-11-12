@@ -10,6 +10,7 @@ const LEVEL_TIME_LIMIT: float = 30.0
 
 var _game_timer: Timer
 var _level_manager: Node
+var _pause_button: Button
 
 
 func _ready() -> void:
@@ -21,6 +22,8 @@ func _ready() -> void:
 	_remove_node("GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel")
 	Adventure.register_clear_transition(_find_clear_transition())
 	_build_pause_button()
+	# 过关中 / 转场播放中把暂停按钮置灰（信号回调不受暂停影响）。
+	Adventure.pause_blocked_changed.connect(_refresh_pause_button)
 	_setup_level_timer()
 
 
@@ -93,9 +96,20 @@ func _build_pause_button() -> void:
 	button.offset_bottom = 96
 	button.pressed.connect(_on_pause_pressed)
 	layer.add_child(button)
+	_pause_button = button
+	_refresh_pause_button()
+
+
+## 过关中 / 过关转场播放中：暂停按钮置灰，点不动。
+func _refresh_pause_button() -> void:
+	if _pause_button == null:
+		return
+	_pause_button.disabled = Adventure.is_pause_blocked()
 
 
 func _on_pause_pressed() -> void:
+	if Adventure.is_pause_blocked():
+		return
 	var menu: Node = find_child("AdventurePauseMenu", true, false)
 	if is_instance_valid(menu) and menu.has_method("toggle_pause"):
 		menu.call("toggle_pause")
@@ -109,4 +123,6 @@ func _find_clear_transition() -> CanvasLayer:
 func _remove_node(path: String) -> void:
 	var node: Node = get_node_or_null(path)
 	if node != null:
+		# 先停掉处理（含 Timer），避免 queue_free 到真正释放之间还触发 capture/save。
+		node.process_mode = Node.PROCESS_MODE_DISABLED
 		node.queue_free()

@@ -54,6 +54,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	# 按键在标题页「设置 → 输入映射 → 暂停」里可改。
 	if event.is_action_pressed("pause"):
+		# 过关中 / 过关转场播放中按暂停键不算数，也不吃掉这次输入。
+		if not _is_open and Adventure.is_pause_blocked():
+			return
 		toggle_pause()
 		get_viewport().set_input_as_handled()
 
@@ -63,8 +66,11 @@ func toggle_pause() -> void:
 		return
 	if _is_open:
 		_close_flip()
-	else:
-		_open_flip()
+		return
+	# 玩家已过关 / 过关转场播放中：不允许打开暂停菜单（已经打开的仍可关闭）。
+	if Adventure.is_pause_blocked():
+		return
+	_open_flip()
 
 
 ## 死亡/过关推进前强制关掉菜单，避免带着暂停状态重载场景。
