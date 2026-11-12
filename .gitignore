@@ -96,3 +96,4 @@ tools/*.png.import
 tools/**/*.png.import
 tools/*_result.txt
 tools/**/*_result.txt
+/.codebuddy
