@@ -46,7 +46,10 @@
 [ext_resource type="Script" uid="uid://bu318c40ey0n7" path="res://script/option/history_ghost_toggle.gd" id="43_ghost"]
 [ext_resource type="Script" path="res://script/title/fit_content_panel.gd" id="44_fit"]
 [ext_resource type="PackedScene" path="res://ui/title/pipe_menu.tscn" id="50_pipe_menu"]
+[ext_resource type="Theme" uid="uid://bpkayogffk0um" path="res://ui/theme/theme_yellow_top.tres" id="60_yellow"]
 [ext_resource type="Script" uid="uid://dre81e0pua38y" path="res://script/multiplayer/ui/title_net_bridge.gd" id="99_bridge"]
+
+[sub_resource type="StyleBoxEmpty" id="SBE_notice_buttons"]
 
 [node name="Title" type="Node2D" unique_id=1624875014]
 
@@ -1027,13 +1030,23 @@ theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 128
 theme_override_constants/margin_bottom = 64
 script = ExtResource("4_ytxtj")
-refuse_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
-accept_button = NodePath("UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
+refuse_button = NodePath("DropRoot/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/RefuseButton")
+accept_button = NodePath("DropRoot/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer/AcceptButton")
 
-[node name="UiPanel" parent="GameRoomSize/UserNotice" unique_id=1506734047 instance=ExtResource("4_i3lsm")]
+[node name="DropRoot" type="Control" parent="GameRoomSize/UserNotice" unique_id=659626027]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/UiPanel" unique_id=1972194216]
+[node name="UiPanel" parent="GameRoomSize/UserNotice/DropRoot" unique_id=1506734047 instance=ExtResource("4_i3lsm")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("60_yellow")
+
+[node name="MarginContainer" type="MarginContainer" parent="GameRoomSize/UserNotice/DropRoot/UiPanel" unique_id=1972194216]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1041,40 +1054,42 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 16
+theme_override_constants/margin_top = 48
 theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_bottom = 32
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer" unique_id=1242804199]
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer" unique_id=1242804199]
 layout_mode = 2
 
-[node name="UserNoticeLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=997845820 instance=ExtResource("5_qon3s")]
+[node name="UserNoticeLabel" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer" unique_id=997845820 instance=ExtResource("5_qon3s")]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
-theme_override_font_sizes/font_size = 80
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 64
 text = "使用须知"
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer" unique_id=517174957]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NoticeLabel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
+[node name="NoticeLabel" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1744153178 instance=ExtResource("5_qon3s")]
 custom_minimum_size = Vector2(233, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("10_bvmdg")
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 40
 text = "使用须知文本"
 autowrap_mode = 3
 
-[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
+[node name="MfpkdPanel" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer" unique_id=1248439741 instance=ExtResource("4_i3lsm")]
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
+theme_override_styles/panel = SubResource("SBE_notice_buttons")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel" unique_id=174296313]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1089,7 +1104,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 128
 
-[node name="RefuseButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
+[node name="RefuseButton" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=1253116355 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -1097,7 +1112,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("10_bvmdg")
 text = "拒绝并退出"
 
-[node name="AcceptButton" parent="GameRoomSize/UserNotice/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
+[node name="AcceptButton" parent="GameRoomSize/UserNotice/DropRoot/UiPanel/MarginContainer/VBoxContainer/MfpkdPanel/HBoxContainer" unique_id=574107124 instance=ExtResource("2_w52fc")]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -1111,7 +1126,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
+theme_override_constants/margin_top = 56
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
