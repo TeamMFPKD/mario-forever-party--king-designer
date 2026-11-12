@@ -14,11 +14,11 @@ const TEMP_STORE: String = "user://adventure_mobile_pause_probe.ini"
 
 func _ready() -> void:
 	var lines: Array[String] = []
-	# 默认按手机跑；加 --probe-desktop 则不伪装，验证桌面端也显示暂停键。
-	var expect_desktop: bool = MpTest.has("--probe-desktop")
-	if not expect_desktop:
+	# 默认按桌面跑；加 --probe-mobile 才伪装 Android（手机端已单独验证过）。
+	var expect_mobile: bool = MpTest.has("--probe-mobile")
+	if expect_mobile:
 		PlatformUtils.set_debug_platform("Android")
-	lines.append("expect_desktop=%s" % str(expect_desktop))
+	lines.append("expect_mobile=%s" % str(expect_mobile))
 	lines.append("platform_name=%s" % PlatformUtils.get_platform_name())
 	lines.append("is_mobile=%s" % str(PlatformUtils.is_mobile_platform()))
 	lines.append("is_desktop=%s" % str(PlatformUtils.is_desktop_platform()))
@@ -69,6 +69,19 @@ func _ready() -> void:
 		await get_tree().create_timer(1.2).timeout
 	lines.append("paused_after_open=%s" % str(get_tree().paused))
 	lines.append("menu_visible_after_open=%s" % str(menu != null and menu.visible))
+
+	# 暂停面板尺寸必须与关卡视口外边框装饰一致。
+	var border: Control = play.find_child("GameBorderTextureRect", true, false) as Control
+	var panel: Control = null
+	if menu != null:
+		panel = menu.get_node_or_null("Root/CardHolder") as Control
+	lines.append("border_found=%s" % str(border != null))
+	lines.append("panel_found=%s" % str(panel != null))
+	lines.append("panel_size=%s" % str(panel.size if panel != null else Vector2.ZERO))
+	lines.append("border_size=%s" % str(border.size if border != null else Vector2.ZERO))
+	lines.append("panel_size_matches_border=%s" % str(
+		panel != null and border != null and panel.size.is_equal_approx(border.size)
+	))
 
 	var continue_ok: bool = false
 	if menu != null:

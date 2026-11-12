@@ -14,12 +14,12 @@ const TEMP_STORE: String = "user://adventure_mobile_pause_shot.ini"
 
 func _ready() -> void:
 	var lines: Array[String] = []
-	# 默认按手机跑；加 --shot-desktop 则不伪装，截桌面端画面。
-	var desktop_mode: bool = MpTest.has("--shot-desktop")
-	if not desktop_mode and not PlatformUtils.is_mobile_platform():
+	# 默认按桌面跑；加 --shot-mobile 才伪装 Android（手机端已单独验证过）。
+	var mobile_mode: bool = MpTest.has("--shot-mobile")
+	if mobile_mode and not PlatformUtils.is_mobile_platform():
 		PlatformUtils.set_debug_platform("Android")
-	var shot_suffix: String = "_desktop" if desktop_mode else ""
-	lines.append("desktop_mode=%s" % str(desktop_mode))
+	var shot_suffix: String = "_mobile" if mobile_mode else ""
+	lines.append("mobile_mode=%s" % str(mobile_mode))
 	lines.append("platform_name=%s" % PlatformUtils.get_platform_name())
 
 	var store: AdventureStore = AdventureStore.new(TEMP_STORE)
@@ -67,10 +67,23 @@ func _ready() -> void:
 		lines.append("button_window_pos=%s" % str(window_pos))
 		lines.append("emulate_touch_from_mouse=%s" % str(Input.is_emulating_touch_from_mouse()))
 		# 优先用鼠标点击：伪装 Android 时会经 emulate_touch_from_mouse 转成触摸。
+		var press_ms: int = Time.get_ticks_msec()
 		_mouse(window_pos, true)
 		await get_tree().process_frame
 		_mouse(window_pos, false)
-		await get_tree().create_timer(1.2).timeout
+		# 翻转约 0.55s：抓两帧中间态，确认透视与倾斜生效。
+		await get_tree().create_timer(0.30).timeout
+		await RenderingServer.frame_post_draw
+		_save("res://tools/adventure_mobile_pause_flip_a%s.png" % shot_suffix)
+		lines.append("flip_a_ms=%d" % (Time.get_ticks_msec() - press_ms))
+		var mid_mesh: MeshInstance2D = play.find_child("FlipMesh", true, false) as MeshInstance2D
+		if mid_mesh != null:
+			lines.append("flip_a_scale=%.3f" % mid_mesh.scale.x)
+		await get_tree().create_timer(0.12).timeout
+		await RenderingServer.frame_post_draw
+		_save("res://tools/adventure_mobile_pause_flip_b%s.png" % shot_suffix)
+		lines.append("flip_b_ms=%d" % (Time.get_ticks_msec() - press_ms))
+		await get_tree().create_timer(0.7).timeout
 		mouse_opened = get_tree().paused
 		if not mouse_opened:
 			# 再直接注入屏幕触摸。
@@ -86,6 +99,15 @@ func _ready() -> void:
 	lines.append("mouse_opened=%s" % str(mouse_opened))
 	lines.append("touch_opened=%s" % str(touch_opened))
 	lines.append("paused=%s" % str(get_tree().paused))
+	var flip_mesh: MeshInstance2D = play.find_child("FlipMesh", true, false) as MeshInstance2D
+	if flip_mesh != null:
+		var flip_material: ShaderMaterial = flip_mesh.material as ShaderMaterial
+		if flip_material != null:
+			lines.append("flip_yaw=%s" % str(flip_material.get_shader_parameter("yaw")))
+			lines.append("flip_pitch=%s" % str(flip_material.get_shader_parameter("pitch")))
+			lines.append("flip_roll=%s" % str(flip_material.get_shader_parameter("roll")))
+			lines.append("flip_perspective=%s" % str(flip_material.get_shader_parameter("perspective")))
+			lines.append("flip_card_tex_null=%s" % str(flip_material.get_shader_parameter("card_tex") == null))
 	var menu: CanvasLayer = play.find_child("AdventurePauseMenu", true, false) as CanvasLayer
 	lines.append("menu_visible=%s" % str(menu != null and menu.visible))
 

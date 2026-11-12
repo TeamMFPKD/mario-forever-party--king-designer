@@ -53,7 +53,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 
 ---
 
-## 2. 四条验证铁律
+## 2. 验证铁律与实现约束
 
 1. **断言看结果文件，不看 stdout、不看退出码。**
    探针统一用 `FileAccess` 把 `key=value` 写进 `res://tools/*_result.txt`；无头下 `print` 可能丢，退出时的引擎报错也不代表业务失败。
@@ -63,6 +63,8 @@ Get-Content -LiteralPath $Err -Encoding UTF8
    它不会实例化 autoload，`Log`、`MpTest`、`Adventure`、`MPManager` 等全局标识符会全部报 "not present on the inferred type Node"；只能参考纯类型错误，不能作为通过依据。
 4. **直接跑探针/场景时，退出码和清理日志是噪音。**
    无头退出常见 `ObjectDB instances were leaked at exit`、`resources still in use at exit`、`找不到进程标识符`（进程已提前退出时 `Stop-Process` 报的），只要结果文件正确就不算失败。
+5. **禁止在脚本里直接手写前端，UI 必须落地为场景节点。**
+   不要用 `Control.new()` / `Label.new()` 之类在 `_ready()` 里搭界面；新增或改造的 UI 一律保存为 `.tscn`（节点树、样式、文本、信号连接都在场景文件里），脚本只负责数据绑定、动画与交互逻辑。调试用的一次性状态条可以例外，但也应尽量做成场景。已有的代码搭 UI 逐步迁移，新代码不再新增。
 
 ---
 
@@ -77,7 +79,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_resume_probe.tscn` | 断点续跑：通过一关后检测续跑、恢复索引与关卡路径 | `tools/adventure_resume_probe_result.txt` |
 | `tools/adventure_start_probe.tscn` | 开局参数校验 + 切到 `Adventure.PLAY_SCENE` | `tools/adventure_start_probe_result.txt` |
 | `tools/adventure_play_probe.tscn` | 真正加载游玩场景，检查 `player` 组、`run_active`、`run_index` | `tools/adventure_play_probe_result.txt` |
-| `tools/adventure_mobile_pause_probe.tscn` | 检查百人团暂停键（默认伪装 Android，加 `--probe-desktop` 测桌面端）能显示、开菜单并用「继续」恢复 | `tools/adventure_mobile_pause_probe_result.txt` |
+| `tools/adventure_mobile_pause_probe.tscn` | 检查百人团暂停键（默认桌面，加 `--probe-mobile` 伪装 Android）能显示、开菜单并用「继续」恢复 | `tools/adventure_mobile_pause_probe_result.txt` |
 | `tools/adventure_design_probe.tscn` | 四套百人团舞台 UI 方案能否构建 | `tools/design_probe.txt` |
 | `tools/title_pipe_probe.tscn` | 正式标题页的水管菜单：五个目标路径能否解析、点击「组织游戏」能否打开 HostPage | `tools/title_pipe_probe_result.txt` |
 | `tools/pipe_menu_probe.tscn` | `ui/title/pipe_menu.tscn` 里五根水管预设的贴图（编辑器里看到的颜色） | `tools/pipe_menu_probe_result.txt` |
@@ -93,7 +95,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_stage_shot.tscn` | `tools/adventure_stage_loading.png`（0.3s）、`tools/adventure_stage.png`（4.7s） |
 | `tools/adventure_play_shot.tscn` | `tools/adventure_play.png`（加载游玩场景 3s 后） |
 | `tools/adventure_pause_shot.tscn` | `tools/adventure_pause.png`（打开暂停菜单） |
-| `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`（伪装 Android，触摸点击暂停键）；加 `--shot-desktop` 输出带 `_desktop` 后缀的桌面版 |
+| `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`、`..._flip_a/b.png`（默认桌面，鼠标点击暂停键）；加 `--shot-mobile` 伪装 Android 并输出带 `_mobile` 后缀的图 |
 | `tools/adventure_transition_shot.tscn` | `tools/adventure_transition.png`（过关过渡动画中） |
 | `tools/adventure_design_shot.tscn` | `tools/design_a_paper.png` / `design_b_stage.png` / `design_c_neon.png` / `design_d_poster.png` |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
@@ -230,14 +232,14 @@ SCHEME_3 OK children=35
 
 ### 4.7 adventure_mobile_pause_probe
 
-默认把平台伪装成 Android 后加载百人团游玩场景；加 `--probe-desktop` 则保持真实桌面平台，用来验证暂停键两端都显示：
+默认按真实桌面平台加载百人团游玩场景；加 `--probe-mobile` 才伪装 Android（手机端已单独验证通过）：
 
 ```text
-expect_desktop=false
-platform_name=Android
-is_mobile=true
-is_desktop=false
-emulate_touch_from_mouse=true
+expect_mobile=false
+platform_name=Windows
+is_mobile=false
+is_desktop=true
+emulate_touch_from_mouse=false
 emulate_mouse_from_touch=true
 start=true
 layer_found=true
@@ -247,13 +249,28 @@ pause_layer_count=1
 menu_found=true
 paused_after_open=true
 menu_visible_after_open=true
+border_found=true
+panel_found=true
+panel_size=(1320.0, 1000.0)
+border_size=(1320.0, 1000.0)
+panel_size_matches_border=true
 continue_ok=true
 paused_after_close=false
 is_mobile_after_clear=false
 emulate_touch_after_clear=false
 ```
 
-桌面模式对应 `expect_desktop=true`、`platform_name=Windows`、`is_mobile=false`、`is_desktop=true`、`emulate_touch_from_mouse=false`，其余关键行相同。暂停键不再按平台隐藏，`button_visible=true` 在两种模式下都必须成立。
+手机模式对应 `expect_mobile=true`、`platform_name=Android`、`is_mobile=true`、`is_desktop=false`、`emulate_touch_from_mouse=true`，其余关键行相同。暂停键不再按平台隐藏，`button_visible=true` 在两种模式下都必须成立。
+
+暂停菜单 UI 是 `object/ui/adventure_pause_menu.tscn`（`room/adventure_play.tscn` 里实例化），脚本 `script/adventure/adventure_pause_menu.gd` 只做翻转与菜单动作。面板尺寸取 `GameRoomSize/SubViewportContainer/Node2D/GameBorderTextureRect` 的全局矩形，因此 `panel_size` 必须与 `border_size`（默认 1320×1000）完全一致，不能退回成 SubViewportContainer 的 1280×928。
+
+翻转是真实透视而不是横向缩放：卡片放在 `CardViewport`（SubViewport）里，翻转期间用 `MeshInstance2D` + `shader/adventure_pause_flip.gdshader` 对 32×32 细分网格逐顶点做 Y 轴旋转 + 透视投影，正面采样关卡 SubViewport 贴图并叠 `sprite/game_border.png`，背面采样卡片贴图；正反面由同一个 `yaw` uniform 在着色器内切换（≤90° 正面、>90° 背面并把 UV.x 翻回来），不会出现换面滞后。动画结束隐藏网格、显示 `CardContainer`（SubViewportContainer）恢复按钮交互。注意 `SubViewportContainer` 隐藏时子视口可能停更，翻转期间必须保持容器可见，用 `modulate.a = 0` + `mouse_filter = IGNORE` 代替隐藏。
+
+正面贴图必须按 SubViewport 实际尺寸映射到边框内框（`inner_min` / `inner_size` uniform），不能铺满整块装饰边框——铺满会把关卡放大，翻转时视口会盖住外框。
+
+翻转姿态每次打开暂停时随机：翻转方向、pitch、roll、上抛高度、透视距离都在固定范围内取值，同一轮关闭沿用这套参数；总角度固定 180°，否则卡片落不平。
+
+整体缩放跟着 `sin(π·eased)` 走：开始/结束时 `scale = 1.0`，时间中点降到 `0.8`（`MID_SCALE`），再回到 1.0。截图结果里的 `flip_a_scale` 可以核对中间帧是否在 0.8~1.0 之间。
 
 `paused_after_open` / `continue_ok` / `paused_after_close` 是核心三项。`is_mobile_after_clear=false`、`emulate_touch_after_clear=false` 用来确认伪装可以撤销（在 Windows 上跑）。
 
@@ -262,7 +279,7 @@ emulate_touch_after_clear=false
 - `Input.set_emulate_touch_from_mouse(true)`：桌面鼠标点击变成 `InputEventScreenTouch`，虚拟按键（TouchScreenButton / FingerInputHolder）才能用鼠标操作；
 - `Input.set_emulate_mouse_from_touch(true)`：触摸再转回鼠标，普通 Button 照常响应。
 
-截图脚本用鼠标点击暂停键验证这条链路，结果里的 `mouse_opened=true` 即表示“鼠标→触摸→按钮”全程生效。桌面模式（`--shot-desktop`）不开模拟，点击直接命中普通 Button；手动注入 `InputEventMouseButton` 时必须带 `button_mask`，否则 Control 的按钮掩码判定不通过。
+截图脚本默认就是桌面模式（加 `--shot-mobile` 才伪装 Android）：桌面下不模拟触摸，鼠标直接命中普通 Button。结果里的 `mouse_opened=true` 即表示点击链路生效；手动注入 `InputEventMouseButton` 时必须带 `button_mask`，否则 Control 的按钮掩码判定不通过。
 
 伪装平台的三种入口（`PlatformUtils`）：
 

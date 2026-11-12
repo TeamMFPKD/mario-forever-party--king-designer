@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://room/base/play_room_base.tscn" id="1_base"]
 [ext_resource type="Script" path="res://script/adventure/adventure_play.gd" id="2_play"]
 [ext_resource type="Script" path="res://script/adventure/adventure_run_controller.gd" id="3_ctrl"]
-[ext_resource type="Script" path="res://script/adventure/adventure_pause_menu.gd" id="4_pause"]
+[ext_resource type="PackedScene" path="res://object/ui/adventure_pause_menu.tscn" id="4_pause"]
 [ext_resource type="PackedScene" path="res://object/ui/adventure_clear_transition.tscn" id="5_clear"]
 [ext_resource type="PackedScene" path="res://object/ui/adventure_level_info.tscn" id="6_info"]
 [ext_resource type="PackedScene" path="res://ui/list/level_info.tscn" id="7_info"]
@@ -20,8 +20,6 @@ script = ExtResource("2_play")
 [node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" instance=ExtResource("9_photo")]
 
 [node name="AdventureLevelInfo" parent="GameRoomSize" instance=ExtResource("6_info")]
-offset_top = 300.0
-offset_bottom = 920.0
 
 [node name="LikedCoursePreview" parent="GameRoomSize" instance=ExtResource("8_liked")]
 layout_mode = 1
@@ -56,7 +54,4 @@ offset_bottom = 840.0
 [node name="AdventureRunController" type="Node" parent="." groups=["play_next_level_manager"]]
 script = ExtResource("3_ctrl")
 
-[node name="AdventurePauseMenu" type="CanvasLayer" parent="."]
-process_mode = 3
-layer = 30
-script = ExtResource("4_pause")
+[node name="AdventurePauseMenu" parent="." instance=ExtResource("4_pause")]

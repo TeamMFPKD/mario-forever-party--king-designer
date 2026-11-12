@@ -1,33 +1,52 @@
 extends CanvasLayer
 
-## 百人团暂停菜单（卡片翻转版）。
+## 百人团暂停菜单（3D 翻转版）。
 ##
-## 关卡视口是一个面板：暂停时水平翻转 180°，背面是「双细线」面板，
-## 菜单内容在背面。背面外层的 scale.x = -1 会让内容镜像，
-## 所以内容层再 scale.x = -1 抵消，最终文字是正的。
+## UI 节点全部在 object/ui/adventure_pause_menu.tscn，本脚本只负责翻转动画与菜单动作。
+## 卡片放在 SubViewport 里，翻转时用细分网格 + adventure_pause_flip.gdshader 做
+## 真实透视投影：正面采样关卡视口贴图（叠外边框），背面采样卡片贴图，
+## 90° 侧对镜头时切换正反面（切换瞬间宽度为 0，看不见）。
+## 动画结束后隐藏网格、显示 SubViewportContainer，按钮恢复正常交互。
 
 @warning_ignore_start("unsafe_call_argument", "unsafe_cast")
 
-const FLIP_IN_FRONT: float = 0.24
-const FLIP_IN_BACK: float = 0.30
-const FLIP_OUT_BACK: float = 0.22
-const FLIP_OUT_FRONT: float = 0.26
+const FLIP_OPEN_TIME: float = 0.55
+const FLIP_CLOSE_TIME: float = 0.45
+const MESH_SUBDIVISIONS: int = 32
+const EDGE_SHADE: float = 0.30
+# 翻转中段整体缩到 0.8，首尾回到 1.0（跟着 sin 峰值走，时间上正好在中点）。
+const MID_SCALE: float = 0.8
+
+# 每次暂停的翻转姿态在这个范围内随机（俯仰、滚转、上抛、透视距离、翻转方向）。
+const PITCH_RANGE: Vector2 = Vector2(0.04, 0.15)
+const ROLL_RANGE: Vector2 = Vector2(0.04, 0.15)
+const LIFT_RANGE: Vector2 = Vector2(10.0, 26.0)
+const PERSPECTIVE_RANGE: Vector2 = Vector2(1500.0, 2050.0)
+
+@onready var _card_holder: Control = $Root/CardHolder
+@onready var _card_container: SubViewportContainer = $Root/CardHolder/CardContainer
+@onready var _card_viewport: SubViewport = $Root/CardHolder/CardContainer/CardViewport
+@onready var _flip_mesh: MeshInstance2D = $Root/CardHolder/FlipMesh
 
 var _is_open: bool = false
 var _animating: bool = false
 
-var _root: Control
-var _back_panel: Panel
-var _content: MarginContainer
 var _level_panel: Control
-var _level_original_scale: Vector2 = Vector2.ONE
 var _flip_tween: Tween
+var _flip_material: ShaderMaterial
+
+# 本次翻转的随机姿态；打开时抽一次，关闭时沿用，保证来回是同一张卡片。
+var _flip_sign: float = 1.0
+var _pitch_amount: float = 0.10
+var _roll_amount: float = 0.085
+var _lift_amount: float = 18.0
 
 
 func _ready() -> void:
-	layer = 30
-	_build_ui()
 	visible = false
+	_flip_material = _flip_mesh.material as ShaderMaterial
+	if _flip_material != null:
+		_flip_material.set_shader_parameter("card_tex", _card_viewport.get_texture())
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -54,169 +73,16 @@ func force_close() -> void:
 	_is_open = false
 	if _flip_tween != null and _flip_tween.is_valid():
 		_flip_tween.kill()
-	_flip_tween = null
+		_flip_tween = null
 	visible = false
-	_reset_panels()
+	if _flip_mesh != null:
+		_flip_mesh.visible = false
+	if _card_holder != null:
+		_card_holder.visible = false
+	_set_card_interactive(true)
+	if _level_panel != null and is_instance_valid(_level_panel):
+		_level_panel.visible = true
 	get_tree().paused = false
-
-
-# ---------------------------------------------------------------------------
-# UI
-# ---------------------------------------------------------------------------
-
-func _build_ui() -> void:
-	_root = Control.new()
-	_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_root.mouse_filter = Control.MOUSE_FILTER_STOP
-	_root.gui_input.connect(_on_root_gui_input)
-	add_child(_root)
-
-	_back_panel = Panel.new()
-	_back_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_back_panel.add_theme_stylebox_override("panel", _make_double_border_style())
-	_back_panel.visible = false
-	_root.add_child(_back_panel)
-
-	# SVG 自带双线较淡，再叠一层更清晰的内外细线。
-	var outer_line: Panel = Panel.new()
-	outer_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	outer_line.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	outer_line.offset_left = 3
-	outer_line.offset_top = 3
-	outer_line.offset_right = -3
-	outer_line.offset_bottom = -3
-	outer_line.add_theme_stylebox_override(
-		"panel", _make_line_style(Color(0.169, 0.165, 0.157, 0.55), 2, 12)
-	)
-	_back_panel.add_child(outer_line)
-
-	var inner_line: Panel = Panel.new()
-	inner_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	inner_line.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	inner_line.offset_left = 12
-	inner_line.offset_top = 12
-	inner_line.offset_right = -12
-	inner_line.offset_bottom = -12
-	inner_line.add_theme_stylebox_override(
-		"panel", _make_line_style(Color(0.169, 0.165, 0.157, 0.40), 2, 8)
-	)
-	_back_panel.add_child(inner_line)
-
-	_content = MarginContainer.new()
-	_content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_content.add_theme_constant_override("margin_left", 48)
-	_content.add_theme_constant_override("margin_top", 32)
-	_content.add_theme_constant_override("margin_right", 48)
-	_content.add_theme_constant_override("margin_bottom", 32)
-	# 抵消外层 scale.x = -1，保证背面文字是正的。
-	_content.scale = Vector2(-1, 1)
-	_back_panel.add_child(_content)
-
-	var root_box: VBoxContainer = VBoxContainer.new()
-	root_box.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root_box.add_theme_constant_override("separation", 0)
-	_content.add_child(root_box)
-
-	var title: Label = Label.new()
-	title.text = "暂停"
-	title.add_theme_font_size_override("font_size", 42)
-	title.add_theme_color_override("font_color", Color("#2B2A28"))
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	root_box.add_child(title)
-
-	var center: CenterContainer = CenterContainer.new()
-	center.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	root_box.add_child(center)
-	var box: VBoxContainer = VBoxContainer.new()
-	box.custom_minimum_size = Vector2(540, 0)
-	box.add_theme_constant_override("separation", 12)
-	center.add_child(box)
-
-	box.add_child(_make_button("继续", _close_flip))
-	var exclude_button: Button = _make_button("将本关从抽取数据中排除", _skip_hard)
-	exclude_button.add_theme_color_override("font_color", Color("#C74343"))
-	box.add_child(exclude_button)
-	box.add_child(_make_button("跳过本关", _skip_soft))
-	var abort_button: Button = _make_button("中断", _interrupt)
-	abort_button.add_theme_color_override("font_color", Color("#2B2A28"))
-	box.add_child(abort_button)
-
-
-func _make_button(text: String, callback: Callable) -> Button:
-	var button: Button = Button.new()
-	button.text = text
-	button.focus_mode = Control.FOCUS_NONE
-	button.custom_minimum_size = Vector2(0, 76)
-	button.add_theme_font_size_override("font_size", 36)
-	button.add_theme_stylebox_override(
-		"normal", _make_button_style(Color("#FFFFFF"), Color("#2B2A28"), 4)
-	)
-	button.add_theme_stylebox_override(
-		"hover", _make_button_style(Color("#FFF9E6"), Color("#2B2A28"), 4)
-	)
-	button.add_theme_stylebox_override(
-		"pressed", _make_button_style(Color("#EFEAD9"), Color("#FFC531"), 4)
-	)
-	button.add_theme_stylebox_override(
-		"disabled", _make_button_style(Color("#E4DCC6"), Color("#B5AE9B"), 4)
-	)
-	var focus_style: StyleBoxFlat = _make_button_style(Color.TRANSPARENT, Color("#FFC531"), 4)
-	focus_style.draw_center = false
-	focus_style.expand_margin_left = 3.0
-	focus_style.expand_margin_top = 3.0
-	focus_style.expand_margin_right = 3.0
-	focus_style.expand_margin_bottom = 3.0
-	button.add_theme_stylebox_override("focus", focus_style)
-	button.pressed.connect(callback)
-	return button
-
-
-func _make_button_style(bg: Color, border: Color, border_width: int) -> StyleBoxFlat:
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = bg
-	style.border_color = border
-	style.border_width_left = border_width
-	style.border_width_top = border_width
-	style.border_width_right = border_width
-	style.border_width_bottom = border_width
-	style.corner_radius_top_left = 10
-	style.corner_radius_top_right = 10
-	style.corner_radius_bottom_left = 10
-	style.corner_radius_bottom_right = 10
-	style.content_margin_left = 24.0
-	style.content_margin_top = 10.0
-	style.content_margin_right = 24.0
-	style.content_margin_bottom = 10.0
-	return style
-
-
-func _make_line_style(color: Color, width: int, corner: int) -> StyleBoxFlat:
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.draw_center = false
-	style.border_color = color
-	style.border_width_left = width
-	style.border_width_top = width
-	style.border_width_right = width
-	style.border_width_bottom = width
-	style.corner_radius_top_left = corner
-	style.corner_radius_top_right = corner
-	style.corner_radius_bottom_left = corner
-	style.corner_radius_bottom_right = corner
-	return style
-
-
-func _make_double_border_style() -> StyleBoxTexture:
-	var style: StyleBoxTexture = StyleBoxTexture.new()
-	style.texture = load("res://ui/theme/borders/panel_double_92.svg") as Texture2D
-	style.texture_margin_left = 22.0
-	style.texture_margin_top = 22.0
-	style.texture_margin_right = 22.0
-	style.texture_margin_bottom = 22.0
-	style.content_margin_left = 26.0
-	style.content_margin_top = 22.0
-	style.content_margin_right = 26.0
-	style.content_margin_bottom = 22.0
-	return style
 
 
 # ---------------------------------------------------------------------------
@@ -236,35 +102,21 @@ func _open_flip() -> void:
 	visible = true
 	get_tree().paused = true
 
-	var rect: Rect2 = _level_panel.get_global_rect()
-	_level_original_scale = _level_panel.scale
-	_level_panel.pivot_offset = _level_panel.size * 0.5
-	_level_panel.visible = true
-	_level_panel.scale = Vector2(_level_original_scale.x, _level_original_scale.y)
-
-	_back_panel.position = rect.position
-	_back_panel.size = rect.size
-	_back_panel.pivot_offset = rect.size * 0.5
-	_content.pivot_offset = rect.size * 0.5
-	_back_panel.scale = Vector2(0.0, 1.0)
-	_back_panel.visible = false
-
-	_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_flip_tween.tween_property(_level_panel, "scale:x", 0.0, FLIP_IN_FRONT) \
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	await _flip_tween.finished
-	_flip_tween = null
-
+	var rect: Rect2 = _find_level_border_rect()
+	if rect.size == Vector2.ZERO:
+		rect = _level_panel.get_global_rect()
+	_randomize_flip_style()
+	_prepare_flip_stage(rect)
 	_level_panel.visible = false
-	_back_panel.visible = true
-	_back_panel.scale = Vector2(0.0, 1.0)
 
+	_update_flip(0.0)
 	_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_flip_tween.tween_property(_back_panel, "scale:x", -1.0, FLIP_IN_BACK) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_flip_tween.tween_method(_update_flip, 0.0, 1.0, FLIP_OPEN_TIME)
 	await _flip_tween.finished
 	_flip_tween = null
-	_back_panel.scale = Vector2(-1.0, 1.0)
+
+	_flip_mesh.visible = false
+	_set_card_interactive(true)
 	_animating = false
 
 
@@ -277,36 +129,123 @@ func _close_flip() -> void:
 	_animating = true
 	_is_open = false
 
-	if _back_panel.visible:
-		_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-		_flip_tween.tween_property(_back_panel, "scale:x", 0.0, FLIP_OUT_BACK) \
-			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-		await _flip_tween.finished
-		_flip_tween = null
-		_back_panel.visible = false
+	_set_card_interactive(false)
+	_flip_mesh.visible = true
+	_update_flip(1.0)
 
-	_level_panel.visible = true
-	_level_panel.scale = Vector2(0.0, _level_original_scale.y)
 	_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	_flip_tween.tween_property(_level_panel, "scale:x", _level_original_scale.x, FLIP_OUT_FRONT) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_flip_tween.tween_method(_update_flip, 1.0, 0.0, FLIP_CLOSE_TIME)
 	await _flip_tween.finished
 	_flip_tween = null
-	_level_panel.scale = _level_original_scale
-	_level_panel.pivot_offset = _level_panel.size * 0.5
 
+	_flip_mesh.visible = false
+	_card_holder.visible = false
+	if _level_panel != null and is_instance_valid(_level_panel):
+		_level_panel.visible = true
 	visible = false
 	get_tree().paused = false
 	_animating = false
 
 
-func _reset_panels() -> void:
-	if _back_panel != null:
-		_back_panel.visible = false
-		_back_panel.scale = Vector2(-1.0, 1.0)
-	if _level_panel != null and is_instance_valid(_level_panel):
-		_level_panel.visible = true
-		_level_panel.scale = _level_original_scale
+## 每次打开暂停时随机一次姿态，同一轮的关闭沿用，保证来回是同一张卡片。
+## 总翻转角固定 180°（否则卡片落不平），随机的是方向与倾斜量。
+func _randomize_flip_style() -> void:
+	_flip_sign = -1.0 if randf() < 0.5 else 1.0
+	_pitch_amount = randf_range(PITCH_RANGE.x, PITCH_RANGE.y) * (-1.0 if randf() < 0.35 else 1.0)
+	_roll_amount = randf_range(ROLL_RANGE.x, ROLL_RANGE.y) * (-1.0 if randf() < 0.5 else 1.0)
+	_lift_amount = randf_range(LIFT_RANGE.x, LIFT_RANGE.y)
+	if _flip_material != null:
+		_flip_material.set_shader_parameter(
+			"perspective", randf_range(PERSPECTIVE_RANGE.x, PERSPECTIVE_RANGE.y)
+		)
+
+
+## 翻转期间卡片容器保持可见（否则子视口可能停更），只用透明度和输入开关控制。
+func _set_card_interactive(active: bool) -> void:
+	_card_container.modulate = Color(1, 1, 1, 1.0 if active else 0.0)
+	_card_container.mouse_filter = Control.MOUSE_FILTER_STOP if active else Control.MOUSE_FILTER_IGNORE
+
+
+func _prepare_flip_stage(rect: Rect2) -> void:
+	_card_holder.visible = true
+	_card_holder.global_position = rect.position
+	_card_holder.size = rect.size
+	# 必须保持容器 visible：SubViewportContainer 隐藏时子视口可能停止渲染，
+	# 背面贴图会变成空白。翻转期间用全透明 + 忽略输入代替隐藏。
+	# 注意 stretch=true 时视口尺寸由容器托管，不要再手动改 SubViewport.size。
+	_set_card_interactive(false)
+	_flip_mesh.visible = true
+	_flip_mesh.mesh = _build_flip_mesh(rect.size)
+	if _flip_material == null:
+		return
+	var level_viewport: SubViewport = _level_panel.get_node_or_null("SubViewport") as SubViewport
+	if level_viewport != null:
+		_flip_material.set_shader_parameter("level_tex", level_viewport.get_texture())
+		# 关卡贴图贴在装饰边框的内框里（SubViewport 的实际渲染尺寸），不铺满整块边框。
+		var level_size: Vector2 = Vector2(
+			float(level_viewport.size.x), float(level_viewport.size.y)
+		)
+		var inner_min: Vector2 = (_level_panel.global_position - rect.position) / rect.size
+		_flip_material.set_shader_parameter("inner_min", inner_min)
+		_flip_material.set_shader_parameter("inner_size", level_size / rect.size)
+	else:
+		_flip_material.set_shader_parameter("inner_min", Vector2.ZERO)
+		_flip_material.set_shader_parameter("inner_size", Vector2.ONE)
+
+
+## p: 0 = 正面（关卡），1 = 背面（卡片）。
+func _update_flip(p: float) -> void:
+	var eased: float = p * p * (3.0 - 2.0 * p)
+	var wave: float = sin(PI * eased)
+
+	if _flip_material != null:
+		_flip_material.set_shader_parameter("yaw", _flip_sign * PI * eased)
+		_flip_material.set_shader_parameter("pitch", _pitch_amount * wave)
+		_flip_material.set_shader_parameter("roll", _roll_amount * wave)
+		_flip_material.set_shader_parameter("shade", 1.0 - EDGE_SHADE * wave)
+
+	_flip_mesh.position = _card_holder.size * 0.5 + Vector2(0.0, -_lift_amount * wave)
+	var mid_scale: float = lerpf(1.0, MID_SCALE, wave)
+	_flip_mesh.scale = Vector2(mid_scale, mid_scale)
+
+
+## 建一张细分四边形网格，供着色器逐顶点做透视投影（避免 4 顶点仿射变形）。
+func _build_flip_mesh(size: Vector2) -> ArrayMesh:
+	var cols: int = MESH_SUBDIVISIONS
+	var rows: int = MESH_SUBDIVISIONS
+	var vertices: PackedVector2Array = PackedVector2Array()
+	var uvs: PackedVector2Array = PackedVector2Array()
+	var indices: PackedInt32Array = PackedInt32Array()
+
+	for j: int in range(rows + 1):
+		for i: int in range(cols + 1):
+			var u: float = float(i) / float(cols)
+			var v: float = float(j) / float(rows)
+			vertices.append(Vector2((u - 0.5) * size.x, (v - 0.5) * size.y))
+			uvs.append(Vector2(u, v))
+
+	for j: int in range(rows):
+		for i: int in range(cols):
+			var a: int = j * (cols + 1) + i
+			var b: int = a + 1
+			var c: int = a + cols + 1
+			var d: int = c + 1
+			indices.append(a)
+			indices.append(b)
+			indices.append(d)
+			indices.append(a)
+			indices.append(d)
+			indices.append(c)
+
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+
+	var mesh: ArrayMesh = ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return mesh
 
 
 func _find_level_panel() -> Control:
@@ -314,6 +253,17 @@ func _find_level_panel() -> Control:
 	if scene == null:
 		return null
 	return scene.find_child("SubViewportContainer", true, false) as Control
+
+
+## 关卡视口外框装饰的全局矩形；找不到时退回关卡视口矩形。
+func _find_level_border_rect() -> Rect2:
+	var scene: Node = get_tree().current_scene
+	if scene == null:
+		return Rect2()
+	var border: Control = scene.find_child("GameBorderTextureRect", true, false) as Control
+	if border == null:
+		return Rect2()
+	return border.get_global_rect()
 
 
 # ---------------------------------------------------------------------------
