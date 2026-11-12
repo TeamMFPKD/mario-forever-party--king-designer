@@ -11,6 +11,8 @@ class_name AdventureManager
 signal run_started
 signal run_changed
 signal run_finished(summary: Dictionary)
+## 每通过 2 关奖励 1 条命（且未触顶）时发出，左侧 HUD 据此播 1UP 飘字 + 音效。
+signal life_bonus
 ## 「暂停是否被禁止」发生变化（已过关 / 过关转场播放中），暂停按钮据此切换 Disabled。
 signal pause_blocked_changed
 
@@ -26,6 +28,8 @@ const LIFE_BONUS_EVERY: int = 2
 const STAGE_SCENE: String = "res://room/adventure_stage.tscn"
 const PLAY_SCENE: String = "res://room/adventure_play.tscn"
 const RESULT_SCENE: String = "res://room/adventure_result.tscn"
+
+const LIFE_BONUS_LAYER: GDScript = preload("res://script/adventure/adventure_life_bonus.gd")
 
 var store: AdventureStore
 var pool: Array[AdventureLevelStat] = []
@@ -56,6 +60,7 @@ func _ready() -> void:
 	store = AdventureStore.new()
 	store.load()
 	_build_transition_ui()
+	_build_life_bonus_layer()
 	_check_resume()
 
 
@@ -325,11 +330,18 @@ func on_level_passed() -> void:
 
 	var cleared: int = int(current_run.get("cleared_count", 0)) + 1
 	current_run["cleared_count"] = cleared
+	var bonus_awarded: bool = false
 	if cleared % LIFE_BONUS_EVERY == 0:
-		var lives: int = mini(int(current_run.get("lives_left", 0)) + 1, LIVES_CAP)
+		var before: int = int(current_run.get("lives_left", 0))
+		var lives: int = mini(before + 1, LIVES_CAP)
 		current_run["lives_left"] = lives
+		# 已经触顶时这次没有真的加命，不播 1UP。
+		bonus_awarded = lives > before
 	store.set_run(current_run)
 	advance()
+	# 定量团最后一关会立刻结算，此时不再飘 1UP。
+	if bonus_awarded and is_running():
+		life_bonus.emit()
 
 
 ## 只有百人团模式会记录；history play 的死亡不算进百人团数据。
@@ -567,6 +579,13 @@ func finish_run(result: String) -> void:
 # ---------------------------------------------------------------------------
 # 过渡动画
 # ---------------------------------------------------------------------------
+
+## 1UP 奖励动画层挂在 autoload 下常驻，过关转场中途换场景也不会打断动画。
+func _build_life_bonus_layer() -> void:
+	var layer: CanvasLayer = LIFE_BONUS_LAYER.new() as CanvasLayer
+	layer.name = "AdventureLifeBonus"
+	add_child(layer)
+
 
 func _build_transition_ui() -> void:
 	_transition_layer = CanvasLayer.new()
