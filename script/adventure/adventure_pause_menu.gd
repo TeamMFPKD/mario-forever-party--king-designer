@@ -14,8 +14,8 @@ const FLIP_OPEN_TIME: float = 0.55
 const FLIP_CLOSE_TIME: float = 0.45
 const MESH_SUBDIVISIONS: int = 32
 const EDGE_SHADE: float = 0.30
-# 翻转中段整体缩到 0.8，首尾回到 1.0（跟着 sin 峰值走，时间上正好在中点）。
-const MID_SCALE: float = 0.8
+# 翻转中段整体缩到 0.6，首尾回到 1.0（跟着 sin 峰值走，时间上正好在中点）。
+const MID_SCALE: float = 0.6
 
 # 每次暂停的翻转姿态在这个范围内随机（俯仰、滚转、上抛、透视距离、翻转方向）。
 const PITCH_RANGE: Vector2 = Vector2(0.04, 0.15)
