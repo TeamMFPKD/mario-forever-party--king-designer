@@ -40,14 +40,16 @@ func _ready() -> void:
 	_build_ui()
 
 
-## 带过渡地切换到指定场景（支持 res:// 与 uid://）
-func change_scene_to_file(path: String) -> void:
+## 带过渡地切换到指定场景（支持 res:// 与 uid://）。
+## instantaneous = true：不播淡出 shader，只用截屏挡住换场景那一帧，
+## 下一帧直接露出新场景（调用方自己已经有覆盖全屏的动画时用，例如百人团翻卡）。
+func change_scene_to_file(path: String, instantaneous: bool = false) -> void:
 	await _wait_previous_transition()
 	var capture: Image = await _capture_screen()
 	var shown: bool = _show_capture(capture)
 	_busy = true
 	var err: int = get_tree().change_scene_to_file(path)
-	await _play_fade_out(err, shown)
+	await _play_fade_out(err, shown, instantaneous)
 
 
 ## 带过渡地切换到已加载的场景资源
@@ -60,14 +62,15 @@ func change_scene_to_packed(packed: PackedScene) -> void:
 	await _play_fade_out(err, shown)
 
 
-## 带过渡地重新加载当前场景
-func reload_current_scene() -> void:
+## 带过渡地重新加载当前场景。
+## instantaneous = true：同 change_scene_to_file，不播淡出 shader。
+func reload_current_scene(instantaneous: bool = false) -> void:
 	await _wait_previous_transition()
 	var capture: Image = await _capture_screen()
 	var shown: bool = _show_capture(capture)
 	_busy = true
 	var err: int = get_tree().reload_current_scene()
-	await _play_fade_out(err, shown)
+	await _play_fade_out(err, shown, instantaneous)
 
 
 ## 上一个过渡还在播放时等待它结束，而不是把这次请求丢掉。
@@ -149,8 +152,9 @@ func _show_capture(img: Image) -> bool:
 	return true
 
 
-## 等新场景就绪后，让截图淡出露出新场景
-func _play_fade_out(err: int, shown: bool) -> void:
+## 等新场景就绪后，让截图淡出露出新场景。
+## instantaneous = true 时不跑淡出：截图只盖住换场景那一帧，下一帧直接撤掉。
+func _play_fade_out(err: int, shown: bool, instantaneous: bool = false) -> void:
 	if err != OK:
 		Log.e("GlobalTransition", "failed to switch scene: %s" % error_string(err))
 		rect_texture.visible = false
@@ -163,6 +167,10 @@ func _play_fade_out(err: int, shown: bool) -> void:
 	# 等新场景实例化并完成第一帧绘制，再开始淡出，避免闪出未绘制的画面
 	await get_tree().process_frame
 	await RenderingServer.frame_post_draw
+	if instantaneous:
+		rect_texture.visible = false
+		_busy = false
+		return
 	_time = 0.0
 	_animating = true
 	texture_material.set_shader_parameter("i_time", 0.0)

@@ -24,6 +24,7 @@ const LIFT_RANGE: Vector2 = Vector2(10.0, 26.0)
 const PERSPECTIVE_RANGE: Vector2 = Vector2(1500.0, 2050.0)
 
 @onready var _card_holder: Control = $Root/CardHolder
+@onready var _backdrop: ColorRect = $Root/CardHolder/Backdrop
 @onready var _card_container: SubViewportContainer = $Root/CardHolder/CardContainer
 @onready var _card_viewport: SubViewport = $Root/CardHolder/CardContainer/CardViewport
 @onready var _flip_mesh: MeshInstance2D = $Root/CardHolder/FlipMesh
@@ -157,6 +158,41 @@ func _close_flip(keep_frozen: bool = false) -> void:
 	_animating = false
 
 
+## 跳过 / 永久排除的离场翻转。
+##
+## 卡片原地翻 180°，正反面都用卡片本身的贴图：翻过去看到的还是这张卡片，
+## 不会像翻回关卡那样露出关卡画面。翻完卡片留在原地继续盖住关卡，
+## 由 GlobalTransition 把这张卡片淡出到下一关。
+func _flip_away_for_skip() -> void:
+	_level_panel = _find_level_panel()
+	if _level_panel == null:
+		return
+	var rect: Rect2 = _find_level_border_rect()
+	if rect.size == Vector2.ZERO:
+		rect = _level_panel.get_global_rect()
+	_randomize_flip_style()
+	_prepare_flip_stage(rect)
+	# 正面也换成卡片贴图，并铺满整块网格（不叠游戏边框）。
+	if _flip_material != null:
+		_flip_material.set_shader_parameter("level_tex", _card_viewport.get_texture())
+		_flip_material.set_shader_parameter("inner_min", Vector2.ZERO)
+		_flip_material.set_shader_parameter("inner_size", Vector2.ONE)
+	if _backdrop != null:
+		_backdrop.visible = true
+	# 关卡视口先藏起来：卡片侧对镜头的瞬间是透明的，
+	# 露出的是垫底色，而不是关卡画面。
+	_level_panel.visible = false
+
+	_animating = true
+	_is_open = false
+	_update_flip(1.0)
+	_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_flip_tween.tween_method(_update_flip, 1.0, 0.0, FLIP_CLOSE_TIME)
+	await _flip_tween.finished
+	_flip_tween = null
+	_animating = false
+
+
 ## 每次打开暂停时随机一次姿态，同一轮的关闭沿用，保证来回是同一张卡片。
 ## 总翻转角固定 180°（否则卡片落不平），随机的是方向与倾斜量。
 func _randomize_flip_style() -> void:
@@ -188,13 +224,17 @@ func _prepare_flip_stage(rect: Rect2) -> void:
 	_flip_mesh.mesh = _build_flip_mesh(rect.size)
 	if _flip_material == null:
 		return
+	# 每次翻转都重新绑定本实例的卡片贴图：材质是场景资源，可能被同时存在的
+	# 另一个暂停菜单实例改写成它自己的（不可见）视口，导致卡片背面全透明。
+	_flip_material.set_shader_parameter("card_tex", _card_viewport.get_texture())
 	var level_viewport: SubViewport = _level_panel.get_node_or_null("SubViewport") as SubViewport
 	if level_viewport != null:
 		_flip_material.set_shader_parameter("level_tex", level_viewport.get_texture())
-		# 关卡贴图贴在装饰边框的内框里（SubViewport 的实际渲染尺寸），不铺满整块边框。
-		var level_size: Vector2 = Vector2(
-			float(level_viewport.size.x), float(level_viewport.size.y)
-		)
+		# 关卡贴图贴在装饰边框的内框里（SubViewportContainer 的显示尺寸），不铺满整块边框。
+		# 注意不能用 SubViewport.size：它是渲染分辨率（1280×960），而容器在屏幕上是
+		# 1280×928（size_2d_override 640×480 按 928 高拉伸），用渲染尺寸会让正面贴图
+		# 纵向多出约 32px，翻转落平时底部露出一条对不齐的「残留」。
+		var level_size: Vector2 = _level_panel.size
 		var inner_min: Vector2 = (_level_panel.global_position - rect.position) / rect.size
 		_flip_material.set_shader_parameter("inner_min", inner_min)
 		_flip_material.set_shader_parameter("inner_size", level_size / rect.size)
@@ -298,25 +338,79 @@ func _skip_soft() -> void:
 
 
 ## 跳过 / 永久排除：
-## 点击瞬间推进团进度（下一关在此刻确定），随后冻结关卡、播已有的翻转动画，
-## 动画结束后再切场景 —— 关卡不会在被卡片盖住的后台继续跑。
+## 点击瞬间推进团进度（下一关在此刻确定），冻结关卡后把卡片翻走。
+##
+## 常规情况不是「原地翻完再硬切」，而是先把下一关预加载到卡片后面，
+## 再翻卡把它露出来 —— 翻转期间背后一直是活的新关卡，既不会露出上一关，
+## 也不会出现一块空白的垫底。
 func _begin_skip(hard: bool) -> void:
 	if _animating:
 		return
+	# 预加载下一关期间也锁住输入：卡片一直盖着，不允许再触发一次暂停/跳过。
+	_animating = true
 	Adventure.skip_current_level(hard)
 	var finished: bool = not Adventure.is_running()
 	var next_key: String = Adventure.current_level_key()
 	# 目标关卡已在点击瞬间确定；先放满 2 个物理帧再冻结，
 	# 冻住的才是完整的一帧，切场景时不会残留上一关的半帧。
 	await Adventure.settle_physics_frames(2)
-	await _close_flip(true)
-	# 兜底：翻转动画内部可能解冻。
-	get_tree().paused = true
 	Log.i("AdventurePauseMenu", ["跳过本关，下一关：", Adventure.RESULT_SCENE if finished else next_key])
 	if finished:
-		GlobalTransition.change_scene_to_file(Adventure.RESULT_SCENE)
-	else:
-		GlobalTransition.reload_current_scene()
+		# 没有下一关可露：卡片原地翻完直接切结算页（不播淡出 shader）。
+		await _flip_away_for_skip()
+		get_tree().paused = true
+		GlobalTransition.change_scene_to_file(Adventure.RESULT_SCENE, true)
+		return
+	await _flip_reveal_next_level()
+
+
+## 跳过 / 排除的主流程：预加载下一关 → 在卡片后面就位 → 翻卡露出新关卡。
+func _flip_reveal_next_level() -> void:
+	# 旧场景马上会被销毁，先把暂停菜单挂到 root 上，免得跟着一起没。
+	if get_parent() != get_tree().root:
+		reparent(get_tree().root)
+
+	var next_scene: Node = await Adventure.preload_next_level_scene()
+	if next_scene == null:
+		# 预加载失败：退化成「原地翻 + 即时切场景」。
+		await _flip_away_for_skip()
+		get_tree().paused = true
+		GlobalTransition.reload_current_scene(true)
+		return
+
+	# 换场后 current_scene 已经是新关卡，重新取面板与边框。
+	_level_panel = _find_level_panel()
+	if _level_panel == null:
+		visible = false
+		get_tree().paused = false
+		queue_free()
+		return
+	var rect: Rect2 = _find_level_border_rect()
+	if rect.size == Vector2.ZERO:
+		rect = _level_panel.get_global_rect()
+	_randomize_flip_style()
+	_prepare_flip_stage(rect)
+	# 翻转期间不显示实时关卡视口：把整块关卡（含边框）隐掉，
+	# 只让卡片自己翻；翻完再把关卡放出来。
+	var level_modulate: Color = _level_panel.modulate
+	_level_panel.modulate.a = 0.0
+
+	_animating = true
+	_is_open = false
+	_update_flip(1.0)
+	_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	_flip_tween.tween_method(_update_flip, 1.0, 0.0, FLIP_CLOSE_TIME)
+	await _flip_tween.finished
+	_flip_tween = null
+
+	# 翻完：先恢复关卡视口，再撤掉卡片并解冻。
+	if is_instance_valid(_level_panel):
+		_level_panel.modulate = level_modulate
+	visible = false
+	_card_holder.visible = false
+	_animating = false
+	get_tree().paused = false
+	queue_free()
 
 
 func _interrupt() -> void:

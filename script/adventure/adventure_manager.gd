@@ -865,6 +865,14 @@ func _load_next_play_scene(transition: CanvasLayer) -> Node:
 	return next_scene
 
 
+## 跳过 / 排除用：把下一关场景预加载好、挂进树并冻结，返回新场景节点。
+##
+## 旧场景会在内部销毁，所以调用方（暂停菜单）必须先把自己 reparent 到 root；
+## 之后卡片后面就是新关卡本身，翻开卡片就能直接露出新关卡。
+func preload_next_level_scene() -> Node:
+	return await _load_next_play_scene(null)
+
+
 ## 等转场播完（visible 变 false）。转场可能已被搬到主视口，也可能还在关卡视口里。
 func _wait_transition_end(transition: CanvasLayer) -> void:
 	var waited: float = 0.0
