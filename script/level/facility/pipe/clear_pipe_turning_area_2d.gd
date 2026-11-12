@@ -20,6 +20,17 @@ func _ready() -> void:
 	if process_mode == ProcessMode.PROCESS_MODE_DISABLED or not visible:
 		queue_free()
 
+func _exit_tree() -> void:
+	# 父节点的 meta 指向自己；如果自己先被释放，meta 会变成悬空引用，
+	# ClearPipeEntrance 之后再读到就会抛 "assign invalid previously freed instance"。
+	var parent: Node = get_parent()
+	if parent == null or not parent.has_meta("clear_pipe_turning_area"):
+		return
+	var raw: Variant = parent.get_meta("clear_pipe_turning_area")
+	if not is_instance_valid(raw) or raw == self:
+		parent.remove_meta("clear_pipe_turning_area")
+
+
 func _on_body_exited(body: Node2D) -> void:
 	var id: int = body.get_instance_id()
 	processed_ids.erase(id)

@@ -67,8 +67,14 @@ func _physics_process(_delta: float) -> void:
 
 		# 透明水管的连接
 		if body.has_meta("clear_pipe_turning_area"):
-			var turning: ClearPipeTurningArea2D = body.get_meta("clear_pipe_turning_area")
-			if is_instance_valid(turning):
+			# 转向区释放后父节点的 meta 可能变成失效引用。
+			# 直接赋给带类型的变量会抛 "assign invalid previously freed instance"，
+			# 所以先按 Variant 取出来校验，顺手把脏 meta 清掉。
+			var raw_turning: Variant = body.get_meta("clear_pipe_turning_area")
+			if not is_instance_valid(raw_turning):
+				body.remove_meta("clear_pipe_turning_area")
+			else:
+				var turning: ClearPipeTurningArea2D = raw_turning
 				var cd: ClearPipeSet.Direction = turning.direction
 				var ed: Direction = entrance_direction
 				if cd == ClearPipeSet.Direction.LEFT and ed == Direction.LEFT \
@@ -86,9 +92,13 @@ func _physics_process(_delta: float) -> void:
 				if body.is_in_group("player") and body.has_meta("is_in_pipe"):
 					continue
 				elif body.has_meta("basic_movement"):
-					var basic_movement: BasicMovement = body.get_meta("basic_movement")
-					if basic_movement.is_in_pipe:
-						continue
+					var raw_movement: Variant = body.get_meta("basic_movement")
+					if is_instance_valid(raw_movement):
+						var basic_movement: BasicMovement = raw_movement
+						if basic_movement.is_in_pipe:
+							continue
+					else:
+						body.remove_meta("basic_movement")
 			overlapped_ids.erase(id)
 
 	# 针对玩家的 overlap meta 处理 — 无条件 5 帧后清除
