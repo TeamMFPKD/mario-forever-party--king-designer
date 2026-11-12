@@ -5,6 +5,10 @@ extends Node
 
 
 func next_level_pass() -> void:
+	# 加载下一关期间场景已经暂停；万一还有残留的终点信号，别再推进一次进度。
+	if Adventure.is_pass_transition_running():
+		Log.w("AdventureRunController", "过关转场进行中，忽略重复的过关")
+		return
 	_close_pause_menu()
 	Adventure.on_level_passed()
 	var finished: bool = not Adventure.is_running()
@@ -27,5 +31,5 @@ func next_level_die() -> void:
 func _close_pause_menu() -> void:
 	get_tree().paused = false
 	var menu: Node = find_child("AdventurePauseMenu", true, false)
-	if menu != null and menu.has_method("force_close"):
+	if is_instance_valid(menu) and menu.has_method("force_close"):
 		menu.call("force_close")

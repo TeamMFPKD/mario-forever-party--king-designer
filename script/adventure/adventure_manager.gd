@@ -43,6 +43,8 @@ var _transition_label: Label
 
 ## 关卡视口内的过关转场（room/adventure_play.tscn 注册，随场景销毁自动失效）
 var _clear_transition: CanvasLayer
+## 过关转场是否正在播放：防止加载期间玩家碰到下一关终点又触发一次转场。
+var _pass_transition_busy: bool = false
 
 
 func _ready() -> void:
@@ -532,9 +534,182 @@ func register_clear_transition(node: CanvasLayer) -> void:
 	_clear_transition = node
 
 
+## 过关转场是否正在播放（加载下一关期间玩家不应该再次触发过关）。
+func is_pass_transition_running() -> bool:
+	return _pass_transition_busy
+
+
+## 过关转场 + 下一关预热。
+##
+## 时序：
+##   0.00s   在关卡视口里开始播转场（黄色块划入）
+##   0.83s   播到一半：转场搬到主视口继续播；同时切到下一关场景并解析关卡
+##   加载完   暂停整个关卡（转场是 PROCESS_MODE_ALWAYS，继续播）
+##   1.66s   转场播完 → 解冻，玩家开始玩
+##
+## 转场搬到主视口之后旧场景才允许销毁，所以切场景不会打断转场。
+func _play_pass_transition(next_scene: String) -> void:
+	if _pass_transition_busy:
+		Log.w("Adventure", "过关转场尚未结束，忽略重复的过关请求")
+		return
+	_pass_transition_busy = true
+	await _run_pass_transition(next_scene)
+	_pass_transition_busy = false
+
+
+func _run_pass_transition(next_scene: String) -> void:
+	var transition: CanvasLayer = _clear_transition
+	if not is_instance_valid(transition):
+		return
+	var cleared: int = int(current_run.get("cleared_count", 1))
+	var total: int = int(current_run.get("total_levels", -1))
+
+	# 跳到别的场景（例如结算页）：沿用旧的「播完再切」。
+	if not next_scene.is_empty():
+		transition.call("play", cleared, total)
+		await _wait_transition_end(transition)
+		GlobalTransition.change_scene_to_file(next_scene)
+		return
+
+	# 下一关没加载完之前不让转场划出，避免露出还没准备好的画面。
+	if transition.has_method("set_slide_out_blocked"):
+		transition.call("set_slide_out_blocked", true)
+	transition.call("play", cleared, total)
+
+	var detach_result: Dictionary = await _detach_and_load_next_level(transition)
+	var detached: bool = bool(detach_result.get("detached", false))
+	var advanced: bool = bool(detach_result.get("advanced", false))
+
+	if is_instance_valid(transition) and transition.has_method("set_slide_out_blocked"):
+		transition.call("set_slide_out_blocked", false)
+	await _wait_transition_end(transition)
+
+	if detached and is_instance_valid(transition):
+		transition.call("release_from_screen")
+
+	if advanced:
+		# 下一关在加载完成时就已经冻结，转场播完直接解冻开始游戏。
+		var scene: Node = get_tree().current_scene
+		if scene != null:
+			# 冻结期间玩家的暂停键有可能把暂停菜单打开，这里复位掉。
+			var menu: Node = scene.find_child("AdventurePauseMenu", true, false)
+			if is_instance_valid(menu) and menu.has_method("force_close"):
+				menu.call("force_close")
+		get_tree().paused = false
+		Log.i("Adventure", "转场结束，开始游玩下一关")
+		return
+
+	# 预热失败：回退到旧的「过场结束后重载当前场景」。
+	Log.w("Adventure", "下一关预热失败，回退到常规重载")
+	GlobalTransition.reload_current_scene()
+
+
+## 等转场播到一半 → 把转场搬到主视口 → 切到下一关场景并等关卡数据加载完。
+## 返回 {"detached": 转场是否已搬走, "advanced": 下一关是否加载成功}。
+func _detach_and_load_next_level(transition: CanvasLayer) -> Dictionary:
+	var failed: Dictionary = {"detached": false, "advanced": false}
+	if not is_instance_valid(transition) or not transition.has_signal("halfway"):
+		return failed
+	# 转场脚本不在 CanvasLayer 的静态类型里，用连接 + 轮询代替 await 信号。
+	var halfway_state: Dictionary = {"reached": false}
+	transition.connect(
+		"halfway",
+		func() -> void: halfway_state["reached"] = true,
+		CONNECT_ONE_SHOT
+	)
+	var waited: float = 0.0
+	while not bool(halfway_state["reached"]) and is_instance_valid(transition) and waited < 3.0:
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+	if not bool(halfway_state["reached"]):
+		return failed
+	# 半程信号来自转场自己的 _process，等一帧再做节点搬运。
+	await get_tree().process_frame
+	if not is_instance_valid(transition):
+		return failed
+
+	if not bool(transition.call("detach_from_level_view", _game_view_rect())):
+		return failed
+
+	var next_scene: Node = await _load_next_play_scene()
+	if is_instance_valid(next_scene):
+		# 新场景就绪：把转场插回关卡视口内部（盖住关卡，但不盖边框/HUD）。
+		var container: Control = next_scene.get_node_or_null(
+			"GameRoomSize/SubViewportContainer"
+		) as Control
+		transition.call("attach_to_game_view", container, _game_view_rect())
+	return {"detached": true, "advanced": is_instance_valid(next_scene)}
+
+
+## 关卡画面（SubViewportContainer）在主视口里的全局矩形。
+func _game_view_rect() -> Rect2:
+	var scene: Node = get_tree().current_scene
+	if scene != null:
+		var container: Control = scene.get_node_or_null(
+			"GameRoomSize/SubViewportContainer"
+		) as Control
+		if container != null:
+			return container.get_global_rect()
+	return Rect2(Vector2(320.0, 32.0), Vector2(1280.0, 928.0))
+
+
+## 切到下一关游玩场景，等关卡数据完全写进场景后暂停（冻结）。
+func _load_next_play_scene() -> Node:
+	var packed: PackedScene = load(PLAY_SCENE) as PackedScene
+	if packed == null:
+		Log.e("Adventure", ["下一关场景加载失败：", PLAY_SCENE])
+		return null
+	var previous: Node = get_tree().current_scene
+	if get_tree().change_scene_to_packed(packed) != OK:
+		Log.e("Adventure", "切换下一关场景失败")
+		return null
+
+	# change_scene_to_packed 在帧末生效：等新场景真正就位。
+	var waited: float = 0.0
+	var next_scene: Node = null
+	while waited < 3.0:
+		var scene: Node = get_tree().current_scene
+		if scene != null and scene != previous:
+			next_scene = scene
+			break
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+	if next_scene == null:
+		Log.e("Adventure", "下一关场景没有出现")
+		return null
+
+	# 新场景一出现就冻结：转场还在播，不能让玩家/敌人/计时器先跑，
+	# 否则玩家可能在加载期间碰到下一关的终点。
+	# LoadLevel 是 deferred 调用 + 同步解析，暂停不会阻断关卡加载。
+	get_tree().paused = true
+
+	# 等关卡文件解析、对象生成完成（LoadLevel 是 deferred 调用的）。
+	var manager: LevelManager = next_scene.find_child("LevelManager", true, false) as LevelManager
+	waited = 0.0
+	while manager != null and manager.level_data_dict.is_empty() and waited < 5.0:
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+	if manager != null and manager.level_data_dict.is_empty():
+		Log.e("Adventure", "下一关加载超时")
+		return null
+	return next_scene
+
+
+## 等转场播完（visible 变 false）。转场可能已被搬到主视口，也可能还在关卡视口里。
+func _wait_transition_end(transition: CanvasLayer) -> void:
+	var waited: float = 0.0
+	while is_instance_valid(transition) and transition.visible and waited < 8.0:
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+
+
 ## kind: pass / skip / finish；next_scene 为空时重载当前场景。
 ## 死亡不播专用符号动画，直接走全局淡出。
 func play_transition(kind: String, next_scene: String = "") -> void:
+	# 过关转场进行中：忽略新的转场请求，否则会把加载期间的暂停解掉 / 跳过关卡。
+	if _pass_transition_busy:
+		Log.w("Adventure", "转场进行中，忽略新的转场请求")
+		return
 	# 任何转场都不应该带着暂停状态切场景。
 	get_tree().paused = false
 	if kind == "death":
@@ -546,17 +721,7 @@ func play_transition(kind: String, next_scene: String = "") -> void:
 
 	# 过关优先在关卡视口里播前端转场（只覆盖 640×480 的游戏画面）
 	if kind == "pass" and is_instance_valid(_clear_transition):
-		var cleared: int = int(current_run.get("cleared_count", 1))
-		var total: int = int(current_run.get("total_levels", -1))
-		_clear_transition.call("play", cleared, total)
-		var waited: float = 0.0
-		while is_instance_valid(_clear_transition) and _clear_transition.visible and waited < 6.0:
-			await get_tree().process_frame
-			waited += get_process_delta_time()
-		if next_scene.is_empty():
-			GlobalTransition.reload_current_scene()
-		else:
-			GlobalTransition.change_scene_to_file(next_scene)
+		await _play_pass_transition(next_scene)
 		return
 
 	if _transition_layer == null:

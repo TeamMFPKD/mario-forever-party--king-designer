@@ -22,10 +22,17 @@ extends CanvasLayer
 
 signal finished
 
+## 播到总时长一半时发出：Adventure 借此在转场遮住画面期间准备下一关。
+signal halfway
+
 const SLIDE_IN: float = 0.34
 const HOLD_DURATION: float = 0.2
 const JUMP_DURATION: float = 0.42
 const SLIDE_OUT: float = 0.5
+
+## 一整段转场的总时长（秒），以及「播到一半」的判定点。
+const TOTAL_DURATION: float = SLIDE_IN + HOLD_DURATION + JUMP_DURATION + HOLD_DURATION + SLIDE_OUT
+const HALFWAY_POINT: float = TOTAL_DURATION * 0.5
 
 ## 跳跃
 const JUMP_HEIGHT: float = 42.0
@@ -94,6 +101,13 @@ var _prop_motion_base: Array[Vector2] = []
 
 var _phase: int = 0
 var _t: float = 0.0
+## 整段转场已经播放了多久（跨阶段累计），用于「播到一半」判定。
+var _elapsed: float = 0.0
+var _halfway_emitted: bool = false
+## 下一关还没就绪时锁住划出：黄色块保持全屏，不露出后面还没准备好的画面。
+var _slide_out_blocked: bool = false
+## 转场播到一半被摘出 CanvasLayer 后，Root 由这里持有（宿主被释放也不影响它）。
+var _detached_root: Control = null
 var _start_level: int = 1
 var _total_level: int = 10
 
@@ -121,6 +135,8 @@ func play(current: int, total: int) -> void:
 	_total_level = total
 	_phase = 0
 	_t = 0.0
+	_elapsed = 0.0
+	_halfway_emitted = false
 	_yellow.position = Vector2(VIEW_W, 0.0)
 	_yellow.modulate.a = 1.0
 	_progress.modulate.a = 1.0
@@ -135,6 +151,8 @@ func play(current: int, total: int) -> void:
 	_capture_prop_motion_base()
 	_update_progress()
 	visible = true
+	if is_instance_valid(_detached_root):
+		_detached_root.visible = true
 	set_process(true)
 
 
@@ -353,8 +371,92 @@ func _ease_in_out_cubic(k: float) -> float:
 	return 1.0 - 4.0 * f * f * f
 
 
+## 转场播到一半后从关卡 SubViewport 里摘出来：
+## Root 暂时挂到主视口根、宿主 CanvasLayer 也一起搬走，这样旧场景可以随时销毁。
+## target_rect 是关卡画面在主视口里的全局矩形（SubViewportContainer 的 global rect）。
+## 返回 true 表示接管成功。
+func detach_from_level_view(target_rect: Rect2) -> bool:
+	if not is_inside_tree() or get_parent() == get_tree().root:
+		return false
+	var root: Control = get_node_or_null("Root") as Control
+	if root == null:
+		return false
+	# Root 必须先离开 CanvasLayer，之后才能插进主视口的绘制顺序里（HUD 之下）。
+	if root.get_parent() != null:
+		root.get_parent().remove_child(root)
+	get_tree().root.add_child(root)
+	_place_root(root, target_rect)
+	_detached_root = root
+	reparent(get_tree().root)
+	return true
+
+
+## 新场景就绪后，把 Root 插回关卡视口内部：
+## 位置在 SubViewport 之后、边框 Node2D 之前，所以只盖住关卡画面，不盖主视口 HUD。
+func attach_to_game_view(container: Control, target_rect: Rect2) -> bool:
+	var root: Control = _detached_root
+	if root == null or not is_instance_valid(root):
+		return false
+	if container == null or not is_instance_valid(container):
+		return false
+	if root.get_parent() != null:
+		root.get_parent().remove_child(root)
+	container.add_child(root)
+	# SubViewport 之后、后面兄弟节点（边框等）之前。
+	var insert_index: int = 0
+	var index: int = 0
+	while index < container.get_child_count():
+		if container.get_child(index) is SubViewport:
+			insert_index = index + 1
+		index += 1
+	container.move_child(root, insert_index)
+	root.position = Vector2.ZERO
+	root.size = Vector2(VIEW_W, VIEW_H)
+	root.scale = Vector2(
+		target_rect.size.x / VIEW_W,
+		target_rect.size.y / VIEW_H
+	)
+	root.visible = visible
+	return true
+
+
+## 播完后连 Root 一起释放（Root 已被搬到主视口/关卡视口，不在宿主下）。
+func release_from_screen() -> void:
+	if is_instance_valid(_detached_root):
+		_detached_root.queue_free()
+	_detached_root = null
+	queue_free()
+
+
+func _place_root(root: Control, target_rect: Rect2) -> void:
+	# 关卡视口是最近邻采样（像素风），搬到主视口后保持一致。
+	root.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	# 原 SubViewport 会自动裁掉划入/划出的超界部分；搬到主视口后必须自己裁，
+	# 否则黄色块和锯齿会画到关卡视口外面（左侧信息面板、右侧关卡信息）。
+	root.clip_contents = true
+	root.anchor_left = 0.0
+	root.anchor_top = 0.0
+	root.anchor_right = 0.0
+	root.anchor_bottom = 0.0
+	root.offset_left = target_rect.position.x
+	root.offset_top = target_rect.position.y
+	root.offset_right = target_rect.position.x + VIEW_W
+	root.offset_bottom = target_rect.position.y + VIEW_H
+	root.scale = Vector2(
+		target_rect.size.x / VIEW_W,
+		target_rect.size.y / VIEW_H
+	)
+
+
+## 下一关还没加载完时锁住划出，让黄色块继续盖住画面。
+func set_slide_out_blocked(blocked: bool) -> void:
+	_slide_out_blocked = blocked
+
+
 func _process(delta: float) -> void:
 	_t += delta
+	_elapsed += delta
+	_emit_halfway()
 	match _phase:
 		0:
 			_phase_slide_in()
@@ -364,6 +466,13 @@ func _process(delta: float) -> void:
 			_phase_jump()
 		4:
 			_phase_slide_out()
+
+
+func _emit_halfway() -> void:
+	if _halfway_emitted or _elapsed < HALFWAY_POINT:
+		return
+	_halfway_emitted = true
+	halfway.emit()
 
 
 func _phase_slide_in() -> void:
@@ -382,6 +491,9 @@ func _phase_slide_in() -> void:
 func _phase_hold() -> void:
 	_player.position.y = _player_rest_y
 	if _t >= HOLD_DURATION:
+		# 第二段地面停（跳完后的收尾）如果下一关还没就绪，就先不划出。
+		if _phase == 3 and _slide_out_blocked:
+			return
 		_advance_phase()
 
 
@@ -441,6 +553,8 @@ func _advance_phase() -> void:
 func _finish() -> void:
 	set_process(false)
 	visible = false
+	if is_instance_valid(_detached_root):
+		_detached_root.visible = false
 	finished.emit()
 
 

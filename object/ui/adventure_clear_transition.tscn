@@ -37,6 +37,7 @@ layer = 60
 script = ExtResource("1_script")
 
 [node name="Root" type="Control" parent="."]
+clip_contents = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

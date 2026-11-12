@@ -97,7 +97,7 @@ func _build_pause_button() -> void:
 
 func _on_pause_pressed() -> void:
 	var menu: Node = find_child("AdventurePauseMenu", true, false)
-	if menu != null and menu.has_method("toggle_pause"):
+	if is_instance_valid(menu) and menu.has_method("toggle_pause"):
 		menu.call("toggle_pause")
 
 
