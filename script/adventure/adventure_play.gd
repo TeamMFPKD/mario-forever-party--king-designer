@@ -18,8 +18,14 @@ func _ready() -> void:
 	_remove_node("GameRoomSize/SubViewportContainer/SubViewport/RandomCapture")
 	_remove_node("GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel")
 	_build_hud()
+	Adventure.register_clear_transition(_find_clear_transition())
 	Adventure.run_changed.connect(_update_hud)
 	_update_hud()
+
+
+## 过关转场挂在关卡 SubViewport 里，按 640×480 的关卡坐标系播放。
+func _find_clear_transition() -> CanvasLayer:
+	return get_node_or_null("GameRoomSize/SubViewportContainer/SubViewport/AdventureClearTransition") as CanvasLayer
 
 
 func _remove_node(path: String) -> void:

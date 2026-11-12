@@ -1,0 +1,163 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://script/adventure/adventure_clear_transition.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://object/level/player/mario_small.tres" id="2_mario"]
+[ext_resource type="Theme" path="res://mfmp_theme.tres" id="3_theme"]
+[ext_resource type="Shader" path="res://shader/color_filter_replace.gdshader" id="4_shader"]
+[ext_resource type="Texture2D" path="res://sprite/bonus/beetroot.png" id="5_beetroot"]
+[ext_resource type="Texture2D" path="res://sprite/bonus/fire_flower.png" id="6_fire_flower"]
+[ext_resource type="Texture2D" path="res://sprite/bonus/lui.png" id="7_lui"]
+[ext_resource type="Texture2D" path="res://sprite/bonus/mushroom.png" id="8_mushroom"]
+
+[sub_resource type="AtlasTexture" id="Atlas_beetroot"]
+atlas = ExtResource("5_beetroot")
+region = Rect2(0, 0, 29, 35)
+
+[sub_resource type="AtlasTexture" id="Atlas_fire_flower"]
+atlas = ExtResource("6_fire_flower")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_lui"]
+atlas = ExtResource("7_lui")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_mushroom"]
+atlas = ExtResource("8_mushroom")
+region = Rect2(0, 0, 31, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_white"]
+shader = ExtResource("4_shader")
+shader_parameter/filter_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+shader_parameter/target_color = Color(1, 1, 1, 1)
+shader_parameter/tolerance = 0.08
+shader_parameter/keep_alpha = true
+
+[node name="AdventureClearTransition" type="CanvasLayer"]
+layer = 60
+script = ExtResource("1_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("3_theme")
+
+[node name="Yellow" type="Node2D" parent="Root"]
+position = Vector2(640, 0)
+
+[node name="YellowShape" type="Polygon2D" parent="Root/Yellow"]
+color = Color(1, 0.5019608, 0, 1)
+
+[node name="Props" type="Node2D" parent="Root/Yellow"]
+
+[node name="Sprite_Beetroot" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(72, 74)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_FireFlower" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(176, 172)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Lui" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(262, 72)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Mushroom" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(360, 46)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Beetroot2" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(470, 156)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_FireFlower2" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(548, 62)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Mushroom2" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(612, 176)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Lui2" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(56, 396)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Mushroom3" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(156, 438)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_FireFlower3" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(272, 372)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Beetroot3" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(400, 438)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_Lui3" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(516, 386)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_FireFlower4" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(600, 438)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Chain" type="Control" parent="Root/Yellow"]
+clip_contents = true
+offset_left = 24.0
+offset_top = 285.0
+offset_right = 616.0
+offset_bottom = 315.0
+mouse_filter = 2
+
+[node name="LevelRow" type="Node2D" parent="Root/Yellow/Chain"]
+
+[node name="Player" type="AnimatedSprite2D" parent="Root/Yellow"]
+position = Vector2(307.2, 237)
+scale = Vector2(0.8, 0.8)
+sprite_frames = ExtResource("2_mario")
+animation = &"jump"
+centered = false
+
+[node name="ProgressLabel" type="Label" parent="Root/Yellow"]
+visible = false
+offset_left = 0.0
+offset_top = 52.0
+offset_right = 640.0
+offset_bottom = 100.0
+theme_override_colors/font_outline_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 26
+text = "第 1/10 关"
+horizontal_alignment = 1
+vertical_alignment = 1

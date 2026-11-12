@@ -41,6 +41,9 @@ var _transition_dim: ColorRect
 var _transition_panel: Panel
 var _transition_label: Label
 
+## 关卡视口内的过关转场（room/adventure_play.tscn 注册，随场景销毁自动失效）
+var _clear_transition: CanvasLayer
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -489,8 +492,27 @@ func _build_transition_ui() -> void:
 	_transition_layer.visible = false
 
 
+func register_clear_transition(node: CanvasLayer) -> void:
+	_clear_transition = node
+
+
 ## kind: pass / skip / death / finish；next_scene 为空时重载当前场景。
 func play_transition(kind: String, next_scene: String = "") -> void:
+	# 过关优先在关卡视口里播前端转场（只覆盖 640×480 的游戏画面）
+	if kind == "pass" and is_instance_valid(_clear_transition):
+		var cleared: int = int(current_run.get("cleared_count", 1))
+		var total: int = int(current_run.get("total_levels", -1))
+		_clear_transition.call("play", cleared, total)
+		var waited: float = 0.0
+		while is_instance_valid(_clear_transition) and _clear_transition.visible and waited < 6.0:
+			await get_tree().process_frame
+			waited += get_process_delta_time()
+		if next_scene.is_empty():
+			GlobalTransition.reload_current_scene()
+		else:
+			GlobalTransition.change_scene_to_file(next_scene)
+		return
+
 	if _transition_layer == null:
 		if next_scene.is_empty():
 			GlobalTransition.reload_current_scene()
