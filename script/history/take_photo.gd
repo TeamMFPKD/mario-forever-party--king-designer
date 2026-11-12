@@ -190,14 +190,26 @@ func _spawn_fly_in(texture_rect: Control) -> bool:
 	game_room_node.add_child(sprite)
 	sprite.texture = ImageTexture.create_from_image(image)
 
-	var start_pos: Vector2 = game_room_node.get_global_position() + game_room_node.get_size() / 2.0
+	# 飞入起点必须锚定关卡视口（SubViewportContainer），
+	# 不能用整个 GameRoomSize，否则动画一开始会盖住左右 HUD。
+	var level_viewport: Control = null
+	var viewport_parent: Node = get_parent()
+	if viewport_parent is SubViewport:
+		level_viewport = viewport_parent.get_parent() as Control
+	if level_viewport == null:
+		level_viewport = game_room_node.get_node_or_null("SubViewportContainer") as Control
+
+	var start_rect: Rect2 = game_room_node.get_global_rect()
+	if level_viewport != null:
+		start_rect = level_viewport.get_global_rect()
+
+	var start_pos: Vector2 = start_rect.position + start_rect.size / 2.0
 	var target_rect: Rect2 = texture_rect.get_global_rect()
 	var end_pos: Vector2 = target_rect.position + target_rect.size / 2.0
 	var texture_size: Vector2i = image.get_size()
-	var game_room_size: Vector2 = game_room_node.get_size()
 	var start_scale: Vector2 = Vector2(
-		game_room_size.x / texture_size.x,
-		game_room_size.y / texture_size.y
+		start_rect.size.x / texture_size.x,
+		start_rect.size.y / texture_size.y
 	)
 	var end_scale: Vector2 = Vector2(
 		target_rect.size.x / texture_size.x,
