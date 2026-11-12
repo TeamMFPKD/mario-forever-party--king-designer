@@ -20,6 +20,15 @@ func _vertical_line(transition: CanvasLayer, tag: String) -> String:
 	return "%s chain_y=%.2f player_y=%.2f" % [tag, chain.global_position.y, player.global_position.y]
 
 
+## 背景道具的位移：跳跃前/后第一颗道具的 global x 应相差一个 NODE_GAP。
+func _props_line(transition: CanvasLayer, tag: String) -> String:
+	var props: Control = transition.get_node("Root/Yellow/Props") as Control
+	var first: Node2D = props.get_child(0) as Node2D
+	return "%s offset=%.2f first_global_x=%.2f count=%d" % [
+		tag, props.position.x, first.global_position.x, props.get_child_count()
+	]
+
+
 ## 检查最近的一颗关卡椭圆中心与玩家可见中心的 x 偏差。
 func _alignment_line(transition: CanvasLayer, tag: String) -> String:
 	var row: Node2D = transition.get_node("Root/Yellow/Chain/LevelRow") as Node2D
@@ -54,8 +63,10 @@ func _ready() -> void:
 		lines.append(_vertical_line(transition, "y_at_0.3"))
 		await get_tree().create_timer(0.15).timeout
 		lines.append(_alignment_line(transition, "before_jump"))
+		lines.append(_props_line(transition, "props_before"))
 		await get_tree().create_timer(0.6).timeout
 		lines.append(_alignment_line(transition, "after_jump"))
+		lines.append(_props_line(transition, "props_after"))
 		await get_tree().create_timer(1.2).timeout
 		lines.append("TRANSITION finished=%d visible=%s" % [_finished_count, str(transition.visible)])
 		transition.queue_free()

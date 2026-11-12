@@ -84,6 +84,7 @@ func get_level_data(key: String) -> Dictionary:
 		"solo_pass": int(config.get_value(section, "solo_pass", 0)),
 		"solo_death": int(config.get_value(section, "solo_death", 0)),
 		"solo_skip": int(config.get_value(section, "solo_skip", 0)),
+		"solo_skip_soft": int(config.get_value(section, "solo_skip_soft", 0)),
 		"solo_last": int(config.get_value(section, "solo_last", 0)),
 		"excluded": bool(config.get_value(section, "excluded", false)),
 		"exclude_reason": str(config.get_value(section, "exclude_reason", "")),
@@ -104,6 +105,7 @@ func reset_solo(key: String) -> void:
 	config.set_value(section, "solo_pass", 0)
 	config.set_value(section, "solo_death", 0)
 	config.set_value(section, "solo_skip", 0)
+	config.set_value(section, "solo_skip_soft", 0)
 	config.set_value(section, "solo_last", 0)
 
 
@@ -128,9 +130,13 @@ func record_death(key: String) -> void:
 	save()
 
 
-func record_skip(key: String) -> void:
+## soft = true：「我打不过」跳过；false：「本关不可能通过」永久排除。
+## solo_skip 两种都计（用于通过率口径），solo_skip_soft 只计前者（用于关卡信息展示）。
+func record_skip(key: String, soft: bool = true) -> void:
 	var section: String = level_section(key)
 	config.set_value(section, "solo_skip", int(config.get_value(section, "solo_skip", 0)) + 1)
+	if soft:
+		config.set_value(section, "solo_skip_soft", int(config.get_value(section, "solo_skip_soft", 0)) + 1)
 	config.set_value(section, "solo_last", int(Time.get_unix_time_from_system()))
 	save()
 

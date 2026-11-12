@@ -16,6 +16,8 @@ var solo_attempt: int = 0
 var solo_pass: int = 0
 var solo_death: int = 0
 var solo_skip: int = 0
+## 只统计「我打不过」的软跳过，不含「本关不可能通过」的硬排除
+var solo_skip_soft: int = 0
 var solo_last: int = 0
 
 var online_pass: int = 0

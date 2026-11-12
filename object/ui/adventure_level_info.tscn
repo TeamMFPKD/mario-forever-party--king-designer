@@ -1,0 +1,145 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://script/adventure/adventure_level_info.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://ui/ui_margin_container.tscn" id="2_margin"]
+[ext_resource type="PackedScene" path="res://ui/ui_panel.tscn" id="3_panel"]
+[ext_resource type="PackedScene" path="res://ui/ui_label.tscn" id="4_label"]
+[ext_resource type="Texture2D" path="res://sprite/player/mario_small.png" id="5_mario"]
+
+[sub_resource type="AtlasTexture" id="Atlas_mario_walk"]
+atlas = ExtResource("5_mario")
+region = Rect2(32, 32, 32, 34)
+
+[node name="AdventureLevelInfo" type="Control" node_paths=PackedStringArray("lives_label", "level_value", "death_value", "pass_value", "skip_value")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 100.0
+offset_right = 296.0
+offset_bottom = 720.0
+mouse_filter = 2
+script = ExtResource("1_script")
+lives_label = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LivesRow/LivesLabel")
+level_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LevelValue")
+death_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/DeathValue")
+pass_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/PassValue")
+skip_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/SkipValue")
+
+[node name="UiMarginContainer" parent="." instance=ExtResource("2_margin")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="UiPanel" parent="UiMarginContainer" instance=ExtResource("3_panel")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InfoMargin" parent="UiMarginContainer" instance=ExtResource("2_margin")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UiMarginContainer/InfoMargin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="LivesRow" type="HBoxContainer" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarioIcon" type="TextureRect" parent="UiMarginContainer/InfoMargin/VBoxContainer/LivesRow"]
+custom_minimum_size = Vector2(64, 68)
+layout_mode = 2
+texture_filter = 1
+texture = SubResource("Atlas_mario_walk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LivesLabel" parent="UiMarginContainer/InfoMargin/VBoxContainer/LivesRow" instance=ExtResource("4_label")]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
+text = "× 20"
+
+[node name="LivesGapTop" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LivesRule" type="ColorRect" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(1, 1, 1, 0.25)
+mouse_filter = 2
+
+[node name="LivesGap" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LevelTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "当前关卡"
+
+[node name="LevelValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
+text = "1"
+
+[node name="DeathTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "本关死亡数"
+
+[node name="DeathValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
+text = "0"
+
+[node name="PassTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "本关通过数"
+
+[node name="PassValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
+text = "0"
+
+[node name="SkipTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "本关跳过数"
+
+[node name="SkipValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 42
+text = "0"

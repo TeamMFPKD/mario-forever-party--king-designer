@@ -69,10 +69,18 @@ const WHITE: Color = Color(1.0, 1.0, 1.0, 1.0)
 const ZIGZAG_STEP: float = 48.0
 const ZIGZAG_DEPTH: float = ZIGZAG_STEP * 0.5
 
+## 背景道具：跟着关卡串一起左移，但只走一半距离（视差）；完全移出画布左侧后才回收
+const PROP_MOVE_SCALE: float = 0.5
+## 划入 / 划出时道具自身的平移量 = NODE_GAP × 该系数
+const PROP_SLIDE_SCALE: float = 4.0
+const PROP_WRAP_LEFT: float = -48.0
+const PROP_WRAP_SPAN: float = VIEW_W + 200.0
+
 @onready var _yellow: Node2D = $Root/Yellow
 @onready var _shape: Polygon2D = $Root/Yellow/YellowShape
 @onready var _chain: Control = $Root/Yellow/Chain
 @onready var _row: Node2D = $Root/Yellow/Chain/LevelRow
+@onready var _props: Control = $Root/Yellow/Props
 @onready var _player: AnimatedSprite2D = $Root/Yellow/Player
 @onready var _progress: Label = $Root/Yellow/ProgressLabel
 
@@ -80,6 +88,9 @@ var _levels: Array[Node2D] = []
 var _level_ids: Array[int] = []
 var _level_labels: Array[Label] = []
 var _base_x: Array[float] = []
+var _prop_base: Array[Vector2] = []
+## 跳跃开始时每颗道具的坐标；跳跃中用它 + 缓动位移，结束后落盘
+var _prop_motion_base: Array[Vector2] = []
 
 var _phase: int = 0
 var _t: float = 0.0
@@ -98,6 +109,7 @@ func _ready() -> void:
 	_player_rest_y = ROW_Y - NODE_RY - FOOT_OFFSET * PLAYER_SCALE
 	_build_shape()
 	_build_row()
+	_remember_props()
 	_player.play(&"jump")
 	if get_tree().current_scene == self:
 		call_deferred("play", 3, 10)
@@ -119,6 +131,8 @@ func play(current: int, total: int) -> void:
 	)
 	_player.play(&"jump")
 	_reset_row()
+	_reset_props()
+	_capture_prop_motion_base()
 	_update_progress()
 	visible = true
 	set_process(true)
@@ -188,6 +202,56 @@ func _make_fade_mask(mask_alpha: float) -> ColorRect:
 	mask.color = Color(YELLOW, mask_alpha)
 	mask.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return mask
+
+
+## 记下背景道具的初始位置，重播时复位。
+func _remember_props() -> void:
+	_prop_base.clear()
+	for child: Node in _props.get_children():
+		var prop: Node2D = child as Node2D
+		if prop != null:
+			_prop_base.append(prop.position)
+
+
+func _reset_props() -> void:
+	_props.position = Vector2.ZERO
+	_prop_motion_base.clear()
+	var index: int = 0
+	while index < _prop_base.size():
+		(_props.get_child(index) as Node2D).position = _prop_base[index]
+		index += 1
+
+
+## 跳跃开始前记下道具当前位置，作为这一跳的起点。
+func _capture_prop_motion_base() -> void:
+	_prop_motion_base.clear()
+	for child: Node in _props.get_children():
+		var prop: Node2D = child as Node2D
+		if prop != null:
+			_prop_motion_base.append(prop.position)
+
+
+## 跳跃中：每颗道具按同一个缓动位移左移（容器与裁切框保持不动）。
+## 位置取整到整像素，避免 2× 最近邻放大时描边像素闪动。
+func _apply_prop_shift(shift: float) -> void:
+	var index: int = 0
+	while index < _prop_motion_base.size():
+		var prop: Node2D = _props.get_child(index) as Node2D
+		prop.position.x = roundf(_prop_motion_base[index].x - shift)
+		index += 1
+
+
+## 阶段结束：位移落盘，并把完全移出画布左侧的道具远距离回收到右侧（不会在画面里瞬移）。
+func _settle_props(amount: float) -> void:
+	var index: int = 0
+	while index < _prop_motion_base.size():
+		var prop: Node2D = _props.get_child(index) as Node2D
+		var x: float = _prop_motion_base[index].x - amount
+		if x < PROP_WRAP_LEFT:
+			x += PROP_WRAP_SPAN
+		prop.position.x = x
+		_prop_motion_base[index] = prop.position
+		index += 1
 
 
 func _reset_row() -> void:
@@ -291,8 +355,10 @@ func _phase_slide_in() -> void:
 
 	# 纯水平划入：纵向位置保持不变
 	_yellow.position.x = VIEW_W * (1.0 - e)
+	_apply_prop_shift(NODE_GAP * PROP_SLIDE_SCALE * e)
 
 	if k >= 1.0:
+		_settle_props(NODE_GAP * PROP_SLIDE_SCALE)
 		_advance_phase()
 
 
@@ -309,6 +375,7 @@ func _phase_jump() -> void:
 	_player.position.y = _player_rest_y - JUMP_HEIGHT * 4.0 * k * (1.0 - k)
 
 	var shift: float = NODE_GAP * e
+	_apply_prop_shift(shift * PROP_MOVE_SCALE)
 	var index: int = 0
 	while index < _levels.size():
 		_levels[index].position.x = _base_x[index] - shift
@@ -328,6 +395,7 @@ func _phase_jump() -> void:
 			index += 1
 
 		_player.position.y = _player_rest_y
+		_settle_props(NODE_GAP * PROP_MOVE_SCALE)
 		_advance_phase()
 
 
@@ -336,14 +404,18 @@ func _phase_slide_out() -> void:
 	var e: float = _ease_in_cubic(k)
 
 	_yellow.position.x = -VIEW_W * e
+	_apply_prop_shift(NODE_GAP * PROP_SLIDE_SCALE * e)
 
 	if k >= 1.0:
+		_settle_props(NODE_GAP * PROP_SLIDE_SCALE)
 		_advance_phase()
 
 
 func _advance_phase() -> void:
 	_phase += 1
 	_t = 0.0
+	if _phase == 2 or _phase == 4:
+		_capture_prop_motion_base()
 	if _phase > 4:
 		_finish()
 

@@ -6,6 +6,7 @@ extends Node
 
 const OUTPUT_SLIDE: String = "res://tools/adventure_clear_transition_slide_in.png"
 const OUTPUT_BEFORE: String = "res://tools/adventure_clear_transition_align_before.png"
+const OUTPUT_MID: String = "res://tools/adventure_clear_transition_mid_jump.png"
 const OUTPUT_AFTER: String = "res://tools/adventure_clear_transition_align_after.png"
 
 
@@ -21,7 +22,9 @@ func _ready() -> void:
 	_save(OUTPUT_SLIDE)
 	await get_tree().create_timer(0.28).timeout
 	_save(OUTPUT_BEFORE)
-	await get_tree().create_timer(0.65).timeout
+	await get_tree().create_timer(0.35).timeout
+	_save(OUTPUT_MID)
+	await get_tree().create_timer(0.3).timeout
 	_save(OUTPUT_AFTER)
 	get_tree().quit()
 

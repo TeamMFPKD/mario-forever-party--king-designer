@@ -52,7 +52,11 @@ position = Vector2(640, 0)
 [node name="YellowShape" type="Polygon2D" parent="Root/Yellow"]
 color = Color(1, 0.5019608, 0, 1)
 
-[node name="Props" type="Node2D" parent="Root/Yellow"]
+[node name="Props" type="Control" parent="Root/Yellow"]
+clip_contents = true
+offset_right = 640.0
+offset_bottom = 480.0
+mouse_filter = 2
 
 [node name="Sprite_Beetroot" type="Sprite2D" parent="Root/Yellow/Props"]
 position = Vector2(72, 74)
@@ -131,6 +135,60 @@ position = Vector2(600, 438)
 scale = Vector2(1, 1)
 material = SubResource("ShaderMaterial_white")
 texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Beetroot7" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(668, 88)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_Mushroom7" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(712, 196)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_FireFlower7" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(676, 404)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Lui7" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(760, 132)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Mushroom8" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(836, 248)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Beetroot8" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(900, 368)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_FireFlower8" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(980, 60)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Mushroom9" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(-44, 180)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Beetroot9" type="Sprite2D" parent="Root/Yellow/Props"]
+position = Vector2(-96, 430)
+scale = Vector2(1, 1)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
 
 [node name="Chain" type="Control" parent="Root/Yellow"]
 clip_contents = true

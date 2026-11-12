@@ -1,11 +1,12 @@
 # 百人团（打团）模式设计方案
 
-> 状态：v0.5（2026-11-09）
+> 状态：v0.6（2026-11-12）
 > v0.1：数据层 + 通过率 + 4 档 + 排除 + 联机先验。
 > v0.2：拍板 4 项核心决策；补充专属入口/舞台场景、命数经济、HUD、跳过本关、关卡过渡动画。
 > v0.3：跳过拆成"永久排除/仅本次"两种；两种都不扣命；无尽团固定档位但成员实时重算；无尽 HUD 显示命数；每通过 2 关 +1 命；定量团关数 5–50（10–100 命）。
 > v0.4：命数总上限 100；无尽团抽空降档、所有关卡玩过则重置轮次继续；通过率改为 `pass / attempt`（进入关卡先记一次失败，跳关计入分母）；定量团也享受每 2 关 +1。
 > v0.5：联机 pass/death 改回存 `.lvl`（恢复每个客户端写本地关卡文件）；`adventure.ini` 只存单人/百人团数据；两套统计彻底分开。
+> v0.6：游玩 HUD 改为左侧关卡信息面板（沿用 history play 右侧信息卡的视觉），命数固定放面板顶部、图标用 mario_small walk 一帧；新增 `solo_skip_soft` 只统计软跳过。
 > 标记约定：**[已拍板]** = 你已确认；**[待拍板]** = 仍需确认；**[建议]** = 我给出的默认答案；**[风险]** = 实现时容易踩的坑。
 
 ---
@@ -39,7 +40,7 @@
 | 9 | 定量团初始命数 = 选择关数 × 2；无尽团初始 30 命 | `[run].lives_total` |
 | 10 | 每过一关有简短过渡动画 | `AdventureTransition` 覆盖层 |
 | 11 | 跳过分两种：本关不可能通过（永久排除）／我打不过（以后仍会抽到），都不扣命 | 暂停菜单 + `skipped_hard/soft` + `solo_skip` |
-| 12 | 专属 HUD：剩余命数、已通过 / 总关卡；无尽模式显示命数 + 已通过数（无总数） | `adventure_hud.tscn` |
+| 12 | 专属 HUD：左侧关卡信息面板，顶部固定显示剩余命数（mario small walk 一帧作图标），下方为当前关卡 / 本关死亡 / 通过 / 软跳过，底部一行显示已通过进度与档位 | `object/ui/adventure_level_info.tscn` |
 
 ---
 
@@ -74,8 +75,8 @@
 
 | 流程 | 入口选项 | 关卡来源 | 初始命数 | HUD |
 | --- | --- | --- | --- | --- |
-| **定量团** | 选「打几关」，范围 5–50，默认 10 | 开局一次性抽 N 关，顺序固定 | `N * 2`（10–100 命） | `剩余命数` + `已通过 c / N` |
-| **无尽团** | 选「无尽」 | 每过一关现抽下一关，池子不重复 | `30` | `剩余命数` + `已通过 N 关`（不显示总数） |
+| **定量团** | 选「打几关」，范围 5–50，默认 10 | 开局一次性抽 N 关，顺序固定 | `N * 2`（10–100 命） | 左侧面板：命数 + `已通过 c / N` |
+| **无尽团** | 选「无尽」 | 每过一关现抽下一关，池子不重复 | `30` | 左侧面板：命数 + `已通过 N 关`（不显示总数） |
 
 - 两种流程共用同一套池子、分档、样本和排除。
 - 无尽团没有"总关卡数"概念；当前档抽空、所有关卡玩过后的行为见 7.6。
@@ -174,6 +175,7 @@ solo_attempt=8             ; 进入关卡次数；失败 = attempt - pass - skip
 solo_pass=2
 solo_death=5               ; 仅展示/分析，不直接进公式
 solo_skip=0
+solo_skip_soft=0           ; solo_skip 的子集：只统计「我打不过」的软跳过
 solo_last=1762700000
 ; 联机 pass_count/death_count 不在这里，存在 .lvl 文件里
 excluded=false
@@ -237,6 +239,7 @@ endless_total_deaths=0
 | `level.<key>.solo_pass` | int | 本机单人通过次数 | 单人通过 |
 | `level.<key>.solo_death` | int | 本机单人死亡次数（仅展示/分析） | 单人死亡 |
 | `level.<key>.solo_skip` | int | 本机单人跳过次数（两种跳过都计） | 跳过本关 |
+| `level.<key>.solo_skip_soft` | int | 「我打不过」的软跳过次数；`solo_skip` 的子集，用于左侧关卡信息面板 | 跳过本关（B） |
 | `level.<key>.solo_last` | int | 最后一次单机样本的 Unix 时间 | 记录 |
 | —（不写 ini） | — | 联机通过/死亡读 `.lvl` 的 `pass_count/death_count` | 联机结算 |
 | `level.<key>.excluded` | bool | 是否永久排除 | 排除 UI |
@@ -439,8 +442,8 @@ for rank in 0..N-1:
 
 | 动作 | 写 ini | 以后是否抽到 | 影响当前团 | 消耗命 |
 | --- | --- | --- | --- | --- |
-| **跳过 A：本关不可能通过** | `solo_skip += 1`；`excluded=true`，`exclude_reason="unsolvable"` | **永不抽到** | 立刻跳过，并从快照剩余部分移除 | 不消耗 |
-| **跳过 B：我打不过（但可能能过）** | `solo_skip += 1` | **下一团仍会抽到** | 跳过本关；本团不再抽到，但不写排除 | 不消耗 |
+| **跳过 A：本关不可能通过** | `solo_skip += 1`（不计 `solo_skip_soft`）；`excluded=true`，`exclude_reason="unsolvable"` | **永不抽到** | 立刻跳过，并从快照剩余部分移除 | 不消耗 |
+| **跳过 B：我打不过（但可能能过）** | `solo_skip += 1`；`solo_skip_soft += 1` | **下一团仍会抽到** | 跳过本关；本团不再抽到，但不写排除 | 不消耗 |
 | **永久排除（设置页）** | `excluded=true`，`exclude_reason="manual"` | **永不抽到** | 从当前池快照移除 | 不涉及 |
 
 **暂停菜单的跳过流程**：
@@ -450,10 +453,10 @@ for rank in 0..N-1:
    - 「我打不过，跳过本关」。
 2. 选择「本关不可能通过」时二次确认：
    - 提示"该关会被永久排除，以后所有团都不会再抽到"；
-   - 确认后：`solo_skip += 1`、`excluded=true`、`skipped_count += 1`、`skipped_hard += 1`；
+   - 确认后：`solo_skip += 1`、`excluded=true`、`skipped_count += 1`、`skipped_hard += 1`（不写 `solo_skip_soft`）；
    - 从当前团的剩余快照中移除该 key。
 3. 选择「我打不过，跳过本关」时：
-   - 不写 `excluded`，只写 `solo_skip += 1`、`skipped_count += 1`、`skipped_soft += 1`；
+   - 不写 `excluded`，只写 `solo_skip += 1`、`solo_skip_soft += 1`、`skipped_count += 1`、`skipped_soft += 1`；
    - 该关在本团不再抽到，但下一团仍可能被抽到。
 4. 两种跳过都**不计通过、不计死亡、不扣命**，播放过渡动画后进入下一关。
 
@@ -504,8 +507,8 @@ IDLE
              ├─(死亡)→ RECORD_DEATH → solo_death+1 → lives_left-1
              │                       ├ 还有命 → 重载本关（重载即新 attempt）
              │                       └ 命数=0 → FAILED
-             ├─(跳过 A：不可能通过)→ solo_skip+1 → 写 excluded → 从快照移除 → 过渡 → 下一关
-             ├─(跳过 B：我打不过)→ solo_skip+1 → 本团不再抽，下一团仍可抽 → 过渡 → 下一关
+             ├─(跳过 A：不可能通过)→ solo_skip+1（不计 soft）→ 写 excluded → 从快照移除 → 过渡 → 下一关
+             ├─(跳过 B：我打不过)→ solo_skip+1、solo_skip_soft+1 → 本团不再抽，下一团仍可抽 → 过渡 → 下一关
              └─(放弃/退出)→ ABANDONED
 FINISHED / FAILED / ABANDONED → SUMMARY → IDLE
 ```
@@ -544,8 +547,8 @@ rng.seed = run.seed
 | 进入关卡（加载成功） | `solo_attempt += 1`（先按未通过记） | 不变 | 不变 | 开局/重载 |
 | 通过 | `solo_pass += 1` | 每累计通过 2 关 `+1`，上限 100 | `cleared_count += 1` | 过渡动画 → 下一关 |
 | 死亡 | `solo_death += 1` | `lives_left -= 1` | 不变 | 有命：重载本关（新 attempt）；没命：结算（失败） |
-| 跳过 A：本关不可能通过 | `solo_skip += 1`；`excluded=true` | 不变 | `skipped_count+1`、`skipped_hard+1` | 从快照移除 → 过渡 → 下一关 |
-| 跳过 B：我打不过 | `solo_skip += 1` | 不变 | `skipped_count+1`、`skipped_soft+1` | 过渡 → 下一关 |
+| 跳过 A：本关不可能通过 | `solo_skip += 1`（不计 `solo_skip_soft`）；`excluded=true` | 不变 | `skipped_count+1`、`skipped_hard+1` | 从快照移除 → 过渡 → 下一关 |
+| 跳过 B：我打不过 | `solo_skip += 1`；`solo_skip_soft += 1` | 不变 | `skipped_count+1`、`skipped_soft+1` | 过渡 → 下一关 |
 | 放弃/退出 | `attempt` 已在进入时记录，pass/skip 不变 → 自然算失败 | 不变 | — | 结算（放弃） |
 
 - **失败数**：`fail = solo_attempt - solo_pass - solo_skip`。死亡、退出、崩溃都落在失败里；`solo_death` 只是失败的一个子集，用于展示。
@@ -719,35 +722,36 @@ icon_life.svg
 - 初始命数实时显示：定量 `N*2`（5–50 关 → 10–100 命），无尽 `30`；
 - 「管理排除关卡」打开列表，每行：文件名、个人通过率、联机通过率、排除开关。
 
-### 8.4 游玩 HUD `adventure_hud.tscn`
+### 8.4 游玩 HUD：左侧关卡信息面板 `adventure_level_info.tscn`
 
-**定量团**：
-
-```text
-┌────────────────────────────────────┐
-│ ♥ x 18      已通过 3 / 10     档位 2 │
-│                                   ▓▓▓░░░░░░ │
-└────────────────────────────────────┘
-```
-
-- 左侧：剩余命数（心形/马里奥头像图标 + 数字）；数字可显示为 `x / 100`，达到 100 时显示 `MAX`；
-- 中间：`已通过 c / N` + 进度条（按椭圆路径也可）；
-- 右侧：当前档位徽章（降档后显示当前 `active_tier`）；
-- 可选：本关个人通过率（不强制，避免干扰）。
-
-**无尽团**：
+**[已拍板 2026-11-12]** 不再用顶部横条 HUD，改为在**屏幕左侧**放一块关卡信息面板。
+样式直接沿用 history play 右侧信息卡（`ui/ui_panel.tscn` 半透明底 + `ui/ui_label.tscn` 白字描边），
+固定挂在 `GameRoomSize` 左上（约 `(24, 100)`），高度按内容自适应。
 
 ```text
-┌──────────────────────────────┐
-│ ♥ x 27        已通过 12 关     │
-└──────────────────────────────┘
+┌──────────────────┐
+│ 🍄 × 18          │  ← 命数：mario_small walk 动画其中一帧 + 剩余命数
+├──────────────────┤
+│ 当前关卡          │
+│ 14 / 30          │  ← 定量团：当前关 / 总关数；无尽团只显示 14
+│ 本关死亡数        │
+│ 0                │
+│ 本关通过数        │
+│ 3                │
+│ 本关跳过数        │
+│ 0                │
+└──────────────────┘
 ```
 
-- 不显示总数、不显示进度条；
-- 剩余命数显示（已拍板，30 命必须有反馈），同样按 `x / 100` 显示，达到 100 显示 `MAX`；
-- 通过时数字做一个短促的弹跳/放大动画；
-- 每通过 2 关触发一次 `+1 命` 的绿色飘字和图标弹跳；
-- 降档时在 HUD 上方飘一行「本档已抽空，已降为 X 档」；新一轮时飘「所有关卡已玩过，开始新一轮」。
+- **命数**：固定显示在面板最上方（不再单独放顶部 HUD）；图标取 `mario_small.tres` 的 `walk` 动画第 3 帧（帧索引 2，atlas `(32, 32, 32, 34)`，最近邻放大 2×）；文字 `× N`，满 100 显示 `× MAX`；
+- **当前关卡**：定量团显示 `当前关 / 总关数`（`run.index + 1` / `total_levels`）；无尽团没有总数，只显示当前关号；
+- **本关死亡数 / 通过数**：这一关在 `adventure.ini` 里的单人累计（`solo_death` / `solo_pass`）；
+- **本关跳过数**：**只统计「我打不过」的软跳过**（`solo_skip_soft`）；「本关不可能通过」的永久排除不计入；
+- 面板不再显示「已通过 / 档位」那一行（2026-11-12 移除），进度信息只在结算页呈现；
+- 数据统一走 `Adventure.current_level_stats()`，面板监听 `Adventure.run_changed` 刷新，换关时场景重载自然刷新；
+- 面板 `mouse_filter = IGNORE`，不影响停玩输入与暂停菜单。
+
+**反馈动画**（后续可加）：通过时命数数字短促放大；每通过 2 关 `+1 命` 时图标弹一下；降档/新一轮的提示文案改为在面板下方飘一行。
 
 **暂停菜单**（`Esc` / 手柄 Start）：
 
@@ -761,26 +765,92 @@ icon_life.svg
 
 ### 8.5 关卡过渡动画
 
-**触发**：通过一关、跳过一关之后。
+百人团在**每次通过一关之后**插一段转场。这一段和联机模式现有的「关卡传送房间」是两套东西：
+联机那套负责把玩家送进下一关，这里这套只负责**演出「角色又往前走了一步」**。
 
-**时长**：约 1.2–2.0 秒，任意输入可在 0.4 秒后跳过。
+#### 8.5.1 触发位置：关卡视口内，不走场景切换
 
-**画面**：
+转场**在关卡场景自己的视口里播**，不另开场景、不切 `CanvasLayer` 到别的场景。
 
-- 复用舞台的椭圆路径，镜头平移到下一关；
-- 当前椭圆从 `current` 变为 `cleared`（绿色对勾）或 `skipped`（灰色叉）；
-- 一个小马里奥标记沿路径跳到下一个椭圆；
-- 显示 `第 3/10 关` 或 `已通过 12 关`；
-- 通过时播放短音效；跳过时用较低沉的提示音。
+- 覆盖层挂到当前关卡场景下（`room/play.tscn` 或冒险关卡的根节点），
+  或由 `Adventure` autoload 持有一个常驻 `CanvasLayer`，两者择一，
+  但**必须位于关卡视口之内**，这样遮挡关系与黑边裁切和游戏画面一致。
+- 播完才调用 `GlobalTransition.reload_current_scene()` 进下一关，避免双重闪屏。
+- `process_mode = PROCESS_MODE_ALWAYS`（终点判定会把 `get_tree().paused` 置 true）。
 
-**实现**：
+#### 8.5.2 画面：宣传片同款黄色转场
 
-- 过渡覆盖层由 `Adventure` autoload 持有（一个常驻 `CanvasLayer`），不随场景重载销毁；
-- 使用 `AnimationPlayer` 或 `Tween`；`process_mode = ALWAYS`；
-- 动画结束后调用 `GlobalTransition.reload_current_scene()`（或切换到结算场景）；
-- `GlobalTransition` 自身还有 0.25s 截图淡出，二者串联：先舞台动画，再淡出到下一关，避免双重闪屏。
+复用 `object/ui/section_transition.tscn`（从 MFMP 宣传片 `transition.tscn` 搬运而来）：
+
+| 元素 | 说明 |
+| --- | --- |
+| 底色 | 纯橙黄 `Color(1, 0.502, 0)`，1920×1080 |
+| 两侧锯齿 | `Polygon2D` ×2（左右各一），顶点数据逐字取自宣传片，上下咬合成拉链条 |
+| 装饰道具 | 22 个 `Sprite2D`（640×480 空间 `scale = 1`，等价原版 1920 空间 `scale = 2`）；画布左右外侧预置额外道具用于补位；跳跃时与关卡串同步左移 **0.5 × `NODE_GAP`**（视差）；划入/划出时自身再左移 **4 × `NODE_GAP`**（272px）；位移只作用在道具自身，容器与裁切框固定，道具被 `clip_contents` 裁在黄板内 |
+| 道具材质 | `color_filter_replace.gdshader`，筛选色 → 目标色（默认黑→白） |
+
+道具贴图统一取 `sprite/bonus/` 下的奖励道具：
+
+```
+beetroot.png        29×105（首帧 29×35）
+fire_flower.png     33×128（首帧 33×32）
+lui.png             33×128（首帧 33×32）
+mushroom.png        31×32
+```
+
+> 注：宣传片里用的是预先抠好的 `*_white.png` 白色剪影；本方案改用 shader 现场染色，
+> 少维护一套素材。染色参数（`filter_color` / `target_color` / `tolerance`）
+> 建议在 `section_transition.tscn` 的 `ShaderMaterial` 上调，不要写死在脚本里。
+
+#### 8.5.3 动画：角色原地跳 + 关卡整体左移
+
+转场期间播放两个并行动作，表达「角色向前推进了一关」：
+
+1. **角色原地跳**——顶部的角色精灵（或队伍图标）做周期性上抛：
+   - 重力式抛物线，`y = -h * 4 * t * (1 - t)`（`t` 为单次跳跃的 0~1 进度），
+     单次约 0.35 秒，循环到转场结束；
+   - 起跳高度建议 36~48 px（乘上节点自身的 `scale` 后折算）。
+2. **脚下关卡全员左移**——角色下方代表「关卡队列」的元素整体向左滚动：
+   - 队列节点横向位移 `x -= speed * delta`，`speed` 约 480 px/s；
+   - 移出左边界后循环补到队尾，营造无限前进感；
+   - 队列内容建议用关卡缩略图或关卡序号牌，数量不少于 6 个以保证无缝。
+
+两者用**同一个 `Tween` / `AnimationPlayer` 时间轴**驱动，保证起跳节奏与滚动节奏对齐。
+
+#### 8.5.4 时序与时长
+
+| 阶段 | 时长 | 说明 |
+| --- | --- | --- |
+| 淡入 | 0.25s | 黄色层从 `modulate.a = 0` 到 1，同时遮住上一关的残留 |
+| 主体 | 1.2~2.0s | 角色跳 + 关卡左移，此时可显示 `第 3/10 关` |
+| 淡出 | 0.25s | 交给 `GlobalTransition` 的截图淡出衔接 |
+
+- **任意输入可在总时长 0.4s 之后跳过**，跳过时直接跳到「淡出」阶段，不打断下一关的加载。
+- 通过一关与跳过一关的转场可共用同一套动画，仅文案与音效不同。
+
+#### 8.5.5 与舞台椭圆路径的关系
+
+8.2 描述的舞台椭圆路径（`adventure_stage.tscn`）是**选关/看进度时的静态视图**，
+本节的转场是**过关瞬间的演出**，二者不复用同一套坐标：
+
+- 舞台椭圆：展示「这一团走到了第几个椭圆」，由舞台场景持有；
+- 关卡内转场：只表达「往前一步」，不渲染完整椭圆图；
+- 若后续想让两者视觉一致，可把椭圆路径抽成共用组件，但 v1 不做。
+
+#### 8.5.6 实现清单
+
+| 文件 | 改动 |
+| --- | --- |
+| `object/ui/section_transition.tscn` | 已建，黄色底 + 锯齿 + 24 个道具 |
+| `shader/color_filter_replace.gdshader` | 已建，筛选染色 |
+| 新增 `script/adventure/adventure_clear_transition.gd` | 驱动淡入 / 跳跃 / 左移 / 淡出 |
+| `script/adventure/adventure_stage.gd` | 过关回调里调用转场，再进下一关 |
+| `docs/raid_mode/README.md` | 本节 |
 
 **[风险]** 终点判定里 `get_tree().paused = true` 会暂停普通节点；过渡层和暂停菜单必须显式 `PROCESS_MODE_ALWAYS`，否则动画不动。
+
+**[风险]** 转场挂在关卡场景里时，`reload_current_scene()` 会连带销毁覆盖层——
+必须先播完淡出、再调切换，且覆盖层自身 `queue_free` 要放在切换之后（或用 `GlobalTransition` 持有的常驻层规避）。
 
 ### 8.6 结算页
 
@@ -811,11 +881,11 @@ script/adventure/run_planner.gd              # seed + 加权抽取
 script/adventure/adventure_run_controller.gd # 场景内推进（group play_next_level_manager）
 script/adventure/adventure_stage_view.gd     # 舞台/椭圆路径的布局与状态
 script/adventure/adventure_transition.gd     # 过渡覆盖层
-script/adventure/adventure_hud.gd            # HUD 数据绑定
+script/adventure/adventure_level_info.gd     # 左侧关卡信息面板数据绑定
 room/adventure_stage.tscn                    # 入口 + 设置 + 路径预览
 room/adventure_play.tscn                     # 游玩场景
 room/adventure_result.tscn                   # 结算
-object/adventure/adventure_hud.tscn
+object/ui/adventure_level_info.tscn
 object/adventure/adventure_pause_menu.tscn
 sprite/ui/adventure/*.svg
 ```
@@ -1012,7 +1082,8 @@ endless_total_deaths=0
 
 - `TierCalculator`、档位 UI、样本门槛/降级、档位变化提示。
 - 定量团初始命数 `2N`、无尽团 30；每通过 2 关 `+1` 命。
-- 过渡动画覆盖层。
+- 过渡动画覆盖层：黄色转场（复用 `object/ui/section_transition.tscn`）+ 角色原地跳 +
+  脚下关卡左移，细节见 §8.5。关卡视口内播放，播完再进下一关。
 - 暂停菜单两条跳过路径：永久排除 / 仅本次跳过。
 - 无尽团每次抽下一关前按最新数据重算档位成员。
 - 关卡信息卡显示双通过率 + 排除开关。
@@ -1035,7 +1106,7 @@ endless_total_deaths=0
 2. **舞台**：SVG 景物正常显示；切换档位时背景主题色变化；椭圆是扁的、略倾斜的，状态可区分。
 3. **设置**：数据源（所有/喜欢）、难度（4 档）、流程（定量/无尽 + 关数）都能选；样本不足时四档禁用。
 4. **命数**：定量团开局 `2N` 命（5–50 关 → 10–100 命），无尽团 30 命；死亡扣 1；每通过 2 关 +1，总上限 100；两种跳过都不扣。
-5. **HUD**：定量团显示 `剩余命数` + `已通过 c / N`；无尽团显示 `剩余命数` + `已通过 N 关`（无总数）；命数显示 `x / 100`，满 100 显示 `MAX`。
+5. **HUD**：左侧面板顶部显示命数（mario walk 一帧图标 + `× N`，满 100 显示 `× MAX`）；面板含当前关卡、本关死亡数、本关通过数、本关跳过数（只算软跳过）；底部显示已通过进度（定量 `c / N`、无尽 `N 关`）与档位。
 6. **过渡**：通过/跳过一关后有 1.2–2.0 秒动画，可用输入跳过。
 7. **跳过**：暂停菜单有两条路径——「本关不可能通过」会永久排除；「我打不过」只记 `solo_skip`，以后仍会抽到。两者都不扣命、不计通过。
 8. **百人团不写 `.lvl`**：完成一轮百人团后，所有 `.lvl` 的修改时间不变（哈希不变）；联机派对模式结算写 `.lvl` 是明确例外。
@@ -1066,7 +1137,7 @@ endless_total_deaths=0
 | 7 | 入口/场景 | 标题新按钮 → SMM1 风格舞台场景，SVG 景物 + 扁倾斜椭圆 + 主题色 |
 | 8 | 跳过分两种 | A「本关不可能通过」永久排除；B「我打不过」只记 `solo_skip`，以后仍会抽到；两者都不扣命 |
 | 9 | 过渡 | 每通过/跳过一关播放短动画 |
-| 10 | HUD | 定量 `命数 + 已通过/总数`；无尽 `命数 + 已通过数`（无总数）；命数显示 `x/100` |
+| 10 | HUD | 左侧关卡信息面板：顶部命数（mario walk 一帧 + `× N`/`× MAX`）+ 当前关卡 + 本关死亡/通过/软跳过 + 底部已通过进度与档位 |
 | 11 | 无尽档位 | 数字固定；每次抽下一关前重算成员；当前档抽空降档并提示；所有关卡玩过则清空本轮、回到所选档继续，不结束 |
 | 12 | 加命 | 每通过 2 关 +1 命，两种模式都适用；总上限 100 |
 | 13 | 通过率口径 | `pass / attempt`；进入关卡即 `attempt+1`（未通过先算失败）；跳关计入分母；失败 = attempt - pass - skip |
@@ -1145,7 +1216,7 @@ func assign_tiers(pool: Array[LevelStat]) -> Dictionary:
 ## 附录 C：与现有文档/代码的对照
 
 - 联机架构基线：`docs/multiplayer_refactor_plan.md`
-- 观战视图（裁剪 `play_room_base` 的坑）：`docs/spectator_mode/README.md`
+- 观看视图（裁剪 `play_room_base` 的坑）：`docs/spectator_mode/README.md`
 - 唯一持久化单例：`script/utils/game_config.gd`（`user://game_settings.cfg`）
 - 关卡 JSON schema：`script/edit/level_manager.gd` 的 `get_level_data_json()`
 - 关卡文件名规则：`script/edit/save_and_load/save_level.gd`

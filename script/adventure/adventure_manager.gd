@@ -154,6 +154,28 @@ func current_level_path() -> String:
 	return resolve_level_path(current_level_key())
 
 
+## 左侧关卡信息面板用：当前关卡在 adventure.ini 里的单人统计。
+## 数值均为「这一关」的累计，不是本团的即时计数。
+func current_level_stats() -> Dictionary:
+	var empty: Dictionary = {
+		"solo_attempt": 0,
+		"solo_pass": 0,
+		"solo_death": 0,
+		"solo_skip": 0,
+		"solo_skip_soft": 0,
+	}
+	if not is_running():
+		return empty
+	var key: String = current_level_key()
+	if key.is_empty():
+		return empty
+	var saved: Dictionary = store.get_level_data(key)
+	var stats: Dictionary = empty.duplicate()
+	for field: String in stats.keys():
+		stats[field] = int(saved.get(field, 0))
+	return stats
+
+
 func resolve_level_path(key: String) -> String:
 	if key.is_empty():
 		return ""
@@ -296,7 +318,7 @@ func on_player_died() -> void:
 func skip_current_level(hard: bool) -> void:
 	if not is_running() or current_key.is_empty():
 		return
-	store.record_skip(current_key)
+	store.record_skip(current_key, not hard)
 	if hard:
 		store.set_excluded(current_key, true, "unsolvable")
 		current_run["skipped_hard"] = int(current_run.get("skipped_hard", 0)) + 1
@@ -310,6 +332,8 @@ func skip_current_level(hard: bool) -> void:
 		if hard:
 			stat.excluded = true
 			stat.exclude_reason = "unsolvable"
+		else:
+			stat.solo_skip_soft += 1
 
 	store.set_run(current_run)
 	advance()
@@ -566,6 +590,7 @@ func _refresh_stat(key: String) -> void:
 	stat.solo_pass = int(saved.get("solo_pass", 0))
 	stat.solo_death = int(saved.get("solo_death", 0))
 	stat.solo_skip = int(saved.get("solo_skip", 0))
+	stat.solo_skip_soft = int(saved.get("solo_skip_soft", 0))
 	stat.solo_last = int(saved.get("solo_last", 0))
 
 

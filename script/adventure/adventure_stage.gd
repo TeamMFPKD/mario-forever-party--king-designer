@@ -87,12 +87,6 @@ func _build_ui() -> void:
 	title.add_theme_color_override("font_color", TEXT_COLOR)
 	root_box.add_child(title)
 
-	var subtitle: Label = Label.new()
-	subtitle.text = "选数据源、难度和流程，抽一串关卡连续打。"
-	subtitle.add_theme_font_size_override("font_size", 26)
-	subtitle.add_theme_color_override("font_color", TEXT_COLOR)
-	root_box.add_child(subtitle)
-
 	root_box.add_child(_make_section_title("数据源"))
 	_pool_buttons = _make_toggle_row(
 		["所有关卡", "喜欢的关卡"],
@@ -100,7 +94,7 @@ func _build_ui() -> void:
 	)
 	root_box.add_child(_pool_buttons[0].get_parent())
 
-	root_box.add_child(_make_section_title("难度（按个人通过率分 4 档）"))
+	root_box.add_child(_make_section_title("难度"))
 	_tier_buttons = _make_toggle_row(
 		["1 轻松", "2 标准", "3 困难", "4 极限", "随机"],
 		func(index: int) -> void: _select_tier(index + 1 if index < 4 else 0)
