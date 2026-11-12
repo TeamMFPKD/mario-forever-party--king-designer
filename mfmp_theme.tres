@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://cg0l8wpjkutri"]
 
-[ext_resource type="FontFile" uid="uid://dvb6feu20686g" path="res://font/Super-Mario-Maker-2.ttf" id="1_jlb3d"]
+[ext_resource type="FontFile" uid="uid://d36ho16u1gb31" path="res://font/Super-Mario-Maker-2-NoHanzi.ttf" id="1_jlb3d"]
 [ext_resource type="FontFile" uid="uid://didkgmqbcelko" path="res://font/ChuangKeTieJinGangTi-2.otf" id="3_t6qpq"]
 
 [sub_resource type="StyleBoxFlat" id="SBF_btn_disabled"]

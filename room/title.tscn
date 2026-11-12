@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="9_ty11l"]
 [ext_resource type="FontFile" uid="uid://cxcewjtggv0hi" path="res://font/OpenSansSemiBoldFont.res" id="10_bvmdg"]
 [ext_resource type="Script" uid="uid://bt2b120wk6vxy" path="res://script/multiplayer/1_game_hall/host_button.gd" id="10_qon3g"]
-[ext_resource type="FontFile" uid="uid://dvb6feu20686g" path="res://font/Super-Mario-Maker-2.ttf" id="11_gcvh4"]
+[ext_resource type="FontVariation" uid="uid://cccrt58y8keqv" path="res://font/ui_maker_font.tres" id="11_gcvh4"]
 [ext_resource type="Script" uid="uid://bbkiqxjpxxgso" path="res://script/multiplayer/1_game_hall/join_button.gd" id="12_10dtl"]
 [ext_resource type="PackedScene" uid="uid://dljhnfo0n1vo4" path="res://ui/list/player_list.tscn" id="14_w38mm"]
 [ext_resource type="Script" uid="uid://jhsrnvitnnhq" path="res://script/multiplayer/1_game_hall/player_list.gd" id="14_wpraw"]

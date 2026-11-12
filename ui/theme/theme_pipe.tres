@@ -1,6 +1,6 @@
 [gd_resource type="Theme" load_steps=27 format=3]
 
-[ext_resource type="FontFile" path="res://font/Super-Mario-Maker-2.ttf" id="1_main"]
+[ext_resource type="FontFile" uid="uid://d36ho16u1gb31" path="res://font/Super-Mario-Maker-2-NoHanzi.ttf" id="1_main"]
 [ext_resource type="FontFile" path="res://font/ChuangKeTieJinGangTi-2.otf" id="2_cn"]
 [ext_resource type="Texture2D" path="res://ui/theme/icons/grabber_pipe.svg" id="3_grab"]
 

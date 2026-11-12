@@ -10,7 +10,7 @@
 
 | 项目 | 取值 |
 |---|---|
-| `default_font` | `FontVariation`：base `res://font/Super-Mario-Maker-2.ttf`，fallbacks 指向 `res://font/ChuangKeTieJinGangTi-2.otf`（`variation_embolden = -0.5`、`baseline_offset = -0.05`） |
+| `default_font` | `FontVariation`：base `res://font/Super-Mario-Maker-2-NoHanzi.ttf`，fallbacks 指向 `res://font/ChuangKeTieJinGangTi-2.otf`（`variation_embolden = -0.5`、`baseline_offset = -0.05`） |
 | `Label/colors/font_color` | `Color(1, 1, 1, 1)` 白色 |
 | `Label/colors/font_outline_color` | `Color(0, 0, 0, 1)` 黑色描边 |
 | `Panel/styles/panel` | **未定义**，走 Godot 内置 Panel 样式 |
@@ -24,7 +24,9 @@
 | `Button/font_sizes/font_size` | `36` |
 | `Button/constants/outline_size` | `0`，按钮文字不带描边 |
 
-要点：**白字 + 黑描边 + 内置 Panel**，字体是马造 2，中文由创客贴金刚体兜底。
+要点：**白字 + 黑描边 + 内置 Panel**，拉丁与假名用马造 2，汉字全部由创客贴金刚体兜底。
+
+> 为什么 base 不是原始的 `Super-Mario-Maker-2.ttf`：马造 2 是日版游戏字库，自带 6682 个汉字且用的是日本字形；而 Godot 的 `FontVariation.fallbacks` **只在缺码位时**才降级，`将`/`径`/`直`/`骨` 这类中日共用码位永远走不到创客，就会出现「同一个界面里一部分是中文形一部分是日文形」。因此另存了一份 `Super-Mario-Maker-2-NoHanzi.ttf`：由原版子集化而来，剔除 U+4E00-9FFF 与 U+F900-FAFF，保留拉丁/数字/假名/符号/全角标点（2.15 MB → 90 KB）。
 
 ## 2. 黄色顶部面板主题 `ui/theme/theme_yellow_top.tres`
 
@@ -45,7 +47,7 @@
 
 给脚本动态创建的 `Label` 用（无法继承场景主题时）。内容与 `mfmp_theme.tres` 的 `default_font` 完全一致：
 
-- base：`Super-Mario-Maker-2.ttf`
+- base：`Super-Mario-Maker-2-NoHanzi.ttf`（剔除汉字的马造 2）
 - fallbacks：`ChuangKeTieJinGangTi-2.otf` 的 `FontVariation`（`embolden = -0.5`、`baseline_offset = -0.05`）
 
 例子：`script/title/pipe_button.gd` 的水管按钮标签。
