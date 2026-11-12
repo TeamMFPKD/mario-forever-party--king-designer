@@ -30,11 +30,14 @@ func _on_viewport_size_changed() -> void :
 		position = Vector2(0, 0)
 		size = Vector2(1920, 1080)
 
-		window.content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+		# 值已经正确时不要重复设置：每次切场景都会走到这里，重设会触发一次视口重排。
+		if window.content_scale_mode != Window.CONTENT_SCALE_MODE_VIEWPORT \
+				or window.content_scale_size != Vector2i(1920, 1080):
+			window.content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
 
-		window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+			window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 
-		window.content_scale_size = Vector2i(1920, 1080)
+			window.content_scale_size = Vector2i(1920, 1080)
 		ProjectSettings.set_setting("display/window/strech/mode", "visible_rect")
 		Log.i("GameRoomSize", ["stretch mode", ProjectSettings.get_setting("display/window/strech/mode")])
 		return

@@ -2,6 +2,8 @@ extends Node
 
 class_name LevelManager
 
+@warning_ignore_start("unsafe_cast", "unsafe_call_argument")
+
 signal level_theme_changed(level_theme: LevelThemeEnum)
 
 signal load_level
@@ -58,6 +60,11 @@ enum LevelThemeEnum {
 var level_data_dict: Dictionary
 var _cached_pipe_line_data: Array = []
 
+## 后台线程预解析好的关卡数据（百人团换关用）：LoadLevel 优先拿它，省掉同步读文件 + JSON 解析。
+var preloaded_level_data: Dictionary = {}
+## 关卡数据是否已经完整写进场景（分帧加载结束、level_data_loaded 发出前置 true）。
+var is_level_data_ready: bool = false
+
 func _ready() -> void:
 	#if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.PLAY \
 	#or GameModeSingleton.game_mode == GameModeSingleton.GameModeType.EDIT:
@@ -105,17 +112,27 @@ func get_level_data_json() -> String:
 func load_level_data_from_json(level_data_json: String) -> void:
 	var json: JSON = JSON.new()
 	var error: Error = json.parse(level_data_json)
-	
+
 	if error != OK:
 		push_error("Failed to parse level data JSON.")
 		return
+	var data_raw: Variant = json.data
+	if not (data_raw is Dictionary):
+		push_error("Level data is not a dictionary.")
+		return
+	apply_level_data(data_raw as Dictionary)
 
+
+## 把已经解析好的关卡字典写进场景。
+## 对象实例化按帧分批（见 ObjectMapLayer.load_object_data），避免大关卡一次性卡住主线程。
+func apply_level_data(data: Dictionary) -> void:
 	# 加载过程中会重建全部数据源，旧历史全部失效：先停止记录，加载完清空。
 	var stack: CommandStack = CommandStack.find_in(get_tree())
 	if stack != null:
 		stack.set_recording_enabled(false)
 
-	level_data_dict = json.data
+	is_level_data_ready = false
+	level_data_dict = data
 
 	var version_value: int = type_convert(level_data_dict.get("version", 1), TYPE_INT)
 	version = version_value
@@ -126,10 +143,11 @@ func load_level_data_from_json(level_data_json: String) -> void:
 	var level_size_left: int = level_size[1]
 	var level_size_right: int = level_size[2]
 	var level_size_bottom: int = level_size[3]
-	level_camera.set_limit_top(level_size_top)
-	level_camera.set_limit_left(level_size_left)
-	level_camera.set_limit_right(level_size_right)
-	level_camera.set_limit_bottom(level_size_bottom)
+	# 一次性应用四个边界：逐个 set_limit_* 会发 4 次 limit_changed，
+	# 每次都让 BackgroundSet 重建背景，切关时明显卡顿。
+	level_camera.apply_limits(
+		level_size_top, level_size_left, level_size_right, level_size_bottom
+	)
 
 	level_theme = level_data_dict.get("level_theme", LevelThemeEnum.OVERWORLD)
 
@@ -199,6 +217,7 @@ func load_level_data_from_json(level_data_json: String) -> void:
 		stack.clear()
 		stack.set_recording_enabled(true)
 
+	is_level_data_ready = true
 	level_data_loaded.emit()
 
 	

@@ -8,11 +8,13 @@ var level_file_path: String = ""
 var level_path_set: Node
 
 func _ready() -> void:
-	# 百人团：当前关卡在加载场景前就确定了，同步填好。
-	# 否则换场景的那一帧会先露出场景里预置的 "Invalid Date / Invalid Author Name / Invalid Rate"。
+	# 百人团：当前关卡在加载场景前就确定了，先同步填日期/作者。
+	# 通过率要读 .lvl 并解析 JSON，延后一帧做，避免 add_child 那一帧同步读盘。
+	# 这样也不会露出场景里预置的 "Invalid Date / Invalid Author Name"。
 	if GameMode.is_adventure() and Adventure.is_running():
 		level_file_path = Adventure.current_level_path()
-		_update_level_info()
+		_fill_name_labels()
+		_calculate_clear_rate.call_deferred()
 		return
 	# 其他模式等待一帧确保所有节点都已准备好
 	await get_tree().process_frame
@@ -25,10 +27,18 @@ func _ready() -> void:
 func _update_level_info() -> void:
 	if level_file_path.is_empty():
 		return
-	
+	_fill_name_labels()
+	_calculate_clear_rate()
+
+
+## 只解析文件名里的日期/作者（不读盘）。
+func _fill_name_labels() -> void:
+	if level_file_path.is_empty():
+		return
+
 	# 解析文件名格式: mfmp_YYYY-MM-DD_HH-MM-SS_作者名_随机ID.lvl
 	var file_parts: PackedStringArray = level_file_path.replace(".lvl", "").split("_")
-	
+
 	# 提取日期信息
 	if file_parts.size() >= 2:
 		var date_str: String = file_parts[1]  # YYYY-MM-DD
@@ -37,22 +47,19 @@ func _update_level_info() -> void:
 			time_str = file_parts[2]  # HH-MM-SS
 			# 将时间格式转换为更易读的格式
 			time_str = time_str.replace("-", ":")
-		
+
 		var display_date: String = date_str
 		if not time_str.is_empty():
 			display_date += " " + time_str
-		
+
 		if date_label:
 			date_label.text = display_date
-	
+
 	# 提取作者信息
 	if file_parts.size() >= 4:
 		var author: String = file_parts[3]
 		if author_label:
 			author_label.text = author
-	
-	# 计算通过率
-	_calculate_clear_rate()
 
 # 计算关卡通过率
 func _calculate_clear_rate() -> void:

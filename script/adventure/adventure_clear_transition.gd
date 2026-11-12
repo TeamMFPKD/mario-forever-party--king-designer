@@ -22,8 +22,12 @@ extends CanvasLayer
 
 signal finished
 
-## 播到总时长一半时发出：Adventure 借此在转场遮住画面期间准备下一关。
+## 播到总时长一半时发出：Adventure 借此把转场搬到主视口。
 signal halfway
+
+## 马里奥跳完、落地进入静止 hold 时发出：Adventure 在这一刻同步加载下一关，
+## 卡顿落在静止画面上，玩家看不出来。
+signal jump_finished
 
 const SLIDE_IN: float = 0.34
 const HOLD_DURATION: float = 0.2
@@ -526,6 +530,8 @@ func _phase_jump() -> void:
 		_update_row_visibility()
 		_player.position.y = _player_rest_y
 		_settle_props(NODE_GAP * PROP_MOVE_SCALE)
+		# 落地后的静止 hold 是加载下一关的最佳窗口。
+		jump_finished.emit()
 		_advance_phase()
 
 

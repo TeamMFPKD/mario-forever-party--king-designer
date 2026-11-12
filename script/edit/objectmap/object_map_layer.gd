@@ -660,7 +660,7 @@ func get_object_data() -> Array:
 func load_object_data(object_data: Array) -> void:
 	clear_all_objects()
 	_door_id_counter = 0  # 重置门ID计数器
-	
+
 	for save_object: Dictionary in object_data:
 		var object_name: String = save_object["object_name"]
 		if object_name == "player" and not spawn_player:

@@ -24,8 +24,10 @@ func _ready() -> void:
 	if level_file_path.is_empty() or level_file_path == "invalid":
 		print("[LikedCoursePreview] Invalid level file path")
 		return
-	
-	# 读取并显示截图
+
+	# 截图读取 + 纹理上传放到下一帧：换场景那一帧已经在做布局和 SubViewport 创建，
+	# 同时读图会让转场明显卡一下。
+	await get_tree().process_frame
 	load_screenshots()
 
 func load_screenshots() -> void:

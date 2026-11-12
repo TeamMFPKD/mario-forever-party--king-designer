@@ -633,35 +633,48 @@ func _run_pass_transition(next_scene: String) -> void:
 	GlobalTransition.reload_current_scene()
 
 
-## 等转场播到一半 → 把转场搬到主视口 → 切到下一关场景并等关卡数据加载完。
+## 等转场播到一半 → 把转场搬到主视口 → 等马里奥落地静止 → 加载下一关。
 ## 返回 {"detached": 转场是否已搬走, "advanced": 下一关是否加载成功}。
 func _detach_and_load_next_level(transition: CanvasLayer) -> Dictionary:
 	var failed: Dictionary = {"detached": false, "advanced": false}
 	if not is_instance_valid(transition) or not transition.has_signal("halfway"):
 		return failed
-	# 转场脚本不在 CanvasLayer 的静态类型里，用连接 + 轮询代替 await 信号。
-	var halfway_state: Dictionary = {"reached": false}
-	transition.connect(
-		"halfway",
-		func() -> void: halfway_state["reached"] = true,
-		CONNECT_ONE_SHOT
-	)
-	var waited: float = 0.0
-	while not bool(halfway_state["reached"]) and is_instance_valid(transition) and waited < 3.0:
-		await get_tree().process_frame
-		waited += get_process_delta_time()
-	if not bool(halfway_state["reached"]):
+
+	# 半程：把转场搬到主视口（纯节点搬运，不卡）。
+	if not await _wait_transition_signal(transition, "halfway", 3.0):
 		return failed
-	# 半程信号来自转场自己的 _process，等一帧再做节点搬运。
 	await get_tree().process_frame
 	if not is_instance_valid(transition):
 		return failed
-
 	if not bool(transition.call("detach_from_level_view", _game_view_rect())):
 		return failed
 
+	# 马里奥落地、画面进入静止 hold 的那一刻再加载下一关：
+	# 加载卡顿会被静止画面吃掉，玩家察觉不到。
+	# 加载没完之前 _slide_out_blocked 会挡住划出。
+	if not await _wait_transition_signal(transition, "jump_finished", 3.0):
+		return failed
+	await get_tree().process_frame
+
 	var next_scene: Node = await _load_next_play_scene(transition)
 	return {"detached": true, "advanced": is_instance_valid(next_scene)}
+
+
+## 等转场脚本的某个信号。转场不在 CanvasLayer 的静态类型里，用连接 + 轮询。
+func _wait_transition_signal(transition: CanvasLayer, signal_name: String, timeout: float) -> bool:
+	if not is_instance_valid(transition) or not transition.has_signal(signal_name):
+		return false
+	var state: Dictionary = {"reached": false}
+	transition.connect(
+		signal_name,
+		func() -> void: state["reached"] = true,
+		CONNECT_ONE_SHOT
+	)
+	var waited: float = 0.0
+	while not bool(state["reached"]) and is_instance_valid(transition) and waited < timeout:
+		await get_tree().process_frame
+		waited += get_process_delta_time()
+	return bool(state["reached"])
 
 
 ## 关卡画面（SubViewportContainer）在主视口里的全局矩形。
@@ -676,7 +689,7 @@ func _game_view_rect() -> Rect2:
 	return Rect2(Vector2(320.0, 32.0), Vector2(1280.0, 928.0))
 
 
-## 切到下一关游玩场景，等关卡数据完全写进场景后暂停（冻结）。
+## 切到下一关游玩场景，等关卡数据完全写进场景后跑 1 物理帧，再暂停（冻结）。
 ##
 ## 不用 change_scene_to_packed：它在帧末才把新场景挂进树，那一帧新场景会画在转场上面，
 ## 而它的 SubViewport 第一帧还没渲染 —— 会看到关卡区域闪黑一下。
@@ -687,10 +700,14 @@ func _load_next_play_scene(transition: CanvasLayer) -> Node:
 	if packed == null:
 		Log.e("Adventure", ["下一关场景加载失败：", PLAY_SCENE])
 		return null
+	var instantiate_start: int = Time.get_ticks_msec()
 	var next_scene: Node = packed.instantiate()
+	var instantiate_cost: int = Time.get_ticks_msec() - instantiate_start
 	if next_scene == null:
 		return null
 	var previous: Node = get_tree().current_scene
+
+	var manager: LevelManager = next_scene.find_child("LevelManager", true, false) as LevelManager
 
 	# 先隐藏 + 冻结，避免新场景在转场插好之前先画一帧。
 	var canvas_item: CanvasItem = next_scene as CanvasItem
@@ -722,7 +739,10 @@ func _load_next_play_scene(transition: CanvasLayer) -> Node:
 			previous_parent.remove_child(previous)
 		previous.queue_free()
 
+	var add_start: int = Time.get_ticks_msec()
 	get_tree().root.add_child(next_scene)
+	var add_cost: int = Time.get_ticks_msec() - add_start
+	Log.i("Adventure", ["换关耗时：instantiate=", instantiate_cost, "ms add_child=", add_cost, "ms"])
 	get_tree().current_scene = next_scene
 
 	# _ready 里可能新建 CanvasLayer（暂停按钮），一并隐藏。
@@ -739,17 +759,26 @@ func _load_next_play_scene(transition: CanvasLayer) -> Node:
 	for layer: CanvasLayer in hidden_layers:
 		layer.visible = true
 	next_scene.process_mode = Node.PROCESS_MODE_INHERIT
+	# 加载期间先冻结，避免玩家/敌人在分帧加载时乱跑。
 	get_tree().paused = true
 
-	# 等关卡文件解析、对象生成完成（LoadLevel 是 deferred 调用的）。
-	var manager: LevelManager = next_scene.find_child("LevelManager", true, false) as LevelManager
+	if manager == null:
+		Log.e("Adventure", "新场景缺少 LevelManager")
+		return null
+
+	# 等关卡数据按帧写进场景（对象实例化分帧，见 ObjectMapLayer.load_object_data）。
 	var waited: float = 0.0
-	while manager != null and manager.level_data_dict.is_empty() and waited < 5.0:
+	while not manager.is_level_data_ready and waited < 8.0:
 		await get_tree().process_frame
 		waited += get_process_delta_time()
-	if manager != null and manager.level_data_dict.is_empty():
+	if not manager.is_level_data_ready:
 		Log.e("Adventure", "下一关加载超时")
 		return null
+
+	# 加载结束后先跑 1 个物理帧，让玩家/物体完成物理初始化，再冻结。
+	get_tree().paused = false
+	await get_tree().physics_frame
+	get_tree().paused = true
 	return next_scene
 
 
