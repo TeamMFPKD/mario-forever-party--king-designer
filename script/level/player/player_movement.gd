@@ -24,6 +24,14 @@ signal screen_shake
 
 @export var crouch_head_area: Area2D
 
+# 碰撞箱补丁（移植自 Mario Forever Green Tea Engine）：
+# 矩形碰撞盒没有原八边形的倒角，需要用两项修正补回官作的擦角手感。
+@export var enable_collision_patch: bool = true
+## 自动迈台阶：地面上水平移动被纯竖直矮墙挡住时，最多抬身该像素数越过（GTE 玩家值 12），0 = 关闭。
+@export var step_up_amount: int = 12
+## 顶天花板擦角：上升时若头顶只擦到方块边缘，最多左右让出该像素数（GTE 默认值 5），0 = 关闭。
+@export var ceiling_corner_amount: int = 5
+
 @export var max_speed_x: float = 400.0
 @export var acceleration: float = 10.0
 @export var deceleration_ground: float = 13.3
@@ -134,7 +142,7 @@ var _fragment_velocity_data: Array[Vector2] = [
 
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	# 冷却递减必须放在 transport_check 之前，确保管道内也能正确递减
 	if out_pipe_cooldown > 0:
 		out_pipe_cooldown -= 1
@@ -263,6 +271,7 @@ func _physics_process(_delta: float) -> void:
 
 	# 应用速度
 	player.velocity = Vector2(-player.up_direction.y, player.up_direction.x) * speed_x - player.up_direction * speed_y
+	_apply_collision_patches(delta)
 	player.move_and_slide()
 
 	# 掉落桥检测
@@ -274,6 +283,80 @@ func _physics_process(_delta: float) -> void:
 
 func is_action_pressed(action: String) -> bool:
 	return Input.is_action_just_pressed(action)
+
+# -----------------------------------------------------------------------------
+# 矩形碰撞盒补丁（移植自 Mario Forever Green Tea Engine）
+# 1) AutoStepUpComponent.TryStepUp()：地面上水平位移即将被纯竖直矮墙吃掉时，
+#    逐像素抬身越过侧壁、水平走完本帧位移、再贴回台阶面；一帧内完成，不掉速、不浮空。
+# 2) CorrectedCharacterBody2D.HorizontalCorrection()：上升顶到方块侧边角时，
+#    左右各试 1~N 像素，找到头顶空位就把身体水平挤出边缘。
+# 两项都在 move_and_slide 之前执行：此时 velocity 尚未被碰撞改写。
+# 仅支持标准向下重力（GTE 的 Correction 组件同样未移植旋转重力）。
+# -----------------------------------------------------------------------------
+func _apply_collision_patches(delta: float) -> void:
+	if not enable_collision_patch:
+		return
+	if absf(rotate_with_up) > 0.01 or is_switching_gravity:
+		return
+	_try_step_up(delta)
+	_ceiling_corner_correction(delta)
+
+
+func _try_step_up(delta: float) -> void:
+	if step_up_amount <= 0 or not player.is_on_floor():
+		return
+	if absf(player.velocity.x) <= 1.0:
+		return
+	# 只用水平分量预判：重力带来的竖直分量会先撞地面，使第一碰撞恒为地面而误判
+	var motion: Vector2 = Vector2(player.velocity.x * delta, 0.0)
+	var collision: KinematicCollision2D = player.move_and_collide(motion, true, 0.08, false)
+	if collision == null:
+		return
+	var normal: Vector2 = collision.get_normal()
+	# 只认纯竖直墙（矮台阶侧壁）；斜面 / 天花板不迈步
+	if absf(normal.x) < 0.999 or absf(normal.y) >= 0.1:
+		return
+	for i: int in range(1, step_up_amount + 2):
+		var from: Transform2D = player.global_transform.translated(Vector2(0.0, -float(i)))
+		if player.test_move(from, motion):
+			continue
+		player.translate(Vector2(0.0, -float(i)))
+		player.move_and_collide(Vector2(motion.x, 0.0))
+		player.move_and_collide(Vector2(0.0, float(i)))
+		# 本帧水平位移已消费，清掉 body 的水平速度，避免随后 move_and_slide 再走一次；
+		# 脚本里的 speed_x 保留（下一帧照常用它计算速度）
+		var velocity: Vector2 = player.velocity
+		velocity.x = 0.0
+		player.velocity = velocity
+		return
+
+
+func _ceiling_corner_correction(delta: float) -> void:
+	if ceiling_corner_amount <= 0 or player.velocity.y >= 0.0:
+		return
+	var motion: Vector2 = Vector2(0.0, player.velocity.y * delta)
+	var collision: KinematicCollision2D = player.move_and_collide(motion, true, 0.001, false)
+	if collision == null:
+		return
+	var normal: Vector2 = collision.get_normal()
+	# 法线偏水平说明撞的是侧壁而非天花板，不处理
+	if absf(normal.x) >= 0.4:
+		return
+	var directions: Array[int] = [-1, 1]
+	for i: int in range(1, ceiling_corner_amount + 1):
+		for j: int in directions:
+			var offset: float = float(i * j)
+			var from: Transform2D = player.global_transform.translated(Vector2(offset, 0.0))
+			if player.test_move(from, motion):
+				continue
+			player.translate(Vector2(offset, 0.0))
+			var velocity: Vector2 = player.velocity
+			# 挤出方向与水平速度相反时清掉水平速度（与 GTE 一致）
+			if velocity.x * float(j) < 0.0:
+				velocity.x = 0.0
+			player.velocity = velocity
+			return
+
 
 func platform_fall_detect() -> void:
 	if !player.is_on_floor():
@@ -297,19 +380,21 @@ class SizeStatus:
 
 func update_hit_box() -> void:
 	var target_shape: Shape2D
+	# 与 Green Tea Engine 一致：小个子 19x26 居中于身体原点，大个子 19x52 上移 13px，
+	# 两档脚线都固定在 +13（BIG 系列沿用本工程宽度，高度同为 52/26）。
 	var target_position: Vector2
 	if crouch or player_suit.suit == PlayerSuit.SuitType.SMALL:
 		target_shape = shape_small
-		target_position = Vector2(0, -1.5)
+		target_position = Vector2(0, 0)
 	else:
 		target_shape = shape_super
-		target_position = Vector2(0, -16.5)
+		target_position = Vector2(0, -13)
 	if player_suit.suit == PlayerSuit.SuitType.POWERED and player_suit.power == PlayerSuit.PowerupType.BIG:
 		target_shape = shape_big
-		target_position = Vector2(0, -16.5)
+		target_position = Vector2(0, -13)
 		if crouch:
 			target_shape = shape_big_crouch
-			target_position = Vector2(0, -1.5)
+			target_position = Vector2(0, 0)
 
 	collision_shape.shape = target_shape
 	cast.shape = target_shape

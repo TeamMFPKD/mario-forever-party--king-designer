@@ -147,12 +147,12 @@ stars = NodePath("../AnimatedSprite2D/Stars")
 player_suit = NodePath("../PlayerMediator/PlayerSuit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
-position = Vector2(1, -2)
+position = Vector2(0, 0)
 shape = ExtResource("3_0f3px")
 
 [node name="InteractionShapeCast2D" type="ShapeCast2D" parent="." unique_id=1647702393]
 visible = false
-position = Vector2(0, -2)
+position = Vector2(0, 0)
 shape = ExtResource("3_0f3px")
 target_position = Vector2(0, 0)
 max_results = 4
