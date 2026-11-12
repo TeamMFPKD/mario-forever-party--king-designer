@@ -35,10 +35,17 @@ func _fake_run() -> void:
 	var store: AdventureStore = AdventureStore.new(TEMP_STORE)
 	store.load()
 	Adventure.store = store
-	store.record_pass(FAKE_KEY)
-	store.record_pass(FAKE_KEY)
-	store.record_pass(FAKE_KEY)
+	# 样本要自洽：attempt = pass + 软跳过 + 失败（见 docs/raid_mode §5.1）
+	var attempt: int = 0
+	while attempt < 6:
+		store.record_attempt(FAKE_KEY)
+		attempt += 1
+	var passed: int = 0
+	while passed < 4:
+		store.record_pass(FAKE_KEY)
+		passed += 1
 	store.record_skip(FAKE_KEY, true)
+	store.record_death(FAKE_KEY)
 	store.record_death(FAKE_KEY)
 
 	var keys: Array = []

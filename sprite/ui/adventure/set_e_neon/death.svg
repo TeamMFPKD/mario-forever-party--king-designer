@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 64 64">
+  <path d="M32 8C18.6 8 8 17.6 8 29.4c0 7.8 3.8 14.2 9.8 17.8V53c0 2.8 2.2 5 5 5h18.4c2.8 0 5-2.2 5-5v-5.8c6-3.6 9.8-10 9.8-17.8C56 17.6 45.4 8 32 8Z" fill="none" stroke="#B45BFF" stroke-width="12" opacity="0.12" stroke-linejoin="round"/>
+  <path d="M32 8C18.6 8 8 17.6 8 29.4c0 7.8 3.8 14.2 9.8 17.8V53c0 2.8 2.2 5 5 5h18.4c2.8 0 5-2.2 5-5v-5.8c6-3.6 9.8-10 9.8-17.8C56 17.6 45.4 8 32 8Z" fill="none" stroke="#B45BFF" stroke-width="7" opacity="0.3" stroke-linejoin="round"/>
+  <path d="M32 8C18.6 8 8 17.6 8 29.4c0 7.8 3.8 14.2 9.8 17.8V53c0 2.8 2.2 5 5 5h18.4c2.8 0 5-2.2 5-5v-5.8c6-3.6 9.8-10 9.8-17.8C56 17.6 45.4 8 32 8Z" fill="none" stroke="#E8C8FF" stroke-width="2.6" stroke-linejoin="round"/>
+  <circle cx="23" cy="29" r="5.6" fill="#B45BFF"/>
+  <circle cx="23" cy="29" r="5.6" fill="none" stroke="#F0DCFF" stroke-width="1.6"/>
+  <circle cx="41" cy="29" r="5.6" fill="#B45BFF"/>
+  <circle cx="41" cy="29" r="5.6" fill="none" stroke="#F0DCFF" stroke-width="1.6"/>
+  <path d="M32 37.5 36.2 44.5H27.8Z" fill="#B45BFF" stroke="#F0DCFF" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M24.5 46.5V52M32 46.5V52M39.5 46.5V52" stroke="#E8C8FF" stroke-width="2.8" stroke-linecap="round"/>
+</svg>

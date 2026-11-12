@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 64 64">
+  <g fill="#05030A" opacity="0.16">
+    <g transform="translate(3 3)">
+      <path d="M6 13 25 32 6 51Z"/>
+      <path d="M27 13 46 32 27 51Z"/>
+      <rect x="48" y="13" width="9" height="38" rx="4.5"/>
+    </g>
+    <g transform="translate(6 6)">
+      <path d="M6 13 25 32 6 51Z"/>
+      <path d="M27 13 46 32 27 51Z"/>
+      <rect x="48" y="13" width="9" height="38" rx="4.5"/>
+    </g>
+    <g transform="translate(9 9)">
+      <path d="M6 13 25 32 6 51Z"/>
+      <path d="M27 13 46 32 27 51Z"/>
+      <rect x="48" y="13" width="9" height="38" rx="4.5"/>
+    </g>
+    <g transform="translate(12 12)">
+      <path d="M6 13 25 32 6 51Z"/>
+      <path d="M27 13 46 32 27 51Z"/>
+      <rect x="48" y="13" width="9" height="38" rx="4.5"/>
+    </g>
+    <g transform="translate(15 15)">
+      <path d="M6 13 25 32 6 51Z"/>
+      <path d="M27 13 46 32 27 51Z"/>
+      <rect x="48" y="13" width="9" height="38" rx="4.5"/>
+    </g>
+  </g>
+  <path d="M6 13 25 32 6 51Z" fill="#FFD24A"/>
+  <path d="M27 13 46 32 27 51Z" fill="#FFD24A"/>
+  <rect x="48" y="13" width="9" height="38" rx="4.5" fill="#FFD24A"/>
+</svg>

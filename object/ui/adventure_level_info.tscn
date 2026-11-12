@@ -1,29 +1,33 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://script/adventure/adventure_level_info.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://ui/ui_margin_container.tscn" id="2_margin"]
 [ext_resource type="PackedScene" path="res://ui/ui_panel.tscn" id="3_panel"]
 [ext_resource type="PackedScene" path="res://ui/ui_label.tscn" id="4_label"]
 [ext_resource type="Texture2D" path="res://sprite/player/mario_small.png" id="5_mario"]
+[ext_resource type="Texture2D" path="res://sprite/ui/adventure/icon_goal.svg" id="6_goal"]
+[ext_resource type="Texture2D" path="res://sprite/ui/adventure/icon_death.svg" id="7_death"]
+[ext_resource type="Texture2D" path="res://sprite/ui/adventure/icon_skip.svg" id="8_skip"]
 
 [sub_resource type="AtlasTexture" id="Atlas_mario_walk"]
 atlas = ExtResource("5_mario")
 region = Rect2(32, 32, 32, 34)
 
-[node name="AdventureLevelInfo" type="Control" node_paths=PackedStringArray("lives_label", "level_value", "death_value", "pass_value", "skip_value")]
+[node name="AdventureLevelInfo" type="Control" node_paths=PackedStringArray("lives_label", "level_value", "death_value", "pass_value", "skip_value", "clear_rate_value")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 24.0
-offset_top = 100.0
-offset_right = 296.0
-offset_bottom = 720.0
+offset_top = 280.0
+offset_right = 300.0
+offset_bottom = 840.0
 mouse_filter = 2
 script = ExtResource("1_script")
 lives_label = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LivesRow/LivesLabel")
 level_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LevelValue")
-death_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/DeathValue")
-pass_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/PassValue")
-skip_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/SkipValue")
+death_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/DeathItem/DeathValue")
+pass_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/PassItem/PassValue")
+skip_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/SkipItem/SkipValue")
+clear_rate_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/ClearRateValue")
 
 [node name="UiMarginContainer" parent="." instance=ExtResource("2_margin")]
 layout_mode = 1
@@ -92,7 +96,7 @@ color = Color(1, 1, 1, 0.25)
 mouse_filter = 2
 
 [node name="LivesGap" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 mouse_filter = 2
 
@@ -108,38 +112,114 @@ theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 42
 text = "1"
 
-[node name="DeathTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+[node name="StatsGapTop" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StatsRule" type="ColorRect" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(1, 1, 1, 0.25)
+mouse_filter = 2
+
+[node name="StatsGap" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="StatsRow" type="HBoxContainer" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PassItem" type="VBoxContainer" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="PassIcon" type="TextureRect" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/PassItem"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_filter = 2
+texture = ExtResource("6_goal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PassValue" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/PassItem" instance=ExtResource("4_label")]
 layout_mode = 2
 theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 30
-text = "本关死亡数"
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 1
 
-[node name="DeathValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+[node name="DeathItem" type="VBoxContainer" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="DeathIcon" type="TextureRect" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/DeathItem"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_filter = 2
+texture = ExtResource("7_death")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DeathValue" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/DeathItem" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 1
+
+[node name="SkipItem" type="VBoxContainer" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="SkipIcon" type="TextureRect" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/SkipItem"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+texture_filter = 2
+texture = ExtResource("8_skip")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SkipValue" parent="UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/SkipItem" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 1
+
+[node name="BottomSpacer" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ClearRateRule" type="ColorRect" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(1, 1, 1, 0.25)
+mouse_filter = 2
+
+[node name="ClearRateGap" type="Control" parent="UiMarginContainer/InfoMargin/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ClearRateTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "个人通过率"
+
+[node name="ClearRateValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
 layout_mode = 2
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 42
-text = "0"
-
-[node name="PassTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
-layout_mode = 2
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 30
-text = "本关通过数"
-
-[node name="PassValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
-layout_mode = 2
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 42
-text = "0"
-
-[node name="SkipTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
-layout_mode = 2
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 30
-text = "本关跳过数"
-
-[node name="SkipValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
-layout_mode = 2
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 42
-text = "0"
+text = "66.7%"

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <polygon points="4,12 8,12 8,16 12,16 12,20 16,20 16,24 20,24 20,28 24,28 24,36 20,36 20,40 16,40 16,44 12,44 12,48 8,48 8,52 4,52" fill="#FFD24A"/>
+  <polygon points="28,12 32,12 32,16 36,16 36,20 40,20 40,24 44,24 44,28 48,28 48,36 44,36 44,40 40,40 40,44 36,44 36,48 32,48 32,52 28,52" fill="#F8A020"/>
+  <path d="M52 12h8v40h-8z" fill="#F8A020"/>
+  <path d="M52 12h2v40h-2z" fill="#FFD88A"/>
+</svg>

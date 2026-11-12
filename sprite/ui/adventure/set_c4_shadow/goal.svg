@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 64 64">
+  <g fill="#05030A" opacity="0.16">
+    <g transform="translate(3 3)">
+      <rect x="29" y="10" width="5" height="44" rx="2.5"/>
+      <circle cx="31.5" cy="10.5" r="7"/>
+      <path d="M34 18 57 22.5 34 27Z"/>
+    </g>
+    <g transform="translate(6 6)">
+      <rect x="29" y="10" width="5" height="44" rx="2.5"/>
+      <circle cx="31.5" cy="10.5" r="7"/>
+      <path d="M34 18 57 22.5 34 27Z"/>
+    </g>
+    <g transform="translate(9 9)">
+      <rect x="29" y="10" width="5" height="44" rx="2.5"/>
+      <circle cx="31.5" cy="10.5" r="7"/>
+      <path d="M34 18 57 22.5 34 27Z"/>
+    </g>
+    <g transform="translate(12 12)">
+      <rect x="29" y="10" width="5" height="44" rx="2.5"/>
+      <circle cx="31.5" cy="10.5" r="7"/>
+      <path d="M34 18 57 22.5 34 27Z"/>
+    </g>
+    <g transform="translate(15 15)">
+      <rect x="29" y="10" width="5" height="44" rx="2.5"/>
+      <circle cx="31.5" cy="10.5" r="7"/>
+      <path d="M34 18 57 22.5 34 27Z"/>
+    </g>
+  </g>
+  <rect x="21" y="54" width="22" height="5" rx="2.5" fill="#F2F4F8" fill-opacity="0.5"/>
+  <rect x="29" y="10" width="5" height="44" rx="2.5" fill="#F2F4F8"/>
+  <path d="M34 18 57 22.5 34 27Z" fill="#F2545B"/>
+  <circle cx="31.5" cy="10.5" r="7" fill="#FFD24A"/>
+</svg>
