@@ -9,7 +9,7 @@ func next_level_pass() -> void:
 	if Adventure.is_pass_transition_running():
 		Log.w("AdventureRunController", "过关转场进行中，忽略重复的过关")
 		return
-	_close_pause_menu()
+	_close_pause_menu(true)
 	# 过场动画要显示「刚通过的是第几关」，必须在推进进度前取快照：
 	# 跳过关卡会让通过数和实际关号错位，结算时 current_run 还会被清空。
 	var level_number: int = Adventure.current_level_number()
@@ -37,8 +37,10 @@ func next_level_die() -> void:
 		GlobalTransition.change_scene_to_file(Adventure.RESULT_SCENE)
 
 
-func _close_pause_menu() -> void:
-	get_tree().paused = false
+## keep_paused：过关转场期间保持冻结，由 Adventure 在转场结束时统一解冻。
+func _close_pause_menu(keep_paused: bool = false) -> void:
 	var menu: Node = find_child("AdventurePauseMenu", true, false)
 	if is_instance_valid(menu) and menu.has_method("force_close"):
-		menu.call("force_close")
+		menu.call("force_close", keep_paused)
+	elif not keep_paused:
+		get_tree().paused = false

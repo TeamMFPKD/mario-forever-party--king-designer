@@ -55,5 +55,8 @@ func _on_body_entered(body: Node2D) -> void:
 		if is_instance_valid(self) and is_inside_tree():
 			await get_tree().create_timer(1.0).timeout
 		
-		get_tree().paused = false
+		# 普通模式要带着未暂停状态重载场景；百人团由 Adventure 全程接管暂停，
+		# 这里一解冻，过场开始前旧关卡就会再多跑一帧。
+		if not GameMode.is_adventure():
+			get_tree().paused = false
 		emit_signal("next_level")

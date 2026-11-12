@@ -912,9 +912,10 @@ func play_transition(
 		Log.w("Adventure", "转场进行中，忽略新的转场请求")
 		return
 
-	# 结算：先放满 2 个物理帧再冻结，然后立刻切到结算页，不播关卡内转场。
+	# 结算：终点处已经冻结了 1 秒，保持冻结直接切结算页（结算页自己解冻）。
+	# 同样不再 settle，避免过关后旧关卡多跑 2 帧才被重新冻住。
 	if kind == "finish":
-		await settle_physics_frames(2)
+		get_tree().paused = true
 		GlobalTransition.change_scene_to_file(RESULT_SCENE if next_scene.is_empty() else next_scene)
 		return
 
@@ -928,9 +929,10 @@ func play_transition(
 
 	# 过关优先在关卡视口里播前端转场（只覆盖 640×480 的游戏画面）
 	if kind == "pass" and is_instance_valid(_clear_transition):
-		# 先放满 2 个物理帧再冻结：冻结的才是完整的一帧，不会把帧中间的状态定住。
-		# 冻结后整段过场里旧关卡都不再推进（转场是 PROCESS_MODE_ALWAYS）。
-		await settle_physics_frames(2)
+		# GoalGate 已经冻结了 1 秒，画面和物理状态早就同步，这里不要再解冻「放满 2 个物理帧」：
+		# 那会让过关后的旧关卡又多跑 1~2 帧才重新冻住（玩家、敌人、倒计时都跟着动一下）。
+		# 直接保持暂停，整段过场里旧关卡都不推进（转场是 PROCESS_MODE_ALWAYS）。
+		get_tree().paused = true
 		await _play_pass_transition(next_scene, level_number, total_levels)
 		return
 
