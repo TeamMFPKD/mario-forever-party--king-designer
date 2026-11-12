@@ -69,18 +69,14 @@ func _ready() -> void:
 	call_deferred("_begin_pool_load")
 
 
+## V4 布局：左侧 412px 竖排导航栏装全部设置按钮，右侧大路线预览，底部动作条。
+## 只重排控件，所有原有引用（按钮数组 / 滑块 / 状态 / 预览网格）保持不变。
 func _build_ui() -> void:
 	_background = ColorRect.new()
 	_background.color = NEUTRAL_COLOR
 	_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_background)
-
-	# 纯色剪影花草原：画在底色之上、所有控件之下
-	_scenery = SCENERY_SCRIPT.new() as Control
-	_scenery.name = "Scenery"
-	_scenery.set("tint", SCENERY_TINT)
-	add_child(_scenery)
 
 	var margin: MarginContainer = MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -91,7 +87,7 @@ func _build_ui() -> void:
 	add_child(margin)
 
 	var root_box: VBoxContainer = VBoxContainer.new()
-	root_box.add_theme_constant_override("separation", 18)
+	root_box.add_theme_constant_override("separation", 14)
 	margin.add_child(root_box)
 
 	var title: Label = Label.new()
@@ -100,51 +96,101 @@ func _build_ui() -> void:
 	title.add_theme_color_override("font_color", TEXT_COLOR)
 	root_box.add_child(title)
 
-	root_box.add_child(_make_section_title("数据源"))
-	_pool_buttons = _make_toggle_row(
-		["所有关卡", "喜欢的关卡"],
-		func(index: int) -> void: _select_pool("all" if index == 0 else "liked")
-	)
-	root_box.add_child(_pool_buttons[0].get_parent())
-
-	root_box.add_child(_make_section_title("难度"))
-	_tier_buttons = _make_toggle_row(
-		["1 轻松", "2 标准", "3 困难", "4 极限", "随机"],
-		func(index: int) -> void: _select_tier(index + 1 if index < 4 else 0)
-	)
-	root_box.add_child(_tier_buttons[0].get_parent())
-
-	root_box.add_child(_make_section_title("流程"))
-	_mode_buttons = _make_toggle_row(
-		["定量团", "无尽团"],
-		func(index: int) -> void: _select_mode("finite" if index == 0 else "endless")
-	)
-	root_box.add_child(_mode_buttons[0].get_parent())
-
-	var length_row: HBoxContainer = HBoxContainer.new()
-	length_row.add_theme_constant_override("separation", 16)
-	root_box.add_child(length_row)
-	_length_label = Label.new()
-	_length_label.custom_minimum_size = Vector2(260, 0)
-	_length_label.add_theme_color_override("font_color", TEXT_COLOR)
-	length_row.add_child(_length_label)
-	_length_slider = HSlider.new()
-	_length_slider.min_value = 5
-	_length_slider.max_value = 50
-	_length_slider.step = 1
-	_length_slider.custom_minimum_size = Vector2(420, 40)
-	_length_slider.value_changed.connect(_on_length_changed)
-	length_row.add_child(_length_slider)
-	_lives_label = Label.new()
-	_lives_label.add_theme_font_size_override("font_size", 24)
-	_lives_label.add_theme_color_override("font_color", TEXT_COLOR)
-	length_row.add_child(_lives_label)
-
 	_status_label = Label.new()
 	_status_label.add_theme_font_size_override("font_size", 24)
 	_status_label.add_theme_color_override("font_color", TEXT_COLOR)
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root_box.add_child(_status_label)
+
+	var content: HBoxContainer = HBoxContainer.new()
+	content.add_theme_constant_override("separation", 24)
+	content.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	root_box.add_child(content)
+
+	# ── 左：竖排导航 ──────────────────────────────────────────────
+	var rail: PanelContainer = PanelContainer.new()
+	rail.custom_minimum_size = Vector2(412, 0)
+	var rail_style: StyleBoxFlat = StyleBoxFlat.new()
+	rail_style.bg_color = Color(1, 1, 1, 0.58)
+	rail_style.corner_radius_top_left = 18
+	rail_style.corner_radius_top_right = 18
+	rail_style.corner_radius_bottom_left = 18
+	rail_style.corner_radius_bottom_right = 18
+	rail_style.border_width_left = 2
+	rail_style.border_width_top = 2
+	rail_style.border_width_right = 2
+	rail_style.border_width_bottom = 2
+	rail_style.border_color = Color(0.15, 0.2, 0.3, 0.22)
+	rail.add_theme_stylebox_override("panel", rail_style)
+	content.add_child(rail)
+
+	var rail_margin: MarginContainer = MarginContainer.new()
+	rail_margin.add_theme_constant_override("margin_left", 20)
+	rail_margin.add_theme_constant_override("margin_top", 18)
+	rail_margin.add_theme_constant_override("margin_right", 20)
+	rail_margin.add_theme_constant_override("margin_bottom", 18)
+	rail.add_child(rail_margin)
+
+	var rail_box: VBoxContainer = VBoxContainer.new()
+	rail_box.add_theme_constant_override("separation", 8)
+	rail_margin.add_child(rail_box)
+
+	rail_box.add_child(_make_section_title("数据源"))
+	_pool_buttons = _make_toggle_column(
+		["所有关卡", "喜欢的关卡"],
+		func(index: int) -> void: _select_pool("all" if index == 0 else "liked"),
+		364.0
+	)
+	rail_box.add_child(_pool_buttons[0].get_parent())
+
+	rail_box.add_child(_make_section_title("难度"))
+	_tier_buttons = _make_toggle_column(
+		["1 轻松", "2 标准", "3 困难", "4 极限", "随机"],
+		func(index: int) -> void: _select_tier(index + 1 if index < 4 else 0),
+		364.0
+	)
+	rail_box.add_child(_tier_buttons[0].get_parent())
+
+	rail_box.add_child(_make_section_title("流程"))
+	_mode_buttons = _make_toggle_column(
+		["定量团", "无尽团"],
+		func(index: int) -> void: _select_mode("finite" if index == 0 else "endless"),
+		364.0
+	)
+	rail_box.add_child(_mode_buttons[0].get_parent())
+
+	var rail_spacer: Control = Control.new()
+	rail_spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	rail_box.add_child(rail_spacer)
+
+	# ── 右：关数信息条 + 路线预览 ─────────────────────────────────
+	var right_box: VBoxContainer = VBoxContainer.new()
+	right_box.add_theme_constant_override("separation", 12)
+	right_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_child(right_box)
+
+	var info_row: HBoxContainer = HBoxContainer.new()
+	info_row.add_theme_constant_override("separation", 16)
+	right_box.add_child(info_row)
+	_length_label = Label.new()
+	_length_label.custom_minimum_size = Vector2(240, 0)
+	_length_label.add_theme_font_size_override("font_size", 22)
+	_length_label.add_theme_color_override("font_color", TEXT_COLOR)
+	info_row.add_child(_length_label)
+	_length_slider = HSlider.new()
+	_length_slider.min_value = 5
+	_length_slider.max_value = 50
+	_length_slider.step = 1
+	_length_slider.custom_minimum_size = Vector2(320, 36)
+	_length_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_length_slider.value_changed.connect(_on_length_changed)
+	info_row.add_child(_length_slider)
+	_lives_label = Label.new()
+	_lives_label.custom_minimum_size = Vector2(420, 0)
+	_lives_label.add_theme_font_size_override("font_size", 20)
+	_lives_label.add_theme_color_override("font_color", TEXT_COLOR)
+	_lives_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_row.add_child(_lives_label)
 
 	var preview_panel: PanelContainer = PanelContainer.new()
 	preview_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -160,7 +206,14 @@ func _build_ui() -> void:
 	preview_style.border_width_bottom = 2
 	preview_style.border_color = Color(0.15, 0.2, 0.3, 0.18)
 	preview_panel.add_theme_stylebox_override("panel", preview_style)
-	root_box.add_child(preview_panel)
+
+	# 关卡椭圆附近的迷你剪影装饰：在面板底色之上、椭圆之下
+	_scenery = SCENERY_SCRIPT.new() as Control
+	_scenery.name = "Scenery"
+	_scenery.set("tint", SCENERY_TINT)
+	preview_panel.add_child(_scenery)
+
+	right_box.add_child(preview_panel)
 	var preview_margin: MarginContainer = MarginContainer.new()
 	preview_margin.add_theme_constant_override("margin_left", 16)
 	preview_margin.add_theme_constant_override("margin_top", 16)
@@ -175,17 +228,25 @@ func _build_ui() -> void:
 	_preview_grid.add_theme_constant_override("v_separation", 14)
 	center.add_child(_preview_grid)
 
+	# ── 动作条放在右侧栏底部：次要按钮靠左，主 CTA 靠右放大 ──────
 	var actions: HBoxContainer = HBoxContainer.new()
-	actions.add_theme_constant_override("separation", 24)
-	root_box.add_child(actions)
-	_resume_button = _make_button("继续上次的团", false)
-	_resume_button.pressed.connect(_on_resume)
-	actions.add_child(_resume_button)
+	actions.add_theme_constant_override("separation", 16)
+	actions.custom_minimum_size = Vector2(0, 108)
+	right_box.add_child(actions)
 	var back_button: Button = _make_button("返回标题", false)
+	back_button.custom_minimum_size = Vector2(190, 64)
 	back_button.pressed.connect(_on_back)
 	actions.add_child(back_button)
+	_resume_button = _make_button("继续上次的团", false)
+	_resume_button.custom_minimum_size = Vector2(240, 64)
+	_resume_button.pressed.connect(_on_resume)
+	actions.add_child(_resume_button)
+	var action_spacer: Control = Control.new()
+	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	actions.add_child(action_spacer)
 	_start_button = _make_button("开始打团", false)
-	_start_button.custom_minimum_size = Vector2(240, 64)
+	_start_button.custom_minimum_size = Vector2(360, 96)
+	_start_button.add_theme_font_size_override("font_size", 32)
 	_start_button.pressed.connect(_on_start)
 	actions.add_child(_start_button)
 
@@ -193,7 +254,7 @@ func _build_ui() -> void:
 func _make_section_title(text: String) -> Label:
 	var label: Label = Label.new()
 	label.text = text
-	label.add_theme_font_size_override("font_size", 30)
+	label.add_theme_font_size_override("font_size", 24)
 	label.add_theme_color_override("font_color", TEXT_COLOR)
 	return label
 
@@ -208,14 +269,16 @@ func _make_button(text: String, toggle: bool) -> Button:
 	return button
 
 
-func _make_toggle_row(texts: Array[String], on_selected: Callable) -> Array[Button]:
-	var row: HBoxContainer = HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
+## V4：设置按钮竖排进左侧导航栏，父节点是 VBoxContainer。
+func _make_toggle_column(texts: Array[String], on_selected: Callable, width: float) -> Array[Button]:
+	var column: VBoxContainer = VBoxContainer.new()
+	column.add_theme_constant_override("separation", 8)
 	var buttons: Array[Button] = []
 	for index: int in range(texts.size()):
 		var button: Button = _make_button(texts[index], true)
+		button.custom_minimum_size = Vector2(width, 54)
 		button.pressed.connect(on_selected.bind(index))
-		row.add_child(button)
+		column.add_child(button)
 		buttons.append(button)
 	return buttons
 

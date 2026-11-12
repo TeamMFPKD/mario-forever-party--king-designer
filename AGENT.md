@@ -80,7 +80,6 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_start_probe.tscn` | 开局参数校验 + 切到 `Adventure.PLAY_SCENE` | `tools/adventure_start_probe_result.txt` |
 | `tools/adventure_play_probe.tscn` | 真正加载游玩场景，检查 `player` 组、`run_active`、`run_index` | `tools/adventure_play_probe_result.txt` |
 | `tools/adventure_mobile_pause_probe.tscn` | 检查百人团暂停键（默认桌面，加 `--probe-mobile` 伪装 Android）能显示、开菜单并用「继续」恢复 | `tools/adventure_mobile_pause_probe_result.txt` |
-| `tools/adventure_design_probe.tscn` | 四套百人团舞台 UI 方案能否构建 | `tools/design_probe.txt` |
 | `tools/title_pipe_probe.tscn` | 正式标题页的水管菜单：五个目标路径能否解析、点击「组织游戏」能否打开 HostPage | `tools/title_pipe_probe_result.txt` |
 | `tools/pipe_menu_probe.tscn` | `ui/title/pipe_menu.tscn` 里五根水管预设的贴图（编辑器里看到的颜色） | `tools/pipe_menu_probe_result.txt` |
 | `tools/pipe_diff.tscn` | 水管 SVG 与参考位图的逐像素差异 | `tools/pipe_diff_result.txt` |
@@ -97,7 +96,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_pause_shot.tscn` | `tools/adventure_pause.png`（打开暂停菜单） |
 | `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`、`..._flip_a/b.png`（默认桌面，鼠标点击暂停键）；加 `--shot-mobile` 伪装 Android 并输出带 `_mobile` 后缀的图 |
 | `tools/adventure_transition_shot.tscn` | `tools/adventure_transition.png`（过关过渡动画中） |
-| `tools/adventure_design_shot.tscn` | `tools/design_a_paper.png` / `design_b_stage.png` / `design_c_neon.png` / `design_d_poster.png` |
+| `tools/adventure_button_pv.tscn` | `tools/adventure_button_pv.png`（已采用的 V4 按钮布局单版预览） |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
 | `tools/spectate_shot.tscn` | `tools/spectate.png`（观看视图，读取 `user://` 最新 `.lvl`） |
 
@@ -105,7 +104,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 
 | 场景 | 说明 |
 | --- | --- |
-| `tools/adventure_design_preview.tscn` | 四套舞台 UI 方案，按 `1~4` 或 `←/→` 切换 |
+| `tools/adventure_button_pv.tscn` | 已采用的 V4 按钮布局单版预览，`S` 截图 |
 | `tools/spectate_demo.tscn` | 无联机的观看界面演示，`1/2/3` 切 PLAY/EDIT/TRANSFER，`←/→` 切目标 |
 
 ### 3.4 联机三实例
@@ -224,19 +223,6 @@ run_index=0
 
 `path_exists`、`player_found`、`run_active` 应全为 `true`；`run_index` 是当前关序号（首关通常为 0），不固定写死。`player_found` 来自 `get_tree().get_first_node_in_group("player")`，若为 `false`，先确认 `room/adventure_play.tscn` 的玩家实例化路径是否改了，而不是直接怀疑 `Adventure` 数据层。
 
-### 4.6 adventure_design_probe
-
-无头构建四套舞台 UI 方案，确认没有脚本/布局报错：
-
-```text
-SCHEME_0 OK children=28
-SCHEME_1 OK children=19
-SCHEME_2 OK children=24
-SCHEME_3 OK children=35
-```
-
-出现 `SCHEME_n LOAD_FAIL` / `INSTANCE_FAIL` 即失败；`children` 数量随实现变化，不是固定判据。
-
 ### 4.7 adventure_mobile_pause_probe
 
 默认按真实桌面平台加载百人团游玩场景；加 `--probe-mobile` 才伪装 Android（手机端已单独验证通过）：
@@ -314,7 +300,7 @@ $p.WaitForExit(120000)
 - `adventure_play_shot.tscn`：先 `Adventure.start_run()` 再加载 `Adventure.PLAY_SCENE`，3s 后隐藏 `AdventurePauseMenu` 截图；依赖 `user://` 里有可用的 `.lvl` 关卡池。
 - `adventure_pause_shot.tscn`：2s 后打开暂停菜单截图，退出前会 `get_tree().paused = false`。
 - `adventure_transition_shot.tscn`：2s 后触发 `play_transition("pass", "res://room/title.tscn")`，0.5s 时截过渡层。
-- `adventure_design_shot.tscn`：先把窗口设为 1920×1080（与四套方案的设计画布一致），再依次切换四套方案截图。
+- `adventure_button_pv.tscn`：V4 按钮布局单版预览，窗口设为 1920×1080，首帧后自动导出 `tools/adventure_button_pv.png`；加 `--pv-shot` 导出后退出。
 - `title_pipe_shot.tscn`：加载 `room/title.tscn`，2.5s 后截 1920×1080；再把窗口缩到 1120×640 截第二张，用于确认水管菜单在缩放窗口下仍贴底居中。截图前会把鼠标挪到角落，避免 hover 把管口道具顶出来。
 - `spectate_shot.tscn`：从 `user://` 找最新、且大于 128 字节的 `.lvl`，加载 `room/spectate_room.tscn`，3s 后截 `tools/spectate.png`。没有可用 `.lvl` 时 `push_error` 后直接退出，不出图。
 
@@ -324,10 +310,10 @@ $p.WaitForExit(120000)
 
 ## 6. 交互演示
 
-### 6.1 adventure_design_preview
+### 6.1 adventure_button_pv
 
-四套百人团舞台 UI 方案：`tools/adventure_design_preview.tscn`。
-按 `1~4` 或 `←/→` 切换，脚本内画布按 1920×1080 设计并自动缩放。仅用于人工对比，不需要断言。
+已采用的 V4 按钮布局单版预览：`tools/adventure_button_pv.tscn`。
+脚本内画布按 1920×1080 设计并自动缩放，`S` 截图；其余三套按钮布局与四套整体 UI 方案均已废除。
 
 ### 6.2 spectate_demo
 
@@ -500,7 +486,7 @@ script = ExtResource("1_probe")
 
 ## 10. 相关文档
 
-- `docs/raid_mode/README.md`：百人团（adventure）模式设计与规则，探针里的数值期望以它为准。
+- `docs/raid_mode/README.md`：百人团（adventure；正式名「随心挑战 / Challenge」，本阶段不改名）模式设计与规则，探针里的数值期望以它为准。
 - `docs/ui/README.md`：UI 主题体系——全局 `mfmp_theme.tres`（内置 Panel + 白字黑描边）与 `ui/theme/theme_yellow_top.tres`（黄色顶块 + 深色无描边）的取值、字体 fallback 约定，改界面配色前先看它。
 - `docs/spectator_mode/README.md`：观看模式、演示场景参数、已实测截图。
 - `docs/multiplayer_refactor_plan.md`：联机架构分期与每阶段验收命令（`mp_test.bat auto` / `auto -Full`）。
