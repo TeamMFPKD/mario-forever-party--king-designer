@@ -51,9 +51,19 @@
 [ext_resource type="Script" uid="uid://w33pqllaw2va" path="res://script/level/player/cloud_pet.gd" id="46_cloud_pet"]
 [ext_resource type="Script" uid="uid://bxp8e4fhly1k" path="res://script/level/player/bee_status_progress_bar.gd" id="47_script"]
 [ext_resource type="Texture2D" uid="uid://cr2n3mccj4qcn" path="res://sprite/projectile/player_bee_flying_time_progress.png" id="48_beebar_progress"]
+[ext_resource type="Shader" path="res://shader/starman_hsv.gdshader" id="54_starman"]
+[ext_resource type="Texture2D" uid="uid://bpssr7agst7ys" path="res://sprite/player/cp_star.png" id="55_cpstar"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_741uk"]
-blend_mode = 1
+[sub_resource type="Curve" id="Curve_starman"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_starman"]
+shader = ExtResource("54_starman")
+shader_parameter/mixing = false
+shader_parameter/slowed_down = false
+shader_parameter/hsv_speed = 1.0
+shader_parameter/blinking = true
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8p21p"]
 radius = 7.0
@@ -107,19 +117,34 @@ platform_on_leave = 2
 safe_margin = 0.09
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1397239126]
+material = SubResource("ShaderMaterial_starman")
 sprite_frames = ExtResource("1_8csaa")
 animation = &"idle"
 offset = Vector2(0, -20)
 
-[node name="InvincibleEffect" type="AnimatedSprite2D" parent="." unique_id=913106306]
-visible = false
-material = SubResource("CanvasItemMaterial_741uk")
-sprite_frames = ExtResource("1_8csaa")
-animation = &"idle"
-autoplay = "idle"
-speed_scale = 0.0
-offset = Vector2(0, -20)
+[node name="Stars" type="CPUParticles2D" parent="AnimatedSprite2D"]
+show_behind_parent = true
+emitting = false
+amount = 24
+texture = ExtResource("55_cpstar")
+lifetime = 0.5
+emission_shape = 1
+emission_sphere_radius = 24.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 25.0
+initial_velocity_max = 75.0
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 0.1
+scale_amount_max = 0.3
+scale_amount_curve = SubResource("Curve_starman")
+
+[node name="InvincibleEffect" type="Node" parent="." unique_id=913106306 node_paths=PackedStringArray("sprite", "stars", "player_suit")]
 script = ExtResource("2_741uk")
+sprite = NodePath("../AnimatedSprite2D")
+stars = NodePath("../AnimatedSprite2D/Stars")
+player_suit = NodePath("../PlayerMediator/PlayerSuit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1790099464]
 position = Vector2(1, -2)
