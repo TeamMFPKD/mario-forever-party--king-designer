@@ -77,6 +77,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_resume_probe.tscn` | 断点续跑：通过一关后检测续跑、恢复索引与关卡路径 | `tools/adventure_resume_probe_result.txt` |
 | `tools/adventure_start_probe.tscn` | 开局参数校验 + 切到 `Adventure.PLAY_SCENE` | `tools/adventure_start_probe_result.txt` |
 | `tools/adventure_play_probe.tscn` | 真正加载游玩场景，检查 `player` 组、`run_active`、`run_index` | `tools/adventure_play_probe_result.txt` |
+| `tools/adventure_mobile_pause_probe.tscn` | 检查百人团暂停键（默认伪装 Android，加 `--probe-desktop` 测桌面端）能显示、开菜单并用「继续」恢复 | `tools/adventure_mobile_pause_probe_result.txt` |
 | `tools/adventure_design_probe.tscn` | 四套百人团舞台 UI 方案能否构建 | `tools/design_probe.txt` |
 | `tools/title_pipe_probe.tscn` | 正式标题页的水管菜单：五个目标路径能否解析、点击「组织游戏」能否打开 HostPage | `tools/title_pipe_probe_result.txt` |
 | `tools/pipe_menu_probe.tscn` | `ui/title/pipe_menu.tscn` 里五根水管预设的贴图（编辑器里看到的颜色） | `tools/pipe_menu_probe_result.txt` |
@@ -92,6 +93,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_stage_shot.tscn` | `tools/adventure_stage_loading.png`（0.3s）、`tools/adventure_stage.png`（4.7s） |
 | `tools/adventure_play_shot.tscn` | `tools/adventure_play.png`（加载游玩场景 3s 后） |
 | `tools/adventure_pause_shot.tscn` | `tools/adventure_pause.png`（打开暂停菜单） |
+| `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`（伪装 Android，触摸点击暂停键）；加 `--shot-desktop` 输出带 `_desktop` 后缀的桌面版 |
 | `tools/adventure_transition_shot.tscn` | `tools/adventure_transition.png`（过关过渡动画中） |
 | `tools/adventure_design_shot.tscn` | `tools/design_a_paper.png` / `design_b_stage.png` / `design_c_neon.png` / `design_d_poster.png` |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
@@ -225,6 +227,52 @@ SCHEME_3 OK children=35
 ```
 
 出现 `SCHEME_n LOAD_FAIL` / `INSTANCE_FAIL` 即失败；`children` 数量随实现变化，不是固定判据。
+
+### 4.7 adventure_mobile_pause_probe
+
+默认把平台伪装成 Android 后加载百人团游玩场景；加 `--probe-desktop` 则保持真实桌面平台，用来验证暂停键两端都显示：
+
+```text
+expect_desktop=false
+platform_name=Android
+is_mobile=true
+is_desktop=false
+emulate_touch_from_mouse=true
+emulate_mouse_from_touch=true
+start=true
+layer_found=true
+button_found=true
+button_visible=true
+pause_layer_count=1
+menu_found=true
+paused_after_open=true
+menu_visible_after_open=true
+continue_ok=true
+paused_after_close=false
+is_mobile_after_clear=false
+emulate_touch_after_clear=false
+```
+
+桌面模式对应 `expect_desktop=true`、`platform_name=Windows`、`is_mobile=false`、`is_desktop=true`、`emulate_touch_from_mouse=false`，其余关键行相同。暂停键不再按平台隐藏，`button_visible=true` 在两种模式下都必须成立。
+
+`paused_after_open` / `continue_ok` / `paused_after_close` 是核心三项。`is_mobile_after_clear=false`、`emulate_touch_after_clear=false` 用来确认伪装可以撤销（在 Windows 上跑）。
+
+伪装成 Android/iOS 时会自动打开两个输入模拟开关，退出伪装时还原：
+
+- `Input.set_emulate_touch_from_mouse(true)`：桌面鼠标点击变成 `InputEventScreenTouch`，虚拟按键（TouchScreenButton / FingerInputHolder）才能用鼠标操作；
+- `Input.set_emulate_mouse_from_touch(true)`：触摸再转回鼠标，普通 Button 照常响应。
+
+截图脚本用鼠标点击暂停键验证这条链路，结果里的 `mouse_opened=true` 即表示“鼠标→触摸→按钮”全程生效。桌面模式（`--shot-desktop`）不开模拟，点击直接命中普通 Button；手动注入 `InputEventMouseButton` 时必须带 `button_mask`，否则 Control 的按钮掩码判定不通过。
+
+伪装平台的三种入口（`PlatformUtils`）：
+
+| 方式 | 写法 | 生效时机 |
+| --- | --- | --- |
+| 引擎参数 | `--fake-platform=android`（放在 `--` 之前） | autoload `_ready` 就能读到 |
+| 用户参数 | `-- --fake-platform=android` | 同上，`OS.get_cmdline_user_args()` 也认 |
+| 脚本内 | `PlatformUtils.set_debug_platform("Android")` | 只影响调用之后的代码 |
+
+需要虚拟按键一起出现时，**必须用命令行参数**：`OnScreenControls` 在 autoload `_ready` 里读平台，脚本内设置已经太晚。仅验证暂停键时三种都行（按钮在游玩场景 `_ready` 才创建）。
 
 ---
 

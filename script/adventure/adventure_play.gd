@@ -20,7 +20,7 @@ func _ready() -> void:
 	_remove_node("GameRoomSize/SubViewportContainer/SubViewport/RandomCapture")
 	_remove_node("GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel")
 	Adventure.register_clear_transition(_find_clear_transition())
-	_build_mobile_pause_button()
+	_build_pause_button()
 	_setup_level_timer()
 
 
@@ -71,25 +71,26 @@ func _on_time_out() -> void:
 		hurt_and_die.call("kill")
 
 
-func _build_mobile_pause_button() -> void:
+func _build_pause_button() -> void:
 	var layer: CanvasLayer = CanvasLayer.new()
 	layer.name = "MobilePauseLayer"
 	layer.layer = 20
 	add_child(layer)
 
 	var button: Button = Button.new()
+	button.name = "MobilePauseButton"
 	button.text = "II"
 	button.tooltip_text = "暂停"
 	button.focus_mode = Control.FOCUS_NONE
 	button.custom_minimum_size = Vector2(72, 72)
 	button.add_theme_font_size_override("font_size", 30)
-	# 倒计时占了右上角，手机暂停键放左上角，避开左侧信息面板顶部。
+	# 倒计时占了右上角，暂停键放左上角，避开左侧信息面板顶部。
+	# 桌面端也显示：鼠标可直接点，键盘仍可用 P / Esc。
 	button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
 	button.offset_left = 24
 	button.offset_top = 24
 	button.offset_right = 96
 	button.offset_bottom = 96
-	button.visible = PlatformUtils.is_mobile_platform()
 	button.pressed.connect(_on_pause_pressed)
 	layer.add_child(button)
 
