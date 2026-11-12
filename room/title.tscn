@@ -47,6 +47,7 @@
 [ext_resource type="Script" path="res://script/title/fit_content_panel.gd" id="44_fit"]
 [ext_resource type="PackedScene" path="res://ui/title/pipe_menu.tscn" id="50_pipe_menu"]
 [ext_resource type="Theme" uid="uid://bpkayogffk0um" path="res://ui/theme/theme_yellow_top.tres" id="60_yellow"]
+[ext_resource type="Script" path="res://script/ui/drop_in_animation.gd" id="61_drop"]
 [ext_resource type="Script" uid="uid://dre81e0pua38y" path="res://script/multiplayer/ui/title_net_bridge.gd" id="99_bridge"]
 
 [sub_resource type="StyleBoxEmpty" id="SBE_notice_buttons"]
@@ -239,10 +240,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("44_fit")
 
+[node name="DropInAnimation" type="Node" parent="GameRoomSize/HostPage"]
+script = ExtResource("61_drop")
+target_path = NodePath("..")
+panel_path = NodePath("../MfpkdPanel")
+
 [node name="ControlVisibieSet" parent="GameRoomSize/HostPage" unique_id=1005411227 instance=ExtResource("9_ty11l")]
 
 [node name="MfpkdPanel" parent="GameRoomSize/HostPage" unique_id=404383076 instance=ExtResource("4_i3lsm")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
 
 [node name="UiMarginContainer" parent="GameRoomSize/HostPage/MfpkdPanel" unique_id=160409407 instance=ExtResource("8_c2fru")]
 layout_mode = 1
@@ -251,16 +258,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer" unique_id=1066164301]
 layout_mode = 2
 
 [node name="UiLabel" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1390167794 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "本地端口"
 vertical_alignment = 1
@@ -271,6 +280,8 @@ text = "5555"
 
 [node name="UiLabel2" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1760568754 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名称"
 vertical_alignment = 1
@@ -281,6 +292,8 @@ text = "Mario"
 
 [node name="UiLabel3" parent="GameRoomSize/HostPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000011 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家头像"
 vertical_alignment = 1
@@ -324,10 +337,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("44_fit")
 
+[node name="DropInAnimation" type="Node" parent="GameRoomSize/JoinPage"]
+script = ExtResource("61_drop")
+target_path = NodePath("..")
+panel_path = NodePath("../MfpkdPanel")
+
 [node name="ControlVisibieSet" parent="GameRoomSize/JoinPage" unique_id=514177840 instance=ExtResource("9_ty11l")]
 
 [node name="MfpkdPanel" parent="GameRoomSize/JoinPage" unique_id=1427548671 instance=ExtResource("4_i3lsm")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
 
 [node name="UiMarginContainer" parent="GameRoomSize/JoinPage/MfpkdPanel" unique_id=240504123 instance=ExtResource("8_c2fru")]
 layout_mode = 1
@@ -336,16 +355,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer" unique_id=429359202]
 layout_mode = 2
 
 [node name="UiLabel" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1380680250 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "组织方 IP"
 vertical_alignment = 1
@@ -356,6 +377,8 @@ text = "localhost"
 
 [node name="UiLabel2" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1198388662 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "端口"
 vertical_alignment = 1
@@ -366,6 +389,8 @@ text = "5555"
 
 [node name="UiLabel3" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=676152860 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家名称"
 vertical_alignment = 1
@@ -376,6 +401,8 @@ text = "Luigi"
 
 [node name="UiLabel4" parent="GameRoomSize/JoinPage/MfpkdPanel/UiMarginContainer/VBoxContainer" unique_id=1249000013 instance=ExtResource("5_qon3s")]
 layout_mode = 2
+theme = ExtResource("60_yellow")
+theme_override_constants/outline_size = 0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 text = "玩家头像"
 vertical_alignment = 1
