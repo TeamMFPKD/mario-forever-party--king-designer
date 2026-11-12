@@ -161,6 +161,28 @@ func current_level_path() -> String:
 	return resolve_level_path(current_level_key())
 
 
+## 当前关卡在本团里的序号（1 起）：过场动画的「第 N/M 关」和关卡串编号都用它。
+## 跳过一关也会占掉一个序号，所以不能拿「通过数」cleared_count 当关号。
+func current_level_number() -> int:
+	if not is_running():
+		return 0
+	return maxi(1, int(current_run.get("index", 0)) + 1)
+
+
+## 本团总关数；无尽团为 -1。
+func current_total_levels() -> int:
+	if not is_running():
+		return -1
+	return int(current_run.get("total_levels", -1))
+
+
+## 本团已通过的关数（无尽团过场显示「已通过 N 关」用）。
+func cleared_count() -> int:
+	if not is_running():
+		return 0
+	return int(current_run.get("cleared_count", 0))
+
+
 ## 左侧关卡信息面板用：当前关卡在 adventure.ini 里的单人统计。
 ## 数值均为「这一关」的累计，不是本团的即时计数。
 func current_level_stats() -> Dictionary:
@@ -350,6 +372,17 @@ func skip_current_level(hard: bool) -> void:
 		else:
 			stat.solo_skip_soft += 1
 
+	# 定量团的最后一关被跳过时不能直接算通关：抽一关补上这个位置，
+	# 玩家打完替补关卡才结算（否则跳一下就直接「走完了整条路线」）。
+	if _is_finite_last_slot():
+		if _replace_current_slot():
+			store.set_run(current_run)
+			run_changed.emit()
+			return
+		Log.w("Adventure", "最后一关被跳过且抽不到替补关卡，本团提前结束")
+		finish_run("no_levels")
+		return
+
 	store.set_run(current_run)
 	advance()
 
@@ -371,6 +404,56 @@ func interrupt_run() -> void:
 # ---------------------------------------------------------------------------
 # 推进内部
 # ---------------------------------------------------------------------------
+
+## 当前是否正停在定量团的最后一格。
+func _is_finite_last_slot() -> bool:
+	if str(current_run.get("mode", "finite")) != "finite":
+		return false
+	var total: int = int(current_run.get("total_levels", 0))
+	return total > 0 and int(current_run.get("index", 0)) >= total - 1
+
+
+## 用一关新的补给替换当前格：关数不变、序号不变，只是换一张地图接着打。
+## 抽不到（池子里全玩过 / 全排除）时返回 false。
+func _replace_current_slot() -> bool:
+	var index: int = int(current_run.get("index", 0))
+	var keys: Array = current_run.get("level_keys", [])
+	if index < 0 or index >= keys.size():
+		return false
+	var replacement: String = _draw_replacement_key()
+	if replacement.is_empty():
+		return false
+
+	keys[index] = replacement
+	current_run["level_keys"] = keys
+	var fingerprints: Array = current_run.get("level_fingerprints", [])
+	while fingerprints.size() < keys.size():
+		fingerprints.append("")
+	fingerprints[index] = _fingerprint_for(replacement)
+	current_run["level_fingerprints"] = fingerprints
+	return true
+
+
+## 从池子里抽一关本团还没出现过的关卡，沿用开团时的档位。
+func _draw_replacement_key() -> String:
+	AdventureTierCalculator.assign_tiers(pool)
+	var used: Array[String] = []
+	for entry: Variant in current_run.get("level_keys", []):
+		used.append(str(entry))
+	if not current_key.is_empty() and not used.has(current_key):
+		used.append(current_key)
+
+	var prefer_low_sample: bool = bool(store.get_setting("prefer_low_sample", true))
+	var draw_seed: int = int(current_run.get("seed", 0)) + int(current_run.get("index", 0))
+	var tier: int = int(current_run.get("tier", 0))
+	var drawn: Array[String] = AdventureRunPlanner.draw(
+		pool, tier, 1, draw_seed, prefer_low_sample, used
+	)
+	if drawn.is_empty() and tier > 0:
+		# 本档抽空：退回随机抽取，至少把这一格补上。
+		drawn = AdventureRunPlanner.draw(pool, 0, 1, draw_seed, prefer_low_sample, used)
+	return "" if drawn.is_empty() else drawn[0]
+
 
 func advance() -> void:
 	if not is_running():
@@ -575,27 +658,29 @@ func _set_level_passed_busy(value: bool) -> void:
 ##   1.66s   转场播完 → 解冻，玩家开始玩
 ##
 ## 转场搬到主视口之后旧场景才允许销毁，所以切场景不会打断转场。
-func _play_pass_transition(next_scene: String) -> void:
+func _play_pass_transition(next_scene: String, level_number: int = 0, total_levels: int = 0) -> void:
 	if _pass_transition_busy:
 		Log.w("Adventure", "过关转场尚未结束，忽略重复的过关请求")
 		return
 	_pass_transition_busy = true
 	pause_blocked_changed.emit()
-	await _run_pass_transition(next_scene)
+	await _run_pass_transition(next_scene, level_number, total_levels)
 	_pass_transition_busy = false
 	pause_blocked_changed.emit()
 
 
-func _run_pass_transition(next_scene: String) -> void:
+func _run_pass_transition(next_scene: String, level_number: int = 0, total_levels: int = 0) -> void:
 	var transition: CanvasLayer = _clear_transition
 	if not is_instance_valid(transition):
 		return
-	var cleared: int = int(current_run.get("cleared_count", 1))
-	var total: int = int(current_run.get("total_levels", -1))
+	# 过场显示「刚通过的关卡序号」：按团进度 index 计算，跳过一关也不会串号；
+	# 结算时 current_run 已被清空，只能用调用方在推进进度前传进来的快照。
+	var number: int = level_number if level_number > 0 else int(current_run.get("cleared_count", 1))
+	var total: int = total_levels if total_levels != 0 else int(current_run.get("total_levels", -1))
 
 	# 跳到别的场景（例如结算页）：沿用旧的「播完再切」。
 	if not next_scene.is_empty():
-		transition.call("play", cleared, total)
+		transition.call("play", number, total)
 		await _wait_transition_end(transition)
 		GlobalTransition.change_scene_to_file(next_scene)
 		return
@@ -603,7 +688,7 @@ func _run_pass_transition(next_scene: String) -> void:
 	# 下一关没加载完之前不让转场划出，避免露出还没准备好的画面。
 	if transition.has_method("set_slide_out_blocked"):
 		transition.call("set_slide_out_blocked", true)
-	transition.call("play", cleared, total)
+	transition.call("play", number, total)
 
 	var detach_result: Dictionary = await _detach_and_load_next_level(transition)
 	var detached: bool = bool(detach_result.get("detached", false))
@@ -775,10 +860,8 @@ func _load_next_play_scene(transition: CanvasLayer) -> Node:
 		Log.e("Adventure", "下一关加载超时")
 		return null
 
-	# 加载结束后先跑 1 个物理帧，让玩家/物体完成物理初始化，再冻结。
-	get_tree().paused = false
-	await get_tree().physics_frame
-	get_tree().paused = true
+	# 加载结束后先跑 2 个物理帧，让玩家/物体完成物理初始化，再冻结。
+	await settle_physics_frames(2)
 	return next_scene
 
 
@@ -790,16 +873,45 @@ func _wait_transition_end(transition: CanvasLayer) -> void:
 		waited += get_process_delta_time()
 
 
+## 冻结关卡前先让物理跑满 count 帧。
+##
+## 直接 paused = true 会把「算到一半」的那一帧定住：物理步刚推进、绘制还没跟上，
+## 切场景时上一关容易残留一帧。先放满若干个物理帧再冻结，
+## 冻住的画面和物理状态才是同一帧。
+##
+## 返回时关卡已冻结，调用方接着播转场 / 切场景即可。
+func settle_physics_frames(count: int = 2) -> void:
+	get_tree().paused = false
+	var target: int = Engine.get_physics_frames() + maxi(count, 1)
+	var guard: int = 0
+	while Engine.get_physics_frames() < target and guard < 600:
+		await get_tree().process_frame
+		guard += 1
+	get_tree().paused = true
+
+
 ## kind: pass / skip / finish；next_scene 为空时重载当前场景。
 ## 死亡不播专用符号动画，直接走全局淡出。
-func play_transition(kind: String, next_scene: String = "") -> void:
+## level_number / total_levels 是过关前的进度快照（0 = 没传，按当前团状态兜底）。
+func play_transition(
+	kind: String,
+	next_scene: String = "",
+	level_number: int = 0,
+	total_levels: int = 0
+) -> void:
 	# 过关转场进行中：忽略新的转场请求，否则会把加载期间的暂停解掉 / 跳过关卡。
 	if _pass_transition_busy:
 		Log.w("Adventure", "转场进行中，忽略新的转场请求")
 		return
-	# 任何转场都不应该带着暂停状态切场景。
-	get_tree().paused = false
+
+	# 结算：先放满 2 个物理帧再冻结，然后立刻切到结算页，不播关卡内转场。
+	if kind == "finish":
+		await settle_physics_frames(2)
+		GlobalTransition.change_scene_to_file(RESULT_SCENE if next_scene.is_empty() else next_scene)
+		return
+
 	if kind == "death":
+		get_tree().paused = false
 		if next_scene.is_empty():
 			GlobalTransition.reload_current_scene()
 		else:
@@ -808,9 +920,14 @@ func play_transition(kind: String, next_scene: String = "") -> void:
 
 	# 过关优先在关卡视口里播前端转场（只覆盖 640×480 的游戏画面）
 	if kind == "pass" and is_instance_valid(_clear_transition):
-		await _play_pass_transition(next_scene)
+		# 先放满 2 个物理帧再冻结：冻结的才是完整的一帧，不会把帧中间的状态定住。
+		# 冻结后整段过场里旧关卡都不再推进（转场是 PROCESS_MODE_ALWAYS）。
+		await settle_physics_frames(2)
+		await _play_pass_transition(next_scene, level_number, total_levels)
 		return
 
+	# 跳过：整个过场期间冻结关卡，切完场景由新场景解冻。
+	get_tree().paused = true
 	if _transition_layer == null:
 		if next_scene.is_empty():
 			GlobalTransition.reload_current_scene()
@@ -820,13 +937,9 @@ func play_transition(kind: String, next_scene: String = "") -> void:
 
 	var symbol: String = "✓"
 	var color: Color = Color("#2E9E5B")
-	match kind:
-		"skip":
-			symbol = "→"
-			color = Color("#D39B22")
-		"finish":
-			symbol = "★"
-			color = Color("#8A5BD6")
+	if kind == "skip":
+		symbol = "→"
+		color = Color("#D39B22")
 	_transition_label.text = symbol
 	_transition_label.add_theme_color_override("font_color", color)
 	_transition_dim.modulate.a = 0.0

@@ -48,6 +48,8 @@ var _tier_info: Dictionary = {}
 
 
 func _ready() -> void:
+	# 从中断/跳过流程进来时场景是冻结着切的，这里负责解冻。
+	get_tree().paused = false
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	if not OS.has_feature("web"):
 		_load_mutex = Mutex.new()

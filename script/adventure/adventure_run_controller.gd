@@ -10,11 +10,20 @@ func next_level_pass() -> void:
 		Log.w("AdventureRunController", "过关转场进行中，忽略重复的过关")
 		return
 	_close_pause_menu()
+	# 过场动画要显示「刚通过的是第几关」，必须在推进进度前取快照：
+	# 跳过关卡会让通过数和实际关号错位，结算时 current_run 还会被清空。
+	var level_number: int = Adventure.current_level_number()
+	var total_levels: int = Adventure.current_total_levels()
+	var passed_count: int = Adventure.cleared_count() + 1
 	Adventure.on_level_passed()
 	var finished: bool = not Adventure.is_running()
+	# 定量团按「团内第几关」显示；无尽团显示「已通过 N 关」，用通过数。
+	var display_number: int = level_number if total_levels > 0 else passed_count
 	Adventure.play_transition(
 		"finish" if finished else "pass",
-		Adventure.RESULT_SCENE if finished else ""
+		Adventure.RESULT_SCENE if finished else "",
+		display_number,
+		total_levels
 	)
 
 

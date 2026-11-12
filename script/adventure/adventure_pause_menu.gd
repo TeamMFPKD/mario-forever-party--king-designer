@@ -74,7 +74,8 @@ func toggle_pause() -> void:
 
 
 ## 死亡/过关推进前强制关掉菜单，避免带着暂停状态重载场景。
-func force_close() -> void:
+## keep_paused：切场景期间继续保持冻结（中断回舞台用），由目标场景自己解冻。
+func force_close(keep_paused: bool = false) -> void:
 	_animating = false
 	_is_open = false
 	if _flip_tween != null and _flip_tween.is_valid():
@@ -88,7 +89,8 @@ func force_close() -> void:
 	_set_card_interactive(true)
 	if _level_panel != null and is_instance_valid(_level_panel):
 		_level_panel.visible = true
-	get_tree().paused = false
+	if not keep_paused:
+		get_tree().paused = false
 
 
 # ---------------------------------------------------------------------------
@@ -126,11 +128,12 @@ func _open_flip() -> void:
 	_animating = false
 
 
-func _close_flip() -> void:
+## keep_frozen：翻转结束后不解冻，交给调用方（跳过本关）继续冻结着切场景。
+func _close_flip(keep_frozen: bool = false) -> void:
 	if _animating:
 		return
 	if _level_panel == null:
-		force_close()
+		force_close(keep_frozen)
 		return
 	_animating = true
 	_is_open = false
@@ -149,7 +152,8 @@ func _close_flip() -> void:
 	if _level_panel != null and is_instance_valid(_level_panel):
 		_level_panel.visible = true
 	visible = false
-	get_tree().paused = false
+	if not keep_frozen:
+		get_tree().paused = false
 	_animating = false
 
 
@@ -286,23 +290,41 @@ func _on_root_gui_input(event: InputEvent) -> void:
 
 
 func _skip_hard() -> void:
-	Adventure.skip_current_level(true)
-	_after_skip()
+	_begin_skip(true)
 
 
 func _skip_soft() -> void:
-	Adventure.skip_current_level(false)
-	_after_skip()
+	_begin_skip(false)
 
 
-func _after_skip() -> void:
-	force_close()
-	var target: String = "" if Adventure.is_running() else Adventure.RESULT_SCENE
-	Adventure.play_transition("skip", target)
+## 跳过 / 永久排除：
+## 点击瞬间推进团进度（下一关在此刻确定），随后冻结关卡、播已有的翻转动画，
+## 动画结束后再切场景 —— 关卡不会在被卡片盖住的后台继续跑。
+func _begin_skip(hard: bool) -> void:
+	if _animating:
+		return
+	Adventure.skip_current_level(hard)
+	var finished: bool = not Adventure.is_running()
+	var next_key: String = Adventure.current_level_key()
+	# 目标关卡已在点击瞬间确定；先放满 2 个物理帧再冻结，
+	# 冻住的才是完整的一帧，切场景时不会残留上一关的半帧。
+	await Adventure.settle_physics_frames(2)
+	await _close_flip(true)
+	# 兜底：翻转动画内部可能解冻。
+	get_tree().paused = true
+	Log.i("AdventurePauseMenu", ["跳过本关，下一关：", Adventure.RESULT_SCENE if finished else next_key])
+	if finished:
+		GlobalTransition.change_scene_to_file(Adventure.RESULT_SCENE)
+	else:
+		GlobalTransition.reload_current_scene()
 
 
 func _interrupt() -> void:
-	# 保存进度并回到百人团舞台，稍后可点「继续上次的团」。
+	# 保存进度并直接回到百人团舞台（稍后可点「继续上次的团」）。
+	# 卡片全程盖住关卡、不放隐藏：先跑满 2 个物理帧再冻结，然后直接切场景，
+	# 这样从点击到舞台出现都不会露出任何关卡视口的画面
+	# （GlobalTransition 淡出的是这张卡片，不是关卡）。
 	Adventure.interrupt_run()
-	force_close()
+	await Adventure.settle_physics_frames(2)
+	get_tree().paused = true
 	GlobalTransition.change_scene_to_file(Adventure.STAGE_SCENE)

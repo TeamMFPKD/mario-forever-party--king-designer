@@ -11,6 +11,8 @@ var _summary: Dictionary = {}
 
 
 func _ready() -> void:
+	# 结算页是冻结着关卡切进来的，这里负责解冻。
+	get_tree().paused = false
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_summary = Adventure.last_summary
 	_build_ui()

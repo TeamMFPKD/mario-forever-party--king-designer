@@ -149,7 +149,7 @@ solo_death=0
 
 ### 4.2 adventure_state_probe
 
-验证单局状态机：初始 10 命（5 关定量团）、每过 2 关 +1 命、死亡 -1、软跳过不扣命、硬跳过后结算。
+验证单局状态机：初始 10 命（5 关定量团）、每过 2 关 +1 命、死亡 -1、软跳过不扣命、最后一关被硬跳过后补位、打完替补关才结算。
 
 关键判据：
 
@@ -162,11 +162,18 @@ cleared=2
 after_death_lives=10
 after_skip_soft_soft=1
 after_pass_3_lives=10
+last_slot_number=5
+last_skip_running=true
+last_skip_index_same=true
+last_skip_replaced=true
+last_skip_key_exists=true
 finished=true
 summary_result=completed
-summary_cleared=3
+summary_cleared=4
 summary_skipped_hard=1
 ```
+
+`last_skip_replaced=true` 是「最后一关永久排除后换一关补位」的核心判据：序号不变、关卡 key 变了、团仍在进行。
 
 命数经济或结算规则改动后，这里要同步更新期望值再跑。
 
