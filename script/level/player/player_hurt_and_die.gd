@@ -74,6 +74,11 @@ func _on_player_hurt() -> void:
 		PlayerSuit.SuitType.POWERED:
 			player_suit.suit = PlayerSuit.SuitType.SUPER
 
+## 外部触发死亡（百人团倒计时归零）。
+func kill() -> void:
+	_on_player_die()
+
+
 func _on_player_die() -> void:
 	if is_dead:
 		return

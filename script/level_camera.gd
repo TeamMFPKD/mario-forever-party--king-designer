@@ -85,4 +85,5 @@ func in_level_check() -> bool:
 	var game_mode_node: GameMode = GameModeSingleton
 	return game_mode_node.game_mode == GameMode.GameModeType.TEST \
 	or game_mode_node.game_mode == GameMode.GameModeType.PLAY \
-	or game_mode_node.game_mode == GameMode.GameModeType.HISTORY_PLAY
+	or game_mode_node.game_mode == GameMode.GameModeType.HISTORY_PLAY \
+	or GameMode.is_adventure()

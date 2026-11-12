@@ -1,4 +1,4 @@
-[gd_scene format=4 load_steps=20 uid="uid://b2f2av134cwap"]
+[gd_scene format=4 load_steps=21 uid="uid://b2f2av134cwap"]
 
 [ext_resource type="PackedScene" path="res://room/base/edit_room_base.tscn" id="1_base"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="6_mwyf7"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://b41scgyg4lqe8" path="res://object/edit/item_button.tscn" id="49_fygdj"]
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="87_dpbuj"]
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="88_8guam"]
+[ext_resource type="PackedScene" path="res://object/ui/adventure_level_stats.tscn" id="12_stats"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="88_iekbx"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="89_mm131"]
 
@@ -35,7 +36,7 @@ visible = false
 
 [node name="SaveLoadTest" type="MarginContainer" parent="GameRoomSize" index="1" unique_id=773497609]
 layout_mode = 0
-offset_right = 328.0
+offset_right = 320.0
 offset_bottom = 428.0
 theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 30
@@ -100,6 +101,18 @@ offset_left = -201.6001
 offset_top = 511.92
 offset_right = -134.40002
 offset_bottom = 511.92
+
+[node name="AdventureLevelStats" parent="GameRoomSize" instance=ExtResource("12_stats")]
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 24.0
+offset_top = 200.0
+offset_right = 284.0
+offset_bottom = 500.0
 
 [node name="LikedCoursePreview" parent="GameRoomSize" index="3" unique_id=735878133 instance=ExtResource("12_vrujf")]
 layout_mode = 1

@@ -18,10 +18,10 @@ func _ready() -> void:
 		await get_tree().create_timer(1.2).timeout
 		emit_signal("next_level")
 	elif GameMode.is_adventure():
-		await get_tree().create_timer(1.2).timeout
+		# 暂停时冻结死亡倒计时，避免恢复前就偷偷切场景。
+		await get_tree().create_timer(1.2, false).timeout
 		emit_signal("next_level")
 	elif GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_PLAY:
-		Adventure.on_player_died()
 		await get_tree().create_timer(1.0).timeout
 		if is_instance_valid(self) and is_inside_tree():
 			GlobalTransition.reload_current_scene()

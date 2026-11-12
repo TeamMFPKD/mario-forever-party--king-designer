@@ -15,11 +15,13 @@ func _ready() -> void:
 
 	# 获取关卡文件路径
 	level_path_node = get_tree().get_first_node_in_group("level_path_set")
-	if not level_path_node:
-		print("[LikedCoursePreview] Level path node not found")
-		return
-	level_file_path = level_path_node.get_meta("level_path_name", "invalid")
-	if level_file_path == "invalid" or level_file_path.is_empty():
+	if level_path_node != null:
+		level_file_path = str(level_path_node.get_meta("level_path_name", ""))
+	# 百人团场景没有 LevelPathSet 的 meta，直接取当前团关卡。
+	if (level_file_path.is_empty() or level_file_path == "invalid") \
+			and GameMode.is_adventure() and Adventure.is_running():
+		level_file_path = Adventure.current_level_path()
+	if level_file_path.is_empty() or level_file_path == "invalid":
 		print("[LikedCoursePreview] Invalid level file path")
 		return
 	

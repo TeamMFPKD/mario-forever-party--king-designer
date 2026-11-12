@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://bsi5qeavmrmpw"]
+
+[ext_resource type="Script" path="res://script/adventure/adventure_level_stats.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://ui/ui_margin_container.tscn" id="2_margin"]
+[ext_resource type="PackedScene" path="res://ui/ui_panel.tscn" id="3_panel"]
+[ext_resource type="PackedScene" path="res://ui/ui_label.tscn" id="4_label"]
+
+[node name="AdventureLevelStats" type="Control" node_paths=PackedStringArray("death_value", "pass_value", "skip_value")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 200.0
+offset_right = 300.0
+offset_bottom = 560.0
+mouse_filter = 2
+script = ExtResource("1_script")
+death_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/DeathValue")
+pass_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/PassValue")
+skip_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/SkipValue")
+
+[node name="UiMarginContainer" parent="." instance=ExtResource("2_margin")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="UiPanel" parent="UiMarginContainer" instance=ExtResource("3_panel")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="InfoMargin" parent="UiMarginContainer" instance=ExtResource("2_margin")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UiMarginContainer/InfoMargin"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
+text = "百人团数据"
+
+[node name="DeathTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "关卡死亡数"
+
+[node name="DeathValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 38
+text = "0"
+
+[node name="PassTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "关卡通过数"
+
+[node name="PassValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 38
+text = "0"
+
+[node name="SkipTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "关卡跳过数"
+
+[node name="SkipValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 38
+text = "0"

@@ -60,7 +60,7 @@ func _on_load_button_pressed() -> void:
 		push_error("Level has no content.")
 		return
 	level_data_node.load_level_data_from_json(content)
-	if GameMode.is_history_play() or GameMode.is_adventure():
+	if GameMode.is_adventure():
 		Adventure.on_level_loaded(file_name)
 
 func load_from_level() -> String:

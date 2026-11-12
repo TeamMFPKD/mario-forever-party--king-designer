@@ -1,5 +1,7 @@
 extends Control
 
+@warning_ignore_start("unsafe_cast", "unsafe_call_argument")
+
 ## 百人团结算页。数据来自 Adventure.last_summary（内存），不读 MPManager。
 
 const STAGE_SCENE: String = "res://room/adventure_stage.tscn"

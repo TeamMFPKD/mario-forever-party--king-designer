@@ -1,4 +1,4 @@
-[gd_scene format=4 load_steps=10 uid="uid://b3uujgk5upbfj"]
+[gd_scene format=4 load_steps=11 uid="uid://b3uujgk5upbfj"]
 
 [ext_resource type="PackedScene" path="res://room/base/play_room_base.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/list/time_hud.tscn" id="6_oqxpu"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="31_sbo3u"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="32_jgnbe"]
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="33_o1hfa"]
+[ext_resource type="PackedScene" path="res://object/ui/adventure_level_stats.tscn" id="7_stats"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="34_me11v"]
 
 [node name="Play" instance=ExtResource("1_base")]
@@ -34,6 +35,18 @@ offset_left = -201.6001
 offset_top = 511.92
 offset_right = -134.40002
 offset_bottom = 511.92
+
+[node name="AdventureLevelStats" parent="GameRoomSize" instance=ExtResource("7_stats")]
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 24.0
+offset_top = 200.0
+offset_right = 284.0
+offset_bottom = 500.0
 
 [node name="LikedCoursePreview" parent="GameRoomSize" index="3" unique_id=735878133 instance=ExtResource("8_ghhtv")]
 layout_mode = 1

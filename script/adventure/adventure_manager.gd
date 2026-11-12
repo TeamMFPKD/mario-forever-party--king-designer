@@ -265,9 +265,9 @@ func start_run(settings: Dictionary) -> bool:
 	return true
 
 
-## load_level.gd 在关卡成功加载后调用。
+## load_level.gd 在关卡成功加载后调用。只在百人团模式记录。
 func on_level_loaded(path: String) -> void:
-	if not GameMode.is_history_play() and not GameMode.is_adventure():
+	if not GameMode.is_adventure():
 		return
 	var key: String = path.get_file()
 	if key.is_empty():
@@ -279,8 +279,10 @@ func on_level_loaded(path: String) -> void:
 		run_changed.emit()
 
 
-## goal_gate 在 ADVENTURE 场景由控制器调用；HISTORY_PLAY 由 goal_gate 直接调用。
+## 只有百人团模式会记录；history play 的通过不算进百人团数据。
 func on_level_passed() -> void:
+	if not GameMode.is_adventure():
+		return
 	if current_key.is_empty():
 		return
 	store.record_pass(current_key)
@@ -297,8 +299,10 @@ func on_level_passed() -> void:
 	advance()
 
 
-## HISTORY_PLAY 由 player_dead 直接调用；ADVENTURE 由控制器调用。
+## 只有百人团模式会记录；history play 的死亡不算进百人团数据。
 func on_player_died() -> void:
+	if not GameMode.is_adventure():
+		return
 	if current_key.is_empty():
 		return
 	store.record_death(current_key)
@@ -343,6 +347,14 @@ func abandon_run() -> void:
 	if not is_running():
 		return
 	finish_run("abandoned")
+
+
+## 中断 = 保存当前团进度并退出，不结算、不增加放弃次数。
+func interrupt_run() -> void:
+	if not is_running():
+		return
+	store.set_run(current_run)
+	resume_available = true
 
 
 # ---------------------------------------------------------------------------
@@ -520,8 +532,18 @@ func register_clear_transition(node: CanvasLayer) -> void:
 	_clear_transition = node
 
 
-## kind: pass / skip / death / finish；next_scene 为空时重载当前场景。
+## kind: pass / skip / finish；next_scene 为空时重载当前场景。
+## 死亡不播专用符号动画，直接走全局淡出。
 func play_transition(kind: String, next_scene: String = "") -> void:
+	# 任何转场都不应该带着暂停状态切场景。
+	get_tree().paused = false
+	if kind == "death":
+		if next_scene.is_empty():
+			GlobalTransition.reload_current_scene()
+		else:
+			GlobalTransition.change_scene_to_file(next_scene)
+		return
+
 	# 过关优先在关卡视口里播前端转场（只覆盖 640×480 的游戏画面）
 	if kind == "pass" and is_instance_valid(_clear_transition):
 		var cleared: int = int(current_run.get("cleared_count", 1))
@@ -550,9 +572,6 @@ func play_transition(kind: String, next_scene: String = "") -> void:
 		"skip":
 			symbol = "→"
 			color = Color("#D39B22")
-		"death":
-			symbol = "✗"
-			color = Color("#C74343")
 		"finish":
 			symbol = "★"
 			color = Color("#8A5BD6")

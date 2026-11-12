@@ -215,6 +215,7 @@ vertical_alignment = 1
 script = ExtResource("9_4xy5l")
 
 [node name="PipeMenu" parent="GameRoomSize" unique_id=222113224 instance=ExtResource("50_pipe_menu")]
+z_index = 10
 layout_mode = 1
 host_visible_set = NodePath("../HostPage/ControlVisibieSet")
 join_visible_set = NodePath("../JoinPage/ControlVisibieSet")
@@ -950,6 +951,16 @@ text = "拍摄"
 
 [node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Photo" index="1" unique_id=1210628054]
 input_map_name = "photo"
+
+[node name="Pause" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer" instance=ExtResource("28_wphsk")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Pause" index="0"]
+text = "暂停"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer/Pause" index="1"]
+input_map_name = "pause"
 
 [node name="Buttons" type="HBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer" unique_id=26128049]
 layout_mode = 2

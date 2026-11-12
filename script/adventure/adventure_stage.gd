@@ -16,6 +16,10 @@ const TIER_COLORS: Array[Color] = [
 const NEUTRAL_COLOR: Color = Color("#DCEBFF")
 const TEXT_COLOR: Color = Color("#1A1A1A")
 
+## 背景装饰层：用 preload 而不是直接引用 class_name，避免编辑器类缓存没刷新时报错
+const SCENERY_SCRIPT: GDScript = preload("res://script/adventure/adventure_scenery.gd")
+const SCENERY_TINT: Color = Color(0.11, 0.16, 0.27, 0.26)
+
 var _pool_source: String = "all"
 var _tier: int = 0
 var _mode: String = "finite"
@@ -29,6 +33,7 @@ var _load_generation: int = 0
 var _loading: bool = false
 
 var _background: ColorRect
+var _scenery: Control
 var _status_label: Label
 var _lives_label: Label
 var _length_label: Label
@@ -68,6 +73,12 @@ func _build_ui() -> void:
 	_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_background)
+
+	# 纯色剪影花草原：画在底色之上、所有控件之下
+	_scenery = SCENERY_SCRIPT.new() as Control
+	_scenery.name = "Scenery"
+	_scenery.set("tint", SCENERY_TINT)
+	add_child(_scenery)
 
 	var margin: MarginContainer = MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)

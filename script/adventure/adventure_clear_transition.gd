@@ -263,6 +263,22 @@ func _reset_row() -> void:
 		_level_ids[index] = level_id
 		_level_labels[index].text = str(level_id) if level_id >= 1 else ""
 		index += 1
+	_update_row_visibility()
+
+
+## 第 1 关左边不画椭圆/连线；有限团最后一关右边也不再画线。
+func _update_row_visibility() -> void:
+	var index: int = 0
+	while index < _levels.size():
+		var level_id: int = _level_ids[index]
+		var visible_level: bool = level_id >= 1 \
+			and (_total_level <= 0 or level_id <= _total_level)
+		_levels[index].visible = visible_level
+		if visible_level:
+			var line: Line2D = _levels[index].get_node_or_null("Line") as Line2D
+			if line != null:
+				line.visible = _total_level <= 0 or level_id < _total_level
+		index += 1
 
 
 func _update_progress() -> void:
@@ -277,6 +293,7 @@ func _make_level_node(level_index: int) -> Node2D:
 	holder.name = "Level_%d" % level_index
 
 	var line: Line2D = Line2D.new()
+	line.name = "Line"
 	line.points = PackedVector2Array([
 		Vector2(NODE_RX, 0.0),
 		Vector2(NODE_GAP - NODE_RX, 0.0),
@@ -394,6 +411,7 @@ func _phase_jump() -> void:
 			_levels[index].position.x = _base_x[index]
 			index += 1
 
+		_update_row_visibility()
 		_player.position.y = _player_rest_y
 		_settle_props(NODE_GAP * PROP_MOVE_SCALE)
 		_advance_phase()

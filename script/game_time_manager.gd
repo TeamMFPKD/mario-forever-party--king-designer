@@ -7,7 +7,7 @@ signal game_time_hud_visible
 
 func _ready() -> void:
 	var game_mode: GameMode = GameModeSingleton as GameMode
-	if game_mode.game_mode == GameMode.GameModeType.PLAY:
+	if game_mode.game_mode == GameMode.GameModeType.PLAY or GameMode.is_adventure():
 		emit_signal("game_time_hud_visible")
 
 func _process(_delta: float) -> void:
