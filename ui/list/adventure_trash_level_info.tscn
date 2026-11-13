@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://ui/ui_label.tscn" id="1_label"]
+[ext_resource type="PackedScene" path="res://ui/ui_button.tscn" id="2_button"]
+[ext_resource type="PackedScene" path="res://ui/ui_margin_container.tscn" id="3_margin"]
+[ext_resource type="Script" path="res://script/adventure/adventure_trash_row.gd" id="4_script"]
+
+[node name="AdventureTrashLevelInfo" type="HBoxContainer" node_paths=PackedStringArray("count_label", "name_label", "view_button", "restore_button")]
+offset_right = 1658.0
+offset_bottom = 88.0
+size_flags_horizontal = 3
+script = ExtResource("4_script")
+count_label = NodePath("CountLabel")
+name_label = NodePath("LevelFileNameLabel")
+view_button = NodePath("UiMarginContainer/HBoxContainer/ViewButton")
+restore_button = NodePath("UiMarginContainer/HBoxContainer/RestoreButton")
+
+[node name="CountLabel" parent="." instance=ExtResource("1_label")]
+custom_minimum_size = Vector2(96, 0)
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelFileNameLabel" parent="." instance=ExtResource("1_label")]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "关卡文件名"
+autowrap_mode = 3
+
+[node name="UiMarginContainer" parent="." instance=ExtResource("3_margin")]
+custom_minimum_size = Vector2(210, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UiMarginContainer"]
+layout_mode = 2
+
+[node name="ViewButton" parent="UiMarginContainer/HBoxContainer" instance=ExtResource("2_button")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "查看"
+metadata/gamepad_focus = true
+
+[node name="RestoreButton" parent="UiMarginContainer/HBoxContainer" instance=ExtResource("2_button")]
+custom_minimum_size = Vector2(190, 48)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 40
+text = "恢复"
+metadata/gamepad_focus = true

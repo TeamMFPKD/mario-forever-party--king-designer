@@ -9,7 +9,10 @@ extends RefCounted
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
 
 const PATH: String = "user://adventure.ini"
-const SCHEMA: int = 1
+const SCHEMA: int = 2
+## 同时保留的进行中团上限。一个团占一个槽位，结算 / 放弃后腾出。
+const MAX_RUN_SLOTS: int = 5
+const LEGACY_RUN_SECTION: String = "run"
 
 var config: ConfigFile
 var path: String = PATH
@@ -30,7 +33,8 @@ func load() -> void:
 	if not config.has_section("meta"):
 		config.set_value("meta", "schema", SCHEMA)
 	elif int(config.get_value("meta", "schema", SCHEMA)) != SCHEMA:
-		Log.w("AdventureStore", ["adventure.ini schema 不匹配：", config.get_value("meta", "schema", 0)])
+		Log.i("AdventureStore", ["adventure.ini schema 升级：", config.get_value("meta", "schema", 0), " -> ", SCHEMA])
+	_migrate_legacy_run()
 
 
 func save() -> bool:
@@ -153,6 +157,25 @@ func is_excluded(key: String) -> bool:
 	return bool(config.get_value(level_section(key), "excluded", false))
 
 
+## 垃圾桶界面用：所有被永久排除的关卡记录（以 ini 为准，不管文件还在不在）。
+## 每条都带上 key 与文件字段，文件是否存在由调用方判断。
+func get_excluded_levels() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for section: String in config.get_sections():
+		if not section.begins_with("level."):
+			continue
+		if not bool(config.get_value(section, "excluded", false)):
+			continue
+		var key: String = section.trim_prefix("level.")
+		if key.is_empty():
+			continue
+		var data: Dictionary = get_level_data(key)
+		data["key"] = key
+		data["file"] = str(config.get_value(section, "file", key))
+		result.append(data)
+	return result
+
+
 # ---------------------------------------------------------------------------
 # 设置 / 当前团 / 累计统计
 # ---------------------------------------------------------------------------
@@ -166,25 +189,122 @@ func set_setting(key: String, value: Variant) -> void:
 	save()
 
 
-func get_run() -> Dictionary:
+# ---------------------------------------------------------------------------
+# 进行中的团（多存档位）
+# ---------------------------------------------------------------------------
+
+func run_section(slot: int) -> String:
+	return "run.%d" % slot
+
+
+## slot=0：取第一个有数据的槽位（兼容旧的单存档调用）。
+func get_run(slot: int = 0) -> Dictionary:
+	if slot <= 0:
+		slot = first_saved_slot()
+	if slot <= 0:
+		return {}
+	var section: String = run_section(slot)
+	if not config.has_section(section):
+		return {}
 	var result: Dictionary = {}
-	if not config.has_section("run"):
-		return result
-	for key: String in config.get_section_keys("run"):
-		result[key] = config.get_value("run", key)
+	for key: String in config.get_section_keys(section):
+		result[key] = config.get_value(section, key)
+	result["slot"] = slot
 	return result
 
 
-func set_run(run: Dictionary) -> void:
+## slot=0：优先用 run 自带的 slot，其次找空槽位。
+func set_run(run: Dictionary, slot: int = 0) -> void:
+	if slot <= 0:
+		slot = int(run.get("slot", 0))
+	if slot <= 0:
+		slot = first_free_slot()
+	if slot <= 0:
+		Log.e("AdventureStore", "保存团进度失败：没有空存档位")
+		return
+	run["slot"] = slot
+	var section: String = run_section(slot)
+	# 先清段，避免上一份团的残留键（例如从定量换成无尽后的 total_levels）混进来。
+	if config.has_section(section):
+		config.erase_section(section)
 	for key: String in run.keys():
-		config.set_value("run", key, run[key])
+		config.set_value(section, key, run[key])
 	save()
 
 
-func clear_run() -> void:
-	if config.has_section("run"):
-		config.erase_section("run")
-	config.set_value("run", "active", false)
+## slot=0：清空全部存档位（迁移 / 重置用）。
+func clear_run(slot: int = 0) -> void:
+	if slot <= 0:
+		for index: int in range(1, MAX_RUN_SLOTS + 1):
+			_erase_run_section(index)
+	else:
+		_erase_run_section(slot)
+	save()
+
+
+func _erase_run_section(slot: int) -> void:
+	var section: String = run_section(slot)
+	if config.has_section(section):
+		config.erase_section(section)
+
+
+func first_saved_slot() -> int:
+	for index: int in range(1, MAX_RUN_SLOTS + 1):
+		var section: String = run_section(index)
+		if config.has_section(section) and not config.get_section_keys(section).is_empty():
+			return index
+	return 0
+
+
+## 槽位是否被一个「还能继续」的团占用（active 且 index 在 level_keys 范围内）。
+## active=false、进度字段缺失或 index 越界的坏档都不算占用，可被新团覆盖，避免死锁。
+func is_run_occupied(slot: int) -> bool:
+	var section: String = run_section(slot)
+	if not config.has_section(section):
+		return false
+	if not bool(config.get_value(section, "active", false)):
+		return false
+	var keys: Array = config.get_value(section, "level_keys", [])
+	var index: int = int(config.get_value(section, "index", 0))
+	return not keys.is_empty() and index >= 0 and index < keys.size()
+
+
+## 第一个可以开新团的槽位；0 = 5 个槽位都被占用。
+func first_free_slot() -> int:
+	for index: int in range(1, MAX_RUN_SLOTS + 1):
+		if not is_run_occupied(index):
+			return index
+	return 0
+
+
+## 被进行中的团占用的槽位数。
+func used_run_slots() -> int:
+	var count: int = 0
+	for index: int in range(1, MAX_RUN_SLOTS + 1):
+		if is_run_occupied(index):
+			count += 1
+	return count
+
+
+## 旧版只有一个 [run] 段：搬到第一个空槽位，然后删掉旧段。
+func _migrate_legacy_run() -> void:
+	if not config.has_section(LEGACY_RUN_SECTION):
+		return
+	var legacy: Dictionary = {}
+	for key: String in config.get_section_keys(LEGACY_RUN_SECTION):
+		legacy[key] = config.get_value(LEGACY_RUN_SECTION, key)
+	var had_active: bool = not legacy.is_empty() and bool(legacy.get("active", false))
+	config.erase_section(LEGACY_RUN_SECTION)
+	if had_active:
+		var slot: int = first_free_slot()
+		if slot > 0:
+			legacy["slot"] = slot
+			var section: String = run_section(slot)
+			for key: String in legacy.keys():
+				config.set_value(section, key, legacy[key])
+			Log.i("AdventureStore", ["旧版单团存档迁移到槽位 ", slot])
+		else:
+			Log.w("AdventureStore", "旧版单团存档迁移失败：没有空槽位")
 	save()
 
 

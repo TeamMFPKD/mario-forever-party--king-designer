@@ -6,7 +6,8 @@ extends Control
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
 
 const TITLE_SCENE: String = "res://room/title.tscn"
-const TIER_NAMES: Array[String] = ["轻松", "标准", "困难", "极限"]
+const TRASH_SCENE: String = "res://room/adventure_trash.tscn"
+const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
 const TIER_COLORS: Array[Color] = [
 	Color("#BFE9FF"),
 	Color("#FFE7A3"),
@@ -19,6 +20,7 @@ const TEXT_COLOR: Color = Color("#1A1A1A")
 ## 背景装饰层：用 preload 而不是直接引用 class_name，避免编辑器类缓存没刷新时报错
 const SCENERY_SCRIPT: GDScript = preload("res://script/adventure/adventure_scenery.gd")
 const SCENERY_TINT: Color = Color(0.11, 0.16, 0.27, 0.26)
+const SAVE_SLOTS_SCENE: PackedScene = preload("res://object/ui/adventure_save_slots.tscn")
 
 var _pool_source: String = "all"
 var _tier: int = 0
@@ -40,7 +42,8 @@ var _length_label: Label
 var _length_slider: HSlider
 var _preview_grid: GridContainer
 var _start_button: Button
-var _resume_button: Button
+var _save_slots: PanelContainer
+var _trash_button: Button
 var _pool_buttons: Array[Button] = []
 var _tier_buttons: Array[Button] = []
 var _mode_buttons: Array[Button] = []
@@ -62,9 +65,10 @@ func _ready() -> void:
 	_prefer_low_sample = bool(settings.get("prefer_low_sample", true))
 	_length_slider.value = _run_length
 	_apply_button_states()
-	_resume_button.visible = Adventure.resume_available
+	_update_trash_button()
 	_status_label.text = "读取中……"
 	_set_controls_enabled(false)
+	_refresh_save_slots()
 	# 先让界面画出来，再在后台线程扫描关卡池。
 	call_deferred("_begin_pool_load")
 
@@ -145,7 +149,7 @@ func _build_ui() -> void:
 
 	rail_box.add_child(_make_section_title("难度"))
 	_tier_buttons = _make_toggle_column(
-		["1 轻松", "2 标准", "3 困难", "4 极限", "随机"],
+		["简单", "普通", "困难", "超难", "随机"],
 		func(index: int) -> void: _select_tier(index + 1 if index < 4 else 0),
 		364.0
 	)
@@ -228,6 +232,11 @@ func _build_ui() -> void:
 	_preview_grid.add_theme_constant_override("v_separation", 14)
 	center.add_child(_preview_grid)
 
+	# ── 存档位：5 个进行中的团，点卡片直接续团 ──────────────────
+	_save_slots = SAVE_SLOTS_SCENE.instantiate() as PanelContainer
+	_save_slots.connect("resume_requested", Callable(self, "_on_slot_resume"))
+	right_box.add_child(_save_slots)
+
 	# ── 动作条放在右侧栏底部：次要按钮靠左，主 CTA 靠右放大 ──────
 	var actions: HBoxContainer = HBoxContainer.new()
 	actions.add_theme_constant_override("separation", 16)
@@ -237,10 +246,10 @@ func _build_ui() -> void:
 	back_button.custom_minimum_size = Vector2(190, 64)
 	back_button.pressed.connect(_on_back)
 	actions.add_child(back_button)
-	_resume_button = _make_button("继续上次的团", false)
-	_resume_button.custom_minimum_size = Vector2(240, 64)
-	_resume_button.pressed.connect(_on_resume)
-	actions.add_child(_resume_button)
+	_trash_button = _make_button("垃圾桶（0）", false)
+	_trash_button.custom_minimum_size = Vector2(200, 64)
+	_trash_button.pressed.connect(_on_trash_pressed)
+	actions.add_child(_trash_button)
 	var action_spacer: Control = Control.new()
 	action_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	actions.add_child(action_spacer)
@@ -341,7 +350,8 @@ func _set_controls_enabled(enabled: bool) -> void:
 	if _length_slider != null:
 		_length_slider.editable = enabled
 	_start_button.disabled = not enabled
-	_resume_button.disabled = not enabled
+	if _trash_button != null:
+		_trash_button.disabled = not enabled
 
 
 func _begin_pool_load() -> void:
@@ -389,8 +399,8 @@ func _on_pool_loaded(built: Dictionary, source: String, generation: int) -> void
 	_loading = false
 	_set_controls_enabled(true)
 	_start_button.disabled = false
-	_resume_button.visible = Adventure.resume_available
 	_refresh_pool_ui()
+	_refresh_save_slots()
 
 
 func _refresh_pool_ui() -> void:
@@ -405,12 +415,13 @@ func _refresh_pool_ui() -> void:
 		var count: int = int(counts[index]) if index < counts.size() else 0
 		_tier_buttons[index].disabled = not selectable
 		_tier_buttons[index].tooltip_text = "本档 %d 关" % count
-		_tier_buttons[index].text = "%d %s（%d）" % [index + 1, TIER_NAMES[index], count]
+		_tier_buttons[index].text = "%s（%d）" % [TIER_NAMES[index], count]
 	if not selectable and _tier > 0:
 		_tier = 0
 	_apply_button_states()
 	_update_theme()
 	_rebuild_preview()
+	_update_trash_button()
 
 
 func _update_theme() -> void:
@@ -467,6 +478,9 @@ func _make_ellipse(number: int, color: Color, endless: bool) -> Control:
 func _on_start() -> void:
 	if _loading:
 		return
+	if Adventure.is_run_slots_full():
+		_refresh_save_slots()
+		return
 	var settings: Dictionary = {
 		"pool_source": _pool_source,
 		"tier": _tier,
@@ -483,14 +497,43 @@ func _on_start() -> void:
 		_status_label.text = Adventure.last_error
 
 
-func _on_resume() -> void:
+func _on_slot_resume(slot: int) -> void:
 	if _loading:
 		return
-	if Adventure.resume_run():
+	if Adventure.resume_run(slot):
 		GlobalTransition.change_scene_to_file(Adventure.PLAY_SCENE)
 	else:
-		_resume_button.visible = false
-		_status_label.text = "没有可继续的团"
+		_refresh_save_slots()
+		_status_label.text = "这个存档位无法继续"
+
+
+func _refresh_save_slots() -> void:
+	if _save_slots == null:
+		return
+	_save_slots.call("setup", Adventure.get_run_slots())
+	_apply_slot_gate()
+
+
+## 5 个存档位都被进行中的团占满时禁止开新团，只能先续团再结算或放弃。
+func _apply_slot_gate() -> void:
+	var full: bool = Adventure.is_run_slots_full()
+	_start_button.text = "存档位已满" if full else "开始打团"
+	if full:
+		_start_button.disabled = true
+		_status_label.text = "存档位已满（%d/%d），先继续其中一个团并结算或放弃" % [
+			Adventure.used_run_slots(), Adventure.MAX_RUN_SLOTS
+		]
+
+
+func _update_trash_button() -> void:
+	if _trash_button == null:
+		return
+	_trash_button.text = "垃圾桶（%d）" % Adventure.excluded_count()
+
+
+## 垃圾桶：进入专门的垃圾桶房间，列出被永久排除的关卡并允许逐关恢复。
+func _on_trash_pressed() -> void:
+	GlobalTransition.change_scene_to_file(TRASH_SCENE)
 
 
 func _on_back() -> void:

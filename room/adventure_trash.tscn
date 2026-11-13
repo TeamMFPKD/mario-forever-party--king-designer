@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://b8ahdjbq4j618"]
+
+[ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="1_roomsize"]
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="2_bg"]
+[ext_resource type="Shader" path="res://shader/hsv_luma.gdshader" id="2_ugkbt"]
+[ext_resource type="PackedScene" uid="uid://cdjqk3jhmevws" path="res://ui/ui_margin_container.tscn" id="3_margin"]
+[ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_panel"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_label"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="6_button"]
+[ext_resource type="Script" uid="uid://cpqbrx4omympq" path="res://script/adventure/adventure_trash_room.gd" id="7_room"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_845ve"]
+shader = ExtResource("2_ugkbt")
+shader_parameter/hue = 0.0
+shader_parameter/saturation = -1.0
+shader_parameter/value = -0.69999998575
+
+[node name="AdventureTrashRoom" type="Node2D" unique_id=1798598117 node_paths=PackedStringArray("level_list", "scroll", "title_label", "empty_label", "back_button")]
+script = ExtResource("7_room")
+level_list = NodePath("GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer/TrashList")
+scroll = NodePath("GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer")
+title_label = NodePath("GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/UiLabel")
+empty_label = NodePath("GameRoomSize/UiMarginContainer/UiMarginContainer/EmptyLabel")
+back_button = NodePath("GameRoomSize/Back/HBoxContainer/BackButton")
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=1530079990]
+z_index = -800
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=583624568]
+material = SubResource("ShaderMaterial_845ve")
+texture = ExtResource("2_bg")
+metadata/_edit_lock_ = true
+
+[node name="GameRoomSize" type="Control" parent="." unique_id=890176072]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+script = ExtResource("1_roomsize")
+metadata/_edit_lock_ = true
+
+[node name="UiMarginContainer" parent="GameRoomSize" unique_id=29217064 instance=ExtResource("3_margin")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 128
+
+[node name="UiPanel" parent="GameRoomSize/UiMarginContainer" unique_id=1528423579 instance=ExtResource("4_panel")]
+layout_mode = 2
+
+[node name="UiMarginContainer" parent="GameRoomSize/UiMarginContainer" unique_id=918278271 instance=ExtResource("3_margin")]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=1360980328]
+layout_mode = 2
+
+[node name="UiLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=1443960174 instance=ExtResource("5_label")]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "垃圾桶"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer" unique_id=604860282]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TrashList" type="VBoxContainer" parent="GameRoomSize/UiMarginContainer/UiMarginContainer/VBoxContainer/ScrollContainer" unique_id=155530514]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptyLabel" parent="GameRoomSize/UiMarginContainer/UiMarginContainer" unique_id=1594285259 instance=ExtResource("5_label")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0.67058825, 0.36078432, 0.69411767, 1)
+theme_override_font_sizes/font_size = 32
+text = "垃圾桶是空的。"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Back" parent="GameRoomSize" unique_id=1978930023 instance=ExtResource("3_margin")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -120.0
+offset_right = 620.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameRoomSize/Back" unique_id=1291725428]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="BackButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=258173879 instance=ExtResource("6_button")]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 7
+text = "返回百人团"
+metadata/gamepad_focus = true
+
+[connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/BackButton" to="." method="_on_back"]

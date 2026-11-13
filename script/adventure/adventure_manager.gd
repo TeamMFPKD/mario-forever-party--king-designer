@@ -17,6 +17,8 @@ signal life_bonus
 signal pause_blocked_changed
 
 const DEFAULT_RUN_LENGTH: int = 10
+## 进行中的团最多同时保留 5 个；满了不能开新团，只能先继续 / 结算 / 放弃其中一个。
+const MAX_RUN_SLOTS: int = AdventureStore.MAX_RUN_SLOTS
 const RUN_LENGTH_MIN: int = 5
 const RUN_LENGTH_MAX: int = 50
 const MIN_POOL: int = 5
@@ -114,6 +116,42 @@ func playable_count() -> int:
 	return count
 
 
+## 垃圾桶界面用：所有被永久排除的关卡，按排除时间从新到旧。
+## 以 adventure.ini 为准，源池没加载也能用；文件已被删除的孤儿记录同样列出。
+func excluded_levels() -> Array[Dictionary]:
+	var result: Array[Dictionary] = store.get_excluded_levels()
+	for entry: Dictionary in result:
+		var key: String = str(entry.get("key", ""))
+		var level_path: String = resolve_level_path(key)
+		entry["level_path"] = level_path
+		entry["file_exists"] = FileAccess.file_exists(level_path)
+	result.sort_custom(
+		func(a: Dictionary, b: Dictionary) -> bool:
+			return int(a.get("excluded_at", 0)) > int(b.get("excluded_at", 0))
+	)
+	return result
+
+
+func excluded_count() -> int:
+	return store.get_excluded_levels().size()
+
+
+## 垃圾桶界面：把一关从永久排除里恢复正常。
+## 只清 excluded 标记，保留历史样本与关卡文件；档位和可玩数立即重算。
+func restore_excluded_level(key: String) -> bool:
+	if key.is_empty() or not store.is_excluded(key):
+		return false
+	store.set_excluded(key, false)
+	var stat: AdventureLevelStat = _find_stat(key)
+	if stat != null:
+		stat.excluded = false
+		stat.exclude_reason = ""
+	_tier_info = AdventureTierCalculator.assign_tiers(pool)
+	Log.i("Adventure", ["已恢复被排除的关卡：", key])
+	run_changed.emit()
+	return true
+
+
 func get_tier_info() -> Dictionary:
 	return _tier_info
 
@@ -123,30 +161,89 @@ func is_running() -> bool:
 
 
 func _check_resume() -> void:
-	var saved: Dictionary = store.get_run()
-	if saved.is_empty() or not bool(saved.get("active", false)):
-		resume_available = false
-		return
+	resume_available = _first_resumable_slot() > 0
+
+
+func is_run_slots_full() -> bool:
+	return store.used_run_slots() >= MAX_RUN_SLOTS
+
+
+func used_run_slots() -> int:
+	return store.used_run_slots()
+
+
+## 舞台存档位列表：固定返回 MAX_RUN_SLOTS 项（空位也在内），供 UI 直接遍历。
+func get_run_slots() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for slot: int in range(1, MAX_RUN_SLOTS + 1):
+		result.append(get_run_slot_info(slot))
+	return result
+
+
+func get_run_slot_info(slot: int) -> Dictionary:
+	var info: Dictionary = {
+		"slot": slot,
+		"active": false,
+		"valid": false,
+		"mode": "finite",
+		"tier": 0,
+		"index": 0,
+		"total_levels": -1,
+		"cleared_count": 0,
+		"lives_left": 0,
+		"level_count": 0,
+		"started_at": 0,
+	}
+	var saved: Dictionary = store.get_run(slot)
+	if saved.is_empty():
+		return info
 	var keys: Array = saved.get("level_keys", [])
-	var index: int = int(saved.get("index", 0))
-	resume_available = not keys.is_empty() and index >= 0 and index < keys.size()
+	info["active"] = bool(saved.get("active", false)) and not keys.is_empty()
+	info["valid"] = _is_slot_resumable(slot)
+	info["mode"] = str(saved.get("mode", "finite"))
+	info["tier"] = int(saved.get("tier", 0))
+	info["index"] = int(saved.get("index", 0))
+	info["total_levels"] = int(saved.get("total_levels", -1))
+	info["cleared_count"] = int(saved.get("cleared_count", 0))
+	info["lives_left"] = int(saved.get("lives_left", 0))
+	info["level_count"] = keys.size()
+	info["started_at"] = int(saved.get("started_at", 0))
+	return info
 
 
-func resume_run() -> bool:
-	if not resume_available:
+func _is_slot_resumable(slot: int) -> bool:
+	return store.is_run_occupied(slot)
+
+
+func _first_resumable_slot() -> int:
+	for slot: int in range(1, MAX_RUN_SLOTS + 1):
+		if _is_slot_resumable(slot):
+			return slot
+	return 0
+
+
+## slot=0：续第一个可用的存档位（兼容旧的无参调用）。
+func resume_run(slot: int = 0) -> bool:
+	if slot <= 0:
+		slot = _first_resumable_slot()
+	if slot <= 0 or not _is_slot_resumable(slot):
+		resume_available = _first_resumable_slot() > 0
 		return false
-	var saved: Dictionary = store.get_run()
-	if saved.is_empty() or not bool(saved.get("active", false)):
-		resume_available = false
-		return false
+	var saved: Dictionary = store.get_run(slot)
+	saved["slot"] = slot
 	var source: String = str(store.get_setting("pool_source", "all"))
 	if pool_source != source or pool.is_empty():
 		load_pool(source)
 	current_run = saved
+	# 旧存档没有 deaths 字段：从 0 开始累计，避免结算页读到空值。
+	if not current_run.has("deaths"):
+		current_run["deaths"] = 0
 	current_key = ""
-	resume_available = false
+	_check_resume()
 	_set_level_passed_busy(false)
 	GameModeSingleton.set("game_mode", GameMode.GameModeType.ADVENTURE)
+	var saved_keys: Array = saved.get("level_keys", [])
+	Log.i("Adventure", ["继续存档位 ", slot, " 的团，进度 ", int(saved.get("index", 0)), "/", saved_keys.size()])
 	run_started.emit()
 	run_changed.emit()
 	return true
@@ -226,8 +323,22 @@ func resolve_level_path(key: String) -> String:
 # 开始 / 推进
 # ---------------------------------------------------------------------------
 
+## 新团占用的槽位：正在进行的团沿用它自己的槽位，否则取第一个空槽。
+## 返回 0 = 5 个槽位都被进行中的团占满。
+func _pick_slot_for_new_run() -> int:
+	if is_running():
+		var current_slot: int = int(current_run.get("slot", 0))
+		if current_slot > 0:
+			return current_slot
+	return store.first_free_slot()
+
+
 func start_run(settings: Dictionary) -> bool:
 	last_error = ""
+	var slot: int = _pick_slot_for_new_run()
+	if slot <= 0:
+		last_error = "存档位已满（%d/%d），请先继续其中一个团并结算或放弃" % [MAX_RUN_SLOTS, MAX_RUN_SLOTS]
+		return false
 	var source: String = str(settings.get("pool_source", "all"))
 	var mode: String = str(settings.get("mode", "finite"))
 	var requested_tier: int = clampi(int(settings.get("tier", 0)), 0, 4)
@@ -268,9 +379,9 @@ func start_run(settings: Dictionary) -> bool:
 		lives_total = run_length * FINITE_LIVES_FACTOR
 		total_levels = run_length
 
-	resume_available = false
 	current_run = {
 		"active": true,
+		"slot": slot,
 		"id": _make_run_id(),
 		"mode": mode,
 		"seed": run_seed,
@@ -283,6 +394,7 @@ func start_run(settings: Dictionary) -> bool:
 		"lives_left": lives_total,
 		"lives_cap": LIVES_CAP,
 		"cleared_count": 0,
+		"deaths": 0,
 		"skipped_count": 0,
 		"skipped_soft": 0,
 		"skipped_hard": 0,
@@ -293,7 +405,9 @@ func start_run(settings: Dictionary) -> bool:
 	}
 	current_key = ""
 	_set_level_passed_busy(false)
-	store.set_run(current_run)
+	store.set_run(current_run, slot)
+	_check_resume()
+	Log.i("Adventure", ["新团写入存档位 ", slot, "（", mode, "）"])
 	GameModeSingleton.set("game_mode", GameMode.GameModeType.ADVENTURE)
 	run_started.emit()
 	run_changed.emit()
@@ -355,6 +469,8 @@ func on_player_died() -> void:
 	if not is_running():
 		return
 
+	# 本团累计死亡数：结算页「死亡数」一列用它（与加命奖励无关）。
+	current_run["deaths"] = int(current_run.get("deaths", 0)) + 1
 	var lives: int = int(current_run.get("lives_left", 0)) - 1
 	current_run["lives_left"] = lives
 	if lives <= 0:
@@ -406,11 +522,15 @@ func abandon_run() -> void:
 
 
 ## 中断 = 保存当前团进度并退出，不结算、不增加放弃次数。
+## 存档留在它自己的槽位里，内存中的当前团清空（避免舞台/标题误判仍在打团）。
 func interrupt_run() -> void:
 	if not is_running():
 		return
+	Log.i("Adventure", ["中断团，存入存档位 ", int(current_run.get("slot", 0))])
 	store.set_run(current_run)
-	resume_available = true
+	current_run = {}
+	current_key = ""
+	_check_resume()
 
 
 # ---------------------------------------------------------------------------
@@ -569,10 +689,11 @@ func finish_run(result: String) -> void:
 			store.set_stat("best_endless_cleared", cleared)
 	store.save()
 
+	var slot: int = int(current_run.get("slot", 0))
 	current_run = {}
 	current_key = ""
-	resume_available = false
-	store.clear_run()
+	store.clear_run(slot)
+	_check_resume()
 	run_finished.emit(summary)
 
 
