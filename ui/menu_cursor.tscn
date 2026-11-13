@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://script/ui/menu_cursor.gd" id="1_cursor"]
+[ext_resource type="Texture2D" uid="uid://cfli4adqnmsk3" path="res://sprite/ui/cursor/cursor_corner_tl.svg" id="2_tl"]
+[ext_resource type="Texture2D" uid="uid://vq5xcmss2nrg" path="res://sprite/ui/cursor/cursor_corner_tr.svg" id="3_tr"]
+[ext_resource type="Texture2D" uid="uid://cts7ejvyl27it" path="res://sprite/ui/cursor/cursor_corner_bl.svg" id="4_bl"]
+[ext_resource type="Texture2D" uid="uid://dx3bc20vkqkkc" path="res://sprite/ui/cursor/cursor_corner_br.svg" id="5_br"]
+
+[node name="MenuCursor" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+script = ExtResource("1_cursor")
+
+[node name="CornerTL" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("2_tl")
+stretch_mode = 3
+
+[node name="CornerTR" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("3_tr")
+stretch_mode = 3
+
+[node name="CornerBL" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("4_bl")
+stretch_mode = 3
+
+[node name="CornerBR" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+mouse_filter = 2
+texture = ExtResource("5_br")
+stretch_mode = 3
