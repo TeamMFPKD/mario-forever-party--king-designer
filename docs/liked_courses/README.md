@@ -189,7 +189,7 @@ func migrate_legacy() -> void
 └─ 取消
 ```
 
-选完模式 → 关闭弹窗 → 异步 `export_levels(mode)` → 系统保存框 → 复用现有 `ImportExportHint` 提示面板。
+选完模式 → 关闭弹窗 → 异步 `export_levels(mode)` → 系统保存框 → 统一调用 autoload `Notice.show_notice()` 弹出结果通知（不再用场景内自建的 `ImportExportHint` 面板）。
 「取消」或文件框取消时不产生任何文件，提示「导出已取消」。
 
 ### 5.2 模式定义

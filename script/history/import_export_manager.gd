@@ -13,7 +13,6 @@ enum ExportMode {
 }
 
 @export var is_liked_room: bool = false
-@export var hint_lable: Label
 @export var export_mode_dialog: Control
 
 const USER_ROOT: String = "user://"
@@ -66,21 +65,24 @@ func _on_import_button_pressed() -> void:
 	_update_import_ui(msg)
 
 
+## 结果提示统一走 autoload Notice（纯信息通知），不在场景里自建面板。
 func _update_export_ui(msg: String) -> void:
 	if msg.begins_with("导出成功"):
-		hint_lable.text = tr("导出成功")
+		Notice.show_notice("导出成功", "导出")
 		emit_signal("export_succeeded")
 	else:
-		hint_lable.text = tr("导出失败") if not msg.begins_with("导出已取消") else tr("导出已取消")
+		var text: String = "导出已取消" if msg.begins_with("导出已取消") else "导出失败"
+		Notice.show_notice(text, "导出")
 		emit_signal("export_failed")
 
 
 func _update_import_ui(msg: String) -> void:
 	if msg.begins_with("导入成功"):
-		hint_lable.text = tr("导入成功")
+		Notice.show_notice("导入成功", "导入")
 		emit_signal("import_succeeded")
 	else:
-		hint_lable.text = tr("导入失败") if not msg.begins_with("导入已取消") else tr("导入已取消")
+		var text: String = "导入已取消" if msg.begins_with("导入已取消") else "导入失败"
+		Notice.show_notice(text, "导入")
 		emit_signal("import_failed")
 
 
