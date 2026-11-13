@@ -17,10 +17,10 @@
 | `Button/styles/normal` | `StyleBoxFlat`：白底、6px 深色边 `(0.169, 0.165, 0.157)`、圆角 10、content margin 32/16 |
 | `Button/styles/hover` | 暖白底 `(1, 0.976, 0.902)` + 同款深色边 |
 | `Button/styles/pressed` | 米灰底 `(0.937, 0.914, 0.851)` + 黄边 `(1, 0.773, 0.192)`，`content_margin_top` 20 / `bottom` 12 做出按压位移 |
-| `Button/styles/disabled` | 灰米底 `(0.894, 0.863, 0.776)` + 灰边 `(0.71, 0.678, 0.608)` |
+| `Button/styles/disabled` | 中性灰底 `(0.82, 0.82, 0.82)` + 深灰边 `(0.58, 0.58, 0.58)` |
 | `Button/styles/focus` | 不填充，6px 黄边、圆角 15、外扩 5px |
 | `Button/colors/font_color` | `Color(0.169, 0.165, 0.157, 1)` 深棕；hover / pressed / focus 同色 |
-| `Button/colors/font_disabled_color` | `Color(0.557, 0.525, 0.455, 1)` |
+| `Button/colors/font_disabled_color` | `Color(0.45, 0.45, 0.45, 1)` |
 | `Button/font_sizes/font_size` | `36` |
 | `Button/constants/outline_size` | `0`，按钮文字不带描边 |
 
