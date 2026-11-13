@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://de64xnukpa0re"]
+[gd_scene load_steps=2 format=3 uid="uid://de64xnukpa0re"]
 
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="1_k6bla"]
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_tkg4x"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
 [ext_resource type="PackedScene" uid="uid://bgbnexddng5mx" path="res://object/level_import_export.tscn" id="14_guxlu"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="14_ixr3s"]
+[ext_resource type="PackedScene" path="res://ui/menu_cursor.tscn" id="15_cursor"]
 
 [node name="History" type="Node2D" unique_id=1793275075]
 
@@ -108,6 +109,11 @@ scroll_container = NodePath("..")
 no_file_hint_label = NodePath("../../../LoadingLabel")
 history_file_date_line_scene = ExtResource("11_mh56w")
 
+[node name="MenuCursor" parent="GameRoomSize" instance=ExtResource("15_cursor")]
+z_index = 20
+padding = Vector2(6, 6)
+target_root = NodePath("../Back/HBoxContainer")
+
 [node name="Back" parent="GameRoomSize" unique_id=1688126696 instance=ExtResource("3_1d24y")]
 layout_mode = 1
 anchors_preset = 7
@@ -137,18 +143,21 @@ size_flags_horizontal = 7
 text = "打开关卡目录"
 script = ExtResource("12_2phut")
 
+metadata/gamepad_focus = true
 [node name="LikedCourseButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=1887453095 instance=ExtResource("5_1x7xw")]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
 text = "喜欢的关卡"
 
+metadata/gamepad_focus = true
 [node name="ToTitleButton" parent="GameRoomSize/Back/HBoxContainer" unique_id=469456600 instance=ExtResource("5_1x7xw")]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
 text = "返回标题画面"
 
+metadata/gamepad_focus = true
 [node name="LevelImportExport" parent="GameRoomSize" unique_id=1195559321 instance=ExtResource("14_guxlu")]
 layout_mode = 1
 

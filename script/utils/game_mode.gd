@@ -59,3 +59,15 @@ static func is_history_play() -> bool:
 
 static func is_history_edit() -> bool:
 	return _current_mode() == GameModeType.HISTORY_EDIT
+
+
+static func is_playing() -> bool:
+	return _current_mode() == GameModeType.PLAY
+
+
+static func is_testing() -> bool:
+	return _current_mode() == GameModeType.TEST
+
+
+static func is_editing() -> bool:
+	return _current_mode() == GameModeType.EDIT

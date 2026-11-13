@@ -1,0 +1,9 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- 四角选择光标：红色角标 + 黑色描边 -->
+  <g fill="#E8342A" stroke="#1A1A1A" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M 4 28 V 4 H 28 V 9 H 9 V 28 Z" />
+    <path d="M 60 28 V 4 H 36 V 9 H 55 V 28 Z" />
+    <path d="M 4 36 V 60 H 28 V 55 H 9 V 36 Z" />
+    <path d="M 60 36 V 60 H 36 V 55 H 55 V 36 Z" />
+  </g>
+</svg>

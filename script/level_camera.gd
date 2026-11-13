@@ -32,25 +32,53 @@ func _physics_process(delta: float) -> void:
 		position = player.position
 		return
 
+	# 编辑模式下镜头由键鼠方向键 / WASD 驱动。
+	# 手柄在场时 move_* 同时绑了 D-pad 和左摇杆，而这两者要留给
+	# 「D-pad 控 UI 焦点」「摇杆控编辑光标」（见 docs/gamepad/README.md §6），
+	# 所以手柄主导时镜头不再响应这些动作。
 	direction = Vector2.ZERO
-	if Input.is_action_pressed("move_up"):
-		direction += Vector2.UP
-		speed = max_speed
-	if Input.is_action_pressed("move_down"):
-		direction += Vector2.DOWN
-		speed = max_speed
-	if Input.is_action_pressed("move_left"):
-		direction += Vector2.LEFT
-		speed = max_speed
-	if Input.is_action_pressed("move_right"):
-		direction += Vector2.RIGHT
-		speed = max_speed
+	if _keyboard_camera_enabled():
+		if Input.is_action_pressed("move_up"):
+			direction += Vector2.UP
+			speed = max_speed
+		if Input.is_action_pressed("move_down"):
+			direction += Vector2.DOWN
+			speed = max_speed
+		if Input.is_action_pressed("move_left"):
+			direction += Vector2.LEFT
+			speed = max_speed
+		if Input.is_action_pressed("move_right"):
+			direction += Vector2.RIGHT
+			speed = max_speed
 	direction = direction.normalized()
 	position += direction * speed * delta
 	speed = 0.0
 
 	position.x = clamp(position.x, limit_left + 320, limit_right - 320)
 	position.y = clamp(position.y, limit_top + 240, limit_bottom - 240)
+
+## 编辑模式下是否允许键盘/鼠标驱动镜头。
+## 手柄主导时返回 false，把那几组输入让给 UI 导航和编辑光标。
+##
+## 这里直接读摇杆轴而不查 InputDevice autoload：
+## autoload 的返回值是 Variant，本项目的 @warning_as_error 不允许把它
+## 转成 bool，会直接编译失败。
+const CAMERA_JOY_DEADZONE: float = 0.35
+
+func _keyboard_camera_enabled() -> bool:
+	var pads: PackedInt32Array = Input.get_connected_joypads()
+	for device: int in pads:
+		if absf(Input.get_joy_axis(device, JOY_AXIS_LEFT_X)) > CAMERA_JOY_DEADZONE:
+			return false
+		if absf(Input.get_joy_axis(device, JOY_AXIS_LEFT_Y)) > CAMERA_JOY_DEADZONE:
+			return false
+		if Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_UP) \
+			or Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_DOWN) \
+			or Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_LEFT) \
+			or Input.is_joy_button_pressed(device, JOY_BUTTON_DPAD_RIGHT):
+			return false
+	return true
+
 
 func set_limit_top(value: int) -> void:
 	limit_top = min(value, limit_bottom - 480)
