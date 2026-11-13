@@ -387,7 +387,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	var direction: Vector2 = _direction_of(event)
 	if direction == Vector2.ZERO:
 		return
-	_move(direction)
+	_nudge_or_move(direction)
 	_repeat_armed = true
 	_held_direction = direction
 	_repeat_timer = REPEAT_DELAY
@@ -446,13 +446,13 @@ func _tick_repeat(delta: float) -> void:
 	if held != _held_direction:
 		_held_direction = held
 		_repeat_timer = REPEAT_DELAY
-		_move(held)
+		_nudge_or_move(held)
 		return
 	_repeat_timer -= delta
 	if _repeat_timer > 0.0:
 		return
 	_repeat_timer = REPEAT_INTERVAL
-	_move(held)
+	_nudge_or_move(held)
 
 
 ## 当前按住的主方向（FOCUS 组：方向键 / 十字键）。
@@ -503,6 +503,10 @@ func _focus_still_valid() -> bool:
 			return false
 		if button.mouse_filter == Control.MOUSE_FILTER_IGNORE:
 			return false
+	if control is Slider:
+		var slider: Slider = control as Slider
+		if not slider.editable:
+			return false
 	return true
 
 
@@ -517,6 +521,40 @@ func _index_of(control: Control) -> int:
 		if is_instance_valid(candidate) and candidate == control:
 			return i
 	return -1
+
+
+## 方向键的统一入口：选中的是滑块就调值，否则才是移动焦点。
+func _nudge_or_move(direction: Vector2) -> void:
+	var current: Control = _focus_candidate()
+	if current is Slider:
+		var slider_control: Slider = current
+		if _nudge_slider(slider_control, direction):
+			return
+	_move(direction)
+
+
+## 水平滑块用左右调值、垂直滑块用上下调值；另一根轴仍然交给焦点移动，
+## 这样滑块不会把上下方向键也吃掉。返回 true 表示这次输入已被滑块消费。
+func _nudge_slider(slider: Slider, direction: Vector2) -> bool:
+	var span: float = slider.max_value - slider.min_value
+	if span <= 0.0:
+		return false
+	# step 为 0（连续滑块）时按量程的 1% 走一步
+	var step: float = slider.step if slider.step > 0.0 else span * 0.01
+	if slider is HSlider:
+		if absf(direction.x) < 0.5:
+			return false
+		var delta_x: float = signf(direction.x) * step
+		slider.value = clampf(slider.value + delta_x, slider.min_value, slider.max_value)
+		return true
+	if slider is VSlider:
+		if absf(direction.y) < 0.5:
+			return false
+		# 垂直滑块的 value 越大越靠上，所以"向上"是加
+		var delta_y: float = -signf(direction.y) * step
+		slider.value = clampf(slider.value + delta_y, slider.min_value, slider.max_value)
+		return true
+	return false
 
 
 func _move(direction: Vector2) -> void:
@@ -953,6 +991,11 @@ func _collect_node(node: Node, skipped: bool, out: Array[Control]) -> void:
 			elif control is LineEdit or control is TextEdit:
 				if control.mouse_filter != Control.MOUSE_FILTER_IGNORE:
 					out.append(control)
+			elif control is Slider:
+				# 滑块也纳入焦点：设置页的音量条要能用方向键选到并调节
+				var slider: Slider = control as Slider
+				if slider.editable and control.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+					out.append(control)
 			elif control.has_meta(META_TARGET):
 				out.append(control)
 	var child_count: int = node.get_child_count()
@@ -975,6 +1018,9 @@ func _is_candidate(node: Node, skip_checked: bool = false) -> bool:
 		return true
 	if _is_text_input(control):
 		return control.mouse_filter != Control.MOUSE_FILTER_IGNORE
+	if control is Slider:
+		var slider: Slider = control as Slider
+		return slider.editable and control.mouse_filter != Control.MOUSE_FILTER_IGNORE
 	return _meta_true(control, META_TARGET)
 
 
