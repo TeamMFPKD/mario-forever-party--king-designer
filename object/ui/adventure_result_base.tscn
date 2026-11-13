@@ -1,9 +1,10 @@
-[gd_scene format=3 load_steps=5]
+[gd_scene format=3 load_steps=6]
 
 [ext_resource type="Script" uid="uid://toeshr8jjck6" path="res://script/adventure/adventure_result.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_label"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="4_button"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="5_back_snd"]
 
 [node name="AdventureResultBase" type="Control" node_paths=PackedStringArray("title_clip", "data_block", "tier_value", "passed_value", "deaths_value", "excluded_value", "skipped_value")]
 layout_mode = 3
@@ -174,6 +175,7 @@ custom_minimum_size = Vector2(300, 88)
 layout_mode = 2
 theme_override_font_sizes/font_size = 36
 text = "返回标题"
+pressed_sound = ExtResource("5_back_snd")
 
 [connection signal="pressed" from="DataBlock/ButtonsRow/AgainButton" to="." method="_on_again_pressed"]
 [connection signal="pressed" from="DataBlock/ButtonsRow/StageButton" to="." method="_on_stage_pressed"]

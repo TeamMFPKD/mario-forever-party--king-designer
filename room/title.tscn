@@ -50,6 +50,7 @@
 [ext_resource type="Theme" uid="uid://bm3i132pjoyj0" path="res://ui/theme/theme_fine_line.tres" id="61_fine"]
 [ext_resource type="Script" uid="uid://bnhjf5ib2iqyl" path="res://script/title/title_page_manager.gd" id="70_pagemgr"]
 [ext_resource type="Script" uid="uid://dre81e0pua38y" path="res://script/multiplayer/ui/title_net_bridge.gd" id="99_bridge"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="100_back_snd"]
 
 [sub_resource type="StyleBoxEmpty" id="SBE_notice_buttons"]
 
@@ -922,6 +923,7 @@ layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
 text = "返回"
+pressed_sound = ExtResource("100_back_snd")
 
 [node name="ControlsPanel" parent="GameRoomSize/Options" unique_id=2000237551 instance=ExtResource("4_i3lsm")]
 visible = false
@@ -1080,6 +1082,7 @@ text = "光标 / 镜头按键"
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 text = "返回主设置"
+pressed_sound = ExtResource("100_back_snd")
 
 [node name="CursorCameraSet" parent="GameRoomSize/Options/ControlsPanel" unique_id=830023748 instance=ExtResource("8_c2fru")]
 visible = false
@@ -1209,11 +1212,13 @@ script = ExtResource("42_reset")
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 text = "返回按键映射"
+pressed_sound = ExtResource("100_back_snd")
 
 [node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Buttons" unique_id=315261719 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 text = "返回主设置"
+pressed_sound = ExtResource("100_back_snd")
 
 [node name="ControlsPanelMobile" parent="GameRoomSize/Options" unique_id=1978154676 instance=ExtResource("4_i3lsm")]
 visible = false
@@ -1258,6 +1263,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "返回主设置"
+pressed_sound = ExtResource("100_back_snd")
 
 [node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanelMobile" unique_id=1778534696 instance=ExtResource("9_ty11l")]
 script = ExtResource("31_n7yan")

@@ -1,4 +1,4 @@
-[gd_scene format=4 load_steps=21 uid="uid://b2f2av134cwap"]
+[gd_scene format=4 load_steps=22 uid="uid://b2f2av134cwap"]
 
 [ext_resource type="PackedScene" path="res://room/base/edit_room_base.tscn" id="1_base"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="6_mwyf7"]
@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" path="res://object/ui/adventure_level_stats.tscn" id="12_stats"]
 [ext_resource type="Texture2D" uid="uid://cacrbfcjex40m" path="res://sprite/facility/solid_spike.png" id="88_iekbx"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="89_mm131"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="90_back_snd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mwnlh"]
 atlas = ExtResource("48_hf5vl")
@@ -220,6 +221,7 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 focus_mode = 0
 text = "返回"
+pressed_sound = ExtResource("90_back_snd")
 autowrap_mode = 3
 
 [node name="MobileControlManager" parent="."]

@@ -31,6 +31,9 @@ const META_MODAL_INCLUSIVE: StringName = &"ui_focus_modal_inclusive"
 ## 用于按钮的实际热区比视觉本体大很多的情况（如标题页水管：Button 为了盖住 hover
 ## 上浮的道具，向上多出 130px，直接框它会把红框顶到管子上面去）。
 const META_FOCUS_RECT: StringName = &"ui_focus_rect"
+## 控件已经自己播了按下音（例如收藏封面借用 UiSoundButton 的音效池），
+## 用这个 meta 关掉导航的兜底按下音，避免同一次点击响两份。
+const META_SOUND_SKIP: StringName = &"ui_sound_skip"
 
 const CURSOR_SCENE_PATH: String = "res://ui/menu_cursor.tscn"
 ## UI 焦点移动音效（SMM2「通用-选择翻页」）
@@ -168,6 +171,8 @@ func _hook_button_sound(node: Node) -> void:
 ## 其余（裸 Button / TextureButton / 没配音效的 UiSoundButton）用统一音效兜底。
 func _on_button_pressed(button: BaseButton) -> void:
 	if not is_instance_valid(button):
+		return
+	if button.has_meta(META_SOUND_SKIP):
 		return
 	if button is UiSoundButton:
 		var sound_button: UiSoundButton = button

@@ -40,7 +40,10 @@ func play_focus_sound() -> bool:
 	return _play(focus_sound)
 
 
-func _play(stream: AudioStream) -> bool:
+## 供非 Button 控件（如收藏页封面的 TextureButton）借用同一套 UI 音效池。
+## 调用方若要自己发声，需在 UiNavigator 那边用 `ui_sound_skip` 关掉兜底按下音，
+## 否则会同时听到两份声音。
+static func play_stream(stream: AudioStream) -> bool:
 	if stream == null:
 		return false
 	var player: AudioStreamPlayer = _next_player()
@@ -49,6 +52,10 @@ func _play(stream: AudioStream) -> bool:
 	player.stream = stream
 	player.play()
 	return true
+
+
+func _play(stream: AudioStream) -> bool:
+	return play_stream(stream)
 
 
 ## 轮转取一个播放器；池还没建（或场景切换把 root 下的持有节点清掉了）时重建。

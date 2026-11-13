@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://djpf3lsntxfdt" path="res://script/history/history_level_file_path_set_button.gd" id="4_7cyto"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="5_sg5bp"]
 [ext_resource type="Script" uid="uid://d34oa5sqso6ht" path="res://script/history/liked_courses/unlike_button.gd" id="5_tvc7b"]
+[ext_resource type="AudioStream" uid="uid://belniydebvho0" path="res://sound/ui/ui_decide_small.wav" id="6_cover_snd"]
 
 [node name="LikedCourseInfo" type="Control" node_paths=PackedStringArray("cover_root", "cover_button", "buttons_root")]
 custom_minimum_size = Vector2(320, 256)
@@ -20,6 +21,7 @@ script = ExtResource("1_card")
 cover_root = NodePath("CoverRoot")
 cover_button = NodePath("CoverRoot/CoverButton")
 buttons_root = NodePath("ButtonsRoot")
+cover_pressed_sound = ExtResource("6_cover_snd")
 
 [node name="LevelFileNameLabel" parent="." instance=ExtResource("1_f2jc8")]
 visible = false
@@ -113,6 +115,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_default_cursor_shape = 2
+metadata/ui_sound_skip = true
 
 [node name="JumpToSceneHistoryPlay" type="Node" parent="."]
 script = ExtResource("5_sg5bp")

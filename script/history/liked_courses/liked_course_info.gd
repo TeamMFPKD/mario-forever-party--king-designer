@@ -13,6 +13,9 @@ const CARD_GROUP: String = "liked_course_card"
 @export var cover_lift: float = 12.0
 @export var buttons_gap: float = 8.0
 @export var hover_tint: Color = Color(0.88, 0.88, 0.88, 1.0)
+## 点封面（展开/收起按钮组）时播放的音效；留空则不出声。
+## 封面是 TextureButton，不是 UiSoundButton，所以借用它的静态音效池播放。
+@export var cover_pressed_sound: AudioStream
 
 var _expanded: bool = false
 var _tween: Tween
@@ -95,6 +98,7 @@ func _find_scroll_container() -> ScrollContainer:
 	return null
 
 func _on_cover_button_pressed() -> void:
+	UiSoundButton.play_stream(cover_pressed_sound)
 	if _expanded:
 		collapse()
 		return

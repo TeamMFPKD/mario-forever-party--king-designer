@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
 [ext_resource type="PackedScene" uid="uid://bgbnexddng5mx" path="res://object/level_import_export.tscn" id="14_guxlu"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="14_ixr3s"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="15_back_snd"]
 
 [node name="History" type="Node2D" unique_id=1793275075]
 
@@ -150,6 +151,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 7
 text = "返回标题画面"
+pressed_sound = ExtResource("15_back_snd")
 
 metadata/gamepad_focus = true
 [node name="LevelImportExport" parent="GameRoomSize" unique_id=1195559321 instance=ExtResource("14_guxlu")]

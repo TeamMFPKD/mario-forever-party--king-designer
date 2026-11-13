@@ -1,4 +1,4 @@
-[gd_scene format=4 load_steps=12 uid="uid://b3uujgk5upbfj"]
+[gd_scene format=4 load_steps=13 uid="uid://b3uujgk5upbfj"]
 
 [ext_resource type="PackedScene" path="res://room/base/play_room_base.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/list/time_hud.tscn" id="6_oqxpu"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://object/ui/adventure_level_stats.tscn" id="7_stats"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="34_me11v"]
 [ext_resource type="PackedScene" path="res://object/ui/adventure_pause_menu.tscn" id="35_pause"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="36_back_snd"]
 
 [node name="Play" instance=ExtResource("1_base")]
 
@@ -82,6 +83,7 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 focus_mode = 0
 text = "返回"
+pressed_sound = ExtResource("36_back_snd")
 autowrap_mode = 3
 
 [node name="LevelPathSetGetter" type="Node" parent="." index="5" unique_id=1354514666 node_paths=PackedStringArray("load_level_node")]

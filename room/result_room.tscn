@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="13_noirq"]
 [ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="15_5xsjv"]
 [ext_resource type="AudioStream" uid="uid://bhfecec1p8kjj" path="res://sound/SE_networkWindowOpen.wav" id="16_kckux"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="17_back_snd"]
 
 [node name="ResultRoom" type="Node2D" unique_id=609637802]
 
@@ -210,6 +211,7 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "返回标题画面"
 script = ExtResource("12_jjhps")
+pressed_sound = ExtResource("17_back_snd")
 
 [node name="MobileControlManager" parent="." unique_id=666185208 instance=ExtResource("13_noirq")]
 show_mode = 0
