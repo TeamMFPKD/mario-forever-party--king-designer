@@ -193,7 +193,6 @@ func host_game(port: int) -> void:
 	if net.is_online() or net.is_connecting():
 		Log.i("已在房间或正在连接，忽略重复的开房请求")
 		return
-	_lobby_page = LobbyPage.HOST
 	if not net.is_valid_port(port):
 		Log.w("创建房间失败：本地端口无效（%d）" % port)
 		Notice.show_notice(PORT_INVALID_MESSAGE, "创建房间失败", "确认", [PORT_MIN, PORT_MAX])
@@ -210,6 +209,9 @@ func host_game(port: int) -> void:
 		)
 		return
 
+	# 只有真正开始监听后才记「当前大厅页」；失败（端口非法/占用）不写，
+	# 否则回到标题页时 TitleNetBridge 会凭这条陈旧状态把 HostPage 又弹出来。
+	_lobby_page = LobbyPage.HOST
 	player.id = net.local_id()
 	player.name = player_name.substr(0, PlayerProfile.NAME_LIMIT)
 	player.device_id = device_id
@@ -229,7 +231,6 @@ func join_game(address: String, port: int) -> void:
 		# 那不是连接失败，静默忽略，避免已经进房还弹“加入失败”。
 		Log.i("已在房间或正在连接，忽略重复的加入请求")
 		return
-	_lobby_page = LobbyPage.JOIN
 	var domain: String = address.strip_edges()
 	if domain.is_empty():
 		Log.w("加入房间失败：未填写组织方 IP / 域名")
@@ -252,6 +253,8 @@ func join_game(address: String, port: int) -> void:
 		_join_failure_notice_open = true
 		Notice.show_notice(CONNECT_FAILED_MESSAGE, "加入房间失败", "确认", [domain, port])
 		return
+	# 真正开始连接后才记；失败时页面保持打开，玩家改完地址可直接重试。
+	_lobby_page = LobbyPage.JOIN
 	Log.i(["正在连接到服务器: ", domain])
 
 
@@ -308,6 +311,13 @@ func set_local_spectator(value: bool) -> void:
 
 func get_lobby_page() -> int:
 	return _lobby_page
+
+
+## 清掉「上次从哪个大厅页进来」的记录。
+## 房间已解散或玩家主动关掉大厅页后调用，避免标题场景重载时被
+## TitleNetBridge._sync_from_state() 当成仍要恢复的页面。
+func clear_lobby_page() -> void:
+	_lobby_page = LobbyPage.NONE
 
 
 ## 玩家身份色（头像外圈 / 消息气泡描边）。
@@ -538,6 +548,8 @@ func _cleanup_session() -> void:
 		flow.phase = RoomPhase.Phase.NONE
 		flow.random_levels.clear()
 		flow.current_level_count = 0
+	# 房间已经解散，没有「上次从哪个大厅页来」可恢复。
+	_lobby_page = LobbyPage.NONE
 
 
 # ---------------------------------------------------------------------------

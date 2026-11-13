@@ -29,7 +29,24 @@ func _ready() -> void:
 	MPManager.net.server_lost.connect(_on_room_lost)
 	MPManager.net.room_closed.connect(_on_room_lost)
 	MPManager.lobby.join_rejected.connect(_on_join_rejected)
+	_watch_page(_host_page)
+	_watch_page(_join_page)
 	_sync_from_state()
+
+
+## 大厅页被关掉（退出动画播完、visible 变 false）时清掉「上次大厅页」记录。
+## 否则下次标题场景重载（例如从百人团返回）时，_sync_from_state 会凭这条
+## 陈旧记录把页面又自动弹回来。
+func _watch_page(page: Control) -> void:
+	if page == null:
+		return
+	page.visibility_changed.connect(_on_page_visibility_changed.bind(page))
+
+
+func _on_page_visibility_changed(page: Control) -> void:
+	if page == null or not is_instance_valid(page) or page.visible:
+		return
+	MPManager.clear_lobby_page()
 
 
 func _sync_from_state() -> void:
