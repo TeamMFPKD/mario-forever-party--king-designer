@@ -32,7 +32,6 @@ const HISTORY_UNDERLYING_BUTTONS: Array[String] = [
 
 @onready var _root: Control = $Root
 @onready var _card_holder: Control = $Root/CardHolder
-@onready var _backdrop: ColorRect = $Root/CardHolder/Backdrop
 @onready var _card_container: SubViewportContainer = $Root/CardHolder/CardContainer
 @onready var _card_viewport: SubViewport = $Root/CardHolder/CardContainer/CardViewport
 @onready var _flip_mesh: MeshInstance2D = $Root/CardHolder/FlipMesh
@@ -133,8 +132,6 @@ func force_close(keep_paused: bool = false) -> void:
 	if _card_holder != null:
 		_card_holder.visible = false
 	_set_card_interactive(true)
-	if _backdrop != null:
-		_backdrop.visible = false
 	Adventure.set_transition_menu_paused(false)
 	if _level_panel != null and is_instance_valid(_level_panel):
 		_level_panel.visible = true
@@ -168,9 +165,9 @@ func _open_flip() -> void:
 	_randomize_flip_style()
 	_prepare_flip_stage(rect)
 	_level_panel.visible = false
-	# 过场动画播到一半会搬到主视口，不再受关卡视口的显隐约束；翻卡缩小/上抛时
-	# 卡片下方会露出还在播的黄色过场。转场期间用垫底色盖住，并定格它的时间线。
-	_backdrop.visible = Adventure.is_pass_transition_running()
+	# 关卡视口隐藏后，卡片背后自然露出场景自带的 psc.png 斜条纹背景。
+	# 转场播到一半会搬到主视口、不再受关卡视口显隐约束，交给转场自己在这期间
+	# 隐藏画面并定格时间线，不用白色垫底去盖。
 	Adventure.set_transition_menu_paused(true)
 
 	_update_flip(0.0)
@@ -205,8 +202,6 @@ func _close_flip(keep_frozen: bool = false) -> void:
 
 	_flip_mesh.visible = false
 	_card_holder.visible = false
-	if _backdrop != null:
-		_backdrop.visible = false
 	Adventure.set_transition_menu_paused(false)
 	if _level_panel != null and is_instance_valid(_level_panel):
 		_level_panel.visible = true
@@ -237,12 +232,10 @@ func _flip_away_for_skip() -> void:
 		_flip_material.set_shader_parameter("level_tex", _card_viewport.get_texture())
 		_flip_material.set_shader_parameter("inner_min", Vector2.ZERO)
 		_flip_material.set_shader_parameter("inner_size", Vector2.ONE)
-	if _backdrop != null:
-		_backdrop.visible = true
 	# 跳过不走过关转场，别把打开菜单时设的定格标志带到下一关。
 	Adventure.set_transition_menu_paused(false)
 	# 关卡视口先藏起来：卡片侧对镜头的瞬间是透明的，
-	# 露出的是垫底色，而不是关卡画面。
+	# 露出的是 psc.png 斜条纹背景，而不是关卡画面。
 	_level_panel.visible = false
 
 	_animating = true

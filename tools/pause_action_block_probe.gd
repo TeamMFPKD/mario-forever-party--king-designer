@@ -114,14 +114,15 @@ func _run() -> void:
 	Adventure.emit_signal("pause_actions_blocked_changed")
 	_lines.append("transition_done_exclude=%s" % str(exclude.disabled))
 
-	await _check_transition_pause(_menu.get_node("Root/CardHolder/Backdrop") as ColorRect)
+	await _check_transition_pause()
 
 
-## 过场动画中暂停：卡片底部不能露出过场，解除暂停要有完整的翻回动画。
-func _check_transition_pause(backdrop: ColorRect) -> void:
-	if backdrop == null:
-		_lines.append("backdrop=missing")
-		return
+## 过场动画中暂停：卡片背后露出场景自带的 psc.png 背景（不再有白色垫底），
+## 解除暂停要有完整的翻回动画。
+func _check_transition_pause() -> void:
+	_lines.append("white_backdrop_removed=%s" % str(
+		_menu.get_node_or_null("Root/CardHolder/Backdrop") == null
+	))
 	var transition: Node = null
 	var packed: PackedScene = load(TRANSITION) as PackedScene
 	if packed != null:
@@ -134,7 +135,6 @@ func _check_transition_pause(backdrop: ColorRect) -> void:
 	get_tree().paused = false
 	_menu.call("toggle_pause")
 	await _settle_menu()
-	_lines.append("transition_backdrop=%s" % str(backdrop.visible))
 	if transition != null:
 		_lines.append("transition_frozen_on_open=%s" % str(bool(transition.get("_menu_paused"))))
 
@@ -149,17 +149,15 @@ func _check_transition_pause(backdrop: ColorRect) -> void:
 	await Adventure.wait_pause_menu_closed()
 	_lines.append("close_animation_played=%s" % str(bool(mid.get("animating", false))))
 	_lines.append("close_animation_finished=%s" % str(not bool(_menu.get("_animating"))))
-	_lines.append("backdrop_hidden_after_close=%s" % str(not backdrop.visible))
 	_lines.append("still_paused_in_transition=%s" % str(get_tree().paused))
 	if transition != null:
 		_lines.append("transition_resumed=%s" % str(not bool(transition.get("_menu_paused"))))
 
-	# 回归：非转场时关菜单仍要正常解冻，且不显示垫底。
+	# 回归：非转场时关菜单仍要正常解冻。
 	Adventure.set("_pass_transition_busy", false)
 	Adventure.emit_signal("pause_actions_blocked_changed")
 	_menu.call("toggle_pause")
 	await _settle_menu()
-	_lines.append("normal_backdrop_hidden=%s" % str(not backdrop.visible))
 	_menu.call("toggle_pause")
 	await Adventure.wait_pause_menu_closed()
 	_lines.append("normal_close_unpauses=%s" % str(not get_tree().paused))

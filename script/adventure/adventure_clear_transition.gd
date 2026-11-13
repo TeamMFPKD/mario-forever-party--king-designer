@@ -460,8 +460,13 @@ func set_slide_out_blocked(blocked: bool) -> void:
 
 
 ## 暂停菜单打开期间定格：_process 照常被调用但不累计时间，信号与阶段都不推进。
+## 同时把已搬到主视口的画面藏起来：关卡视口被菜单隐藏后，中间区域要露出场景
+## 自带的 psc.png 斜条纹背景，不能再让黄色过场画在上面（也不用白色垫底去盖）。
 func set_menu_paused(value: bool) -> void:
 	_menu_paused = value
+	if is_instance_valid(_detached_root):
+		# 转场已经播完时 visible=false，恢复也不能把画面重新点亮。
+		_detached_root.visible = not value and visible
 
 
 func _process(delta: float) -> void:

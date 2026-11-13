@@ -139,17 +139,6 @@ offset_right = 1320.0
 offset_bottom = 1000.0
 mouse_filter = 2
 
-[node name="Backdrop" type="ColorRect" parent="Root/CardHolder"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.972549, 0.972549, 0.972549, 1)
-
 [node name="CardContainer" type="SubViewportContainer" parent="Root/CardHolder"]
 layout_mode = 1
 anchors_preset = 15
