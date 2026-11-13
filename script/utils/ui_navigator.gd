@@ -921,7 +921,10 @@ func _rescan() -> void:
 		for control: Control in raw:
 			if control == modal or modal.is_ancestor_of(control):
 				filtered.append(control)
-		raw = filtered
+		# 回放页的翻卡暂停菜单故意没有选项，模态子树里一个可交互控件都没有。
+		# 这种"空牢笼"不该把焦点困住：回退到全量候选，让方向键继续操作下层 UI。
+		if not filtered.is_empty():
+			raw = filtered
 	var previous_ids: Dictionary[int, bool] = _known_ids
 	_candidates = raw
 	var current_ids: Dictionary[int, bool] = {}
@@ -1016,8 +1019,11 @@ func _collect_node(node: Node, skipped: bool, in_modal: bool, out: Array[Control
 	var now_modal: bool = in_modal
 	if node is Control:
 		var control: Control = node as Control
+		# 必须判 is_visible_in_tree()：模态 Root 自己的 visible 常常是 true，
+		# 真正隐藏它的是父级 CanvasLayer（不是 CanvasItem，上面的快速判定看不到）。
+		# 否则关掉的暂停菜单仍会把候选锁进它那棵空子树。
 		if _current_modal == null and control.has_meta(META_MODAL) \
-				and _meta_true(control, META_MODAL):
+				and _meta_true(control, META_MODAL) and control.is_visible_in_tree():
 			_current_modal = control
 			now_modal = true
 		if not now_skipped:
