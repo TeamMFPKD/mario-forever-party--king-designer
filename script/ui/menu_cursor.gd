@@ -129,6 +129,10 @@ func _follow_target(delta: float) -> void:
 		_base_rect.position.lerp(_target_rect.position, weight),
 		_base_rect.size.lerp(_target_rect.size, weight)
 	)
+	# 收敛到亚像素后直接吸附：指数收敛永远差一点点，留着 0.x px 偏差会让描边发虚
+	if _base_rect.position.distance_to(_target_rect.position) < 0.5 \
+			and _base_rect.size.distance_to(_target_rect.size) < 0.5:
+		_base_rect = _target_rect
 
 
 func _advance_breath(delta: float) -> void:
