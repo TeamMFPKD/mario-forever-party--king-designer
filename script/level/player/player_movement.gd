@@ -303,7 +303,12 @@ func _apply_collision_patches(delta: float) -> void:
 
 
 func _try_step_up(delta: float) -> void:
-	if step_up_amount <= 0 or not player.is_on_floor():
+	if step_up_amount <= 0:
+		return
+	# 只在非上升状态迈步：站着、贴地或正在下落都允许。
+	# 跑过「砖-空-砖」一格坑时脚底已低于对侧砖顶几像素，此时 is_on_floor 为 false，
+	# 若死守 on_floor 就永远迈不上去（矩形盒没有原八边形的底部倒角可蹭）。
+	if player.velocity.y < 0.0:
 		return
 	if absf(player.velocity.x) <= 1.0:
 		return
