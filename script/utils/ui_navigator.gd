@@ -99,6 +99,8 @@ var _left_down: bool = false
 
 var _modal_visible: bool = false
 var _modal_probe: float = 0.0
+## 按键时按需刷新模态的上次时间戳（节流用）
+var _modal_refresh_ms: int = 0
 ## 上一轮扫描得到的模态节点，命中测试时用来过滤
 var _current_modal: Control = null
 ## 有节点被移出树：候选数组里可能留下已释放的引用，下次处理输入前先清理
@@ -225,7 +227,7 @@ func _process(delta: float) -> void:
 	_modal_probe += delta
 	if _modal_probe >= MODAL_PROBE_INTERVAL:
 		_modal_probe = 0.0
-		_modal_visible = _is_gameplay_mode() and _any_visible_modal()
+		_update_modal_visible()
 
 	if not _navigation_enabled():
 		_release_left_button()
@@ -236,7 +238,9 @@ func _process(delta: float) -> void:
 	_prune_if_needed()
 
 	# 游戏内 FOCUS 组归角色，UI 只能用虚拟鼠标；带着 FOCUS 模式进来时强制掰回来。
-	if _is_character_control_mode():
+	# 但模态 UI（暂停菜单 / 通知）盖在游戏上时不能掰——否则暂停菜单里方向键
+	# 刚切到 FOCUS 就被下一帧改回 POINTER。
+	if not _modal_visible and _is_character_control_mode():
 		if _mode != InputMode.POINTER:
 			_mode = InputMode.POINTER
 
@@ -275,6 +279,18 @@ func _navigation_enabled() -> bool:
 	return true
 
 
+## 重新探测屏幕上有没有可见的模态 UI。
+##
+## 模态开关会改变候选范围（有模态时只留它的后代），所以状态一变必须立刻重扫：
+## 否则暂停菜单刚打开时方向键还在旧的 HUD 候选里跳，表现为"按了没反应"。
+func _update_modal_visible() -> void:
+	var previous: bool = _modal_visible
+	_modal_visible = (_is_gameplay_mode() or GameMode.is_history_play()) and _any_visible_modal()
+	_modal_probe = 0.0
+	if _modal_visible != previous:
+		_dirty = true
+
+
 func _is_gameplay_mode() -> bool:
 	return GameMode.is_playing() or GameMode.is_adventure() or GameMode.is_testing()
 
@@ -298,6 +314,15 @@ func _any_visible_modal() -> bool:
 # ---------------------------------------------------------------------------
 
 func _input(event: InputEvent) -> void:
+	# 游戏内暂停菜单刚打开时，0.3s 的定时探测还没跑；按键瞬间补一次，
+	# 否则第一下方向键会被判给角色、看起来像"暂停后 UI 操作不了"。
+	if not _modal_visible and (_is_gameplay_mode() or GameMode.is_history_play()) \
+			and (event is InputEventKey or event is InputEventJoypadButton
+				or event is InputEventJoypadMotion or event is InputEventAction):
+		var now_ms: int = Time.get_ticks_msec()
+		if now_ms - _modal_refresh_ms >= 100:
+			_modal_refresh_ms = now_ms
+			_update_modal_visible()
 	if not _navigation_enabled():
 		return
 	_prune_if_needed()
@@ -321,6 +346,10 @@ func _input(event: InputEvent) -> void:
 ## 归角色移动，UI 只能用虚拟鼠标。CAMERA 组任何时候都只归镜头。
 func _group_allowed(group: InputGroups.Group) -> bool:
 	if group == InputGroups.Group.FOCUS:
+		# 模态 UI（暂停菜单 / 通知）盖在游戏上时，方向键与十字键优先给 UI，
+		# 哪怕场上有玩家在跑。
+		if _modal_visible:
+			return true
 		return not _is_character_control_mode()
 	if group == InputGroups.Group.POINTER:
 		return true
@@ -815,6 +844,8 @@ func _ensure_cursor_node() -> void:
 		_cursor_layer = CanvasLayer.new()
 		_cursor_layer.name = "UiNavigatorCursorLayer"
 		_cursor_layer.layer = CURSOR_LAYER
+		# 暂停菜单里红框也要继续呼吸 / 跟手，不能跟着 tree.paused 停下
+		_cursor_layer.process_mode = Node.PROCESS_MODE_ALWAYS
 		get_tree().root.add_child(_cursor_layer)
 	var created: Node = _cursor_scene.instantiate()
 	if not (created is UiMenuCursor):
@@ -822,6 +853,7 @@ func _ensure_cursor_node() -> void:
 		return
 	var cursor: UiMenuCursor = created as UiMenuCursor
 	cursor.name = "UiNavigatorCursor"
+	cursor.process_mode = Node.PROCESS_MODE_ALWAYS
 	_cursor_layer.add_child(cursor)
 	_cursor = cursor
 
@@ -882,7 +914,7 @@ func _rescan() -> void:
 	_current_modal = null
 	var raw: Array[Control] = []
 	for child: Node in get_tree().root.get_children():
-		_collect_node(child, false, raw)
+		_collect_node(child, false, false, raw)
 	var modal: Control = _current_modal
 	if modal != null:
 		var filtered: Array[Control] = []
@@ -967,8 +999,11 @@ func _first_new_candidate(previous_ids: Dictionary[int, bool]) -> int:
 
 
 ## 热路径：判定逻辑全部内联，并用 get_child_count/get_child 避免每个节点分配一个子节点数组。
-func _collect_node(node: Node, skipped: bool, out: Array[Control]) -> void:
-	if node is Viewport:
+func _collect_node(node: Node, skipped: bool, in_modal: bool, out: Array[Control]) -> void:
+	# 别的 Viewport 里的内容默认不参与（坐标系不同，靠 SubViewportContainer 自己转发）。
+	# 例外：模态 UI 自己就建在 SubViewport 里——百人团暂停卡片为了翻转效果把
+	# 整张卡（含 4 个按钮）放在 CardViewport 中，不进去收的话菜单里一个候选都没有。
+	if node is Viewport and not in_modal:
 		return
 	# 祖先不可见时上面已经 return，所以这里只查自身 visible 就够
 	if node is CanvasItem and not (node as CanvasItem).visible:
@@ -978,11 +1013,13 @@ func _collect_node(node: Node, skipped: bool, out: Array[Control]) -> void:
 	# 此时 has_meta() 仍为 true，只看 key 存在会把整棵子树误排除。
 	if not now_skipped and node.has_meta(META_SKIP):
 		now_skipped = _meta_true(node, META_SKIP)
+	var now_modal: bool = in_modal
 	if node is Control:
 		var control: Control = node as Control
 		if _current_modal == null and control.has_meta(META_MODAL) \
 				and _meta_true(control, META_MODAL):
 			_current_modal = control
+			now_modal = true
 		if not now_skipped:
 			if control is BaseButton:
 				var button: BaseButton = control as BaseButton
@@ -1000,7 +1037,7 @@ func _collect_node(node: Node, skipped: bool, out: Array[Control]) -> void:
 				out.append(control)
 	var child_count: int = node.get_child_count()
 	for i: int in range(child_count):
-		_collect_node(node.get_child(i), now_skipped, out)
+		_collect_node(node.get_child(i), now_skipped, now_modal, out)
 
 
 func _is_candidate(node: Node, skip_checked: bool = false) -> bool:
@@ -1052,7 +1089,28 @@ func _canvas_rect_of(control: Control) -> Rect2:
 	var transform: Transform2D = target.get_global_transform_with_canvas()
 	var top_left: Vector2 = transform * Vector2.ZERO
 	var bottom_right: Vector2 = transform * target.size
-	return Rect2(top_left, bottom_right - top_left).abs()
+	var rect: Rect2 = Rect2(top_left, bottom_right - top_left).abs()
+	return _to_root_canvas_rect(rect, target)
+
+
+## SubViewport 里的控件，坐标是相对那个视口的，必须换算到 root 画布上。
+## 百人团暂停卡片的按钮就在 CardViewport 内，不换算焦点框会画到别处。
+func _to_root_canvas_rect(rect: Rect2, control: Control) -> Rect2:
+	var viewport: Viewport = control.get_viewport()
+	var root_viewport: Viewport = get_viewport()
+	if viewport == null or root_viewport == null or viewport == root_viewport:
+		return rect
+	var inner: Vector2 = viewport.get_visible_rect().size
+	if inner.x <= 0.0 or inner.y <= 0.0:
+		return rect
+	var holder: Node = viewport.get_parent()
+	if not (holder is Control):
+		return rect
+	var holder_control: Control = holder
+	var holder_rect: Rect2 = holder_control.get_global_rect()
+	# SubViewportContainer 开了 stretch 时两者等大，scale 为 1
+	var scale: Vector2 = holder_control.size / inner
+	return Rect2(holder_rect.position + rect.position * scale, rect.size * scale)
 
 
 func _focus_rect_control(control: Control) -> Control:
