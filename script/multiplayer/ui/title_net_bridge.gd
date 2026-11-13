@@ -9,6 +9,7 @@ const HOST_PAGE: String = "../GameRoomSize/HostPage"
 const JOIN_PAGE: String = "../GameRoomSize/JoinPage"
 const PLAYER_PAGE: String = "../GameRoomSize/PlayerPage"
 const CLIENT_INVISIBLE_SET: String = "../ClientInvisibleNodeSet"
+const TITLE_PAGE_MANAGER_GROUP: StringName = &"title_page_manager"
 
 var _host_page: Control
 var _join_page: Control
@@ -41,12 +42,7 @@ func _sync_from_state() -> void:
 
 
 func _show_player_page() -> void:
-	if _host_page:
-		_host_page.visible = false
-	if _join_page:
-		_join_page.visible = false
-	if _player_page:
-		_player_page.visible = true
+	_open_page(_player_page)
 	if _client_invisible_set:
 		if MPManager.net.is_server():
 			_client_invisible_set.call("_on_nodes_visible_set")
@@ -67,9 +63,16 @@ func _on_room_lost() -> void:
 
 
 func _restore_page(page: Control) -> void:
-	if _player_page:
-		_player_page.visible = false
-	if _host_page:
-		_host_page.visible = page == _host_page
-	if _join_page:
-		_join_page.visible = page == _join_page
+	_open_page(page)
+
+
+## 页面显隐统一交给 TitlePageManager（它负责互斥与退出动画）；
+## 没有管理器时（例如单独跑子场景）退回直接改 visible。
+func _open_page(page: Control) -> void:
+	if page == null or not is_instance_valid(page):
+		return
+	var manager: Node = get_tree().get_first_node_in_group(TITLE_PAGE_MANAGER_GROUP)
+	if manager != null:
+		manager.call("open_page", page)
+		return
+	page.visible = true

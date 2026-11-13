@@ -57,6 +57,10 @@ static var _pipe_variants: Array[Texture2D] = []
 static var _item_variants: Dictionary = {}
 
 var _base_y: float = 0.0
+## 由 pipe_menu 控制：整排收起/升回期间锁掉点击与 hover 位移
+var _input_locked: bool = false
+var _hover_tween: Tween
+var _item_tween: Tween
 
 
 func _ready() -> void:
@@ -77,6 +81,27 @@ func set_base_position(y: float) -> void:
 ## 仅供截图/调试：把管口道具升起来
 func show_item() -> void:
 	_item.position.y = ITEM_SHOWN_Y
+
+
+## 由 pipe_menu 调用：锁掉点击，并把 hover 抬起的位移与管口道具收回去
+func set_input_locked(locked: bool) -> void:
+	_input_locked = locked
+	_button.mouse_filter = (
+		Control.MOUSE_FILTER_IGNORE if locked else Control.MOUSE_FILTER_STOP
+	)
+	if locked:
+		_stop_hover()
+
+
+func _stop_hover() -> void:
+	if _hover_tween != null and _hover_tween.is_valid():
+		_hover_tween.kill()
+	_hover_tween = null
+	if _item_tween != null and _item_tween.is_valid():
+		_item_tween.kill()
+	_item_tween = null
+	if _item != null:
+		_item.position.y = ITEM_HIDDEN_Y
 
 
 func _apply_label() -> void:
@@ -145,14 +170,16 @@ func _atlas(texture: Texture2D, region: Rect2) -> AtlasTexture:
 
 
 func _on_hover(entered: bool) -> void:
+	if _input_locked:
+		return
 	var target_y: float = (_base_y - HOVER_LIFT) if entered else _base_y
 	var item_target: float = ITEM_SHOWN_Y if entered else ITEM_HIDDEN_Y
-	var holder_tween: Tween = create_tween()
-	holder_tween.tween_property(self, "position:y", target_y, 0.12).set_trans(
+	_hover_tween = create_tween()
+	_hover_tween.tween_property(self, "position:y", target_y, 0.12).set_trans(
 		Tween.TRANS_CUBIC
 	).set_ease(Tween.EASE_OUT)
-	var item_tween: Tween = _item.create_tween()
-	item_tween.tween_property(_item, "position:y", item_target, 0.2).set_trans(
+	_item_tween = _item.create_tween()
+	_item_tween.tween_property(_item, "position:y", item_target, 0.2).set_trans(
 		Tween.TRANS_CUBIC
 	).set_ease(Tween.EASE_OUT)
 
