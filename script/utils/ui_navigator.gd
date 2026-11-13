@@ -135,6 +135,11 @@ func _process(delta: float) -> void:
 		_dirty = true
 		return
 
+	# 编辑室里不提供虚拟鼠标：WASD 全部归 LevelCamera 移镜头，方向和 D-pad 只做焦点导航。
+	# 从别的界面带着 POINTER 模式进来时强制切回 FOCUS。
+	if GameMode.is_editing() and _mode != InputMode.FOCUS:
+		_mode = InputMode.FOCUS
+
 	_since_scan += delta
 	if _dirty or _since_scan >= SCAN_INTERVAL:
 		_dirty = false
@@ -228,6 +233,9 @@ func _classify(event: InputEvent) -> int:
 		if code == KEY_UP or code == KEY_DOWN or code == KEY_LEFT or code == KEY_RIGHT:
 			return SOURCE_FOCUS
 		if code == KEY_W or code == KEY_A or code == KEY_S or code == KEY_D:
+			# 编辑室里 WASD 是移动镜头，不能被当成"移动鼠标"（LevelCamera 直接读物理键）
+			if GameMode.is_editing():
+				return SOURCE_NONE
 			return SOURCE_POINTER
 		return SOURCE_NONE
 	return SOURCE_NONE

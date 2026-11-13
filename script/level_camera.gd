@@ -32,22 +32,24 @@ func _physics_process(delta: float) -> void:
 		position = player.position
 		return
 
-	# 编辑模式下镜头由键鼠方向键 / WASD 驱动。
-	# 手柄在场时 move_* 同时绑了 D-pad 和左摇杆，而这两者要留给
-	# 「D-pad 控 UI 焦点」「摇杆控编辑光标」（见 docs/gamepad/README.md §6），
-	# 所以手柄主导时镜头不再响应这些动作。
+	# 编辑模式下镜头**只由 WASD 驱动**。
+	#
+	# 不能用 move_* 动作：同一组动作同时绑了 WSAD、方向键、D-pad 和左摇杆，
+	# 而方向键要留给 UI 焦点导航（否则按方向键会一边移镜头一边动红框），
+	# 手柄的 D-pad / 左摇杆按 docs/gamepad/README.md §6 留给 UI 与编辑光标。
+	# 所以这里直接读物理键，手柄活跃时整个不响应（见 _keyboard_camera_enabled）。
 	direction = Vector2.ZERO
 	if _keyboard_camera_enabled():
-		if Input.is_action_pressed("move_up"):
+		if Input.is_physical_key_pressed(KEY_W):
 			direction += Vector2.UP
 			speed = max_speed
-		if Input.is_action_pressed("move_down"):
+		if Input.is_physical_key_pressed(KEY_S):
 			direction += Vector2.DOWN
 			speed = max_speed
-		if Input.is_action_pressed("move_left"):
+		if Input.is_physical_key_pressed(KEY_A):
 			direction += Vector2.LEFT
 			speed = max_speed
-		if Input.is_action_pressed("move_right"):
+		if Input.is_physical_key_pressed(KEY_D):
 			direction += Vector2.RIGHT
 			speed = max_speed
 	direction = direction.normalized()
