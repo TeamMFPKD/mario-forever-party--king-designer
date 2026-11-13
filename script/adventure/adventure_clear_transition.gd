@@ -110,6 +110,8 @@ var _elapsed: float = 0.0
 var _halfway_emitted: bool = false
 ## 下一关还没就绪时锁住划出：黄色块保持全屏，不露出后面还没准备好的画面。
 var _slide_out_blocked: bool = false
+## 暂停菜单打开时冻结转场时间线，避免在玩家看不到的地方把划入/跳跃/划出播完。
+var _menu_paused: bool = false
 ## 转场播到一半被摘出 CanvasLayer 后，Root 由这里持有（宿主被释放也不影响它）。
 var _detached_root: Control = null
 var _start_level: int = 1
@@ -457,7 +459,14 @@ func set_slide_out_blocked(blocked: bool) -> void:
 	_slide_out_blocked = blocked
 
 
+## 暂停菜单打开期间定格：_process 照常被调用但不累计时间，信号与阶段都不推进。
+func set_menu_paused(value: bool) -> void:
+	_menu_paused = value
+
+
 func _process(delta: float) -> void:
+	if _menu_paused:
+		return
 	_t += delta
 	_elapsed += delta
 	_emit_halfway()

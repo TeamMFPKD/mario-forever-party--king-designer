@@ -23,6 +23,14 @@ const ROLL_RANGE: Vector2 = Vector2(0.04, 0.15)
 const LIFT_RANGE: Vector2 = Vector2(10.0, 26.0)
 const PERSPECTIVE_RANGE: Vector2 = Vector2(1500.0, 2050.0)
 
+## 回放页卡片只盖住中间的关卡视口，两侧的「查看」「返回」仍归本场景管。
+## 它们被按下时要同步解冻，否则切到下一场景时树还是 paused。
+const HISTORY_UNDERLYING_BUTTONS: Array[String] = [
+	"GameRoomSize/MarginContainer/Button",
+	"GameRoomSize/BackToHistory/BackToHistoryButton",
+]
+
+@onready var _root: Control = $Root
 @onready var _card_holder: Control = $Root/CardHolder
 @onready var _backdrop: ColorRect = $Root/CardHolder/Backdrop
 @onready var _card_container: SubViewportContainer = $Root/CardHolder/CardContainer
@@ -66,6 +74,13 @@ func _ready() -> void:
 	if history_mode:
 		_skip_button.visible = false
 		_abort_button.visible = false
+		# 回放页的卡片不独占焦点：方向键要能跳到两侧的「查看」「返回」。
+		_root.set_meta(&"ui_focus_modal_inclusive", true)
+		# Root 全屏 STOP 会吃掉 UiNavigator 合成的点击，改成穿透让下层按钮能被点中；
+		# 卡片区域仍有 CardContainer（STOP）挡着，继续 / 排除照常可点。
+		# 代价：卡片外空白处不再触发「点空白继续」，改用「继续」按钮或暂停键收起菜单。
+		_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_connect_underlying_buttons.call_deferred()
 	if not actions_visible:
 		# 没有选项时按钮容器会塌陷，标题就贴在卡片顶部。
 		# 这里让标题吃掉整张卡片并垂直居中，视觉上"暂停"落在正中间。
@@ -118,6 +133,9 @@ func force_close(keep_paused: bool = false) -> void:
 	if _card_holder != null:
 		_card_holder.visible = false
 	_set_card_interactive(true)
+	if _backdrop != null:
+		_backdrop.visible = false
+	Adventure.set_transition_menu_paused(false)
 	if _level_panel != null and is_instance_valid(_level_panel):
 		_level_panel.visible = true
 	if not keep_paused:
@@ -150,6 +168,10 @@ func _open_flip() -> void:
 	_randomize_flip_style()
 	_prepare_flip_stage(rect)
 	_level_panel.visible = false
+	# 过场动画播到一半会搬到主视口，不再受关卡视口的显隐约束；翻卡缩小/上抛时
+	# 卡片下方会露出还在播的黄色过场。转场期间用垫底色盖住，并定格它的时间线。
+	_backdrop.visible = Adventure.is_pass_transition_running()
+	Adventure.set_transition_menu_paused(true)
 
 	_update_flip(0.0)
 	_flip_tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
@@ -183,10 +205,15 @@ func _close_flip(keep_frozen: bool = false) -> void:
 
 	_flip_mesh.visible = false
 	_card_holder.visible = false
+	if _backdrop != null:
+		_backdrop.visible = false
+	Adventure.set_transition_menu_paused(false)
 	if _level_panel != null and is_instance_valid(_level_panel):
 		_level_panel.visible = true
 	visible = false
-	if not keep_frozen:
+	# 过关 / 转场期间世界本来就冻结着，交给转场流程统一解冻；
+	# 这里提前解冻会让旧关卡在换关前多跑一帧。
+	if not keep_frozen and not Adventure.is_pause_action_blocked():
 		get_tree().paused = false
 	_animating = false
 
@@ -212,6 +239,8 @@ func _flip_away_for_skip() -> void:
 		_flip_material.set_shader_parameter("inner_size", Vector2.ONE)
 	if _backdrop != null:
 		_backdrop.visible = true
+	# 跳过不走过关转场，别把打开菜单时设的定格标志带到下一关。
+	Adventure.set_transition_menu_paused(false)
 	# 关卡视口先藏起来：卡片侧对镜头的瞬间是透明的，
 	# 露出的是垫底色，而不是关卡画面。
 	_level_panel.visible = false
@@ -361,11 +390,29 @@ func _on_root_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event: InputEventMouseButton = event
 		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT:
-			# 回放页的「排除」按钮点完会变灰但仍留在卡片上；点它（以及卡片本身）
-			# 不能被当成"点空白处继续"，否则会从暂停状态里退出去。
+			# 排除按钮点完会变灰但仍留在卡片上；点它（以及卡片本身）不能被当成
+			# "点空白处继续"。回放页 Root 本身是 IGNORE，正常鼠标不会走到这里，
+			# 但保留这层判断，兼容直接 emit gui_input 的场景。
 			if history_mode and _card_holder.get_global_rect().has_point(mouse_event.global_position):
 				return
 			_close_flip()
+
+
+## 回放页：下层「查看 / 返回」被按下时同步解冻并收起卡片。
+## 不能走 _close_flip() 的异步翻回 —— 切场景会把旧菜单连同 tween 一起销毁，
+## await 永远不返回，树会一直停在 paused。
+func _connect_underlying_buttons() -> void:
+	var scene: Node = get_tree().current_scene
+	if scene == null:
+		return
+	for path: String in HISTORY_UNDERLYING_BUTTONS:
+		var button: Button = scene.get_node_or_null(path) as Button
+		if button != null and not button.pressed.is_connected(_on_underlying_pressed):
+			button.pressed.connect(_on_underlying_pressed)
+
+
+func _on_underlying_pressed() -> void:
+	force_close()
 
 
 ## 「排除」：百人团里是硬跳过并翻到下一关；回放页里只写名单、保持暂停。

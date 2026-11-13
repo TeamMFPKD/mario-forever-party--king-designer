@@ -35,7 +35,8 @@ const RESULT_OVER_SCENE: String = "res://room/adventure_result_over.tscn"
 const RESULT_CLEAR_SCENE: String = "res://room/adventure_result_clear.tscn"
 
 const LIFE_BONUS_LAYER: GDScript = preload("res://script/adventure/adventure_life_bonus.gd")
-## 百人团 BGM（挑战 / 挑战专家）：常驻本管理器，跨舞台、游玩、结算连续播放。
+## 百人团 BGM（挑战 / 挑战专家）：常驻本管理器，只在舞台 / 界面播放；
+## 开团进关卡后让位给默认 BGM 池，结算等子页面再用各自的专属曲。
 const BGM_SCENE: PackedScene = preload("res://object/bgm/adventure_bgm.tscn")
 
 var store: AdventureStore
@@ -741,6 +742,20 @@ func play_bgm(tier: int) -> void:
 	_bgm.call("play_tier", tier)
 
 
+## 开团进入关卡：舞台上的挑战曲到此为止，改由默认 BGM 池随机播放（与 History play 一致）。
+## 池子是常驻 autoload，换关时已在播就不再 restart，音乐连续、也不会从头重来。
+func play_level_bgm() -> void:
+	stop_bgm(0.0)
+	var bgm: AudioStreamPlayer = _default_bgm()
+	if bgm != null and not bgm.playing:
+		bgm.play()
+
+
+## 结算 / 回收站等子页面的专属 BGM 接管时，随机池也要让位，避免两套音乐叠加。
+func stop_pool_bgm() -> void:
+	_stop_default_bgm()
+
+
 ## 百人团 BGM 是否正在接管音乐：BgmManager 据此不再启动随机曲，避免两套音乐叠在一起。
 func is_bgm_active() -> bool:
 	if _bgm == null:
@@ -779,10 +794,13 @@ func _build_bgm() -> void:
 
 ## 百人团的挑战 BGM 接管期间，标题等房间留下的随机 BGM 必须让位。
 func _stop_default_bgm() -> void:
-	var node: Node = get_tree().get_first_node_in_group("bgm")
-	var default_bgm: AudioStreamPlayer = node as AudioStreamPlayer
+	var default_bgm: AudioStreamPlayer = _default_bgm()
 	if default_bgm != null:
 		default_bgm.stop()
+
+
+func _default_bgm() -> AudioStreamPlayer:
+	return get_tree().get_first_node_in_group("bgm") as AudioStreamPlayer
 
 
 # ---------------------------------------------------------------------------
@@ -865,14 +883,38 @@ func is_pause_action_blocked() -> bool:
 	return _level_passed_busy or _pass_transition_busy
 
 
-## 过关 / 转场期间玩家仍可暂停：推进换关前先等菜单关掉，别把这次暂停冲掉。
-## 没有打开的菜单时立即返回，常规转场时序不变。
-func wait_pause_menu_closed() -> void:
+## 暂停菜单打开期间把过关转场定格，别让它躲在卡片后面继续播。
+func set_transition_menu_paused(value: bool) -> void:
+	if is_instance_valid(_clear_transition) and _clear_transition.has_method("set_menu_paused"):
+		_clear_transition.call("set_menu_paused", value)
+
+
+func _find_pause_menu() -> Node:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
-		return
-	var menu: Node = scene.find_child("AdventurePauseMenu", true, false)
-	while is_instance_valid(menu) and bool(menu.get("_is_open")):
+		return null
+	return scene.find_child("AdventurePauseMenu", true, false)
+
+
+## 转场等待的超时不能把玩家暂停的时间算进去，否则暂停久了会误判成转场超时。
+func _is_pause_menu_open() -> bool:
+	var menu: Node = _find_pause_menu()
+	return is_instance_valid(menu) and bool(menu.get("_is_open"))
+
+
+func _pause_menu_busy(menu: Node) -> bool:
+	if not is_instance_valid(menu):
+		return false
+	# _close_flip 在动画第一帧就把 _is_open 置 false，所以还要等 _animating 落下来，
+	# 否则推进器会立刻 force_close，把翻回关卡的动画掐断。
+	return bool(menu.get("_is_open")) or bool(menu.get("_animating"))
+
+
+## 过关 / 转场期间玩家仍可暂停：推进换关前先等菜单完整翻回去。
+## 没有打开的菜单时立即返回，常规转场时序不变。
+func wait_pause_menu_closed() -> void:
+	var menu: Node = _find_pause_menu()
+	while _pause_menu_busy(menu):
 		await get_tree().process_frame
 
 
@@ -1002,7 +1044,8 @@ func _wait_transition_signal(transition: CanvasLayer, signal_name: String, timeo
 	var waited: float = 0.0
 	while not bool(state["reached"]) and is_instance_valid(transition) and waited < timeout:
 		await get_tree().process_frame
-		waited += get_process_delta_time()
+		if not _is_pause_menu_open():
+			waited += get_process_delta_time()
 	return bool(state["reached"])
 
 
@@ -1122,7 +1165,8 @@ func _wait_transition_end(transition: CanvasLayer) -> void:
 	var waited: float = 0.0
 	while is_instance_valid(transition) and transition.visible and waited < 8.0:
 		await get_tree().process_frame
-		waited += get_process_delta_time()
+		if not _is_pause_menu_open():
+			waited += get_process_delta_time()
 
 
 ## 冻结关卡前先让物理跑满 count 帧。

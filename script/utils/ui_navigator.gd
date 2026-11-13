@@ -24,6 +24,9 @@ extends Node
 const META_SKIP: StringName = &"ui_focus_skip"
 const META_TARGET: StringName = &"ui_focus_target"
 const META_MODAL: StringName = &"ui_focus_modal"
+## 模态不独占焦点：候选不收敛到模态子树，下层 UI 仍能用方向键选中。
+## 回放页翻卡菜单只盖住中间的关卡视口，两侧的「查看」「返回」要留在导航里。
+const META_MODAL_INCLUSIVE: StringName = &"ui_focus_modal_inclusive"
 ## 指定"焦点框按哪个节点的矩形画"（NodePath，相对候选自身）。
 ## 用于按钮的实际热区比视觉本体大很多的情况（如标题页水管：Button 为了盖住 hover
 ## 上浮的道具，向上多出 130px，直接框它会把红框顶到管子上面去）。
@@ -103,6 +106,8 @@ var _modal_probe: float = 0.0
 var _modal_refresh_ms: int = 0
 ## 上一轮扫描得到的模态节点，命中测试时用来过滤
 var _current_modal: Control = null
+## 本轮模态是否为「非独占」（不把候选锁进自己那棵子树）
+var _current_modal_inclusive: bool = false
 ## 有节点被移出树：候选数组里可能留下已释放的引用，下次处理输入前先清理
 var _needs_prune: bool = false
 
@@ -912,17 +917,17 @@ func refresh_now() -> void:
 
 func _rescan() -> void:
 	_current_modal = null
+	_current_modal_inclusive = false
 	var raw: Array[Control] = []
 	for child: Node in get_tree().root.get_children():
 		_collect_node(child, false, false, raw)
 	var modal: Control = _current_modal
-	if modal != null:
+	if modal != null and not _current_modal_inclusive:
 		var filtered: Array[Control] = []
 		for control: Control in raw:
 			if control == modal or modal.is_ancestor_of(control):
 				filtered.append(control)
-		# 回放页的翻卡暂停菜单故意没有选项，模态子树里一个可交互控件都没有。
-		# 这种"空牢笼"不该把焦点困住：回退到全量候选，让方向键继续操作下层 UI。
+		# 空模态不该把焦点困住：回退到全量候选，让方向键继续操作下层 UI。
 		if not filtered.is_empty():
 			raw = filtered
 	var previous_ids: Dictionary[int, bool] = _known_ids
@@ -1025,6 +1030,7 @@ func _collect_node(node: Node, skipped: bool, in_modal: bool, out: Array[Control
 		if _current_modal == null and control.has_meta(META_MODAL) \
 				and _meta_true(control, META_MODAL) and control.is_visible_in_tree():
 			_current_modal = control
+			_current_modal_inclusive = _meta_true(control, META_MODAL_INCLUSIVE)
 			now_modal = true
 		if not now_skipped:
 			if control is BaseButton:

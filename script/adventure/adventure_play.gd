@@ -23,8 +23,8 @@ func _ready() -> void:
 	_build_pause_button()
 	# 过关 / 转场期间仍允许暂停；暂停菜单自己会把会切场景的动作按钮置灰。
 	_setup_level_timer()
-	# 从舞台进来时 BGM 已按所选难度在播；直接进游玩（探针 / 意外路径）时这里补上。
-	Adventure.play_bgm(Adventure.current_tier())
+	# 开团后不再延续舞台的挑战曲：换成默认 BGM 池随机播放，与 History play 一致。
+	Adventure.play_level_bgm()
 
 
 func _setup_level_timer() -> void:

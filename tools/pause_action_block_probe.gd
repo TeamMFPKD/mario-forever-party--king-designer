@@ -7,6 +7,7 @@ extends Node
 
 const OUTPUT: String = "res://tools/pause_action_block_probe_result.txt"
 const MENU: String = "res://object/ui/adventure_pause_menu.tscn"
+const TRANSITION: String = "res://object/ui/adventure_clear_transition.tscn"
 const BUTTONS: String = "Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"
 
 var _lines: Array[String] = []
@@ -112,6 +113,63 @@ func _run() -> void:
 	Adventure.set("_pass_transition_busy", false)
 	Adventure.emit_signal("pause_actions_blocked_changed")
 	_lines.append("transition_done_exclude=%s" % str(exclude.disabled))
+
+	await _check_transition_pause(_menu.get_node("Root/CardHolder/Backdrop") as ColorRect)
+
+
+## 过场动画中暂停：卡片底部不能露出过场，解除暂停要有完整的翻回动画。
+func _check_transition_pause(backdrop: ColorRect) -> void:
+	if backdrop == null:
+		_lines.append("backdrop=missing")
+		return
+	var transition: Node = null
+	var packed: PackedScene = load(TRANSITION) as PackedScene
+	if packed != null:
+		transition = packed.instantiate()
+		add_child(transition)
+		Adventure.register_clear_transition(transition as CanvasLayer)
+
+	Adventure.set("_pass_transition_busy", true)
+	Adventure.emit_signal("pause_actions_blocked_changed")
+	get_tree().paused = false
+	_menu.call("toggle_pause")
+	await _settle_menu()
+	_lines.append("transition_backdrop=%s" % str(backdrop.visible))
+	if transition != null:
+		_lines.append("transition_frozen_on_open=%s" % str(bool(transition.get("_menu_paused"))))
+
+	# 关菜单 0.15s 后翻转应仍在进行；wait 必须等动画播完才返回。
+	var mid: Dictionary = {"animating": false}
+	var mid_timer: SceneTreeTimer = get_tree().create_timer(0.15, true, false, true)
+	mid_timer.timeout.connect(
+		func() -> void: mid["animating"] = bool(_menu.get("_animating")),
+		CONNECT_ONE_SHOT
+	)
+	_menu.call("toggle_pause")
+	await Adventure.wait_pause_menu_closed()
+	_lines.append("close_animation_played=%s" % str(bool(mid.get("animating", false))))
+	_lines.append("close_animation_finished=%s" % str(not bool(_menu.get("_animating"))))
+	_lines.append("backdrop_hidden_after_close=%s" % str(not backdrop.visible))
+	_lines.append("still_paused_in_transition=%s" % str(get_tree().paused))
+	if transition != null:
+		_lines.append("transition_resumed=%s" % str(not bool(transition.get("_menu_paused"))))
+
+	# 回归：非转场时关菜单仍要正常解冻，且不显示垫底。
+	Adventure.set("_pass_transition_busy", false)
+	Adventure.emit_signal("pause_actions_blocked_changed")
+	_menu.call("toggle_pause")
+	await _settle_menu()
+	_lines.append("normal_backdrop_hidden=%s" % str(not backdrop.visible))
+	_menu.call("toggle_pause")
+	await Adventure.wait_pause_menu_closed()
+	_lines.append("normal_close_unpauses=%s" % str(not get_tree().paused))
+
+
+func _settle_menu() -> void:
+	var guard: int = 0
+	while bool(_menu.get("_animating")) and guard < 240:
+		await get_tree().process_frame
+		guard += 1
 
 
 func _write() -> void:
