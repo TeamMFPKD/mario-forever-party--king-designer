@@ -57,6 +57,9 @@ var _transition_label: Label
 
 ## 关卡视口内的过关转场（room/adventure_play.tscn 注册，随场景销毁自动失效）
 var _clear_transition: CanvasLayer
+## 本次真正在播的转场。换关时新场景的 _ready() 会重新 register_clear_transition，
+## 覆盖 _clear_transition；定格必须用这个不受换场景影响的引用。
+var _active_transition: CanvasLayer
 ## 过关转场是否正在播放：防止加载期间玩家碰到下一关终点又触发一次转场。
 var _pass_transition_busy: bool = false
 ## 本次关卡是否已经过关（碰到终点 → 下一关加载完成）。期间暂停菜单禁用切场景动作。
@@ -884,9 +887,13 @@ func is_pause_action_blocked() -> bool:
 
 
 ## 暂停菜单打开期间把过关转场定格，别让它躲在卡片后面继续播。
+## 换关后 _clear_transition 会被新场景的同名节点顶掉，所以优先用本次真正在播的实例。
 func set_transition_menu_paused(value: bool) -> void:
-	if is_instance_valid(_clear_transition) and _clear_transition.has_method("set_menu_paused"):
-		_clear_transition.call("set_menu_paused", value)
+	var target: CanvasLayer = _active_transition
+	if not is_instance_valid(target):
+		target = _clear_transition
+	if is_instance_valid(target) and target.has_method("set_menu_paused"):
+		target.call("set_menu_paused", value)
 
 
 func _find_pause_menu() -> Node:
@@ -897,9 +904,10 @@ func _find_pause_menu() -> Node:
 
 
 ## 转场等待的超时不能把玩家暂停的时间算进去，否则暂停久了会误判成转场超时。
+## 翻回动画期间 _is_open 已经置 false，但 _animating 还在，这段时间同样要算暂停窗口。
 func _is_pause_menu_open() -> bool:
 	var menu: Node = _find_pause_menu()
-	return is_instance_valid(menu) and bool(menu.get("_is_open"))
+	return is_instance_valid(menu) and _pause_menu_busy(menu)
 
 
 func _pause_menu_busy(menu: Node) -> bool:
@@ -946,6 +954,7 @@ func _play_pass_transition(next_scene: String, level_number: int = 0, total_leve
 	_pass_transition_busy = true
 	pause_actions_blocked_changed.emit()
 	await _run_pass_transition(next_scene, level_number, total_levels)
+	_active_transition = null
 	_pass_transition_busy = false
 	pause_actions_blocked_changed.emit()
 
@@ -954,6 +963,7 @@ func _run_pass_transition(next_scene: String, level_number: int = 0, total_level
 	var transition: CanvasLayer = _clear_transition
 	if not is_instance_valid(transition):
 		return
+	_active_transition = transition
 	# 过场显示「刚通过的关卡序号」：按团进度 index 计算，跳过一关也不会串号；
 	# 结算时 current_run 已被清空，只能用调用方在推进进度前传进来的快照。
 	var number: int = level_number if level_number > 0 else int(current_run.get("cleared_count", 1))
@@ -983,6 +993,9 @@ func _run_pass_transition(next_scene: String, level_number: int = 0, total_level
 		transition.call("release_from_screen")
 
 	if advanced:
+		# 转场播完时玩家可能还开着暂停菜单、或「继续」的翻回动画还没播完：
+		# 先等菜单完整收起，否则下面的 force_close 会把翻回动画掐断。
+		await wait_pause_menu_closed()
 		# 下一关在加载完成时就已经冻结，转场播完直接解冻开始游戏。
 		var scene: Node = get_tree().current_scene
 		if scene != null:
