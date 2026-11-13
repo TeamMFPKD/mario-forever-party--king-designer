@@ -926,6 +926,8 @@ theme_override_constants/margin_top = 32
 theme_override_constants/margin_right = 192
 theme_override_constants/margin_bottom = 32
 
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanel/InputMapSet" instance=ExtResource("9_ty11l")]
+
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/InputMapSet" unique_id=486418179]
 layout_mode = 2
 
@@ -1036,10 +1038,144 @@ layout_mode = 2
 text = "重置按键"
 script = ExtResource("42_reset")
 
+[node name="CursorCameraButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons" instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+text = "光标 / 镜头按键"
+
 [node name="MainOptionButton" parent="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons" unique_id=26128048 instance=ExtResource("2_w52fc")]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 text = "返回主设置"
+
+[node name="CursorCameraSet" parent="GameRoomSize/Options/ControlsPanel" instance=ExtResource("8_c2fru")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 192
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 192
+theme_override_constants/margin_bottom = 32
+
+[node name="ControlVisibieSet" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet" instance=ExtResource("9_ty11l")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet"]
+layout_mode = 2
+
+[node name="CursorCameraLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer" instance=ExtResource("5_qon3s")]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "虚拟光标 / 镜头按键"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sets" type="HBoxContainer" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme_override_constants/separation = 256
+
+[node name="CursorGroup" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CursorUp" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorUp" index="0"]
+text = "虚拟光标 上"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorUp" index="1"]
+input_map_name = "ui_cursor_up"
+
+[node name="CursorDown" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorDown" index="0"]
+text = "虚拟光标 下"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorDown" index="1"]
+input_map_name = "ui_cursor_down"
+
+[node name="CursorLeft" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorLeft" index="0"]
+text = "虚拟光标 左"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorLeft" index="1"]
+input_map_name = "ui_cursor_left"
+
+[node name="CursorRight" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorRight" index="0"]
+text = "虚拟光标 右"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CursorGroup/CursorRight" index="1"]
+input_map_name = "ui_cursor_right"
+
+[node name="CameraGroup" type="VBoxContainer" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CameraUp" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraUp" index="0"]
+text = "镜头移动 上"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraUp" index="1"]
+input_map_name = "ui_camera_up"
+
+[node name="CameraDown" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraDown" index="0"]
+text = "镜头移动 下"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraDown" index="1"]
+input_map_name = "ui_camera_down"
+
+[node name="CameraLeft" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraLeft" index="0"]
+text = "镜头移动 左"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraLeft" index="1"]
+input_map_name = "ui_camera_left"
+
+[node name="CameraRight" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup" instance=ExtResource("28_wphsk")]
+layout_mode = 2
+
+[node name="InputNameLabel" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraRight" index="0"]
+text = "镜头移动 右"
+
+[node name="InputSetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Sets/CameraGroup/CameraRight" index="1"]
+input_map_name = "ui_camera_right"
+
+[node name="Buttons" type="HBoxContainer" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_constants/separation = 64
+
+[node name="ResetButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Buttons" instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+text = "重置按键"
+script = ExtResource("42_reset")
+
+[node name="BackButton" parent="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Buttons" instance=ExtResource("2_w52fc")]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+text = "返回按键映射"
 
 [node name="ControlsPanelMobile" parent="GameRoomSize/Options" unique_id=1978154676 instance=ExtResource("4_i3lsm")]
 visible = false
@@ -1261,6 +1397,10 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/BasicPanel/Back/HBoxContainer/BackButton" to="GameRoomSize/Options/ControlVisibieSet" method="_set_invisible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons/MainOptionButton" to="GameRoomSize/Options/ControlsPanel/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons/CursorCameraButton" to="GameRoomSize/Options/ControlsPanel/InputMapSet/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/Buttons/CursorCameraButton" to="GameRoomSize/Options/ControlsPanel/CursorCameraSet/ControlVisibieSet" method="_set_visible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Buttons/BackButton" to="GameRoomSize/Options/ControlsPanel/CursorCameraSet/ControlVisibieSet" method="_set_invisible"]
+[connection signal="pressed" from="GameRoomSize/Options/ControlsPanel/CursorCameraSet/VBoxContainer/Buttons/BackButton" to="GameRoomSize/Options/ControlsPanel/InputMapSet/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/DefaultLayoutButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_make_buttons_layout_default"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]

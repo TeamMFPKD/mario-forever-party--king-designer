@@ -74,6 +74,19 @@ func _process(delta: float) -> void:
 		_set_sending_overlay(false)
 
 
+## Tab / 手柄 SELECT 开关快捷消息面板。
+##
+## 单人场景（open_button 不可见）直接不响应：设置页里 Tab 还要用来做别的事，
+## 而且没有其他玩家时发消息也没意义。
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("quick_message"):
+		return
+	if not _is_open and not open_button.visible:
+		return
+	toggle_panel()
+	get_viewport().set_input_as_handled()
+
+
 func _on_players_updated() -> void:
 	var required: int = 1 if debug else 2
 	open_button.visible = MPManager.players.size() >= required

@@ -3,17 +3,12 @@ extends Node
 ## 键盘 / 手柄 UI 操作（autoload 名：UiNavigator）。
 ##
 ## 方向控制分三组，定义与输入判定全部封装在 `script/utils/input_groups.gd`：
-## - **POINTER 组**：WASD / 左摇杆
-## - **FOCUS 组**：方向键 / 十字键（D-pad）
-## - **SCROLL 组**：IJKL / 右摇杆
+## - **POINTER 组**：IJKL / 左摇杆 → 移动虚拟鼠标
+## - **FOCUS 组**：方向键 / 十字键（D-pad）→ 操作 UI 焦点
+## - **CAMERA 组**：WASD / 右摇杆 → 移动镜头（编辑室）
 ##
-## 各场景的用途分工：
-##
-## | 场景 | POINTER 组 | FOCUS 组 | SCROLL 组 |
-## |---|---|---|---|
-## | 菜单 / 标题 / 列表 | 虚拟鼠标 | UI 焦点 | 滚动列表 |
-## | 编辑室 edit.tscn | 镜头移动（不归 UI） | UI 焦点 | 滚动列表 |
-## | PLAY / HISTORY_PLAY | UI（虚拟鼠标） | 角色移动（不归 UI） | 滚动列表 |
+## 唯一的场景限制：PLAY / HISTORY_PLAY / TEST / ADVENTURE 里方向键与十字键归角色移动，
+## UI 只能用虚拟鼠标；CAMERA 组任何时候都不参与 UI。
 ##
 ## 操作：
 ## - 归 UI 的那一组方向：FOCUS 在一个个控件间跳转（长按重复、列表自动滚动），
@@ -41,16 +36,16 @@ const SCAN_INTERVAL: float = 0.3
 const MODAL_PROBE_INTERVAL: float = 0.4
 ## 虚拟鼠标移动速度（逻辑像素 / 秒）。摇杆幅度会等比缩放。
 const MOUSE_SPEED: float = 900.0
-## ScrollContainer 的滚动速度（逻辑像素 / 秒）。IJKL / 右摇杆幅度会等比缩放。
-const SCROLL_SPEED: float = 1400.0
 ## 方向查找时"横向偏移"惩罚的阈值（像素）
 const AXIS_TOLERANCE: float = 96.0
 ## 长按方向键后，开始自动重复前的延迟（秒）
 const REPEAT_DELAY: float = 0.4
 ## 自动重复的间隔（秒）
 const REPEAT_INTERVAL: float = 0.12
-## 四角光标所在 CanvasLayer，保证画在所有界面之上
-const CURSOR_LAYER: int = 100
+## 四角光标所在 CanvasLayer，必须高于所有 UI 面板：
+## 消息面板 message_overlay 是 110、全局通知 Notice 是 128，
+## 光标作为"手在哪"的指示不能被它们盖住，所以取 200。
+const CURSOR_LAYER: int = 200
 
 const ACTION_ACCEPT: StringName = &"ui_menu_accept"
 const ACTION_CANCEL: StringName = &"ui_menu_cancel"
@@ -93,8 +88,6 @@ var _repeat_timer: float = 0.0
 
 ## 左键当前是否按下（按住保持，用于拖拽）
 var _left_down: bool = false
-## 滚动像素累加器：scroll_vertical 是整数，小幅度输入时靠它攒够 1px 再滚
-var _scroll_accum: Vector2 = Vector2.ZERO
 
 var _modal_visible: bool = false
 var _modal_probe: float = 0.0
@@ -165,15 +158,10 @@ func _process(delta: float) -> void:
 		return
 	_prune_if_needed()
 
-	# 编辑室：POINTER 组归镜头，UI 只做焦点导航。
-	# 游戏内：FOCUS 组归角色，UI 只能用虚拟鼠标。
-	# 从别的界面带着不匹配的模式进来时强制掰回来。
+	# 游戏内 FOCUS 组归角色，UI 只能用虚拟鼠标；带着 FOCUS 模式进来时强制掰回来。
 	if _is_character_control_mode():
 		if _mode != InputMode.POINTER:
 			_mode = InputMode.POINTER
-	elif _is_editing_scene():
-		if _mode != InputMode.FOCUS:
-			_mode = InputMode.FOCUS
 
 	_since_scan += delta
 	if _dirty or _since_scan >= SCAN_INTERVAL:
@@ -189,7 +177,6 @@ func _process(delta: float) -> void:
 		if not _focus_still_valid():
 			_dirty = true
 		_tick_repeat(delta)
-	_tick_scroll(delta)
 	_tick_left_button()
 	_sync_cursor()
 
@@ -253,16 +240,13 @@ func _input(event: InputEvent) -> void:
 
 ## 这一组方向控制在当前场景是否归 UI 管。
 ##
-## 编辑室（edit / history_edit）：POINTER 组归 LevelCamera 移镜头，只有 FOCUS 组操作 UI。
-## 游戏内（PLAY / HISTORY_PLAY / TEST / ADVENTURE）：FOCUS 组归角色移动，UI 只能用 POINTER 组。
-## 其余（标题 / 列表 / 弹窗）：两组都归 UI。
+## 唯一的场景限制：游戏内（PLAY / HISTORY_PLAY / TEST / ADVENTURE）方向键与十字键
+## 归角色移动，UI 只能用虚拟鼠标。CAMERA 组任何时候都只归镜头。
 func _group_allowed(group: InputGroups.Group) -> bool:
-	if group == InputGroups.Group.POINTER:
-		if _is_character_control_mode():
-			return true
-		return not _is_editing_scene()
 	if group == InputGroups.Group.FOCUS:
 		return not _is_character_control_mode()
+	if group == InputGroups.Group.POINTER:
+		return true
 	return false
 
 
@@ -270,19 +254,6 @@ func _group_allowed(group: InputGroups.Group) -> bool:
 func _is_character_control_mode() -> bool:
 	return GameMode.is_playing() or GameMode.is_history_play() \
 		or GameMode.is_testing() or GameMode.is_adventure()
-
-
-## 当前场景是不是编辑类场景（edit.tscn / history_edit.tscn）。
-##
-## 不能只看 GameMode：`game_mode` 的默认值就是 EDIT，标题画面、列表页也都是 EDIT，
-## 只按模式判断会把标题页的 WASD 也当成镜头输入。
-## 这里看场景里有没有注册进 "level_camera" 组的镜头——编辑室与关卡场景都挂它，
-## 标题 / 列表 / 弹窗没有。游戏内（PLAY 等）也有这个组，但调用点会先判
-## `_is_character_control_mode()`，所以不会误伤。
-func _is_editing_scene() -> bool:
-	if get_tree().current_scene == null:
-		return false
-	return get_tree().get_first_node_in_group("level_camera") != null
 
 
 func _switch_to_focus() -> void:
@@ -557,71 +528,7 @@ func _scroll_container_of(control: Control) -> ScrollContainer:
 	return null
 
 
-## SCROLL 组（IJKL / 右摇杆）：滚动当前界面上最相关的那一个 ScrollContainer。
-##
-## "最相关"按优先级找：焦点所在容器 → 鼠标悬停所在容器 → 候选里第一个位于容器内的。
-func _tick_scroll(delta: float) -> void:
-	var axis: Vector2 = InputGroups.scroll_axis()
-	if axis == Vector2.ZERO:
-		_scroll_accum = Vector2.ZERO
-		return
-	var scroll: ScrollContainer = _active_scroll_container()
-	if scroll == null:
-		return
-	_scroll_accum += axis * SCROLL_SPEED * delta
-	var step_y: int = int(_scroll_accum.y)
-	if step_y != 0:
-		if _can_scroll_vertical(scroll):
-			scroll.scroll_vertical += step_y
-			_scroll_accum.y -= float(step_y)
-		else:
-			_scroll_accum.y = 0.0
-	var step_x: int = int(_scroll_accum.x)
-	if step_x != 0:
-		if _can_scroll_horizontal(scroll):
-			scroll.scroll_horizontal += step_x
-			_scroll_accum.x -= float(step_x)
-		else:
-			_scroll_accum.x = 0.0
 
-
-## 主动找当前该滚的那个 ScrollContainer。
-func _active_scroll_container() -> ScrollContainer:
-	var anchor: Control = _focus_candidate() if _mode == InputMode.FOCUS else _hover_target()
-	if anchor != null:
-		var found: ScrollContainer = _scroll_container_of(anchor)
-		if found != null:
-			return found
-	var hovered: Control = _hover_target()
-	if hovered != null:
-		var hovered_scroll: ScrollContainer = _scroll_container_of(hovered)
-		if hovered_scroll != null:
-			return hovered_scroll
-	for i: int in range(_candidates.size()):
-		var raw: Variant = _candidates[i]
-		if not is_instance_valid(raw) or not (raw is Control):
-			continue
-		var control: Control = raw
-		if not is_instance_valid(control):
-			continue
-		var candidate_scroll: ScrollContainer = _scroll_container_of(control)
-		if candidate_scroll != null:
-			return candidate_scroll
-	return null
-
-
-func _can_scroll_vertical(scroll: ScrollContainer) -> bool:
-	if scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED:
-		return false
-	var bar: VScrollBar = scroll.get_v_scroll_bar()
-	return bar != null and bar.max_value > bar.page
-
-
-func _can_scroll_horizontal(scroll: ScrollContainer) -> bool:
-	if scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED:
-		return false
-	var bar: HScrollBar = scroll.get_h_scroll_bar()
-	return bar != null and bar.max_value > bar.page
 
 
 ## 选中项滚出 ScrollContainer 可视区时把它滚回来。
