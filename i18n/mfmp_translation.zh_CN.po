@@ -497,3 +497,48 @@ msgstr "游戏已开始，只能以观看身份加入。"
 
 msgid "客户端版本不一致，请更新后再加入。"
 msgstr "客户端版本不一致，请更新后再加入。"
+
+msgid "暂停"
+msgstr "暂停"
+
+msgid "光标 / 镜头按键"
+msgstr "光标 / 镜头按键"
+
+msgid "返回按键映射"
+msgstr "返回按键映射"
+
+msgid "虚拟光标 上"
+msgstr "虚拟光标 上"
+
+msgid "虚拟光标 下"
+msgstr "虚拟光标 下"
+
+msgid "虚拟光标 左"
+msgstr "虚拟光标 左"
+
+msgid "虚拟光标 右"
+msgstr "虚拟光标 右"
+
+msgid "镜头移动 上"
+msgstr "镜头移动 上"
+
+msgid "镜头移动 下"
+msgstr "镜头移动 下"
+
+msgid "镜头移动 左"
+msgstr "镜头移动 左"
+
+msgid "镜头移动 右"
+msgstr "镜头移动 右"
+
+msgid "移动/UI上"
+msgstr "移动/UI上"
+
+msgid "移动/UI下"
+msgstr "移动/UI下"
+
+msgid "移动/UI左"
+msgstr "移动/UI左"
+
+msgid "移动/UI右"
+msgstr "移动/UI右"

@@ -497,3 +497,48 @@ msgstr "ゲームは開始済みです。観戦としてのみ参加できます
 
 msgid "客户端版本不一致，请更新后再加入。"
 msgstr "クライアントのバージョンが一致しません。更新してから参加してください。"
+
+msgid "暂停"
+msgstr "一時停止"
+
+msgid "光标 / 镜头按键"
+msgstr "カーソル / カメラ"
+
+msgid "返回按键映射"
+msgstr "キー設定に戻る"
+
+msgid "虚拟光标 上"
+msgstr "カーソル 上"
+
+msgid "虚拟光标 下"
+msgstr "カーソル 下"
+
+msgid "虚拟光标 左"
+msgstr "カーソル 左"
+
+msgid "虚拟光标 右"
+msgstr "カーソル 右"
+
+msgid "镜头移动 上"
+msgstr "カメラ 上"
+
+msgid "镜头移动 下"
+msgstr "カメラ 下"
+
+msgid "镜头移动 左"
+msgstr "カメラ 左"
+
+msgid "镜头移动 右"
+msgstr "カメラ 右"
+
+msgid "移动/UI上"
+msgstr "移動 / UI 上"
+
+msgid "移动/UI下"
+msgstr "移動 / UI 下"
+
+msgid "移动/UI左"
+msgstr "移動 / UI 左"
+
+msgid "移动/UI右"
+msgstr "移動 / UI 右"
