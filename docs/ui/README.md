@@ -56,7 +56,7 @@
 
 ## 未接入的探索稿
 
-`ui/theme/` 下另有 `theme_maker.tres`、`theme_pipe.tres`、`theme_pixel8.tres`、`theme_night.tres`、`theme_dark_panel.tres`、`theme_glass_panels.tres`，以及 `panel_large.tres`、`panel_small.tres` 与 `borders/panel_double_84.svg`、`panel_double_92.svg`、`panel_glass.svg`。
+`ui/theme/` 下另有 `theme_maker.tres`、`theme_dark_panel.tres`、`theme_glass_panels.tres`，以及 `panel_large.tres`、`panel_small.tres` 与 `borders/panel_double_84.svg`、`panel_double_92.svg`、`panel_glass.svg`。
 
 这些是早期风格探索，目前没有任何场景引用，保留备查，不要直接删除。
 
