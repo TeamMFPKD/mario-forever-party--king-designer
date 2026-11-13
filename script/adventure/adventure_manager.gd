@@ -29,9 +29,13 @@ const LIFE_BONUS_EVERY: int = 2
 
 const STAGE_SCENE: String = "res://room/adventure_stage.tscn"
 const PLAY_SCENE: String = "res://room/adventure_play.tscn"
-const RESULT_SCENE: String = "res://room/adventure_result.tscn"
+## 结算拆成两张独立场景：GAME OVER / GAME CLEAR，共用 object/ui/adventure_result_base.tscn。
+const RESULT_OVER_SCENE: String = "res://room/adventure_result_over.tscn"
+const RESULT_CLEAR_SCENE: String = "res://room/adventure_result_clear.tscn"
 
 const LIFE_BONUS_LAYER: GDScript = preload("res://script/adventure/adventure_life_bonus.gd")
+## 百人团 BGM（挑战 / 挑战专家）：常驻本管理器，跨舞台、游玩、结算连续播放。
+const BGM_SCENE: PackedScene = preload("res://object/bgm/adventure_bgm.tscn")
 
 var store: AdventureStore
 var pool: Array[AdventureLevelStat] = []
@@ -56,6 +60,9 @@ var _pass_transition_busy: bool = false
 ## 本次关卡是否已经过关（碰到终点 → 下一关加载完成）。期间禁止暂停。
 var _level_passed_busy: bool = false
 
+## 百人团 BGM 播放器（object/bgm/adventure_bgm.tscn 实例）。
+var _bgm: Node
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -63,6 +70,7 @@ func _ready() -> void:
 	store.load()
 	_build_transition_ui()
 	_build_life_bonus_layer()
+	_build_bgm()
 	_check_resume()
 
 
@@ -698,6 +706,63 @@ func finish_run(result: String) -> void:
 
 
 # ---------------------------------------------------------------------------
+# 百人团 BGM
+# ---------------------------------------------------------------------------
+
+## 播放 / 切换百人团 BGM：简单、普通与随机档用「挑战」，困难、超难用「挑战专家」。
+## 两首同时播放，切档只做交叉淡入淡出，不会从头重播。
+func play_bgm(tier: int) -> void:
+	_stop_default_bgm()
+	if _bgm == null:
+		return
+	_bgm.call("play_tier", tier)
+
+
+## 百人团 BGM 是否正在接管音乐：BgmManager 据此不再启动随机曲，避免两套音乐叠在一起。
+func is_bgm_active() -> bool:
+	if _bgm == null:
+		return false
+	return bool(_bgm.call("is_active"))
+
+
+## 离开百人团：淡出并停掉挑战 BGM，回到标题 / 其它房间时随机 BGM 自然接回。
+func stop_bgm(fade_time: float = 0.6) -> void:
+	if _bgm == null:
+		return
+	_bgm.call("stop_all", fade_time)
+
+
+## 本团难度档：1 简单 / 2 普通 / 3 困难 / 4 超难；没有进行中的团或随机档返回 0。
+func current_tier() -> int:
+	if not is_running():
+		return 0
+	return int(current_run.get("tier", 0))
+
+
+## 按本团结算结果选结算场景：通关 = GAME CLEAR，其它 = GAME OVER。
+## 结算时 current_run 已清空，只能读 last_summary。
+func result_scene() -> String:
+	return RESULT_CLEAR_SCENE if str(last_summary.get("result", "")) == "completed" else RESULT_OVER_SCENE
+
+
+func _build_bgm() -> void:
+	var instance: Node = BGM_SCENE.instantiate()
+	if instance == null:
+		return
+	instance.name = "AdventureBgm"
+	add_child(instance)
+	_bgm = instance
+
+
+## 百人团的挑战 BGM 接管期间，标题等房间留下的随机 BGM 必须让位。
+func _stop_default_bgm() -> void:
+	var node: Node = get_tree().get_first_node_in_group("bgm")
+	var default_bgm: AudioStreamPlayer = node as AudioStreamPlayer
+	if default_bgm != null:
+		default_bgm.stop()
+
+
+# ---------------------------------------------------------------------------
 # 过渡动画
 # ---------------------------------------------------------------------------
 
@@ -1056,7 +1121,7 @@ func play_transition(
 	# 同样不再 settle，避免过关后旧关卡多跑 2 帧才被重新冻住。
 	if kind == "finish":
 		get_tree().paused = true
-		GlobalTransition.change_scene_to_file(RESULT_SCENE if next_scene.is_empty() else next_scene)
+		GlobalTransition.change_scene_to_file(result_scene() if next_scene.is_empty() else next_scene)
 		return
 
 	if kind == "death":

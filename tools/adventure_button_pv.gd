@@ -25,7 +25,7 @@ const HIGHLIGHT: Color = Color("#F08A2C")
 const CHIP: Color = Color("#9CC7F0")
 
 const POOL_LABELS: Array[String] = ["所有关卡", "喜欢的关卡"]
-const TIER_LABELS: Array[String] = ["1 轻松", "2 标准", "3 困难", "4 极限", "随机"]
+const TIER_LABELS: Array[String] = ["简单", "普通", "困难", "超难", "随机"]
 const MODE_LABELS: Array[String] = ["定量团", "无尽团"]
 
 var _canvas: Control
@@ -107,7 +107,7 @@ func _make_stage() -> Control:
 	stage.add_child(background)
 
 	_fixed(stage, _label_node("百人团", 64, INK), 64, 32, 700, 86)
-	_fixed(stage, _label_node("可玩 128 关  ·  已采样 34  ·  2 档标准", 25, INK_2), 68, 120, 900, 40)
+	_fixed(stage, _label_node("可玩 128 关  ·  已采样 34  ·  普通", 25, INK_2), 68, 120, 900, 40)
 	_layout_v4(stage)
 	return stage
 

@@ -1,0 +1,219 @@
+[gd_scene format=3 load_steps=5]
+
+[ext_resource type="PackedScene" path="res://object/ui/adventure_result_base.tscn" id="1_base"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
+[ext_resource type="Script" path="res://script/bgm/adventure_room_bgm.gd" id="3_bgm"]
+[ext_resource type="AudioStream" uid="uid://c6h31urnkaaum" path="res://sound/bgm/adventure/1-03. 100 Mario Challenge - Staffroll [Staff Roll] (Easy).mp3" id="4_staffroll"]
+
+[node name="AdventureResultClear" instance=ExtResource("1_base")]
+is_game_clear = true
+
+[node name="Background" type="ColorRect" parent="." index=0]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.964706, 0.803922, 1)
+
+[node name="TitleRow" type="HBoxContainer" parent="TitleClip"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 84.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="L0" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L1" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L2" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L3" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="Control" parent="TitleClip/TitleRow"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="L4" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L5" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "L"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L6" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L7" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L8" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoomBgm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_staffroll")
+bus = &"Music"
+script = ExtResource("3_bgm")

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bha7lcdl0rlt8"
+path="res://.godot/imported/121 The Dungeon is Full of Monsters.ogg-0bdb9c9db7a13f7e7e14488746ec94eb.oggvorbisstr"
+
+[deps]
+
+source_file="res://sound/bgm/history/121 The Dungeon is Full of Monsters.ogg"
+dest_files=["res://.godot/imported/121 The Dungeon is Full of Monsters.ogg-0bdb9c9db7a13f7e7e14488746ec94eb.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

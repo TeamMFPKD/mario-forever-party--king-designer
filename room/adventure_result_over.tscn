@@ -1,0 +1,209 @@
+[gd_scene format=3 load_steps=6]
+
+[ext_resource type="PackedScene" path="res://object/ui/adventure_result_base.tscn" id="1_base"]
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="2_psc"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://script/bgm/adventure_room_bgm.gd" id="4_bgm"]
+[ext_resource type="AudioStream" uid="uid://cdqwr8k1nc7a6" path="res://sound/bgm/adventure/1-24 Game Over.mp3" id="5_gameover"]
+
+[node name="AdventureResultOver" instance=ExtResource("1_base")]
+is_game_clear = false
+
+[node name="Background" type="ColorRect" parent="." index=0]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." index=1]
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D"]
+self_modulate = Color(0.13, 0.1, 0.18, 1)
+texture = ExtResource("2_psc")
+
+[node name="TitleRow" type="HBoxContainer" parent="TitleClip"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 84.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="L0" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L1" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L2" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L3" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="Control" parent="TitleClip/TitleRow"]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="L4" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "O"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L5" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "V"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L6" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L7" type="Control" parent="TitleClip/TitleRow"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoomBgm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_gameover")
+bus = &"Music"
+script = ExtResource("4_bgm")

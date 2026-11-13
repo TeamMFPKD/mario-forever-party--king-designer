@@ -21,7 +21,7 @@ func next_level_pass() -> void:
 	var display_number: int = level_number if total_levels > 0 else passed_count
 	Adventure.play_transition(
 		"finish" if finished else "pass",
-		Adventure.RESULT_SCENE if finished else "",
+		Adventure.result_scene() if finished else "",
 		display_number,
 		total_levels
 	)
@@ -34,7 +34,7 @@ func next_level_die() -> void:
 	if Adventure.is_running():
 		GlobalTransition.reload_current_scene()
 	else:
-		GlobalTransition.change_scene_to_file(Adventure.RESULT_SCENE)
+		GlobalTransition.change_scene_to_file(Adventure.result_scene())
 
 
 ## keep_paused：过关转场期间保持冻结，由 Adventure 在转场结束时统一解冻。

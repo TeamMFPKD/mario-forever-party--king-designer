@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_label"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="6_button"]
 [ext_resource type="Script" uid="uid://cpqbrx4omympq" path="res://script/adventure/adventure_trash_room.gd" id="7_room"]
+[ext_resource type="Script" path="res://script/bgm/adventure_room_bgm.gd" id="8_bgm"]
+[ext_resource type="AudioStream" uid="uid://bha7lcdl0rlt8" path="res://sound/bgm/history/121 The Dungeon is Full of Monsters.ogg" id="9_trash"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_845ve"]
 shader = ExtResource("2_ugkbt")
@@ -126,5 +128,10 @@ layout_mode = 2
 size_flags_horizontal = 7
 text = "返回百人团"
 metadata/gamepad_focus = true
+
+[node name="RoomBgm" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_trash")
+bus = &"Music"
+script = ExtResource("8_bgm")
 
 [connection signal="pressed" from="GameRoomSize/Back/HBoxContainer/BackButton" to="." method="_on_back"]

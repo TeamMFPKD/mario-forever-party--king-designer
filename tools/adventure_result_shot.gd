@@ -1,9 +1,10 @@
 extends Node
 
-## 结算页截图脚本：分别截 GAME OVER 与 GAME CLEAR 两版。
+## 结算页截图脚本：分别截 GAME OVER 与 GAME CLEAR 两张独立场景。
 ## 必须窗口化运行（不要 --headless），否则取不到画面。
 
-const RESULT_SCENE: String = "res://room/adventure_result.tscn"
+const OVER_SCENE: String = "res://room/adventure_result_over.tscn"
+const CLEAR_SCENE: String = "res://room/adventure_result_clear.tscn"
 const OVER_OUTPUT: String = "res://tools/adventure_result_over.png"
 const CLEAR_OUTPUT: String = "res://tools/adventure_result_clear.png"
 
@@ -21,15 +22,16 @@ func _shoot_over() -> void:
 	Adventure.last_summary = {
 		"result": "failed",
 		"mode": "finite",
-		"cleared_count": 6,
+		"cleared_count": 2,
 		"total_levels": 10,
 		"lives_left": 0,
 		"lives_total": 20,
 		"tier": 3,
-		"skipped_soft": 1,
-		"skipped_hard": 0,
+		"deaths": 10,
+		"skipped_soft": 0,
+		"skipped_hard": 1,
 	}
-	await _shoot(OVER_OUTPUT)
+	await _shoot(OVER_OUTPUT, OVER_SCENE)
 
 
 func _shoot_clear() -> void:
@@ -41,14 +43,15 @@ func _shoot_clear() -> void:
 		"lives_left": 7,
 		"lives_total": 20,
 		"tier": 2,
-		"skipped_soft": 0,
-		"skipped_hard": 1,
+		"deaths": 3,
+		"skipped_soft": 1,
+		"skipped_hard": 0,
 	}
-	await _shoot(CLEAR_OUTPUT)
+	await _shoot(CLEAR_OUTPUT, CLEAR_SCENE)
 
 
-func _shoot(output_path: String) -> void:
-	var packed: PackedScene = load(RESULT_SCENE) as PackedScene
+func _shoot(output_path: String, scene_path: String) -> void:
+	var packed: PackedScene = load(scene_path) as PackedScene
 	if packed == null:
 		return
 	var screen: Node = packed.instantiate()

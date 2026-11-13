@@ -376,12 +376,12 @@ func _begin_skip(hard: bool) -> void:
 	# 目标关卡已在点击瞬间确定；先放满 2 个物理帧再冻结，
 	# 冻住的才是完整的一帧，切场景时不会残留上一关的半帧。
 	await Adventure.settle_physics_frames(2)
-	Log.i("AdventurePauseMenu", ["跳过本关，下一关：", Adventure.RESULT_SCENE if finished else next_key])
+	Log.i("AdventurePauseMenu", ["跳过本关，下一关：", Adventure.result_scene() if finished else next_key])
 	if finished:
 		# 没有下一关可露：卡片原地翻完直接切结算页（不播淡出 shader）。
 		await _flip_away_for_skip()
 		get_tree().paused = true
-		GlobalTransition.change_scene_to_file(Adventure.RESULT_SCENE, true)
+		GlobalTransition.change_scene_to_file(Adventure.result_scene(), true)
 		return
 	await _flip_reveal_next_level()
 

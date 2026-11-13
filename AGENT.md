@@ -66,6 +66,22 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 5. **禁止在脚本里直接手写前端，UI 必须落地为场景节点。**
    不要用 `Control.new()` / `Label.new()` 之类在 `_ready()` 里搭界面；新增或改造的 UI 一律保存为 `.tscn`（节点树、样式、文本、信号连接都在场景文件里），脚本只负责数据绑定、动画与交互逻辑。调试用的一次性状态条可以例外，但也应尽量做成场景。已有的代码搭 UI 逐步迁移，新代码不再新增。
 
+### 2.1 提交信息（commit message）规范
+
+summary 必须是 **前缀 + 冒号 + 内容**，并且 **summary 与 body 全程使用英文**：不留中文、全角标点（，。：（）——）或其他非 ASCII 字符。
+
+```text
+feat(input): three direction groups for sticks, arrow keys and IJKL
+fix(edit): WASD moves only the camera while arrow keys drive the UI
+chore(multiplayer): drop unused signaling fallback
+```
+
+- 前缀 = 类型，或 `类型(范围)`。允许的类型：`feat` / `fix` / `refactor` / `perf` / `style` / `docs` / `chore` / `test`。
+- 冒号后一个空格再写内容；summary 不以句号结尾，尽量不超过 72 字符。
+- 范围可选，用简短名词，如 `ui` / `input` / `multiplayer` / `adventure` / `title`。
+- body 与 summary 之间空一行，同样只用英文，分段落写动机、方案与影响；引用代码标识符可直接用反引号。
+- 检查办法：`git --no-pager log -1 --pretty=%s` 应能匹配 `^[a-z]+(\([a-z0-9-]+\))?: .+`，且 `git log -1 --pretty=%B` 无中文。
+
 ---
 
 ## 3. 测试脚本总览
@@ -77,6 +93,7 @@ Get-Content -LiteralPath $Err -Encoding UTF8
 | `tools/adventure_probe.tscn` | 百人团关卡池构建、4 档分档、抽取、单人统计读写 | `tools/adventure_probe_result.txt` |
 | `tools/adventure_state_probe.tscn` | 一局内的通过 / 死亡 / 软跳过 / 硬跳过与命数、结算 | `tools/adventure_state_probe_result.txt` |
 | `tools/adventure_resume_probe.tscn` | 断点续跑：通过一关后检测续跑、恢复索引与关卡路径 | `tools/adventure_resume_probe_result.txt` |
+| `tools/adventure_slots_probe.tscn` | 5 个存档位：旧 `[run]` 迁移、开团占位、满位拒绝、按槽续团、放弃腾位 | `tools/adventure_slots_probe_result.txt` |
 | `tools/adventure_start_probe.tscn` | 开局参数校验 + 切到 `Adventure.PLAY_SCENE` | `tools/adventure_start_probe_result.txt` |
 | `tools/adventure_play_probe.tscn` | 真正加载游玩场景，检查 `player` 组、`run_active`、`run_index` | `tools/adventure_play_probe_result.txt` |
 | `tools/adventure_mobile_pause_probe.tscn` | 检查百人团暂停键（默认桌面，加 `--probe-mobile` 伪装 Android）能显示、开菜单并用「继续」恢复 | `tools/adventure_mobile_pause_probe_result.txt` |
@@ -191,6 +208,37 @@ resume_path_exists=true
 ```
 
 `resume_key` 是具体关卡文件名，不固定；只校验 `resume_path_exists=true`。
+
+### 4.3.1 adventure_slots_probe
+
+验证 5 个存档位（`[run.1]` … `[run.5]`）：
+
+```text
+migrate_ok=true
+migrate_cleared=true
+opened=5
+used=5
+full=true
+resume_available=true
+slots=5
+valid=5
+sixth_blocked=true
+sixth_error=存档位已满（5/5），请先继续其中一个团并结算或放弃
+used_after_block=5
+resume_slot3=true
+resume_slot=3
+resume_index=0
+resume_keys=5
+used_after_abandon=4
+slot3_cleared=true
+start_after_abandon=true
+used_after_start_again=5
+new_slot=3
+```
+
+关键判据：`migrate_ok=true`（旧单团存档搬到槽 1）、`full=true`、`sixth_blocked=true`、
+`valid=5`、`slot3_cleared=true`、`new_slot=3`（放弃后空出的槽被新团复用）。
+探针用 `user://adventure_slots_probe.ini`，结束时清理；不会碰玩家的 `adventure.ini`。
 
 ### 4.4 adventure_start_probe
 

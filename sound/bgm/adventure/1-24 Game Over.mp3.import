@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cdqwr8k1nc7a6"
+path="res://.godot/imported/1-24 Game Over.mp3-6199ff3bdecd8c0dd93274ed6adaeeb8.mp3str"
+
+[deps]
+
+source_file="res://sound/bgm/adventure/1-24 Game Over.mp3"
+dest_files=["res://.godot/imported/1-24 Game Over.mp3-6199ff3bdecd8c0dd93274ed6adaeeb8.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

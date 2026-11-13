@@ -1,12 +1,12 @@
 class_name AdventureScenery
 extends Control
 
-## 百人团房间的纯色剪影装饰：草与花。
+## 迷你纯色剪影装饰：草簇 / 小花，单件尺寸取 32 / 64 / 96，随机撒在容器里。
+## 用来点缀关卡椭圆附近，不铺满背景。
 ##
-## 草：每根叶片是一个 Node2D，基部对齐地面；改 `skew` 让叶尖左右飘（基部不动）。
-## 花：整朵绕基部轻微摇摆（rotation），花头里的花瓣组持续旋转，像风扇。
-##
-## 颜色只有一个：`tint`（带 alpha 的纯色），后排自动更淡，形成层次。
+## 草：一整片矮胖的连续尖峰剪影（轮廓就是一串 ^^^^^，峰尖倒圆角），
+##     改 `skew` 让峰尖左右飘（基部不动）。
+## 花：粗短茎 + 圆叶 + 大花头，矮胖卡通比例，整朵绕基部轻微摇摆。
 
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
 
@@ -17,21 +17,21 @@ class Sway:
 	var phase: float = 0.0
 
 
-class Spin:
-	var node: Node2D
-	var speed: float = 0.6
-
-
 const DEFAULT_TINT: Color = Color(0.10, 0.15, 0.26, 0.30)
+const SIZES: Array[float] = [32.0, 64.0, 96.0]
 
-## 单一剪影色；后排会用 0.62 倍 alpha
-var tint: Color = DEFAULT_TINT
-## 随机种子，换一个数字就换一套布局
+## 单一剪影色；换主题时改它会立刻给已生成的剪影重新上色。
+var tint: Color = DEFAULT_TINT:
+	set(value):
+		tint = value
+		_apply_tint()
+## 随机种子：换数字换一套摆位
 var seed_value: int = 7
+## 密度倍率，1.0 大约每 42000 平方像素一件
+var density: float = 1.0
 
 var _grass: Array[Sway] = []
 var _flowers: Array[Sway] = []
-var _petals: Array[Spin] = []
 var _shapes: Array[Polygon2D] = []
 var _lines: Array[Line2D] = []
 var _time: float = 0.0
@@ -49,14 +49,11 @@ func _process(delta: float) -> void:
 	_time += delta
 	for sway: Sway in _grass:
 		if is_instance_valid(sway.node):
-			# 剪切变换：基部固定，叶尖左右摆
+			# 剪切变换：基部固定，峰尖左右摆
 			sway.node.skew = sin(_time * sway.speed + sway.phase) * sway.amplitude
 	for sway: Sway in _flowers:
 		if is_instance_valid(sway.node):
 			sway.node.rotation = sin(_time * sway.speed + sway.phase) * sway.amplitude
-	for spin: Spin in _petals:
-		if is_instance_valid(spin.node):
-			spin.node.rotation += delta * spin.speed
 
 
 func _on_resized() -> void:
@@ -68,24 +65,34 @@ func _rebuild() -> void:
 		return
 	_rebuilding = true
 	_clear()
+
 	var width: float = size.x
 	var height: float = size.y
-	if width < 80.0 or height < 80.0:
+	if width < 120.0 or height < 120.0:
 		_rebuilding = false
 		return
 
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = seed_value
-	var ground: float = height + 4.0
 
-	# 最底层：几座很扁的草坡，把孤立的草叶连成一片草地
-	_spawn_hills(rng, width, ground, 0.7, 3)
-	# 后排：淡、稀、矮
-	_spawn_grass(rng, width, ground, 0.62, 9, 30.0, 50.0)
-	_spawn_flowers(rng, width, ground, 0.62, 2, 88.0, 110.0)
-	# 前排：实、疏（错开位置，避免完全重叠）
-	_spawn_grass(rng, width, ground, 1.0, 6, 44.0, 70.0)
-	_spawn_flowers(rng, width, ground, 1.0, 3, 112.0, 146.0)
+	var target_count: int = clampi(int(width * height / 36000.0 * density), 6, 22)
+	var index: int = 0
+	while index < target_count:
+		var item_size: float = SIZES[rng.randi_range(0, SIZES.size() - 1)]
+		# 只摆在关卡椭圆的上下两侧，贴着那一排，而不是铺满整块面板
+		var base_y: float = rng.randf_range(height * 0.1, height * 0.34)
+		if rng.randf() < 0.55:
+			base_y = rng.randf_range(height * 0.66, height * 0.94)
+		var base: Vector2 = Vector2(
+			rng.randf_range(40.0 + item_size * 0.82, width - 40.0 - item_size * 0.82),
+			base_y
+		)
+		var alpha_scale: float = rng.randf_range(0.72, 1.0)
+		if rng.randf() < 0.55:
+			_make_grass(rng, base, item_size, alpha_scale)
+		else:
+			_make_flower(rng, base, item_size, alpha_scale)
+		index += 1
 
 	_apply_tint()
 	_rebuilding = false
@@ -94,7 +101,6 @@ func _rebuild() -> void:
 func _clear() -> void:
 	_grass.clear()
 	_flowers.clear()
-	_petals.clear()
 	_shapes.clear()
 	_lines.clear()
 	var children: Array[Node] = get_children()
@@ -103,84 +109,57 @@ func _clear() -> void:
 		child.queue_free()
 
 
-## 很扁的草坡：底边贴地，看起来像连绵的草地轮廓。
-func _spawn_hills(
-	rng: RandomNumberGenerator,
-	width: float,
-	ground: float,
-	alpha_scale: float,
-	count: int
-) -> void:
-	var hill_width: float = width / float(count) * 1.45
-	var index: int = 0
-	while index < count:
-		var hill: Polygon2D = Polygon2D.new()
-		hill.polygon = _ellipse_points(hill_width * 0.5, rng.randf_range(46.0, 68.0), 26)
-		hill.position = Vector2((float(index) + 0.5) / float(count) * width, ground)
-		hill.set_meta("alpha_scale", alpha_scale)
-		add_child(hill)
-		_shapes.append(hill)
-		index += 1
+## 一簇草：底边贴地、上缘是一串尖峰的连续剪影，整体随风轻摆。
+func _make_grass(rng: RandomNumberGenerator, base: Vector2, size_px: float, alpha_scale: float) -> void:
+	var clump: Node2D = Node2D.new()
+	clump.position = base
+	add_child(clump)
+
+	var shape: Polygon2D = Polygon2D.new()
+	shape.polygon = _grass_points(rng, size_px)
+	shape.set_meta("alpha_scale", alpha_scale)
+	clump.add_child(shape)
+	_shapes.append(shape)
+
+	var sway: Sway = Sway.new()
+	sway.node = clump
+	sway.amplitude = rng.randf_range(0.035, 0.07)
+	sway.speed = rng.randf_range(0.8, 1.5)
+	sway.phase = rng.randf_range(0.0, TAU)
+	_grass.append(sway)
 
 
-func _spawn_grass(
-	rng: RandomNumberGenerator,
-	width: float,
-	ground: float,
-	alpha_scale: float,
-	count: int,
-	min_height: float,
-	max_height: float
-) -> void:
-	var index: int = 0
-	while index < count:
-		var slot: float = (float(index) + rng.randf_range(0.15, 0.85)) / float(count)
-		var clump: Node2D = Node2D.new()
-		clump.position = Vector2(slot * width, ground)
-		add_child(clump)
+## 草簇轮廓：矮胖的连续尖峰（^^^^^），峰尖与谷底都倒圆角，卡通剪影。
+func _grass_points(rng: RandomNumberGenerator, size_px: float) -> PackedVector2Array:
+	var width: float = size_px * rng.randf_range(1.05, 1.35)
+	var height: float = size_px * rng.randf_range(0.42, 0.56)
+	var peaks: int = rng.randi_range(3, 5)
+	var pitch: float = width / float(peaks)
 
-		var blades: int = rng.randi_range(2, 3)
-		var blade_index: int = 0
-		while blade_index < blades:
-			var blade: Node2D = Node2D.new()
-			blade.position = Vector2(rng.randf_range(-13.0, 13.0), 0.0)
-			clump.add_child(blade)
+	var cycle: PackedVector2Array = PackedVector2Array()
+	cycle.append(Vector2(-width * 0.5, 0.0))
+	cycle.append(Vector2(width * 0.5, 0.0))
+	cycle.append(Vector2(width * 0.5, -height * rng.randf_range(0.16, 0.26)))
 
-			var shape: Polygon2D = Polygon2D.new()
-			# 同一丛里的草叶左右交替外弯，形成卡通草簇
-			var lean: float = -1.0 if blade_index % 2 == 0 else 1.0
-			shape.polygon = _blade_points(rng.randf_range(min_height, max_height), rng.randf_range(16.0, 24.0), lean)
-			shape.set_meta("alpha_scale", alpha_scale)
-			blade.add_child(shape)
-			_shapes.append(shape)
-
-			var sway: Sway = Sway.new()
-			sway.node = blade
-			sway.amplitude = rng.randf_range(0.10, 0.20)
-			sway.speed = rng.randf_range(0.9, 1.7)
-			sway.phase = rng.randf_range(0.0, TAU)
-			_grass.append(sway)
-			blade_index += 1
-		index += 1
+	# 从右往左折返：尖峰 → 谷底 → 尖峰……
+	var index: int = peaks - 1
+	while index >= 0:
+		var left: float = -width * 0.5 + pitch * float(index)
+		var right: float = left + pitch
+		# 峰高随机、两端略矮，峰尖略偏向一侧，避免等距三角形的机械感
+		var peak_height: float = height * rng.randf_range(0.68, 1.0)
+		if index == 0 or index == peaks - 1:
+			peak_height *= 0.86
+		cycle.append(Vector2(lerpf(left, right, rng.randf_range(0.36, 0.64)), -peak_height))
+		if index > 0:
+			cycle.append(Vector2(left, -height * rng.randf_range(0.16, 0.28)))
+		index -= 1
+	cycle.append(Vector2(-width * 0.5, -height * rng.randf_range(0.16, 0.26)))
+	return _round_polygon(cycle, 0.2, 4, true)
 
 
-func _spawn_flowers(
-	rng: RandomNumberGenerator,
-	width: float,
-	ground: float,
-	alpha_scale: float,
-	count: int,
-	min_height: float,
-	max_height: float
-) -> void:
-	var index: int = 0
-	while index < count:
-		var slot: float = (float(index) + rng.randf_range(0.2, 0.8)) / float(count)
-		_make_flower(rng, Vector2(slot * width, ground), rng.randf_range(min_height, max_height), alpha_scale)
-		index += 1
-
-
-func _make_flower(rng: RandomNumberGenerator, base: Vector2, height: float, alpha_scale: float) -> void:
+## 一朵小花：粗短茎 + 圆叶 + 大花头，整体高度约 0.7 × size_px，矮胖卡通比例。
+func _make_flower(rng: RandomNumberGenerator, base: Vector2, size_px: float, alpha_scale: float) -> void:
 	var flower: Node2D = Node2D.new()
 	flower.position = base
 	add_child(flower)
@@ -188,65 +167,89 @@ func _make_flower(rng: RandomNumberGenerator, base: Vector2, height: float, alph
 	var stem: Line2D = Line2D.new()
 	stem.points = PackedVector2Array([
 		Vector2.ZERO,
-		Vector2(5.0, -height * 0.42),
-		Vector2(1.0, -height * 0.78),
+		Vector2(size_px * 0.03, -size_px * 0.2),
+		Vector2(0.0, -size_px * 0.38),
 	])
-	stem.width = 8.0
+	stem.width = maxf(2.0, size_px * 0.075)
+	stem.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	stem.end_cap_mode = Line2D.LINE_CAP_ROUND
 	stem.set_meta("alpha_scale", alpha_scale)
 	flower.add_child(stem)
 	_lines.append(stem)
 
-	_add_leaf(flower, Vector2(2.0, -height * 0.3), 1.0, alpha_scale)
-	_add_leaf(flower, Vector2(4.0, -height * 0.52), -1.0, alpha_scale)
+	_add_leaf(flower, Vector2(size_px * 0.02, -size_px * 0.15), 1.0, size_px, alpha_scale)
 
-	var head: Node2D = Node2D.new()
-	head.position = Vector2(1.0, -height * 0.78)
+	var head: Polygon2D = Polygon2D.new()
+	head.polygon = _round_polygon(_flower_head_points(size_px * 0.28, rng.randi_range(5, 6)), 0.26, 3)
+	head.position = Vector2(0.0, -size_px * 0.42)
+	head.set_meta("alpha_scale", alpha_scale)
 	flower.add_child(head)
-
-	var spin: Node2D = Node2D.new()
-	head.add_child(spin)
-
-	var petal_count: int = rng.randi_range(5, 6)
-	var petal_index: int = 0
-	while petal_index < petal_count:
-		var angle: float = TAU * float(petal_index) / float(petal_count)
-		var petal: Polygon2D = Polygon2D.new()
-		petal.polygon = _ellipse_points(12.0, 19.0)
-		petal.position = Vector2(0.0, -16.0).rotated(angle)
-		petal.rotation = angle
-		petal.set_meta("alpha_scale", alpha_scale)
-		spin.add_child(petal)
-		_shapes.append(petal)
-		petal_index += 1
-
-	var core: Polygon2D = Polygon2D.new()
-	core.polygon = _ellipse_points(11.0, 11.0)
-	core.set_meta("alpha_scale", alpha_scale)
-	head.add_child(core)
-	_shapes.append(core)
-
-	var spin_data: Spin = Spin.new()
-	spin_data.node = spin
-	spin_data.speed = rng.randf_range(0.45, 0.95) * (1.0 if rng.randf() > 0.5 else -1.0)
-	_petals.append(spin_data)
+	_shapes.append(head)
 
 	var sway: Sway = Sway.new()
 	sway.node = flower
-	sway.amplitude = rng.randf_range(0.05, 0.10)
+	sway.amplitude = rng.randf_range(0.05, 0.09)
 	sway.speed = rng.randf_range(0.6, 1.1)
 	sway.phase = rng.randf_range(0.0, TAU)
 	_flowers.append(sway)
 
 
-func _add_leaf(flower: Node2D, at: Vector2, direction: float, alpha_scale: float) -> void:
+## 尖瓣花头：每片花瓣由「瓣间凹点 → 两侧 → 尖顶」连成，外轮廓呈尖角星形。
+func _flower_head_points(radius: float, petals: int) -> PackedVector2Array:
+	var points: PackedVector2Array = PackedVector2Array()
+	var step: float = TAU / float(petals)
+	var index: int = 0
+	while index < petals:
+		var angle: float = step * float(index)
+		points.append(Vector2(cos(angle - step * 0.5), sin(angle - step * 0.5)) * radius * 0.42)
+		points.append(Vector2(cos(angle - step * 0.22), sin(angle - step * 0.22)) * radius * 0.82)
+		points.append(Vector2(cos(angle), sin(angle)) * radius)
+		points.append(Vector2(cos(angle + step * 0.22), sin(angle + step * 0.22)) * radius * 0.82)
+		index += 1
+	return points
+
+
+## 把闭合轮廓的每个转折点倒成圆角（二次贝塞尔），得到圆润的卡通边。
+## keep_flat = true 时跳过贴地角（y ≈ 0），保证草簇底边仍然平直。
+func _round_polygon(points: PackedVector2Array, radius_scale: float, segments: int = 4, keep_flat: bool = false) -> PackedVector2Array:
+	var result: PackedVector2Array = PackedVector2Array()
+	var count: int = points.size()
+	var index: int = 0
+	while index < count:
+		var previous: Vector2 = points[(index - 1 + count) % count]
+		var current: Vector2 = points[index]
+		var next: Vector2 = points[(index + 1) % count]
+		if keep_flat and current.y >= -0.01:
+			result.append(current)
+			index += 1
+			continue
+		var to_previous: Vector2 = previous - current
+		var to_next: Vector2 = next - current
+		var trim: float = minf(to_previous.length(), to_next.length()) * radius_scale
+		if trim < 0.5:
+			result.append(current)
+			index += 1
+			continue
+		var entry: Vector2 = current + to_previous.normalized() * trim
+		var exit: Vector2 = current + to_next.normalized() * trim
+		var step: int = 0
+		while step <= segments:
+			var t: float = float(step) / float(segments)
+			var inverse: float = 1.0 - t
+			result.append(entry * inverse * inverse + current * 2.0 * inverse * t + exit * t * t)
+			step += 1
+		index += 1
+	return result
+
+
+func _add_leaf(flower: Node2D, at: Vector2, direction: float, size_px: float, alpha_scale: float) -> void:
 	var leaf: Node2D = Node2D.new()
 	leaf.position = at
-	leaf.rotation = deg_to_rad(-34.0) * direction
+	leaf.rotation = deg_to_rad(40.0) * direction
 	flower.add_child(leaf)
 
 	var shape: Polygon2D = Polygon2D.new()
-	shape.polygon = _ellipse_points(10.0, 18.0)
-	shape.position = Vector2(16.0 * direction, 0.0)
+	shape.polygon = _blade_points(size_px * 0.24, size_px * 0.16, direction)
 	shape.set_meta("alpha_scale", alpha_scale)
 	leaf.add_child(shape)
 	_shapes.append(shape)
@@ -266,27 +269,18 @@ func _blade_points(height: float, width: float, lean: float) -> PackedVector2Arr
 	var points: PackedVector2Array = PackedVector2Array()
 	var segments: int = 9
 	var index: int = 0
+	var tip: float = width * 0.06
 	while index <= segments:
 		var t: float = float(index) / float(segments)
-		var half: float = width * 0.5 * (1.0 - t) * (1.0 - t * 0.3)
+		var half: float = lerpf(width * 0.5, tip, t) * (1.0 - t * 0.25)
 		var center: Vector2 = Vector2(sin(t * 1.15) * width * 0.5 * lean, -height * t)
 		points.append(center + Vector2(half, 0.0))
 		index += 1
 	index = segments
 	while index >= 0:
 		var t: float = float(index) / float(segments)
-		var half: float = width * 0.5 * (1.0 - t) * (1.0 - t * 0.3)
+		var half: float = lerpf(width * 0.5, tip, t) * (1.0 - t * 0.25)
 		var center: Vector2 = Vector2(sin(t * 1.15) * width * 0.5 * lean, -height * t)
 		points.append(center - Vector2(half, 0.0))
 		index -= 1
-	return points
-
-
-func _ellipse_points(rx: float, ry: float, segments: int = 20) -> PackedVector2Array:
-	var points: PackedVector2Array = PackedVector2Array()
-	var index: int = 0
-	while index < segments:
-		var angle: float = TAU * float(index) / float(segments)
-		points.append(Vector2(cos(angle) * rx, sin(angle) * ry))
-		index += 1
 	return points

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://script/bgm/adventure_bgm.gd" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://blsolcmww6go5" path="res://sound/bgm/adventure/1-01. 100 Mario Challenge.mp3" id="2_challenge"]
+[ext_resource type="AudioStream" uid="uid://b7yawhufwjsjj" path="res://sound/bgm/adventure/1-02. 100 Mario Challenge (Expert).mp3" id="3_expert"]
+
+[node name="AdventureBgm" type="Node"]
+process_mode = 3
+script = ExtResource("1_script")
+
+[node name="Challenge" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_challenge")
+volume_db = -80.0
+bus = &"Music"
+
+[node name="Expert" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_expert")
+volume_db = -80.0
+bus = &"Music"

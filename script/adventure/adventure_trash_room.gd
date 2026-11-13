@@ -23,6 +23,7 @@ var _first_row_button: Button = null
 
 
 func _ready() -> void:
+	# 专属 BGM 由场景里的 RoomBgm 节点负责：停掉挑战曲、淡入历史房间曲。
 	_refresh()
 
 
@@ -63,6 +64,7 @@ func _focus_default() -> void:
 func _on_view_requested(level_path: String) -> void:
 	if not _bind_history_edit_context(level_path):
 		return
+	# 垃圾桶专属 BGM 随场景销毁停止，历史房间自己的 BGM 会接上。
 	GlobalTransition.change_scene_to_file(HISTORY_EDIT_SCENE)
 
 

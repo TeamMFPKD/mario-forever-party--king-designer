@@ -6,6 +6,10 @@ extends Node
 func _ready() -> void:
 	var bgm: BGM = get_tree().get_first_node_in_group("bgm") as BGM
 	bgm.sound_effect = sound_effect
+	# 百人团自带挑战 BGM：随机曲目让位，避免两套音乐同时响。
+	if Adventure.is_bgm_active():
+		bgm.stop()
+		return
 	if not bgm.playing and play:
 		bgm.play()
 	if not play:

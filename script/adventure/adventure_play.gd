@@ -25,6 +25,8 @@ func _ready() -> void:
 	# 过关中 / 转场播放中把暂停按钮置灰（信号回调不受暂停影响）。
 	Adventure.pause_blocked_changed.connect(_refresh_pause_button)
 	_setup_level_timer()
+	# 从舞台进来时 BGM 已按所选难度在播；直接进游玩（探针 / 意外路径）时这里补上。
+	Adventure.play_bgm(Adventure.current_tier())
 
 
 func _setup_level_timer() -> void:

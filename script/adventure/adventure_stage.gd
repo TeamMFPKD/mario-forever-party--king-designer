@@ -8,18 +8,30 @@ extends Control
 const TITLE_SCENE: String = "res://room/title.tscn"
 const TRASH_SCENE: String = "res://room/adventure_trash.tscn"
 const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
+## 四档主题色：淡蓝 / 偏深绿 / 土黄 / 紫。
 const TIER_COLORS: Array[Color] = [
-	Color("#BFE9FF"),
-	Color("#FFE7A3"),
-	Color("#E3B5FF"),
-	Color("#FFC9C9"),
+	Color("#CDEBFF"),
+	Color("#3F8C5A"),
+	Color("#C8A45C"),
+	Color("#8E44AD"),
 ]
-const NEUTRAL_COLOR: Color = Color("#DCEBFF")
+## 各主题色上的前景文字：浅底用深色，深底用白字（土黄底用深棕）。
+const TIER_TEXT_COLORS: Array[Color] = [
+	Color("#1A1A1A"),
+	Color("#F5FBFF"),
+	Color("#3A2A12"),
+	Color("#F5FBFF"),
+]
+const NEUTRAL_COLOR: Color = Color("#E7EBF2")
 const TEXT_COLOR: Color = Color("#1A1A1A")
 
 ## 背景装饰层：用 preload 而不是直接引用 class_name，避免编辑器类缓存没刷新时报错
 const SCENERY_SCRIPT: GDScript = preload("res://script/adventure/adventure_scenery.gd")
-const SCENERY_TINT: Color = Color(0.11, 0.16, 0.27, 0.26)
+## 浅底用深色剪影；深底换成浅色剪影，否则装饰会完全看不见。
+const SCENERY_TINT_ON_LIGHT_BG: Color = Color(0.11, 0.16, 0.27, 0.26)
+const SCENERY_TINT_ON_DARK_BG: Color = Color(1, 1, 1, 0.24)
+const ELLIPSE_BORDER_ON_LIGHT_BG: Color = Color(0.15, 0.15, 0.2, 0.65)
+const ELLIPSE_BORDER_ON_DARK_BG: Color = Color(1, 1, 1, 0.7)
 const SAVE_SLOTS_SCENE: PackedScene = preload("res://object/ui/adventure_save_slots.tscn")
 
 var _pool_source: String = "all"
@@ -48,6 +60,10 @@ var _pool_buttons: Array[Button] = []
 var _tier_buttons: Array[Button] = []
 var _mode_buttons: Array[Button] = []
 var _tier_info: Dictionary = {}
+## 直接画在主题背景上的文字（标题、状态、关数/命数），换档要跟着换前景色。
+var _theme_labels: Array[Label] = []
+var _label_tint: Color = TEXT_COLOR
+var _ellipse_border: Color = ELLIPSE_BORDER_ON_LIGHT_BG
 
 
 func _ready() -> void:
@@ -65,6 +81,10 @@ func _ready() -> void:
 	_prefer_low_sample = bool(settings.get("prefer_low_sample", true))
 	_length_slider.value = _run_length
 	_apply_button_states()
+	# 进场立刻套上已选难度的主题色，不用等关卡池扫完才变色。
+	_update_theme()
+	# 进场就按当前选择的难度起 BGM；切难度时 _select_tier 里交叉淡化。
+	Adventure.play_bgm(_tier)
 	_update_trash_button()
 	_status_label.text = "读取中……"
 	_set_controls_enabled(false)
@@ -99,12 +119,14 @@ func _build_ui() -> void:
 	title.add_theme_font_size_override("font_size", 64)
 	title.add_theme_color_override("font_color", TEXT_COLOR)
 	root_box.add_child(title)
+	_theme_labels.append(title)
 
 	_status_label = Label.new()
 	_status_label.add_theme_font_size_override("font_size", 24)
 	_status_label.add_theme_color_override("font_color", TEXT_COLOR)
 	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root_box.add_child(_status_label)
+	_theme_labels.append(_status_label)
 
 	var content: HBoxContainer = HBoxContainer.new()
 	content.add_theme_constant_override("separation", 24)
@@ -181,6 +203,7 @@ func _build_ui() -> void:
 	_length_label.add_theme_font_size_override("font_size", 22)
 	_length_label.add_theme_color_override("font_color", TEXT_COLOR)
 	info_row.add_child(_length_label)
+	_theme_labels.append(_length_label)
 	_length_slider = HSlider.new()
 	_length_slider.min_value = 5
 	_length_slider.max_value = 50
@@ -195,6 +218,7 @@ func _build_ui() -> void:
 	_lives_label.add_theme_color_override("font_color", TEXT_COLOR)
 	_lives_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_row.add_child(_lives_label)
+	_theme_labels.append(_lives_label)
 
 	var preview_panel: PanelContainer = PanelContainer.new()
 	preview_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -214,7 +238,7 @@ func _build_ui() -> void:
 	# 关卡椭圆附近的迷你剪影装饰：在面板底色之上、椭圆之下
 	_scenery = SCENERY_SCRIPT.new() as Control
 	_scenery.name = "Scenery"
-	_scenery.set("tint", SCENERY_TINT)
+	_scenery.set("tint", SCENERY_TINT_ON_LIGHT_BG)
 	preview_panel.add_child(_scenery)
 
 	right_box.add_child(preview_panel)
@@ -326,6 +350,8 @@ func _select_tier(tier: int) -> void:
 	_apply_button_states()
 	_update_theme()
 	_rebuild_preview()
+	# 简单 / 普通 ↔ 困难 / 超难：两首挑战 BGM 交叉淡入淡出。
+	Adventure.play_bgm(tier)
 
 
 func _select_mode(mode: String) -> void:
@@ -424,11 +450,26 @@ func _refresh_pool_ui() -> void:
 	_update_trash_button()
 
 
+## 换档：背景主题色 + 直接压在背景上的文字前景色 + 装饰剪影配色。
+## 深底档位（深绿 / 紫）用白字与浅色剪影，否则深色文字和深色装饰都会糊掉。
 func _update_theme() -> void:
+	var bg: Color = NEUTRAL_COLOR
+	var tint: Color = TEXT_COLOR
 	if _tier >= 1 and _tier <= 4:
-		_background.color = TIER_COLORS[_tier - 1]
-	else:
-		_background.color = NEUTRAL_COLOR
+		bg = TIER_COLORS[_tier - 1]
+		tint = TIER_TEXT_COLORS[_tier - 1]
+	_background.color = bg
+	_label_tint = tint
+	for label: Label in _theme_labels:
+		label.add_theme_color_override("font_color", tint)
+	var dark_theme: bool = tint.get_luminance() > 0.6
+	if _scenery != null:
+		_scenery.set(
+			"tint",
+			SCENERY_TINT_ON_DARK_BG if dark_theme else SCENERY_TINT_ON_LIGHT_BG
+		)
+	_ellipse_border = \
+		ELLIPSE_BORDER_ON_DARK_BG if dark_theme else ELLIPSE_BORDER_ON_LIGHT_BG
 
 
 func _update_lives() -> void:
@@ -462,13 +503,13 @@ func _make_ellipse(number: int, color: Color, endless: bool) -> Control:
 	style.border_width_top = 2
 	style.border_width_right = 2
 	style.border_width_bottom = 2
-	style.border_color = Color(0.15, 0.15, 0.2, 0.65)
+	style.border_color = _ellipse_border
 	panel.add_theme_stylebox_override("panel", style)
 	var label: Label = Label.new()
 	label.text = "?" if endless else str(number)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", TEXT_COLOR)
+	label.add_theme_color_override("font_color", _label_tint)
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(label)
@@ -537,6 +578,7 @@ func _on_trash_pressed() -> void:
 
 
 func _on_back() -> void:
+	Adventure.stop_bgm()
 	GlobalTransition.change_scene_to_file(TITLE_SCENE)
 
 

@@ -1,0 +1,180 @@
+[gd_scene format=3 load_steps=5]
+
+[ext_resource type="Script" uid="uid://toeshr8jjck6" path="res://script/adventure/adventure_result.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="3_label"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="4_button"]
+
+[node name="AdventureResultBase" type="Control" node_paths=PackedStringArray("title_clip", "data_block", "tier_value", "passed_value", "deaths_value", "excluded_value", "skipped_value")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+title_clip = NodePath("TitleClip")
+data_block = NodePath("DataBlock")
+tier_value = NodePath("DataBlock/Table/TierItem/TierValue")
+passed_value = NodePath("DataBlock/Table/PassedItem/PassedValue")
+deaths_value = NodePath("DataBlock/Table/DeathsItem/DeathsValue")
+excluded_value = NodePath("DataBlock/Table/ExcludedItem/ExcludedValue")
+skipped_value = NodePath("DataBlock/Table/SkippedItem/SkippedValue")
+
+[node name="TitleClip" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 80.0
+offset_bottom = 480.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="DataBlock" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -470.0
+offset_right = 620.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 54
+alignment = 1
+
+[node name="Table" type="HBoxContainer" parent="DataBlock"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TierItem" type="VBoxContainer" parent="DataBlock/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="TierCaption" parent="DataBlock/Table/TierItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "难度"
+horizontal_alignment = 1
+
+[node name="TierValue" parent="DataBlock/Table/TierItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "随机"
+horizontal_alignment = 1
+
+[node name="PassedItem" type="VBoxContainer" parent="DataBlock/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="PassedCaption" parent="DataBlock/Table/PassedItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "已通过"
+horizontal_alignment = 1
+
+[node name="PassedValue" parent="DataBlock/Table/PassedItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0/0"
+horizontal_alignment = 1
+
+[node name="DeathsItem" type="VBoxContainer" parent="DataBlock/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="DeathsCaption" parent="DataBlock/Table/DeathsItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "死亡数"
+horizontal_alignment = 1
+
+[node name="DeathsValue" parent="DataBlock/Table/DeathsItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+
+[node name="ExcludedItem" type="VBoxContainer" parent="DataBlock/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="ExcludedCaption" parent="DataBlock/Table/ExcludedItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "排除"
+horizontal_alignment = 1
+
+[node name="ExcludedValue" parent="DataBlock/Table/ExcludedItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+
+[node name="SkippedItem" type="VBoxContainer" parent="DataBlock/Table"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="SkippedCaption" parent="DataBlock/Table/SkippedItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "跳过"
+horizontal_alignment = 1
+
+[node name="SkippedValue" parent="DataBlock/Table/SkippedItem" instance=ExtResource("3_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+
+[node name="ButtonsRow" type="HBoxContainer" parent="DataBlock"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+
+[node name="AgainButton" parent="DataBlock/ButtonsRow" instance=ExtResource("4_button")]
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "继续挑战"
+
+[node name="StageButton" parent="DataBlock/ButtonsRow" instance=ExtResource("4_button")]
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "更改模式"
+
+[node name="TitleButton" parent="DataBlock/ButtonsRow" instance=ExtResource("4_button")]
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "返回标题"
+
+[connection signal="pressed" from="DataBlock/ButtonsRow/AgainButton" to="." method="_on_again_pressed"]
+[connection signal="pressed" from="DataBlock/ButtonsRow/StageButton" to="." method="_on_stage_pressed"]
+[connection signal="pressed" from="DataBlock/ButtonsRow/TitleButton" to="." method="_on_title_pressed"]
