@@ -542,3 +542,6 @@ msgstr "移動 / UI 左"
 
 msgid "移动/UI右"
 msgstr "移動 / UI 右"
+
+msgid "快捷消息"
+msgstr "クイックメッセージ"
