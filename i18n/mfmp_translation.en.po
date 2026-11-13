@@ -545,3 +545,6 @@ msgstr "Move / UI Right"
 
 msgid "快捷消息"
 msgstr "Quick Message"
+
+msgid "UI 音量"
+msgstr "UI Volume"

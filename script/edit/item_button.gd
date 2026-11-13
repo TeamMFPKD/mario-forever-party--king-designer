@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 class_name ItemButton
 
@@ -24,6 +24,7 @@ var _default_mouse_filter: Control.MouseFilter = Control.MOUSE_FILTER_STOP
 var _default_focus_mode: Control.FocusMode = Control.FOCUS_ALL
 
 func _ready() -> void:
+	super()
 	level_control = get_tree().get_first_node_in_group("level_control") as LevelControl
 	pressed.connect(_on_button_pressed)
 	_default_alpha = modulate.a

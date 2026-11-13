@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 ## 关卡主题按钮：点击切换主题，并通过 CmdChangeLevelTheme 写入撤销历史。
 
@@ -8,6 +8,7 @@ var level_manager: LevelManager
 var _command_stack: CommandStack = null
 
 func _ready() -> void:
+	super()
 	level_manager = get_tree().get_first_node_in_group("level_manager") as LevelManager
 	_command_stack = CommandStack.find_in(get_tree())
 	pressed.connect(_on_button_pressed)

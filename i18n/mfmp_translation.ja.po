@@ -545,3 +545,6 @@ msgstr "移動 / UI 右"
 
 msgid "快捷消息"
 msgstr "クイックメッセージ"
+
+msgid "UI 音量"
+msgstr "UI音量"

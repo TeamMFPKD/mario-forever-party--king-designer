@@ -102,6 +102,7 @@ grow_horizontal = 2
 text = ""
 script = ExtResource("2_cgfdo")
 life_limit = 1
+pressed_sound = ExtResource("7_t1cis")
 
 [node name="Sprite2D" type="Sprite2D" parent="LifeUpButton" unique_id=86088886]
 position = Vector2(64, 24)
@@ -124,6 +125,7 @@ grow_horizontal = 2
 grow_vertical = 0
 text = ""
 script = ExtResource("2_cgfdo")
+pressed_sound = ExtResource("7_t1cis")
 
 [node name="Sprite2D" type="Sprite2D" parent="LifeDownButton" unique_id=238175876]
 position = Vector2(64, 32)
@@ -187,9 +189,6 @@ position = Vector2(3, 0)
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_rugdn")
 
-[node name="LifeChangeSound" parent="." unique_id=1715984441 instance=ExtResource("6_eikvs")]
-stream = ExtResource("7_t1cis")
-
 [node name="AniCooldownTimer" type="Timer" parent="." unique_id=1274871739]
 wait_time = 0.5
 one_shot = true
@@ -200,7 +199,5 @@ ignore_time_scale = true
 libraries/ = SubResource("AnimationLibrary_bmt0n")
 
 [connection signal="pressed" from="LifeUpButton" to="LifeDisplay/LifeDisplay" method="_on_life_up"]
-[connection signal="pressed" from="LifeUpButton" to="LifeChangeSound" method="play"]
 [connection signal="pressed" from="LifeDownButton" to="LifeDisplay/LifeDisplay" method="_on_life_down"]
-[connection signal="pressed" from="LifeDownButton" to="LifeChangeSound" method="play"]
 [connection signal="timeout" from="AniCooldownTimer" to="LifeDisplay/LifeDisplay" method="_on_ani_cooldown_finished"]

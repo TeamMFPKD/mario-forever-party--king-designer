@@ -30,6 +30,10 @@ const META_MODAL: StringName = &"ui_focus_modal"
 const META_FOCUS_RECT: StringName = &"ui_focus_rect"
 
 const CURSOR_SCENE_PATH: String = "res://ui/menu_cursor.tscn"
+## UI 焦点移动音效（SMM2「通用-选择翻页」）
+const MOVE_SOUND_PATH: String = "res://sound/ui/ui_move.wav"
+## 按钮按下音效（SMM2「通用-大确定」），给没自己配 pressed_sound 的按钮兜底
+const PRESS_SOUND_PATH: String = "res://sound/ui/ui_press.wav"
 ## 兜底重扫间隔（秒）。可交互控件的显隐变化不发信号，只能靠这个兜住。
 const SCAN_INTERVAL: float = 0.3
 ## 游戏内探测"有没有模态 UI 出现"的间隔。
@@ -65,6 +69,10 @@ var _since_scan: float = 0.0
 
 var _cursor_layer: CanvasLayer = null
 var _cursor: UiMenuCursor = null
+## 焦点移动音效播放器（单实例，每次移动重头播）
+var _move_player: AudioStreamPlayer = null
+## 按下音效兜底播放器：只服务没自己配 pressed_sound 的按钮
+var _press_player: AudioStreamPlayer = null
 
 ## 当前模式
 var _mode: InputMode = InputMode.FOCUS
@@ -109,11 +117,80 @@ func _ready() -> void:
 	get_tree().node_added.connect(_on_tree_changed)
 	get_tree().node_removed.connect(_on_tree_changed)
 	UiFocusPolicy.policy_changed.connect(_on_tree_changed)
+	_setup_move_sound()
+	_setup_press_sound()
 
 
-func _on_tree_changed(_node: Node) -> void:
+## 焦点移动音效：一个常驻播放器，每次移动 play() 重头播。
+## 用 PROCESS_MODE_ALWAYS，因为多数移动发生在暂停状态下的菜单里。
+func _setup_move_sound() -> void:
+	_move_player = _make_player("UiMoveSound", MOVE_SOUND_PATH)
+
+
+## 按下音效兜底：按钮自己没配 pressed_sound 时由这里出声。
+## 播放器挂在 autoload 上，切场景不会跟着按钮一起销毁。
+func _setup_press_sound() -> void:
+	_press_player = _make_player("UiPressSound", PRESS_SOUND_PATH)
+
+
+func _make_player(node_name: String, stream_path: String) -> AudioStreamPlayer:
+	var stream_res: Resource = load(stream_path)
+	if not (stream_res is AudioStream):
+		return null
+	var player: AudioStreamPlayer = AudioStreamPlayer.new()
+	player.name = node_name
+	player.stream = stream_res as AudioStream
+	player.bus = &"UI"
+	player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(player)
+	return player
+
+
+## 新节点入树时挂上按下音效兜底。用 node_added 而不是等 _rescan，
+## 是因为扫描只在导航启用时跑，游戏内（暂停菜单等）会漏掉。
+func _hook_button_sound(node: Node) -> void:
+	if not (node is BaseButton):
+		return
+	var button: BaseButton = node
+	if button.pressed.is_connected(_on_button_pressed):
+		return
+	button.pressed.connect(_on_button_pressed.bind(button))
+
+
+## 按钮被按下：自己带了 pressed_sound 的（UiSoundButton）已经播过，这里跳过；
+## 其余（裸 Button / TextureButton / 没配音效的 UiSoundButton）用统一音效兜底。
+func _on_button_pressed(button: BaseButton) -> void:
+	if not is_instance_valid(button):
+		return
+	if button is UiSoundButton:
+		var sound_button: UiSoundButton = button
+		if sound_button.pressed_sound != null:
+			return
+	if _press_player != null and _press_player.stream != null:
+		_press_player.play()
+
+
+## 焦点切到某个控件时出声：控件自己配了 focus_sound 就用它的，
+## 没配（或不是 UiSoundButton）才退回全局默认的移动音效。
+func _play_focus_sound(control: Control) -> void:
+	if control.has_method("play_focus_sound"):
+		var result: Variant = control.call("play_focus_sound")
+		if result is bool:
+			var played: bool = result
+			if played:
+				return
+	_play_move_sound()
+
+
+func _play_move_sound() -> void:
+	if _move_player != null and _move_player.stream != null:
+		_move_player.play()
+
+
+func _on_tree_changed(node: Node) -> void:
 	_dirty = true
 	_needs_prune = true
+	_hook_button_sound(node)
 
 
 ## 把已经 free 掉的控件从候选里剔除。
@@ -479,6 +556,7 @@ func _move(direction: Vector2) -> void:
 	_user_selected = true
 	_selected_id = int(_candidates[best].get_instance_id())
 	_ensure_visible(_candidates[best])
+	_play_focus_sound(_candidates[best])
 
 
 ## 取消键的特殊语义：焦点困在滚动列表（ScrollContainer）里时，先跳到容器外的某个 UIControl。

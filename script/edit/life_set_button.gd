@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 enum LifeLimitEnum {
 	DOWN,
@@ -12,6 +12,7 @@ enum LifeLimitEnum {
 var level_manager: LevelManager
 
 func _ready() -> void:
+	super()
 	level_manager = get_tree().get_first_node_in_group("level_manager")
 	level_manager.lives_changed.connect(_on_lives_changed)
 

@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 enum LevelSizeExpandMode {
 	IN,
@@ -24,6 +24,7 @@ var _limits_before: Vector4i = Vector4i.ZERO
 var _position_before: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	super()
 	#pressed.connect(_on_button_pressed)
 	level_camera = get_tree().get_first_node_in_group("level_camera") as LevelCamera
 	_command_stack = CommandStack.find_in(get_tree())

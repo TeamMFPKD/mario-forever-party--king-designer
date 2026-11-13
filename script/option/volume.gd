@@ -4,6 +4,7 @@ enum VolumeType {
 	MASTER,
 	MUSIC,
 	SOUND,
+	UI,
 }
 
 # 字典映射VolumeType到bus名称
@@ -11,6 +12,7 @@ var bus_names: Dictionary = {
 	VolumeType.MASTER: "Master",
 	VolumeType.MUSIC: "Music", 
 	VolumeType.SOUND: "Sound",
+	VolumeType.UI: "UI",
 }
 
 @export var volume_type: VolumeType = VolumeType.MASTER

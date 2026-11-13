@@ -545,3 +545,6 @@ msgstr "移动/UI右"
 
 msgid "快捷消息"
 msgstr "快捷消息"
+
+msgid "UI 音量"
+msgstr "UI 音量"

@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://dvu45nym5l6oi"]
 
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="1_3tkkc"]
+[ext_resource type="Script" path="res://script/ui/ui_sound_button.gd" id="2_snd"]
+[ext_resource type="AudioStream" path="res://sound/ui/ui_move.wav" id="3_move"]
+[ext_resource type="AudioStream" path="res://sound/ui/ui_press.wav" id="4_press"]
 
 [node name="UiButton" type="Button" unique_id=1210628054]
 offset_right = 300.0
@@ -9,3 +12,6 @@ focus_mode = 0
 theme = ExtResource("1_3tkkc")
 theme_override_font_sizes/font_size = 50
 text = "请输入文本"
+script = ExtResource("2_snd")
+focus_sound = ExtResource("3_move")
+pressed_sound = ExtResource("4_press")

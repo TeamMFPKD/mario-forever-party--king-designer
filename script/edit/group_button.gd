@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @export var item_group: Control
 
@@ -18,6 +18,7 @@ var _close_token: int = 0
 var _selection_pending: bool = false
 
 func _ready() -> void:
+	super()
 	pressed.connect(_on_button_pressed)
 	if item_group == null:
 		push_error("item_group is not assigned in GroupButton")
