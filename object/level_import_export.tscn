@@ -70,6 +70,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+metadata/ui_focus_modal = true
 
 [node name="ControlVisibieSet" parent="ImportExportHint" unique_id=416177451 instance=ExtResource("7_fmrit")]
 
@@ -111,6 +112,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+metadata/ui_focus_modal = true
 
 [node name="CenterContainer" type="CenterContainer" parent="ExportModeDialog"]
 layout_mode = 1
@@ -170,6 +172,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 40
 text = "取消"
+metadata/ui_focus_cancel = true
 
 [connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton" to="ImportExportManager" method="_on_import_button_pressed"]
 [connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton2" to="ImportExportManager" method="_on_export_button_pressed"]

@@ -8,6 +8,7 @@
 
 [node name="NoticePanel" type="Control"]
 visible = false
+metadata/ui_focus_modal = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -79,3 +80,4 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "确认"
+metadata/ui_focus_cancel = true

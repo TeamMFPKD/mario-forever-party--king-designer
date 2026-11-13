@@ -207,9 +207,11 @@ func _randomize_flip_style() -> void:
 
 
 ## 翻转期间卡片容器保持可见（否则子视口可能停更），只用透明度和输入开关控制。
+## 同时标记 ui_focus_skip：卡片全透明时按钮仍是 visible，不排除的话手柄光标会浮在空处。
 func _set_card_interactive(active: bool) -> void:
 	_card_container.modulate = Color(1, 1, 1, 1.0 if active else 0.0)
 	_card_container.mouse_filter = Control.MOUSE_FILTER_STOP if active else Control.MOUSE_FILTER_IGNORE
+	_card_container.set_meta("ui_focus_skip", not active)
 
 
 func _prepare_flip_stage(rect: Rect2) -> void:

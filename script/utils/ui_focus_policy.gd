@@ -4,11 +4,11 @@ extends Node
 ##
 ## 决定一个 BaseButton 该不该可聚焦。决策表：
 ##
-## | 平台     | 手柄在用 | 有 gamepad_focus 标记 | 无标记 |
-## |----------|---------|----------------------|--------|
-## | 移动端   | —       | FOCUS_NONE           | FOCUS_NONE |
-## | PC/主机  | 否      | FOCUS_NONE           | FOCUS_NONE |
-## | PC/主机  | **是**  | **复原原值**          | FOCUS_NONE |
+## | 平台     | 主导设备      | 有 gamepad_focus 标记 | 无标记 |
+## |----------|--------------|----------------------|--------|
+## | 移动端   | —            | FOCUS_NONE           | FOCUS_NONE |
+## | PC/主机  | 鼠标         | FOCUS_NONE           | FOCUS_NONE |
+## | PC/主机  | 键盘/手柄     | **复原原值**          | FOCUS_NONE |
 ##
 ## 设计要点：
 ## - 只放开**显式标记过**的节点。没标记的一律保持禁用，避免布局里大量
@@ -61,10 +61,15 @@ func _on_last_device_changed(_device: StringName) -> void:
 # ---------------------------------------------------------------------------
 
 ## 是否应当放开被标记节点的焦点。
+##
+## 键盘主导也放开：需求要求「上次操作是键盘或手柄时默认聚焦一个 UI」。
+## 鼠标主导时返回 false —— 鼠标用户保留纯 hover 体验，不被焦点框打扰。
 func should_enable_gamepad_focus() -> bool:
 	if is_mobile_platform():
 		return false
-	return InputDevice.has_gamepad() and InputDevice.is_gamepad_active()
+	if InputDevice.is_gamepad_active():
+		return true
+	return InputDevice.last_device == InputDevice.DEVICE_KEYBOARD
 
 
 ## 是否移动端。直接用 PlatformUtils 的现成实现，保证 debug 伪装平台也生效。

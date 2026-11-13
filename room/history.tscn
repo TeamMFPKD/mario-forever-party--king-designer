@@ -16,7 +16,6 @@
 [ext_resource type="Script" uid="uid://dtcng3unv4hog" path="res://script/history/open_level_folder_button.gd" id="12_2phut"]
 [ext_resource type="PackedScene" uid="uid://bgbnexddng5mx" path="res://object/level_import_export.tscn" id="14_guxlu"]
 [ext_resource type="PackedScene" uid="uid://cm7d6a14luesa" path="res://object/on_screen_controls/mobile_control_manager.tscn" id="14_ixr3s"]
-[ext_resource type="PackedScene" path="res://ui/menu_cursor.tscn" id="15_cursor"]
 
 [node name="History" type="Node2D" unique_id=1793275075]
 
@@ -108,11 +107,6 @@ level_list_line_scene = ExtResource("7_5mpa1")
 scroll_container = NodePath("..")
 no_file_hint_label = NodePath("../../../LoadingLabel")
 history_file_date_line_scene = ExtResource("11_mh56w")
-
-[node name="MenuCursor" parent="GameRoomSize" instance=ExtResource("15_cursor")]
-z_index = 20
-padding = Vector2(6, 6)
-target_root = NodePath("../Back/HBoxContainer")
 
 [node name="Back" parent="GameRoomSize" unique_id=1688126696 instance=ExtResource("3_1d24y")]
 layout_mode = 1

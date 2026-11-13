@@ -1,148 +1,160 @@
 extends Control
+class_name UiMenuCursor
 
-## 菜单四角光标（手柄 / 键盘导航用）。
+## 菜单聚焦四角光标（**纯表现组件**）。
 ##
-## 背景：本作 UI 一律鼠标 / 触屏操作，autoload `NoButtonFocus` 会把所有
-## [BaseButton] 的 focus_mode 置为 FOCUS_NONE 并强制释放焦点，因此**不能**用
-## Godot 原生的焦点系统做导航。本节点自己维护"当前选中项"，把四角光标画在
-## 选中控件的四边外侧。
+## 它只负责"画"：位置跟随、呼吸、按下变黄。
+## 谁被选中、方向键怎么走、确认键触发谁，全部由 autoload `UiNavigator` 决定
+## （见 `script/utils/ui_navigator.gd`）。本节点不再自己收集按钮、不再自己读输入。
 ##
-## 为什么用 4 个独立 Corner 而不是 NinePatchRect：
-## NinePatchRect 会把四条边整体拉伸，四角光标的"臂"会被扯成整条线。
-## 四角必须各自固定尺寸，只有**位置**跟着目标矩形走。
-##
-## 用法：把本节点放在目标控件所在的同一画布下（通常与按钮同属一个 GameRoomSize），
-## target_root 指向装着按钮的容器。_ready 时按树序收集其中所有可见、未禁用的 Button。
-##
-## 输入：ui_left / ui_right / ui_up / ui_down 切换，ui_accept 触发。
+## 三条表现要求：
+## 1. 换选中项时位置用极短缓动跟随，不瞬移；
+## 2. 常态做"四角靠近中心 → 远离中心"的轻微呼吸（默认 ±2.5%，周期 1.8s）；
+## 3. 按下确认键时红色（#E8342A）平滑变成主题黄（#FFC531），松开恢复。
 
-signal selection_changed(index: int, button: Control)
-signal activated(index: int, button: Control)
+const TINT_SHADER_PATH: String = "res://shader/ui_cursor_tint.gdshader"
 
-## 装按钮的容器；按钮在其中的树序即默认遍历顺序
-@export var target_root: NodePath
-## 光标相对控件外扩的像素
+## 光标相对目标控件外扩的像素
 @export var padding: Vector2 = Vector2(10.0, 8.0)
-## 移动到新位置用的时长
+## 位置跟随的缓动时长（秒）；<= 0 表示瞬移
 @export var move_duration: float = 0.14
-## 走到两端是否环绕
-@export var wrap: bool = true
-## 空间查找时，垂直于目标方向的偏移惩罚阈值
-@export var axis_tolerance: float = 96.0
+## 呼吸幅度：四角沿"中心 ↔ 角"方向缩放的百分比
+@export var breath_amplitude: float = 0.025
+## 呼吸周期（秒）
+@export var breath_period: float = 1.8
+## 常态色（贴图原始红）
+@export var base_color: Color = Color(0.909804, 0.203922, 0.164706, 1.0)
+## 按下确认键时的高亮色（主题黄）
+@export var highlight_color: Color = Color(1.0, 0.772549, 0.192157, 1.0)
+## 红↔黄的过渡速度
+@export var highlight_speed: float = 12.0
 
-var _buttons: Array[Control] = []
-var _index: int = -1
-var _tween: Tween
+var _target_rect: Rect2 = Rect2()
+var _base_rect: Rect2 = Rect2()
+var _has_target: bool = false
+var _breath_time: float = 0.0
+var _highlight: float = 0.0
+var _highlight_target: float = 0.0
+var _tint: ShaderMaterial = null
 
-@onready var _tl: TextureRect = $CornerTL
-@onready var _tr: TextureRect = $CornerTR
-@onready var _bl: TextureRect = $CornerBL
-@onready var _br: TextureRect = $CornerBR
+@onready var _corner_tl: TextureRect = $CornerTL
+@onready var _corner_tr: TextureRect = $CornerTR
+@onready var _corner_bl: TextureRect = $CornerBL
+@onready var _corner_br: TextureRect = $CornerBR
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for corner: TextureRect in [_tl, _tr, _bl, _br]:
+	z_index = 4096
+	var corners: Array[TextureRect] = _corners()
+	_tint = _build_tint()
+	for corner: TextureRect in corners:
 		corner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		corner.stretch_mode = TextureRect.STRETCH_KEEP
+		if _tint != null:
+			corner.material = _tint
 	visible = false
-	_collect_buttons()
-	if _buttons.is_empty():
+
+
+func _process(delta: float) -> void:
+	if not visible or not _has_target:
 		return
-	select(0, true)
+	_follow_target(delta)
+	_advance_breath(delta)
+	_advance_highlight(delta)
+	_layout(1.0)
 
 
-## 按树序收集 target_root 下所有可用 Button。
-func _collect_buttons() -> void:
-	_buttons.clear()
-	var root: Node = get_node_or_null(target_root)
-	if root == null:
-		root = get_parent()
-	if root == null:
-		return
-	_collect_into(root)
-	var usable: Array[Control] = []
-	for button: Control in _buttons:
-		if not is_instance_valid(button):
-			continue
-		if not button.is_visible_in_tree():
-			continue
-		if button is BaseButton and (button as BaseButton).disabled:
-			continue
-		usable.append(button)
-	_buttons = usable
+# ---------------------------------------------------------------------------
+# 对外 API（由 UiNavigator 调用）
+# ---------------------------------------------------------------------------
 
-
-func _collect_into(node: Node) -> void:
-	for child: Node in node.get_children():
-		if child is Button:
-			_buttons.append(child as Control)
-		_collect_into(child)
-
-
-## 当前选中索引；没有选中时为 -1。
-func get_selection() -> int:
-	return _index
-
-
-## 当前选中的控件。
-func get_selected_button() -> Control:
-	if _index < 0 or _index >= _buttons.size():
-		return null
-	return _buttons[_index]
-
-
-## 当前选中控件名（探针 / 调试用）。
-func get_selected_label() -> String:
-	var button: Control = get_selected_button()
-	if button == null:
-		return ""
-	return str(button.name)
-
-
-## 选中第 index 项并移动光标。instant 为 true 时不播动画（初始化用）。
-func select(index: int, instant: bool = false) -> void:
-	if _buttons.is_empty():
-		visible = false
-		return
-	var clamped: int = clampi(index, 0, _buttons.size() - 1)
-	_index = clamped
+## 显示光标并朝向 rect（本节点父级的局部坐标）。instant 为 true 时不做跟随缓动。
+##
+## 每帧被调用时只更新目标矩形，实际摆放交给 _process，避免打断呼吸相位。
+func show_at(rect: Rect2, instant: bool = false) -> void:
+	_target_rect = rect
+	if instant or not _has_target:
+		_base_rect = rect
+		_has_target = true
+		_breath_time = 0.0
+		_layout(1.0)
 	visible = true
-	var button: Control = _buttons[_index]
-	_apply_rect(button, instant)
-	# 手柄激活时把原生焦点也同步过去，方便依赖 focus_entered/exited 的控件
-	if UiFocusPolicy.should_enable_gamepad_focus() and button is BaseButton:
-		var base: BaseButton = button as BaseButton
-		if base.focus_mode != Control.FOCUS_NONE:
-			base.grab_focus()
-	selection_changed.emit(_index, _buttons[_index])
 
 
-## 把四角摆到目标控件的四边外侧。
-func _apply_rect(button: Control, instant: bool) -> void:
-	var target: Rect2 = _rect_of(button).grow_individual(padding.x, padding.y, padding.x, padding.y)
-	if _tween != null and _tween.is_valid():
-		_tween.kill()
+## 隐藏光标。
+func hide_cursor() -> void:
+	visible = false
+	_has_target = false
 
-	var placements: Array[Rect2] = [
-		Rect2(target.position, _corner_size(_tl)),
-		Rect2(Vector2(target.end.x - _corner_size(_tr).x, target.position.y), _corner_size(_tr)),
-		Rect2(Vector2(target.position.x, target.end.y - _corner_size(_bl).y), _corner_size(_bl)),
-		Rect2(target.end - _corner_size(_br), _corner_size(_br)),
-	]
-	var corners: Array[TextureRect] = [_tl, _tr, _bl, _br]
 
-	if instant or move_duration <= 0.0:
-		for i: int in range(corners.size()):
-			corners[i].position = placements[i].position
-			corners[i].size = placements[i].size
+## 按下确认键时置 true，松开置 false。
+func set_highlight(on: bool) -> void:
+	_highlight_target = 1.0 if on else 0.0
+
+
+## 当前光标框（含 padding，本节点父级局部坐标）。
+func get_frame_rect() -> Rect2:
+	return _base_rect.grow_individual(padding.x, padding.y, padding.x, padding.y)
+
+
+# ---------------------------------------------------------------------------
+# 内部
+# ---------------------------------------------------------------------------
+
+func _corners() -> Array[TextureRect]:
+	return [_corner_tl, _corner_tr, _corner_bl, _corner_br]
+
+
+func _build_tint() -> ShaderMaterial:
+	var res: Resource = load(TINT_SHADER_PATH)
+	if not (res is Shader):
+		return null
+	var mat: ShaderMaterial = ShaderMaterial.new()
+	mat.shader = res as Shader
+	mat.set_shader_parameter("base_color", base_color)
+	mat.set_shader_parameter("highlight_color", highlight_color)
+	mat.set_shader_parameter("highlight_amount", 0.0)
+	return mat
+
+
+func _follow_target(delta: float) -> void:
+	if move_duration <= 0.0:
+		_base_rect = _target_rect
 		return
+	# 指数收敛：约 3.5 个时间常数后到位，起步快、末端缓
+	var weight: float = clampf(1.0 - exp(-3.5 * delta / move_duration), 0.0, 1.0)
+	# Rect2 没有 lerp()，位置和尺寸分别插值
+	_base_rect = Rect2(
+		_base_rect.position.lerp(_target_rect.position, weight),
+		_base_rect.size.lerp(_target_rect.size, weight)
+	)
 
-	_tween = create_tween()
-	_tween.set_parallel(true)
-	for i: int in range(corners.size()):
-		_tween.tween_property(corners[i], "position", placements[i].position, move_duration) \
-			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+func _advance_breath(delta: float) -> void:
+	_breath_time += delta
+
+
+func _advance_highlight(delta: float) -> void:
+	_highlight = move_toward(_highlight, _highlight_target, maxf(highlight_speed, 0.01) * delta)
+	if _tint != null:
+		_tint.set_shader_parameter("highlight_amount", _highlight)
+
+
+## 按呼吸系数摆放四个角。
+func _layout(scale_k: float) -> void:
+	var frame: Rect2 = get_frame_rect()
+	var center: Vector2 = frame.get_center()
+	var breath: float = 1.0
+	if breath_period > 0.0 and breath_amplitude > 0.0:
+		breath = 1.0 + breath_amplitude * sin(_breath_time * TAU / breath_period)
+	var k: float = scale_k * breath
+	var corners: Array[TextureRect] = _corners()
+	for corner: TextureRect in corners:
+		var size: Vector2 = _corner_size(corner)
+		var anchor: Vector2 = _anchor_of(frame, corner, size)
+		corner.position = center + (anchor - center) * k
+		corner.size = size
 
 
 func _corner_size(corner: TextureRect) -> Vector2:
@@ -151,75 +163,11 @@ func _corner_size(corner: TextureRect) -> Vector2:
 	return corner.texture.get_size()
 
 
-## 把控件（可能在别的变换层级）的矩形换算到本节点的局部坐标。
-func _rect_of(button: Control) -> Rect2:
-	var inv: Transform2D = get_global_transform_with_canvas().affine_inverse()
-	var btn: Transform2D = button.get_global_transform_with_canvas()
-	var top_left: Vector2 = inv * (btn * Vector2.ZERO)
-	var bottom_right: Vector2 = inv * (btn * Vector2(button.size))
-	return Rect2(top_left, bottom_right - top_left).abs()
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if not visible or _buttons.is_empty():
-		return
-	# 移动端不响应键盘/手柄导航（触屏操作）
-	if UiFocusPolicy.is_mobile_platform():
-		return
-	if event.is_action_pressed("ui_left"):
-		_move_in(Vector2.LEFT)
-		accept_event()
-	elif event.is_action_pressed("ui_right"):
-		_move_in(Vector2.RIGHT)
-		accept_event()
-	elif event.is_action_pressed("ui_up"):
-		_move_in(Vector2.UP)
-		accept_event()
-	elif event.is_action_pressed("ui_down"):
-		_move_in(Vector2.DOWN)
-		accept_event()
-	elif event.is_action_pressed("ui_menu_accept") or event.is_action_pressed("ui_accept"):
-		var button: Control = get_selected_button()
-		if button != null:
-			activated.emit(_index, button)
-			if button is BaseButton:
-				(button as BaseButton).pressed.emit()
-		accept_event()
-
-
-## 朝 direction 方向找最近的候选控件。
-func _move_in(direction: Vector2) -> void:
-	if _buttons.size() <= 1:
-		return
-	var from: Rect2 = _rect_of(_buttons[_index])
-	var from_center: Vector2 = from.get_center()
-
-	var best_index: int = -1
-	var best_cost: float = INF
-	for i: int in range(_buttons.size()):
-		if i == _index:
-			continue
-		var rect: Rect2 = _rect_of(_buttons[i])
-		var center: Vector2 = rect.get_center()
-		var delta: Vector2 = center - from_center
-		if delta.dot(direction) <= 0.0:
-			continue
-		var across: float = absf(delta.dot(Vector2(direction.y, direction.x)))
-		var along: float = delta.dot(direction)
-		var cost: float = along + across * (1.0 if across <= axis_tolerance else 6.0)
-		if cost < best_cost:
-			best_cost = cost
-			best_index = i
-
-	if best_index < 0:
-		var step: int = 1 if (direction.x > 0.0 or direction.y > 0.0) else -1
-		var next: int = _index + step
-		if wrap:
-			next = posmod(next, _buttons.size())
-		else:
-			next = clampi(next, 0, _buttons.size() - 1)
-		if next != _index:
-			select(next)
-		return
-
-	select(best_index)
+func _anchor_of(frame: Rect2, corner: TextureRect, size: Vector2) -> Vector2:
+	if corner == _corner_tl:
+		return frame.position
+	if corner == _corner_tr:
+		return Vector2(frame.end.x - size.x, frame.position.y)
+	if corner == _corner_bl:
+		return Vector2(frame.position.x, frame.end.y - size.y)
+	return frame.end - size

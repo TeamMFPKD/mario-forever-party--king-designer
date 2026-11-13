@@ -19,6 +19,7 @@ signal gamepad_presence_changed(present: bool)
 signal last_device_changed(device: StringName)
 
 const DEVICE_KEYBOARD: StringName = &"keyboard"
+const DEVICE_MOUSE: StringName = &"mouse"
 const DEVICE_GAMEPAD: StringName = &"gamepad"
 
 ## 摇杆需要超过这个幅度才算"手柄活动"（对抗漂移）
@@ -64,9 +65,14 @@ func is_gamepad_active() -> bool:
 	return _has_gamepad and last_device == DEVICE_GAMEPAD
 
 
-## 当前主导设备是否键鼠。
+## 当前主导设备是否键盘。
 func is_keyboard_active() -> bool:
 	return last_device == DEVICE_KEYBOARD
+
+
+## 当前主导设备是否鼠标（鼠标主导时不抢 UI 焦点，保留 hover 体验）。
+func is_mouse_active() -> bool:
+	return last_device == DEVICE_MOUSE
 
 
 # ---------------------------------------------------------------------------
@@ -113,11 +119,11 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton:
 		var button_event: InputEventMouseButton = event
 		if button_event.pressed:
-			_claim_keyboard()
+			_claim_mouse()
 	elif event is InputEventMouseMotion:
 		var motion_event: InputEventMouseMotion = event
 		if motion_event.relative.length() >= MOUSE_MOVE_THRESHOLD:
-			_claim_keyboard()
+			_claim_mouse()
 
 
 func _claim_gamepad() -> void:
@@ -136,7 +142,16 @@ func _claim_gamepad() -> void:
 
 
 func _claim_keyboard() -> void:
+	_claim_pointer_device(DEVICE_KEYBOARD)
+
+
+func _claim_mouse() -> void:
+	_claim_pointer_device(DEVICE_MOUSE)
+
+
+## 键鼠切回来是即时的（手柄抢过去才需要延迟确认）。
+func _claim_pointer_device(device: StringName) -> void:
 	_gamepad_claim_since = 0
-	if last_device == DEVICE_KEYBOARD:
+	if last_device == device:
 		return
-	_set_last_device(DEVICE_KEYBOARD)
+	_set_last_device(device)
