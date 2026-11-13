@@ -30,6 +30,11 @@ const FALLBACK_VIEW_H: float = 1080.0
 @export var watch_path: NodePath = ^".."
 ## _ready 时 watch 已经可见也要播一次（标题页的两个页面初始隐藏，不需要）
 @export var play_on_ready_visible: bool = false
+## 起始上抬距离（像素）。> 0 时不再按视口高度推算，改用这个值：
+## 字母逐字掉落这类只需要"从裁剪框上沿落进来"的场景用它，否则会从屏幕外很远开始掉。
+@export var drop_distance: float = 0.0
+## 播放前的等待时间（秒）。批量调用时由调用方给每个实例设置，实现逐字错峰。
+@export var start_delay: float = 0.0
 
 var _target: Control
 var _panel: Control
@@ -74,13 +79,21 @@ func play_drop_in() -> void:
 	if view_h <= 0.0:
 		view_h = FALLBACK_VIEW_H
 	var panel_h: float = _panel.size.y if _panel != null and _panel.size.y > 0.0 else view_h * 0.5
-	# 面板垂直居中：中心离屏幕上沿 view_h/2，再加自身半高与余量，
-	# 起始时整块面板刚好完全在屏幕上边缘之外。
-	var start_y: float = _rest_y - (view_h * 0.5 + panel_h * 0.5 + START_MARGIN)
+	# 默认按视口推算起始高度（通知面板从屏幕外掉进来）；
+	# 指定 drop_distance 时改用固定距离（字母从裁剪框上沿掉进来）。
+	var fall: float = drop_distance
+	if fall <= 0.0:
+		# 面板垂直居中：中心离屏幕上沿 view_h/2，再加自身半高与余量，
+		# 起始时整块面板刚好完全在屏幕上边缘之外。
+		fall = view_h * 0.5 + panel_h * 0.5 + START_MARGIN
+	var start_y: float = _rest_y - fall
 	_target.position.y = start_y
 	_has_offset = true
 
 	_tween = create_tween()
+	# 逐字错峰：先在空中等一会儿再下落（起始位置已在裁剪框外，看不见）。
+	if start_delay > 0.0:
+		_tween.tween_interval(start_delay)
 	# 显式给每段指定起始值：页面刚显示时 Control 会按 anchors 重排一次，
 	# 把刚写进去的起始偏移抹掉；Tween 惰性采样起点就会误读成静止位置，
 	# 整段动画看起来完全没动。from() 让每一帧都由 Tween 自己接管。
