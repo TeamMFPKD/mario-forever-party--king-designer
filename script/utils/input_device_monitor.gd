@@ -35,6 +35,9 @@ var _has_gamepad: bool = false
 ## 手柄首次活动的时间戳；为 0 表示当前没有待确认的手柄活动
 var _gamepad_claim_since: int = 0
 var _hooked: bool = false
+## 虚拟鼠标（UiNavigator 的 warp_mouse / 合成点击）造成的鼠标事件要忽略，
+## 否则会把"主导设备"抢回鼠标，进而把导航自己关掉。
+var _mouse_suppressed_until: int = 0
 
 
 func _ready() -> void:
@@ -73,6 +76,16 @@ func is_keyboard_active() -> bool:
 ## 当前主导设备是否鼠标（鼠标主导时不抢 UI 焦点，保留 hover 体验）。
 func is_mouse_active() -> bool:
 	return last_device == DEVICE_MOUSE
+
+
+## 虚拟鼠标专用：接下来一小段时间内忽略鼠标事件，不要让它们抢走主导权。
+## UiNavigator 每次 warp_mouse / 合成点击都会调用。
+func suppress_mouse_activity(duration_ms: int = 150) -> void:
+	_mouse_suppressed_until = Time.get_ticks_msec() + duration_ms
+
+
+func _is_mouse_suppressed() -> bool:
+	return Time.get_ticks_msec() < _mouse_suppressed_until
 
 
 # ---------------------------------------------------------------------------
@@ -117,10 +130,14 @@ func _input(event: InputEvent) -> void:
 		if key_event.pressed and not key_event.echo:
 			_claim_keyboard()
 	elif event is InputEventMouseButton:
+		if _is_mouse_suppressed():
+			return
 		var button_event: InputEventMouseButton = event
 		if button_event.pressed:
 			_claim_mouse()
 	elif event is InputEventMouseMotion:
+		if _is_mouse_suppressed():
+			return
 		var motion_event: InputEventMouseMotion = event
 		if motion_event.relative.length() >= MOUSE_MOVE_THRESHOLD:
 			_claim_mouse()
