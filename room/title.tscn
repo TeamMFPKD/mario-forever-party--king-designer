@@ -3,11 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="1_n3h5q"]
 [ext_resource type="PackedScene" uid="uid://0q6mkcb2qes6" path="res://object/bgm/bgm_manager.tscn" id="2_rfq10"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_w52fc"]
-[ext_resource type="AudioStream" uid="uid://dfee8buxtsm0y" path="res://sound/bgm/title/ktkm-smm_title_screen_intro.wav" id="3_bj3by"]
 [ext_resource type="Script" uid="uid://cfo8ff51k0nv3" path="res://script/edit/game_room_size.gd" id="3_xb41j"]
 [ext_resource type="PackedScene" uid="uid://c5awjxvmcmx7j" path="res://ui/ui_panel.tscn" id="4_i3lsm"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="4_ikv4w"]
-[ext_resource type="AudioStream" uid="uid://b4uqeh2ldoc3w" path="res://sound/bgm/title/ktkm-smm_title_screen_main.wav" id="4_mavin"]
 [ext_resource type="Script" uid="uid://c65cokp5m732b" path="res://script/title/user_notice.gd" id="4_ytxtj"]
 [ext_resource type="Script" uid="uid://62e2gryab40o" path="res://script/multiplayer/1_game_hall/game_start.gd" id="5_estsl"]
 [ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="5_qon3s"]
@@ -45,6 +43,7 @@
 [ext_resource type="Script" uid="uid://bfuqiopjih0j2" path="res://script/option/input_map_reset_button.gd" id="42_reset"]
 [ext_resource type="Script" uid="uid://bu318c40ey0n7" path="res://script/option/history_ghost_toggle.gd" id="43_ghost"]
 [ext_resource type="Script" path="res://script/title/fit_content_panel.gd" id="44_fit"]
+[ext_resource type="AudioStream" uid="uid://bksmm8turgobu" path="res://sound/bgm/title/ktkm-smm_title_screen.ogg" id="47_emdk1"]
 [ext_resource type="PackedScene" path="res://ui/title/pipe_menu.tscn" id="50_pipe_menu"]
 [ext_resource type="Theme" uid="uid://bpkayogffk0um" path="res://ui/theme/theme_yellow_top.tres" id="60_yellow"]
 [ext_resource type="Script" uid="uid://bvha75uoxboof" path="res://script/ui/drop_in_animation.gd" id="61_drop"]
@@ -1332,13 +1331,10 @@ wait_time = 0.3
 one_shot = true
 autostart = true
 
-[node name="TitleScreenBGMP1" type="AudioStreamPlayer" parent="." unique_id=1820936535]
-stream = ExtResource("3_bj3by")
+[node name="TitleScreenBGM" type="AudioStreamPlayer" parent="." unique_id=1820936535]
+stream = ExtResource("47_emdk1")
 bus = &"Music"
-
-[node name="TitleScreenBGMP2" type="AudioStreamPlayer" parent="." unique_id=1418492999]
-stream = ExtResource("4_mavin")
-bus = &"Music"
+parameters/looping = true
 
 [node name="NetBridge" type="Node" parent="." unique_id=505411436]
 script = ExtResource("99_bridge")
@@ -1388,9 +1384,7 @@ show_mode = 0
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/BasicPanel/ControlVisibieSet" method="_set_visible"]
 [connection signal="pressed" from="GameRoomSize/Options/ControlsPanelMobile/UiMarginContainer/VBoxContainer/MainOptionButton" to="GameRoomSize/Options/ControlsPanelMobile/ControlVisibieSet" method="_set_invisible"]
 [connection signal="notice_accepted" from="GameRoomSize/UserNotice" to="GameRoomSize/UserNotice/Language/ControlVisibieSet" method="_set_invisible" flags=3]
-[connection signal="timeout" from="BGMStartToPlayTimer" to="TitleScreenBGMP1" method="play"]
-[connection signal="finished" from="TitleScreenBGMP1" to="TitleScreenBGMP2" method="play"]
-[connection signal="finished" from="TitleScreenBGMP2" to="TitleScreenBGMP2" method="play"]
+[connection signal="timeout" from="BGMStartToPlayTimer" to="TitleScreenBGM" method="play"]
 
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Up"]
 [editable path="GameRoomSize/Options/ControlsPanel/InputMapSet/VBoxContainer/InputMapSet/VBoxContainer2/Down"]
