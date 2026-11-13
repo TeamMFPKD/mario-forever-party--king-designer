@@ -28,6 +28,14 @@ const PERSPECTIVE_RANGE: Vector2 = Vector2(1500.0, 2050.0)
 @onready var _card_container: SubViewportContainer = $Root/CardHolder/CardContainer
 @onready var _card_viewport: SubViewport = $Root/CardHolder/CardContainer/CardViewport
 @onready var _flip_mesh: MeshInstance2D = $Root/CardHolder/FlipMesh
+@onready var _title: Label = $Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Title
+@onready var _center: Control = $Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center
+@onready var _buttons: Control = $Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons
+
+## 卡片上的选项按钮是否显示。回放页复用本菜单做「纯翻卡暂停」时置 false。
+@export var actions_visible: bool = true
+## 是否允许在百人团之外使用（例如回放页）。为 true 时不再要求 Adventure.is_running()。
+@export var usable_outside_adventure: bool = false
 
 var _is_open: bool = false
 var _animating: bool = false
@@ -45,13 +53,25 @@ var _lift_amount: float = 18.0
 
 func _ready() -> void:
 	visible = false
+	_buttons.visible = actions_visible
+	if not actions_visible:
+		# 没有选项时按钮容器会塌陷，标题就贴在卡片顶部。
+		# 这里让标题吃掉整张卡片并垂直居中，视觉上"暂停"落在正中间。
+		_center.size_flags_vertical = Control.SIZE_FILL
+		_title.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_flip_material = _flip_mesh.material as ShaderMaterial
-	if _flip_material != null:
+	if _flip_material != null and _card_viewport != null:
 		_flip_material.set_shader_parameter("card_tex", _card_viewport.get_texture())
 
 
+## 本菜单什么时候可用：百人团跑团中，或显式允许的非百人团场景（回放页）。
+func _is_active_context() -> bool:
+	return Adventure.is_running() or usable_outside_adventure
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if not Adventure.is_running():
+	if not _is_active_context():
 		return
 	# 按键在标题页「设置 → 输入映射 → 暂停」里可改。
 	if event.is_action_pressed("pause"):
@@ -63,7 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func toggle_pause() -> void:
-	if not Adventure.is_running() or _animating:
+	if not _is_active_context() or _animating:
 		return
 	if _is_open:
 		_close_flip()

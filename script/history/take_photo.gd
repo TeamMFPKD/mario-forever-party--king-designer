@@ -99,6 +99,10 @@ func capture() -> void:
 	var target_png: String = LikedCourses.photo_path(file_name)
 
 	# 截图处理
+	if viewport == null:
+		viewport = get_viewport()
+	if viewport == null:
+		return
 	var viewport_texture: ViewportTexture = viewport.get_texture()
 	image = viewport_texture.get_image()
 	var tmp_texture: ImageTexture = ImageTexture.create_from_image(image)

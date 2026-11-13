@@ -1,4 +1,4 @@
-[gd_scene format=4 load_steps=11 uid="uid://b3uujgk5upbfj"]
+[gd_scene format=4 load_steps=12 uid="uid://b3uujgk5upbfj"]
 
 [ext_resource type="PackedScene" path="res://room/base/play_room_base.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://c3rvw6a2ucku8" path="res://ui/list/time_hud.tscn" id="6_oqxpu"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://brbc87qxp0qae" path="res://script/history/level_path_set_getter.gd" id="33_o1hfa"]
 [ext_resource type="PackedScene" path="res://object/ui/adventure_level_stats.tscn" id="7_stats"]
 [ext_resource type="Script" uid="uid://m2qmk6skmtau" path="res://script/utils/jump_to_scene.gd" id="34_me11v"]
+[ext_resource type="PackedScene" path="res://object/ui/adventure_pause_menu.tscn" id="35_pause"]
 
 [node name="Play" instance=ExtResource("1_base")]
 
@@ -95,6 +96,10 @@ scene_uid = &"uid://b2f2av134cwap"
 script = ExtResource("34_me11v")
 scene_uid = &"uid://de64xnukpa0re"
 use_return_scene = true
+
+[node name="HistoryPauseMenu" parent="." index="8" instance=ExtResource("35_pause")]
+actions_visible = false
+usable_outside_adventure = true
 
 [connection signal="pressed" from="GameRoomSize/BackToHistory/BackToHistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]
 [editable path="GameRoomSize/BackToHistory"]
