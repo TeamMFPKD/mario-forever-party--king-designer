@@ -2,26 +2,29 @@ extends Node
 
 ## 键盘 / 手柄 UI 操作（autoload 名：UiNavigator）。
 ##
-## 两套操作并存，按**输入来源**自动切换：
+## 方向控制分三组，定义与输入判定全部封装在 `script/utils/input_groups.gd`：
+## - **POINTER 组**：WASD / 左摇杆
+## - **FOCUS 组**：方向键 / 十字键（D-pad）
+## - **SCROLL 组**：IJKL / 右摇杆
 ##
-## | 输入 | 模式 | 行为 |
-## |---|---|---|
-## | 方向键 / 十字键（D-pad） | FOCUS | 四角框在控件之间跳转，长按自动重复，列表自动滚动 |
-## | WASD / 左摇杆 | POINTER | 平滑移动真实鼠标，指哪点哪 |
-## | Enter / 手柄 A | 两模式共用 | 在"当前点击点"合成鼠标左键；按住保持按下，松开才抬起（可拖拽） |
-## | Esc / 手柄 B | 两模式共用 | 合成鼠标右键单击 |
+## 各场景的用途分工：
 ##
-## 输入来源怎么区分：D-pad 走 `InputEventJoypadButton`、左摇杆走 `InputEventJoypadMotion`；
-## 键盘方向键与 WASD 同属 `InputEventKey`，按 `physical_keycode` 分。不能靠 action 区分——
-## `ui_left` / `move_left` 同时绑了方向键、D-pad 和左摇杆。
+## | 场景 | POINTER 组 | FOCUS 组 | SCROLL 组 |
+## |---|---|---|---|
+## | 菜单 / 标题 / 列表 | 虚拟鼠标 | UI 焦点 | 滚动列表 |
+## | 编辑室 edit.tscn | 镜头移动（不归 UI） | UI 焦点 | 滚动列表 |
+## | PLAY / HISTORY_PLAY | UI（虚拟鼠标） | 角色移动（不归 UI） | 滚动列表 |
 ##
-## 点击点：FOCUS 模式取当前选中控件的矩形中心，POINTER 模式取虚拟鼠标位置。
-## 两模式都通过 `viewport.push_input` 合成事件，所以能触发只响应鼠标的控件。
+## 操作：
+## - 归 UI 的那一组方向：FOCUS 在一个个控件间跳转（长按重复、列表自动滚动），
+##   POINTER 平滑平移真实鼠标（指哪点哪、可点空白处）。
+## - Enter / 手柄 A：在"当前点击点"合成鼠标左键，**按住保持按下、松开才抬起**（可拖拽）。
+## - Esc / 手柄 B：合成右键单击；焦点在 ScrollContainer 内时改为跳出容器。
 ##
-## 四角光标在 FOCUS 模式框住选中项，在 POINTER 模式框住鼠标下的控件（空白处只剩系统指针）。
+## 点击点：FOCUS 取选中控件的矩形中心，POINTER 取虚拟鼠标位置，都走 `viewport.push_input`。
+## 四角光标：FOCUS 框选中项，POINTER 框鼠标下的控件（空白处只剩系统指针）。
 ##
-## 设备门控：移动端不启用；鼠标主导不启用；游戏内（PLAY / ADVENTURE / TEST）不启用，
-## 除非屏幕上有可见的模态 UI（暂停菜单 / 通知）。
+## 设备门控：移动端 / 鼠标主导不启用；游戏内默认不启用，除非有可见的 `ui_focus_modal`。
 
 const META_SKIP: StringName = &"ui_focus_skip"
 const META_TARGET: StringName = &"ui_focus_target"
@@ -38,8 +41,8 @@ const SCAN_INTERVAL: float = 0.3
 const MODAL_PROBE_INTERVAL: float = 0.4
 ## 虚拟鼠标移动速度（逻辑像素 / 秒）。摇杆幅度会等比缩放。
 const MOUSE_SPEED: float = 900.0
-## 摇杆需要超过这个幅度才算"在推"
-const JOY_AXIS_DEADZONE: float = 0.2
+## ScrollContainer 的滚动速度（逻辑像素 / 秒）。IJKL / 右摇杆幅度会等比缩放。
+const SCROLL_SPEED: float = 1400.0
 ## 方向查找时"横向偏移"惩罚的阈值（像素）
 const AXIS_TOLERANCE: float = 96.0
 ## 长按方向键后，开始自动重复前的延迟（秒）
@@ -52,10 +55,7 @@ const CURSOR_LAYER: int = 100
 const ACTION_ACCEPT: StringName = &"ui_menu_accept"
 const ACTION_CANCEL: StringName = &"ui_menu_cancel"
 
-## 输入来源分类
-const SOURCE_NONE: int = 0
-const SOURCE_FOCUS: int = 1
-const SOURCE_POINTER: int = 2
+## 方向控制分组见 script/utils/input_groups.gd（POINTER = WASD/左摇杆，FOCUS = 方向键/十字键）
 
 enum InputMode {
 	FOCUS,
@@ -93,11 +93,15 @@ var _repeat_timer: float = 0.0
 
 ## 左键当前是否按下（按住保持，用于拖拽）
 var _left_down: bool = false
+## 滚动像素累加器：scroll_vertical 是整数，小幅度输入时靠它攒够 1px 再滚
+var _scroll_accum: Vector2 = Vector2.ZERO
 
 var _modal_visible: bool = false
 var _modal_probe: float = 0.0
 ## 上一轮扫描得到的模态节点，命中测试时用来过滤
 var _current_modal: Control = null
+## 有节点被移出树：候选数组里可能留下已释放的引用，下次处理输入前先清理
+var _needs_prune: bool = false
 
 signal activated(control: Control)
 signal cancelled()
@@ -116,6 +120,31 @@ func _ready() -> void:
 
 func _on_tree_changed(_node: Node) -> void:
 	_dirty = true
+	_needs_prune = true
+
+
+## 把已经 free 掉的控件从候选里剔除。
+##
+## 为什么必须有：节点被 queue_free 后，`node_removed` 那一刻对象还有效（prune 不掉），
+## 真正释放发生在帧末；下一帧 `_input` / `_unhandled_input` 早于 `_process` 的定时重扫，
+## 直接读 `Array[Control]` 里那一格会触发
+## "The Object-derived class of argument 1 (previously freed) is not a subclass of ..."。
+## 遍历时用 Variant 中转，避免类型化数组读取时就被类型检查拦下。
+func _prune_if_needed() -> void:
+	if not _needs_prune:
+		return
+	_needs_prune = false
+	var alive: Array[Control] = []
+	for i: int in range(_candidates.size()):
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var control: Control = raw
+		if is_instance_valid(control):
+			alive.append(control)
+	if alive.size() != _candidates.size():
+		_candidates = alive
+		_dirty = true
 
 
 func _on_policy_changed() -> void:
@@ -134,11 +163,17 @@ func _process(delta: float) -> void:
 		_repeat_armed = false
 		_dirty = true
 		return
+	_prune_if_needed()
 
-	# 编辑室里不提供虚拟鼠标：WASD 全部归 LevelCamera 移镜头，方向和 D-pad 只做焦点导航。
-	# 从别的界面带着 POINTER 模式进来时强制切回 FOCUS。
-	if GameMode.is_editing() and _mode != InputMode.FOCUS:
-		_mode = InputMode.FOCUS
+	# 编辑室：POINTER 组归镜头，UI 只做焦点导航。
+	# 游戏内：FOCUS 组归角色，UI 只能用虚拟鼠标。
+	# 从别的界面带着不匹配的模式进来时强制掰回来。
+	if _is_character_control_mode():
+		if _mode != InputMode.POINTER:
+			_mode = InputMode.POINTER
+	elif _is_editing_scene():
+		if _mode != InputMode.FOCUS:
+			_mode = InputMode.FOCUS
 
 	_since_scan += delta
 	if _dirty or _since_scan >= SCAN_INTERVAL:
@@ -154,6 +189,7 @@ func _process(delta: float) -> void:
 		if not _focus_still_valid():
 			_dirty = true
 		_tick_repeat(delta)
+	_tick_scroll(delta)
 	_tick_left_button()
 	_sync_cursor()
 
@@ -200,45 +236,53 @@ func _any_visible_modal() -> bool:
 func _input(event: InputEvent) -> void:
 	if not _navigation_enabled():
 		return
+	_prune_if_needed()
 	# 输入框打字时不抢模式（WASD 是打字，不是移动鼠标）
 	if _text_focus_owner() != null:
 		return
-	match _classify(event):
-		SOURCE_FOCUS:
-			_switch_to_focus()
-		SOURCE_POINTER:
-			_switch_to_pointer()
+	var group: InputGroups.Group = InputGroups.classify(event)
+	if group == InputGroups.Group.NONE:
+		return
+	if not _group_allowed(group):
+		return
+	if group == InputGroups.Group.FOCUS:
+		_switch_to_focus()
+	else:
+		_switch_to_pointer()
 
 
-## 判断这次事件属于哪套操作。只认"开始动作"（按下 / 推杆超过死区）。
-func _classify(event: InputEvent) -> int:
-	if event is InputEventJoypadMotion:
-		var motion: InputEventJoypadMotion = event
-		if absf(motion.axis_value) >= JOY_AXIS_DEADZONE:
-			return SOURCE_POINTER
-		return SOURCE_NONE
-	if event is InputEventJoypadButton:
-		var joy_button: InputEventJoypadButton = event
-		if not joy_button.pressed:
-			return SOURCE_NONE
-		var index: int = int(joy_button.button_index)
-		if index >= int(JOY_BUTTON_DPAD_UP) and index <= int(JOY_BUTTON_DPAD_RIGHT):
-			return SOURCE_FOCUS
-		return SOURCE_NONE
-	if event is InputEventKey:
-		var key: InputEventKey = event
-		if not key.pressed or key.echo:
-			return SOURCE_NONE
-		var code: Key = key.physical_keycode
-		if code == KEY_UP or code == KEY_DOWN or code == KEY_LEFT or code == KEY_RIGHT:
-			return SOURCE_FOCUS
-		if code == KEY_W or code == KEY_A or code == KEY_S or code == KEY_D:
-			# 编辑室里 WASD 是移动镜头，不能被当成"移动鼠标"（LevelCamera 直接读物理键）
-			if GameMode.is_editing():
-				return SOURCE_NONE
-			return SOURCE_POINTER
-		return SOURCE_NONE
-	return SOURCE_NONE
+## 这一组方向控制在当前场景是否归 UI 管。
+##
+## 编辑室（edit / history_edit）：POINTER 组归 LevelCamera 移镜头，只有 FOCUS 组操作 UI。
+## 游戏内（PLAY / HISTORY_PLAY / TEST / ADVENTURE）：FOCUS 组归角色移动，UI 只能用 POINTER 组。
+## 其余（标题 / 列表 / 弹窗）：两组都归 UI。
+func _group_allowed(group: InputGroups.Group) -> bool:
+	if group == InputGroups.Group.POINTER:
+		if _is_character_control_mode():
+			return true
+		return not _is_editing_scene()
+	if group == InputGroups.Group.FOCUS:
+		return not _is_character_control_mode()
+	return false
+
+
+## 由方向键 / 十字键操作角色的模式。
+func _is_character_control_mode() -> bool:
+	return GameMode.is_playing() or GameMode.is_history_play() \
+		or GameMode.is_testing() or GameMode.is_adventure()
+
+
+## 当前场景是不是编辑类场景（edit.tscn / history_edit.tscn）。
+##
+## 不能只看 GameMode：`game_mode` 的默认值就是 EDIT，标题画面、列表页也都是 EDIT，
+## 只按模式判断会把标题页的 WASD 也当成镜头输入。
+## 这里看场景里有没有注册进 "level_camera" 组的镜头——编辑室与关卡场景都挂它，
+## 标题 / 列表 / 弹窗没有。游戏内（PLAY 等）也有这个组，但调用点会先判
+## `_is_character_control_mode()`，所以不会误伤。
+func _is_editing_scene() -> bool:
+	if get_tree().current_scene == null:
+		return false
+	return get_tree().get_first_node_in_group("level_camera") != null
 
 
 func _switch_to_focus() -> void:
@@ -277,6 +321,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if not _navigation_enabled():
 		return
+	_prune_if_needed()
 
 	if event.is_action_pressed(ACTION_CANCEL):
 		# 焦点在滚动列表里时，取消键先"跳出列表"，而不是直接右键
@@ -302,11 +347,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _handle_text_input(event: InputEvent) -> bool:
-	var owner: Control = _text_focus_owner()
-	if owner == null:
+	var focused: Control = _text_focus_owner()
+	if focused == null:
 		return false
 	if event.is_action_pressed(ACTION_CANCEL):
-		owner.release_focus()
+		focused.release_focus()
 		_dirty = true
 		get_viewport().set_input_as_handled()
 	return true
@@ -316,9 +361,9 @@ func _text_focus_owner() -> Control:
 	var viewport: Viewport = get_viewport()
 	if viewport == null:
 		return null
-	var owner: Control = viewport.gui_get_focus_owner()
-	if owner != null and _is_text_input(owner):
-		return owner
+	var focused: Control = viewport.gui_get_focus_owner()
+	if focused != null and _is_text_input(focused):
+		return focused
 	return null
 
 
@@ -330,13 +375,13 @@ func _is_text_input(control: Control) -> bool:
 func _direction_of(event: InputEvent) -> Vector2:
 	if event.is_echo():
 		return Vector2.ZERO
-	if event.is_action_pressed("ui_left"):
+	if event.is_action_pressed("ui_focus_left"):
 		return Vector2.LEFT
-	if event.is_action_pressed("ui_right"):
+	if event.is_action_pressed("ui_focus_right"):
 		return Vector2.RIGHT
-	if event.is_action_pressed("ui_up"):
+	if event.is_action_pressed("ui_focus_up"):
 		return Vector2.UP
-	if event.is_action_pressed("ui_down"):
+	if event.is_action_pressed("ui_focus_down"):
 		return Vector2.DOWN
 	return Vector2.ZERO
 
@@ -362,9 +407,9 @@ func _tick_repeat(delta: float) -> void:
 	_move(held)
 
 
-## 当前按住的主方向（十字键 / 方向键）。
+## 当前按住的主方向（FOCUS 组：方向键 / 十字键）。
 func _poll_direction() -> Vector2:
-	var axis: Vector2 = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var axis: Vector2 = InputGroups.focus_axis()
 	if axis.length_squared() < 0.04:
 		return Vector2.ZERO
 	if absf(axis.x) >= absf(axis.y):
@@ -381,7 +426,15 @@ func _focus_candidate() -> Control:
 		return null
 	if _focus_index < 0 or _focus_index >= _candidates.size():
 		_focus_index = 0
-	return _candidates[_focus_index]
+	var raw: Variant = _candidates[_focus_index]
+	if not is_instance_valid(raw) or not (raw is Control):
+		_needs_prune = true
+		return null
+	var candidate: Control = raw
+	if not is_instance_valid(candidate):
+		_needs_prune = true
+		return null
+	return candidate
 
 
 ## 当前选中项是否仍然可用（没被禁用 / 没被隐藏 / 没离开候选集合）。
@@ -390,7 +443,10 @@ func _focus_still_valid() -> bool:
 		return true
 	if _focus_index < 0 or _focus_index >= _candidates.size():
 		return false
-	var control: Control = _candidates[_focus_index]
+	var raw: Variant = _candidates[_focus_index]
+	if not is_instance_valid(raw) or not (raw is Control):
+		return false
+	var control: Control = raw
 	if not is_instance_valid(control) or not control.is_visible_in_tree():
 		return false
 	if control is BaseButton:
@@ -406,24 +462,33 @@ func _index_of(control: Control) -> int:
 	if control == null:
 		return -1
 	for i: int in range(_candidates.size()):
-		if _candidates[i] == control:
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var candidate: Control = raw
+		if is_instance_valid(candidate) and candidate == control:
 			return i
 	return -1
 
 
 func _move(direction: Vector2) -> void:
-	if _candidates.size() <= 1:
+	var current: Control = _focus_candidate()
+	if current == null or _candidates.size() <= 1:
 		return
-	if _focus_index < 0 or _focus_index >= _candidates.size():
-		_focus_index = 0
-	var from_rect: Rect2 = _canvas_rect_of(_candidates[_focus_index])
+	var from_rect: Rect2 = _canvas_rect_of(current)
 	var from_center: Vector2 = from_rect.get_center()
 	var best: int = -1
 	var best_cost: float = INF
 	for i: int in range(_candidates.size()):
 		if i == _focus_index:
 			continue
-		var rect: Rect2 = _canvas_rect_of(_candidates[i])
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var other: Control = raw
+		if not is_instance_valid(other) or other == current:
+			continue
+		var rect: Rect2 = _canvas_rect_of(other)
 		var offset: Vector2 = rect.get_center() - from_center
 		if offset.dot(direction) <= 0.0:
 			continue
@@ -462,7 +527,10 @@ func _try_leave_scroll_container() -> bool:
 	var best: int = -1
 	var best_distance: float = INF
 	for i: int in range(_candidates.size()):
-		var candidate: Control = _candidates[i]
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var candidate: Control = raw
 		if not is_instance_valid(candidate):
 			continue
 		if _scroll_container_of(candidate) == scroll:
@@ -489,6 +557,73 @@ func _scroll_container_of(control: Control) -> ScrollContainer:
 	return null
 
 
+## SCROLL 组（IJKL / 右摇杆）：滚动当前界面上最相关的那一个 ScrollContainer。
+##
+## "最相关"按优先级找：焦点所在容器 → 鼠标悬停所在容器 → 候选里第一个位于容器内的。
+func _tick_scroll(delta: float) -> void:
+	var axis: Vector2 = InputGroups.scroll_axis()
+	if axis == Vector2.ZERO:
+		_scroll_accum = Vector2.ZERO
+		return
+	var scroll: ScrollContainer = _active_scroll_container()
+	if scroll == null:
+		return
+	_scroll_accum += axis * SCROLL_SPEED * delta
+	var step_y: int = int(_scroll_accum.y)
+	if step_y != 0:
+		if _can_scroll_vertical(scroll):
+			scroll.scroll_vertical += step_y
+			_scroll_accum.y -= float(step_y)
+		else:
+			_scroll_accum.y = 0.0
+	var step_x: int = int(_scroll_accum.x)
+	if step_x != 0:
+		if _can_scroll_horizontal(scroll):
+			scroll.scroll_horizontal += step_x
+			_scroll_accum.x -= float(step_x)
+		else:
+			_scroll_accum.x = 0.0
+
+
+## 主动找当前该滚的那个 ScrollContainer。
+func _active_scroll_container() -> ScrollContainer:
+	var anchor: Control = _focus_candidate() if _mode == InputMode.FOCUS else _hover_target()
+	if anchor != null:
+		var found: ScrollContainer = _scroll_container_of(anchor)
+		if found != null:
+			return found
+	var hovered: Control = _hover_target()
+	if hovered != null:
+		var hovered_scroll: ScrollContainer = _scroll_container_of(hovered)
+		if hovered_scroll != null:
+			return hovered_scroll
+	for i: int in range(_candidates.size()):
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var control: Control = raw
+		if not is_instance_valid(control):
+			continue
+		var candidate_scroll: ScrollContainer = _scroll_container_of(control)
+		if candidate_scroll != null:
+			return candidate_scroll
+	return null
+
+
+func _can_scroll_vertical(scroll: ScrollContainer) -> bool:
+	if scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED:
+		return false
+	var bar: VScrollBar = scroll.get_v_scroll_bar()
+	return bar != null and bar.max_value > bar.page
+
+
+func _can_scroll_horizontal(scroll: ScrollContainer) -> bool:
+	if scroll.horizontal_scroll_mode == ScrollContainer.SCROLL_MODE_DISABLED:
+		return false
+	var bar: HScrollBar = scroll.get_h_scroll_bar()
+	return bar != null and bar.max_value > bar.page
+
+
 ## 选中项滚出 ScrollContainer 可视区时把它滚回来。
 func _ensure_visible(control: Control) -> void:
 	var node: Node = control.get_parent()
@@ -503,11 +638,9 @@ func _ensure_visible(control: Control) -> void:
 # POINTER 模式：虚拟鼠标
 # ---------------------------------------------------------------------------
 
+## POINTER 组的方向向量：WASD + 左摇杆。
 func _input_axis() -> Vector2:
-	var axis: Vector2 = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	if axis.length_squared() > 0.0001:
-		return axis
-	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	return InputGroups.pointer_axis()
 
 
 func _mouse_point() -> Vector2:
@@ -702,7 +835,11 @@ func _find_candidate_ancestor(control: Control) -> Control:
 
 func _pick_at(point: Vector2) -> Control:
 	var best: Control = null
-	for control: Control in _candidates:
+	for i: int in range(_candidates.size()):
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var control: Control = raw
 		if not is_instance_valid(control) or not control.is_visible_in_tree():
 			continue
 		if _canvas_rect_of(control).has_point(point):
@@ -753,7 +890,13 @@ func _resolve_focus(previous_ids: Dictionary[int, bool]) -> void:
 	var found: int = -1
 	if _selected_id != 0:
 		for i: int in range(_candidates.size()):
-			if int(_candidates[i].get_instance_id()) == _selected_id:
+			var raw: Variant = _candidates[i]
+			if not is_instance_valid(raw) or not (raw is Control):
+				continue
+			var candidate: Control = raw
+			if not is_instance_valid(candidate):
+				continue
+			if int(candidate.get_instance_id()) == _selected_id:
 				found = i
 				break
 	# 玩家自己用方向键选的要保住；系统兜底项遇到新界面就让位
@@ -766,20 +909,36 @@ func _resolve_focus(previous_ids: Dictionary[int, bool]) -> void:
 		found = _first_new_candidate(previous_ids)
 	if found < 0:
 		found = 0
+	var chosen_raw: Variant = _candidates[found]
+	if not (chosen_raw is Control):
+		_focus_index = 0
+		_selected_id = 0
+		return
+	var chosen: Control = chosen_raw
+	if not is_instance_valid(chosen):
+		_focus_index = 0
+		_selected_id = 0
+		_needs_prune = true
+		return
 	var changed: bool = found != _focus_index
 	_focus_index = found
-	_selected_id = int(_candidates[found].get_instance_id())
+	_selected_id = int(chosen.get_instance_id())
 	if not keep_user:
 		_user_selected = false
 	if changed:
-		_ensure_visible(_candidates[found])
+		_ensure_visible(chosen)
 
 
 ## 这一轮新出现的候选里的第一个（树序），也就是新打开界面上最早的可交互控件。
 func _first_new_candidate(previous_ids: Dictionary[int, bool]) -> int:
 	for i: int in range(_candidates.size()):
-		var id: int = int(_candidates[i].get_instance_id())
-		if not previous_ids.has(id):
+		var raw: Variant = _candidates[i]
+		if not is_instance_valid(raw) or not (raw is Control):
+			continue
+		var control: Control = raw
+		if not is_instance_valid(control):
+			continue
+		if not previous_ids.has(int(control.get_instance_id())):
 			return i
 	return -1
 
