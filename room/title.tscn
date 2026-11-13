@@ -691,6 +691,22 @@ size_flags_vertical = 1
 script = ExtResource("26_nl766")
 volume_type = 2
 
+[node name="UiVolume" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="UiVolumeLabel" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/UiVolume" instance=ExtResource("5_qon3s")]
+layout_mode = 2
+text = "UI 音量"
+
+[node name="UiVolumeHSlider" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer/UiVolume" instance=ExtResource("28_nmdgl")]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 1
+script = ExtResource("26_nl766")
+volume_type = 3
+
 [node name="Language" type="HBoxContainer" parent="GameRoomSize/Options/BasicPanel/BasicSettings/VBoxContainer" unique_id=976672169]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
