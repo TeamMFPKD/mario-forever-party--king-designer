@@ -244,6 +244,7 @@ script = ExtResource("44_fit")
 script = ExtResource("61_drop")
 target_path = NodePath("..")
 panel_path = NodePath("../MfpkdPanel")
+enter_style = 1
 
 [node name="ControlVisibieSet" parent="GameRoomSize/HostPage" unique_id=1005411227 instance=ExtResource("9_ty11l")]
 
@@ -341,6 +342,7 @@ script = ExtResource("44_fit")
 script = ExtResource("61_drop")
 target_path = NodePath("..")
 panel_path = NodePath("../MfpkdPanel")
+enter_style = 1
 
 [node name="ControlVisibieSet" parent="GameRoomSize/JoinPage" unique_id=514177840 instance=ExtResource("9_ty11l")]
 
