@@ -10,7 +10,6 @@ const LEVEL_TIME_LIMIT: float = 30.0
 
 var _game_timer: Timer
 var _level_manager: Node
-var _pause_button: Button
 
 
 func _ready() -> void:
@@ -22,8 +21,7 @@ func _ready() -> void:
 	_remove_node("GameRoomSize/SubViewportContainer/SubViewport/Level/SaveLevel")
 	Adventure.register_clear_transition(_find_clear_transition())
 	_build_pause_button()
-	# 过关中 / 转场播放中把暂停按钮置灰（信号回调不受暂停影响）。
-	Adventure.pause_blocked_changed.connect(_refresh_pause_button)
+	# 过关 / 转场期间仍允许暂停；暂停菜单自己会把会切场景的动作按钮置灰。
 	_setup_level_timer()
 	# 从舞台进来时 BGM 已按所选难度在播；直接进游玩（探针 / 意外路径）时这里补上。
 	Adventure.play_bgm(Adventure.current_tier())
@@ -80,6 +78,8 @@ func _build_pause_button() -> void:
 	var layer: CanvasLayer = CanvasLayer.new()
 	layer.name = "MobilePauseLayer"
 	layer.layer = 20
+	# 过关冻结期间树已暂停，按钮要 ALWAYS 才能点开暂停菜单。
+	layer.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(layer)
 
 	var button: Button = Button.new()
@@ -98,20 +98,9 @@ func _build_pause_button() -> void:
 	button.offset_bottom = 96
 	button.pressed.connect(_on_pause_pressed)
 	layer.add_child(button)
-	_pause_button = button
-	_refresh_pause_button()
-
-
-## 过关中 / 过关转场播放中：暂停按钮置灰，点不动。
-func _refresh_pause_button() -> void:
-	if _pause_button == null:
-		return
-	_pause_button.disabled = Adventure.is_pause_blocked()
 
 
 func _on_pause_pressed() -> void:
-	if Adventure.is_pause_blocked():
-		return
 	var menu: Node = find_child("AdventurePauseMenu", true, false)
 	if is_instance_valid(menu) and menu.has_method("toggle_pause"):
 		menu.call("toggle_pause")

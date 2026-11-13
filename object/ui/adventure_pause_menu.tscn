@@ -248,12 +248,14 @@ custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/font_color = Color(0.780392, 0.262745, 0.262745, 1)
+theme_override_colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
 text = "将本关从抽取数据中排除"
 
 [node name="SkipButton" type="Button" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"]
 custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
+theme_override_colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
 text = "跳过本关"
 
 [node name="AbortButton" type="Button" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"]
@@ -261,6 +263,7 @@ custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/font_color = Color(0.168627, 0.164706, 0.156863, 1)
+theme_override_colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
 text = "中断"
 
 [node name="FlipMesh" type="MeshInstance2D" parent="Root/CardHolder"]
@@ -269,6 +272,6 @@ material = SubResource("ShaderMaterial_flip")
 
 [connection signal="gui_input" from="Root" to="." method="_on_root_gui_input"]
 [connection signal="pressed" from="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons/ContinueButton" to="." method="_close_flip"]
-[connection signal="pressed" from="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons/ExcludeButton" to="." method="_skip_hard"]
+[connection signal="pressed" from="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons/ExcludeButton" to="." method="_on_exclude_pressed"]
 [connection signal="pressed" from="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons/SkipButton" to="." method="_skip_soft"]
 [connection signal="pressed" from="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons/AbortButton" to="." method="_interrupt"]

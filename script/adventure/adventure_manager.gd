@@ -13,8 +13,9 @@ signal run_changed
 signal run_finished(summary: Dictionary)
 ## 每通过 2 关奖励 1 条命（且未触顶）时发出，左侧 HUD 据此播 1UP 飘字 + 音效。
 signal life_bonus
-## 「暂停是否被禁止」发生变化（已过关 / 过关转场播放中），暂停按钮据此切换 Disabled。
-signal pause_blocked_changed
+## 「暂停菜单里的切场景动作是否被禁用」发生变化（已过关 / 过关转场播放中）。
+## 暂停本身始终允许，菜单里的排除 / 跳过 / 中断据此切换 Disabled。
+signal pause_actions_blocked_changed
 
 const DEFAULT_RUN_LENGTH: int = 10
 ## 进行中的团最多同时保留 5 个；满了不能开新团，只能先继续 / 结算 / 放弃其中一个。
@@ -57,7 +58,7 @@ var _transition_label: Label
 var _clear_transition: CanvasLayer
 ## 过关转场是否正在播放：防止加载期间玩家碰到下一关终点又触发一次转场。
 var _pass_transition_busy: bool = false
-## 本次关卡是否已经过关（碰到终点 → 下一关加载完成）。期间禁止暂停。
+## 本次关卡是否已经过关（碰到终点 → 下一关加载完成）。期间暂停菜单禁用切场景动作。
 var _level_passed_busy: bool = false
 
 ## 百人团 BGM 播放器（object/bgm/adventure_bgm.tscn 实例）。
@@ -124,7 +125,7 @@ func playable_count() -> int:
 	return count
 
 
-## 垃圾桶界面用：所有被永久排除的关卡，按排除时间从新到旧。
+## 「排除的关卡」界面用：所有被永久排除的关卡，按排除时间从新到旧。
 ## 以 adventure.ini 为准，源池没加载也能用；文件已被删除的孤儿记录同样列出。
 func excluded_levels() -> Array[Dictionary]:
 	var result: Array[Dictionary] = store.get_excluded_levels()
@@ -144,7 +145,7 @@ func excluded_count() -> int:
 	return store.get_excluded_levels().size()
 
 
-## 垃圾桶界面：把一关从永久排除里恢复正常。
+## 「排除的关卡」界面：把一关从永久排除里恢复正常。
 ## 只清 excluded 标记，保留历史样本与关卡文件；档位和可玩数立即重算。
 func restore_excluded_level(key: String) -> bool:
 	if key.is_empty() or not store.is_excluded(key):
@@ -156,6 +157,28 @@ func restore_excluded_level(key: String) -> bool:
 		stat.exclude_reason = ""
 	_tier_info = AdventureTierCalculator.assign_tiers(pool)
 	Log.i("Adventure", ["已恢复被排除的关卡：", key])
+	run_changed.emit()
+	return true
+
+
+func is_excluded(key: String) -> bool:
+	return not key.is_empty() and store.is_excluded(key)
+
+
+## 非跑团场景（回放页）用：把一关加入永久排除名单。
+## 只写 excluded=manual，不记跳过样本、不推进当前团、不切场景；
+## 已排除或 key 为空时返回 false。与 skip_current_level(true) 的区别是
+## 后者还要把本关算作一次跳过，并翻卡进入下一关。
+func exclude_level(key: String) -> bool:
+	if key.is_empty() or store.is_excluded(key):
+		return false
+	store.set_excluded(key, true, "manual")
+	var stat: AdventureLevelStat = _find_stat(key)
+	if stat != null:
+		stat.excluded = true
+		stat.exclude_reason = "manual"
+	_tier_info = AdventureTierCalculator.assign_tiers(pool)
+	Log.i("Adventure", ["已排除关卡：", key])
 	run_changed.emit()
 	return true
 
@@ -425,7 +448,7 @@ func start_run(settings: Dictionary) -> bool:
 ## load_level.gd 在关卡成功加载后调用。只在百人团模式记录。
 func on_level_loaded(path: String) -> void:
 	# 新关卡就绪：上一关的「已过关」状态作废。
-	# 转场还没播完时仍由 _pass_transition_busy 挡住暂停，不会提前放开。
+	# 转场还没播完时动作按钮仍由 _pass_transition_busy 保持禁用。
 	_set_level_passed_busy(false)
 	if not GameMode.is_adventure():
 		return
@@ -836,13 +859,24 @@ func is_pass_transition_running() -> bool:
 	return _pass_transition_busy
 
 
-## 暂停是否被禁止：已过关或过关转场播放中。
-## 暂停键与手机暂停按钮都以此为准，按钮同时置为 Disabled。
-func is_pause_blocked() -> bool:
+## 暂停菜单里的切场景动作是否被禁用：已过关或过关转场播放中。
+## 暂停本身始终允许；这段时间菜单照常打开，只是排除 / 跳过 / 中断不可点。
+func is_pause_action_blocked() -> bool:
 	return _level_passed_busy or _pass_transition_busy
 
 
-## GoalGate 碰到终点时调用：从这一刻起禁止暂停，直到下一关加载完成。
+## 过关 / 转场期间玩家仍可暂停：推进换关前先等菜单关掉，别把这次暂停冲掉。
+## 没有打开的菜单时立即返回，常规转场时序不变。
+func wait_pause_menu_closed() -> void:
+	var scene: Node = get_tree().current_scene
+	if scene == null:
+		return
+	var menu: Node = scene.find_child("AdventurePauseMenu", true, false)
+	while is_instance_valid(menu) and bool(menu.get("_is_open")):
+		await get_tree().process_frame
+
+
+## GoalGate 碰到终点时调用：从这一刻起暂停菜单禁用切场景动作，直到下一关加载完成。
 func notify_level_passed() -> void:
 	_set_level_passed_busy(true)
 
@@ -851,7 +885,7 @@ func _set_level_passed_busy(value: bool) -> void:
 	if _level_passed_busy == value:
 		return
 	_level_passed_busy = value
-	pause_blocked_changed.emit()
+	pause_actions_blocked_changed.emit()
 
 
 ## 过关转场 + 下一关预热。
@@ -868,10 +902,10 @@ func _play_pass_transition(next_scene: String, level_number: int = 0, total_leve
 		Log.w("Adventure", "过关转场尚未结束，忽略重复的过关请求")
 		return
 	_pass_transition_busy = true
-	pause_blocked_changed.emit()
+	pause_actions_blocked_changed.emit()
 	await _run_pass_transition(next_scene, level_number, total_levels)
 	_pass_transition_busy = false
-	pause_blocked_changed.emit()
+	pause_actions_blocked_changed.emit()
 
 
 func _run_pass_transition(next_scene: String, level_number: int = 0, total_levels: int = 0) -> void:
@@ -945,6 +979,11 @@ func _detach_and_load_next_level(transition: CanvasLayer) -> Dictionary:
 	if not await _wait_transition_signal(transition, "jump_finished", 3.0):
 		return failed
 	await get_tree().process_frame
+
+	# 玩家可能在这段冻结里按了暂停：先挂起换关，等点「继续」再往下走，
+	# 否则旧场景（连同它的暂停菜单）一销毁，暂停就莫名其妙没了。
+	await wait_pause_menu_closed()
+	get_tree().paused = true
 
 	var next_scene: Node = await _load_next_play_scene(transition)
 	return {"detached": true, "advanced": is_instance_valid(next_scene)}

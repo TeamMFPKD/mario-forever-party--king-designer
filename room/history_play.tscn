@@ -98,7 +98,7 @@ scene_uid = &"uid://de64xnukpa0re"
 use_return_scene = true
 
 [node name="HistoryPauseMenu" parent="." index="8" instance=ExtResource("35_pause")]
-actions_visible = false
+history_mode = true
 usable_outside_adventure = true
 
 [connection signal="pressed" from="GameRoomSize/BackToHistory/BackToHistoryButton" to="JumpToSceneHistory" method="jump_to_scene" flags=3]

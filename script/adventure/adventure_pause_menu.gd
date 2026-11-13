@@ -32,13 +32,19 @@ const PERSPECTIVE_RANGE: Vector2 = Vector2(1500.0, 2050.0)
 @onready var _center: Control = $Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center
 @onready var _buttons: Control = $Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons
 
-## 卡片上的选项按钮是否显示。回放页复用本菜单做「纯翻卡暂停」时置 false。
+## 卡片上的选项按钮是否显示。只要翻卡动画、不要按钮时置 false。
 @export var actions_visible: bool = true
 ## 是否允许在百人团之外使用（例如回放页）。为 true 时不再要求 Adventure.is_running()。
 @export var usable_outside_adventure: bool = false
+## 回放页变体：只留「继续」「排除」；「排除」只写排除名单，不推进团、不切场景。
+@export var history_mode: bool = false
 
 var _is_open: bool = false
 var _animating: bool = false
+
+var _exclude_button: Button
+var _skip_button: Button
+var _abort_button: Button
 
 var _level_panel: Control
 var _flip_tween: Tween
@@ -54,6 +60,12 @@ var _lift_amount: float = 18.0
 func _ready() -> void:
 	visible = false
 	_buttons.visible = actions_visible
+	_exclude_button = _buttons.get_node("ExcludeButton") as Button
+	_skip_button = _buttons.get_node("SkipButton") as Button
+	_abort_button = _buttons.get_node("AbortButton") as Button
+	if history_mode:
+		_skip_button.visible = false
+		_abort_button.visible = false
 	if not actions_visible:
 		# 没有选项时按钮容器会塌陷，标题就贴在卡片顶部。
 		# 这里让标题吃掉整张卡片并垂直居中，视觉上"暂停"落在正中间。
@@ -63,6 +75,9 @@ func _ready() -> void:
 	_flip_material = _flip_mesh.material as ShaderMaterial
 	if _flip_material != null and _card_viewport != null:
 		_flip_material.set_shader_parameter("card_tex", _card_viewport.get_texture())
+	# 过关 / 转场状态可能在菜单打开期间变化，三个动作按钮要跟着实时置灰。
+	Adventure.pause_actions_blocked_changed.connect(_refresh_action_buttons)
+	_refresh_action_buttons()
 
 
 ## 本菜单什么时候可用：百人团跑团中，或显式允许的非百人团场景（回放页）。
@@ -75,9 +90,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	# 按键在标题页「设置 → 输入映射 → 暂停」里可改。
 	if event.is_action_pressed("pause"):
-		# 过关中 / 过关转场播放中按暂停键不算数，也不吃掉这次输入。
-		if not _is_open and Adventure.is_pause_blocked():
-			return
+		# 过关 / 转场期间也允许暂停，只是卡片上会切场景的动作被置灰。
 		toggle_pause()
 		get_viewport().set_input_as_handled()
 
@@ -87,9 +100,6 @@ func toggle_pause() -> void:
 		return
 	if _is_open:
 		_close_flip()
-		return
-	# 玩家已过关 / 过关转场播放中：不允许打开暂停菜单（已经打开的仍可关闭）。
-	if Adventure.is_pause_blocked():
 		return
 	_open_flip()
 
@@ -130,6 +140,9 @@ func _open_flip() -> void:
 	_is_open = true
 	visible = true
 	get_tree().paused = true
+	# 每次打开都重读状态：恢复过的关卡要能重新排除，
+	# 过关 / 转场期间则把排除 / 跳过 / 中断一起置灰。
+	_refresh_action_buttons()
 
 	var rect: Rect2 = _find_level_border_rect()
 	if rect.size == Vector2.ZERO:
@@ -348,14 +361,58 @@ func _on_root_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event: InputEventMouseButton = event
 		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT:
+			# 回放页的「排除」按钮点完会变灰但仍留在卡片上；点它（以及卡片本身）
+			# 不能被当成"点空白处继续"，否则会从暂停状态里退出去。
+			if history_mode and _card_holder.get_global_rect().has_point(mouse_event.global_position):
+				return
 			_close_flip()
 
 
-func _skip_hard() -> void:
-	_begin_skip(true)
+## 「排除」：百人团里是硬跳过并翻到下一关；回放页里只写名单、保持暂停。
+func _on_exclude_pressed() -> void:
+	if Adventure.is_pause_action_blocked():
+		return
+	if not history_mode:
+		_begin_skip(true)
+		return
+	var key: String = _history_level_key()
+	if key.is_empty():
+		Log.w("AdventurePauseMenu", "找不到当前回放关卡，无法排除")
+		return
+	Adventure.exclude_level(key)
+	# 不翻卡、不切场景、不解冻：菜单与树暂停都维持原样。
+	_exclude_button.disabled = true
+
+
+## 回放页里当前关卡的 key（关卡文件名，与百人团关卡池一致）。
+func _history_level_key() -> String:
+	var setter: Node = get_tree().get_first_node_in_group("level_path_set")
+	if setter == null:
+		return ""
+	var path: String = str(setter.get_meta("level_path_name", ""))
+	if path.is_empty() or path == "invalid":
+		return ""
+	return AdventureLevelIdentity.key_from_path(path)
+
+
+## 过关 / 过关转场播放中：暂停照常开，但会切场景的三个动作一律 Disabled。
+## 回放页的排除按钮额外叠加「已排除 / 拿不到关卡 key」的置灰规则。
+func _refresh_action_buttons() -> void:
+	if _exclude_button == null or _skip_button == null or _abort_button == null:
+		return
+	var blocked: bool = Adventure.is_pause_action_blocked()
+	_skip_button.disabled = blocked
+	_abort_button.disabled = blocked
+	if history_mode:
+		var key: String = _history_level_key()
+		_exclude_button.disabled = blocked or key.is_empty() or Adventure.is_excluded(key)
+	else:
+		_exclude_button.disabled = blocked
 
 
 func _skip_soft() -> void:
+	if Adventure.is_pause_action_blocked():
+		return
 	_begin_skip(false)
 
 
@@ -436,6 +493,8 @@ func _flip_reveal_next_level() -> void:
 
 
 func _interrupt() -> void:
+	if Adventure.is_pause_action_blocked():
+		return
 	# 保存进度并直接回到百人团舞台（稍后可点「继续上次的团」）。
 	# 卡片全程盖住关卡、不放隐藏：先跑满 2 个物理帧再冻结，然后直接切场景，
 	# 这样从点击到舞台出现都不会露出任何关卡视口的画面

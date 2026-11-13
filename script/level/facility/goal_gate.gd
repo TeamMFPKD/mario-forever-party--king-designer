@@ -37,7 +37,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and !is_passed and not body.has_meta("level_passed"):
 		# 防止同时触发两个终点导致卡死
 		body.set_meta("level_passed", true)
-		# 从碰到终点这一刻起禁止暂停（含终点后 1 秒冻结与后面的过关转场）。
+		# 从碰到终点这一刻起暂停菜单禁用切场景动作（含终点后 1 秒冻结与过关转场），
+		# 但暂停本身仍允许。
 		if GameMode.is_adventure():
 			Adventure.notify_level_passed()
 

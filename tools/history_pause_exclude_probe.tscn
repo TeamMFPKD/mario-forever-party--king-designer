@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tools/history_pause_exclude_probe.gd" id="1_probe"]
+
+[node name="HistoryPauseExcludeProbe" type="Node"]
+script = ExtResource("1_probe")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_right = 1280.0
+offset_bottom = 928.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+disable_3d = true
+size = Vector2i(1280, 928)

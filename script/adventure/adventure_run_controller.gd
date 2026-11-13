@@ -9,6 +9,9 @@ func next_level_pass() -> void:
 	if Adventure.is_pass_transition_running():
 		Log.w("AdventureRunController", "过关转场进行中，忽略重复的过关")
 		return
+	# 终点后 1 秒冻结期间玩家可以暂停：菜单留着，等「继续」后再推进，
+	# 否则推进器会 force_close 掉刚打开的暂停菜单。
+	await Adventure.wait_pause_menu_closed()
 	_close_pause_menu(true)
 	# 过场动画要显示「刚通过的是第几关」，必须在推进进度前取快照：
 	# 跳过关卡会让通过数和实际关号错位，结算时 current_run 还会被清空。
