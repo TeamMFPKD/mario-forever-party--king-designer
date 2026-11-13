@@ -1,5 +1,5 @@
 <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-  <!-- 四角光标 · TL 角：红色角标 + 黑色描边 -->
-  <path d="M 4 40 V 4 H 40 V 16 H 16 V 40 Z" fill="#E8342A" stroke="#1A1A1A" stroke-width="5"
+  <!-- 四角光标 · TL 角：红色角标 + 黑色描边；外角 10px 圆角，与按钮 corner_radius=10 对齐 -->
+  <path d="M 4 40 V 14 C 4 8.477 8.477 4 14 4 H 40 V 16 H 16 V 40 Z" fill="#E8342A" stroke="#1A1A1A" stroke-width="5"
         stroke-linejoin="round" stroke-linecap="round" />
 </svg>
