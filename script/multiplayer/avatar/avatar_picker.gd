@@ -45,7 +45,7 @@ const RELAX_RATIO: float = 0.85
 @export var max_tries: int = 160
 
 @onready var _backdrop: ColorRect = get_node_or_null("Backdrop") as ColorRect
-@onready var _panel: Panel = get_node_or_null("Panel") as Panel
+@onready var _panel: Control = get_node_or_null("Panel") as Control
 @onready var _items: Control = get_node_or_null("Panel/Margin/Items") as Control
 
 var _cells: Array[Button] = []
