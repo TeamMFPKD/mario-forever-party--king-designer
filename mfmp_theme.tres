@@ -108,3 +108,4 @@ Button/styles/normal = SubResource("SBF_btn_normal")
 Button/styles/pressed = SubResource("SBF_btn_pressed")
 Label/colors/font_color = Color(1, 1, 1, 1)
 Label/colors/font_outline_color = Color(0, 0, 0, 1)
+Label/constants/outline_size = 9
