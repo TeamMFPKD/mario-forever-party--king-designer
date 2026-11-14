@@ -121,6 +121,8 @@ chore(multiplayer): drop unused signaling fallback
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
 | `tools/spectate_shot.tscn` | `tools/spectate.png`（观看视图，读取 `user://` 最新 `.lvl`） |
 | `tools/endless_palette_stage_shot.tscn` | `tools/endless_palette_a.png` ~ `_d.png`（把四套候选配色依次套到真实舞台的无尽团存档卡上，用于挑配色） |
+| `tools/endless_variant_shot.tscn` | `tools/endless_variant_*.png`（以 C/D 为基准做亮度、饱和度微调，一次出 10 个变种） |
+| `tools/endless_title_shot.tscn` | `tools/endless_title_*.png`（同一个无尽团卡面的四种标题字色方案对比） |
 
 ### 3.3 交互演示（人工看）
 

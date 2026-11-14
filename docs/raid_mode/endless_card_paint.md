@@ -86,10 +86,11 @@ Slot1 (Button)                     ← 样式表只画描边，底填充透明
 Paint 从无尽团切换成定量团时要同时撤掉：
 
 - `Paint.visible = false`（`_set_paint_active`）
-- 白字与描边撤回到深色（`_clear_endless_text`）
+- 无尽团专用的字色与描边覆盖撤掉（`_clear_endless_text`）
 
-否则同一个格子换团之后会留着白字白描边，在白色卡面上完全看不见。
-探针 `back_to_finite_title=f5fbff`（第 2 档的白字）就是这条的回归点。
+否则同一个格子换团之后会留着上一套颜色，落在新卡面上可能完全看不见。
+探针 `back_to_finite_title=f5fbff`（第 2 档样式表自带的字色）就是这条的回归点：
+只要它还等于 `f5fbff`，就说明覆盖确实撤掉了。
 
 ---
 
@@ -110,17 +111,40 @@ Paint 从无尽团切换成定量团时要同时撤掉：
 | `value_mul` / `saturation` | 1.0 / 1.0 | 由脚本按选中态写入，**不要在编辑器里改** |
 | `width_px` / `corner_radius_px` | 339×76 / 4 | 由脚本写入，**不要在编辑器里改** |
 
-### 5.1 配色为什么不用彩虹
+### 5.1 配色怎么定的（两次都错过的弯路）
 
-第一版用的是红 / 黄 / 蓝 / 绿四个原色，被否掉了：这套 UI 是浅灰白底 + 细描边的轻量风格，
-四个高饱和原色同时出现会像贴了一张塑料纸，而且四色之间没有色相关系，眼睛找不到落点。
+**第一版：红 / 黄 / 蓝 / 绿四原色 → 否掉。** 这套 UI 是浅灰白底 + 细描边的轻量风格，
+四个高饱和原色同时出现像贴了张塑料纸，而且四色之间没有色相关系，眼睛找不到落点。
 
-现在的默认配色是 **蓝 → 紫 → 品红 → 珊瑚**，四色首尾相接、色相连续推过去，
-任何一帧画面上只同时出现两三个相邻色。想换风格只改这四个色值即可，
-或把 `style` 改成 4（双色扫光）走最克的路线。
+**第二版：蓝 → 紫 → 品红 → 珊瑚（色相连续）→ 也否掉。** 色相关系对了，但整体还是偏艳、偏"设计感"，
+放在这排存档卡里仍然抢眼。
 
-`tools/endless_palette_stage_shot.tscn` 会把四套候选配色依次套到真实舞台上各截一张
-（`tools/endless_palette_a.png` ~ `_d.png`），换配色时可以照着对比。
+**当前版：低饱和彩虹压亮度、提明度的奶白变种（变种表里的 D5）。**
+四色为 `#FBB3B8`（粉）/ `#FBEAB3`（浅黄）/ `#B1F1BE`（薄荷）/ `#B3D8FB`（天蓝），
+由原始 D 组 `#E89AA0` / `#E8D69A` / `#9ADFA8` / `#9AC2E8` 统一做 **sat ×0.85、val ×1.08** 得到。
+高明度低饱和让它不抢眼，又能与定量团的白卡明确区分。
+
+配色是"放在真实界面上挑"的，不是看孤立色块定的。两个工具：
+
+| 工具 | 作用 |
+| --- | --- |
+| `tools/endless_palette_stage_shot.tscn` | 四套整组候选（A/B/C/D）依次套到真实舞台上各截一张 |
+| `tools/endless_variant_shot.tscn` | 以 C/D 为基准做亮度、饱和度微调，一次出 10 个变种 |
+
+两者的做法都是改 `VARIANTS` 表里的 `[后缀, 基准组, 饱和度倍率, 明度倍率]`，改完重跑即可。
+
+### 5.2 标题字色与卡面明度绑定
+
+卡面配色一变，标题的可读性也会跟着变，这条容易漏：
+
+| 卡面 | 标题 | 理由 |
+| --- | --- | --- |
+| 早期高饱和彩底 | 白字 + 6px 深色描边 | 深色字在艳色上看不清 |
+| **当前 D5 奶白彩底** | **深色字 `#1A1A1F`，无描边** | 卡面本身够亮，白字靠描边反而像贴纸 |
+
+所以 `ENDLESS_TEXT_COLOR` / `ENDLESS_TEXT_OUTLINE` / `ENDLESS_TEXT_OUTLINE_SIZE`
+必须和配色一起考虑。**换配色时先看标题还读不读得清**，
+`tools/endless_title_shot.tscn` 会把四种字色方案各截一张做对比。
 
 ---
 
@@ -134,14 +158,14 @@ endless_paint_active=true
 finite_paint_off=true
 endless_style_alpha=0          # 样式表透明，彩色由 Paint 出
 endless_style_border=3f8c5a    # 描边仍是档位色（第 2 档 = 普通）
-endless_title_white=true
-endless_title_outline=6
+endless_title_dark=true       # 深色字，和奶白彩底拉开明度差
+endless_title_outline=0       # 不靠描边，避免"贴纸感"
 endless_selected_border=10     # 选中描边加粗，卡面不换纯色
 endless_selected_paint=true
 endless_paint_width=339        # 尺寸已同步给 shader
 endless_material_isolated=true # 五张卡各用各的材质
 back_to_finite_paint_off=true  # 换回定量团后彩色撤掉
-back_to_finite_title=f5fbff    # 白字撤回到该档的深色字
+back_to_finite_title=f5fbff    # 覆盖撤掉，回到样式表自带的字色
 ```
 
 截图（窗口化，不加 `--headless`）：
@@ -155,7 +179,7 @@ Godot --path "<工程根>" res://tools/adventure_stage_shot.tscn
 
 滚动无法从单张静态图看出，验证办法是比同一张卡在两个时刻的像素差：
 `adventure_stage_loading.png`（0.3s）与 `adventure_stage.png`（7s）里第三格区域的平均通道差为
-**R 63.8 / G 20.1 / B 31.7（0~255）**，采样到 **206** 种不同颜色；定量团的卡片在同一区域完全没有变化。
+**R 36.0 / G 25.3 / B 21.4（0~255）**，采样到 **183** 种不同颜色；定量团的卡片在同一区域完全没有变化。
 
 ---
 

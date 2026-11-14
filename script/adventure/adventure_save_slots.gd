@@ -46,10 +46,12 @@ const DISABLED_COLOR: Color = Color(1, 1, 1, 0.72)
 ## hover 给一层很淡的白，保证指针上去仍有反馈。
 const ENDLESS_CARD_FILL: Color = Color(0, 0, 0, 0)
 const ENDLESS_CARD_HOVER: Color = Color(1, 1, 1, 0.18)
-## 彩色卡面底色偏亮偏嫩，纯黑字读不清：标题改白字 + 深色描边。
-const ENDLESS_TEXT_COLOR: Color = Color(1, 1, 1, 1)
-const ENDLESS_TEXT_OUTLINE: Color = Color(0.08, 0.07, 0.1, 0.9)
-const ENDLESS_TEXT_OUTLINE_SIZE: int = 6
+## 无尽团的卡面是高明度低饱和的奶白彩底（D5 配色），深色标题本身就够清楚。
+## 早先用过"白字 + 6px 深色描边"，在这套浅底上像贴纸，已弃用：
+## 换配色时务必确认标题与卡面的明度差，别把这条改回白字。
+const ENDLESS_TEXT_COLOR: Color = Color(0.102, 0.102, 0.122, 1)
+const ENDLESS_TEXT_OUTLINE: Color = Color(1, 1, 1, 0)
+const ENDLESS_TEXT_OUTLINE_SIZE: int = 0
 
 @onready var _slot_row: HBoxContainer = $Margin/Box/SlotRow
 

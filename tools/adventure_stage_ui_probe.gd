@@ -155,7 +155,7 @@ func _ready() -> void:
 	lines.append("endless_style_alpha=%d" % int(round(endless_style.bg_color.a * 100.0)))
 	lines.append("endless_style_border=%s" % endless_style.border_color.to_html(false))
 	var endless_title: Label = endless_button.get_node_or_null("Content/Title") as Label
-	lines.append("endless_title_white=%s" % str(_title_color_html(endless_title) == "ffffff"))
+	lines.append("endless_title_dark=%s" % str(_title_color_html(endless_title) == "1a1a1f"))
 	lines.append("endless_title_outline=%d" % int(endless_title.get_theme_constant("outline_size")))
 	# 选中无尽卡：描边加粗，卡面不换成纯色（Paint 仍然开着）。
 	endless_button.emit_signal("pressed")
@@ -171,7 +171,7 @@ func _ready() -> void:
 			(finite_paint as ColorRect).material == (endless_paint as ColorRect).material
 		)
 	lines.append("endless_material_isolated=%s" % str(not shared_material))
-	# 切回定量团：彩色卡面关掉、白字撤掉，回到原来的深色标题。
+	# 切回定量团：彩色卡面关掉、标题撤回样式表默认色。
 	_seed_mode(store, 3, 1, 2, "finite")
 	stage.call("_refresh_save_slots")
 	await get_tree().process_frame

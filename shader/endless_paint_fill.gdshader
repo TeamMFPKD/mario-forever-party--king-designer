@@ -16,12 +16,14 @@ uniform int style = 0;
 // 0.5 = 两色各占一半、交界柔和；越小色带越窄、交界越硬
 uniform float band_soft = 0.5;
 
-// 默认配色走"同一段色相连续推过去"：蓝 → 紫 → 品红 → 珊瑚，
-// 四色首尾相接，任何一帧都只是两三个相邻色，不会同时出现红黄蓝绿。
-uniform vec4 color_a : source_color = vec4(0.290, 0.620, 1.000, 1.000);
-uniform vec4 color_b : source_color = vec4(0.482, 0.424, 1.000, 1.000);
-uniform vec4 color_c : source_color = vec4(0.784, 0.420, 1.000, 1.000);
-uniform vec4 color_d : source_color = vec4(1.000, 0.482, 0.541, 1.000);
+// 默认配色是「低饱和彩虹」压亮度、提明度后的奶白变种（变种表里的 D5）：
+// 粉红 / 浅黄 / 薄荷 / 天蓝，四色都被推到高明度低饱和，放在浅灰白底上不抢眼，
+// 又能与定量团的白卡区分开。原始 D 组色值 #E89AA0 / #E8D69A / #9ADFA8 / #9AC2E8
+// 统一做了 sat x0.85、val x1.08。
+uniform vec4 color_a : source_color = vec4(0.983, 0.702, 0.723, 1.000);
+uniform vec4 color_b : source_color = vec4(0.983, 0.918, 0.702, 1.000);
+uniform vec4 color_c : source_color = vec4(0.696, 0.944, 0.746, 1.000);
+uniform vec4 color_d : source_color = vec4(0.702, 0.846, 0.983, 1.000);
 
 // 一组完整四色周期的波长（像素）：越大色块越宽
 uniform float brush_px = 210.0;
