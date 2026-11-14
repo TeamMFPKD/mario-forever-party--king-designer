@@ -736,7 +736,7 @@ AdventureStage (Control, 1920x1080)
 
 **关卡椭圆（LevelEllipse）[2026-11-14 实现]**：
 
-- 素材 `sprite/ui/adventure/level_node.svg`：**白色实心椭圆**（68×58，`fill-opacity 0.62`）+ **2px 黑色描边**，
+- 素材 `sprite/ui/adventure/level_node.svg`：**白色实心椭圆**（92×78，`fill-opacity 0.62`）+ **2px 黑色描边**，
   参考过关过场里的扁椭圆比例（约 1.17:1）；不旋转、不缩放，一个关卡一个 `Sprite2D`；
 - 编号是**中间挖空**的，不是叠一层白字：白色字身在 `CanvasGroup` 内用
   `CanvasItemMaterial(BLEND_MODE_SUB)` 把椭圆减出字形（内部透出背景），再叠一层
@@ -993,7 +993,7 @@ level_ellipse_cleared.svg / level_ellipse_skipped.svg / avatar_marker.svg / icon
    与存档卡描边同色系），难度文字前景色 / 装饰剪影 / 椭圆描边一起跟随；
    取消选中或改选「新存档」时回到配置页里选的那个档位的颜色。
 10. **[已拍板 2026-11-14]** 关卡外观：**白色半透明实心椭圆 SVG**（`sprite/ui/adventure/level_node.svg`，
-    68×58，`fill-opacity 0.62` + 2px 黑色描边），编号**中间挖空**（`CanvasGroup` 内用减法混合把椭圆减出字形，
+    92×78，`fill-opacity 0.62` + 2px 黑色描边），编号**中间挖空**（`CanvasGroup` 内用减法混合把椭圆减出字形，
     再叠一层透明字身 + 黑色描边的 `Label`）；关卡节点原点即椭圆中心，mario 踩在椭圆上沿。
 11. **[已拍板 2026-11-14]** 难度色背景改用 `object/adventure/backgrounds.tscn` 的 5 张 **1920×1080 渐变**
     （Easy / Normal / Expert / SuperExpert / Random），实例化为 `BackgroundArt` 并**铺满整屏**

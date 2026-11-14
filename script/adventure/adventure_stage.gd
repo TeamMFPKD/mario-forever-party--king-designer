@@ -47,12 +47,12 @@ const STATUS_SLIDE_SEC: float = 0.22
 
 ## 关卡示意图上的马里奥：沿用过关过场动画的 mario_small 帧与缩放，站在当前进度那一格的上沿。
 const MARIO_FRAMES: SpriteFrames = preload("res://object/level/player/mario_small.tres")
-const MARIO_SCALE: float = 0.9
+const MARIO_SCALE: float = 1.1
 const MARIO_FRAME_H: float = 66.0
 ## 关卡：白色半透明实心椭圆 + 白色编号，样式都在场景里调（编辑器可见）。
 const LEVEL_NODE_SCENE: PackedScene = preload("res://object/adventure/level_node.tscn")
 ## 椭圆高度（与 level_node.tscn 一致）：马里奥站在椭圆上沿时按它算脚底位置。
-const ELLIPSE_H: float = 58.0
+const ELLIPSE_H: float = 78.0
 const ENDLESS_PREVIEW_COUNT: int = 10
 ## 命数显示上限：与游玩左侧信息面板一致，触顶显示「× MAX」。
 const LIVES_CAP: int = 100

@@ -10,19 +10,19 @@ extends Control
 ## 子节点的**原点 = 椭圆中心**，连线和马里奥都按中心相对定位。
 
 const COLUMNS: int = 10
-## 与 object/adventure/level_node.tscn 里的椭圆尺寸保持一致。
-const CELL_W: float = 68.0
-const CELL_H: float = 58.0
-const GAP_X: float = 14.0
-const GAP_Y: float = 14.0
+## 与 object/adventure/level_node.tscn 里的椭圆尺寸保持一致（SVG 92×78）。
+const CELL_W: float = 92.0
+const CELL_H: float = 78.0
+const GAP_X: float = 22.0
+const GAP_Y: float = 20.0
 ## 和过关过场里的椭圆串同款线宽。
 const LINE_WIDTH: float = 2.0
 ## 连线外侧的黑色描边：每边 2px，先画粗黑线打底，再把彩色线盖在上面。
 const LINE_OUTLINE: float = 2.0
 const LINE_OUTLINE_COLOR: Color = Color(0, 0, 0, 1)
-## level_node.svg 的椭圆 rx=32、描边 2px（外沿 33）；线端点再往里伸 2px，
+## level_node.svg 的椭圆 rx=44、描边 2px（外沿 45）；线端点再往里伸 2px，
 ## 让线真正压进椭圆边缘，而不是留一道可见的缝。
-const ELLIPSE_RX: float = 33.0
+const ELLIPSE_RX: float = 45.0
 const LINE_OVERLAP: float = 2.0
 const EDGE_X: float = ELLIPSE_RX - LINE_OVERLAP
 ## 折返线：先水平向行外伸出，再画一个向外凸的三次贝塞尔 C 形弯落到下一行。
@@ -34,7 +34,7 @@ const CURVE_STEPS: int = 24
 ## 窗口外的淡出延长线：窗口没顶到第 1 关时左侧补一段，后面还有下一关时右侧补一段。
 ## 延长线在 STUB_LENGTH 内由实到虚，观感对齐过关过场（adventure_clear_transition.gd）
 ## 两侧的阶梯淡出：那条是叠渐变遮罩，这里直接在线上做 alpha 坡。
-const STUB_LENGTH: float = 72.0
+const STUB_LENGTH: float = 84.0
 const STUB_STEPS: int = 12
 
 var line_color: Color = Color(0.15, 0.2, 0.3, 0.65):
