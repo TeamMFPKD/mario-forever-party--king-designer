@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dh5jyddyk7vbq" path="res://script/edit/group_button.gd" id="2_0vreg"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="2_maxtu"]
 [ext_resource type="AudioStream" uid="uid://cr58xlqrdnefa" path="res://sound/edit/item_group_select.wav" id="5_ig22r"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="6_ui_button"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kgkip"]
 atlas = ExtResource("2_maxtu")
@@ -47,13 +48,14 @@ _data = {
 &"new_animation": SubResource("Animation_vvhug")
 }
 
-[node name="GroupButton" type="Button" unique_id=637023655]
+[node name="GroupButton" unique_id=637023655 instance=ExtResource("6_ui_button")]
 custom_minimum_size = Vector2(170, 170)
 offset_left = 7.0
 offset_top = 6.0
 offset_right = 160.0
 offset_bottom = 160.0
 theme = ExtResource("1_maxtu")
+text = ""
 script = ExtResource("2_0vreg")
 pressed_sound = ExtResource("5_ig22r")
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://script/title/pipe_button.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://sprite/ui/pipe/warp_pipe.svg" id="2_pipe"]
 [ext_resource type="FontFile" path="res://font/ui_maker_font.tres" id="3_font"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="4_ui_button"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_none"]
 
@@ -63,11 +64,12 @@ text = "组织游戏"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" type="Button" parent="."]
+[node name="Button" parent="." instance=ExtResource("4_ui_button")]
 offset_top = -130.0
 offset_right = 190.0
 offset_bottom = 296.0
 focus_mode = 0
+text = ""
 theme_override_styles/normal = SubResource("StyleBoxEmpty_none")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_none")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_none")

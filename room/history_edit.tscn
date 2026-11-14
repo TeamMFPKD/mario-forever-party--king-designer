@@ -47,7 +47,7 @@ theme_override_constants/margin_bottom = 30
 [node name="VBoxContainer" type="VBoxContainer" parent="GameRoomSize/SaveLoadTest" index="0" unique_id=1291501492]
 layout_mode = 2
 
-[node name="PlayButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" index="0" unique_id=590762782]
+[node name="PlayButton" parent="GameRoomSize/SaveLoadTest/VBoxContainer" index="0" unique_id=590762782 instance=ExtResource("9_mgrj7")]
 custom_minimum_size = Vector2(260, 136)
 layout_mode = 2
 size_flags_horizontal = 13
@@ -61,7 +61,7 @@ room_scene_uid = "uid://b3uujgk5upbfj"
 target_mode = 4
 metadata/_edit_lock_ = true
 
-[node name="SaveButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" index="1" unique_id=1483234204]
+[node name="SaveButton" parent="GameRoomSize/SaveLoadTest/VBoxContainer" index="1" unique_id=1483234204 instance=ExtResource("9_mgrj7")]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 13
@@ -72,7 +72,7 @@ text = "Save"
 script = ExtResource("8_w1k87")
 metadata/_edit_lock_ = true
 
-[node name="LoadButton" type="Button" parent="GameRoomSize/SaveLoadTest/VBoxContainer" index="2" unique_id=2104197841]
+[node name="LoadButton" parent="GameRoomSize/SaveLoadTest/VBoxContainer" index="2" unique_id=2104197841 instance=ExtResource("9_mgrj7")]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 13

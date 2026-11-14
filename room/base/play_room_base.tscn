@@ -1,4 +1,4 @@
-[gd_scene format=4 load_steps=42]
+[gd_scene format=4 load_steps=43]
 
 [ext_resource type="PackedScene" path="res://room/base/room_base.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://cw836hlngytf1" path="res://script/multiplayer/5_play/multiplayer_ani_sprite_manager.gd" id="5_27ofe"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://bwnqke2ld78e3" path="res://script/multiplayer/random_capture/random_capture.gd" id="25_3lia6"]
 [ext_resource type="Script" uid="uid://chmrv03j2sfai" path="res://script/multiplayer/game_mode_detect.gd" id="25_pt5fk"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="26_cpu0x"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="27_ui_button"]
 [ext_resource type="Script" uid="uid://fl0kl7e2b6n5" path="res://script/edit/clear_pipe/pipe_builder.gd" id="40_k06ju"]
 [ext_resource type="PackedScene" uid="uid://ch07v2yfii176" path="res://object/level/facility/key/pink_coin_canvas_layer.tscn" id="41_b1rav"]
 [ext_resource type="PackedScene" uid="uid://0pxyeyw6pisu" path="res://object/edit/clear_pipe/spawner_pipe_vertical_up.tscn" id="41_k06ju"]
@@ -153,11 +154,12 @@ theme_override_constants/margin_bottom = 30
 
 [node name="ControlVisibieSet" parent="GameRoomSize/MarginContainer" index="0" unique_id=416177451 instance=ExtResource("24_pt5fk")]
 
-[node name="Button" type="Button" parent="GameRoomSize/MarginContainer" index="1" unique_id=998423911]
+[node name="Button" parent="GameRoomSize/MarginContainer" index="1" unique_id=998423911 instance=ExtResource("27_ui_button")]
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("26_cpu0x")
 theme_override_font_sizes/font_size = 50
+text = ""
 script = ExtResource("18_e5c0k")
 
 [node name="GameModeDetect" type="Node" parent="GameRoomSize/MarginContainer" index="2" unique_id=1790741609]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Theme" path="res://mfmp_theme.tres" id="1_theme"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_ui_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 content_margin_left = 16.0
@@ -55,8 +56,10 @@ anti_aliasing = true
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
-[node name="QuickMessageButton" type="Button"]
+[node name="QuickMessageButton" instance=ExtResource("2_ui_button")]
 custom_minimum_size = Vector2(0, 76)
+offset_right = 0.0
+offset_bottom = 0.0
 theme = ExtResource("1_theme")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 1, 1, 1)

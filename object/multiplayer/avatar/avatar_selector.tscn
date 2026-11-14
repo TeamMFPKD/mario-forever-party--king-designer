@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="1_theme"]
 [ext_resource type="Script" path="res://script/multiplayer/avatar/avatar_selector.gd" id="2_script"]
 [ext_resource type="Shader" path="res://shader/avatar_circle.gdshader" id="3_shader"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="4_ui_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
 bg_color = Color(1, 1, 1, 1)
@@ -113,14 +114,17 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="PreviewButton" type="Button" parent="."]
+[node name="PreviewButton" parent="." instance=ExtResource("4_ui_button")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
+text = ""
 theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")

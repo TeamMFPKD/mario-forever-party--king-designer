@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://script/adventure/adventure_pause_menu.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_ui_button"]
 [ext_resource type="Shader" path="res://shader/adventure_pause_flip.gdshader" id="2_flip"]
 [ext_resource type="Texture2D" path="res://sprite/game_border.png" id="3_border"]
 [ext_resource type="Texture2D" path="res://ui/theme/borders/panel_double_92.svg" id="4_panel"]
@@ -226,33 +227,41 @@ layout_mode = 2
 theme = SubResource("Theme_menu")
 theme_override_constants/separation = 12
 
-[node name="ContinueButton" type="Button" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"]
+[node name="ContinueButton" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons" instance=ExtResource("5_ui_button")]
 custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
+theme = SubResource("Theme_menu")
+theme_override_font_sizes/font_size = 36
 text = "继续"
 
-[node name="ExcludeButton" type="Button" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"]
+[node name="ExcludeButton" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons" instance=ExtResource("5_ui_button")]
 custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
+theme = SubResource("Theme_menu")
 theme_override_colors/font_color = Color(0.780392, 0.262745, 0.262745, 1)
 theme_override_colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
 text = "将本关从抽取数据中排除"
 
-[node name="SkipButton" type="Button" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"]
+[node name="SkipButton" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons" instance=ExtResource("5_ui_button")]
 custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
+theme = SubResource("Theme_menu")
 theme_override_colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
 text = "跳过本关"
 
-[node name="AbortButton" type="Button" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons"]
+[node name="AbortButton" parent="Root/CardHolder/CardContainer/CardViewport/BackPanel/Content/VBox/Center/Buttons" instance=ExtResource("5_ui_button")]
 custom_minimum_size = Vector2(0, 76)
 layout_mode = 2
 focus_mode = 0
+theme = SubResource("Theme_menu")
 theme_override_colors/font_color = Color(0.168627, 0.164706, 0.156863, 1)
 theme_override_colors/font_disabled_color = Color(0.45, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 36
 text = "中断"
 
 [node name="FlipMesh" type="MeshInstance2D" parent="Root/CardHolder"]

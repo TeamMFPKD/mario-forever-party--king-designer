@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://br4dgypxyxj4l" path="res://script/edit/item_button.gd" id="2_43re8"]
 [ext_resource type="Texture2D" uid="uid://cpt58ywi635nk" path="res://sprite/tile/tile_overworld.png" id="3_qh42o"]
 [ext_resource type="AudioStream" uid="uid://dhgmhs28bmru8" path="res://sound/edit/item_select.wav" id="5_754x0"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="6_ui_button"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k5hgj"]
 atlas = ExtResource("3_qh42o")
@@ -47,7 +48,7 @@ _data = {
 &"new_animation": SubResource("Animation_vvhug")
 }
 
-[node name="ItemButton" type="Button" unique_id=1174583370]
+[node name="ItemButton" unique_id=1174583370 instance=ExtResource("6_ui_button")]
 custom_minimum_size = Vector2(170, 170)
 offset_left = 7.0
 offset_top = 6.0
@@ -56,6 +57,7 @@ offset_bottom = 160.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_tw4dc")
+text = ""
 script = ExtResource("2_43re8")
 pressed_sound = ExtResource("5_754x0")
 metadata/_custom_type_script = "uid://br4dgypxyxj4l"

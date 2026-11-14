@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dn1u3kagxyuqr" path="res://sprite/ui/item_box.png" id="3_wlm1x"]
 [ext_resource type="Texture2D" uid="uid://bte80pp2bpn" path="res://sprite/ui/s_left_1.png" id="4_t0oly"]
 [ext_resource type="AudioStream" uid="uid://c1jkrsxequ3hf" path="res://sound/edit/SE_commentVisible.wav" id="6_lff6i"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="7_ui_button"]
 
 [sub_resource type="Animation" id="Animation_qh42o"]
 length = 0.001
@@ -43,12 +44,13 @@ _data = {
 &"new_animation": SubResource("Animation_vvhug")
 }
 
-[node name="LevelSizeButton" type="Button" unique_id=637023655]
+[node name="LevelSizeButton" unique_id=637023655 instance=ExtResource("7_ui_button")]
 offset_left = 7.0
 offset_top = 6.0
 offset_right = 160.0
 offset_bottom = 160.0
 theme = ExtResource("1_p7by8")
+text = ""
 script = ExtResource("2_t0oly")
 pressed_sound = ExtResource("6_lff6i")
 

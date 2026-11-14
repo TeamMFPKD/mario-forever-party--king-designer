@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://q3tmurnpujmc" path="res://sprite/ui/new_bottom.png" id="2_xwl44"]
 [ext_resource type="Shader" uid="uid://bxy65noklqais" path="res://shader/avatar_circle.gdshader" id="3_shader"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="4_theme"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_ui_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ring"]
 bg_color = Color(1, 1, 1, 1)
@@ -160,7 +161,7 @@ text = "Ready"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerRoleButton" type="Button" parent="."]
+[node name="PlayerRoleButton" parent="." instance=ExtResource("5_ui_button")]
 custom_minimum_size = Vector2(140, 44)
 layout_mode = 2
 size_flags_horizontal = 0

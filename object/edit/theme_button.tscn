@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://ceh5mmcdhojib" path="res://shader/bg_preview.gdshader" id="4_asjny"]
 [ext_resource type="Texture2D" uid="uid://df0qqs3nxjcnc" path="res://sprite/theme_preview/bg_preview_overworld.png" id="5_1uouk"]
 [ext_resource type="AudioStream" uid="uid://c1jkrsxequ3hf" path="res://sound/edit/SE_commentVisible.wav" id="6_asjny"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="7_ui_button"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_virh0"]
 shader = ExtResource("4_asjny")
@@ -49,12 +50,13 @@ _data = {
 &"new_animation": SubResource("Animation_vvhug")
 }
 
-[node name="ThemeButton" type="Button" unique_id=637023655]
+[node name="ThemeButton" unique_id=637023655 instance=ExtResource("7_ui_button")]
 offset_left = 7.0
 offset_top = 6.0
 offset_right = 160.0
 offset_bottom = 160.0
 theme = ExtResource("1_xdfpa")
+text = ""
 script = ExtResource("2_xdfpa")
 pressed_sound = ExtResource("6_asjny")
 
