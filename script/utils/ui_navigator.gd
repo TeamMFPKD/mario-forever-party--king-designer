@@ -250,7 +250,7 @@ func _process(delta: float) -> void:
 	# 游戏内 FOCUS 组归角色，UI 只能用虚拟鼠标；带着 FOCUS 模式进来时强制掰回来。
 	# 但模态 UI（暂停菜单 / 通知）盖在游戏上时不能掰——否则暂停菜单里方向键
 	# 刚切到 FOCUS 就被下一帧改回 POINTER。
-	if not _modal_visible and _is_character_control_mode():
+	if not _modal_visible and _has_player():
 		if _mode != InputMode.POINTER:
 			_mode = InputMode.POINTER
 
@@ -284,7 +284,7 @@ func _navigation_enabled() -> bool:
 		return false
 	if _modal_visible:
 		return true
-	if _is_gameplay_mode():
+	if _has_player():
 		return false
 	return true
 
@@ -295,14 +295,10 @@ func _navigation_enabled() -> bool:
 ## 否则暂停菜单刚打开时方向键还在旧的 HUD 候选里跳，表现为"按了没反应"。
 func _update_modal_visible() -> void:
 	var previous: bool = _modal_visible
-	_modal_visible = (_is_gameplay_mode() or GameMode.is_history_play()) and _any_visible_modal()
+	_modal_visible = (_has_player() or GameMode.is_history_play()) and _any_visible_modal()
 	_modal_probe = 0.0
 	if _modal_visible != previous:
 		_dirty = true
-
-
-func _is_gameplay_mode() -> bool:
-	return GameMode.is_playing() or GameMode.is_adventure() or GameMode.is_testing()
 
 
 func _any_visible_modal() -> bool:
@@ -326,7 +322,7 @@ func _any_visible_modal() -> bool:
 func _input(event: InputEvent) -> void:
 	# 游戏内暂停菜单刚打开时，0.3s 的定时探测还没跑；按键瞬间补一次，
 	# 否则第一下方向键会被判给角色、看起来像"暂停后 UI 操作不了"。
-	if not _modal_visible and (_is_gameplay_mode() or GameMode.is_history_play()) \
+	if not _modal_visible and (_has_player() or GameMode.is_history_play()) \
 			and (event is InputEventKey or event is InputEventJoypadButton
 				or event is InputEventJoypadMotion or event is InputEventAction):
 		var now_ms: int = Time.get_ticks_msec()
@@ -360,16 +356,20 @@ func _group_allowed(group: InputGroups.Group) -> bool:
 		# 哪怕场上有玩家在跑。
 		if _modal_visible:
 			return true
-		return not _is_character_control_mode()
+		return not _has_player()
 	if group == InputGroups.Group.POINTER:
 		return true
 	return false
 
 
-## 由方向键 / 十字键操作角色的模式。
-func _is_character_control_mode() -> bool:
-	return GameMode.is_playing() or GameMode.is_history_play() \
-		or GameMode.is_testing() or GameMode.is_adventure()
+## 场上是否有活着的玩家实体。
+##
+## 方向键该给角色还是给 UI，取决于**有没有人可操控**，而不是 GameMode：
+## `GameMode.ADVENTURE` 同时覆盖"跑团中的关卡"和"中断后的百人团舞台"，
+## 后者没有玩家却同样被当成游戏内，导致方向键无法操作 UI。同理还有冒险结算页。
+func _has_player() -> bool:
+	var node: Node = get_tree().get_first_node_in_group("player")
+	return node != null and is_instance_valid(node)
 
 
 func _switch_to_focus() -> void:
