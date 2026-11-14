@@ -13,7 +13,7 @@
 atlas = ExtResource("5_mario")
 region = Rect2(32, 32, 32, 34)
 
-[node name="AdventureLevelInfo" type="Control" node_paths=PackedStringArray("lives_label", "level_value", "death_value", "pass_value", "skip_value", "clear_rate_value")]
+[node name="AdventureLevelInfo" type="Control" node_paths=PackedStringArray("lives_label", "level_title", "level_value", "death_value", "pass_value", "skip_value", "clear_rate_value")]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 24.0
@@ -23,6 +23,7 @@ offset_bottom = 840.0
 mouse_filter = 2
 script = ExtResource("1_script")
 lives_label = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LivesRow/LivesLabel")
+level_title = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LevelTitle")
 level_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/LevelValue")
 death_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/DeathItem/DeathValue")
 pass_value = NodePath("UiMarginContainer/InfoMargin/VBoxContainer/StatsRow/PassItem/PassValue")
@@ -104,7 +105,7 @@ mouse_filter = 2
 layout_mode = 2
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 30
-text = "当前关卡"
+text = "难度"
 
 [node name="LevelValue" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
 layout_mode = 2

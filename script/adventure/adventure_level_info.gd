@@ -6,11 +6,13 @@ extends Control
 ##
 ## 样式沿用 history play 右侧信息卡（ui_panel 半透明底 + ui_label 白字描边），
 ## 内容为「这一关」在 adventure.ini 里的单人累计：
-##   当前关卡 / 本关通过数 / 本关死亡数 / 本关跳过数（只算软跳过）/ 个人通过率
+##   本关难度名称 / 当前关卡 / 本关通过数 / 本关死亡数 / 本关跳过数（只算软跳过）/ 个人通过率
 ## 命数固定显示在面板最上方，图标取 mario_small walk 动画的第 3 帧（帧索引 2，atlas 32,0）。
 ## 三个计数用 SVG 图标表示：旗杆=通过、骷髅=死亡、快进=跳过。
 
 @export var lives_label: Label
+## 原「当前关卡」标题，现改为显示本关的难度名称（随机档显示「随机」）。
+@export var level_title: Label
 @export var level_value: Label
 @export var death_value: Label
 @export var pass_value: Label
@@ -18,6 +20,7 @@ extends Control
 @export var clear_rate_value: Label
 
 const LIVES_CAP: int = 100
+const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
 
 
 func _ready() -> void:
@@ -32,6 +35,7 @@ func _refresh() -> void:
 	var run: Dictionary = Adventure.current_run
 	var lives: int = int(run.get("lives_left", 0))
 	lives_label.text = "× MAX" if lives >= LIVES_CAP else "× %d" % lives
+	level_title.text = _tier_name(run)
 
 	var index: int = int(run.get("index", 0)) + 1
 	var total: int = int(run.get("total_levels", -1))
@@ -48,6 +52,15 @@ func _refresh() -> void:
 	# 只统计「我打不过」的软跳过，不含「本关不可能通过」的永久排除
 	skip_value.text = str(int(stats.get("solo_skip_soft", 0)))
 	clear_rate_value.text = _format_clear_rate(stats)
+
+
+## 本关难度名称：无尽团抽空降档后 active_tier 会低于开团档，按「实际这一关」的档显示；
+## 0 = 随机档（没有固定难度）。
+func _tier_name(run: Dictionary) -> String:
+	var tier: int = int(run.get("active_tier", run.get("tier", 0)))
+	if tier >= 1 and tier <= TIER_NAMES.size():
+		return TIER_NAMES[tier - 1]
+	return "随机"
 
 
 ## 个人通过率 = solo_pass / solo_attempt（口径见 docs/raid_mode §5.1）。
