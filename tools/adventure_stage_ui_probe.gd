@@ -43,6 +43,7 @@ func _ready() -> void:
 		"Layout/Box/PreviewPanel/PreviewCenter/PreviewGrid"
 	) as Control
 	var bg_rect: ColorRect = stage.get_node_or_null("Background") as ColorRect
+	var bg_art: Node2D = stage.get_node_or_null("BackgroundArt") as Node2D
 	var tier_column: Node = stage.get_node_or_null(
 		"Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn"
 	)
@@ -54,6 +55,7 @@ func _ready() -> void:
 		or center == null
 		or grid == null
 		or bg_rect == null
+		or bg_art == null
 		or tier_column == null
 	):
 		_write(lines + ["nodes_found=false"])
@@ -84,6 +86,7 @@ func _ready() -> void:
 	lines.append("no_select_preview_count=%d" % grid.get_child_count())
 	lines.append("no_select_mario_index=%d" % _mario_index(grid))
 	lines.append("no_select_bg=%s" % bg_rect.color.to_html(false))
+	lines.append("no_select_bg_art=%s" % _visible_bg_art(bg_art))
 	# 「随机」按钮银白描边，四档按钮仍是主题深色描边。
 	var random_button: Button = tier_column.get_node_or_null("Tier5") as Button
 	var tier1_button: Button = tier_column.get_node_or_null("Tier1") as Button
@@ -127,8 +130,9 @@ func _ready() -> void:
 	lines.append("resume_preview_left=%d" % int(center.offset_left))
 	lines.append("resume_preview_count=%d" % grid.get_child_count())
 	lines.append("resume_mario_index=%d" % _mario_index(grid))
-	# 选中存档后主题色切到该团档位（存档1 = 普通 = 3F8C5A）。
+	# 选中存档后主题色切到该团档位（存档1 = 普通 = 3F8C5A，整屏渐变换成 Normal）。
 	lines.append("resume_bg=%s" % bg_rect.color.to_html(false))
+	lines.append("resume_bg_art=%s" % _visible_bg_art(bg_art))
 
 	# 6. 补满 5 个团：仍然只有 5 格，没有「新存档」入口。
 	for slot: int in range(3, 6):
@@ -193,6 +197,17 @@ func _title_color_html(title: Label) -> String:
 	if title == null:
 		return "none"
 	return title.get_theme_color("font_color").to_html(false)
+
+
+## 当前可见的难度背景 Sprite 名字（Easy/Normal/...），没有则 none。
+func _visible_bg_art(art: Node2D) -> String:
+	if art == null:
+		return "none"
+	for child: Node in art.get_children():
+		var sprite: Sprite2D = child as Sprite2D
+		if sprite != null and sprite.visible:
+			return str(sprite.name)
+	return "none"
 
 
 ## 按钮常态描边色（十六进制），找不到时返回 none。

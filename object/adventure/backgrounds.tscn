@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://n5yiahk1fdsj"]
+
+[sub_resource type="Gradient" id="Gradient_765bg"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.5, 0.75, 1, 1, 0.5, 1, 1, 1, 1, 1, 0.7372549, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_al5lq"]
+gradient = SubResource("Gradient_765bg")
+width = 1920
+height = 1080
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_rwv67"]
+offsets = PackedFloat32Array(0, 0.69948184, 1)
+colors = PackedColorArray(0.5019608, 0.7490196, 0.14901961, 1, 0.7415, 1, 0.53, 1, 0.39545667, 0.62, 0.29140002, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oeds4"]
+gradient = SubResource("Gradient_rwv67")
+width = 1920
+height = 1080
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_0gksk"]
+offsets = PackedFloat32Array(0, 0.34196892, 1)
+colors = PackedColorArray(1, 0.6166667, 0, 1, 0.89, 0.731135, 0.3293, 1, 1, 0.8075, 0.23000002, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u6sc2"]
+gradient = SubResource("Gradient_0gksk")
+width = 1920
+height = 1080
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_8n1gx"]
+offsets = PackedFloat32Array(0.09326425, 0.41709843, 0.8937824)
+colors = PackedColorArray(0.4945, 0, 0.69, 1, 0.5162, 0.14240003, 0.89, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qysxv"]
+gradient = SubResource("Gradient_8n1gx")
+width = 1920
+height = 1080
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_3hmb5"]
+offsets = PackedFloat32Array(0.09067357, 0.53108805, 1)
+colors = PackedColorArray(0.42000002, 1, 1, 1, 1, 0.57, 1, 1, 1, 1, 0.61, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_765bg"]
+gradient = SubResource("Gradient_3hmb5")
+width = 1920
+height = 1080
+fill_to = Vector2(0, 1)
+
+[node name="Backgrounds" type="Node2D" unique_id=171313430]
+
+[node name="Easy" type="Sprite2D" parent="." unique_id=1947858912]
+texture = SubResource("GradientTexture2D_al5lq")
+
+[node name="Normal" type="Sprite2D" parent="." unique_id=131489171]
+texture = SubResource("GradientTexture2D_oeds4")
+
+[node name="Expert" type="Sprite2D" parent="." unique_id=985409536]
+texture = SubResource("GradientTexture2D_u6sc2")
+
+[node name="SuperExpert" type="Sprite2D" parent="." unique_id=1903866401]
+texture = SubResource("GradientTexture2D_qysxv")
+
+[node name="Random" type="Sprite2D" parent="." unique_id=1600795082]
+texture = SubResource("GradientTexture2D_765bg")

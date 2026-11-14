@@ -46,10 +46,20 @@ const PARAMS_SLIDE_DISTANCE: float = 64.0
 const MARIO_FRAMES: SpriteFrames = preload("res://object/level/player/mario_small.tres")
 const MARIO_SCALE: float = 0.9
 const MARIO_FRAME_H: float = 66.0
-const ELLIPSE_SIZE: float = 58.0
+## 关卡：白色半透明实心椭圆（SVG，参考过关过场的扁椭圆），数字在椭圆上挖空。
+const ELLIPSE_TEXTURE: Texture2D = preload("res://sprite/ui/adventure/level_node.svg")
+const ELLIPSE_W: float = 68.0
+const ELLIPSE_H: float = 58.0
+const NUMBER_FONT_SIZE: int = 26
+## 编号的黑色描边宽度（字身是挖空的，只留这圈黑边）。
+const NUMBER_OUTLINE_SIZE: int = 4
 const ENDLESS_PREVIEW_COUNT: int = 10
+## 难度背景：object/adventure/backgrounds.tscn 里的 5 张 1920×1080 渐变，铺满整屏。
+const BACKGROUND_NODE_NAMES: Array[String] = ["Easy", "Normal", "Expert", "SuperExpert", "Random"]
+const BACKGROUND_DESIGN_SIZE: Vector2 = Vector2(1920, 1080)
 
 @export var background: ColorRect
+@export var backgrounds: Node2D
 @export var title_label: Label
 @export var status_label: Label
 @export var save_slots: PanelContainer
@@ -63,6 +73,9 @@ const ENDLESS_PREVIEW_COUNT: int = 10
 @export var back_button: Button
 @export var trash_button: Button
 @export var start_button: Button
+
+## 关卡数字的减法混合材质：所有关卡共享一份，无逐项参数。
+static var _cutout_material_instance: CanvasItemMaterial
 
 var _pool_source: String = "all"
 var _tier: int = 0
@@ -102,6 +115,8 @@ func _ready() -> void:
 		_load_mutex = Mutex.new()
 	_bind_controls()
 	_capture_params_layout()
+	_fit_background()
+	resized.connect(_fit_background)
 
 	var settings: Dictionary = Adventure.get_settings()
 	_pool_source = str(settings.get("pool_source", "all"))
@@ -230,7 +245,9 @@ func _update_theme() -> void:
 	if theme_tier >= 1 and theme_tier <= 4:
 		bg = TIER_COLORS[theme_tier - 1]
 		tint = TIER_TEXT_COLORS[theme_tier - 1]
+	# ColorRect 只做兜底底色：真正的背景是铺满整屏的难度渐变（object/adventure/backgrounds.tscn）。
 	background.color = bg
+	_show_background(theme_tier)
 	_label_tint = tint
 	_ellipse_border = bg.darkened(0.25)
 	for label: Label in _theme_labels:
@@ -241,6 +258,30 @@ func _update_theme() -> void:
 			"tint",
 			SCENERY_TINT_ON_DARK_BG if dark_theme else SCENERY_TINT_ON_LIGHT_BG
 		)
+
+
+## 难度渐变背景铺满整个屏幕：背景 Sprite 是 1920×1080，按舞台当前尺寸拉伸并居中。
+func _fit_background() -> void:
+	if backgrounds == null:
+		return
+	backgrounds.position = size * 0.5
+	backgrounds.scale = Vector2(
+		size.x / BACKGROUND_DESIGN_SIZE.x,
+		size.y / BACKGROUND_DESIGN_SIZE.y
+	)
+
+
+## 只显示该难度对应的那一张渐变（tier 0 = 随机）。
+func _show_background(tier: int) -> void:
+	if backgrounds == null:
+		return
+	var index: int = tier - 1 if tier >= 1 and tier <= 4 else BACKGROUND_NODE_NAMES.size() - 1
+	for node_index: int in range(BACKGROUND_NODE_NAMES.size()):
+		var sprite: Sprite2D = backgrounds.get_node_or_null(
+			BACKGROUND_NODE_NAMES[node_index]
+		) as Sprite2D
+		if sprite != null:
+			sprite.visible = node_index == index
 
 
 ## 关卡示意图：没选存档时按侧边栏设置画，选中已有存档时画该团的真实路线，
@@ -291,44 +332,59 @@ func _place_progress_mario(progress: int) -> void:
 	var index: int = progress - 1
 	if index < 0 or index >= preview_grid.get_child_count():
 		return
-	var panel: Control = preview_grid.get_child(index) as Control
-	if panel == null:
+	var cell: Node2D = preview_grid.get_child(index) as Node2D
+	if cell == null:
 		return
 	var mario: AnimatedSprite2D = AnimatedSprite2D.new()
 	mario.sprite_frames = MARIO_FRAMES
 	mario.scale = Vector2(MARIO_SCALE, MARIO_SCALE)
 	mario.play(&"idle")
-	panel.add_child(mario)
-	# 帧高 66、脚底在帧底：让脚正好踩在圆形关卡的上沿。
-	mario.position = Vector2(ELLIPSE_SIZE * 0.5, -MARIO_FRAME_H * MARIO_SCALE * 0.5)
+	cell.add_child(mario)
+	# 帧高 66、脚底在帧底：让脚正好踩在椭圆关卡的上沿。
+	mario.position = Vector2(0.0, -ELLIPSE_H * 0.5 - MARIO_FRAME_H * MARIO_SCALE * 0.5)
 
 
-func _make_ellipse(number: int, endless: bool) -> Control:
-	var panel: Panel = Panel.new()
-	panel.custom_minimum_size = Vector2(58, 58)
-	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = Color(1, 1, 1, 0.55)
-	style.border_width_left = 3
-	style.border_width_top = 3
-	style.border_width_right = 3
-	style.border_width_bottom = 3
-	style.border_color = _ellipse_border
-	style.corner_radius_top_left = 29
-	style.corner_radius_top_right = 29
-	style.corner_radius_bottom_right = 29
-	style.corner_radius_bottom_left = 29
-	panel.add_theme_stylebox_override("panel", style)
+## 一关：白色半透明实心椭圆（SVG，自带黑色描边）+ 中间挖空的数字。
+## 数字分两层：白色字身用减法混合把椭圆「挖掉」（内部透背景），黑色描边盖在外沿。
+## CanvasGroup 让减法只作用在本关椭圆上，不会把后面的背景一起减掉。
+func _make_ellipse(number: int, endless: bool) -> CanvasGroup:
+	var cell: CanvasGroup = CanvasGroup.new()
+	var ellipse: Sprite2D = Sprite2D.new()
+	ellipse.texture = ELLIPSE_TEXTURE
+	ellipse.centered = true
+	cell.add_child(ellipse)
+	var number_text: String = "?" if endless else str(number)
+	var body: Label = _make_number_label(number_text)
+	body.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	body.material = _cutout_material()
+	cell.add_child(body)
+	var edge: Label = _make_number_label(number_text)
+	edge.add_theme_color_override("font_color", Color(0, 0, 0, 0))
+	edge.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	edge.add_theme_constant_override("outline_size", NUMBER_OUTLINE_SIZE)
+	cell.add_child(edge)
+	return cell
+
+
+func _make_number_label(number_text: String) -> Label:
 	var label: Label = Label.new()
-	label.text = "?" if endless else str(number)
+	label.text = number_text
+	label.size = Vector2(ELLIPSE_W, ELLIPSE_H)
+	label.position = Vector2(-ELLIPSE_W * 0.5, -ELLIPSE_H * 0.5)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_color_override("font_color", Color(0.12, 0.14, 0.18, 1))
-	label.add_theme_font_size_override("font_size", 24)
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.add_theme_font_size_override("font_size", NUMBER_FONT_SIZE)
+	label.add_theme_constant_override("outline_size", 0)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(label)
-	return panel
+	return label
+
+
+## 挖空数字用的减法混合材质（共享一份，无逐项参数）。
+func _cutout_material() -> CanvasItemMaterial:
+	if _cutout_material_instance == null:
+		_cutout_material_instance = CanvasItemMaterial.new()
+		_cutout_material_instance.blend_mode = CanvasItemMaterial.BLEND_MODE_SUB
+	return _cutout_material_instance
 
 
 # ---------------------------------------------------------------------------

@@ -692,7 +692,10 @@ rng.seed = run.seed
 这是整个模式的"门面"，参考《马里奥制造 1》百人团的世界地图：
 
 - 全屏 1920×1080，横向卷轴；
-- 背景主题色由难度档决定；
+- **背景由难度档决定并铺满整屏**：`object/adventure/backgrounds.tscn` 里 5 张 1920×1080 竖向渐变
+  （`Easy / Normal / Expert / SuperExpert / Random`），舞台实例化为 `BackgroundArt`，
+  按当前有效档位（选中存档时取该团档位）只显示一张，并按舞台尺寸拉伸居中
+  （`adventure_stage.gd::_show_background()` / `_fit_background()`）；`Background` ColorRect 只做兜底底色；
 - 关卡用**扁的、略倾斜的椭圆**排在一条路径上；
 - 已通过 / 当前 / 跳过 / 未打 有明确的状态区分；
 - 下方或左侧叠一个设置面板，选数据源 / 难度 / 流程；
@@ -720,19 +723,17 @@ AdventureStage (Control, 1920x1080)
     └── StartButton
 ```
 
-**关卡椭圆（LevelEllipse）**：
+**关卡椭圆（LevelEllipse）[2026-11-14 实现]**：
 
-- 使用 `level_ellipse.svg`（约 220×130），在场景里 `scale = Vector2(1.0, 0.55)`、`rotation = deg_to_rad(-8)`，得到"扁扁的带一点倾斜"的效果；
-- 椭圆内部放编号 `Label`（反向旋转，保持文字水平）；
-- 状态：
-  - `pending`：白色/半透明描边；
-  - `current`：主题色发光 + 轻微上下浮动（Tween 循环）；
-  - `cleared`：填充绿色 + 对勾；
-  - `skipped`：填充灰色 + 叉；
-  - `failed`：暗红 + 裂纹（可选）。
-- 椭圆之间用 2px 实线连接，形成"路线"：同一行相邻圆之间画水平直线；行末 → 下一行行首
+- 素材 `sprite/ui/adventure/level_node.svg`：**白色实心椭圆**（68×58，`fill-opacity 0.62`）+ **2px 黑色描边**，
+  参考过关过场里的扁椭圆比例（约 1.17:1）；不旋转、不缩放，一个关卡一个 `Sprite2D`；
+- 编号是**中间挖空**的，不是叠一层白字：白色字身在 `CanvasGroup` 内用
+  `CanvasItemMaterial(BLEND_MODE_SUB)` 把椭圆减出字形（内部透出背景），再叠一层
+  「透明字身 + 黑色描边」的 `Label` 形成黑色轮廓（`adventure_stage.gd::_make_ellipse()`）；
+- 椭圆之间用 2px 实线连接，形成"路线"：同一行相邻椭圆之间画水平直线；行末 → 下一行行首
   （如 10 → 11）画三次贝塞尔曲线，竖直下探、水平横穿行间空隙、再竖直落到下一行首格顶边。
-  示意图每行固定 10 格、最后一行左对齐（见 `script/adventure/adventure_stage_preview.gd`）。
+  示意图每行固定 10 格、最后一行左对齐（见 `script/adventure/adventure_stage_preview.gd`）；
+- 状态样式（`pending` / `current` / `cleared` / `skipped` / `failed` 的颜色区分）仍是规划，尚未实现。
 
 **SVG 素材清单**（`sprite/ui/adventure/`）：
 
@@ -743,11 +744,11 @@ hill_near.svg
 bush.svg
 castle.svg
 flag.svg
-level_ellipse.svg
-level_ellipse_cleared.svg
-level_ellipse_skipped.svg
-avatar_marker.svg
-icon_life.svg
+level_node.svg          （已实现：白色半透明实心椭圆 + 黑色描边）
+icon_death.svg          （已实现：HUD 用）
+icon_goal.svg           （已实现：HUD 用）
+icon_skip.svg           （已实现：HUD 用）
+level_ellipse_cleared.svg / level_ellipse_skipped.svg / avatar_marker.svg / icon_life.svg （规划）
 ```
 
 - 全部用 SVG，Godot 导入为可缩放纹理；在 `TextureRect` / `Sprite2D` 里设置合适的 `expand_mode` / `scale`。
@@ -969,6 +970,12 @@ icon_life.svg
 9. **[已拍板 2026-11-14]** 选中已有存档时，**页面背景主题色切到该团难度档的主题色**（沿用 §8.2 的四档色值，
    与存档卡描边同色系），难度文字前景色 / 装饰剪影 / 椭圆描边一起跟随；
    取消选中或改选「新存档」时回到侧边栏里选的那个档位的颜色。
+10. **[已拍板 2026-11-14]** 关卡外观：**白色半透明实心椭圆 SVG**（`sprite/ui/adventure/level_node.svg`，
+    68×58，`fill-opacity 0.62` + 2px 黑色描边），编号**中间挖空**（`CanvasGroup` 内用减法混合把椭圆减出字形，
+    再叠一层透明字身 + 黑色描边的 `Label`）；关卡节点原点即椭圆中心，mario 踩在椭圆上沿。
+11. **[已拍板 2026-11-14]** 难度色背景改用 `object/adventure/backgrounds.tscn` 的 5 张 **1920×1080 渐变**
+    （Easy / Normal / Expert / SuperExpert / Random），实例化为 `BackgroundArt` 并**铺满整屏**
+    （按舞台尺寸非等比拉伸居中，窗口尺寸变化时重算），随有效难度档切换；ColorRect 仅作兜底底色。
 
 ### 8.3.2 舞台布局定案参考图（2026-11-13 用户提供）
 
