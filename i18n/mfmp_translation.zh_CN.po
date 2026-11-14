@@ -213,6 +213,9 @@ msgstr "分辨率"
 msgid "玩家离开提示"
 msgstr "{player_name} 离开了房间。"
 
+msgid "玩家加入提示"
+msgstr "{player_name} 加入了房间。"
+
 msgid "玩家掉线提示"
 msgstr "{player_name} 掉线了，等待重连…"
 

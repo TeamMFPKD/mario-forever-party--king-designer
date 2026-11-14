@@ -36,6 +36,8 @@ signal play_sound_joined
 signal play_sound_exited
 ## 本地玩家的“游戏/观看”角色变化；大厅页与 player list 的切换按钮都监听它。
 signal local_role_changed(is_spectator: bool)
+## 本地玩家主动离开房间（名字在清理名单前取好），用于给自己也弹一条离开提示。
+signal local_player_left(player_name: String)
 
 enum LobbyPage {
 	NONE,
@@ -262,6 +264,9 @@ func join_game(address: String, port: int) -> void:
 
 
 func leave_room(reason: String = "主动退出") -> void:
+	# 自己退房也要有自己的消息：在清空名单之前先把名字发出去。
+	if net != null and net.is_online():
+		local_player_left.emit(player.name)
 	_reconnect_address = ""
 	_reconnect_port = 0
 	_is_reconnecting = false

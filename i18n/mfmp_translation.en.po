@@ -216,6 +216,9 @@ msgstr "Resolution"
 msgid "玩家离开提示"
 msgstr "{player_name} left the room."
 
+msgid "玩家加入提示"
+msgstr "{player_name} joined the room."
+
 msgid "玩家掉线提示"
 msgstr "{player_name} lost connection. Waiting for reconnection…"
 

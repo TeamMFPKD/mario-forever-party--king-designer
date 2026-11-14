@@ -216,6 +216,9 @@ msgstr "解像度"
 msgid "玩家离开提示"
 msgstr "{player_name} がルームを退出しました。"
 
+msgid "玩家加入提示"
+msgstr "{player_name} がルームに参加しました。"
+
 msgid "玩家掉线提示"
 msgstr "{player_name} の接続が切れました。再接続を待っています…"
 
