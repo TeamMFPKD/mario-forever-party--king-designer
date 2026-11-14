@@ -69,6 +69,12 @@ Get-Content -LiteralPath $Err -Encoding UTF8
    改完就停在工作区，把改了哪些文件、为什么改、怎么验证的写清楚交给用户，由用户决定什么时候提交。
    同理，**也不要主动 push、不要主动建分支、合并、rebase、回滚或 amend**——这些动作一旦发生就难以撤销，一并交给用户指令。
    （提交信息的格式规范见 2.1，那是"用户要求提交时"才知道该照什么写，不是"可以自己提交"的许可。）
+7. **写按钮脚本一律继承 `UiSoundButton`（即 `ui/ui_button.tscn` 挂的脚本，口语里的"UIButton 类"），不要 `extends Button`。**
+   场景里的 `Button` 节点也一律实例化 `res://ui/ui_button.tscn`；场景覆写按钮的 `script` 时，如果脚本还是 `extends Button`，模板自带的 `focus_sound` / `pressed_sound` 会在实例化时被丢掉，按钮就没有自己的焦点/按下音效。
+   - 覆写了 `_ready()` 就在第一行写 `super()`（有提前 `return` 的也要放在 `return` 前），否则基类 `pressed.connect(_on_pressed)` 不会执行。
+   - 自定义按下回调不要叫 `_on_pressed`：那会覆盖基类播音效的方法并造成 `pressed` 重复连接，统一叫 `_on_button_pressed`。
+   - `TextureButton`（标题广告 `forum_button.gd`、收藏页封面热区）不是 `Button` 子类，走 `UiNavigator` 的兜底音效；`addons/` 第三方插件同理，都不在此约束内。
+   - 转换旧按钮时要抵消 `ui_button.tscn` 的模板默认值：`text`（默认"请输入文本"，无文字写 `text = ""`）、`theme_override_font_sizes/font_size`（模板 50）、`offset_right/offset_bottom`（模板 300/140）。
 
 ### 2.1 提交信息（commit message）规范
 
@@ -112,7 +118,7 @@ chore(multiplayer): drop unused signaling fallback
 
 | 场景 | 输出 |
 | --- | --- |
-| `tools/adventure_stage_shot.tscn` | `tools/adventure_stage_loading.png`（0.3s）、`tools/adventure_stage.png`（4.7s）、`..._selected.png`（选中「新存档」）、`..._resume.png`（选中存档1）、`..._endless.png`（选中无尽团存档3） |
+| `tools/adventure_stage_shot.tscn` | `tools/adventure_stage_loading.png`（0.3s）、`tools/adventure_stage.png`（4.7s）、`..._selected.png`（选中「新存档」）、`..._resume.png`（选中存档1）、`..._endless.png`（选中无尽存档3） |
 | `tools/adventure_play_shot.tscn` | `tools/adventure_play.png`（加载游玩场景 3s 后） |
 | `tools/adventure_pause_shot.tscn` | `tools/adventure_pause.png`（打开暂停菜单） |
 | `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`、`..._flip_a/b.png`（默认桌面，鼠标点击暂停键）；加 `--shot-mobile` 伪装 Android 并输出带 `_mobile` 后缀的图 |
@@ -120,9 +126,9 @@ chore(multiplayer): drop unused signaling fallback
 | `tools/adventure_button_pv.tscn` | `tools/adventure_button_pv.png`（已采用的 V4 按钮布局单版预览） |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
 | `tools/spectate_shot.tscn` | `tools/spectate.png`（观看视图，读取 `user://` 最新 `.lvl`） |
-| `tools/endless_palette_stage_shot.tscn` | `tools/endless_palette_a.png` ~ `_d.png`（把四套候选配色依次套到真实舞台的无尽团存档卡上，用于挑配色） |
+| `tools/endless_palette_stage_shot.tscn` | `tools/endless_palette_a.png` ~ `_d.png`（把四套候选配色依次套到真实舞台的无尽存档卡上，用于挑配色） |
 | `tools/endless_variant_shot.tscn` | `tools/endless_variant_*.png`（以 C/D 为基准做亮度、饱和度微调，一次出 10 个变种） |
-| `tools/endless_title_shot.tscn` | `tools/endless_title_*.png`（同一个无尽团卡面的四种标题字色方案对比） |
+| `tools/endless_title_shot.tscn` | `tools/endless_title_*.png`（同一个无尽卡面的四种标题字色方案对比） |
 
 ### 3.3 交互演示（人工看）
 
@@ -172,7 +178,7 @@ solo_death=0
 
 ### 4.2 adventure_state_probe
 
-验证单局状态机：初始 10 命（5 关定量团）、每过 2 关 +1 命、死亡 -1、软跳过不扣命、最后一关被硬跳过后补位、打完替补关才结算。
+验证单局状态机：初始 10 命（5 关固定）、每过 2 关 +1 命、死亡 -1、软跳过不扣命、最后一关被硬跳过后补位、打完替补关才结算。
 
 关键判据：
 
@@ -351,7 +357,7 @@ $p = Start-Process -FilePath $Godot -PassThru `
 $p.WaitForExit(120000)
 ```
 
-- `adventure_stage_shot.tscn`：0.3s 截加载界面，4.7s 截舞台正式画面，随后依次截「选中新存档」「选中存档1（定量团）」「选中存档3（无尽团，彩色卡面）」；五张图都会覆盖。存档3 种子为 `mode: "endless"`，用来确认无尽存档卡的滚动彩色卡面。
+- `adventure_stage_shot.tscn`：0.3s 截加载界面，4.7s 截舞台正式画面，随后依次截「选中新存档」「选中存档1（固定）」「选中存档3（无尽，彩色卡面）」；五张图都会覆盖。存档3 种子为 `mode: "endless"`，用来确认无尽存档卡的滚动彩色卡面。
 - `adventure_play_shot.tscn`：先 `Adventure.start_run()` 再加载 `Adventure.PLAY_SCENE`，3s 后隐藏 `AdventurePauseMenu` 截图；依赖 `user://` 里有可用的 `.lvl` 关卡池。
 - `adventure_pause_shot.tscn`：2s 后打开暂停菜单截图，退出前会 `get_tree().paused = false`。
 - `adventure_transition_shot.tscn`：2s 后触发 `play_transition("pass", "res://room/title.tscn")`，0.5s 时截过渡层。
