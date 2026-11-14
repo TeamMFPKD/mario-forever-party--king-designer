@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="6_back_snd"]
 [ext_resource type="Script" uid="uid://bn1yr1qipwsnu" path="res://script/adventure/adventure_stage_preview.gd" id="7_preview"]
 [ext_resource type="PackedScene" uid="uid://n5yiahk1fdsj" path="res://object/adventure/backgrounds.tscn" id="8_backgrounds"]
+[ext_resource type="Script" path="res://script/adventure/adventure_banner.gd" id="9_banner"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview"]
 bg_color = Color(1, 1, 1, 0.42)
@@ -45,7 +46,7 @@ script = ExtResource("1_script")
 background = NodePath("Background")
 backgrounds = NodePath("BackgroundArt")
 title_label = NodePath("Layout/Box/TitleBar/Title")
-status_label = NodePath("Layout/Box/StatusRow/StatusLabel")
+status_label = NodePath("Layout/Box/StatusRow/StatusBox/StatusLabel")
 save_slots = NodePath("Layout/Box/SaveSlots")
 params_panel = NodePath("Layout/Box/PreviewPanel/ParamsPanel")
 params_title = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ParamsTitle")
@@ -71,6 +72,29 @@ color = Color(0.906, 0.922, 0.949, 1)
 [node name="BackgroundArt" parent="." unique_id=992781805 instance=ExtResource("8_backgrounds")]
 position = Vector2(960, 540)
 
+[node name="TopBanner" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 252.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("9_banner")
+zigzag_bottom = true
+
+[node name="BottomBanner" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -186.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("9_banner")
+zigzag_bottom = false
+
 [node name="Layout" type="MarginContainer" parent="." unique_id=1751140773]
 layout_mode = 1
 anchors_preset = 15
@@ -79,16 +103,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_bottom = 16
 
 [node name="Box" type="VBoxContainer" parent="Layout" unique_id=1907136587]
 layout_mode = 2
 theme_override_constants/separation = 12
 
 [node name="TitleBar" type="HBoxContainer" parent="Layout/Box" unique_id=723008667]
-custom_minimum_size = Vector2(0, 86)
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 
 [node name="TitleLeft" type="Control" parent="Layout/Box/TitleBar" unique_id=190056425]
@@ -112,8 +136,13 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="SaveSlots" parent="Layout/Box" unique_id=1621592128 instance=ExtResource("3_slots")]
-custom_minimum_size = Vector2(0, 124)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
+
+[node name="TopBannerGap" type="Control" parent="Layout/Box"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+mouse_filter = 2
 
 [node name="PreviewPanel" type="Panel" parent="Layout/Box" unique_id=1680428117]
 custom_minimum_size = Vector2(0, 420)
@@ -296,8 +325,13 @@ layout_mode = 2
 mouse_filter = 2
 script = ExtResource("7_preview")
 
+[node name="BottomBannerGap" type="Control" parent="Layout/Box"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+mouse_filter = 2
+
 [node name="BottomBar" type="HBoxContainer" parent="Layout/Box" unique_id=1764725663]
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 theme_override_constants/separation = 16
 
@@ -323,14 +357,14 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="StartButton" type="Button" parent="Layout/Box/BottomBar" unique_id=1415588602]
-custom_minimum_size = Vector2(360, 96)
+custom_minimum_size = Vector2(360, 88)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 32
 text = "开始挑战"
 
 [node name="StatusRow" type="HBoxContainer" parent="Layout/Box" unique_id=2023494668]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_constants/separation = 16
 
@@ -339,11 +373,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="StatusLabel" type="Label" parent="Layout/Box/StatusRow" unique_id=42683921]
+[node name="StatusBox" type="Control" parent="Layout/Box/StatusRow" unique_id=1928307465]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
+mouse_filter = 2
+
+[node name="StatusLabel" type="Label" parent="Layout/Box/StatusRow/StatusBox" unique_id=42683921]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 20
 text = "读取中……"
 horizontal_alignment = 2

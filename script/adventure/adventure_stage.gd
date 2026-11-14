@@ -42,6 +42,12 @@ const RANDOM_BORDER_COLOR: Color = Color("#C2C8D2")
 const PARAMS_SLIDE_SEC: float = 0.18
 const PARAMS_SLIDE_DISTANCE: float = 64.0
 
+## 右下状态文字：只在关卡池读取中显示（左划淡入，读完右划淡出），
+## 读完后不再换成提示句（用户要求）。操作失败反馈仍复用同一句位。
+const STATUS_LOADING_TEXT: String = "读取中……"
+const STATUS_SLIDE_DISTANCE: float = 32.0
+const STATUS_SLIDE_SEC: float = 0.22
+
 ## 关卡示意图上的马里奥：沿用过关过场动画的 mario_small 帧与缩放，站在当前进度那一格的上沿。
 const MARIO_FRAMES: SpriteFrames = preload("res://object/level/player/mario_small.tres")
 const MARIO_SCALE: float = 0.9
@@ -92,11 +98,9 @@ var _loading: bool = false
 var _pool_buttons: Array[Button] = []
 var _tier_buttons: Array[Button] = []
 var _mode_buttons: Array[Button] = []
-var _theme_labels: Array[Label] = []
 var _tier_info: Dictionary = {}
 ## -1 = 无选中，0 = 新存档，1..5 = 存档位
 var _selection: int = -1
-var _label_tint: Color = TEXT_COLOR
 var _ellipse_border: Color = Color(0.15, 0.2, 0.3, 0.85)
 ## 存档位数据快照：选中已有存档时，关卡示意图改成显示该团的真实路线。
 var _run_slots: Array[Dictionary] = []
@@ -106,6 +110,9 @@ var _params_rest_right: float = 404.0
 var _params_expanded: bool = false
 var _params_layout_ready: bool = false
 var _params_tween: Tween
+## 状态文字是否处于显示态（淡出动画期间已经是 false）。
+var _status_visible: bool = false
+var _status_tween: Tween
 
 
 func _ready() -> void:
@@ -126,7 +133,6 @@ func _ready() -> void:
 	_prefer_low_sample = bool(settings.get("prefer_low_sample", true))
 	length_slider.value = _run_length
 
-	_theme_labels = [title_label, status_label]
 	_apply_button_states()
 	_update_theme()
 	Adventure.play_bgm(_tier)
@@ -236,8 +242,9 @@ func _update_lives() -> void:
 	length_label.text = "打几关：%d" % _run_length if _mode == "finite" else "打几关：无尽"
 
 
-## 换档：背景主题色 + 直接压在背景上的文字前景色 + 装饰剪影配色。
+## 换档：背景主题色 + 装饰剪影配色。
 ## 选中已有存档时，主题色跟着该团的难度档走（而不是侧边栏里选的那个）。
+## 标题/状态文字落在橙黄横幅上，颜色固定（不再跟难度前景色，深色档的白字在橙底上会糊）。
 func _update_theme() -> void:
 	var bg: Color = NEUTRAL_COLOR
 	var tint: Color = TEXT_COLOR
@@ -248,10 +255,7 @@ func _update_theme() -> void:
 	# ColorRect 只做兜底底色：真正的背景是铺满整屏的难度渐变（object/adventure/backgrounds.tscn）。
 	background.color = bg
 	_show_background(theme_tier)
-	_label_tint = tint
 	_ellipse_border = bg.darkened(0.25)
-	for label: Label in _theme_labels:
-		label.add_theme_color_override("font_color", tint)
 	var dark_theme: bool = tint.get_luminance() > 0.6
 	if scenery != null:
 		scenery.set(
@@ -414,7 +418,11 @@ func _apply_selection_gate() -> void:
 	_set_params_expanded(_selection == 0)
 	start_button.text = "开始挑战"
 	start_button.disabled = _loading or _selection < 0
-	status_label.text = _status_text()
+	# 右下状态文字只用来报读取进度：读完直接右划淡出，不再换成提示句（用户要求）。
+	if _loading:
+		_show_status(STATUS_LOADING_TEXT)
+	else:
+		_hide_status()
 
 
 ## tscn 存的是展开态几何（侧栏左边缘 16、右边缘 404）；收起时整体滑出左边界。
@@ -461,16 +469,49 @@ func _hide_params_panel() -> void:
 		params_panel.visible = false
 
 
-func _status_text() -> String:
-	if _loading:
-		return "读取中……"
-	if _selection < 0:
-		if Adventure.is_run_slots_full():
-			return "存档位已满（5/5）"
-		return "选一个存档位，或选「新存档」"
-	if _selection == 0:
-		return "新存档 · 点「开始挑战」开始"
-	return "存档 %d · 点「开始挑战」继续" % _selection
+## 左划淡入：从右侧偏移滑回原位并淡入。已经在显示时不重播，避免闪动。
+func _show_status(text: String) -> void:
+	if status_label == null:
+		return
+	status_label.text = text
+	if _status_visible:
+		return
+	_status_visible = true
+	_kill_status_tween()
+	status_label.visible = true
+	status_label.position.x = STATUS_SLIDE_DISTANCE
+	status_label.modulate.a = 0.0
+	_status_tween = create_tween().set_parallel(true)
+	_status_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	_status_tween.tween_property(status_label, "position:x", 0.0, STATUS_SLIDE_SEC)
+	_status_tween.tween_property(status_label, "modulate:a", 1.0, STATUS_SLIDE_SEC)
+
+
+## 右划淡出：向右滑出并淡出，结束后隐藏。已隐藏时无操作，可反复调用。
+func _hide_status() -> void:
+	if status_label == null or not _status_visible:
+		return
+	_status_visible = false
+	_kill_status_tween()
+	_status_tween = create_tween().set_parallel(true)
+	_status_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	_status_tween.tween_property(
+		status_label, "position:x", STATUS_SLIDE_DISTANCE, STATUS_SLIDE_SEC
+	)
+	_status_tween.tween_property(status_label, "modulate:a", 0.0, STATUS_SLIDE_SEC)
+	_status_tween.chain().tween_callback(_finish_hide_status)
+
+
+func _kill_status_tween() -> void:
+	if _status_tween != null and _status_tween.is_valid():
+		_status_tween.kill()
+	_status_tween = null
+
+
+func _finish_hide_status() -> void:
+	# 淡出途中又被重新显示时不隐藏。
+	if not _status_visible:
+		status_label.visible = false
 
 
 func _refresh_save_slots() -> void:
@@ -560,7 +601,7 @@ func _on_start() -> void:
 			GlobalTransition.change_scene_to_file(Adventure.PLAY_SCENE)
 		else:
 			_refresh_save_slots()
-			status_label.text = "这个存档位无法继续"
+			_show_status("这个存档位无法继续")
 		return
 	var settings: Dictionary = {
 		"pool_source": _pool_source,
@@ -573,7 +614,7 @@ func _on_start() -> void:
 	if Adventure.start_run(settings):
 		GlobalTransition.change_scene_to_file(Adventure.PLAY_SCENE)
 	else:
-		status_label.text = Adventure.last_error
+		_show_status(Adventure.last_error)
 
 
 func _on_trash_pressed() -> void:
