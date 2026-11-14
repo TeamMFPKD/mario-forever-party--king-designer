@@ -26,7 +26,7 @@
 | 中文正式名 | **随心挑战** |
 | 英文正式名 | **Challenge** |
 | 拍板时间 | 2026-11-12 |
-| 是否落地到 UI / 代码 | **暂不**，本阶段只记录决定 |
+| 是否落地到 UI / 代码 | **已落地玩家文案**（2026-11-14）：界面上的「百人团」全部换成「随心挑战」；代码 / 资源 / 存档不动 |
 
 ### 为什么改名
 
@@ -37,7 +37,7 @@
 
 | 层 | 现在叫什么 | 本阶段 |
 | --- | --- | --- |
-| 玩家可见文案 | 「百人团」（标题水管、舞台标题、结算/暂停文案、数据卡「百人团数据」） | 保留，方便开发与对照既有截图、探针 |
+| 玩家可见文案 | 「随心挑战」（标题水管、舞台标题、数据卡「随心挑战数据」、排除房间返回按钮）；动作按钮为「开始挑战」 | **已改**（2026-11-14，见下方「文案替换清单」） |
 | 文档措辞 | 「百人团」「定量团」「无尽团」「打团」「本团」 | 保留，本文其余章节照旧 |
 | 代码 / 资源 | autoload `Adventure`、`script/adventure/adventure_*.gd`、`room/adventure_*.tscn`、`object/ui/adventure_*.tscn`、`tools/adventure_*` 探针 | 保留 `adventure_` 前缀，不重命名 |
 | 存档 / 枚举 / 配置 | `user://adventure.ini`、`[run]`、`GameModeType.ADVENTURE`、`mode=finite` / `endless` | 保留，改名会破坏续团存档 |
@@ -45,12 +45,26 @@
 
 **结论：「百人团」与 `adventure_xxx` 是开发期代号，与正式名解耦；正式名只用于对外表述，不触发任何全局替换。**
 
+### 文案替换清单（2026-11-14 已做）
+
+| 位置 | 文件 | 旧 | 新 |
+| --- | --- | --- | --- |
+| 标题水管 | `ui/title/pipe_menu.tscn` + `script/title/pipe_button.gd` 的 `LABELS` | 百人团 | 随心挑战 |
+| 舞台标题 | `room/adventure_stage.tscn` 的 `Title` | 百人团 | 随心挑战 |
+| 开始按钮 | `room/adventure_stage.tscn` 与 `script/adventure/adventure_stage.gd` | 开始打团 | 开始挑战 |
+| 状态栏提示 | `script/adventure/adventure_stage.gd` `_status_text()` | 点「开始打团」 | 点「开始挑战」 |
+| 排除房间返回键 | `room/adventure_trash.tscn` | 返回百人团 | 返回随心挑战 |
+| 关卡数据卡标题 | `object/ui/adventure_level_stats.tscn` | 百人团数据 | 随心挑战数据 |
+
+> **水管标签要按字宽缩放**：Label 只有 174px、字号 36，4 个汉字实测宽 442px（截图 1920 宽下的绝对像素），
+> 会顶穿管身。`pipe_button.gd` 的 `_fit_font_size()` 用 `Font.get_string_size()` 反推字号，上限 36 / 38、
+> 下限 24；2~3 字的旧标签算出来比上限大，因此只往下压不往上放。
+
 ### 将来正式改名时再处理
 
-1. 玩家可见文案：`ui/title/pipe_menu.tscn` 与 `script/title/pipe_button.gd` 的 `LABELS`（运行时后者覆盖前者，必须同步）、`script/adventure/adventure_stage.gd` 标题与按钮、`script/adventure/adventure_result.gd` 结算文案、`object/ui/adventure_level_stats.tscn`；
-2. 本文 §3 术语表、§8 舞台面板示意、§15 决策记录，以及 `AGENT.md` 的相关描述；
+1. 本文 §3 术语表、§8 舞台面板示意、§15 决策记录，以及 `AGENT.md` 的相关描述（这些仍写「百人团」）；
 3. 「团」字术语（定量团 / 无尽团 / 打团 / 本团 / 再来一团 / 继续上次的团）是否改成「挑战」系，届时单独拍板；
-4. 排版复核：水管 Label 宽 174px / 字号 36，4 字「随心挑战」接近满宽；数据卡可用宽约 220px，标题不宜写 6 字。
+4. 排版复核：水管 Label 已由 `_fit_font_size()` 自动缩放，不再需要人工调字号；数据卡可用宽约 220px，标题不宜写 6 字。
 
 > 内部代号（`Adventure` / `adventure_` / `raid`）**不随正式名改**，理由见上表。
 

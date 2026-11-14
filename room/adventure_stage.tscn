@@ -97,7 +97,7 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 58
-text = "百人团"
+text = "随心挑战"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -323,7 +323,7 @@ custom_minimum_size = Vector2(360, 96)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 32
-text = "开始打团"
+text = "开始挑战"
 
 [node name="StatusRow" type="HBoxContainer" parent="Layout/Box"]
 custom_minimum_size = Vector2(0, 34)

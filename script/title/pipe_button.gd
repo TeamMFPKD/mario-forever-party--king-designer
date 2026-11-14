@@ -25,6 +25,11 @@ const ITEM_SHOWN_Y: float = -130.0
 
 const HOVER_LIFT: float = 18.0
 
+## 管身上可用的字宽（Label 左右各留 6px 内边距，避免贴到描边）。
+## 4 字标签（如「随心挑战」）在 36 号下会超出这个宽度，按实际字宽反推字号。
+const LABEL_FIT_W: float = 162.0
+const LABEL_FIT_MIN_SIZE: int = 24
+
 ## 顺序 = pipe_index：绿 / 黄 / 蓝 / 红 / 白
 const TARGET_COLORS: Array[String] = [
 	"#00aa63",
@@ -33,7 +38,7 @@ const TARGET_COLORS: Array[String] = [
 	"#d6342a",
 	"#f2f2f2",
 ]
-const LABELS: Array[String] = ["组织游戏", "加入游戏", "游玩记录", "百人团", "设置界面"]
+const LABELS: Array[String] = ["组织游戏", "加入游戏", "游玩记录", "随心挑战", "设置界面"]
 const ITEM_PATHS: Array[String] = [
 	"res://sprite/ui/title/Artwork_-_SUPER_MUSHROOM_(Simple).svg",
 	"res://sprite/ui/title/Super_Mario_-_Art_-_1UP_Mushroom.svg",
@@ -109,7 +114,19 @@ func _apply_label() -> void:
 		return
 	_label.text = LABELS[pipe_index]
 	_label.add_theme_font_override("font", FONT_MAKER)
-	_label.add_theme_font_size_override("font_size", 38 if pipe_index == 0 else 36)
+	_label.add_theme_font_size_override("font_size", _fit_font_size(LABELS[pipe_index], 38 if pipe_index == 0 else 36))
+
+
+## 字号按字宽反推：太长就整体缩小，保证不越过管身描边。
+## 短标签（2~3 字）算出来的字号会比 MAX 还大，这里只往下压不往上放。
+func _fit_font_size(text: String, preferred: int) -> int:
+	var width: float = FONT_MAKER.get_string_size(
+		text, HORIZONTAL_ALIGNMENT_LEFT, -1, preferred
+	).x
+	if width <= LABEL_FIT_W or width <= 0.0:
+		return preferred
+	var scaled: float = float(preferred) * LABEL_FIT_W / width
+	return maxi(LABEL_FIT_MIN_SIZE, int(floorf(scaled)))
 
 
 func _apply_pipe() -> void:

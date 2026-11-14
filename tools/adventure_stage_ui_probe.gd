@@ -177,6 +177,11 @@ func _ready() -> void:
 	await get_tree().process_frame
 	lines.append("back_to_finite_paint_off=%s" % str(not endless_paint.visible))
 	lines.append("back_to_finite_title=%s" % _title_color_html(endless_title))
+	# 改名回归（2026-11-14）：玩家文案统一为「随心挑战」/「开始挑战」，
+	# 这几个字符串一旦回退成开发代号就说明某份 tscn 被覆盖回去了。
+	var stage_title: Label = stage.get_node_or_null("Layout/Box/TitleBar/Title") as Label
+	lines.append("stage_title=%s" % (stage_title.text if stage_title != null else "none"))
+	lines.append("start_button_text=%s" % start.text)
 
 	_write(lines)
 	_cleanup()

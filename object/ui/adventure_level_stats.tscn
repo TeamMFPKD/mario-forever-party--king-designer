@@ -59,7 +59,7 @@ theme_override_constants/separation = 2
 layout_mode = 2
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 30
-text = "百人团数据"
+text = "随心挑战数据"
 
 [node name="DeathTitle" parent="UiMarginContainer/InfoMargin/VBoxContainer" instance=ExtResource("4_label")]
 layout_mode = 2

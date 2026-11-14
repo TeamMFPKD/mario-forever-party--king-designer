@@ -105,7 +105,7 @@ func setup(slots: Array[Dictionary], new_run_slot: int) -> void:
 			_set_card_title(button, "新存档")
 		else:
 			_set_card_title(button, "进度异常" if bool(data.get("active", false)) else "空")
-	# 已选中的格子如果变得不可用，回到「无选中」，避免【开始打团】误开。
+	# 已选中的格子如果变得不可用，回到「无选中」，避免【开始挑战】误开。
 	var still_valid: bool = false
 	for value: int in _slot_selection:
 		if value == _selection:
@@ -139,7 +139,7 @@ func _tooltip_for(resumable: bool, is_new: bool, has_data: bool, data: Dictionar
 	return "存档位为空"
 
 
-## 再次点击已选中的格子不取消选中，避免【开始打团】突然变灰。
+## 再次点击已选中的格子不取消选中，避免【开始挑战】突然变灰。
 func _on_slot_pressed(index: int) -> void:
 	if index < 0 or index >= _slot_selection.size():
 		return

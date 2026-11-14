@@ -107,7 +107,7 @@ texture = SubResource("AtlasTexture_cap_red")
 texture = SubResource("AtlasTexture_body_red")
 
 [node name="Label" parent="Pipe2" index="3"]
-text = "百人团"
+text = "随心挑战"
 
 [node name="Pipe3" parent="." instance=ExtResource("2_pipe")]
 offset_left = 1079.0

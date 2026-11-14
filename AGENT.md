@@ -541,7 +541,7 @@ script = ExtResource("1_probe")
 
 ## 10. 相关文档
 
-- `docs/raid_mode/README.md`：百人团（adventure；正式名「随心挑战 / Challenge」，本阶段不改名）模式设计与规则，探针里的数值期望以它为准。
+- `docs/raid_mode/README.md`：随心挑战（开发代号 adventure，正式名「随心挑战 / Challenge」，玩家文案 2026-11-14 已改名、代码与存档保留 adventure 前缀）模式设计与规则，探针里的数值期望以它为准。
 - `docs/ui/README.md`：UI 主题体系——全局 `mfmp_theme.tres`（内置 Panel + 白字黑描边）与 `ui/theme/theme_yellow_top.tres`（黄色顶块 + 深色无描边）的取值、字体 fallback 约定，改界面配色前先看它。
 - `docs/spectator_mode/README.md`：观看模式、演示场景参数、已实测截图。
 - `docs/multiplayer_refactor_plan.md`：联机架构分期与每阶段验收命令（`mp_test.bat auto` / `auto -Full`）。

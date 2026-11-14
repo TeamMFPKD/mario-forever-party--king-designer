@@ -356,7 +356,7 @@ func _apply_selection_gate() -> void:
 	length_slider.editable = params_on
 	# 侧边栏只在「新存档」态展开；加载中保持当前展开状态，免得收起又弹开。
 	_set_params_expanded(_selection == 0)
-	start_button.text = "开始打团"
+	start_button.text = "开始挑战"
 	start_button.disabled = _loading or _selection < 0
 	status_label.text = _status_text()
 
@@ -413,8 +413,8 @@ func _status_text() -> String:
 			return "存档位已满（5/5）"
 		return "选一个存档位，或选「新存档」"
 	if _selection == 0:
-		return "新存档 · 点「开始打团」开始"
-	return "存档 %d · 点「开始打团」继续" % _selection
+		return "新存档 · 点「开始挑战」开始"
+	return "存档 %d · 点「开始挑战」继续" % _selection
 
 
 func _refresh_save_slots() -> void:
