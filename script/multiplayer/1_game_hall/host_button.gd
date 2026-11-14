@@ -36,14 +36,14 @@ func _add_role_row() -> void:
 		return
 	var row: HBoxContainer = HBoxContainer.new()
 	row.name = "RoleRow"
-	row.theme = preload("res://mfmp_theme.tres")
+	# 不绑定具体主题：跟随所在页面的 Theme，换主题时这一行自动同步
 	# 与下方 Quit/Host 那行保持同样的间距，左右两格才能宽度对齐。
 	row.add_theme_constant_override("separation", 32)
 	# 文案与字号对齐 UiLabel（45 / outline 7），并撑满左半格。
 	var label: Label = Label.new()
 	label.text = tr("参与模式")
+	# 与同列其它 UiLabel 保持同一字号（ui_label.tscn 用的是 45）
 	label.add_theme_font_size_override("font_size", 45)
-	label.add_theme_constant_override("outline_size", 7)
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.size_flags_vertical = Control.SIZE_FILL
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

@@ -1,6 +1,6 @@
-[gd_resource type="Theme" load_steps=3 format=3]
+[gd_resource type="Theme" format=3 uid="uid://cu6ng2pcp27p0"]
 
-[ext_resource type="Texture2D" path="res://ui/theme/borders/panel_glass.svg" id="1_glass"]
+[ext_resource type="Texture2D" uid="uid://c8lhdyi20ye8" path="res://ui/theme/borders/panel_glass.svg" id="1_glass"]
 
 [sub_resource type="StyleBoxTexture" id="SBT_glass"]
 texture = ExtResource("1_glass")
