@@ -642,8 +642,8 @@ msgstr "存档%d"
 msgid "存档位已满（%d/%d），请先继续其中一个团并结算或放弃"
 msgstr "存档位已满（%d/%d），请先继续其中一个团并结算或放弃"
 
-msgid "定量团"
-msgstr "定量团"
+msgid "固定"
+msgstr "固定"
 
 msgid "将本关从抽取数据中排除"
 msgstr "将本关从抽取数据中排除"
@@ -675,11 +675,11 @@ msgstr "房主关闭房间"
 msgid "所有关卡"
 msgstr "所有关卡"
 
-msgid "打几关：%d"
-msgstr "打几关：%d"
+msgid "关卡数：%d"
+msgstr "关卡数：%d"
 
-msgid "打几关：无尽"
-msgstr "打几关：无尽"
+msgid "关卡数：无尽"
+msgstr "关卡数：无尽"
 
 msgid "排除"
 msgstr "排除"
@@ -699,8 +699,8 @@ msgstr "新存档"
 msgid "新存档设置"
 msgstr "新存档设置"
 
-msgid "无尽团"
-msgstr "无尽团"
+msgid "无尽"
+msgstr "无尽"
 
 msgid "无法加入房间"
 msgstr "无法加入房间"

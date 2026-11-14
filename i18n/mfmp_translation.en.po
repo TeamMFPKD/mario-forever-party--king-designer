@@ -624,10 +624,10 @@ msgstr "Delete Save"
 msgid "删除当前存档？"
 msgstr "Delete this save?"
 
-msgid "定量团"
+msgid "固定"
 msgstr "Fixed Challenge"
 
-msgid "无尽团"
+msgid "无尽"
 msgstr "Endless Challenge"
 
 msgid "开始挑战"

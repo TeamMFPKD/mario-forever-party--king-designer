@@ -624,10 +624,10 @@ msgstr "セーブデータを削除"
 msgid "删除当前存档？"
 msgstr "このセーブデータを削除しますか？"
 
-msgid "定量团"
+msgid "固定"
 msgstr "定量チャレンジ"
 
-msgid "无尽团"
+msgid "无尽"
 msgstr "エンドレスチャレンジ"
 
 msgid "开始挑战"
@@ -678,10 +678,10 @@ msgstr "セーブ%d"
 msgid "初始命数：%d"
 msgstr "初期残機：%d"
 
-msgid "打几关：%d"
+msgid "关卡数：%d"
 msgstr "コース数：%d"
 
-msgid "打几关：无尽"
+msgid "关卡数：无尽"
 msgstr "コース数：エンドレス"
 
 msgid "第 %d/%d 关"
