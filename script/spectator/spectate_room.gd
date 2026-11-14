@@ -38,6 +38,8 @@ var _loaded_level: int = -1
 var _editor_target_id: int = 0
 ## 纯观战者已经代拍过的关卡；同一关只截一次。
 var _captured_levels: Dictionary[int, bool] = {}
+## 观战相机平滑：观战者看的是幽灵，硬跟随会很生硬。
+const CAMERA_SMOOTHING_SPEED: float = 8.0
 
 
 func _ready() -> void:
@@ -156,6 +158,8 @@ func _rebuild() -> void:
 	_camera = base.get_node_or_null(
 		"GameRoomSize/SubViewportContainer/SubViewport/Level/LevelCamera"
 	) as LevelCamera
+	if _camera != null:
+		_camera.follow_smoothing_speed = CAMERA_SMOOTHING_SPEED
 
 	add_child(base)
 	move_child(base, 0)
@@ -251,7 +255,12 @@ func _process(_delta: float) -> void:
 		ani.z_index = 10 if is_target else 9
 	var ghost: AnimatedSprite2D = _ghosts.get_ghost(target.id)
 	if ghost != null and _camera.player != ghost:
+		var rebinding: bool = _camera.player != null
 		_camera.player = ghost
+		# 换观察目标：把「上次位置」也切到新目标，避免被当成瞬移而硬跳过去，
+		# 交给平滑跟随从当前位置缓过去；首次绑定仍直接对位。
+		if rebinding:
+			_camera.last_player_position = ghost.position
 		_camera.reset_physics_interpolation()
 
 

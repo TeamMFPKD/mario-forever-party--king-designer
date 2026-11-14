@@ -5,6 +5,9 @@ class_name LevelCamera
 signal limit_changed(top: int, left: int, right: int, bottom: int)
 
 @export var max_speed: float = 960.0
+## 跟随玩家的平滑速度（每秒指数逼近）；0 = 原来的硬跟随。
+## 只给观战相机打开，正常游玩 / 编辑保持原样。
+@export var follow_smoothing_speed: float = 0.0
 
 var speed: float = 0.0
 var direction: Vector2 = Vector2.ZERO
@@ -26,10 +29,15 @@ func _physics_process(delta: float) -> void:
 			reset_physics_interpolation()
 			return
 		if last_player_position.distance_to(player.position) > TELEPORT_THRESHOLD:
+			# 关卡内瞬移 / 换观察目标：直接对齐，不要拖着相机飞过去。
 			position = player.position
 			reset_physics_interpolation()
+		elif follow_smoothing_speed > 0.0:
+			var weight: float = 1.0 - exp(-follow_smoothing_speed * delta)
+			position = position.lerp(player.position, weight)
+		else:
+			position = player.position
 		last_player_position = player.position
-		position = player.position
 		return
 
 	# 编辑模式下镜头由 CAMERA 组驱动：WASD（键盘）/ 右摇杆（手柄）；
