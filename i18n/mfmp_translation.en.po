@@ -420,8 +420,8 @@ msgstr "Hide"
 msgid "选择导出模式"
 msgstr "Choose Export Mode"
 
-msgid "导出所有关卡（含收藏）+排除关卡+百人团存档数据"
-msgstr "All Levels (Liked) + Excluded + Raid Saves"
+msgid "导出所有关卡（含收藏）+排除关卡+随心挑战存档数据"
+msgstr "All Levels (Liked) + Excluded + Challenge Saves"
 
 msgid "导出所有关卡（含收藏）+排除关卡"
 msgstr "All Levels (Liked) + Excluded"
