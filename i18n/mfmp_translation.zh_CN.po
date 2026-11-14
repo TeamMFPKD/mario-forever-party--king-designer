@@ -81,9 +81,6 @@ msgstr "强制继续"
 msgid "结果"
 msgstr "结果"
 
-msgid "返回标题画面"
-msgstr "返回标题画面"
-
 msgid "名称"
 msgstr "名称"
 
@@ -420,6 +417,12 @@ msgstr "隐藏"
 msgid "选择导出模式"
 msgstr "选择导出模式"
 
+msgid "导出所有关卡（含收藏）+排除关卡+百人团存档数据"
+msgstr "导出所有关卡（含收藏）+排除关卡+百人团存档数据"
+
+msgid "导出所有关卡（含收藏）+排除关卡"
+msgstr "导出所有关卡（含收藏）+排除关卡"
+
 msgid "导出所有关卡（含收藏）"
 msgstr "导出所有关卡（含收藏）"
 
@@ -548,3 +551,255 @@ msgstr "快捷消息"
 
 msgid "UI 音量"
 msgstr "UI 音量"
+
+msgid "与主机断开，正在重连…"
+msgstr "与主机断开，正在重连…"
+
+msgid "个人通过率"
+msgstr "个人通过率"
+
+msgid "主动退出"
+msgstr "主动退出"
+
+msgid "保存并中断"
+msgstr "保存并中断"
+
+msgid "关卡传输超时"
+msgstr "关卡传输超时"
+
+msgid "关卡分块不完整"
+msgstr "关卡分块不完整"
+
+msgid "关卡分块数量异常"
+msgstr "关卡分块数量异常"
+
+msgid "关卡分块缺失"
+msgstr "关卡分块缺失"
+
+msgid "关卡数据校验失败"
+msgstr "关卡数据校验失败"
+
+msgid "关卡数据超出声明大小"
+msgstr "关卡数据超出声明大小"
+
+msgid "关卡数据长度不一致"
+msgstr "关卡数据长度不一致"
+
+msgid "关卡文件写入失败"
+msgstr "关卡文件写入失败"
+
+msgid "关卡文件大小异常"
+msgstr "关卡文件大小异常"
+
+msgid "关卡文件已缺失，无法查看"
+msgstr "关卡文件已缺失，无法查看"
+
+msgid "关卡文件路径不合法"
+msgstr "关卡文件路径不合法"
+
+msgid "关卡跳过数"
+msgstr "关卡跳过数"
+
+msgid "关卡通过数"
+msgstr "关卡通过数"
+
+msgid "写入失败"
+msgstr "写入失败"
+
+msgid "分块不完整"
+msgstr "分块不完整"
+
+msgid "分块数量异常"
+msgstr "分块数量异常"
+
+msgid "分块缺失"
+msgstr "分块缺失"
+
+msgid "初始命数：%d"
+msgstr "初始命数：%d"
+
+msgid "删除存档"
+msgstr "删除存档"
+
+msgid "删除当前存档？"
+msgstr "删除当前存档？"
+
+msgid "制作完毕！（%d/%d）"
+msgstr "制作完毕！（%d/%d）"
+
+msgid "可玩关卡不足（至少需要 %d 关）"
+msgstr "可玩关卡不足（至少需要 %d 关）"
+
+msgid "否"
+msgstr "否"
+
+msgid "困难"
+msgstr "困难"
+
+msgid "存档%d"
+msgstr "存档%d"
+
+msgid "存档位已满（%d/%d），请先继续其中一个团并结算或放弃"
+msgstr "存档位已满（%d/%d），请先继续其中一个团并结算或放弃"
+
+msgid "定量团"
+msgstr "定量团"
+
+msgid "将本关从抽取数据中排除"
+msgstr "将本关从抽取数据中排除"
+
+msgid "已通过"
+msgstr "已通过"
+
+msgid "已通过 %d 关"
+msgstr "已通过 %d 关"
+
+msgid "开始挑战"
+msgstr "开始挑战"
+
+msgid "恢复"
+msgstr "恢复"
+
+msgid "意外断开连接"
+msgstr "意外断开连接"
+
+msgid "房主关卡数据异常，已返回大厅。"
+msgstr "房主关卡数据异常，已返回大厅。"
+
+msgid "房主关卡文件缺失，已返回大厅。"
+msgstr "房主关卡文件缺失，已返回大厅。"
+
+msgid "房主关闭房间"
+msgstr "房主关闭房间"
+
+msgid "所有关卡"
+msgstr "所有关卡"
+
+msgid "打几关：%d"
+msgstr "打几关：%d"
+
+msgid "打几关：无尽"
+msgstr "打几关：无尽"
+
+msgid "排除"
+msgstr "排除"
+
+msgid "排除的关卡"
+msgstr "排除的关卡"
+
+msgid "撤销 (Ctrl+Z)"
+msgstr "撤销 (Ctrl+Z)"
+
+msgid "数据缺失"
+msgstr "数据缺失"
+
+msgid "新存档"
+msgstr "新存档"
+
+msgid "新存档设置"
+msgstr "新存档设置"
+
+msgid "无尽团"
+msgstr "无尽团"
+
+msgid "无法加入房间"
+msgstr "无法加入房间"
+
+msgid "是"
+msgstr "是"
+
+msgid "普通"
+msgstr "普通"
+
+msgid "更改模式"
+msgstr "更改模式"
+
+msgid "本地关卡文件缺失"
+msgstr "本地关卡文件缺失"
+
+msgid "校验失败"
+msgstr "校验失败"
+
+msgid "格式错误"
+msgstr "格式错误"
+
+msgid "死亡数"
+msgstr "死亡数"
+
+msgid "没有可用的关卡，已返回大厅。"
+msgstr "没有可用的关卡，已返回大厅。"
+
+msgid "没有抽到可玩的关卡"
+msgstr "没有抽到可玩的关卡"
+
+msgid "没有排除的关卡。"
+msgstr "没有排除的关卡。"
+
+msgid "移动端触控"
+msgstr "移动端触控"
+
+msgid "空"
+msgstr "空"
+
+msgid "第 %d/%d 关"
+msgstr "第 %d/%d 关"
+
+msgid "简单"
+msgstr "简单"
+
+msgid "继续"
+msgstr "继续"
+
+msgid "继续挑战"
+msgstr "继续挑战"
+
+msgid "解析错误"
+msgstr "解析错误"
+
+msgid "超难"
+msgstr "超难"
+
+msgid "路径不合法"
+msgstr "路径不合法"
+
+msgid "跳过"
+msgstr "跳过"
+
+msgid "跳过本关"
+msgstr "跳过本关"
+
+msgid "返回大厅"
+msgstr "返回大厅"
+
+msgid "返回标题"
+msgstr "返回标题"
+
+msgid "返回随心挑战"
+msgstr "返回随心挑战"
+
+msgid "这个存档位无法继续"
+msgstr "这个存档位无法继续"
+
+msgid "进度异常"
+msgstr "进度异常"
+
+msgid "重做 (Ctrl+Y)"
+msgstr "重做 (Ctrl+Y)"
+
+msgid "重连失败，已返回标题。"
+msgstr "重连失败，已返回标题。"
+
+msgid "随心挑战"
+msgstr "随心挑战"
+
+msgid "随心挑战数据"
+msgstr "随心挑战数据"
+
+msgid "随机"
+msgstr "随机"
+
+msgid "难度"
+msgstr "难度"
+
+msgid "（未知关卡）"
+msgstr "（未知关卡）"

@@ -60,7 +60,7 @@ func _refresh() -> void:
 			ready_count += 1
 	disabled = local_player.edit_finished
 	_update_burst_state()
-	text = "制作完毕！（%d/%d）" % [ready_count, total_count]
+	text = tr("制作完毕！（%d/%d）") % [ready_count, total_count]
 
 
 ## 底色三态：已完成 → 灰色；悬停 → 提亮 + 微放大；否则默认金黄

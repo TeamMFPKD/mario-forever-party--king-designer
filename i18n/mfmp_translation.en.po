@@ -81,9 +81,6 @@ msgstr "Force Continue"
 msgid "结果"
 msgstr "Results"
 
-msgid "返回标题画面"
-msgstr "Back to title"
-
 msgid "名称"
 msgstr "Name"
 
@@ -122,6 +119,9 @@ msgstr "Show Touch"
 
 msgid "游玩记录"
 msgstr "History"
+
+msgid "随心挑战"
+msgstr "Challenge"
 
 msgid "设置界面"
 msgstr "Options"
@@ -420,6 +420,12 @@ msgstr "Hide"
 msgid "选择导出模式"
 msgstr "Choose Export Mode"
 
+msgid "导出所有关卡（含收藏）+排除关卡+百人团存档数据"
+msgstr "All Levels (Liked) + Excluded + Raid Saves"
+
+msgid "导出所有关卡（含收藏）+排除关卡"
+msgstr "All Levels (Liked) + Excluded"
+
 msgid "导出所有关卡（含收藏）"
 msgstr "Export All Levels (with Liked)"
 
@@ -501,6 +507,33 @@ msgstr "Client version mismatch. Please update before joining."
 msgid "暂停"
 msgstr "Pause"
 
+msgid "继续"
+msgstr "Continue"
+
+msgid "跳过本关"
+msgstr "Skip This Level"
+
+msgid "将本关从抽取数据中排除"
+msgstr "Exclude This Level"
+
+msgid "保存并中断"
+msgstr "Save & Quit"
+
+msgid "简单"
+msgstr "Easy"
+
+msgid "普通"
+msgstr "Normal"
+
+msgid "困难"
+msgstr "Expert"
+
+msgid "超难"
+msgstr "Super Expert"
+
+msgid "随机"
+msgstr "Random"
+
 msgid "光标 / 镜头按键"
 msgstr "Cursor / Camera"
 
@@ -548,3 +581,225 @@ msgstr "Quick Message"
 
 msgid "UI 音量"
 msgstr "UI Volume"
+
+msgid "返回标题"
+msgstr "Back to Title"
+
+msgid "难度"
+msgstr "Difficulty"
+
+msgid "已通过"
+msgstr "Cleared"
+
+msgid "排除"
+msgstr "Excluded"
+
+msgid "排除的关卡"
+msgstr "Excluded Levels"
+
+msgid "更改模式"
+msgstr "Change Mode"
+
+msgid "死亡数"
+msgstr "Deaths"
+
+msgid "继续挑战"
+msgstr "Continue Challenge"
+
+msgid "跳过"
+msgstr "Skipped"
+
+msgid "个人通过率"
+msgstr "Your Clear Rate"
+
+msgid "关卡跳过数"
+msgstr "Level Skips"
+
+msgid "关卡通过数"
+msgstr "Level Clears"
+
+msgid "删除存档"
+msgstr "Delete Save"
+
+msgid "删除当前存档？"
+msgstr "Delete this save?"
+
+msgid "定量团"
+msgstr "Fixed Challenge"
+
+msgid "无尽团"
+msgstr "Endless Challenge"
+
+msgid "开始挑战"
+msgstr "Start Challenge"
+
+msgid "恢复"
+msgstr "Restore"
+
+msgid "所有关卡"
+msgstr "All Levels"
+
+msgid "新存档设置"
+msgstr "New Run Settings"
+
+msgid "没有排除的关卡。"
+msgstr "No excluded levels."
+
+msgid "返回随心挑战"
+msgstr "Back to Challenge"
+
+msgid "随心挑战数据"
+msgstr "Challenge Data"
+
+msgid "新存档"
+msgstr "New Save"
+
+msgid "进度异常"
+msgstr "Progress Error"
+
+msgid "空"
+msgstr "Empty"
+
+msgid "这个存档位无法继续"
+msgstr "This save slot cannot be resumed."
+
+msgid "没有抽到可玩的关卡"
+msgstr "No playable levels were drawn."
+
+msgid "存档位已满（%d/%d），请先继续其中一个团并结算或放弃"
+msgstr "All save slots are full (%d/%d). Finish or abandon an existing run first."
+
+msgid "可玩关卡不足（至少需要 %d 关）"
+msgstr "Not enough playable levels (at least %d required)."
+
+msgid "存档%d"
+msgstr "Save %d"
+
+msgid "初始命数：%d"
+msgstr "Starting Lives: %d"
+
+msgid "打几关：%d"
+msgstr "Levels: %d"
+
+msgid "打几关：无尽"
+msgstr "Levels: Endless"
+
+msgid "第 %d/%d 关"
+msgstr "Level %d/%d"
+
+msgid "已通过 %d 关"
+msgstr "%d Levels Cleared"
+
+msgid "（未知关卡）"
+msgstr "(Unknown Level)"
+
+msgid "关卡文件已缺失，无法查看"
+msgstr "Level file is missing; cannot view."
+
+msgid "制作完毕！（%d/%d）"
+msgstr "Ready! (%d/%d)"
+
+msgid "是"
+msgstr "Yes"
+
+msgid "否"
+msgstr "No"
+
+msgid "移动端触控"
+msgstr "Touch Controls"
+
+msgid "撤销 (Ctrl+Z)"
+msgstr "Undo (Ctrl+Z)"
+
+msgid "重做 (Ctrl+Y)"
+msgstr "Redo (Ctrl+Y)"
+
+msgid "数据缺失"
+msgstr "No Data"
+
+msgid "格式错误"
+msgstr "Format Error"
+
+msgid "解析错误"
+msgstr "Parse Error"
+
+msgid "无法加入房间"
+msgstr "Cannot Join Room"
+
+msgid "返回大厅"
+msgstr "Back to Lobby"
+
+msgid "与主机断开，正在重连…"
+msgstr "Reconnecting to host…"
+
+msgid "重连失败，已返回标题。"
+msgstr "Reconnection failed. Returning to title."
+
+msgid "没有可用的关卡，已返回大厅。"
+msgstr "No playable levels. Returned to the lobby."
+
+msgid "房主关卡数据异常，已返回大厅。"
+msgstr "Host level data is invalid. Returned to the lobby."
+
+msgid "房主关卡文件缺失，已返回大厅。"
+msgstr "Host level file is missing. Returned to the lobby."
+
+msgid "主动退出"
+msgstr "Left voluntarily"
+
+msgid "房主关闭房间"
+msgstr "Host closed the room"
+
+msgid "意外断开连接"
+msgstr "Unexpected disconnection"
+
+msgid "关卡传输超时"
+msgstr "Level transfer timed out"
+
+msgid "关卡分块不完整"
+msgstr "Incomplete level chunks"
+
+msgid "关卡分块数量异常"
+msgstr "Invalid level chunk count"
+
+msgid "关卡分块缺失"
+msgstr "Missing level chunks"
+
+msgid "关卡数据校验失败"
+msgstr "Level data validation failed"
+
+msgid "关卡数据超出声明大小"
+msgstr "Level data exceeds declared size"
+
+msgid "关卡数据长度不一致"
+msgstr "Level data length mismatch"
+
+msgid "关卡文件写入失败"
+msgstr "Failed to write level file"
+
+msgid "关卡文件大小异常"
+msgstr "Invalid level file size"
+
+msgid "关卡文件路径不合法"
+msgstr "Invalid level file path"
+
+msgid "本地关卡文件缺失"
+msgstr "Local level file is missing"
+
+msgid "写入失败"
+msgstr "Write failed"
+
+msgid "分块不完整"
+msgstr "Incomplete chunks"
+
+msgid "分块数量异常"
+msgstr "Invalid chunk count"
+
+msgid "分块缺失"
+msgstr "Missing chunks"
+
+msgid "校验失败"
+msgstr "Validation failed"
+
+msgid "路径不合法"
+msgstr "Invalid path"

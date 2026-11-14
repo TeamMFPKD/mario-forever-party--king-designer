@@ -60,6 +60,8 @@ const NUMBER_FONT_SIZE: int = 26
 ## 编号的黑色描边宽度（字身是挖空的，只留这圈黑边）。
 const NUMBER_OUTLINE_SIZE: int = 4
 const ENDLESS_PREVIEW_COUNT: int = 10
+## 命数显示上限：与游玩左侧信息面板一致，触顶显示「× MAX」。
+const LIVES_CAP: int = 100
 ## 难度背景：object/adventure/backgrounds.tscn 里的 5 张 1920×1080 渐变，铺满整屏。
 const BACKGROUND_NODE_NAMES: Array[String] = ["Easy", "Normal", "Expert", "SuperExpert", "Random"]
 const BACKGROUND_DESIGN_SIZE: Vector2 = Vector2(1920, 1080)
@@ -78,7 +80,14 @@ const BACKGROUND_DESIGN_SIZE: Vector2 = Vector2(1920, 1080)
 @export var scenery: Control
 @export var back_button: Button
 @export var trash_button: Button
+## 底栏中间的「删除存档」（红字）：只在选中一个有团的存档位时出现。
+@export var delete_button: Button
 @export var start_button: Button
+## 主面板左上角的存档摘要：选中「有团的存档位」时才显示。
+@export var save_info: PanelContainer
+@export var save_lives_label: Label
+@export var save_tier_label: Label
+@export var save_progress_label: Label
 
 ## 关卡数字的减法混合材质：所有关卡共享一份，无逐项参数。
 static var _cutout_material_instance: CanvasItemMaterial
@@ -135,7 +144,6 @@ func _ready() -> void:
 
 	_apply_button_states()
 	_update_theme()
-	Adventure.play_bgm(_tier)
 	_refresh_save_slots()
 	_load_pool.call_deferred()
 
@@ -221,7 +229,6 @@ func _select_tier(tier: int) -> void:
 	_apply_button_states()
 	_update_theme()
 	_rebuild_preview()
-	Adventure.play_bgm(tier)
 
 
 func _select_mode(mode: String) -> void:
@@ -238,12 +245,12 @@ func _on_length_changed(value: float) -> void:
 
 func _update_lives() -> void:
 	var lives: int = _run_length * 2 if _mode == "finite" else 30
-	lives_label.text = "初始命数：%d" % lives
-	length_label.text = "打几关：%d" % _run_length if _mode == "finite" else "打几关：无尽"
+	lives_label.text = tr("初始命数：%d") % lives
+	length_label.text = (tr("打几关：%d") % _run_length) if _mode == "finite" else tr("打几关：无尽")
 
 
-## 换档：背景主题色 + 装饰剪影配色。
-## 选中已有存档时，主题色跟着该团的难度档走（而不是侧边栏里选的那个）。
+## 换档：背景主题色 + 装饰剪影配色 + BGM。
+## 选中已有存档时，主题与 BGM 都跟着该团的难度档走（而不是侧边栏里选的那个）。
 ## 标题/状态文字落在橙黄横幅上，颜色固定（不再跟难度前景色，深色档的白字在橙底上会糊）。
 func _update_theme() -> void:
 	var bg: Color = NEUTRAL_COLOR
@@ -255,6 +262,8 @@ func _update_theme() -> void:
 	# ColorRect 只做兜底底色：真正的背景是铺满整屏的难度渐变（object/adventure/backgrounds.tscn）。
 	background.color = bg
 	_show_background(theme_tier)
+	# BGM 与背景同源：切存档位时档位跟着变，曲目必须一起换（play_tier 对同档幂等，重复调用不重播）。
+	Adventure.play_bgm(theme_tier)
 	_ellipse_border = bg.darkened(0.25)
 	var dark_theme: bool = tint.get_luminance() > 0.6
 	if scenery != null:
@@ -313,6 +322,33 @@ func _rebuild_preview() -> void:
 	if not run.is_empty():
 		progress = int(run.get("index", 0)) + 1
 	_place_progress_mario(clampi(progress, 1, maxi(count, 1)))
+	_refresh_save_info()
+
+
+## 主面板左上角的存档摘要（选中「有团的存档位」时才有）：
+## 第一行 mario_small 的 walk 第 2 帧 + × 命数；第二行 难度 + 进度。
+## 进度：定量团「当前关/总关数」，无尽团没有总数，显示「已通过关数（无尽）」。
+func _refresh_save_info() -> void:
+	if save_info == null:
+		return
+	var run: Dictionary = _selected_run()
+	save_info.visible = not run.is_empty()
+	if delete_button != null:
+		delete_button.visible = not run.is_empty()
+	if run.is_empty():
+		return
+	var lives: int = int(run.get("lives_left", 0))
+	save_lives_label.text = "× MAX" if lives >= LIVES_CAP else "× %d" % lives
+	var tier: int = int(run.get("tier", 0))
+	save_tier_label.text = (
+		TIER_NAMES[tier - 1] if tier >= 1 and tier <= TIER_NAMES.size() else "随机"
+	)
+	var total: int = int(run.get("total_levels", -1))
+	if total > 0:
+		save_progress_label.text = "%d/%d" % [int(run.get("index", 0)) + 1, total]
+	else:
+		# 无尽团没有总关数，只报进度数字（不带后缀）。
+		save_progress_label.text = "%d" % int(run.get("cleared_count", 0))
 
 
 ## 选中的存档位对应的团数据；新存档 / 无选中返回空字典。
@@ -395,8 +431,14 @@ func _cutout_material() -> CanvasItemMaterial:
 # 选择态门控（§8.3.1）
 # ---------------------------------------------------------------------------
 
+## 「排除的关卡」页的「删除存档」要知道舞台上高亮的是哪个存档位（0 = 没选 / 新存档）。
+func _sync_stage_slot() -> void:
+	Adventure.stage_slot = _selection if _selection >= 1 else 0
+
+
 func _on_selection_changed(selection: int) -> void:
 	_selection = selection
+	_sync_stage_slot()
 	_apply_selection_gate()
 	# 选中已有存档：主题色切到该团难度档，关卡示意图换成该团路线、马里奥落到当前进度。
 	_update_theme()
@@ -519,6 +561,7 @@ func _refresh_save_slots() -> void:
 	_run_slots = Adventure.get_run_slots()
 	save_slots.call("setup", _run_slots, Adventure.store.first_free_slot())
 	_selection = int(save_slots.call("get_selection"))
+	_sync_stage_slot()
 	_apply_selection_gate()
 	# 存档列表变化可能让选中失效，主题色与路线都要按当前选中重算。
 	_update_theme()
@@ -579,8 +622,7 @@ func _refresh_pool_ui() -> void:
 	var counts: Array = _tier_info.get("counts", [0, 0, 0, 0])
 	for index: int in range(4):
 		var count: int = int(counts[index]) if index < counts.size() else 0
-		_tier_buttons[index].tooltip_text = "本档 %d 关" % count
-		_tier_buttons[index].text = "%s（%d）" % [TIER_NAMES[index], count]
+		_tier_buttons[index].text = "%s（%d）" % [tr(TIER_NAMES[index]), count]
 	if not selectable and _tier > 0:
 		_tier = 0
 	_apply_button_states()
@@ -619,6 +661,19 @@ func _on_start() -> void:
 
 func _on_trash_pressed() -> void:
 	GlobalTransition.change_scene_to_file(TRASH_SCENE)
+
+
+## 底栏的「删除存档」：先弹全局面板做两按钮确认（默认答案是「否」），点「是」才真删。
+func _on_delete_pressed() -> void:
+	var slot: int = _selection
+	if slot < 1:
+		return
+	Notice.show_confirm("删除当前存档？", "删除存档", "否", "是")
+	var accepted: bool = await Notice.answered
+	if not accepted:
+		return
+	Adventure.delete_run_slot(slot)
+	_refresh_save_slots()
 
 
 func _on_back() -> void:

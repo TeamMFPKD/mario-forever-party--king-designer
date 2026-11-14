@@ -48,6 +48,9 @@ var last_error: String = ""
 
 var current_key: String = ""
 var resume_available: bool = false
+## 舞台当前高亮的存档位（0 = 未选中 / 选的是「新存档」）。
+## 「排除的关卡」页的「删除存档」按它决定删哪一个，省得两个场景之间传参。
+var stage_slot: int = 0
 var _tier_info: Dictionary = {}
 
 var _transition_layer: CanvasLayer
@@ -372,7 +375,7 @@ func start_run(settings: Dictionary) -> bool:
 	last_error = ""
 	var slot: int = _pick_slot_for_new_run()
 	if slot <= 0:
-		last_error = "存档位已满（%d/%d），请先继续其中一个团并结算或放弃" % [MAX_RUN_SLOTS, MAX_RUN_SLOTS]
+		last_error = tr("存档位已满（%d/%d），请先继续其中一个团并结算或放弃") % [MAX_RUN_SLOTS, MAX_RUN_SLOTS]
 		return false
 	var source: String = str(settings.get("pool_source", "all"))
 	var mode: String = str(settings.get("mode", "finite"))
@@ -389,7 +392,7 @@ func start_run(settings: Dictionary) -> bool:
 	else:
 		load_pool(source)
 	if playable_count() < MIN_POOL:
-		last_error = "可玩关卡不足（至少需要 %d 关）" % MIN_POOL
+		last_error = tr("可玩关卡不足（至少需要 %d 关）") % MIN_POOL
 		return false
 
 	var tier: int = requested_tier
@@ -566,6 +569,25 @@ func interrupt_run() -> void:
 	current_run = {}
 	current_key = ""
 	_check_resume()
+
+
+## 删除某个存档位（「排除的关卡」页的「删除存档」用）。
+## 如果被删的正是内存里正在进行的团，一并忘掉它，免得回到舞台还能续。
+## 返回 true = 确实删掉了一个占用中的存档位。
+func delete_run_slot(slot: int) -> bool:
+	if slot <= 0:
+		return false
+	var occupied: bool = store.is_run_occupied(slot)
+	if is_running() and int(current_run.get("slot", 0)) == slot:
+		current_run = {}
+		current_key = ""
+	store.clear_run(slot)
+	_check_resume()
+	if stage_slot == slot:
+		stage_slot = 0
+	run_changed.emit()
+	Log.i("Adventure", ["删除存档位 ", slot, "（", "已占用" if occupied else "本就为空", "）"])
+	return occupied
 
 
 # ---------------------------------------------------------------------------

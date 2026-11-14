@@ -8,7 +8,7 @@ extends PanelContainer
 ## 第一个可开新团的格子显示「新存档」；其余空格显示「空」，坏档显示「进度异常」。
 ## 例：存档1 / 存档2 / 新存档 / 空 / 空
 ##
-## 卡片只留一行标题，进度 / 档位 / 命数等细节放进 tooltip，界面不再堆小字说明。
+## 卡片只留一行标题，不再挂 tooltip（选中后主面板左上角的存档摘要会显示命数 / 难度 / 进度）。
 ## 选择 ≠ 开始：点格子只改选中态并发出 selection_changed，由舞台决定是否开团/续团。
 
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
@@ -17,7 +17,7 @@ extends PanelContainer
 signal selection_changed(selection: int)
 
 const SLOT_COUNT: int = 5
-const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
+
 ## 与舞台背景主题色同一套色值：存档卡按团的难度档上色。
 const TIER_COLORS: Array[Color] = [
 	Color("#CDEBFF"),
@@ -98,9 +98,8 @@ func setup(slots: Array[Dictionary], new_run_slot: int) -> void:
 		_slot_tier[index] = clampi(int(data.get("tier", 0)), 0, TIER_COLORS.size()) if resumable else -1
 		_slot_mode[index] = str(data.get("mode", "finite")) if resumable else ""
 		button.disabled = not enabled
-		button.tooltip_text = _tooltip_for(resumable, is_new, bool(data.get("active", false)), data)
 		if resumable:
-			_set_card_title(button, "存档%d" % slot)
+			_set_card_title(button, tr("存档%d") % slot)
 		elif is_new:
 			_set_card_title(button, "新存档")
 		else:
@@ -120,23 +119,6 @@ func _set_card_title(button: Button, content: String) -> void:
 	var title: Label = button.get_node_or_null("Content/Title") as Label
 	if title != null:
 		title.text = content
-
-
-func _tooltip_for(resumable: bool, is_new: bool, has_data: bool, data: Dictionary) -> String:
-	if resumable:
-		var parts: Array[String] = ["继续这个团", _tier_text(int(data.get("tier", 0)))]
-		var total: int = maxi(int(data.get("total_levels", 1)), 1)
-		if str(data.get("mode", "finite")) == "finite":
-			parts.append("定量 %d / %d 关" % [mini(int(data.get("index", 0)) + 1, total), total])
-		else:
-			parts.append("无尽 · 已通过 %d 关" % int(data.get("cleared_count", 0)))
-		parts.append("剩 %d 命" % int(data.get("lives_left", 0)))
-		return " · ".join(parts)
-	if is_new:
-		return "用侧边栏的设置开一个新团"
-	if has_data:
-		return "这个存档位进度异常，无法继续"
-	return "存档位为空"
 
 
 ## 再次点击已选中的格子不取消选中，避免【开始挑战】突然变灰。
@@ -322,9 +304,3 @@ func _tier_font_color(tier: int) -> Color:
 	if tier < 1 or tier > TIER_TEXT_COLORS.size():
 		return CARD_TEXT
 	return TIER_TEXT_COLORS[tier - 1]
-
-
-func _tier_text(tier: int) -> String:
-	if tier >= 1 and tier <= TIER_NAMES.size():
-		return TIER_NAMES[tier - 1]
-	return "随机"

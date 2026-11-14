@@ -307,9 +307,9 @@ func _update_row_visibility() -> void:
 
 func _update_progress() -> void:
 	if _total_level > 0:
-		_progress.text = "第 %d/%d 关" % [_start_level, _total_level]
+		_progress.text = tr("第 %d/%d 关") % [_start_level, _total_level]
 	else:
-		_progress.text = "已通过 %d 关" % _start_level
+		_progress.text = tr("已通过 %d 关") % _start_level
 
 
 func _make_level_node(level_index: int) -> Node2D:

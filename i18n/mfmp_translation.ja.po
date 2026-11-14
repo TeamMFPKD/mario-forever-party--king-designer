@@ -81,9 +81,6 @@ msgstr "強制続行"
 msgid "结果"
 msgstr "結果"
 
-msgid "返回标题画面"
-msgstr "タイトルに戻る"
-
 msgid "名称"
 msgstr "プレイヤー名"
 
@@ -122,6 +119,9 @@ msgstr "タッチ操作を表示"
 
 msgid "游玩记录"
 msgstr "プレイ履歴"
+
+msgid "随心挑战"
+msgstr "チャレンジ"
 
 msgid "设置界面"
 msgstr "設定画面"
@@ -420,6 +420,12 @@ msgstr "非表示"
 msgid "选择导出模式"
 msgstr "エクスポートモードを選択"
 
+msgid "导出所有关卡（含收藏）+排除关卡+百人团存档数据"
+msgstr "全ステージ（お気に入り含む）＋除外＋百人団セーブ"
+
+msgid "导出所有关卡（含收藏）+排除关卡"
+msgstr "全ステージ（お気に入り含む）＋除外"
+
 msgid "导出所有关卡（含收藏）"
 msgstr "全ステージをエクスポート（お気に入り含む）"
 
@@ -501,6 +507,33 @@ msgstr "クライアントのバージョンが一致しません。更新して
 msgid "暂停"
 msgstr "一時停止"
 
+msgid "继续"
+msgstr "つづける"
+
+msgid "跳过本关"
+msgstr "このコースをスキップ"
+
+msgid "将本关从抽取数据中排除"
+msgstr "このコースを抽選データから除外"
+
+msgid "保存并中断"
+msgstr "保存して中断"
+
+msgid "简单"
+msgstr "簡単"
+
+msgid "普通"
+msgstr "普通"
+
+msgid "困难"
+msgstr "難しい"
+
+msgid "超难"
+msgstr "超難しい"
+
+msgid "随机"
+msgstr "ランダム"
+
 msgid "光标 / 镜头按键"
 msgstr "カーソル / カメラ"
 
@@ -548,3 +581,225 @@ msgstr "クイックメッセージ"
 
 msgid "UI 音量"
 msgstr "UI音量"
+
+msgid "返回标题"
+msgstr "タイトルへ戻る"
+
+msgid "难度"
+msgstr "難易度"
+
+msgid "已通过"
+msgstr "クリア"
+
+msgid "排除"
+msgstr "除外"
+
+msgid "排除的关卡"
+msgstr "除外したコース"
+
+msgid "更改模式"
+msgstr "モードを変更"
+
+msgid "死亡数"
+msgstr "デス数"
+
+msgid "继续挑战"
+msgstr "チャレンジを続ける"
+
+msgid "跳过"
+msgstr "スキップ"
+
+msgid "个人通过率"
+msgstr "個人クリア率"
+
+msgid "关卡跳过数"
+msgstr "コーススキップ数"
+
+msgid "关卡通过数"
+msgstr "コースクリア数"
+
+msgid "删除存档"
+msgstr "セーブデータを削除"
+
+msgid "删除当前存档？"
+msgstr "このセーブデータを削除しますか？"
+
+msgid "定量团"
+msgstr "定量チャレンジ"
+
+msgid "无尽团"
+msgstr "エンドレスチャレンジ"
+
+msgid "开始挑战"
+msgstr "チャレンジ開始"
+
+msgid "恢复"
+msgstr "復元"
+
+msgid "所有关卡"
+msgstr "すべてのコース"
+
+msgid "新存档设置"
+msgstr "新しいチャレンジの設定"
+
+msgid "没有排除的关卡。"
+msgstr "除外したコースはありません。"
+
+msgid "返回随心挑战"
+msgstr "チャレンジに戻る"
+
+msgid "随心挑战数据"
+msgstr "チャレンジデータ"
+
+msgid "新存档"
+msgstr "新しいセーブ"
+
+msgid "进度异常"
+msgstr "進行データ異常"
+
+msgid "空"
+msgstr "空き"
+
+msgid "这个存档位无法继续"
+msgstr "このセーブ枠は続きから再開できません"
+
+msgid "没有抽到可玩的关卡"
+msgstr "プレイ可能なコースが抽選できませんでした"
+
+msgid "存档位已满（%d/%d），请先继续其中一个团并结算或放弃"
+msgstr "セーブ枠がいっぱいです（%d/%d）。先にいずれかのチャレンジを続けてクリアまたは放棄してください"
+
+msgid "可玩关卡不足（至少需要 %d 关）"
+msgstr "プレイ可能なコースが足りません（%d コース以上必要）"
+
+msgid "存档%d"
+msgstr "セーブ%d"
+
+msgid "初始命数：%d"
+msgstr "初期残機：%d"
+
+msgid "打几关：%d"
+msgstr "コース数：%d"
+
+msgid "打几关：无尽"
+msgstr "コース数：エンドレス"
+
+msgid "第 %d/%d 关"
+msgstr "%d/%d コース目"
+
+msgid "已通过 %d 关"
+msgstr "%d コースクリア"
+
+msgid "（未知关卡）"
+msgstr "（不明なコース）"
+
+msgid "关卡文件已缺失，无法查看"
+msgstr "コースファイルがないため表示できません"
+
+msgid "制作完毕！（%d/%d）"
+msgstr "作成完了！（%d/%d）"
+
+msgid "是"
+msgstr "はい"
+
+msgid "否"
+msgstr "いいえ"
+
+msgid "移动端触控"
+msgstr "タッチ操作"
+
+msgid "撤销 (Ctrl+Z)"
+msgstr "元に戻す (Ctrl+Z)"
+
+msgid "重做 (Ctrl+Y)"
+msgstr "やり直す (Ctrl+Y)"
+
+msgid "数据缺失"
+msgstr "データなし"
+
+msgid "格式错误"
+msgstr "形式エラー"
+
+msgid "解析错误"
+msgstr "解析エラー"
+
+msgid "无法加入房间"
+msgstr "ルームに参加できません"
+
+msgid "返回大厅"
+msgstr "ロビーに戻る"
+
+msgid "与主机断开，正在重连…"
+msgstr "ホストに再接続中…"
+
+msgid "重连失败，已返回标题。"
+msgstr "再接続に失敗しました。タイトルに戻ります。"
+
+msgid "没有可用的关卡，已返回大厅。"
+msgstr "プレイ可能なコースがありません。ロビーに戻りました。"
+
+msgid "房主关卡数据异常，已返回大厅。"
+msgstr "ホストのコースデータに異常があります。ロビーに戻りました。"
+
+msgid "房主关卡文件缺失，已返回大厅。"
+msgstr "ホストのコースファイルがありません。ロビーに戻りました。"
+
+msgid "主动退出"
+msgstr "自主退出"
+
+msgid "房主关闭房间"
+msgstr "ホストがルームを閉じました"
+
+msgid "意外断开连接"
+msgstr "予期しない切断"
+
+msgid "关卡传输超时"
+msgstr "コース転送がタイムアウト"
+
+msgid "关卡分块不完整"
+msgstr "コースの分割データが不完全"
+
+msgid "关卡分块数量异常"
+msgstr "コースの分割数が異常"
+
+msgid "关卡分块缺失"
+msgstr "コースの分割データが不足"
+
+msgid "关卡数据校验失败"
+msgstr "コースデータの検証に失敗"
+
+msgid "关卡数据超出声明大小"
+msgstr "コースデータが宣言サイズを超過"
+
+msgid "关卡数据长度不一致"
+msgstr "コースデータの長さが不一致"
+
+msgid "关卡文件写入失败"
+msgstr "コースファイルの書き込みに失敗"
+
+msgid "关卡文件大小异常"
+msgstr "コースファイルのサイズが異常"
+
+msgid "关卡文件路径不合法"
+msgstr "コースファイルのパスが不正"
+
+msgid "本地关卡文件缺失"
+msgstr "ローカルのコースファイルがありません"
+
+msgid "写入失败"
+msgstr "書き込みに失敗"
+
+msgid "分块不完整"
+msgstr "分割データが不完全"
+
+msgid "分块数量异常"
+msgstr "分割数が異常"
+
+msgid "分块缺失"
+msgstr "分割データが不足"
+
+msgid "校验失败"
+msgstr "検証に失敗"
+
+msgid "路径不合法"
+msgstr "パスが不正"
