@@ -24,7 +24,27 @@ func _ready() -> void:
 	# 延迟设置输入处理器，避免竞争条件
 	call_deferred("setup_input_handler")
 
+func _exit_tree() -> void:
+	_disconnect_input_handler()
+
+## 关卡重载时旧场景会被摘出场景树，但对象往往要到帧末才释放。
+## 输入信号连的是 autoload 的 InputHandler（游玩场景没有自己的 InputHandler），
+## 不主动断开的话，摘出期间仍会收到点击回调，此时 get_tree() 已经是 null。
+func _disconnect_input_handler() -> void:
+	if _input_handler == null or not is_instance_valid(_input_handler):
+		_input_handler = null
+		return
+	if _input_handler.input_clicked.is_connected(_on_input_clicked):
+		_input_handler.input_clicked.disconnect(_on_input_clicked)
+	if _input_handler.input_released.is_connected(_on_input_released):
+		_input_handler.input_released.disconnect(_on_input_released)
+	if _input_handler.input_dragged.is_connected(_on_input_dragged):
+		_input_handler.input_dragged.disconnect(_on_input_dragged)
+	_input_handler = null
+
 func setup_input_handler() -> void:
+	if not is_inside_tree():
+		return
 	# 检查是否已有输入处理器
 	var input_handler: InputHandler = null
 	
@@ -54,6 +74,8 @@ func setup_input_handler() -> void:
 			level_node.call_deferred("add_child", input_handler)
 			# 等待一帧让InputHandler完全初始化
 			await get_tree().process_frame
+			if not is_inside_tree():
+				return
 			Log.i("TileMapDraw: InputHandler created and added to Level node")
 		else:
 			Log.i("TileMapDraw: Error: Cannot find Level node to add InputHandler")
@@ -172,18 +194,33 @@ func _refresh_preview_cell(cell: Vector2i) -> void:
 		preview.set_cell(cell, source_id, atlas_coords, alternative)
 	preview.reset_physics_interpolation()
 
+## 与 _process 的预览、ObjectMapLayer 的点击处理保持同一套门控：
+## 只有编辑模式 + 节点仍在场景树中才允许改瓦片。
+## 游玩场景的 TileMapDraw 会连到 autoload InputHandler，重载关卡时可能收到
+## 摘出场景树之后的残留点击，此时 get_tree() 为 null，不能继续往下走。
+func _can_draw_tiles() -> bool:
+	if not is_inside_tree() or not drawing_enabled or tile_map == null:
+		return false
+	var game_mode_node: GameMode = GameModeSingleton
+	# EDIT 是普通编辑器，HISTORY_EDIT 是「从历史记录进入编辑」，两者都有编辑 UI；
+	# 其余（TEST / PLAY / HISTORY_PLAY / ADVENTURE）都是游玩场景，不允许改瓦片。
+	return game_mode_node.game_mode == GameMode.GameModeType.EDIT \
+		or game_mode_node.game_mode == GameMode.GameModeType.HISTORY_EDIT
+
 func _on_input_clicked(input_pos: Vector2) -> void:
-	if drawing_enabled and tile_map:
-		# 点击时开始绘图
-		is_drawing = true
-		place_tile_at_cursor(input_pos)
+	if not _can_draw_tiles():
+		return
+	# 点击时开始绘图
+	is_drawing = true
+	place_tile_at_cursor(input_pos)
 
 func _on_input_released(_input_pos: Vector2) -> void:
 	is_drawing = false
 
 func _on_input_dragged(input_pos: Vector2) -> void:
-	if drawing_enabled and is_drawing and tile_map:
-		place_tile_at_cursor(input_pos)
+	if not _can_draw_tiles() or not is_drawing:
+		return
+	place_tile_at_cursor(input_pos)
 
 # 设置绘图启用状态
 func set_drawing_enabled(enabled: bool) -> void:
@@ -204,7 +241,7 @@ func stop_drawing() -> void:
 	is_drawing = false
 
 func place_tile_at_cursor(cursor_pos: Vector2) -> void:
-	if not tile_map:
+	if not _can_draw_tiles():
 		return
 	
 	# 将世界坐标转换为本地坐标
@@ -323,6 +360,8 @@ func erase_tile_at_position(input_pos: Vector2) -> void:
 
 # 检查并擦除边界terrain（与check_and_draw_border_terrain对应的删除逻辑）
 func check_and_erase_border_terrain(cell_coords: Vector2i) -> void:
+	if not is_inside_tree():
+		return
 	# 获取Camera2D
 	var level_camera: Camera2D = get_tree().get_first_node_in_group("level_camera")
 	if not level_camera:
@@ -392,6 +431,8 @@ func check_and_erase_border_terrain(cell_coords: Vector2i) -> void:
 
 # 检查并绘制边界terrain
 func check_and_draw_border_terrain(cell_coords: Vector2i) -> void:
+	if not is_inside_tree():
+		return
 	# 获取Camera2D
 	var level_camera: Camera2D = get_tree().get_first_node_in_group("level_camera")
 	if not level_camera:
