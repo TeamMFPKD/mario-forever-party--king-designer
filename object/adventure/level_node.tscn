@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dc457tasg78dg"]
+
+[ext_resource type="Script" uid="uid://b64dgg6xhbdy" path="res://script/adventure/adventure_level_node.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b1dc100dq8m8s" path="res://sprite/ui/adventure/level_node.svg" id="2_ellipse"]
+
+[node name="LevelNode" type="Node2D" unique_id=849164721 node_paths=PackedStringArray("number_label")]
+script = ExtResource("1_script")
+number_label = NodePath("Number")
+
+[node name="Ellipse" type="Sprite2D" parent="." unique_id=2083554853]
+texture = ExtResource("2_ellipse")
+
+[node name="Number" type="Label" parent="." unique_id=1266628238]
+offset_left = -34.0
+offset_top = -29.0
+offset_right = 34.0
+offset_bottom = 29.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1

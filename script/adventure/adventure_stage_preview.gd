@@ -10,13 +10,16 @@ extends Control
 ## 子节点的**原点 = 椭圆中心**，连线和马里奥都按中心相对定位。
 
 const COLUMNS: int = 10
-## 与舞台里的 ELLIPSE_W / ELLIPSE_H 保持一致。
+## 与 object/adventure/level_node.tscn 里的椭圆尺寸保持一致。
 const CELL_W: float = 68.0
 const CELL_H: float = 58.0
 const GAP_X: float = 14.0
 const GAP_Y: float = 14.0
 ## 和过关过场里的椭圆串同款线宽。
 const LINE_WIDTH: float = 2.0
+## 连线外侧的黑色描边：每边 2px，先画粗黑线打底，再把彩色线盖在上面。
+const LINE_OUTLINE: float = 2.0
+const LINE_OUTLINE_COLOR: Color = Color(0, 0, 0, 1)
 ## level_node.svg 的椭圆 rx=32、描边 2px（外沿 33）；线端点再往里伸 2px，
 ## 让线真正压进椭圆边缘，而不是留一道可见的缝。
 const ELLIPSE_RX: float = 33.0
@@ -70,16 +73,15 @@ func _draw() -> void:
 		if index % COLUMNS == COLUMNS - 1:
 			# 行末在右（0、2…行）就从右侧绕，行末在左（1、3…行）就从左侧绕。
 			var side: float = 1.0 if (int(floorf(float(index) / float(COLUMNS))) % 2) == 0 else -1.0
-			draw_polyline(_wrap_points(from_cell, to_cell, side), line_color, LINE_WIDTH, true)
+			var points: PackedVector2Array = _wrap_points(from_cell, to_cell, side)
+			draw_polyline(points, LINE_OUTLINE_COLOR, LINE_WIDTH + LINE_OUTLINE * 2.0, true)
+			draw_polyline(points, line_color, LINE_WIDTH, true)
 			continue
 		var y: float = from_cell.position.y
-		draw_line(
-			Vector2(minf(from_cell.position.x, to_cell.position.x) + EDGE_X, y),
-			Vector2(maxf(from_cell.position.x, to_cell.position.x) - EDGE_X, y),
-			line_color,
-			LINE_WIDTH,
-			true
-		)
+		var start: Vector2 = Vector2(minf(from_cell.position.x, to_cell.position.x) + EDGE_X, y)
+		var end: Vector2 = Vector2(maxf(from_cell.position.x, to_cell.position.x) - EDGE_X, y)
+		draw_line(start, end, LINE_OUTLINE_COLOR, LINE_WIDTH + LINE_OUTLINE * 2.0, true)
+		draw_line(start, end, line_color, LINE_WIDTH, true)
 
 
 ## 行末 → 下一行行首：水平出线 → 向外凸的 C 形弯下折 → 水平回到下一行首格。
