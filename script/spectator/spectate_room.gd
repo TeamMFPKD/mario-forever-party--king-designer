@@ -36,6 +36,8 @@ var _camera: LevelCamera = null
 var _ghosts: MpAniSpriteManager = null
 var _loaded_level: int = -1
 var _editor_target_id: int = 0
+## 纯观战者已经代拍过的关卡；同一关只截一次。
+var _captured_levels: Dictionary[int, bool] = {}
 
 
 func _ready() -> void:
@@ -162,6 +164,51 @@ func _rebuild() -> void:
 		"GameRoomSize/SubViewportContainer/Node2D/GameBorderTextureRect"
 	) as TextureRect
 	_apply_target_color()
+	_capture_watched_level(base, _loaded_level)
+
+
+## 纯观战者代拍：切到哪一关就给该关的游玩玩家存一张结算回顾图；
+## 参与过本局（reach_end / 有自己的关卡）的玩家继续沿用 play 阶段自己的
+## 截图逻辑，进入观战房间后不再截别人的关卡。
+func _capture_watched_level(view: Node, level: int) -> void:
+	if not _is_pure_spectator():
+		return
+	if _captured_levels.has(level):
+		return
+	_captured_levels[level] = true
+	# 等关卡数据加载、画面渲染出来再截（与 play 阶段的截图节奏一致）。
+	await get_tree().create_timer(0.5).timeout
+	if not is_instance_valid(view) or _base != view:
+		return
+	var viewport: SubViewport = view.get_node_or_null(
+		"GameRoomSize/SubViewportContainer/SubViewport"
+	) as SubViewport
+	if viewport == null:
+		return
+	var image: Image = viewport.get_texture().get_image()
+	if image == null:
+		return
+	var texture: ImageTexture = ImageTexture.create_from_image(image)
+	if texture == null:
+		return
+	texture.set_size_override(Vector2i(160, 120))
+	var manager: Node = get_tree().get_first_node_in_group("random_capture_manager")
+	if manager == null:
+		return
+	for profile: PlayerProfile in MPManager.players:
+		if profile.is_spectator or profile.reach_end:
+			continue
+		if profile.current_level != level:
+			continue
+		manager.call("set_captures", profile.id, texture)
+
+
+## 只有「没参与本局、全程观战」的玩家才代拍；参与者 reach_end 后不截。
+func _is_pure_spectator() -> bool:
+	var me: PlayerProfile = MPManager.get_local_player()
+	if me == null:
+		return false
+	return me.is_spectator and not me.reach_end and me.level_file_name.is_empty()
 
 
 func _strip(base: Node) -> void:
