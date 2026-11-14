@@ -90,3 +90,5 @@ func _apply_texture(image: Image) -> void:
 	if parent is TextureRect and is_instance_valid(parent):
 		var texture_rect: TextureRect = parent
 		texture_rect.texture = ImageTexture.create_from_image(image)
+		# 封面是异步读盘后一次性贴上去的，不淡入就会在某一帧硬弹出来。
+		QuickFadeIn.play(texture_rect)

@@ -80,4 +80,6 @@ func load_and_display_screenshot(file_path: String) -> void:
 	var texture: ImageTexture = ImageTexture.create_from_image(image)
 	texture.set_size_override(texture_rect.size)
 	texture_rect.texture = texture
+	# 截图是读盘后一次性贴上去的，不淡入就会在某一帧硬弹出来。
+	QuickFadeIn.play(texture_rect)
 	print("[LikedCoursePreview] Screenshot loaded: ", file_path)

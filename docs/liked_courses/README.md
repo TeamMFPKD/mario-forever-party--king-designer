@@ -315,6 +315,7 @@ LikedCourses.add_many(收藏)          # 并集合并，不清空本机已有收
 | 文件 | 内容 |
 | --- | --- |
 | `script/history/liked_courses/liked_courses_store.gd` | autoload `LikedCourses`：索引读写、add/remove、路径解析、旧版迁移 |
+| `script/ui/quick_fade_in.gd` | `QuickFadeIn`：贴图异步到位时的快速淡入（见 11.1） |
 | `docs/liked_courses/README.md` | 本文档 |
 
 ### 7.2 修改
@@ -419,3 +420,28 @@ LikedCourses.add_many(收藏)          # 并集合并，不清空本机已有收
 - 路径校验：`a/b.png`、`../a.png` 均被拒绝。
 
 > 触屏/实机 UI（弹窗排版、文件对话框回传）未做自动化验证，需要手点一遍。
+
+### 11.1 封面快速淡入（2026-11-14）
+
+**问题**：封面 png 是异步读盘（工作线程解码 → 主线程 `_process` 应用纹理），拿到之后
+`TextureRect.texture = ...` 是一次性赋值，画面在某一帧里**硬弹**出来。收藏房间卡片一多时，
+几张封面会在不同帧先后跳出，很扎眼。
+
+**做法**：新增 `script/ui/quick_fade_in.gd`（`class_name QuickFadeIn`，`RefCounted` 静态工具），
+贴完纹理后调用 `QuickFadeIn.play(目标 TextureRect)`：
+
+| 项 | 取值 / 行为 |
+| --- | --- |
+| 时长 | `DEFAULT_DURATION = 0.16s`（`TRANS_QUAD` + `EASE_OUT`） |
+| 改动属性 | 只动 `modulate:a`，**不碰 `self_modulate`**（收藏卡片的悬停变色用的是它） |
+| 重复调用 | 掐掉上一轮再从 0 重播，避免两条 tween 同时写 alpha |
+| 目标释放 | 收尾回调先 `is_instance_valid`，列表重排/离开房间不会报错 |
+| `duration <= 0` | 直接置 1，等价于关掉淡入 |
+
+**接入点**（两条封面链路都接）：
+
+- `script/history/liked_courses/capture_texture_setter.gd` → 收藏房间卡片的封面
+- `script/history/liked_courses/liked_course_preview.gd` → 游玩/编辑器页左上角的关卡预览
+
+**验证**：`tools/quick_fade_in_probe.tscn`（逐帧采样，要求出现 ≥2 个 0<alpha<1 的中间帧且单调不减）
+与 `tools/cover_scripts_compile_probe.tscn`（六个脚本 + 两个场景的加载/实例化）均通过。
