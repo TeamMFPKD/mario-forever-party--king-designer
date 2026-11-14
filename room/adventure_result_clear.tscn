@@ -1,14 +1,22 @@
-[gd_scene format=3 load_steps=5]
+[gd_scene format=3 uid="uid://iogy5auuodd4"]
 
 [ext_resource type="PackedScene" path="res://object/ui/adventure_result_base.tscn" id="1_base"]
+[ext_resource type="Shader" path="res://shader/hsv_luma.gdshader" id="2_35fav"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
-[ext_resource type="Script" path="res://script/bgm/adventure_room_bgm.gd" id="3_bgm"]
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="3_0efdk"]
+[ext_resource type="Script" uid="uid://cw0ke4xig20pu" path="res://script/bgm/adventure_room_bgm.gd" id="3_bgm"]
 [ext_resource type="AudioStream" uid="uid://c6h31urnkaaum" path="res://sound/bgm/adventure/1-03. 100 Mario Challenge - Staffroll [Staff Roll] (Easy).mp3" id="4_staffroll"]
 
-[node name="AdventureResultClear" instance=ExtResource("1_base")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vvggj"]
+shader = ExtResource("2_35fav")
+shader_parameter/hue = -0.24499996413750003
+shader_parameter/saturation = -0.17999996105000005
+shader_parameter/value = 0.0
+
+[node name="AdventureResultClear" unique_id=1287122520 instance=ExtResource("1_base")]
 is_game_clear = true
 
-[node name="Background" type="ColorRect" parent="." index=0]
+[node name="Background" type="ColorRect" parent="." index="0" unique_id=936117883]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,7 +26,16 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.964706, 0.803922, 1)
 
-[node name="TitleRow" type="HBoxContainer" parent="TitleClip"]
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." index="1" unique_id=835126879]
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" index="0" unique_id=691596762]
+material = SubResource("ShaderMaterial_vvggj")
+texture = ExtResource("3_0efdk")
+
+[node name="TitleRow" type="HBoxContainer" parent="TitleClip" index="0" unique_id=516980353]
 visible = false
 layout_mode = 1
 anchors_preset = 5
@@ -28,11 +45,11 @@ offset_top = 84.0
 grow_horizontal = 2
 theme_override_constants/separation = 8
 
-[node name="L0" type="Control" parent="TitleClip/TitleRow"]
+[node name="L0" type="Control" parent="TitleClip/TitleRow" index="0" unique_id=815702467]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L0"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L0" index="0" unique_id=1046204473]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,11 +65,11 @@ text = "G"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L1" type="Control" parent="TitleClip/TitleRow"]
+[node name="L1" type="Control" parent="TitleClip/TitleRow" index="1" unique_id=1426264787]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L1"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L1" index="0" unique_id=542303103]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,11 +85,11 @@ text = "A"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L2" type="Control" parent="TitleClip/TitleRow"]
+[node name="L2" type="Control" parent="TitleClip/TitleRow" index="2" unique_id=218812634]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L2"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L2" index="0" unique_id=1927044881]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -88,11 +105,11 @@ text = "M"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L3" type="Control" parent="TitleClip/TitleRow"]
+[node name="L3" type="Control" parent="TitleClip/TitleRow" index="3" unique_id=214977807]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L3"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L3" index="0" unique_id=1327183047]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,16 +125,16 @@ text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Space" type="Control" parent="TitleClip/TitleRow"]
+[node name="Space" type="Control" parent="TitleClip/TitleRow" index="4" unique_id=1810114948]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="L4" type="Control" parent="TitleClip/TitleRow"]
+[node name="L4" type="Control" parent="TitleClip/TitleRow" index="5" unique_id=1626506184]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L4"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L4" index="0" unique_id=389967833]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -133,11 +150,11 @@ text = "C"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L5" type="Control" parent="TitleClip/TitleRow"]
+[node name="L5" type="Control" parent="TitleClip/TitleRow" index="6" unique_id=1261773383]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L5"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L5" index="0" unique_id=882825090]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -153,11 +170,11 @@ text = "L"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L6" type="Control" parent="TitleClip/TitleRow"]
+[node name="L6" type="Control" parent="TitleClip/TitleRow" index="7" unique_id=1897765330]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L6"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L6" index="0" unique_id=528651166]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -173,11 +190,11 @@ text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L7" type="Control" parent="TitleClip/TitleRow"]
+[node name="L7" type="Control" parent="TitleClip/TitleRow" index="8" unique_id=1136168709]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L7"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L7" index="0" unique_id=732279421]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -193,11 +210,11 @@ text = "A"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="L8" type="Control" parent="TitleClip/TitleRow"]
+[node name="L8" type="Control" parent="TitleClip/TitleRow" index="9" unique_id=1236994476]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Letter" type="Label" parent="TitleClip/TitleRow/L8"]
+[node name="Letter" type="Label" parent="TitleClip/TitleRow/L8" index="0" unique_id=2021216410]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,7 +230,7 @@ text = "R"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RoomBgm" type="AudioStreamPlayer" parent="."]
+[node name="RoomBgm" type="AudioStreamPlayer" parent="." index="4" unique_id=572531536]
 stream = ExtResource("4_staffroll")
 bus = &"Music"
 script = ExtResource("3_bgm")

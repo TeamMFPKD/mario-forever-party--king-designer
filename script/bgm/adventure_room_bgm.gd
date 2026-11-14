@@ -9,14 +9,6 @@ extends AudioStreamPlayer
 @export var silent_db: float = -80.0
 
 func _ready() -> void:
-	# mp3 / ogg 的导入参数默认是 loop=false，结算页可能停留很久，这里统一兜底循环。
-	var mp3: AudioStreamMP3 = stream as AudioStreamMP3
-	if mp3 != null:
-		mp3.loop = true
-	var ogg: AudioStreamOggVorbis = stream as AudioStreamOggVorbis
-	if ogg != null:
-		ogg.loop = true
-
 	Adventure.stop_bgm(fade_time)
 	Adventure.stop_pool_bgm()
 	volume_db = silent_db

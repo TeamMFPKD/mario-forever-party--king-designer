@@ -1,0 +1,173 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Shader" uid="uid://c83cmo2yymp6h" path="res://shader/color_filter_replace.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://boougl1n17n1k" path="res://sprite/bonus/beetroot.png" id="2_beetroot"]
+[ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="3_fire_flower"]
+[ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="4_lui"]
+[ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="5_mushroom"]
+
+[sub_resource type="AtlasTexture" id="Atlas_beetroot"]
+atlas = ExtResource("2_beetroot")
+region = Rect2(0, 0, 29, 35)
+
+[sub_resource type="AtlasTexture" id="Atlas_fire_flower"]
+atlas = ExtResource("3_fire_flower")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_lui"]
+atlas = ExtResource("4_lui")
+region = Rect2(0, 0, 33, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_mushroom"]
+atlas = ExtResource("5_mushroom")
+region = Rect2(0, 0, 31, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_white"]
+shader = ExtResource("1_shader")
+shader_parameter/filter_color = Color(0.16078432, 0.16078432, 0.16078432, 1)
+shader_parameter/target_color = Color(1, 1, 1, 1)
+shader_parameter/tolerance = 0.08
+shader_parameter/keep_alpha = true
+
+[node name="SectionTransition" type="Node2D"]
+
+[node name="Root" type="Node2D" parent="."]
+
+[node name="Content" type="Node2D" parent="Root"]
+
+[node name="Background" type="ColorRect" parent="Root/Content"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(1, 0.5019608, 0, 1)
+
+[node name="ZigzagLeft" type="Polygon2D" parent="Root/Content"]
+color = Color(1, 0.5019608, 0, 1)
+polygon = PackedVector2Array(0, 0, 0, 1080, -64, 1080, 0, 1016, -64, 952, 0, 888, -64, 824, 0, 760, -64, 696, 0, 632, -64, 568, 0, 504, -64, 440, 0, 376, -64, 312, 0, 248, -64, 184, 0, 120, -64, 56, 0, -8)
+
+[node name="ZigzagRight" type="Polygon2D" parent="Root/Content"]
+position = Vector2(1920, 0)
+color = Color(1, 0.5019608, 0, 1)
+polygon = PackedVector2Array(0, 0, 0, 1080, 64, 1080, 0, 1016, 64, 952, 0, 888, 64, 824, 0, 760, 64, 696, 0, 632, 64, 568, 0, 504, 64, 440, 0, 376, 64, 312, 0, 248, 64, 184, 0, 120, 64, 56, 0, -8)
+
+[node name="Sprites" type="Node2D" parent="Root/Content"]
+scale = Vector2(2, 2)
+
+[node name="Sprite_Beetroot" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(140, 508)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_FireFlower" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(100, 372)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Lui" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(224, 480)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Mushroom" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(316, 492)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Lui2" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(756, 500)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Mushroom2" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(656, 500)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_FireFlower2" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(808, 412)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Beetroot2" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(880, 376)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_Beetroot3" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(236, 40)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_Beetroot4" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(800, 64)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_FireFlower3" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(140, 88)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_FireFlower4" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(892, 68)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_Lui3" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(732, 96)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Lui4" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(300, 76)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Mushroom3" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(684, 48)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Mushroom4" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(172, 144)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Mushroom5" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(500, 444)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Mushroom6" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(448, 36)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_mushroom")
+
+[node name="Sprite_Lui5" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(64, 280)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Lui6" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(868, 224)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_lui")
+
+[node name="Sprite_Beetroot5" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(444, 476)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_Beetroot6" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(496, 80)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_beetroot")
+
+[node name="Sprite_FireFlower5" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(580, 472)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")
+
+[node name="Sprite_FireFlower6" type="Sprite2D" parent="Root/Content/Sprites"]
+position = Vector2(580, 64)
+material = SubResource("ShaderMaterial_white")
+texture = SubResource("Atlas_fire_flower")

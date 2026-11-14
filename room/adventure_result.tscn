@@ -1,0 +1,582 @@
+[gd_scene format=3 uid="uid://b3nqenvy543xd"]
+
+[ext_resource type="Script" uid="uid://toeshr8jjck6" path="res://script/adventure/adventure_result.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" uid="uid://b83oppyc4w8v0" path="res://sprite/psc.png" id="3_psc"]
+[ext_resource type="PackedScene" uid="uid://b0f1hnktpw5k8" path="res://ui/ui_label.tscn" id="4_label"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="5_button"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="6_back_snd"]
+
+[node name="AdventureResult" type="Control" unique_id=305531411 node_paths=PackedStringArray("title_clip", "data_block", "tier_value", "passed_value", "deaths_value", "excluded_value", "skipped_value")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+title_clip = NodePath("TitleClip")
+data_block = NodePath("DataBlock")
+tier_value = NodePath("DataBlock/Table/TierItem/TierValue")
+passed_value = NodePath("DataBlock/Table/PassedItem/PassedValue")
+deaths_value = NodePath("DataBlock/Table/DeathsItem/DeathsValue")
+excluded_value = NodePath("DataBlock/Table/ExcludedItem/ExcludedValue")
+skipped_value = NodePath("DataBlock/Table/SkippedItem/SkippedValue")
+
+[node name="ClearBackground" type="ColorRect" parent="." unique_id=1972017600]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.964706, 0.803922, 1)
+
+[node name="OverBackground" type="ColorRect" parent="." unique_id=1822605611]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="BackgroundParallax2D" type="Parallax2D" parent="." unique_id=1956488151]
+repeat_size = Vector2(1920, 1080)
+autoscroll = Vector2(0, 150)
+repeat_times = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="BackgroundParallax2D" unique_id=1876715]
+self_modulate = Color(0.13, 0.1, 0.18, 1)
+texture = ExtResource("3_psc")
+
+[node name="TitleClip" type="Control" parent="." unique_id=351702556]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 80.0
+offset_bottom = 480.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="OverRow" type="HBoxContainer" parent="TitleClip" unique_id=1456872849]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 84.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="L0" type="Control" parent="TitleClip/OverRow" unique_id=587298316]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L0" unique_id=1754008038]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L1" type="Control" parent="TitleClip/OverRow" unique_id=575451808]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L1" unique_id=220446756]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L2" type="Control" parent="TitleClip/OverRow" unique_id=12512659]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L2" unique_id=1855486253]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L3" type="Control" parent="TitleClip/OverRow" unique_id=1572296118]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L3" unique_id=1798476587]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="Control" parent="TitleClip/OverRow" unique_id=1575184033]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="L4" type="Control" parent="TitleClip/OverRow" unique_id=812194272]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L4" unique_id=1910314364]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "O"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L5" type="Control" parent="TitleClip/OverRow" unique_id=656138276]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L5" unique_id=124692749]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "V"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L6" type="Control" parent="TitleClip/OverRow" unique_id=1281266770]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L6" unique_id=1231248673]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L7" type="Control" parent="TitleClip/OverRow" unique_id=1734042863]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/OverRow/L7" unique_id=1959301609]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(0.694118, 0.321569, 0.94902, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ClearRow" type="HBoxContainer" parent="TitleClip" unique_id=342647424]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 84.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="L0" type="Control" parent="TitleClip/ClearRow" unique_id=801156622]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L0" unique_id=309858314]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "G"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L1" type="Control" parent="TitleClip/ClearRow" unique_id=1153621272]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L1" unique_id=8868218]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L2" type="Control" parent="TitleClip/ClearRow" unique_id=1614001994]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L2" unique_id=990889637]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "M"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L3" type="Control" parent="TitleClip/ClearRow" unique_id=352135666]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L3" unique_id=391526475]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space" type="Control" parent="TitleClip/ClearRow" unique_id=1346251710]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="L4" type="Control" parent="TitleClip/ClearRow" unique_id=137080219]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L4" unique_id=1643793580]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "C"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L5" type="Control" parent="TitleClip/ClearRow" unique_id=1664468884]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L5" unique_id=873881740]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "L"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L6" type="Control" parent="TitleClip/ClearRow" unique_id=265787099]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L6" unique_id=1899981492]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L7" type="Control" parent="TitleClip/ClearRow" unique_id=488997661]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L7" unique_id=1435478926]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="L8" type="Control" parent="TitleClip/ClearRow" unique_id=1851176407]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Letter" type="Label" parent="TitleClip/ClearRow/L8" unique_id=1220656381]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_color = Color(1, 0.780392, 0.109804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 220
+text = "R"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DataBlock" type="VBoxContainer" parent="." unique_id=306191745]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -620.0
+offset_top = -470.0
+offset_right = 620.0
+offset_bottom = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 54
+alignment = 1
+
+[node name="Table" type="HBoxContainer" parent="DataBlock" unique_id=1841909686]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TierItem" type="VBoxContainer" parent="DataBlock/Table" unique_id=1068691883]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="TierCaption" parent="DataBlock/Table/TierItem" unique_id=18004121 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "难度"
+horizontal_alignment = 1
+
+[node name="TierValue" parent="DataBlock/Table/TierItem" unique_id=274463613 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "随机"
+horizontal_alignment = 1
+
+[node name="PassedItem" type="VBoxContainer" parent="DataBlock/Table" unique_id=140190169]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="PassedCaption" parent="DataBlock/Table/PassedItem" unique_id=290443201 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "已通过"
+horizontal_alignment = 1
+
+[node name="PassedValue" parent="DataBlock/Table/PassedItem" unique_id=1887322919 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0/0"
+horizontal_alignment = 1
+
+[node name="DeathsItem" type="VBoxContainer" parent="DataBlock/Table" unique_id=440671680]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="DeathsCaption" parent="DataBlock/Table/DeathsItem" unique_id=563284270 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "死亡数"
+horizontal_alignment = 1
+
+[node name="DeathsValue" parent="DataBlock/Table/DeathsItem" unique_id=1440815355 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+
+[node name="ExcludedItem" type="VBoxContainer" parent="DataBlock/Table" unique_id=391177510]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="ExcludedCaption" parent="DataBlock/Table/ExcludedItem" unique_id=591948339 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "排除"
+horizontal_alignment = 1
+
+[node name="ExcludedValue" parent="DataBlock/Table/ExcludedItem" unique_id=1056337858 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+
+[node name="SkippedItem" type="VBoxContainer" parent="DataBlock/Table" unique_id=575363697]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="SkippedCaption" parent="DataBlock/Table/SkippedItem" unique_id=948698458 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.72)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "跳过"
+horizontal_alignment = 1
+
+[node name="SkippedValue" parent="DataBlock/Table/SkippedItem" unique_id=829714985 instance=ExtResource("4_label")]
+layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+
+[node name="ButtonsRow" type="HBoxContainer" parent="DataBlock" unique_id=1537988558]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+
+[node name="AgainButton" parent="DataBlock/ButtonsRow" unique_id=832853265 instance=ExtResource("5_button")]
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "继续挑战"
+
+[node name="StageButton" parent="DataBlock/ButtonsRow" unique_id=150213482 instance=ExtResource("5_button")]
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "更改模式"
+
+[node name="TitleButton" parent="DataBlock/ButtonsRow" unique_id=1098143370 instance=ExtResource("5_button")]
+custom_minimum_size = Vector2(300, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "返回标题"
+pressed_sound = ExtResource("6_back_snd")
+
+[connection signal="pressed" from="DataBlock/ButtonsRow/AgainButton" to="." method="_on_again_pressed"]
+[connection signal="pressed" from="DataBlock/ButtonsRow/StageButton" to="." method="_on_stage_pressed"]
+[connection signal="pressed" from="DataBlock/ButtonsRow/TitleButton" to="." method="_on_title_pressed"]
