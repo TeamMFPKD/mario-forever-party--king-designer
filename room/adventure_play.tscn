@@ -20,6 +20,12 @@ script = ExtResource("2_play")
 [node name="TakePhoto" parent="GameRoomSize/SubViewportContainer/SubViewport" instance=ExtResource("9_photo")]
 
 [node name="AdventureLevelInfo" parent="GameRoomSize" instance=ExtResource("6_info")]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 280.0
+offset_right = 300.0
+offset_bottom = 840.0
 
 [node name="LikedCoursePreview" parent="GameRoomSize" instance=ExtResource("8_liked")]
 layout_mode = 1
