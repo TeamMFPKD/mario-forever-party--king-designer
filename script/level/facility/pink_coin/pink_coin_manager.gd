@@ -55,8 +55,18 @@ func pink_coin_obtained() -> void:
 func _create_key() -> void:
 	var key_instance: Node2D = key_scene.instantiate() as Node2D
 	var key_movement: KeyMovement = key_instance.get_node("KeyMovement") as KeyMovement
+	# 钥匙是世界里的物件，不能挂在 HUD 的 CanvasLayer 下（本组件就挂在里面）：
+	# 挂进去会 1) 按屏幕坐标绘制，镜头滚动后位置全错；2) 被粉币 HUD 的翻页缩小/隐藏动画一起带走，
+	# 表现为钥匙生成后留在原地、随后消失。所以改挂到 CanvasLayer 的父节点（关卡的世界节点）。
+	var hud_layer: Node = get_parent()
+	var world_parent: Node = hud_layer.get_parent() if hud_layer != null else null
+	if world_parent == null:
+		world_parent = hud_layer
+	if world_parent != null:
+		world_parent.add_child(key_instance)
+	else:
+		add_child(key_instance)
 	var player: Node2D = get_player_body()
 	if player:
 		key_instance.global_position = player.global_position
-	add_sibling(key_instance)
 	key_movement.state = KeyMovement.KeyState.GOT
