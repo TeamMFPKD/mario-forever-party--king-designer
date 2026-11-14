@@ -126,7 +126,7 @@ func _ready() -> void:
 		_cursor_scene = res as PackedScene
 	get_tree().node_added.connect(_on_tree_changed)
 	get_tree().node_removed.connect(_on_tree_changed)
-	UiFocusPolicy.policy_changed.connect(_on_tree_changed)
+	UiFocusPolicy.policy_changed.connect(_on_policy_changed)
 	_setup_move_sound()
 	_setup_press_sound()
 
