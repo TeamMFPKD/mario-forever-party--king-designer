@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://script/adventure/adventure_save_slots.gd" id="1_script"]
+[ext_resource type="Shader" path="res://shader/endless_paint_fill.gdshader" id="2_paint_shader"]
+[ext_resource type="Script" path="res://script/adventure/adventure_slot_paint.gd" id="3_paint_script"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slots"]
 bg_color = Color(1, 1, 1, 0.58)
@@ -13,6 +15,9 @@ corner_radius_top_left = 18
 corner_radius_top_right = 18
 corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_endless_paint"]
+shader = ExtResource("2_paint_shader")
 
 [node name="AdventureSaveSlots" type="PanelContainer"]
 theme_override_styles/panel = SubResource("StyleBoxFlat_slots")
@@ -42,6 +47,22 @@ toggle_mode = true
 tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
+
+[node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot1"]
+material = SubResource("ShaderMaterial_endless_paint")
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_paint_script")
 
 [node name="Content" type="VBoxContainer" parent="Margin/Box/SlotRow/Slot1"]
 layout_mode = 1
@@ -78,6 +99,22 @@ tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
+[node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot2"]
+material = SubResource("ShaderMaterial_endless_paint")
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_paint_script")
+
 [node name="Content" type="VBoxContainer" parent="Margin/Box/SlotRow/Slot2"]
 layout_mode = 1
 anchors_preset = 15
@@ -112,6 +149,22 @@ toggle_mode = true
 tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
+
+[node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot3"]
+material = SubResource("ShaderMaterial_endless_paint")
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_paint_script")
 
 [node name="Content" type="VBoxContainer" parent="Margin/Box/SlotRow/Slot3"]
 layout_mode = 1
@@ -148,6 +201,22 @@ tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
+[node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot4"]
+material = SubResource("ShaderMaterial_endless_paint")
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_paint_script")
+
 [node name="Content" type="VBoxContainer" parent="Margin/Box/SlotRow/Slot4"]
 layout_mode = 1
 anchors_preset = 15
@@ -182,6 +251,22 @@ toggle_mode = true
 tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
+
+[node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot5"]
+material = SubResource("ShaderMaterial_endless_paint")
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_paint_script")
 
 [node name="Content" type="VBoxContainer" parent="Margin/Box/SlotRow/Slot5"]
 layout_mode = 1

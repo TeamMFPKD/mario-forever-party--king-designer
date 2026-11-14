@@ -108,7 +108,7 @@ chore(multiplayer): drop unused signaling fallback
 
 | 场景 | 输出 |
 | --- | --- |
-| `tools/adventure_stage_shot.tscn` | `tools/adventure_stage_loading.png`（0.3s）、`tools/adventure_stage.png`（4.7s） |
+| `tools/adventure_stage_shot.tscn` | `tools/adventure_stage_loading.png`（0.3s）、`tools/adventure_stage.png`（4.7s）、`..._selected.png`（选中「新存档」）、`..._resume.png`（选中存档1）、`..._endless.png`（选中无尽团存档3） |
 | `tools/adventure_play_shot.tscn` | `tools/adventure_play.png`（加载游玩场景 3s 后） |
 | `tools/adventure_pause_shot.tscn` | `tools/adventure_pause.png`（打开暂停菜单） |
 | `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`、`..._flip_a/b.png`（默认桌面，鼠标点击暂停键）；加 `--shot-mobile` 伪装 Android 并输出带 `_mobile` 后缀的图 |
@@ -344,7 +344,7 @@ $p = Start-Process -FilePath $Godot -PassThru `
 $p.WaitForExit(120000)
 ```
 
-- `adventure_stage_shot.tscn`：0.3s 截加载界面，4.7s 截舞台正式画面；两张图都会覆盖。
+- `adventure_stage_shot.tscn`：0.3s 截加载界面，4.7s 截舞台正式画面，随后依次截「选中新存档」「选中存档1（定量团）」「选中存档3（无尽团，彩色卡面）」；五张图都会覆盖。存档3 种子为 `mode: "endless"`，用来确认无尽存档卡的滚动彩色卡面。
 - `adventure_play_shot.tscn`：先 `Adventure.start_run()` 再加载 `Adventure.PLAY_SCENE`，3s 后隐藏 `AdventurePauseMenu` 截图；依赖 `user://` 里有可用的 `.lvl` 关卡池。
 - `adventure_pause_shot.tscn`：2s 后打开暂停菜单截图，退出前会 `get_tree().paused = false`。
 - `adventure_transition_shot.tscn`：2s 后触发 `play_transition("pass", "res://room/title.tscn")`，0.5s 时截过渡层。

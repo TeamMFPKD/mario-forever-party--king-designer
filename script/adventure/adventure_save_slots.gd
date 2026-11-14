@@ -3,6 +3,8 @@ extends PanelContainer
 ## 通栏存档位栏：一排固定 5 个格子，没有单独的「＋ 新存档」按钮。
 ##
 ## 有团可续的格子显示「存档N」，并用该团难度档的主题色描边（选中时整块填该色）；
+## 无尽团的格子例外：卡片内部铺一层滚动的多色渐变（油漆桶），描边仍是档位色，
+## 选中/未选中只调明度与饱和度，不把彩色卡面盖成纯色（见 adventure_slot_paint.gd）。
 ## 第一个可开新团的格子显示「新存档」；其余空格显示「空」，坏档显示「进度异常」。
 ## 例：存档1 / 存档2 / 新存档 / 空 / 空
 ##
@@ -40,6 +42,14 @@ const SELECTED_COLOR: Color = Color(1, 0.9, 0.6, 1)
 const NORMAL_COLOR: Color = Color(1, 1, 1, 1)
 ## 空槽 / 坏档仍要看清「空」字，别淡到快看不见。
 const DISABLED_COLOR: Color = Color(1, 1, 1, 0.72)
+## 无尽团卡面：底色交给 Paint 节点，样式表只剩描边（fill 透明）。
+## hover 给一层很淡的白，保证指针上去仍有反馈。
+const ENDLESS_CARD_FILL: Color = Color(0, 0, 0, 0)
+const ENDLESS_CARD_HOVER: Color = Color(1, 1, 1, 0.18)
+## 彩色卡面底色偏亮偏嫩，纯黑字读不清：标题改白字 + 深色描边。
+const ENDLESS_TEXT_COLOR: Color = Color(1, 1, 1, 1)
+const ENDLESS_TEXT_OUTLINE: Color = Color(0.08, 0.07, 0.1, 0.9)
+const ENDLESS_TEXT_OUTLINE_SIZE: int = 6
 
 @onready var _slot_row: HBoxContainer = $Margin/Box/SlotRow
 
@@ -49,6 +59,10 @@ var _slot_selection: Array[int] = [-1, -1, -1, -1, -1]
 var _slot_enabled: Array[bool] = [false, false, false, false, false]
 ## 有团可续的格子记团的难度档 1..4，其余 -1；用来给卡片上色。
 var _slot_tier: Array[int] = [-1, -1, -1, -1, -1]
+## 有团可续的格子记团的流程（"finite" / "endless"），其余空串；无尽团要铺彩色卡面。
+var _slot_mode: Array[String] = ["", "", "", "", ""]
+## 每格 Button 下的 Paint 节点（无尽团彩色卡面），没有则为 null，在 _ready 里缓存。
+var _slot_paints: Array = [null, null, null, null, null]
 
 
 func _ready() -> void:
@@ -57,6 +71,10 @@ func _ready() -> void:
 		if button == null:
 			continue
 		button.pressed.connect(_on_slot_pressed.bind(index))
+		_slot_paints[index] = button.get_node_or_null("Paint")
+		var paint: Control = _slot_paints[index] as Control
+		if paint != null:
+			paint.visible = false
 
 
 ## slots 来自 Adventure.get_run_slots()，固定 5 项。
@@ -76,6 +94,7 @@ func setup(slots: Array[Dictionary], new_run_slot: int) -> void:
 		_slot_selection[index] = (0 if is_new else slot) if enabled else -1
 		# 有团记 0..4（0 = 随机，没有专属档位色），其余 -1 表示不是团。
 		_slot_tier[index] = clampi(int(data.get("tier", 0)), 0, TIER_COLORS.size()) if resumable else -1
+		_slot_mode[index] = str(data.get("mode", "finite")) if resumable else ""
 		button.disabled = not enabled
 		button.tooltip_text = _tooltip_for(resumable, is_new, bool(data.get("active", false)), data)
 		if resumable:
@@ -168,7 +187,11 @@ func _apply_highlight() -> void:
 		var value: int = _slot_selection[index]
 		var selected: bool = value >= 0 and value == _selection
 		button.button_pressed = selected
-		if _slot_tier[index] >= 0:
+		if _is_endless(index):
+			# 无尽团：卡面交给 Paint 的滚动彩色渐变，样式表只留档位色描边。
+			_apply_endless_card(index, button, selected)
+			button.modulate = NORMAL_COLOR
+		elif _slot_tier[index] >= 0:
 			# 有团的卡（含「随机」档）：档位色描边，选中时整块填该色，不叠黄色 modulate。
 			_apply_tier_card(button, _slot_tier[index], selected)
 			button.modulate = NORMAL_COLOR
@@ -179,7 +202,55 @@ func _apply_highlight() -> void:
 			button.modulate = DISABLED_COLOR
 
 
+## 这一格是不是「无尽团」的存档。
+func _is_endless(index: int) -> bool:
+	if index < 0 or index >= _slot_mode.size():
+		return false
+	return _slot_mode[index] == "endless" and _slot_tier[index] >= 0
+
+
+## 无尽团卡面：样式表改成「透明底 + 档位色描边」，彩色渐变由 Paint 节点的 shader 出。
+## 选中态不换底色（Paint 一直开着），只让描边更粗、标题更亮。
+func _apply_endless_card(index: int, button: Button, selected: bool) -> void:
+	var accent: Color = _tier_accent(_slot_tier[index])
+	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
+		var hover: bool = state == "hover" or state == "hover_pressed"
+		var fill: Color = ENDLESS_CARD_FILL
+		if hover and not selected:
+			fill = ENDLESS_CARD_HOVER
+		var style: StyleBoxFlat = _card_style(button, state, accent, fill)
+		style.border_width_left = 10 if selected else 6
+		style.border_width_top = 10 if selected else 6
+		style.border_width_right = 10 if selected else 6
+		style.border_width_bottom = 10 if selected else 6
+		button.add_theme_stylebox_override(state, style)
+	var title: Label = button.get_node_or_null("Content/Title") as Label
+	if title != null:
+		title.add_theme_color_override("font_color", ENDLESS_TEXT_COLOR)
+		title.add_theme_color_override("font_outline_color", ENDLESS_TEXT_OUTLINE)
+		title.add_theme_constant_override("outline_size", ENDLESS_TEXT_OUTLINE_SIZE)
+	_set_paint_active(index, true)
+	var paint: Node = _slot_paints[index] as Node
+	if paint != null and paint.has_method("set_selected"):
+		paint.call("set_selected", selected)
+
+
+## 把某一格的彩色卡面打开 / 关闭。非无尽团一律关掉，避免残留。
+func _set_paint_active(index: int, active: bool) -> void:
+	if index < 0 or index >= _slot_paints.size():
+		return
+	var paint: Control = _slot_paints[index] as Control
+	if paint == null:
+		return
+	if paint.has_method("set_active"):
+		paint.call("set_active", active)
+	else:
+		paint.visible = active
+
+
 func _apply_tier_card(button: Button, tier: int, selected: bool) -> void:
+	_set_paint_active(_slot_row.get_children().find(button), false)
+	_clear_endless_text(button)
 	var accent: Color = _tier_accent(tier)
 	var fill: Color = _tier_fill(tier) if selected else CARD_BG
 	var hover_fill: Color = fill if selected else CARD_BG_HOVER
@@ -196,6 +267,8 @@ func _apply_tier_card(button: Button, tier: int, selected: bool) -> void:
 
 
 func _clear_tier_card(button: Button) -> void:
+	_set_paint_active(_slot_row.get_children().find(button), false)
+	_clear_endless_text(button)
 	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
 		button.remove_theme_stylebox_override(state)
 	var title: Label = button.get_node_or_null("Content/Title") as Label
@@ -203,6 +276,16 @@ func _clear_tier_card(button: Button) -> void:
 		# 不能 remove_theme_color_override：场景里的深色本身也是一层 override，
 		# 移掉会落到主题 Label 的白色默认值（选中「新存档」时字就变成白字）。
 		title.add_theme_color_override("font_color", CARD_TEXT)
+
+
+## 无尽卡面用白字 + 深色描边；切回普通卡时要把描边和白色都撤掉，否则白字看不见。
+## 注意不能 remove_theme_*_override 掉 font_color：场景里的深色本身也是一层 override。
+func _clear_endless_text(button: Button) -> void:
+	var title: Label = button.get_node_or_null("Content/Title") as Label
+	if title == null:
+		return
+	title.add_theme_constant_override("outline_size", 0)
+	title.add_theme_color_override("font_color", CARD_TEXT)
 
 
 func _card_style(button: Button, state: String, accent: Color, fill: Color) -> StyleBoxFlat:

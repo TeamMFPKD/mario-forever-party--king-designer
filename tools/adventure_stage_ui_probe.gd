@@ -140,9 +140,54 @@ func _ready() -> void:
 	lines.append("full_no_new_slot=%s" % str(full_titles.find("新存档") == -1))
 	lines.append("full_resume_start_enabled=%s" % str(not start.disabled))
 
+	# 7. 无尽团的存档卡：卡面换成滚动的多色渐变（Paint），样式表只剩档位色描边。
+	_seed_mode(store, 3, 1, 2, "endless")
+	stage.call("_refresh_save_slots")
+	await get_tree().process_frame
+	var endless_button: Button = slots.call("button_at", 2) as Button
+	var endless_paint: Control = endless_button.get_node_or_null("Paint") as Control
+	lines.append("endless_paint_present=%s" % str(endless_paint != null))
+	lines.append("endless_paint_active=%s" % str(endless_paint != null and endless_paint.visible))
+	var finite_paint: Control = (slots.call("button_at", 0) as Button).get_node_or_null("Paint") as Control
+	lines.append("finite_paint_off=%s" % str(finite_paint == null or not finite_paint.visible))
+	# 样式表透明底（彩色由 Paint 出），描边仍是该团档位的颜色。
+	var endless_style: StyleBoxFlat = endless_button.get_theme_stylebox("normal") as StyleBoxFlat
+	lines.append("endless_style_alpha=%d" % int(round(endless_style.bg_color.a * 100.0)))
+	lines.append("endless_style_border=%s" % endless_style.border_color.to_html(false))
+	var endless_title: Label = endless_button.get_node_or_null("Content/Title") as Label
+	lines.append("endless_title_white=%s" % str(_title_color_html(endless_title) == "ffffff"))
+	lines.append("endless_title_outline=%d" % int(endless_title.get_theme_constant("outline_size")))
+	# 选中无尽卡：描边加粗，卡面不换成纯色（Paint 仍然开着）。
+	endless_button.emit_signal("pressed")
+	await get_tree().process_frame
+	var selected_style: StyleBoxFlat = endless_button.get_theme_stylebox("normal") as StyleBoxFlat
+	lines.append("endless_selected_border=%d" % int(selected_style.border_width_left))
+	lines.append("endless_selected_paint=%s" % str(endless_paint != null and endless_paint.visible))
+	# 卡面尺寸写进了 shader（换分辨率时色块不缩水），且五张卡各用各的材质。
+	lines.append("endless_paint_width=%d" % int(endless_paint.call("painted_size").x))
+	var shared_material: bool = false
+	if finite_paint != null and endless_paint != null:
+		shared_material = (
+			(finite_paint as ColorRect).material == (endless_paint as ColorRect).material
+		)
+	lines.append("endless_material_isolated=%s" % str(not shared_material))
+	# 切回定量团：彩色卡面关掉、白字撤掉，回到原来的深色标题。
+	_seed_mode(store, 3, 1, 2, "finite")
+	stage.call("_refresh_save_slots")
+	await get_tree().process_frame
+	lines.append("back_to_finite_paint_off=%s" % str(not endless_paint.visible))
+	lines.append("back_to_finite_title=%s" % _title_color_html(endless_title))
+
 	_write(lines)
 	_cleanup()
 	get_tree().quit()
+
+
+## 标题实际生效的字色（十六进制）。Label 没有 color 属性，只能走主题查询。
+func _title_color_html(title: Label) -> String:
+	if title == null:
+		return "none"
+	return title.get_theme_color("font_color").to_html(false)
 
 
 ## 按钮常态描边色（十六进制），找不到时返回 none。
@@ -163,14 +208,19 @@ func _mario_index(grid: Control) -> int:
 	return -1
 
 
-func _seed(store: AdventureStore, slot: int, index: int, tier: int) -> void:
+func _seed_mode(store: AdventureStore, slot: int, index: int, tier: int, mode: String) -> void:
+	_seed(store, slot, index, tier, mode)
+
+
+## 无尽团没有总关数（total_levels = -1），其余字段一样。
+func _seed(store: AdventureStore, slot: int, index: int, tier: int, mode: String = "finite") -> void:
 	store.set_run({
 		"active": true,
 		"level_keys": ["demo_a", "demo_b", "demo_c", "demo_d", "demo_e"],
 		"index": index,
-		"mode": "finite",
+		"mode": mode,
 		"tier": tier,
-		"total_levels": 10,
+		"total_levels": -1 if mode == "endless" else 10,
 		"cleared_count": index,
 		"lives_left": 16,
 		"deaths": 1,

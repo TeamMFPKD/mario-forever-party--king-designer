@@ -10,6 +10,7 @@ const OUTPUT_PATH: String = "res://tools/adventure_stage.png"
 const LOADING_PATH: String = "res://tools/adventure_stage_loading.png"
 const SELECTED_PATH: String = "res://tools/adventure_stage_selected.png"
 const RESUME_PATH: String = "res://tools/adventure_stage_resume.png"
+const ENDLESS_PATH: String = "res://tools/adventure_stage_endless.png"
 const TEMP_STORE: String = "user://adventure_stage_shot.ini"
 
 
@@ -19,6 +20,8 @@ func _ready() -> void:
 	# 存档1 用 24 关（3 行）以便看到跨行曲线；存档2 是「随机」档，看存档卡银白描边。
 	_seed(store, 1, 2, 1, 24)
 	_seed(store, 2, 4, 0, 14)
+	# 存档3 用无尽团：验证卡面滚动的多色渐变（油漆桶）和自动滚动。
+	_seed_endless(store, 3, 3, 2)
 	Adventure.store = store
 
 	var packed: PackedScene = load("res://room/adventure_stage.tscn") as PackedScene
@@ -58,6 +61,17 @@ func _ready() -> void:
 			var resume_image: Image = get_viewport().get_texture().get_image()
 			if resume_image != null:
 				resume_image.save_png(RESUME_PATH)
+
+		# 最后一张：选中无尽团的存档3，确认彩色卡面在选中态下仍然滚动（只换明度与描边）。
+		var endless_index: int = titles.find("存档3")
+		if endless_index >= 0:
+			var endless_button: Button = slots.call("button_at", endless_index) as Button
+			if endless_button != null:
+				endless_button.emit_signal("pressed")
+				await get_tree().create_timer(0.5).timeout
+				var endless_image: Image = get_viewport().get_texture().get_image()
+				if endless_image != null:
+					endless_image.save_png(ENDLESS_PATH)
 	_cleanup()
 	get_tree().quit()
 
@@ -72,6 +86,23 @@ func _seed(store: AdventureStore, slot: int, index: int, tier: int, total: int) 
 		"total_levels": total,
 		"cleared_count": index,
 		"lives_left": 16,
+		"deaths": 1,
+		"skipped_soft": 0,
+		"skipped_hard": 0,
+	}, slot)
+
+
+## 无尽团存档：没有 total_levels，卡面走彩色油漆桶。
+func _seed_endless(store: AdventureStore, slot: int, index: int, tier: int) -> void:
+	store.set_run({
+		"active": true,
+		"level_keys": ["demo_a", "demo_b", "demo_c", "demo_d", "demo_e"],
+		"index": index,
+		"mode": "endless",
+		"tier": tier,
+		"total_levels": -1,
+		"cleared_count": index,
+		"lives_left": 23,
 		"deaths": 1,
 		"skipped_soft": 0,
 		"skipped_hard": 0,
