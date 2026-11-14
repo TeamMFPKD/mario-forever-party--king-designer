@@ -1,6 +1,6 @@
 extends Node2D
 
-## 百人团「垃圾桶」房间：列出被永久排除的关卡，允许逐关恢复正常。
+## 百人团「排除的关卡」房间：列出被永久排除的关卡，允许逐关恢复正常。
 ##
 ## 版式参考 room/history.tscn：背景 + 面板 + 标题 + 滚动列表 + 底部返回。
 ## 数据以 adventure.ini 为准（Adventure.excluded_levels）；恢复只清 excluded 标记，
@@ -34,8 +34,8 @@ func _refresh() -> void:
 	_first_row_button = null
 
 	var levels: Array[Dictionary] = Adventure.excluded_levels()
-	# 标题兼作计数，保持与 history 相同的单行标题结构，不额外占一行。
-	title_label.text = "垃圾桶" if levels.is_empty() else "垃圾桶（%d）" % levels.size()
+	# 标题固定为「排除的关卡」，不显示文件数；列表行数由下方列表本身呈现。
+	title_label.text = "排除的关卡"
 	scroll.visible = not levels.is_empty()
 	empty_label.visible = levels.is_empty()
 
@@ -60,11 +60,11 @@ func _focus_default() -> void:
 		back_button.grab_focus()
 
 
-## 「查看」：把要打开的关卡与「退出编辑器回垃圾桶」写进 LevelPathSet，再进 history_edit。
+## 「查看」：把要打开的关卡与「退出编辑器后返回排除的关卡房间」写进 LevelPathSet，再进 history_edit。
 func _on_view_requested(level_path: String) -> void:
 	if not _bind_history_edit_context(level_path):
 		return
-	# 垃圾桶专属 BGM 随场景销毁停止，历史房间自己的 BGM 会接上。
+	# 「排除的关卡」房间专属 BGM 随场景销毁停止，历史房间自己的 BGM 会接上。
 	GlobalTransition.change_scene_to_file(HISTORY_EDIT_SCENE)
 
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://script/adventure/adventure_save_slots.gd" id="1_script"]
 [ext_resource type="Shader" path="res://shader/endless_paint_fill.gdshader" id="2_paint_shader"]
 [ext_resource type="Script" path="res://script/adventure/adventure_slot_paint.gd" id="3_paint_script"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="4_ui_button"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slots"]
 bg_color = Color(1, 1, 1, 0.58)
@@ -38,7 +39,7 @@ theme_override_constants/separation = 8
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Slot1" type="Button" parent="Margin/Box/SlotRow"]
+[node name="Slot1" parent="Margin/Box/SlotRow" instance=ExtResource("4_ui_button")]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -89,7 +90,7 @@ text = "存档 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot2" type="Button" parent="Margin/Box/SlotRow"]
+[node name="Slot2" parent="Margin/Box/SlotRow" instance=ExtResource("4_ui_button")]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -140,7 +141,7 @@ text = "存档 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot3" type="Button" parent="Margin/Box/SlotRow"]
+[node name="Slot3" parent="Margin/Box/SlotRow" instance=ExtResource("4_ui_button")]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -191,7 +192,7 @@ text = "存档 3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot4" type="Button" parent="Margin/Box/SlotRow"]
+[node name="Slot4" parent="Margin/Box/SlotRow" instance=ExtResource("4_ui_button")]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -242,7 +243,7 @@ text = "存档 4"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot5" type="Button" parent="Margin/Box/SlotRow"]
+[node name="Slot5" parent="Margin/Box/SlotRow" instance=ExtResource("4_ui_button")]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3

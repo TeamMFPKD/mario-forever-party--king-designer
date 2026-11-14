@@ -3,7 +3,7 @@ extends HBoxContainer
 
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
 
-## 垃圾桶房间的一行：序号 + 关卡文件名 + 右侧「查看」「恢复」。
+## 「排除的关卡」房间的一行：序号 + 关卡文件名 + 右侧「查看」「恢复」。
 ## 只负责显示与转发点击，真正的恢复 / 跳转由 AdventureTrashRoom 处理。
 
 signal view_requested(level_path: String)

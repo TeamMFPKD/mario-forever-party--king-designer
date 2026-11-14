@@ -157,7 +157,7 @@ func is_excluded(key: String) -> bool:
 	return bool(config.get_value(level_section(key), "excluded", false))
 
 
-## 垃圾桶界面用：所有被永久排除的关卡记录（以 ini 为准，不管文件还在不在）。
+## 「排除的关卡」界面用：所有被永久排除的关卡记录（以 ini 为准，不管文件还在不在）。
 ## 每条都带上 key 与文件字段，文件是否存在由调用方判断。
 func get_excluded_levels() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []

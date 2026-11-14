@@ -48,10 +48,11 @@ mouse_filter = 2
 theme = ExtResource("3_theme")
 
 [node name="Yellow" type="Node2D" parent="Root"]
-position = Vector2(640, 0)
+position = Vector2(0, 0)
 
 [node name="YellowShape" type="Polygon2D" parent="Root/Yellow"]
 color = Color(1, 0.5019608, 0, 1)
+polygon = PackedVector2Array(640, 0, 664, 24, 640, 48, 664, 72, 640, 96, 664, 120, 640, 144, 664, 168, 640, 192, 664, 216, 640, 240, 664, 264, 640, 288, 664, 312, 640, 336, 664, 360, 640, 384, 664, 408, 640, 432, 664, 456, 640, 480, 0, 480, -24, 456, 0, 432, -24, 408, 0, 384, -24, 360, 0, 336, -24, 312, 0, 288, -24, 264, 0, 240, -24, 216, 0, 192, -24, 168, 0, 144, -24, 120, 0, 96, -24, 72, 0, 48, -24, 24, 0, 0)
 
 [node name="Props" type="Control" parent="Root/Yellow"]
 clip_contents = true
