@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bufoqkogfjepc" path="res://object/level/sound/sound_effect.tscn" id="1_se"]
+
+[node name="SoundEffectRestart" instance=ExtResource("1_se")]
+repeat_policy = 1

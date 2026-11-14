@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://dlxgkhf1ee7o0" path="res://sound/level/break.se.wav" id="4_uotgv"]
 [ext_resource type="AudioStream" uid="uid://dx5w7ruc3j6sd" path="res://sound/level/coin.se.wav" id="5_dnips"]
 [ext_resource type="Script" path="res://script/level/component/player_body_injector.gd" id="6_injector"]
+[ext_resource type="PackedScene" path="res://object/level/sound/sound_effect_restart.tscn" id="7_restart"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_alh4b"]
 atlas = ExtResource("1_dnips")
@@ -146,7 +147,7 @@ speed_scale = 1.2
 [node name="BreakSound" parent="." unique_id=1715984441 instance=ExtResource("3_q144o")]
 stream = ExtResource("4_uotgv")
 
-[node name="BumpSound" parent="." unique_id=547067653 instance=ExtResource("3_q144o")]
+[node name="BumpSound" parent="." unique_id=547067653 instance=ExtResource("7_restart")]
 stream = ExtResource("5_dnips")
 
 [node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="." unique_id=209649764]
