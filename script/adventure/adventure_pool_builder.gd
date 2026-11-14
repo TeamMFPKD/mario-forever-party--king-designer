@@ -49,7 +49,7 @@ static func apply_updates(store: AdventureStore, updates: Array) -> void:
 static func _build(store: AdventureStore, source: String, threaded: bool) -> Dictionary:
 	var paths: Dictionary = {}
 	if source == "liked":
-		_scan_dir(LIKED_DIR, paths)
+		_collect_liked(paths)
 	else:
 		_scan_dir("user://", paths)
 		_scan_dir(LIKED_DIR, paths)
@@ -76,6 +76,18 @@ static func _build(store: AdventureStore, source: String, threaded: bool) -> Dic
 		"stats": result,
 		"meta_updates": state["meta_updates"],
 	}
+
+
+## 收藏池以索引（user://liked courses/liked_courses.cfg）为准：新版收藏不再在
+## 收藏目录里放 .lvl 副本，关卡正本统一留在 user:// 根目录。
+## LikedCourses.get_files() / level_path() 都是纯文件读取，线程里可直接调用。
+static func _collect_liked(paths: Dictionary) -> void:
+	for file_name: String in LikedCourses.get_files():
+		if paths.has(file_name):
+			continue
+		paths[file_name] = LikedCourses.level_path(file_name)
+	# 兜底：索引损坏或旧版迁移失败时，收藏目录里的 .lvl 副本仍然可玩。
+	_scan_dir(LIKED_DIR, paths)
 
 
 static func _scan_dir(dir_path: String, paths: Dictionary) -> void:
