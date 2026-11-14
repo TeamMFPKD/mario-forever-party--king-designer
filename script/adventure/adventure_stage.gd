@@ -159,6 +159,7 @@ func _bind_controls() -> void:
 		button.pressed.connect(_select_mode.bind("finite" if index == 0 else "endless"))
 	length_slider.value_changed.connect(_on_length_changed)
 	save_slots.connect("selection_changed", Callable(self, "_on_selection_changed"))
+	save_slots.connect("slot_clicked", Callable(self, "_on_slot_clicked"))
 
 
 # ---------------------------------------------------------------------------
@@ -439,6 +440,14 @@ func _set_params_page(expanded: bool) -> void:
 func _on_params_ok() -> void:
 	_params_dismissed = true
 	_set_params_page(false)
+
+
+## 每次点「新存档」格子都重新放出配置页：OK 关掉之后，再点同一格也能再打开。
+func _on_slot_clicked(selection: int) -> void:
+	if selection != 0 or not _params_dismissed:
+		return
+	_params_dismissed = false
+	_apply_selection_gate()
 
 
 ## 左划淡入：从右侧偏移滑回原位并淡入。已经在显示时不重播，避免闪动。

@@ -15,6 +15,8 @@ extends PanelContainer
 
 ## selection：1..5 = 存档位，0 = 新存档，-1 = 无选中
 signal selection_changed(selection: int)
+## 每次点击可用格子都发（包括重复点当前选中项）：舞台据此重新打开配置页。
+signal slot_clicked(selection: int)
 
 const SLOT_COUNT: int = 5
 
@@ -130,10 +132,12 @@ func _on_slot_pressed(index: int) -> void:
 		return
 	if selection == _selection:
 		_apply_highlight()
+		slot_clicked.emit(selection)
 		return
 	_selection = selection
 	_apply_highlight()
 	selection_changed.emit(selection)
+	slot_clicked.emit(selection)
 
 
 func get_selection() -> int:
