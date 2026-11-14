@@ -7,9 +7,11 @@ signal export_succeeded
 signal export_failed
 
 enum ExportMode {
-	ALL_WITH_LIKED,  # 所有关卡 + 收藏索引 + 收藏封面
-	LIKED_ONLY,      # 仅收藏关卡 + 索引 + 封面
-	ALL_ONLY,        # 仅所有关卡，不含收藏索引/封面
+	ALL_WITH_LIKED,          # 所有关卡 + 收藏索引 + 收藏封面
+	LIKED_ONLY,              # 仅收藏关卡 + 索引 + 封面
+	ALL_ONLY,                # 仅所有关卡，不含收藏索引/封面
+	ALL_WITH_LIKED_RAID,     # 所有关卡 + 收藏 + 随心挑战排除名单 + 随心挑战存档
+	ALL_WITH_LIKED_EXCLUDED, # 所有关卡 + 收藏 + 随心挑战排除名单（不含存档）
 }
 
 @export var is_liked_room: bool = false
@@ -18,6 +20,14 @@ enum ExportMode {
 const USER_ROOT: String = "user://"
 const LIKED_INDEX_NAME: String = "liked_courses.cfg"
 const LIKED_ARCHIVE_PREFIX: String = "liked_courses/"
+## 随心挑战数据以两个独立 cfg 平铺进 zip：分开才能只带排除名单、不带存档。
+const RAID_EXCLUDED_NAME: String = "raid_excluded.cfg"
+const RAID_SAVES_NAME: String = "raid_saves.cfg"
+const RAID_META_SECTION: String = "raid"
+const RAID_VERSION: int = 1
+const RAID_KIND_EXCLUDED: String = "excluded"
+const RAID_KIND_SAVES: String = "saves"
+const RAID_LEVEL_PREFIX: String = "level."
 
 var _dialog_result: String = ""
 signal _dialog_completed
@@ -52,6 +62,14 @@ func _on_export_mode_liked_only() -> void:
 
 func _on_export_mode_all_only() -> void:
 	_start_export(ExportMode.ALL_ONLY)
+
+
+func _on_export_mode_all_with_liked_raid() -> void:
+	_start_export(ExportMode.ALL_WITH_LIKED_RAID)
+
+
+func _on_export_mode_all_with_liked_excluded() -> void:
+	_start_export(ExportMode.ALL_WITH_LIKED_EXCLUDED)
 
 
 func _start_export(mode: ExportMode) -> void:
@@ -93,12 +111,18 @@ func _update_import_ui(msg: String) -> void:
 func export_levels(mode: ExportMode) -> String:
 	if mode == ExportMode.LIKED_ONLY:
 		return await _export_liked_levels()
+	if mode == ExportMode.ALL_WITH_LIKED_RAID:
+		return await _export_all_levels(true, true, true)
+	if mode == ExportMode.ALL_WITH_LIKED_EXCLUDED:
+		return await _export_all_levels(true, true, false)
 	if mode == ExportMode.ALL_WITH_LIKED:
 		return await _export_all_levels(true)
 	return await _export_all_levels(false)
 
 
-func _export_all_levels(include_liked: bool) -> String:
+func _export_all_levels(
+	include_liked: bool, include_excluded: bool = false, include_raid_saves: bool = false
+) -> String:
 	var level_names: Array[String] = _list_root_levels()
 	if level_names.is_empty():
 		return "导出失败：目录中没有 .lvl 文件"
@@ -109,8 +133,14 @@ func _export_all_levels(include_liked: bool) -> String:
 
 	if include_liked:
 		_append_liked_entries(entries, level_names)
+	if include_excluded:
+		_append_raid_entries(entries, include_raid_saves)
 
 	var tag: String = "all_liked" if include_liked else "history"
+	if include_raid_saves:
+		tag = "all_liked_raid"
+	elif include_excluded:
+		tag = "all_liked_excluded"
 	return await _write_zip(entries, tag)
 
 
@@ -159,6 +189,68 @@ func _append_liked_photos(entries: Array[Dictionary], names: Array[String]) -> v
 			"archive": LIKED_ARCHIVE_PREFIX + photo_path.get_file(),
 			"source": photo_path,
 		})
+
+
+# ---------------------------------------------------------------------------
+# 随心挑战数据（adventure.ini 子集）：排除名单 / 5 个存档位
+# ---------------------------------------------------------------------------
+
+## 模式 1 写两个 cfg，模式 2 只写排除名单的 cfg。
+func _append_raid_entries(entries: Array[Dictionary], include_saves: bool) -> void:
+	entries.append({"archive": RAID_EXCLUDED_NAME, "content": _build_raid_excluded_text()})
+	if include_saves:
+		entries.append({"archive": RAID_SAVES_NAME, "content": _build_raid_saves_text()})
+
+
+func _raid_source() -> ConfigFile:
+	if Adventure == null or Adventure.store == null:
+		Log.w("ImportExport", "随心挑战存档未就绪，导出的数据为空")
+		return null
+	return Adventure.store.config
+
+
+func _raid_header(out: ConfigFile, kind: String) -> void:
+	out.set_value(RAID_META_SECTION, "version", RAID_VERSION)
+	out.set_value(RAID_META_SECTION, "kind", kind)
+
+
+## 只打包 [level.*] 里 excluded=true 的记录，不带单人样本统计。
+func _build_raid_excluded_text() -> String:
+	var out: ConfigFile = ConfigFile.new()
+	_raid_header(out, RAID_KIND_EXCLUDED)
+	var source: ConfigFile = _raid_source()
+	if source != null:
+		for section: String in source.get_sections():
+			if not section.begins_with(RAID_LEVEL_PREFIX):
+				continue
+			if source.get_value(section, "excluded", false) != true:
+				continue
+			var key: String = section.trim_prefix(RAID_LEVEL_PREFIX)
+			if not LikedCourses.is_valid_level_name(key):
+				continue
+			out.set_value(section, "file", source.get_value(section, "file", key))
+			out.set_value(section, "excluded", true)
+			out.set_value(section, "exclude_reason", source.get_value(section, "exclude_reason", ""))
+			out.set_value(section, "excluded_at", source.get_value(section, "excluded_at", 0))
+	return out.encode_to_text()
+
+
+## 打包 [run.1]..[run.5] 的完整键，恢复时按槽位逐段写回。
+func _build_raid_saves_text() -> String:
+	var out: ConfigFile = ConfigFile.new()
+	_raid_header(out, RAID_KIND_SAVES)
+	var source: ConfigFile = _raid_source()
+	if source != null:
+		for slot: int in range(1, AdventureStore.MAX_RUN_SLOTS + 1):
+			var section: String = "run.%d" % slot
+			if not source.has_section(section):
+				continue
+			var keys: PackedStringArray = source.get_section_keys(section)
+			if keys.is_empty():
+				continue
+			for key: String in keys:
+				out.set_value(section, key, source.get_value(section, key))
+	return out.encode_to_text()
 
 
 func _list_root_levels() -> Array[String]:
@@ -263,15 +355,25 @@ func _import_zip(zip_path: String) -> String:
 	if has_index:
 		index_names = _parse_index(reader.read_file(LIKED_INDEX_NAME))
 
+	var raid_excluded: ConfigFile = _read_raid_config(reader, file_list, RAID_EXCLUDED_NAME, RAID_KIND_EXCLUDED)
+	var raid_saves: ConfigFile = _read_raid_config(reader, file_list, RAID_SAVES_NAME, RAID_KIND_SAVES)
+
 	var zip_levels: Array[String] = []
 	var imported_count: int = 0
 	var failed_count: int = 0
+	if raid_excluded != null:
+		imported_count += 1
+	if raid_saves != null:
+		imported_count += 1
 
 	for entry_name: String in file_list:
 		var entry_path: String = entry_name.replace("\\", "/")
 		if entry_path.ends_with("/"):
 			continue
 		if entry_path == LIKED_INDEX_NAME:
+			continue
+		# 随心挑战数据已在上面解析，不走普通条目的落盘分支
+		if entry_path == RAID_EXCLUDED_NAME or entry_path == RAID_SAVES_NAME:
 			continue
 
 		# 新版收藏封面：liked_courses/<base>.png
@@ -331,6 +433,12 @@ func _import_zip(zip_path: String) -> String:
 
 	reader.close()
 
+	var restored_excluded: int = _restore_raid_excluded(raid_excluded)
+	var restored_saves: int = _restore_raid_saves(raid_saves)
+	var raid_note: String = ""
+	if restored_excluded > 0 or restored_saves > 0:
+		raid_note = "，恢复排除 %d / 存档 %d" % [restored_excluded, restored_saves]
+
 	var favorites: Array[String] = []
 	if has_index:
 		# 以包内索引为准：模式 1 的包里包含全部关卡，不能把未收藏的也登记成收藏
@@ -353,8 +461,77 @@ func _import_zip(zip_path: String) -> String:
 
 	emit_signal("import_finished")
 	if failed_count > 0:
-		return "导入成功：%d 个文件（新增收藏 %d，跳过 %d）" % [imported_count, added, failed_count]
-	return "导入成功：%d 个文件（新增收藏 %d）" % [imported_count, added]
+		return "导入成功：%d 个文件（新增收藏 %d，跳过 %d）%s" % [imported_count, added, failed_count, raid_note]
+	return "导入成功：%d 个文件（新增收藏 %d）%s" % [imported_count, added, raid_note]
+
+
+## 读取并校验包内随心挑战数据；不存在 / 损坏 / kind 不匹配都返回 null。
+func _read_raid_config(
+	reader: ZIPReader, file_list: PackedStringArray, entry_name: String, kind: String
+) -> ConfigFile:
+	if not file_list.has(entry_name):
+		return null
+	var data: PackedByteArray = reader.read_file(entry_name)
+	if data.is_empty():
+		Log.w("ImportExport", "压缩包内随心挑战数据为空：%s" % entry_name)
+		return null
+	var config: ConfigFile = ConfigFile.new()
+	if config.parse(data.get_string_from_utf8()) != OK:
+		Log.w("ImportExport", "随心挑战数据解析失败：%s" % entry_name)
+		return null
+	if config.get_value(RAID_META_SECTION, "kind", "") != kind:
+		Log.w("ImportExport", "随心挑战数据类型不匹配：%s" % entry_name)
+		return null
+	return config
+
+
+## 排除名单只增不减：本机已排除的关卡保留原有的 reason / 排除时间。
+func _restore_raid_excluded(config: ConfigFile) -> int:
+	if config == null or Adventure == null or Adventure.store == null:
+		return 0
+	var target: ConfigFile = Adventure.store.config
+	var added: int = 0
+	for section: String in config.get_sections():
+		if not section.begins_with(RAID_LEVEL_PREFIX):
+			continue
+		var key: String = section.trim_prefix(RAID_LEVEL_PREFIX)
+		if not LikedCourses.is_valid_level_name(key):
+			continue
+		if target.get_value(section, "excluded", false) == true:
+			continue
+		target.set_value(section, "file", config.get_value(section, "file", key))
+		target.set_value(section, "excluded", true)
+		target.set_value(section, "exclude_reason", config.get_value(section, "exclude_reason", ""))
+		target.set_value(section, "excluded_at", config.get_value(section, "excluded_at", 0))
+		added += 1
+	if added > 0:
+		Adventure.store.save()
+		Log.i("ImportExport", ["已恢复随心挑战排除关卡：", added])
+	return added
+
+
+## 存档按槽位恢复；已有进行中团（active）的槽位跳过，避免覆盖本地进度。
+func _restore_raid_saves(config: ConfigFile) -> int:
+	if config == null or Adventure == null or Adventure.store == null:
+		return 0
+	var target: ConfigFile = Adventure.store.config
+	var restored: int = 0
+	for slot: int in range(1, AdventureStore.MAX_RUN_SLOTS + 1):
+		var section: String = "run.%d" % slot
+		if not config.has_section(section):
+			continue
+		if Adventure.store.is_run_occupied(slot):
+			Log.w("ImportExport", ["存档位已有进行中的团，跳过恢复：", slot])
+			continue
+		if target.has_section(section):
+			target.erase_section(section)
+		for key: String in config.get_section_keys(section):
+			target.set_value(section, key, config.get_value(section, key))
+		restored += 1
+	if restored > 0:
+		Adventure.store.save()
+		Log.i("ImportExport", ["已恢复随心挑战存档：", restored])
+	return restored
 
 
 func _parse_index(data: PackedByteArray) -> Array[String]:

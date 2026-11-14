@@ -77,7 +77,7 @@ grow_vertical = 2
 mouse_filter = 1
 
 [node name="DialogPanel" type="PanelContainer" parent="ExportModeDialog/CenterContainer"]
-custom_minimum_size = Vector2(900, 0)
+custom_minimum_size = Vector2(1200, 0)
 layout_mode = 2
 
 [node name="UiMarginContainer" parent="ExportModeDialog/CenterContainer/DialogPanel" instance=ExtResource("1_g823o")]
@@ -97,6 +97,20 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 56
 text = "选择导出模式"
 horizontal_alignment = 1
+
+[node name="AllWithLikedRaidButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "导出所有关卡（含收藏）+排除关卡+随心挑战存档数据"
+
+[node name="AllWithLikedExcludedButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "导出所有关卡（含收藏）+排除关卡"
 
 [node name="AllWithLikedButton" parent="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer" instance=ExtResource("2_dpuln")]
 custom_minimum_size = Vector2(0, 96)
@@ -129,6 +143,8 @@ metadata/ui_focus_cancel = true
 
 [connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton" to="ImportExportManager" method="_on_import_button_pressed"]
 [connection signal="pressed" from="UiMarginContainer/VBoxContainer/UiButton2" to="ImportExportManager" method="_on_export_button_pressed"]
+[connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/AllWithLikedRaidButton" to="ImportExportManager" method="_on_export_mode_all_with_liked_raid"]
+[connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/AllWithLikedExcludedButton" to="ImportExportManager" method="_on_export_mode_all_with_liked_excluded"]
 [connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/AllWithLikedButton" to="ImportExportManager" method="_on_export_mode_all_with_liked"]
 [connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/LikedOnlyButton" to="ImportExportManager" method="_on_export_mode_liked_only"]
 [connection signal="pressed" from="ExportModeDialog/CenterContainer/DialogPanel/UiMarginContainer/VBoxContainer/AllOnlyButton" to="ImportExportManager" method="_on_export_mode_all_only"]

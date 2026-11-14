@@ -175,7 +175,7 @@ func migrate_legacy() -> void
 
 ---
 
-## 5. 导出：三模式弹窗 [已拍板]
+## 5. 导出：五模式弹窗 [已拍板]
 
 ### 5.1 交互
 
@@ -183,6 +183,8 @@ func migrate_legacy() -> void
 
 ```
 选择导出模式
+├─ 导出所有关卡（含收藏）+排除关卡+随心挑战存档数据
+├─ 导出所有关卡（含收藏）+排除关卡
 ├─ 导出所有关卡（含收藏）
 ├─ 仅导出收藏的关卡
 ├─ 仅导出所有关卡
@@ -196,17 +198,27 @@ func migrate_legacy() -> void
 
 ```gdscript
 enum ExportMode {
-    ALL_WITH_LIKED,  # 1
-    LIKED_ONLY,      # 2
-    ALL_ONLY,        # 3
+    ALL_WITH_LIKED,          # 原有模式 1
+    LIKED_ONLY,              # 原有模式 2
+    ALL_ONLY,                # 原有模式 3
+    ALL_WITH_LIKED_RAID,     # 新模式 1
+    ALL_WITH_LIKED_EXCLUDED, # 新模式 2
 }
 ```
 
 | 模式 | zip 内容 | 失败前置条件 |
 | --- | --- | --- |
+| 新 1 全部 + 存档 | 全部 `*.lvl` + 收藏索引/封面 + `raid_excluded.cfg` + `raid_saves.cfg` | 根目录无 `.lvl` |
+| 新 2 全部 + 排除 | 全部 `*.lvl` + 收藏索引/封面 + `raid_excluded.cfg`（**不写** `raid_saves.cfg`） | 根目录无 `.lvl` |
 | 1 所有关卡 + 收藏 | 根目录全部 `*.lvl`（平铺）+ `liked_courses.cfg`（若有收藏）+ `liked_courses/<base>.png`（仅收藏封面） | 根目录无 `.lvl` |
 | 2 仅收藏 | 索引引用且根目录存在的 `*.lvl`（平铺）+ `liked_courses.cfg`（只列实际打包的）+ `liked_courses/<base>.png` | 索引为空，或引用关卡全部缺失 |
 | 3 仅所有关卡 | 根目录全部 `*.lvl`（平铺）；**不写 cfg、不写 png** | 根目录无 `.lvl` |
+
+两个新模式的随心挑战数据取自 `user://adventure.ini` 的内存副本：
+- `raid_excluded.cfg`：`[level.*]` 中 `excluded=true` 的记录（只带 `file` / `excluded` / `exclude_reason` / `excluded_at`，不打包单人样本统计），加 `[raid] kind=excluded`。
+- `raid_saves.cfg`：`[run.1]`…`[run.5]` 的完整键，加 `[raid] kind=saves`。
+- 排除关卡本身已经是 `user://` 根目录里的 `.lvl`，随「所有关卡」一起打包，这里额外带的是**名单与进度数据**。
+- 两个 cfg 都平铺在 zip 根目录，用 `[raid] kind` 防串用；名单为空 / 存档位全空时仍写一个只含 `[raid]` 段的 cfg，方便从包名区分模式。
 
 ### 5.3 打包规则
 
@@ -215,6 +227,8 @@ enum ExportMode {
 3. 模式 1/2 写入 zip 的 cfg 必须是**实际打包关卡集合与索引的交集**（缺失项剔除），保证包自洽；模式 1 没有收藏时不写 cfg、不建 `liked_courses/`（此时内容等同模式 3）。
 4. 缺失的收藏关卡跳过，成功提示附「已跳过 N 个」；返回值仍以「导出成功」开头，`_update_export_ui()` 的前缀判定不受影响。
 5. zip 默认名按模式区分：
+   - 新模式 1：`<device>_mfmp_all_liked_raid_(<earliest>_to_<latest>).zip`
+   - 新模式 2：`<device>_mfmp_all_liked_excluded_(<earliest>_to_<latest>).zip`
    - 模式 1：`<device>_mfmp_all_liked_(<earliest>_to_<latest>).zip`
    - 模式 2：`<device>_mfmp_liked_(<earliest>_to_<latest>).zip`
    - 模式 3：`<device>_mfmp_history_(<earliest>_to_<latest>).zip`
@@ -244,7 +258,11 @@ enum ExportMode {
 | 平铺裸 `.lvl`（无路径成分） | `user://<file>` | 已存在同名则**跳过不覆盖**；计入 `imported_lvls` |
 | `liked_courses/<base>.png` | `user://liked courses/<base>.png` | 覆盖旧封面 |
 | `liked_courses.cfg` | **不直接落盘**，只解析内容 | 用实际文件重建索引，防脏清单 |
+| `raid_excluded.cfg` | **不直接落盘**，合并进 `user://adventure.ini` | 校验 `[raid] kind=excluded`；排除名单只增不减，本机已排除的关卡保留原 `exclude_reason` / `excluded_at` |
+| `raid_saves.cfg` | **不直接落盘**，按槽位合并进 `user://adventure.ini` | 校验 `[raid] kind=saves`；`[run.1]`…`[run.5]` 整段写回，已有进行中团的槽位跳过并记日志，不覆盖本地进度 |
 | 其他（子目录、`..`、盘符、可执行文件等） | 拒绝 + `Log.w` | 顺带修掉现有 `target + file_name` 拼接的路径隐患 |
+
+随心挑战 cfg 也计入导入成功条目；恢复数量附在成功提示末尾（`恢复排除 N / 存档 M`）。旧包（没有这两个 cfg）行为完全不变。
 
 ### 6.3 收藏重建规则（关键修正）
 
@@ -272,9 +290,11 @@ LikedCourses.add_many(收藏)          # 并集合并，不清空本机已有收
 | --- | --- | --- |
 | 旧历史包（平铺 lvl，无 cfg） | 关卡落根目录，收藏不变 | 关卡落根目录，**全部登记为收藏**（房间选择即用户意图） |
 | 旧收藏包（平铺 lvl + 平铺 png，无 cfg） | 关卡落根目录，收藏不变（png 落根目录，与旧行为一致） | 关卡落根目录 + 全部登记收藏 + png 移入收藏夹 = **自动转换** |
-| 新模式 1 包（lvl + cfg + `liked_courses/*.png`） | 关卡 + 收藏一起恢复 | 同左 |
-| 新模式 2 包 | 收藏关卡 + 收藏恢复 | 同左 |
-| 新模式 3 包（仅 lvl） | 只导关卡 | 全部登记为收藏（与旧历史包同规则） |
+| 模式 1 包（lvl + cfg + `liked_courses/*.png`） | 关卡 + 收藏一起恢复 | 同左 |
+| 模式 2 包 | 收藏关卡 + 收藏恢复 | 同左 |
+| 模式 3 包（仅 lvl） | 只导关卡 | 全部登记为收藏（与旧历史包同规则） |
+| 新模式 1 包（全部 + 收藏 + 随心挑战数据） | 关卡 + 收藏 + 排除名单 + 存档 | 同左 |
+| 新模式 2 包（全部 + 收藏 + 排除名单） | 关卡 + 收藏 + 排除名单 | 同左 |
 
 **[风险]** 若用户把旧历史包误导入收藏房间，整包都会变成收藏。这是「房间即意图」的代价；不额外做文件名启发式判断（老包命名不可靠）。
 
@@ -283,8 +303,8 @@ LikedCourses.add_many(收藏)          # 并集合并，不清空本机已有收
 新模式 zip 被**旧版本**游戏导入时：
 
 - 平铺 `.lvl` 仍能落地（旧历史/收藏导入逻辑都按平铺处理）；
-- `liked_courses/*.png` 与 `liked_courses.cfg` 会被旧代码忽略或写失败，不崩溃；
-- 旧版收藏房间导入新模式 1 包时，会把所有关卡复制进收藏夹——即旧行为，可接受。
+- `liked_courses/*.png`、`liked_courses.cfg`、`raid_*.cfg` 会被旧代码忽略或当作非法条目拒绝（提示里多算几个「跳过」），不崩溃；
+- 旧版收藏房间导入模式 1 包时，会把所有关卡复制进收藏夹——即旧行为，可接受。
 
 ---
 
@@ -306,9 +326,9 @@ LikedCourses.add_many(收藏)          # 并集合并，不清空本机已有收
 | `script/history/liked_courses/load_liked_courses.gd` | 数据源改为索引 |
 | `script/history/liked_courses/unlike_button.gd` | 只删索引 + 封面，不碰原关卡 |
 | `script/history/history_level_file_path_set_button.gd` | 路径经 `LikedCourses.level_path()` |
-| `script/history/import_export_manager.gd` | `ExportMode` 枚举、三模式导出、条目化安全导入、旧包分流 |
-| `object/level_import_export.tscn` | 内嵌 `ExportModeDialog`（标题 + 3 模式 + 取消），接按钮信号 |
-| `i18n/mfmp_translation.zh_CN.po` / `.en.po` / `.ja.po` | 新增：`选择导出模式`、`导出所有关卡（含收藏）`、`仅导出收藏的关卡`、`仅导出所有关卡`、`取消`、`未找到历史关卡。`、`未找到喜欢的关卡。` |
+| `script/history/import_export_manager.gd` | `ExportMode` 枚举、五模式导出、条目化安全导入、旧包分流；两个新模式附带 `raid_excluded.cfg` / `raid_saves.cfg`，导入侧按名单与存档位非破坏性合并 |
+| `object/level_import_export.tscn` | 内嵌 `ExportModeDialog`（标题 + 5 模式 + 取消，面板加宽到 1200），接按钮信号 |
+| `i18n/mfmp_translation.zh_CN.po` / `.en.po` / `.ja.po` | 新增：`选择导出模式`、5 个模式按钮、`取消`、`未找到历史关卡。`、`未找到喜欢的关卡。` |
 
 ### 7.3 不改
 
