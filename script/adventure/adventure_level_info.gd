@@ -39,7 +39,7 @@ func _refresh() -> void:
 
 	var index: int = int(run.get("index", 0)) + 1
 	var total: int = int(run.get("total_levels", -1))
-	# 定量团显示「第几关 / 总关数」，无尽团没有总数，只显示当前关
+	# 固定显示「第几关 / 总关数」，无尽没有总数，只显示当前关
 	if total > 0:
 		level_value.text = "%d / %d" % [index, total]
 	else:
@@ -54,7 +54,7 @@ func _refresh() -> void:
 	clear_rate_value.text = _format_clear_rate(stats)
 
 
-## 本关难度名称：无尽团抽空降档后 active_tier 会低于开团档，按「实际这一关」的档显示；
+## 本关难度名称：无尽抽空降档后 active_tier 会低于开团档，按「实际这一关」的档显示；
 ## 0 = 随机档（没有固定难度）。
 func _tier_name(run: Dictionary) -> String:
 	var tier: int = int(run.get("active_tier", run.get("tier", 0)))

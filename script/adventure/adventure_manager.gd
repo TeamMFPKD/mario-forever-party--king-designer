@@ -309,14 +309,14 @@ func current_level_number() -> int:
 	return maxi(1, int(current_run.get("index", 0)) + 1)
 
 
-## 本团总关数；无尽团为 -1。
+## 本团总关数；无尽为 -1。
 func current_total_levels() -> int:
 	if not is_running():
 		return -1
 	return int(current_run.get("total_levels", -1))
 
 
-## 本团已通过的关数（无尽团过场显示「已通过 N 关」用）。
+## 本团已通过的关数（无尽过场显示「已通过 N 关」用）。
 func cleared_count() -> int:
 	if not is_running():
 		return 0
@@ -491,7 +491,7 @@ func on_level_passed() -> void:
 		bonus_awarded = lives > before
 	store.set_run(current_run)
 	advance()
-	# 定量团最后一关会立刻结算，此时不再飘 1UP。
+	# 固定最后一关会立刻结算，此时不再飘 1UP。
 	if bonus_awarded and is_running():
 		life_bonus.emit()
 
@@ -538,7 +538,7 @@ func skip_current_level(hard: bool) -> void:
 		else:
 			stat.solo_skip_soft += 1
 
-	# 定量团的最后一关被跳过时不能直接算通关：抽一关补上这个位置，
+	# 固定的最后一关被跳过时不能直接算通关：抽一关补上这个位置，
 	# 玩家打完替补关卡才结算（否则跳一下就直接「走完了整条路线」）。
 	if _is_finite_last_slot():
 		if _replace_current_slot():
@@ -594,7 +594,7 @@ func delete_run_slot(slot: int) -> bool:
 # 推进内部
 # ---------------------------------------------------------------------------
 
-## 当前是否正停在定量团的最后一格。
+## 当前是否正停在固定的最后一格。
 func _is_finite_last_slot() -> bool:
 	if str(current_run.get("mode", "finite")) != "finite":
 		return false

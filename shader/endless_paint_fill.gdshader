@@ -1,6 +1,6 @@
 shader_type canvas_item;
 
-// 无尽团存档卡的卡面填充：多色渐变 + 滚动。
+// 无尽存档卡的卡面填充：多色渐变 + 滚动。
 //
 // 只画卡面内部：圆角用圆角矩形 SDF 切（不依赖 clip_children，它只按矩形裁），
 // 描边仍是 Button 自己的 StyleBoxFlat border，所以本节点要按描边宽度内缩。
@@ -18,7 +18,7 @@ uniform float band_soft = 0.5;
 
 // 默认配色是「低饱和彩虹」压亮度、提明度后的奶白变种（变种表里的 D5）：
 // 粉红 / 浅黄 / 薄荷 / 天蓝，四色都被推到高明度低饱和，放在浅灰白底上不抢眼，
-// 又能与定量团的白卡区分开。原始 D 组色值 #E89AA0 / #E8D69A / #9ADFA8 / #9AC2E8
+// 又能与固定的白卡区分开。原始 D 组色值 #E89AA0 / #E8D69A / #9ADFA8 / #9AC2E8
 // 统一做了 sat x0.85、val x1.08。
 uniform vec4 color_a : source_color = vec4(0.983, 0.702, 0.723, 1.000);
 uniform vec4 color_b : source_color = vec4(0.983, 0.918, 0.702, 1.000);

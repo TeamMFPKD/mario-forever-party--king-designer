@@ -20,7 +20,7 @@ func next_level_pass() -> void:
 	var passed_count: int = Adventure.cleared_count() + 1
 	Adventure.on_level_passed()
 	var finished: bool = not Adventure.is_running()
-	# 定量团按「团内第几关」显示；无尽团显示「已通过 N 关」，用通过数。
+	# 固定按「团内第几关」显示；无尽显示「已通过 N 关」，用通过数。
 	var display_number: int = level_number if total_levels > 0 else passed_count
 	Adventure.play_transition(
 		"finish" if finished else "pass",

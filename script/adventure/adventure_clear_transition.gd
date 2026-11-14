@@ -135,7 +135,7 @@ func _ready() -> void:
 		call_deferred("play", 3, 10)
 
 
-## current：刚通过的关序号（1 起）；total <= 0 表示无尽团。
+## current：刚通过的关序号（1 起）；total <= 0 表示无尽。
 func play(current: int, total: int) -> void:
 	_start_level = current
 	_total_level = total

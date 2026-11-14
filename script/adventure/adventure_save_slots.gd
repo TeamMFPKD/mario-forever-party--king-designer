@@ -3,7 +3,7 @@ extends PanelContainer
 ## 通栏存档位栏：一排固定 5 个格子，没有单独的「＋ 新存档」按钮。
 ##
 ## 有团可续的格子显示「存档N」，并用该团难度档的主题色描边（选中时整块填该色）；
-## 无尽团的格子例外：卡片内部铺一层滚动的多色渐变（油漆桶），描边仍是档位色，
+## 无尽的格子例外：卡片内部铺一层滚动的多色渐变（油漆桶），描边仍是档位色，
 ## 选中/未选中只调明度与饱和度，不把彩色卡面盖成纯色（见 adventure_slot_paint.gd）。
 ## 第一个可开新团的格子显示「新存档」；其余空格显示「空」，坏档显示「进度异常」。
 ## 例：存档1 / 存档2 / 新存档 / 空 / 空
@@ -42,11 +42,11 @@ const SELECTED_COLOR: Color = Color(1, 0.9, 0.6, 1)
 const NORMAL_COLOR: Color = Color(1, 1, 1, 1)
 ## 空槽 / 坏档仍要看清「空」字，别淡到快看不见。
 const DISABLED_COLOR: Color = Color(1, 1, 1, 0.72)
-## 无尽团卡面：底色交给 Paint 节点，样式表只剩描边（fill 透明）。
+## 无尽卡面：底色交给 Paint 节点，样式表只剩描边（fill 透明）。
 ## hover 给一层很淡的白，保证指针上去仍有反馈。
 const ENDLESS_CARD_FILL: Color = Color(0, 0, 0, 0)
 const ENDLESS_CARD_HOVER: Color = Color(1, 1, 1, 0.18)
-## 无尽团的卡面是高明度低饱和的奶白彩底（D5 配色），深色标题本身就够清楚。
+## 无尽的卡面是高明度低饱和的奶白彩底（D5 配色），深色标题本身就够清楚。
 ## 早先用过"白字 + 6px 深色描边"，在这套浅底上像贴纸，已弃用：
 ## 换配色时务必确认标题与卡面的明度差，别把这条改回白字。
 const ENDLESS_TEXT_COLOR: Color = Color(0.102, 0.102, 0.122, 1)
@@ -61,9 +61,9 @@ var _slot_selection: Array[int] = [-1, -1, -1, -1, -1]
 var _slot_enabled: Array[bool] = [false, false, false, false, false]
 ## 有团可续的格子记团的难度档 1..4，其余 -1；用来给卡片上色。
 var _slot_tier: Array[int] = [-1, -1, -1, -1, -1]
-## 有团可续的格子记团的流程（"finite" / "endless"），其余空串；无尽团要铺彩色卡面。
+## 有团可续的格子记团的流程（"finite" / "endless"），其余空串；无尽要铺彩色卡面。
 var _slot_mode: Array[String] = ["", "", "", "", ""]
-## 每格 Button 下的 Paint 节点（无尽团彩色卡面），没有则为 null，在 _ready 里缓存。
+## 每格 Button 下的 Paint 节点（无尽彩色卡面），没有则为 null，在 _ready 里缓存。
 var _slot_paints: Array = [null, null, null, null, null]
 
 
@@ -172,7 +172,7 @@ func _apply_highlight() -> void:
 		var selected: bool = value >= 0 and value == _selection
 		button.button_pressed = selected
 		if _is_endless(index):
-			# 无尽团：卡面交给 Paint 的滚动彩色渐变，样式表只留档位色描边。
+			# 无尽：卡面交给 Paint 的滚动彩色渐变，样式表只留档位色描边。
 			_apply_endless_card(index, button, selected)
 			button.modulate = NORMAL_COLOR
 		elif _slot_tier[index] >= 0:
@@ -186,14 +186,14 @@ func _apply_highlight() -> void:
 			button.modulate = DISABLED_COLOR
 
 
-## 这一格是不是「无尽团」的存档。
+## 这一格是不是「无尽」的存档。
 func _is_endless(index: int) -> bool:
 	if index < 0 or index >= _slot_mode.size():
 		return false
 	return _slot_mode[index] == "endless" and _slot_tier[index] >= 0
 
 
-## 无尽团卡面：样式表改成「透明底 + 档位色描边」，彩色渐变由 Paint 节点的 shader 出。
+## 无尽卡面：样式表改成「透明底 + 档位色描边」，彩色渐变由 Paint 节点的 shader 出。
 ## 选中态不换底色（Paint 一直开着），只让描边更粗、标题更亮。
 func _apply_endless_card(index: int, button: Button, selected: bool) -> void:
 	var accent: Color = _tier_accent(_slot_tier[index])
@@ -219,7 +219,7 @@ func _apply_endless_card(index: int, button: Button, selected: bool) -> void:
 		paint.call("set_selected", selected)
 
 
-## 把某一格的彩色卡面打开 / 关闭。非无尽团一律关掉，避免残留。
+## 把某一格的彩色卡面打开 / 关闭。非无尽一律关掉，避免残留。
 func _set_paint_active(index: int, active: bool) -> void:
 	if index < 0 or index >= _slot_paints.size():
 		return

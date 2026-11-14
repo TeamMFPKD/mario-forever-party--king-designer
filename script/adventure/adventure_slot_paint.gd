@@ -2,10 +2,10 @@ extends ColorRect
 
 class_name AdventureSlotPaint
 
-## 无尽团存档卡的「彩色油漆桶」卡面（挂在存档卡 Button 下的 Paint 节点）。
+## 无尽存档卡的「彩色油漆桶」卡面（挂在存档卡 Button 下的 Paint 节点）。
 ##
 ## 由 adventure_save_slots.gd 按存档的 mode 打开 / 关闭：
-##   定量团和空槽保持原来的纯色卡片；无尽团在卡片内部铺一层滚动的多色渐变。
+##   固定和空槽保持原来的纯色卡片；无尽在卡片内部铺一层滚动的多色渐变。
 ##
 ## 三个必须由脚本同步给 shader 的量（都不能写死在 .tscn 里）：
 ##   1. width_px —— 实际像素尺寸。卡片在 HBox 里均分宽度，窗口缩放会变；
