@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 ## 编辑房间的“制作完毕！”按钮。
 ## 当前按钮改用和普通按钮一致的淡黄色矩形（主题样式见 edit.tscn 的 theme_override_styles），
@@ -11,6 +11,7 @@ var _hovered: bool = false
 
 
 func _ready() -> void:
+	super()
 	_burst = _find_burst()
 	pressed.connect(_on_button_pressed)
 	mouse_entered.connect(_on_mouse_entered)

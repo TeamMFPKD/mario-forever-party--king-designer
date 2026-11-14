@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 ## 把“输入映射”面板里的按键恢复为项目默认值（project.godot 的 [input] 定义）。
 
@@ -8,9 +8,10 @@ const INPUT_EVENT_SECTION: String = "input_event"
 const INPUT_MAP_BUTTON_GROUP: String = "input_map_set_button"
 
 func _ready() -> void:
-	pressed.connect(_on_pressed)
+	super()
+	pressed.connect(_on_button_pressed)
 
-func _on_pressed() -> void:
+func _on_button_pressed() -> void:
 	var actions: Dictionary = _collect_actions()
 	_clear_saved_mappings()
 	for action_name: String in actions.keys():

@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 ## 记录来源房间的场景路径，退出关卡/编辑器时按它返回（从"喜欢的关卡"进入就回收藏页）。
 const RETURN_SCENE_META: String = "return_scene_path"
@@ -16,6 +16,7 @@ var level_path_set: Node
 var _return_scene_path: String = ""
 
 func _ready() -> void:
+	super()
 	pressed.connect(_on_button_pressed)
 	if is_liked_course:
 		level_path_name = LikedCourses.level_path(level_file_name_label.text)

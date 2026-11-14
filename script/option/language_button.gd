@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 ## 语言切换按钮。语言状态的读写统一走 GameConfig，
 ## 这样初次运行的系统语言推断、设置保存、旧存档兼容都只有一处实现。
@@ -9,13 +9,14 @@ var cycle: PackedStringArray = ["en", "zh_CN"]
 
 
 func _ready() -> void:
-	pressed.connect(_on_pressed)
+	super()
+	pressed.connect(_on_button_pressed)
 	current_language = GameConfig.get_language()
 	TranslationServer.set_locale(current_language)
 	update_button_text()
 
 
-func _on_pressed() -> void:
+func _on_button_pressed() -> void:
 	var index: int = cycle.find(current_language)
 	current_language = cycle[(index + 1) % cycle.size()]
 	GameConfig.set_language(current_language)

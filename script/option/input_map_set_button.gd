@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @export var input_map_name: String
 
@@ -7,6 +7,7 @@ var is_waiting_for_input: bool = false
 const MAX_SLOTS: int = 3
 
 func _ready() -> void:
+    super()
     add_to_group("input_map_set_button")
     pressed.connect(_on_button_pressed)
     _update_button_text()

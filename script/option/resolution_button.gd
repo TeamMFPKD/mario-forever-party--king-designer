@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 signal mobile_platform_invisible
 
@@ -12,6 +12,7 @@ var current_index: int = 0
 var config: ConfigFile
 
 func _ready() -> void:
+	super()
 	# 移动端按钮不可视
 	if not PlatformUtils.is_desktop_platform():
 		_resolution_mobile_platform_invisible()

@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @export var line_edit_local_port: LineEdit
 @export var line_edit_player_name: LineEdit
@@ -16,6 +16,7 @@ var player_name: String = ""
 
 
 func _ready() -> void:
+	super()
 	pressed.connect(_on_button_pressed)
 	game_config = get_tree().get_first_node_in_group("game_config")
 

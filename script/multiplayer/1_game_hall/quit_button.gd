@@ -1,9 +1,10 @@
-extends Button
+extends UiSoundButton
 
 
 func _ready() -> void:
-	pressed.connect(_on_pressed)
+	super()
+	pressed.connect(_on_button_pressed)
 
 
-func _on_pressed() -> void:
+func _on_button_pressed() -> void:
 	MPManager.leave_room("主动退出")

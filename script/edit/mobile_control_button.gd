@@ -1,10 +1,11 @@
-extends Button
+extends UiSoundButton
 
 @export var show_mode: MobileControl.ShowModeType = MobileControl.ShowModeType.SHOW
 
 var mobile_control: MobileControl
 
 func _ready() -> void:
+	super()
 	# 运行平台检测
 	if not (OS.has_feature("mobile")):
 		hide()
@@ -13,9 +14,9 @@ func _ready() -> void:
 	mobile_control = get_tree().get_first_node_in_group("mobile_control")
 	mobile_control.show_mode = show_mode
 	update_button_text()
-	pressed.connect(_on_pressed)
+	pressed.connect(_on_button_pressed)
 
-func _on_pressed() -> void:
+func _on_button_pressed() -> void:
 	if mobile_control == null:
 		return
 	

@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @export var line_edit_frp_domain: LineEdit
 @export var line_edit_remote_port: LineEdit
@@ -18,6 +18,7 @@ var player_name: String = ""
 
 
 func _ready() -> void:
+	super()
 	pressed.connect(_on_button_pressed)
 	game_config = GameConfig
 

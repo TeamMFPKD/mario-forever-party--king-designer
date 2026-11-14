@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 var is_ready: bool = false
 var last_input_time: float = 0.0
@@ -11,6 +11,7 @@ var skip_auto_unready: bool = false
 
 
 func _ready() -> void:
+	super()
 	skip_auto_unready = MpTest.has("--mp-no-ready-timeout")
 	pressed.connect(_on_button_pressed)
 	last_input_time = Time.get_unix_time_from_system()

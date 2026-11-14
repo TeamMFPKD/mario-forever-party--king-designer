@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @export var level_file_name_label: Label
 @export var path_to_ancestor: NodePath = "../../.."
@@ -6,6 +6,7 @@ extends Button
 var ancestor_node: Node
 
 func _ready() -> void:
+	super()
 	pressed.connect(_on_button_pressed)
 	ancestor_node = get_node(path_to_ancestor)
 

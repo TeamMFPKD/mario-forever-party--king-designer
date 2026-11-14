@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @warning_ignore_start("unsafe_property_access", "unsafe_method_access")
 
@@ -10,7 +10,8 @@ const KEY: String = "history_ghost_enabled"
 
 
 func _ready() -> void:
-	pressed.connect(_on_pressed)
+	super()
+	pressed.connect(_on_button_pressed)
 	_refresh_text()
 
 
@@ -21,7 +22,7 @@ func _is_enabled() -> bool:
 	return true
 
 
-func _on_pressed() -> void:
+func _on_button_pressed() -> void:
 	GameConfig.config.set_value(SECTION, KEY, not _is_enabled())
 	GameConfig.save()
 	_refresh_text()

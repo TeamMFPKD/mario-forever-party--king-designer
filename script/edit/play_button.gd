@@ -1,4 +1,4 @@
-extends Button
+extends UiSoundButton
 
 @export var room_scene_uid: String
 @export var target_mode: GameModeSingleton.GameModeType = GameModeSingleton.GameModeType.TEST
@@ -6,6 +6,7 @@ extends Button
 var game_mode: GameMode
 
 func _ready() -> void:
+	super()
 	game_mode = GameModeSingleton
 	pressed.connect(_on_button_pressed)
 
