@@ -58,7 +58,14 @@ var parent: StaticBody2D = null
 @export var _collision_shape_2d: CollisionShape2D
 static var _original_collision_shape_2d: Shape2D = null
 var _origin_collision_layer: int = 0
-#var _hidden_shape: RectangleShape2D = preload("uid://dgpgao4212wvq")
+
+## 隐藏砖一律改用 32×32 矩形碰撞。
+## 可见的问号砖用的是凸多边形，底边中间凹进 2px（还原原作砖块底缝）。
+## 砖藏起来之后玩家看不见那个凹口，从下方斜着顶到边缘时判定反而会落空，
+## 所以隐藏态换成正矩形；顶出来（set_visible）再换回原来的多边形。
+## 原来的写法是 preload 一个 uid 资源，但那个资源在项目里不存在，从未生效。
+const HIDDEN_SHAPE_SIZE: Vector2 = Vector2(32, 32)
+static var _hidden_shape: RectangleShape2D = null
 
 const HIDDEN_LAYER: int = 132
 
@@ -217,8 +224,16 @@ func set_hidden() -> void:
 	Callable(_apply_hidden_shape).call_deferred()
 
 func _apply_hidden_shape() -> void:
-	#_collision_shape_2d.shape = _hidden_shape
+	_collision_shape_2d.shape = _get_hidden_shape()
 	_collision_shape_2d.one_way_collision = true
+
+
+## 懒建一次即可，所有隐藏砖共用同一个形状资源。
+static func _get_hidden_shape() -> RectangleShape2D:
+	if _hidden_shape == null:
+		_hidden_shape = RectangleShape2D.new()
+		_hidden_shape.size = HIDDEN_SHAPE_SIZE
+	return _hidden_shape
 
 func set_visible() -> void:
 	if parent == null:
@@ -231,5 +246,7 @@ func set_visible() -> void:
 	_collision_shape_2d.position = Vector2.ZERO
 
 func _apply_visible_shape() -> void:
-	#_collision_shape_2d.shape = _original_collision_shape_2d
+	# 顶出来后换回可见砖的凸多边形，凹底那条缝跟着回来。
+	if _original_collision_shape_2d != null:
+		_collision_shape_2d.shape = _original_collision_shape_2d
 	_collision_shape_2d.one_way_collision = false
