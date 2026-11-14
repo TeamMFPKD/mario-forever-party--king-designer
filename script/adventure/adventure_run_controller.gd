@@ -17,11 +17,11 @@ func next_level_pass() -> void:
 	# 跳过关卡会让通过数和实际关号错位，结算时 current_run 还会被清空。
 	var level_number: int = Adventure.current_level_number()
 	var total_levels: int = Adventure.current_total_levels()
-	var passed_count: int = Adventure.cleared_count() + 1
 	Adventure.on_level_passed()
 	var finished: bool = not Adventure.is_running()
-	# 固定按「团内第几关」显示；无尽显示「已通过 N 关」，用通过数。
-	var display_number: int = level_number if total_levels > 0 else passed_count
+	# 过场数字与左侧面板一致，都用「团内第几关」：跳过关卡会让已通过数落后于关号，
+	# 用通过数会让过场看起来倒退（面板已经在第 121 关，过场却从 99 开始滚）。
+	var display_number: int = level_number
 	Adventure.play_transition(
 		"finish" if finished else "pass",
 		Adventure.result_scene() if finished else "",
