@@ -45,8 +45,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 toggle_mode = true
-tooltip_text = "选择这个存档位"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 50
 text = ""
 
 [node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot1"]
@@ -85,7 +84,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 50
 text = "存档 1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -96,8 +95,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 toggle_mode = true
-tooltip_text = "选择这个存档位"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 50
 text = ""
 
 [node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot2"]
@@ -136,7 +134,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 50
 text = "存档 2"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -147,8 +145,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 toggle_mode = true
-tooltip_text = "选择这个存档位"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 50
 text = ""
 
 [node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot3"]
@@ -187,7 +184,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 50
 text = "存档 3"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -198,8 +195,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 toggle_mode = true
-tooltip_text = "选择这个存档位"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 50
 text = ""
 
 [node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot4"]
@@ -238,7 +234,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 50
 text = "存档 4"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -249,8 +245,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 toggle_mode = true
-tooltip_text = "选择这个存档位"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 50
 text = ""
 
 [node name="Paint" type="ColorRect" parent="Margin/Box/SlotRow/Slot5"]
@@ -289,7 +284,7 @@ size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 50
 text = "存档 5"
 horizontal_alignment = 1
 vertical_alignment = 1
