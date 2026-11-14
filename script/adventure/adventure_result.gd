@@ -9,7 +9,10 @@ extends Control
 ##   - 这里只负责标题裁剪框、数据表、按钮，以及两者共用的演出与数据绑定。
 ## 结局场景覆写 is_game_clear 决定配色，标题行统一命名为 TitleClip/TitleRow。
 ##
-## 演出：标题逐字从裁剪框上沿掉落（DropInAnimation），掉完后数据表上划淡入。
+## 演出分两套：
+## - GAME OVER：标题逐字从裁剪框上沿掉落（DropInAnimation），掉完后数据表上划淡入；
+## - GAME CLEAR：标题逐字直接出现在目标位置，带初速度受重力影响，落到目标 y 会反弹
+##   （LetterBounceAnimation），弹稳后数据表再上划淡入。
 ## 数据来自 Adventure.last_summary（内存），不读 MPManager。
 
 const STAGE_SCENE: String = "res://room/adventure_stage.tscn"
@@ -24,6 +27,11 @@ const DATA_AFTER_LETTERS_DELAY: float = 0.18
 ## 数据表格上划距离与时长
 const DATA_RISE_DISTANCE: float = 110.0
 const DATA_FADE_TIME: float = 0.5
+
+## GAME CLEAR：相邻字母开始弹跳的间隔（秒）
+const CLEAR_LETTER_STAGGER: float = 0.09
+## GAME CLEAR：等最后一颗字母弹稳的最长等待（秒），兜底防止数据表永远不出现
+const CLEAR_LETTERS_TIMEOUT: float = 4.0
 
 const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
 
@@ -46,6 +54,8 @@ const CAPTION_FONT_SIZE: int = 30
 var _title_row: HBoxContainer
 var _data_rest_y: float = 0.0
 var _letters: Array[DropInAnimation] = []
+## GAME CLEAR 用的逐字弹跳动画（与 GAME OVER 的掉落动画分开存）
+var _bounce_letters: Array[LetterBounceAnimation] = []
 
 
 func _ready() -> void:
@@ -67,10 +77,14 @@ func _ready() -> void:
 func _apply_mode() -> void:
 	if is_game_clear:
 		_apply_clear_text_style()
-	# 标题行先隐藏，等 _play_intro 排好版再显示，避免入场前闪一帧完整标题。
 	title_clip.visible = true
 	if _title_row != null:
-		_title_row.visible = false
+		# 标题行先摆出来但全透明：容器只给可见的子节点排版，
+		# 排版没落定就采样静止位置，字母会停在偏掉的地方（见 _wait_layout_ready）。
+		# GAME CLEAR 的字母各自淡入，行本身保持不透明；
+		# GAME OVER 由 _play_intro 统一淡入整行。
+		_title_row.visible = true
+		_title_row.modulate.a = 0.0
 
 
 ## 浅色底上用深棕字，表头再淡一档，描边压到 2px 保留统一的黑描边。
@@ -103,9 +117,68 @@ func _fit_row(row: HBoxContainer) -> void:
 		slot.custom_minimum_size = Vector2(minimum.x + 10.0, minimum.y + 8.0)
 
 
+## 等标题行排版稳定再开始演出。
+##
+## 主题字体是懒加载的：字体换上之前，字母 Label 用的是默认字体，最小高度比
+## 换上之后小一截，槽位按旧字形撑出来的尺寸就偏了，字母会被撑成
+## 「比槽位高出一截」，采样到的静止位置也跟着偏（实测第一个字母偏了 85px，
+## 会停在半空）。
+##
+## 所以这里反复做两件事：按当前字形重新撑槽位、等排版落定。
+## 判据：字母尺寸等于槽位尺寸、字母在槽位里的偏移归零（满幅锚定），
+## 且字形最小尺寸连续两帧没再变（说明字体已经换上）。
+func _wait_layout_ready() -> void:
+	var guard: int = 30
+	var last_min: Vector2 = Vector2.ZERO
+	while guard > 0:
+		_fit_row(_title_row)
+		await get_tree().process_frame
+		var minimum: Vector2 = _letters_min_size()
+		if _layout_ready() and minimum == last_min:
+			return
+		last_min = minimum
+		guard -= 1
+
+
+## 第一个字母的最小尺寸：所有字母同字号同字体，取一个就够。
+func _letters_min_size() -> Vector2:
+	if _title_row == null:
+		return Vector2.ZERO
+	for child: Node in _title_row.get_children():
+		var slot: Control = child as Control
+		if slot == null:
+			continue
+		var letter: Label = slot.get_node_or_null("Letter") as Label
+		if letter == null:
+			continue
+		return letter.get_minimum_size()
+	return Vector2.ZERO
+
+
+func _layout_ready() -> bool:
+	if _title_row == null:
+		return true
+	for child: Node in _title_row.get_children():
+		var slot: Control = child as Control
+		if slot == null:
+			continue
+		var letter: Label = slot.get_node_or_null("Letter") as Label
+		if letter == null:
+			continue
+		if slot.size.y <= 0.0 or letter.size != slot.size:
+			return false
+		if absf(letter.position.y) > 0.5 or absf(letter.position.x) > 0.5:
+			return false
+	return true
+
+
 func _prepare_letters(row: HBoxContainer) -> void:
 	_letters.clear()
+	_bounce_letters.clear()
 	if row == null:
+		return
+	if is_game_clear:
+		_prepare_clear_letters(row)
 		return
 	var fall: float = title_clip.size.y + LETTER_DROP_MARGIN
 	for child: Node in row.get_children():
@@ -123,6 +196,23 @@ func _prepare_letters(row: HBoxContainer) -> void:
 		drop.drop_distance = fall
 		letter.add_child(drop)
 		_letters.append(drop)
+
+
+## GAME CLEAR：字母不走「从遮罩上沿掉进来」，改成在目标位置直接出现，
+## 再由重力动画负责弹跳落位（淡入也在动画脚本里做，逐字错峰才看得出「一个一个出现」）。
+func _prepare_clear_letters(row: HBoxContainer) -> void:
+	for child: Node in row.get_children():
+		var slot: Control = child as Control
+		if slot == null:
+			continue
+		var letter: Label = slot.get_node_or_null("Letter") as Label
+		if letter == null:
+			continue
+		var bounce: LetterBounceAnimation = LetterBounceAnimation.new()
+		bounce.name = "Bounce"
+		bounce.target_path = ^".."
+		letter.add_child(bounce)
+		_bounce_letters.append(bounce)
 
 
 # ---------------------------------------------------------------------------
@@ -166,9 +256,15 @@ func _play_intro() -> void:
 	if _title_row == null:
 		_show_data()
 		return
-	# 先让标题行可见（透明）等一帧，保证 HBox 已经按字形宽度排好位置，
-	# 否则字母可能在 x=0 处起跳、随后才被容器挪到正确位置。
-	_title_row.visible = true
+	# 标题行在 _apply_mode 里已经摆出来（透明），这里等排版落定再开始演出，
+	# 否则字母可能在 x=0 处起跳、或停在偏掉的静止位置上。
+	await _wait_layout_ready()
+	if is_game_clear:
+		# GAME CLEAR 的字母各自淡入，标题行本身保持不透明。
+		_title_row.modulate.a = 1.0
+		await get_tree().process_frame
+		await _play_clear_intro()
+		return
 	_title_row.modulate.a = 0.0
 	await get_tree().process_frame
 	_title_row.modulate.a = 1.0
@@ -195,6 +291,40 @@ func _play_intro() -> void:
 	wait += DATA_AFTER_LETTERS_DELAY
 	await get_tree().create_timer(wait).timeout
 	_show_data()
+
+
+## GAME CLEAR：逐字弹跳入场。等最后一颗字母弹稳再上划数据表。
+func _play_clear_intro() -> void:
+	# 数据表同样等排版完成后采样静止位置，再挪到下方准备上划。
+	_data_rest_y = data_block.position.y
+	data_block.modulate.a = 0.0
+	data_block.position.y = _data_rest_y + DATA_RISE_DISTANCE
+	data_block.visible = false
+
+	if _bounce_letters.is_empty():
+		_show_data()
+		return
+
+	for index: int in range(_bounce_letters.size()):
+		var bounce: LetterBounceAnimation = _bounce_letters[index]
+		bounce.start_delay = float(index) * CLEAR_LETTER_STAGGER
+		bounce.play()
+
+	await _wait_letters_settled(_bounce_letters[_bounce_letters.size() - 1])
+	await get_tree().create_timer(DATA_AFTER_LETTERS_DELAY).timeout
+	_show_data()
+
+
+## 等最后一颗字母弹跳停稳；动画异常时用超时兜底，别让数据表永远不出现。
+func _wait_letters_settled(last: LetterBounceAnimation) -> void:
+	var guard: float = CLEAR_LETTERS_TIMEOUT
+	while guard > 0.0:
+		if last == null or not is_instance_valid(last):
+			return
+		if last.is_finished():
+			return
+		await get_tree().process_frame
+		guard -= get_process_delta_time()
 
 
 func _show_data() -> void:
