@@ -17,8 +17,8 @@
 | `move_down` | ↓ / S | 12（十字下） | axis 1 = +1 |
 | `move_left` | ← / A | 13（十字左） | axis 0 = -1 |
 | `move_right` | → / D | 14（十字右） | axis 0 = +1 |
-| `move_jump` | Z / K | 0（A） | — |
-| `move_fire` | X / J | 1（B） | — |
+| `move_jump` | Z / K | 0（A）、1（B） | — |
+| `move_fire` | X / J | 2（X）、3（Y） | — |
 | `restart` | Q | 9（Start） | — |
 | `photo` | C | 10 | — |
 | `pause` | P | 6 | — |
