@@ -29,27 +29,6 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Header" type="HBoxContainer" parent="Margin/Box"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="Margin/Box/Header"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
-text = "存档位"
-
-[node name="Spacer" type="Control" parent="Margin/Box/Header"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CountLabel" type="Label" parent="Margin/Box/Header"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
-text = "0 / 5"
-
 [node name="SlotRow" type="HBoxContainer" parent="Margin/Box"]
 layout_mode = 2
 theme_override_constants/separation = 12
@@ -59,7 +38,8 @@ custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-tooltip_text = "点击继续这个团"
+toggle_mode = true
+tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
@@ -69,9 +49,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -12.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -79,37 +59,22 @@ theme_override_constants/separation = 0
 
 [node name="Title" type="Label" parent="Margin/Box/SlotRow/Slot1/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 26
 text = "存档 1"
 horizontal_alignment = 1
-
-[node name="Line1" type="Label" parent="Margin/Box/SlotRow/Slot1/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = "空存档位"
-horizontal_alignment = 1
-
-[node name="Line2" type="Label" parent="Margin/Box/SlotRow/Slot1/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = ""
-horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Slot2" type="Button" parent="Margin/Box/SlotRow"]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-tooltip_text = "点击继续这个团"
+toggle_mode = true
+tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
@@ -119,9 +84,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -12.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -129,37 +94,22 @@ theme_override_constants/separation = 0
 
 [node name="Title" type="Label" parent="Margin/Box/SlotRow/Slot2/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 26
 text = "存档 2"
 horizontal_alignment = 1
-
-[node name="Line1" type="Label" parent="Margin/Box/SlotRow/Slot2/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = "空存档位"
-horizontal_alignment = 1
-
-[node name="Line2" type="Label" parent="Margin/Box/SlotRow/Slot2/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = ""
-horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Slot3" type="Button" parent="Margin/Box/SlotRow"]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-tooltip_text = "点击继续这个团"
+toggle_mode = true
+tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
@@ -169,9 +119,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -12.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -179,37 +129,22 @@ theme_override_constants/separation = 0
 
 [node name="Title" type="Label" parent="Margin/Box/SlotRow/Slot3/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 26
 text = "存档 3"
 horizontal_alignment = 1
-
-[node name="Line1" type="Label" parent="Margin/Box/SlotRow/Slot3/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = "空存档位"
-horizontal_alignment = 1
-
-[node name="Line2" type="Label" parent="Margin/Box/SlotRow/Slot3/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = ""
-horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Slot4" type="Button" parent="Margin/Box/SlotRow"]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-tooltip_text = "点击继续这个团"
+toggle_mode = true
+tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
@@ -219,9 +154,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -12.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -229,37 +164,22 @@ theme_override_constants/separation = 0
 
 [node name="Title" type="Label" parent="Margin/Box/SlotRow/Slot4/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 26
 text = "存档 4"
 horizontal_alignment = 1
-
-[node name="Line1" type="Label" parent="Margin/Box/SlotRow/Slot4/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = "空存档位"
-horizontal_alignment = 1
-
-[node name="Line2" type="Label" parent="Margin/Box/SlotRow/Slot4/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = ""
-horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Slot5" type="Button" parent="Margin/Box/SlotRow"]
 custom_minimum_size = Vector2(220, 88)
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-tooltip_text = "点击继续这个团"
+toggle_mode = true
+tooltip_text = "选择这个存档位"
 theme_override_font_sizes/font_size = 20
 text = ""
 
@@ -269,9 +189,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 12.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -12.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -279,27 +199,11 @@ theme_override_constants/separation = 0
 
 [node name="Title" type="Label" parent="Margin/Box/SlotRow/Slot5/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 26
 text = "存档 5"
 horizontal_alignment = 1
-
-[node name="Line1" type="Label" parent="Margin/Box/SlotRow/Slot5/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = "空存档位"
-horizontal_alignment = 1
-
-[node name="Line2" type="Label" parent="Margin/Box/SlotRow/Slot5/Content"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 16
-text = ""
-horizontal_alignment = 1
+vertical_alignment = 1

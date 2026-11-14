@@ -1,12 +1,349 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource type="Script" path="res://script/adventure/adventure_stage.gd" id="1_stage"]
+[ext_resource type="Script" path="res://script/adventure/adventure_stage.gd" id="1_script"]
+[ext_resource type="Theme" path="res://mfmp_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://object/ui/adventure_save_slots.tscn" id="3_slots"]
+[ext_resource type="Script" path="res://script/adventure/adventure_scenery.gd" id="4_scenery"]
+[ext_resource type="Script" uid="uid://bf667kd8ycusk" path="res://script/ui/ui_sound_button.gd" id="5_back_snd_script"]
+[ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="6_back_snd"]
+[ext_resource type="Script" path="res://script/adventure/adventure_stage_preview.gd" id="7_preview"]
 
-[node name="AdventureStage" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_preview"]
+bg_color = Color(1, 1, 1, 0.42)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15, 0.2, 0.3, 0.18)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_params"]
+bg_color = Color(1, 1, 1, 0.74)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15, 0.2, 0.3, 0.22)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="AdventureStage" type="Control" node_paths=PackedStringArray("background", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "lives_label", "preview_grid", "scenery", "back_button", "trash_button", "start_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_stage")
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+background = NodePath("Background")
+title_label = NodePath("Layout/Box/TitleBar/Title")
+status_label = NodePath("Layout/Box/StatusRow/StatusLabel")
+save_slots = NodePath("Layout/Box/SaveSlots")
+params_panel = NodePath("Layout/Box/PreviewPanel/ParamsPanel")
+params_title = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ParamsTitle")
+length_label = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow/LengthLabel")
+length_slider = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow/LengthSlider")
+lives_label = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LivesLabel")
+preview_grid = NodePath("Layout/Box/PreviewPanel/PreviewCenter/PreviewGrid")
+scenery = NodePath("Layout/Box/PreviewPanel/Scenery")
+back_button = NodePath("Layout/Box/BottomBar/BackButton")
+trash_button = NodePath("Layout/Box/BottomBar/TrashButton")
+start_button = NodePath("Layout/Box/BottomBar/StartButton")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.906, 0.922, 0.949, 1)
+
+[node name="Layout" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 20
+
+[node name="Box" type="VBoxContainer" parent="Layout"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleBar" type="HBoxContainer" parent="Layout/Box"]
+custom_minimum_size = Vector2(0, 86)
+layout_mode = 2
+
+[node name="TitleLeft" type="Control" parent="Layout/Box/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Layout/Box/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.101961, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 58
+text = "百人团"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleRight" type="Control" parent="Layout/Box/TitleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="SaveSlots" parent="Layout/Box" instance=ExtResource("3_slots")]
+custom_minimum_size = Vector2(0, 124)
+layout_mode = 2
+
+[node name="PreviewPanel" type="Panel" parent="Layout/Box"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_preview")
+
+[node name="Scenery" type="Control" parent="Layout/Box/PreviewPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_scenery")
+
+[node name="ParamsPanel" type="PanelContainer" parent="Layout/Box/PreviewPanel"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 404.0
+offset_bottom = -16.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_params")
+
+[node name="ParamsMargin" type="MarginContainer" parent="Layout/Box/PreviewPanel/ParamsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="ParamsBox" type="VBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ParamsTitle" type="Label" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "新存档设置"
+
+[node name="PoolRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PoolAll" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/PoolRow"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "所有关卡"
+
+[node name="PoolLiked" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/PoolRow"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "喜欢的关卡"
+
+[node name="TierColumn" type="VBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Tier1" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "简单"
+
+[node name="Tier2" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "普通"
+
+[node name="Tier3" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "困难"
+
+[node name="Tier4" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "超难"
+
+[node name="Tier5" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "随机"
+
+[node name="ModeRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ModeFinite" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ModeRow"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "定量团"
+
+[node name="ModeEndless" type="Button" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ModeRow"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+theme_override_font_sizes/font_size = 20
+text = "无尽团"
+
+[node name="LengthRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LengthLabel" type="Label" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "打几关：10"
+
+[node name="LengthSlider" type="HSlider" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 5.0
+max_value = 50.0
+step = 1.0
+value = 10.0
+
+[node name="LivesLabel" type="Label" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "初始命数：20"
+autowrap_mode = 3
+
+[node name="PreviewCenter" type="CenterContainer" parent="Layout/Box/PreviewPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PreviewGrid" type="Control" parent="Layout/Box/PreviewPanel/PreviewCenter"]
+custom_minimum_size = Vector2(706, 58)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("7_preview")
+
+[node name="BottomBar" type="HBoxContainer" parent="Layout/Box"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BackButton" type="Button" parent="Layout/Box/BottomBar"]
+custom_minimum_size = Vector2(260, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+text = "返回标题"
+script = ExtResource("5_back_snd_script")
+pressed_sound = ExtResource("6_back_snd")
+
+[node name="TrashButton" type="Button" parent="Layout/Box/BottomBar"]
+custom_minimum_size = Vector2(260, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 26
+text = "排除的关卡"
+
+[node name="BottomSpacer" type="Control" parent="Layout/Box/BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="StartButton" type="Button" parent="Layout/Box/BottomBar"]
+custom_minimum_size = Vector2(360, 96)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+text = "开始打团"
+
+[node name="StatusRow" type="HBoxContainer" parent="Layout/Box"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StatusSpacer" type="Control" parent="Layout/Box/StatusRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="StatusLabel" type="Label" parent="Layout/Box/StatusRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "读取中……"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="Layout/Box/BottomBar/BackButton" to="." method="_on_back"]
+[connection signal="pressed" from="Layout/Box/BottomBar/TrashButton" to="." method="_on_trash_pressed"]
+[connection signal="pressed" from="Layout/Box/BottomBar/StartButton" to="." method="_on_start"]
