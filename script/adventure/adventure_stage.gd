@@ -283,6 +283,10 @@ func _show_background(tier: int) -> void:
 
 ## 关卡示意图：没选存档时按配置页设置画，选中已有存档时画该团的真实路线，
 ## 并在当前进度那一格上站一个马里奥（与过关过场里站在椭圆顶边一致）。
+##
+## 无尽没有终点，示意图开一扇 10 格的窗口套在当前进度上：进度 < 10 时从第 1 关起，
+## 到 10 及以后玩家始终停在最右格（第 360 关就画 351…360）。窗口两侧的连线由
+## 「左边还有没有前一关 / 右边还有没有下一关」决定，见 adventure_stage_preview.gd。
 func _rebuild_preview() -> void:
 	# 先摘出再释放：queue_free 的旧节点在本帧仍是子节点，会打乱后面按下标挂马里奥。
 	for child: Node in preview_grid.get_children():
@@ -297,15 +301,24 @@ func _rebuild_preview() -> void:
 			count = ENDLESS_PREVIEW_COUNT
 		else:
 			count = maxi(int(run.get("total_levels", _run_length)), 1)
-	for index: int in range(count):
-		preview_grid.add_child(_make_ellipse(index + 1, endless))
-	# 位置与连线都交给示意图脚本：同行直线、换行曲线。
-	preview_grid.set("line_color", _ellipse_border)
-	preview_grid.call("relayout")
 	var progress: int = 1
 	if not run.is_empty():
 		progress = int(run.get("index", 0)) + 1
-	_place_progress_mario(clampi(progress, 1, maxi(count, 1)))
+	progress = maxi(progress, 1)
+	# first = 窗口第一格显示的关卡号：无尽跟着进度滑动，固定团永远从第 1 关画起。
+	var first: int = 1
+	if endless:
+		first = maxi(progress - ENDLESS_PREVIEW_COUNT + 1, 1)
+	for index: int in range(count):
+		preview_grid.add_child(_make_ellipse(first + index))
+	# 位置与连线都交给示意图脚本：同行直线、换行曲线。
+	preview_grid.set("line_color", _ellipse_border)
+	preview_grid.set("head_link", first > 1)
+	# 无尽永远还有下一关；固定团的最后一关后面什么都不该画。
+	preview_grid.set("tail_link", endless)
+	preview_grid.call("relayout")
+	# 马里奥站在窗口内的第几格：无限窗口按进度滑动，固定团进度即序号。
+	_place_progress_mario(clampi(progress - first + 1, 1, maxi(count, 1)))
 	_refresh_save_info()
 
 
@@ -369,9 +382,10 @@ func _place_progress_mario(progress: int) -> void:
 
 
 ## 一关：object/adventure/level_node.tscn（椭圆 + 编号全在场景里，脚本只填关卡号）。
-func _make_ellipse(number: int, endless: bool) -> Node2D:
+## 无尽也照实填关卡号（第 351 格就写 351），不再画「?」。
+func _make_ellipse(number: int) -> Node2D:
 	var cell: AdventureLevelNode = LEVEL_NODE_SCENE.instantiate()
-	cell.setup(number, endless)
+	cell.setup(number)
 	return cell
 
 

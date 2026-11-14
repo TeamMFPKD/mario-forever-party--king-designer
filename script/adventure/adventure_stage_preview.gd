@@ -31,10 +31,27 @@ const WRAP_BULGE: float = 64.0
 ## 曲线最外点 = WRAP_OUT + 0.75 * WRAP_BULGE，左右各留这么多空白给折返线。
 const WRAP_PAD: float = WRAP_OUT + WRAP_BULGE * 0.75 + 2.0
 const CURVE_STEPS: int = 24
+## 窗口外的淡出延长线：窗口没顶到第 1 关时左侧补一段，后面还有下一关时右侧补一段。
+## 延长线在 STUB_LENGTH 内由实到虚，观感对齐过关过场（adventure_clear_transition.gd）
+## 两侧的阶梯淡出：那条是叠渐变遮罩，这里直接在线上做 alpha 坡。
+const STUB_LENGTH: float = 72.0
+const STUB_STEPS: int = 12
 
 var line_color: Color = Color(0.15, 0.2, 0.3, 0.65):
 	set(value):
 		line_color = value
+		queue_redraw()
+
+## 窗口左侧是否补延长线（false = 第 1 格就是第 1 关，左边不该有路）。
+var head_link: bool = false:
+	set(value):
+		head_link = value
+		queue_redraw()
+
+## 窗口右侧是否补延长线（后面还有下一关）。
+var tail_link: bool = false:
+	set(value):
+		tail_link = value
 		queue_redraw()
 
 
@@ -65,6 +82,9 @@ func relayout() -> void:
 
 func _draw() -> void:
 	var count: int = get_child_count()
+	if count > 0:
+		_draw_head_stub(get_child(0) as Node2D)
+		_draw_tail_stub(get_child(count - 1) as Node2D)
 	for index: int in range(count - 1):
 		var from_cell: Node2D = get_child(index) as Node2D
 		var to_cell: Node2D = get_child(index + 1) as Node2D
@@ -82,6 +102,48 @@ func _draw() -> void:
 		var end: Vector2 = Vector2(maxf(from_cell.position.x, to_cell.position.x) - EDGE_X, y)
 		draw_line(start, end, LINE_OUTLINE_COLOR, LINE_WIDTH + LINE_OUTLINE * 2.0, true)
 		draw_line(start, end, line_color, LINE_WIDTH, true)
+
+
+## 窗口左侧的淡出延长线：窗口没顶到第 1 关时才画（第 1 关左边不该有路）。
+func _draw_head_stub(cell: Node2D) -> void:
+	if not head_link or cell == null:
+		return
+	_draw_stub(cell, -_row_direction(0))
+
+
+## 窗口右侧的淡出延长线：后面还有下一关时才画。
+func _draw_tail_stub(cell: Node2D) -> void:
+	if not tail_link or cell == null:
+		return
+	_draw_stub(cell, _row_direction(get_child_count() - 1))
+
+
+## 该格所在行的行进方向：偶数行从左往右（+1），奇数行从右往左（-1）。
+## 延长线沿行进方向接出去，折返排布（有限团 11 关以上）也不会接反。
+func _row_direction(index: int) -> float:
+	var row: int = int(floorf(float(index) / float(COLUMNS)))
+	return 1.0 if row % 2 == 0 else -1.0
+
+
+## 从椭圆外侧边缘往外画一段 STUB_LENGTH 的线，alpha 由实到虚。
+## 与过关过场（adventure_clear_transition.gd）两侧的阶梯淡出同观感：
+## 那条是叠一层渐变遮罩（alpha 线性递减），这里没有遮罩可叠，
+## 改用 draw_polyline 的逐顶点颜色做同样的线性淡出，且没有阶梯可见。
+func _draw_stub(cell: Node2D, dir: float) -> void:
+	var start: Vector2 = Vector2(cell.position.x + dir * EDGE_X, cell.position.y)
+	var points: PackedVector2Array = PackedVector2Array()
+	var colors: PackedColorArray = PackedColorArray()
+	var step: float = STUB_LENGTH / float(STUB_STEPS)
+	for index: int in range(STUB_STEPS + 1):
+		points.append(start + Vector2(dir * step * float(index), 0.0))
+		# 靠椭圆那头最实，远端彻底透明。
+		var fade: float = 1.0 - float(index) / float(STUB_STEPS)
+		colors.append(Color(line_color, line_color.a * fade))
+	var outline_colors: PackedColorArray = PackedColorArray()
+	for color: Color in colors:
+		outline_colors.append(Color(LINE_OUTLINE_COLOR, color.a))
+	draw_polyline_colors(points, outline_colors, LINE_WIDTH + LINE_OUTLINE * 2.0, true)
+	draw_polyline_colors(points, colors, LINE_WIDTH, true)
 
 
 ## 行末 → 下一行行首：水平出线 → 向外凸的 C 形弯下折 → 水平回到下一行首格。

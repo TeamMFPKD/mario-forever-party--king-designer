@@ -9,8 +9,9 @@ extends Node2D
 @export var number_label: Label
 
 
-## endless = true 时显示「?」（无尽团后面的关卡未知）。
-func setup(number: int, endless: bool) -> void:
+## 无尽团也照实写关卡号：示意图套在进度上的 10 格窗口里，每一格都是已知的关号
+## （第 360 关就显示 351…360），不再用「?」表示未知。
+func setup(number: int) -> void:
 	if number_label == null:
 		return
-	number_label.text = "?" if endless else str(number)
+	number_label.text = str(number)
