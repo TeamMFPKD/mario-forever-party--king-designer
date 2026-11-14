@@ -17,6 +17,16 @@ var last_click_position: Vector2 = Vector2.ZERO
 # 用于跟踪上次操作的网格位置，避免重复操作同一位置
 var last_operation_grid_pos: Vector2i = Vector2i(-1, -1)
 
+## 触摸设备默认把触摸模拟成鼠标事件；同一次操作两条路径都到达时只处理触摸。
+## 否则按下会先放一个物件，模拟鼠标再点在同一格上会被当成「拖动已有物件」，
+## 移动端就退化成只能放一个。
+const TOUCH_MOUSE_GRACE_MSEC: int = 100
+var _ignore_mouse_until_msec: int = 0
+
+
+func _is_touch_emulated_mouse() -> bool:
+	return Time.get_ticks_msec() <= _ignore_mouse_until_msec
+
 func _ready() -> void:
 	# 设置输入处理优先级，确保在其他脚本之前处理输入
 	process_priority = -1
@@ -31,6 +41,13 @@ func _process(_delta: float) -> void:
 	pass
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		_ignore_mouse_until_msec = Time.get_ticks_msec() + TOUCH_MOUSE_GRACE_MSEC
+	elif event is InputEventMouseButton or event is InputEventMouseMotion:
+		# 同一次触摸带出来的模拟鼠标事件：整体交给触摸分支处理。
+		if _is_touch_emulated_mouse():
+			return
+
 	# 重置上次操作网格位置，因为鼠标可能移动到了新的位置
 	if event is InputEventMouseButton or event is InputEventMouseMotion or event is InputEventScreenTouch or event is InputEventScreenDrag:
 		last_operation_grid_pos = Vector2i(-1, -1)
