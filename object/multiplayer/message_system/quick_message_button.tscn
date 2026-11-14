@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3 uid="uid://b7bsm7fee7jao"]
 
-[ext_resource type="Theme" path="res://mfmp_theme.tres" id="1_theme"]
+[ext_resource type="AudioStream" uid="uid://b13s2x5ieii5s" path="res://sound/MM2_MultiPlayMessage_Cursor.wav" id="2_k7636"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="2_ui_button"]
+[ext_resource type="AudioStream" uid="uid://dice36wxq5gk5" path="res://sound/MM2_MultiPlayMessage_Enter.wav" id="3_smii1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
 content_margin_left = 16.0
@@ -18,24 +19,6 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-anti_aliasing = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
-bg_color = Color(0.06, 0.06, 0.1, 0.62)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
-anti_aliasing = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
 content_margin_left = 16.0
@@ -52,23 +35,39 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-anti_aliasing = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 16.0
+content_margin_bottom = 8.0
+bg_color = Color(0.06, 0.06, 0.1, 0.62)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
-[node name="QuickMessageButton" instance=ExtResource("2_ui_button")]
+[node name="QuickMessageButton" unique_id=420565572 instance=ExtResource("2_ui_button")]
 custom_minimum_size = Vector2(0, 76)
 offset_right = 0.0
 offset_bottom = 0.0
-theme = ExtResource("1_theme")
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_normal")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "MSG_QUICK_01"
+focus_sound = ExtResource("2_k7636")
+pressed_sound = ExtResource("3_smii1")
