@@ -81,3 +81,28 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "确认"
 metadata/ui_focus_cancel = true
+
+[node name="ButtonRow" type="HBoxContainer" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="NoButton" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer/VBoxContainer/ButtonRow" instance=ExtResource("3_button")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "否"
+metadata/gamepad_focus = true
+metadata/ui_focus_cancel = true
+
+[node name="YesButton" parent="DropRoot/CenterContainer/UiPanel/UiMarginContainer/VBoxContainer/ButtonRow" instance=ExtResource("3_button")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "是"
+metadata/gamepad_focus = true
