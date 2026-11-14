@@ -29,6 +29,9 @@ var current_level_count: int = 0
 var edit_seconds: int = 0
 ## 最近一次结算数据。结算场景可能在广播之后才加载，result_list 在 _ready 里补读。
 var last_results: Array = []
+## EDIT 阶段截止的本地时刻（Time.get_ticks_msec()）。观看者没有编辑房间，
+## 右上角倒计时靠它算；0 表示当前没有进行中的编辑倒计时。
+var edit_deadline_msec: int = 0
 
 var _manager: MultiplayerManager
 var _registry: SessionRegistry
@@ -74,19 +77,22 @@ func start_edit(seconds: int) -> void:
 	current_level_count = 0
 	random_levels.clear()
 	_manager.game_start_time = _make_match_stamp()
+	# 准备动画 5.5s 之后玩家才开始编辑；主机权威计时同样从 Start 开始算。
+	# 编辑器直接运行时 ready_room 会跳过动画，这里也要跳过这段等待。
+	var ready_sec: float = 0.0 if OS.has_feature("editor") else READY_COUNTDOWN_SEC
+	var total_msec: int = int((ready_sec + float(seconds)) * 1000.0)
+	edit_deadline_msec = Time.get_ticks_msec() + total_msec
 	Log.i("MPTEST] phase EDIT edit_seconds=%d" % seconds)
+	# 倒计时用「还剩多少毫秒」下发：两端 ticks_msec 起点不同，绝对值对不上。
 	s2c_phase_changed.rpc(
 		RoomPhase.Phase.EDIT,
 		{
 			"edit_seconds": seconds,
 			"stamp": _manager.game_start_time,
+			"edit_msec_left": total_msec,
 		}
 	)
-	if _net.is_server():
-		# 准备动画 5.5s 之后玩家才开始编辑；主机权威计时同样从 Start 开始算。
-		# 编辑器直接运行时 ready_room 会跳过动画，这里也要跳过这段等待。
-		var ready_sec: float = 0.0 if OS.has_feature("editor") else READY_COUNTDOWN_SEC
-		_host_edit_timer.start(ready_sec + float(seconds))
+	_host_edit_timer.start(ready_sec + float(seconds))
 
 
 ## 编辑倒计时结束或全员完成编辑（仅主机调用）。
@@ -97,6 +103,7 @@ func finish_edit(reason: String) -> void:
 		return
 	if _host_edit_timer != null:
 		_host_edit_timer.stop()
+	edit_deadline_msec = 0
 	var timer: Timer = TimerSingleton
 	if timer != null and not timer.is_stopped():
 		timer.stop()
@@ -180,6 +187,7 @@ func abort_to_lobby(reason: String) -> void:
 		return
 	if _host_edit_timer != null:
 		_host_edit_timer.stop()
+	edit_deadline_msec = 0
 	Log.w("中止本局：%s" % reason)
 	# 回大厅前清掉重连超时的记录，避免标题的玩家列表残留。
 	_lobby.prune_abandoned()
@@ -195,6 +203,7 @@ func abort_all_playing_gone() -> void:
 		return
 	if _host_edit_timer != null:
 		_host_edit_timer.stop()
+	edit_deadline_msec = 0
 	Log.w("所有游玩玩家都已离开，整局返回标题")
 	_lobby.reset_roster_for_lobby()
 	random_levels.clear()
@@ -401,6 +410,9 @@ func _apply_edit_phase(payload: Dictionary) -> void:
 	var stamp: String = str(payload.get("stamp", ""))
 	if not stamp.is_empty():
 		_manager.game_start_time = stamp
+	# 观看者没有编辑房间，右上角倒计时靠这个截止时刻算。
+	var msec_left: int = int(payload.get("edit_msec_left", 0))
+	edit_deadline_msec = 0 if msec_left <= 0 else Time.get_ticks_msec() + msec_left
 	var mode: GameMode = GameModeSingleton
 	mode.game_mode = GameMode.GameModeType.EDIT
 	if edit_seconds > 0:
@@ -465,9 +477,11 @@ func s2c_sync_phase_to(peer_id: int) -> void:
 	var payload: Dictionary = {}
 	match phase:
 		RoomPhase.Phase.EDIT:
+			# 中途加入的观看者拿到的是「还剩多久」，不是「原本设了多久」。
 			payload = {
 				"edit_seconds": edit_seconds,
 				"stamp": _manager.game_start_time,
+				"edit_msec_left": maxi(0, edit_deadline_msec - Time.get_ticks_msec()),
 			}
 		RoomPhase.Phase.PLAY:
 			var profile: PlayerProfile = _registry.get_player(peer_id)

@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://script/spectator/spectate_time_hud.gd" id="1_hud"]
+[ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
+
+[node name="SpectateTimeHUD" type="MarginContainer"]
+visible = false
+custom_minimum_size = Vector2(233, 233)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -233.0
+offset_bottom = 233.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+script = ExtResource("1_hud")
+
+[node name="TimeLabel" type="Label" parent="."]
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_font_sizes/font_size = 120
+text = "30"
+horizontal_alignment = 1

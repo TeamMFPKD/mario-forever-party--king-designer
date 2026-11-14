@@ -153,6 +153,7 @@ enum GamePhase {
 | --- | --- |
 | `game_phase: GamePhase` | 当前阶段 |
 | `phase_deadline_msec: int` | 当前阶段截止时间（`Time.get_ticks_msec()`） |
+| `edit_msec_left: int` | EDIT 阶段载荷里下发的剩余毫秒；观看端据此算本地截止时刻（两端 `ticks_msec` 起点不同，不能直接传绝对值） |
 | `random_levels: Array` | 本局关卡文件名顺序（进入 `PLAY` 前对观看者也要可用） |
 | `spectator_status: Dictionary` | `player_id -> {current_level, reach_end, is_in_result, is_dead, lives}` |
 | `level_data_cache: Dictionary` | 房主侧：`level_file_name -> level_json`，防止作者掉线后丢失 |
@@ -255,6 +256,8 @@ func get_watchable_players() -> Array   # 非观看、is_in_game、未 reach_end
 | 结果页 | 所有人 | RESULT 阶段由 `MatchFlowService` 统一切到 `result_room`，观看者也能看结果 |
 
 PLAY 观看视图复用 `play_room_base.tscn`，运行时裁掉 `TimeoutManager / RandomCapture / BadLevelDetect / MarginContainer / GameTimeHUD / MobileControlManager / SaveLevel`，并设置 `ObjectMapLayer.spawn_player = false`、`LoadLevel.report_progress = false`、`MpAniSpriteManager.spectate_mode = true`。相机沿用 `LevelCamera`，运行时把 `player` 指向目标幽灵。
+
+计时由观看场景自己的 `Hud/TimeHUD`（`ui/list/spectate_time_hud.tscn`）显示，**不**复用被裁掉的 `GameTimeHUD`：观看端没有本地关卡计时器可读。EDIT 用 `MatchFlowService.edit_deadline_msec`，PLAY 用目标玩家 12 Hz 状态包里携带的 `level_time_left`。
 
 ---
 
@@ -505,6 +508,7 @@ PLAY 观看视图复用 `play_room_base.tscn`，运行时裁掉 `TimeoutManager 
 | 元素 | 内容 |
 | --- | --- |
 | 信息栏（关卡视口外） | 左上角唯一面板：`正在观看` + 玩家名；`关卡进度` + `x/y` |
+| 右上角计时 | EDIT 显示房间级**编辑倒计时**（不是目标测试关卡内部的计时器）；PLAY 显示**目标关卡内的剩余时间**；其它阶段整块隐藏 |
 | EDIT 阶段信息栏 | 隐藏「关卡进度」标签，把 `x/y` 替换为「编辑中」；屏幕中央不显示额外说明 |
 | 面板样式 | 固定深紫半透明底、**无描边**、不随目标玩家改色；所有文字白色 + 黑色描边 |
 | 目标幽灵 | 被观看玩家 **完全不透明**；同房间其他玩家保留 0.25 半透明幽灵 |

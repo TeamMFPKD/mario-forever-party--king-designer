@@ -29,6 +29,7 @@ const STRIP_PATHS: Array[String] = [
 @onready var _waiting_status: Label = $Hud/ProgressBox/StatusLabel
 @onready var _progress_row: HBoxContainer = $Hud/ProgressBox/ProgressRow
 @onready var _editor_view: TextureRect = $Hud/EditorView
+@onready var _time_hud: SpectateTimeHUD = $Hud/TimeHUD
 
 var _base: Node = null
 var _base_border: TextureRect = null
@@ -241,7 +242,35 @@ func get_ghost_manager() -> MpAniSpriteManager:
 	return _ghosts
 
 
+## 右上角计时：EDIT 显示房间级编辑倒计时，PLAY 显示目标关卡内的剩余时间。
+## 其它阶段（等待/传输）没有可显示的数值，整块隐藏。
+func _refresh_time_hud() -> void:
+	if _time_hud == null:
+		return
+	match MPManager.phase:
+		RoomPhase.Phase.EDIT:
+			var msec_left: int = MPManager.flow.edit_deadline_msec - Time.get_ticks_msec()
+			if MPManager.flow.edit_deadline_msec <= 0:
+				_time_hud.clear()
+			else:
+				_time_hud.show_seconds(maxf(0.0, float(msec_left) / 1000.0))
+		RoomPhase.Phase.PLAY:
+			var target: PlayerProfile = _current_target()
+			if target == null or _ghosts == null:
+				_time_hud.clear()
+				return
+			var time_left: float = _ghosts.get_time_left(target.id)
+			if time_left < 0.0:
+				# 还没收到目标的第一个状态包，先不显示，免得闪一个假的 0。
+				_time_hud.clear()
+			else:
+				_time_hud.show_seconds(time_left)
+		_:
+			_time_hud.clear()
+
+
 func _process(_delta: float) -> void:
+	_refresh_time_hud()
 	if _ghosts == null or _camera == null:
 		return
 	var target: PlayerProfile = _current_target()

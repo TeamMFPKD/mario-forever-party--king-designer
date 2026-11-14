@@ -105,7 +105,8 @@ func send_ani_sprite_data(
 	flip_h: bool,
 	is_dead: bool,
 	sprite_scale: Vector2,
-	rotation: float
+	rotation: float,
+	level_time_left: float
 ) -> void:
 	if _manager == null or not _is_playing():
 		return
@@ -123,7 +124,7 @@ func send_ani_sprite_data(
 	if current_level == _manager.current_level_count:
 		_forward_to_scene(
 			player_id, ani_pos, suit, power, animation, frame, flip_h,
-			is_dead, sprite_scale, rotation
+			is_dead, sprite_scale, rotation, level_time_left
 		)
 
 
@@ -137,7 +138,8 @@ func _forward_to_scene(
 	flip_h: bool,
 	is_dead: bool,
 	sprite_scale: Vector2,
-	rotation: float
+	rotation: float,
+	level_time_left: float
 ) -> void:
 	if _attached_manager == null:
 		return
@@ -146,7 +148,7 @@ func _forward_to_scene(
 		return
 	manager.apply_remote_state(
 		player_id, ani_pos, suit, power, animation, frame, flip_h,
-		is_dead, sprite_scale, rotation
+		is_dead, sprite_scale, rotation, level_time_left
 	)
 
 

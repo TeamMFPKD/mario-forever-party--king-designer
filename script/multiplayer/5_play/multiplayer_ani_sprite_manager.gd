@@ -34,6 +34,9 @@ var player_hurt_and_die: PlayerHurtAndDie
 
 var _send_accum: float = 0.0
 var _no_player_print_limit: int = 0
+## player_id -> 该玩家关卡内剩余时间（秒）。观看者自己没有关卡计时器可读，
+## 右上角计时只能跟着目标的 12 Hz 状态包走。
+var remote_time_left: Dictionary = {}
 
 
 func _ready() -> void:
@@ -101,6 +104,8 @@ func _physics_process(delta: float) -> void:
 		)
 
 	if MPManager.ghosts != null:
+		var game_timer: Timer = get_tree().get_first_node_in_group("game_timer") as Timer
+		var level_time_left: float = 0.0 if game_timer == null else game_timer.time_left
 		MPManager.ghosts.send_ani_sprite_data.rpc(
 			MPManager.player.id,
 			MPManager.current_level_count,
@@ -112,13 +117,21 @@ func _physics_process(delta: float) -> void:
 			local_ani.flip_h,
 			player_hurt_and_die.is_dead,
 			local_ani.scale,
-			local_ani.global_rotation
+			local_ani.global_rotation,
+			level_time_left
 		)
 
 
 func _exit_tree() -> void:
 	if is_instance_valid(MPManager) and MPManager.ghosts != null:
 		MPManager.ghosts.detach_manager(self)
+
+
+## 该玩家关卡内剩余时间；还没收到过任何状态包时返回 -1。
+func get_time_left(player_id: int) -> float:
+	if not remote_time_left.has(player_id):
+		return -1.0
+	return float(remote_time_left[player_id])
 
 
 ## 观看相机用来找目标的幽灵节点；还没收到第一帧时返回 null。
@@ -140,8 +153,10 @@ func apply_remote_state(
 	flip_h: bool,
 	is_dead: bool,
 	sprite_scale: Vector2,
-	rotation: float
+	rotation: float,
+	level_time_left: float
 ) -> void:
+	remote_time_left[player_id] = level_time_left
 	var target: AnimatedSprite2D = null
 	for ani: AnimatedSprite2D in anis:
 		if ani.has_meta("player_id") and int(ani.get_meta("player_id")) == player_id:
