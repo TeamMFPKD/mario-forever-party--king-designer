@@ -236,6 +236,7 @@ solo_death=5               ; 仅展示/分析，不直接进公式
 solo_skip=0
 solo_skip_soft=0           ; solo_skip 的子集：只统计「我打不过」的软跳过
 solo_last=1762700000
+solo_drawn=3               ; 被百人团抽进团的次数（抽取权重用，见 7.2）
 ; 联机 pass_count/death_count 不在这里，存在 .lvl 文件里
 excluded=false
 exclude_reason=""
@@ -595,13 +596,23 @@ rng.seed = run.seed
 
 候选 = 池内未排除、文件存在、不在本团已选列表中的关卡
 
-权重 w = 1 + PREFER_LOW_SAMPLE * 1 / (1 + n + m / 4)
+权重 w = (1 + PREFER_LOW_SAMPLE * 1 / (1 + n + m / 4)) * never_drawn
        # PREFER_LOW_SAMPLE=3；n/m 为该关 solo_attempt / online_attempt
-       # prefer_low_sample=false 时 w=1（均匀随机）
+       # never_drawn = NEVER_DRAWN_BONUS(4) 当且仅当该关从没被抽进过任何团，否则 1
+       # prefer_low_sample=false 时 w=1（均匀随机，连 never_drawn 也不生效）
 
 固定：一次抽 min(run_length, 候选数) 关
 无尽：每次抽 1 关
 ```
+
+**「从没被抽到过」怎么判定**（`AdventureLevelStat.is_drawn()`）：
+
+- 每个关卡在 `adventure.ini` 里多存一个 `solo_drawn`（被抽进团的次数），开团整批 +1、无尽每抽一关 +1、补给替换 +1；
+- `solo_drawn > 0` 即算「露过面」；
+- **老存档没有这个字段**，此时用 `total_attempt() > 0` 兜底——有任何一次 attempt 就说明它一定进过团，不会被误判成新关；
+- 关卡布局变了（`generation + 1`，样本作废）时 `solo_drawn` 一起清零，让它重新回到优先队列。
+
+> 为什么加权而不是「把没抽过的排在前面」：抽取本身要保留随机性，硬性优先会让新导入的一批关卡总是被连续抽中。乘一个倍率（4×）既能让冷门关明显更容易出现，又不至于压掉随机感。
 
 - 同一团内不重复；池子不足时**缩短团长度**（固定）或结束（无尽），不做重复抽取，避免样本膨胀。
 - 顺序默认随机；可选「由易到难」（按 `d` 升序），给想要爬坡感的玩家。
@@ -1420,6 +1431,8 @@ endless_total_deaths=0
 | 旧版只有单个 `[run]` 段 | 加载时自动迁移到第一个空槽（通常是 `[run.1]`），进度不丢 |
 | 排除到池子不足 | 拒绝开局并提示恢复 |
 | 样本为 0 的关卡 | 不参与分档；随机模式可抽，抽到即采样 |
+| 从没被抽到过的关卡 | 抽取权重额外 ×4，让冷门关先露面；抽到一次后回到普通权重 |
+| 老存档没有 `solo_drawn` | 用「有没有 attempt」兜底判定，已有样本的关卡不会被当成新关加权 |
 | 联机 `.lvl` 与单人 `ini` 不一致 | 两条独立通道，不做比较：联机读 `.lvl`，单人读 `ini` |
 | 无尽当前档抽空 | 降档（3→2→1），提示「本档已抽空，已降为 X 档」 |
 | 无尽所有档位都抽空 | 清空 `cycle_played`、`cycle+1`、回到开局所选档，提示「所有关卡已玩过，开始新一轮」，不结束 |
@@ -1584,6 +1597,7 @@ func assign_tiers(pool: Array[LevelStat]) -> Dictionary:
 | `PRIOR` | 0.5 | `TierCalculator` |
 | `P_CLAMP` | [0.02, 0.98] | `TierCalculator` |
 | `PREFER_LOW_SAMPLE` | 3.0 | `RunPlanner` |
+| `NEVER_DRAWN_BONUS` | 4.0 | `RunPlanner` |
 | `DEFAULT_RUN_LENGTH` | 10 | `Adventure` |
 | `RUN_LENGTH_MIN` | 5 | `Adventure` |
 | `RUN_LENGTH_MAX` | 50 | `Adventure` |

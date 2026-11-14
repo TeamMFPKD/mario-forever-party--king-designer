@@ -90,6 +90,7 @@ func get_level_data(key: String) -> Dictionary:
 		"solo_skip": int(config.get_value(section, "solo_skip", 0)),
 		"solo_skip_soft": int(config.get_value(section, "solo_skip_soft", 0)),
 		"solo_last": int(config.get_value(section, "solo_last", 0)),
+		"solo_drawn": int(config.get_value(section, "solo_drawn", 0)),
 		"excluded": bool(config.get_value(section, "excluded", false)),
 		"exclude_reason": str(config.get_value(section, "exclude_reason", "")),
 		"excluded_at": int(config.get_value(section, "excluded_at", 0)),
@@ -103,6 +104,8 @@ func set_level_meta(key: String, file_name: String, fingerprint: String, generat
 	config.set_value(section, "generation", generation)
 
 
+## 布局变了（generation+1）时整关当作新关卡：样本与抽取历史一起清掉，
+## 让它重新回到「从没被抽到过」的优先队列里。
 func reset_solo(key: String) -> void:
 	var section: String = level_section(key)
 	config.set_value(section, "solo_attempt", 0)
@@ -111,6 +114,19 @@ func reset_solo(key: String) -> void:
 	config.set_value(section, "solo_skip", 0)
 	config.set_value(section, "solo_skip_soft", 0)
 	config.set_value(section, "solo_last", 0)
+	config.set_value(section, "solo_drawn", 0)
+
+
+## 记一次「被抽进团」。开团是整批写，无尽是每抽一关写一次，所以一次调用只落盘一次。
+func record_drawn(keys: Array[String]) -> void:
+	if keys.is_empty():
+		return
+	for key: String in keys:
+		if key.is_empty():
+			continue
+		var section: String = level_section(key)
+		config.set_value(section, "solo_drawn", int(config.get_value(section, "solo_drawn", 0)) + 1)
+	save()
 
 
 func record_attempt(key: String) -> void:

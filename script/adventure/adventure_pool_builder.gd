@@ -148,6 +148,7 @@ static func _load_stat(
 	stat.solo_skip = int(saved.get("solo_skip", 0))
 	stat.solo_skip_soft = int(saved.get("solo_skip_soft", 0))
 	stat.solo_last = int(saved.get("solo_last", 0))
+	stat.solo_drawn = int(saved.get("solo_drawn", 0))
 
 	var saved_fingerprint: String = str(saved.get("fingerprint", ""))
 	var generation: int = int(saved.get("generation", 0))
@@ -161,6 +162,7 @@ static func _load_stat(
 		stat.solo_pass = 0
 		stat.solo_death = 0
 		stat.solo_skip = 0
+		stat.solo_drawn = 0
 
 	return stat
 

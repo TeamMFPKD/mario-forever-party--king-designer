@@ -2,9 +2,14 @@ class_name AdventureRunPlanner
 extends RefCounted
 
 ## 从池子里按权重无放回抽关。
-## 权重偏向低样本关卡，让随机团也能帮忙采样。
+## 权重偏向低样本关卡，让随机团也能帮忙采样；
+## 并且再偏向「从没被百人团抽到过」的关卡，避免热门关反复出现、冷门关永远轮不到。
 
+## 低样本加成：样本越少权重越大（分母里的常数项保证它有上限）。
 const PREFER_LOW_SAMPLE: float = 3.0
+## 「从没被抽到过」的额外倍率。乘在低样本权重之上，
+## 所以一关只要露过一次面，权重就掉回普通档，把机会让给还没出现过的关卡。
+const NEVER_DRAWN_BONUS: float = 4.0
 
 
 static func draw(
@@ -52,9 +57,13 @@ static func draw(
 	return result
 
 
+## 单关注释：prefer_low_sample=false 时是均匀随机（权重恒为 1）。
 static func _weight(stat: AdventureLevelStat, prefer_low_sample: bool) -> float:
 	if not prefer_low_sample:
 		return 1.0
 	var n: float = float(stat.solo_attempt)
 	var m: float = float(stat.online_attempt())
-	return 1.0 + PREFER_LOW_SAMPLE / (1.0 + n + m / 4.0)
+	var weight: float = 1.0 + PREFER_LOW_SAMPLE / (1.0 + n + m / 4.0)
+	if not stat.is_drawn():
+		weight *= NEVER_DRAWN_BONUS
+	return weight

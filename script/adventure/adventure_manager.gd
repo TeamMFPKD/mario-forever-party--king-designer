@@ -410,6 +410,10 @@ func start_run(settings: Dictionary) -> bool:
 	if keys.is_empty():
 		last_error = "没有抽到可玩的关卡"
 		return false
+	# 抽中即登记：抽取权重靠 solo_drawn 判断「露没露过面」，
+	# 固定团一次抽满、无尽一次抽一关，都在这条出口上写。
+	store.record_drawn(keys)
+	_sync_drawn(keys)
 
 	var lives_total: int = ENDLESS_LIVES
 	var total_levels: int = -1
@@ -641,7 +645,11 @@ func _draw_replacement_key() -> String:
 	if drawn.is_empty() and tier > 0:
 		# 本档抽空：退回随机抽取，至少把这一格补上。
 		drawn = AdventureRunPlanner.draw(pool, 0, 1, draw_seed, prefer_low_sample, used)
-	return "" if drawn.is_empty() else drawn[0]
+	if drawn.is_empty():
+		return ""
+	store.record_drawn(drawn)
+	_sync_drawn(drawn)
+	return drawn[0]
 
 
 func advance() -> void:
@@ -695,6 +703,8 @@ func _next_endless_key() -> String:
 		)
 		if not drawn.is_empty():
 			current_run["active_tier"] = active_tier
+			store.record_drawn(drawn)
+			_sync_drawn(drawn)
 			return drawn[0]
 
 		# 当前档抽空：降档。
@@ -1309,6 +1319,16 @@ func _refresh_stat(key: String) -> void:
 	stat.solo_skip = int(saved.get("solo_skip", 0))
 	stat.solo_skip_soft = int(saved.get("solo_skip_soft", 0))
 	stat.solo_last = int(saved.get("solo_last", 0))
+	stat.solo_drawn = int(saved.get("solo_drawn", 0))
+
+
+## 把刚登记的「被抽到」同步到内存里的池条目：
+## 同一进程内接着开下一团（或无尽下一关）时，权重用的是这些字段而不是 ini。
+func _sync_drawn(keys: Array) -> void:
+	for entry: Variant in keys:
+		var stat: AdventureLevelStat = _find_stat(str(entry))
+		if stat != null:
+			stat.solo_drawn += 1
 
 
 func _find_stat(key: String) -> AdventureLevelStat:
