@@ -32,12 +32,13 @@ func _physics_process(delta: float) -> void:
 		position = player.position
 		return
 
-	# 编辑模式下镜头由 CAMERA 组驱动：WASD（键盘）/ 右摇杆（手柄）。
+	# 编辑模式下镜头由 CAMERA 组驱动：WASD（键盘）/ 右摇杆（手柄）；
+	# 移动端再并上方向键 / 十字键，让屏幕虚拟方向键也能推镜头（见 edit_camera_axis）。
 	#
 	# 三套操作互不重叠（定义见 script/utils/input_groups.gd）：
 	# IJKL / 左摇杆 = 虚拟鼠标，方向键 / 十字键 = UI 焦点，WASD / 右摇杆 = 镜头。
-	# 所以这里不需要再做"手柄活跃时让路"的判断，也不会和 UI 抢输入。
-	direction = InputGroups.camera_axis()
+	# 移动端是唯一例外：没有键盘、UI 焦点导航整体关闭，方向键那组就空出来给镜头用。
+	direction = InputGroups.edit_camera_axis()
 	if direction != Vector2.ZERO:
 		speed = max_speed
 		direction = direction.normalized()

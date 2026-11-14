@@ -55,6 +55,28 @@ static func camera_axis() -> Vector2:
 	)
 
 
+## 编辑器里推镜头的方向。
+##
+## 桌面：只用 CAMERA 组（WASD / 右摇杆），方向键和十字键留给 UI 焦点，三组互不重叠。
+##
+## 移动端：额外并上 `move_*`——屏幕上的虚拟方向键（object/on_screen_controls）
+## 的 TouchScreenButton.action 直接就是 move_left/right/up/down，不是 ui_focus_*。
+## 移动端没有键盘，且 UI 焦点导航整体关闭（UiNavigator._navigation_enabled 在
+## 移动端直接 return false），move_* 这一组除了给玩家跑就没别人用，
+## 编辑器里又没有玩家，所以并进来相当于「虚拟方向键独占推镜头」。
+static func edit_camera_axis() -> Vector2:
+	var axis: Vector2 = camera_axis()
+	if PlatformUtils.is_mobile_platform():
+		axis += move_axis()
+	return axis.limit_length(1.0)
+
+
+## 角色移动组：move_left / move_right / move_up / move_down。
+## 移动端虚拟方向键注入的就是这一组（纯键盘映射，手柄十字键另在 ui_focus_*）。
+static func move_axis() -> Vector2:
+	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
+
+
 ## 判断这次事件属于哪一组。只认"开始动作"（按下 / 推杆超过死区）。
 ##
 ## 全部走各自专属的 action，所以设置页改键（包括绑摇杆轴）之后这里自动跟随。

@@ -284,6 +284,37 @@ if Input.is_action_pressed("move_down"):
 | **键鼠** | 移动镜头 | —（无） | 编辑光标 |
 | **手柄** | **操控 UI**（切换焦点） | **移动编辑光标** | — |
 
+### 6.3.1 移动端：虚拟方向键归镜头（2026-11-14 已实现）
+
+**现象**：移动端进 `edit.tscn`，屏幕上的虚拟方向键点了没反应，镜头不动。
+
+**原因**：两条链路的 action 对不上。
+
+| 链路 | 用的 action |
+|---|---|
+| 虚拟方向键（`object/on_screen_controls`，TouchScreenButton） | `move_left/right/up/down` |
+| `LevelCamera` 编辑态推镜头 | `ui_camera_*`（WASD / 右摇杆） |
+
+移动端没有键盘，WASD 按不出来；右摇杆也没有。所以镜头一个输入都收不到。
+而 `move_*` 那一组在编辑器里没有任何消费者——编辑器没有玩家。
+
+**做法**：`InputGroups.edit_camera_axis()` 在移动端把 `move_*` 并进 CAMERA 轴：
+
+```gdscript
+static func edit_camera_axis() -> Vector2:
+    var axis: Vector2 = camera_axis()          # WASD / 右摇杆
+    if PlatformUtils.is_mobile_platform():
+        axis += move_axis()                    # 虚拟方向键
+    return axis.limit_length(1.0)
+```
+
+**为什么桌面端不受影响**：桌面仍只有 CAMERA 组，方向键/十字键继续留给 UI 焦点——
+三组互不重叠的约定没被破坏。移动端之所以能并，是因为 UI 焦点导航在移动端整体关闭
+（`UiNavigator._navigation_enabled()` 第一行就 `return false`），那一组本来就空着。
+
+> 与用户要求的对应关系：「禁用按钮 UI 操作（已有点触相当于鼠标）+ 虚拟按键一律用于移动玩家或镜头」。
+> 移动端 UI 本来就不走焦点导航，点触即鼠标；虚拟按键现在只服务玩家（关卡内）或镜头（编辑器）。
+
 ### 6.4 落地方式
 
 **第一步：拆分动作**
