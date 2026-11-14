@@ -14,6 +14,11 @@
 [ext_resource type="Texture2D" uid="uid://cqqffqaely120" path="res://sprite/bonus/fire_flower.png" id="13_fire_flower"]
 [ext_resource type="Texture2D" uid="uid://b50ckhut8otgs" path="res://sprite/bonus/lui.png" id="14_lui"]
 [ext_resource type="Texture2D" uid="uid://b3rpllqxa4qyl" path="res://sprite/bonus/mushroom.png" id="15_mushroom"]
+[ext_resource type="Texture2D" uid="uid://bl8l8fn2gwmqa" path="res://sprite/player/mario_small.png" id="16_mario_small"]
+[ext_resource type="Script" uid="uid://bvha75uoxboof" path="res://script/ui/drop_in_animation.gd" id="17_drop"]
+[ext_resource type="PackedScene" uid="uid://dblna8s3hifnj" path="res://ui/control_visibie_set.tscn" id="18_vis_set"]
+[ext_resource type="Theme" uid="uid://bpkayogffk0um" path="res://ui/theme/theme_yellow_top.tres" id="19_yellow"]
+[ext_resource type="Theme" uid="uid://bm3i132pjoyj0" path="res://ui/theme/theme_fine_line.tres" id="20_fine"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_silhouette"]
 shader = ExtResource("11_filter")
@@ -46,7 +51,11 @@ corner_radius_top_right = 18
 corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
 
-[node name="AdventureStage" type="Control" unique_id=2142023481 node_paths=PackedStringArray("background", "backgrounds", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "lives_label", "preview_grid", "scenery", "back_button", "trash_button", "start_button")]
+[sub_resource type="AtlasTexture" id="Atlas_mario_walk2"]
+atlas = ExtResource("16_mario_small")
+region = Rect2(32, 32, 32, 34)
+
+[node name="AdventureStage" type="Control" unique_id=2142023481 node_paths=PackedStringArray("background", "backgrounds", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "lives_label", "preview_grid", "scenery", "back_button", "trash_button", "delete_button", "start_button", "save_info", "save_lives_label", "save_tier_label", "save_progress_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -69,7 +78,12 @@ preview_grid = NodePath("Layout/Box/PreviewPanel/PreviewCenter/PreviewGrid")
 scenery = NodePath("Layout/Box/PreviewPanel/Scenery")
 back_button = NodePath("Layout/Box/BottomBar/BackButton")
 trash_button = NodePath("Layout/Box/BottomBar/TrashButton")
+delete_button = NodePath("Layout/Box/BottomBar/DeleteButton")
 start_button = NodePath("Layout/Box/BottomBar/StartButton")
+save_info = NodePath("Layout/Box/PreviewPanel/SaveInfo")
+save_lives_label = NodePath("Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/LivesRow/LivesLabel")
+save_tier_label = NodePath("Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/InfoRow/TierLabel")
+save_progress_label = NodePath("Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/InfoRow/ProgressLabel")
 
 [node name="Background" type="ColorRect" parent="." unique_id=650121687]
 layout_mode = 1
@@ -92,11 +106,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CanvasGroup" type="CanvasGroup" parent="Control" unique_id=1552240507]
-self_modulate = Color(1, 1, 1, 0.88235295)
-
-[node name="TopBanner" type="Control" parent="Control/CanvasGroup" unique_id=709398773]
-layout_mode = 3
+[node name="TopBanner" type="Control" parent="Control" unique_id=709398773]
+layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_right = 1920.0
@@ -104,7 +115,7 @@ offset_bottom = 252.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Body" type="ColorRect" parent="Control/CanvasGroup/TopBanner" unique_id=983495496]
+[node name="Body" type="ColorRect" parent="Control/TopBanner" unique_id=983495496]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,24 +126,24 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.501961, 0, 1)
 
-[node name="Teeth" type="Parallax2D" parent="Control/CanvasGroup/TopBanner" unique_id=1278267242]
+[node name="Teeth" type="Parallax2D" parent="Control/TopBanner" unique_id=1278267242]
 editor_description = "锯齿条：Tooth 里画的是一整排 1920 宽的齿（编辑器里也完整可见）。repeat_size.x = 一排版宽 = 1920，autoscroll.x 为负 = 向左滚；repeat_times 按重复次数铺余量（重复是以内容为中心向两侧铺，4 份 = ±3840，1920 屏足够），给 -1 在无相机场景里不会自动铺满。"
 repeat_size = Vector2(1920, 0)
 autoscroll = Vector2(-40, 0)
 repeat_times = 4
 
-[node name="Tooth" type="Polygon2D" parent="Control/CanvasGroup/TopBanner/Teeth" unique_id=240260690]
+[node name="Tooth" type="Polygon2D" parent="Control/TopBanner/Teeth" unique_id=240260690]
 position = Vector2(0, 220)
 color = Color(1, 0.501961, 0, 1)
 polygon = PackedVector2Array(0, 0, 1920, 0, 1920, 32, 1888, 0, 1856, 32, 1824, 0, 1792, 32, 1760, 0, 1728, 32, 1696, 0, 1664, 32, 1632, 0, 1600, 32, 1568, 0, 1536, 32, 1504, 0, 1472, 32, 1440, 0, 1408, 32, 1376, 0, 1344, 32, 1312, 0, 1280, 32, 1248, 0, 1216, 32, 1184, 0, 1152, 32, 1120, 0, 1088, 32, 1056, 0, 1024, 32, 992, 0, 960, 32, 928, 0, 896, 32, 864, 0, 832, 32, 800, 0, 768, 32, 736, 0, 704, 32, 672, 0, 640, 32, 608, 0, 576, 32, 544, 0, 512, 32, 480, 0, 448, 32, 416, 0, 384, 32, 352, 0, 320, 32, 288, 0, 256, 32, 224, 0, 192, 32, 160, 0, 128, 32, 96, 0, 64, 32, 32, 0, 0, 32)
 
-[node name="Props" type="Parallax2D" parent="Control/CanvasGroup/TopBanner" unique_id=707001733]
+[node name="Props" type="Parallax2D" parent="Control/TopBanner" unique_id=707001733]
 editor_description = "道具剪影层：与 Teeth 同 repeat_size / 同 autoscroll，所以跟锯齿一起循环滚动（两者相位都从 0 开始，相对位置固定）。道具在 x/y 上错落摆放，y 别越过 84（存档卡上沿）。"
 repeat_size = Vector2(1920, 0)
 autoscroll = Vector2(-40, 0)
 repeat_times = 4
 
-[node name="Prop1" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=1006313155]
+[node name="Prop1" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=1006313155]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(96, 38)
 scale = Vector2(1.7, 1.7)
@@ -140,7 +151,7 @@ texture = ExtResource("14_lui")
 region_enabled = true
 region_rect = Rect2(0, 0, 33, 32)
 
-[node name="Prop2" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=734429940]
+[node name="Prop2" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=734429940]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(300, 52)
 scale = Vector2(1.3, 1.3)
@@ -148,7 +159,7 @@ texture = ExtResource("15_mushroom")
 region_enabled = true
 region_rect = Rect2(0, 0, 31, 32)
 
-[node name="Prop3" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=1961469222]
+[node name="Prop3" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=1961469222]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(470, 34)
 scale = Vector2(1.5, 1.5)
@@ -156,7 +167,7 @@ texture = ExtResource("13_fire_flower")
 region_enabled = true
 region_rect = Rect2(0, 0, 33, 32)
 
-[node name="Prop4" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=1759691073]
+[node name="Prop4" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=1759691073]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(700, 50)
 scale = Vector2(1.6, 1.6)
@@ -164,7 +175,7 @@ texture = ExtResource("12_beetroot")
 region_enabled = true
 region_rect = Rect2(0, 0, 29, 35)
 
-[node name="Prop5" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=1765533255]
+[node name="Prop5" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=1765533255]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1180, 44)
 scale = Vector2(1.4, 1.4)
@@ -172,7 +183,7 @@ texture = ExtResource("15_mushroom")
 region_enabled = true
 region_rect = Rect2(0, 0, 31, 32)
 
-[node name="Prop6" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=1865979486]
+[node name="Prop6" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=1865979486]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1360, 54)
 scale = Vector2(1.6, 1.6)
@@ -180,7 +191,7 @@ texture = ExtResource("14_lui")
 region_enabled = true
 region_rect = Rect2(0, 0, 33, 32)
 
-[node name="Prop7" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=25331158]
+[node name="Prop7" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=25331158]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1560, 36)
 scale = Vector2(1.4, 1.4)
@@ -188,7 +199,7 @@ texture = ExtResource("12_beetroot")
 region_enabled = true
 region_rect = Rect2(0, 0, 29, 35)
 
-[node name="Prop8" type="Sprite2D" parent="Control/CanvasGroup/TopBanner/Props" unique_id=621634405]
+[node name="Prop8" type="Sprite2D" parent="Control/TopBanner/Props" unique_id=621634405]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1760, 50)
 scale = Vector2(1.7, 1.7)
@@ -196,20 +207,19 @@ texture = ExtResource("13_fire_flower")
 region_enabled = true
 region_rect = Rect2(0, 0, 33, 32)
 
-[node name="BottomBanner" type="Control" parent="Control/CanvasGroup" unique_id=1201390930]
-layout_mode = 3
+[node name="BottomBanner" type="Control" parent="Control" unique_id=1201390930]
+layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 894.0
+offset_top = -186.0
 offset_right = 1920.0
-offset_bottom = 1080.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="Body" type="ColorRect" parent="Control/CanvasGroup/BottomBanner" unique_id=804079218]
+[node name="Body" type="ColorRect" parent="Control/BottomBanner" unique_id=804079218]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -220,23 +230,23 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.501961, 0, 1)
 
-[node name="Teeth" type="Parallax2D" parent="Control/CanvasGroup/BottomBanner" unique_id=825515183]
+[node name="Teeth" type="Parallax2D" parent="Control/BottomBanner" unique_id=825515183]
 editor_description = "锯齿条：Tooth 里画的是一整排 1920 宽的齿（编辑器里也完整可见）。repeat_size.x = 一排版宽 = 1920，autoscroll.x 为正 = 向右滚；repeat_times 按重复次数铺余量（重复是以内容为中心向两侧铺，4 份 = ±3840，1920 屏足够），给 -1 在无相机场景里不会自动铺满。"
 repeat_size = Vector2(1920, 0)
 autoscroll = Vector2(40, 0)
 repeat_times = 4
 
-[node name="Tooth" type="Polygon2D" parent="Control/CanvasGroup/BottomBanner/Teeth" unique_id=2123748040]
+[node name="Tooth" type="Polygon2D" parent="Control/BottomBanner/Teeth" unique_id=2123748040]
 color = Color(1, 0.501961, 0, 1)
 polygon = PackedVector2Array(0, 32, 1920, 32, 1920, 0, 1888, 32, 1856, 0, 1824, 32, 1792, 0, 1760, 32, 1728, 0, 1696, 32, 1664, 0, 1632, 32, 1600, 0, 1568, 32, 1536, 0, 1504, 32, 1472, 0, 1440, 32, 1408, 0, 1376, 32, 1344, 0, 1312, 32, 1280, 0, 1248, 32, 1216, 0, 1184, 32, 1152, 0, 1120, 32, 1088, 0, 1056, 32, 1024, 0, 992, 32, 960, 0, 928, 32, 896, 0, 864, 32, 832, 0, 800, 32, 768, 0, 736, 32, 704, 0, 672, 32, 640, 0, 608, 32, 576, 0, 544, 32, 512, 0, 480, 32, 448, 0, 416, 32, 384, 0, 352, 32, 320, 0, 288, 32, 256, 0, 224, 32, 192, 0, 160, 32, 128, 0, 96, 32, 64, 0, 32, 32, 0, 0)
 
-[node name="Props" type="Parallax2D" parent="Control/CanvasGroup/BottomBanner" unique_id=1406695075]
+[node name="Props" type="Parallax2D" parent="Control/BottomBanner" unique_id=1406695075]
 editor_description = "道具剪影层：与 Teeth 同 repeat_size / 同 autoscroll，所以跟锯齿一起循环滚动（两者相位从 0 开始，相对位置固定）。道具在 y 上错落摆放，y 尽量落在 60~100（上方是锯齿带、下方是状态文字行）。"
 repeat_size = Vector2(1920, 0)
 autoscroll = Vector2(40, 0)
 repeat_times = 4
 
-[node name="Prop1" type="Sprite2D" parent="Control/CanvasGroup/BottomBanner/Props" unique_id=2085930656]
+[node name="Prop1" type="Sprite2D" parent="Control/BottomBanner/Props" unique_id=2085930656]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(150, 82)
 scale = Vector2(1.5, 1.5)
@@ -244,7 +254,7 @@ texture = ExtResource("15_mushroom")
 region_enabled = true
 region_rect = Rect2(0, 0, 31, 32)
 
-[node name="Prop2" type="Sprite2D" parent="Control/CanvasGroup/BottomBanner/Props" unique_id=333539825]
+[node name="Prop2" type="Sprite2D" parent="Control/BottomBanner/Props" unique_id=333539825]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(700, 70)
 scale = Vector2(1.7, 1.7)
@@ -252,7 +262,7 @@ texture = ExtResource("14_lui")
 region_enabled = true
 region_rect = Rect2(0, 0, 33, 32)
 
-[node name="Prop3" type="Sprite2D" parent="Control/CanvasGroup/BottomBanner/Props" unique_id=849175270]
+[node name="Prop3" type="Sprite2D" parent="Control/BottomBanner/Props" unique_id=849175270]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(900, 94)
 scale = Vector2(1.4, 1.4)
@@ -260,7 +270,7 @@ texture = ExtResource("13_fire_flower")
 region_enabled = true
 region_rect = Rect2(0, 0, 33, 32)
 
-[node name="Prop4" type="Sprite2D" parent="Control/CanvasGroup/BottomBanner/Props" unique_id=1735520515]
+[node name="Prop4" type="Sprite2D" parent="Control/BottomBanner/Props" unique_id=1735520515]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1120, 66)
 scale = Vector2(1.5, 1.5)
@@ -268,7 +278,7 @@ texture = ExtResource("12_beetroot")
 region_enabled = true
 region_rect = Rect2(0, 0, 29, 35)
 
-[node name="Prop5" type="Sprite2D" parent="Control/CanvasGroup/BottomBanner/Props" unique_id=2019127429]
+[node name="Prop5" type="Sprite2D" parent="Control/BottomBanner/Props" unique_id=2019127429]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1310, 88)
 scale = Vector2(1.8, 1.8)
@@ -276,7 +286,7 @@ texture = ExtResource("15_mushroom")
 region_enabled = true
 region_rect = Rect2(0, 0, 31, 32)
 
-[node name="Prop6" type="Sprite2D" parent="Control/CanvasGroup/BottomBanner/Props" unique_id=554448374]
+[node name="Prop6" type="Sprite2D" parent="Control/BottomBanner/Props" unique_id=554448374]
 material = SubResource("ShaderMaterial_silhouette")
 position = Vector2(1600, 74)
 scale = Vector2(1.5, 1.5)
@@ -294,7 +304,6 @@ grow_vertical = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 40
-theme_override_constants/margin_bottom = 16
 
 [node name="Box" type="VBoxContainer" parent="Layout" unique_id=1907136587]
 layout_mode = 2
@@ -334,12 +343,14 @@ layout_mode = 2
 mouse_filter = 2
 
 [node name="PreviewPanel" type="Panel" parent="Layout/Box" unique_id=1680428117]
+self_modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_preview")
 
 [node name="Scenery" type="Control" parent="Layout/Box/PreviewPanel" unique_id=1883192710]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -349,129 +360,240 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("4_scenery")
 
-[node name="ParamsPanel" type="PanelContainer" parent="Layout/Box/PreviewPanel" unique_id=339056252]
-z_index = 1
+[node name="SaveInfo" type="PanelContainer" parent="Layout/Box/PreviewPanel" unique_id=1541185143]
+visible = false
 layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 404.0
-offset_bottom = -16.0
-grow_vertical = 2
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 244.0
+offset_bottom = 140.0
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_params")
+
+[node name="InfoMargin" type="MarginContainer" parent="Layout/Box/PreviewPanel/SaveInfo" unique_id=1140591803]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin" unique_id=1294856735]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="LivesRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox" unique_id=1979540382]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarioIconBox" type="Control" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/LivesRow" unique_id=423668478]
+custom_minimum_size = Vector2(32, 66)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="MarioIcon" type="TextureRect" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/LivesRow/MarioIconBox" unique_id=1194683722]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("Atlas_mario_walk2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LivesLabel" type="Label" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/LivesRow" unique_id=11675114]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 34
+text = "× 12"
+
+[node name="InfoRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox" unique_id=408056361]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="TierLabel" type="Label" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/InfoRow" unique_id=1915433637]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "普通"
+
+[node name="ProgressLabel" type="Label" parent="Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/InfoRow" unique_id=1415743538]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "2/10"
+
+[node name="ParamsPanel" type="PanelContainer" parent="Layout/Box/PreviewPanel" unique_id=339056252]
+visible = false
+z_index = 5
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -650.0
+offset_top = -300.0
+offset_right = 650.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("19_yellow")
+
+[node name="DropInAnimation" type="Node" parent="Layout/Box/PreviewPanel/ParamsPanel" unique_id=1900000001]
+script = ExtResource("17_drop")
+watch_path = NodePath("..")
+enter_style = 1
+
+[node name="ControlVisibieSet" parent="Layout/Box/PreviewPanel/ParamsPanel" unique_id=1900000002 instance=ExtResource("18_vis_set")]
 
 [node name="ParamsMargin" type="MarginContainer" parent="Layout/Box/PreviewPanel/ParamsPanel" unique_id=2133920780]
 layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 12
+theme = ExtResource("20_fine")
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
 
 [node name="ParamsBox" type="VBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin" unique_id=758614739]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="ParamsTitle" type="Label" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=9003520]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 36
 text = "新存档设置"
+horizontal_alignment = 1
 
 [node name="PoolRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=80244681]
 layout_mode = 2
-theme_override_constants/separation = 8
+alignment = 1
+theme_override_constants/separation = 16
 
 [node name="PoolAll" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/PoolRow" unique_id=1411815108 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "所有关卡"
 
 [node name="PoolLiked" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/PoolRow" unique_id=1098177206 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "喜欢的关卡"
 
-[node name="TierColumn" type="VBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=56180438]
+[node name="PoolRule" type="ColorRect" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=465649632]
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
-theme_override_constants/separation = 5
+mouse_filter = 2
+color = Color(0.15, 0.2, 0.3, 0.65)
+
+[node name="TierColumn" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=56180438]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 12
 
 [node name="Tier1" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn" unique_id=1484330859 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "简单"
 
 [node name="Tier2" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn" unique_id=1421403806 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "普通"
 
 [node name="Tier3" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn" unique_id=688607341 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "困难"
 
 [node name="Tier4" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn" unique_id=1138690295 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "超难"
 
 [node name="Tier5" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/TierColumn" unique_id=161503968 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 44)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
 text = "随机"
 
+[node name="TierRule" type="ColorRect" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=755212068]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.15, 0.2, 0.3, 0.65)
+
 [node name="ModeRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=449197875]
 layout_mode = 2
-theme_override_constants/separation = 8
+alignment = 1
+theme_override_constants/separation = 16
 
 [node name="ModeFinite" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ModeRow" unique_id=992673595 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
-text = "定量团"
+text = "固定"
 
 [node name="ModeEndless" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ModeRow" unique_id=83282062 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
 toggle_mode = true
-text = "无尽团"
+text = "无尽"
 
 [node name="LengthRow" type="HBoxContainer" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=1967420159]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 16
 
 [node name="LengthLabel" type="Label" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow" unique_id=1998478528]
-custom_minimum_size = Vector2(120, 0)
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
-text = "打几关：10"
+theme_override_font_sizes/font_size = 26
+text = "关卡数：10"
 
 [node name="LengthSlider" type="HSlider" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow" unique_id=1046000599]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 36)
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 5.0
@@ -482,9 +604,16 @@ value = 10.0
 layout_mode = 2
 theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "初始命数：20"
-autowrap_mode = 3
+
+[node name="OkButton" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=1900000003 instance=ExtResource("10_ui_button")]
+custom_minimum_size = Vector2(240, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("19_yellow")
+theme_override_font_sizes/font_size = 36
+text = "OK"
 
 [node name="PreviewCenter" type="CenterContainer" parent="Layout/Box/PreviewPanel" unique_id=2041223727]
 layout_mode = 1
@@ -516,17 +645,24 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="BackButton" parent="Layout/Box/BottomBar" unique_id=50227756 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(260, 80)
+custom_minimum_size = Vector2(340, 80)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
 text = "返回标题"
 pressed_sound = ExtResource("6_back_snd")
 
 [node name="TrashButton" parent="Layout/Box/BottomBar" unique_id=1432774219 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(260, 80)
+custom_minimum_size = Vector2(390, 80)
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
 text = "排除的关卡"
+
+[node name="DeleteButton" parent="Layout/Box/BottomBar" unique_id=1494099707 instance=ExtResource("10_ui_button")]
+visible = false
+custom_minimum_size = Vector2(340, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.851, 0.157, 0.157, 1)
+theme_override_colors/font_pressed_color = Color(0.647, 0.102, 0.102, 1)
+theme_override_colors/font_hover_color = Color(1, 0.29, 0.29, 1)
+text = "删除存档"
 
 [node name="BottomSpacer" type="Control" parent="Layout/Box/BottomBar" unique_id=44753683]
 layout_mode = 2
@@ -534,9 +670,8 @@ size_flags_horizontal = 3
 mouse_filter = 2
 
 [node name="StartButton" parent="Layout/Box/BottomBar" unique_id=1415588602 instance=ExtResource("10_ui_button")]
-custom_minimum_size = Vector2(360, 88)
+custom_minimum_size = Vector2(380, 88)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
 text = "开始挑战"
 
 [node name="StatusRow" type="HBoxContainer" parent="Layout/Box" unique_id=2023494668]
@@ -568,4 +703,6 @@ horizontal_alignment = 2
 
 [connection signal="pressed" from="Layout/Box/BottomBar/BackButton" to="." method="_on_back"]
 [connection signal="pressed" from="Layout/Box/BottomBar/TrashButton" to="." method="_on_trash_pressed"]
+[connection signal="pressed" from="Layout/Box/BottomBar/DeleteButton" to="." method="_on_delete_pressed"]
 [connection signal="pressed" from="Layout/Box/BottomBar/StartButton" to="." method="_on_start"]
+[connection signal="pressed" from="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/OkButton" to="." method="_on_params_ok"]

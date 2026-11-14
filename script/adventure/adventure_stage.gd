@@ -32,15 +32,12 @@ const SCENERY_TINT_ON_DARK_BG: Color = Color(1, 1, 1, 0.24)
 const POOL_BUTTON_NAMES: Array[String] = ["PoolAll", "PoolLiked"]
 const TIER_BUTTON_NAMES: Array[String] = ["Tier1", "Tier2", "Tier3", "Tier4", "Tier5"]
 const MODE_BUTTON_NAMES: Array[String] = ["ModeFinite", "ModeEndless"]
-## 主题里给「小按钮」准备的细描边变体（3px），见 mfmp_theme.tres。
-const SMALL_BUTTON_VARIATION: StringName = &"SmallButton"
 ## 「随机」难度没有档位色，按钮描边用银白色。
 const RANDOM_BORDER_COLOR: Color = Color("#C2C8D2")
 
-## 左侧侧边栏（开团详细配置）只在新存档态展开，其余时候收起让预览区吃满宽度。
-## 展开/收起用滑动 + 淡入淡出，避免面板突然出现/消失。
-const PARAMS_SLIDE_SEC: float = 0.18
-const PARAMS_SLIDE_DISTANCE: float = 64.0
+## 新存档配置页：与标题页 HostPage 同款的居中页面零件。
+const PARAMS_VISIBLE_SET: String = "ControlVisibieSet"
+const META_FOCUS_SKIP: StringName = &"ui_focus_skip"
 
 ## 右下状态文字：只在关卡池读取中显示（左划淡入，读完右划淡出），
 ## 读完后不再换成提示句（用户要求）。操作失败反馈仍复用同一句位。
@@ -52,13 +49,10 @@ const STATUS_SLIDE_SEC: float = 0.22
 const MARIO_FRAMES: SpriteFrames = preload("res://object/level/player/mario_small.tres")
 const MARIO_SCALE: float = 0.9
 const MARIO_FRAME_H: float = 66.0
-## 关卡：白色半透明实心椭圆（SVG，参考过关过场的扁椭圆），数字在椭圆上挖空。
-const ELLIPSE_TEXTURE: Texture2D = preload("res://sprite/ui/adventure/level_node.svg")
-const ELLIPSE_W: float = 68.0
+## 关卡：白色半透明实心椭圆 + 白色编号，样式都在场景里调（编辑器可见）。
+const LEVEL_NODE_SCENE: PackedScene = preload("res://object/adventure/level_node.tscn")
+## 椭圆高度（与 level_node.tscn 一致）：马里奥站在椭圆上沿时按它算脚底位置。
 const ELLIPSE_H: float = 58.0
-const NUMBER_FONT_SIZE: int = 26
-## 编号的黑色描边宽度（字身是挖空的，只留这圈黑边）。
-const NUMBER_OUTLINE_SIZE: int = 4
 const ENDLESS_PREVIEW_COUNT: int = 10
 ## 命数显示上限：与游玩左侧信息面板一致，触顶显示「× MAX」。
 const LIVES_CAP: int = 100
@@ -89,9 +83,6 @@ const BACKGROUND_DESIGN_SIZE: Vector2 = Vector2(1920, 1080)
 @export var save_tier_label: Label
 @export var save_progress_label: Label
 
-## 关卡数字的减法混合材质：所有关卡共享一份，无逐项参数。
-static var _cutout_material_instance: CanvasItemMaterial
-
 var _pool_source: String = "all"
 var _tier: int = 0
 var _mode: String = "finite"
@@ -110,15 +101,11 @@ var _mode_buttons: Array[Button] = []
 var _tier_info: Dictionary = {}
 ## -1 = 无选中，0 = 新存档，1..5 = 存档位
 var _selection: int = -1
+## 配置页被底部 OK 关掉后保持关闭，直到用户重新点存档位。
+var _params_dismissed: bool = false
 var _ellipse_border: Color = Color(0.15, 0.2, 0.3, 0.85)
 ## 存档位数据快照：选中已有存档时，关卡示意图改成显示该团的真实路线。
 var _run_slots: Array[Dictionary] = []
-## 侧边栏展开态几何（tscn 里的值），收起时整体左滑出；示意图不被推挤。
-var _params_rest_left: float = 16.0
-var _params_rest_right: float = 404.0
-var _params_expanded: bool = false
-var _params_layout_ready: bool = false
-var _params_tween: Tween
 ## 状态文字是否处于显示态（淡出动画期间已经是 false）。
 var _status_visible: bool = false
 var _status_tween: Tween
@@ -130,7 +117,6 @@ func _ready() -> void:
 	if not OS.has_feature("web"):
 		_load_mutex = Mutex.new()
 	_bind_controls()
-	_capture_params_layout()
 	_fit_background()
 	resized.connect(_fit_background)
 
@@ -149,19 +135,17 @@ func _ready() -> void:
 
 
 func _bind_controls() -> void:
-	# 侧边栏里都是小按钮：用主题的 SmallButton 变体（3px 细描边），别用大按钮的 6px。
+	# 配置页按钮沿用 ui_button.tscn 的 50 号大按钮 / 6px 描边，不再套 SmallButton 细描边。
 	for index: int in range(POOL_BUTTON_NAMES.size()):
 		var button: Button = params_panel.find_child(POOL_BUTTON_NAMES[index], true, false) as Button
 		if button == null:
 			continue
-		button.theme_type_variation = SMALL_BUTTON_VARIATION
 		_pool_buttons.append(button)
 		button.pressed.connect(_select_pool.bind("all" if index == 0 else "liked"))
 	for index: int in range(TIER_BUTTON_NAMES.size()):
 		var button: Button = params_panel.find_child(TIER_BUTTON_NAMES[index], true, false) as Button
 		if button == null:
 			continue
-		button.theme_type_variation = SMALL_BUTTON_VARIATION
 		if index >= TIER_NAMES.size():
 			# 第 5 个是「随机」，没有档位色，用银白描边和四档区分开。
 			_apply_silver_border(button)
@@ -171,7 +155,6 @@ func _bind_controls() -> void:
 		var button: Button = params_panel.find_child(MODE_BUTTON_NAMES[index], true, false) as Button
 		if button == null:
 			continue
-		button.theme_type_variation = SMALL_BUTTON_VARIATION
 		_mode_buttons.append(button)
 		button.pressed.connect(_select_mode.bind("finite" if index == 0 else "endless"))
 	length_slider.value_changed.connect(_on_length_changed)
@@ -246,11 +229,11 @@ func _on_length_changed(value: float) -> void:
 func _update_lives() -> void:
 	var lives: int = _run_length * 2 if _mode == "finite" else 30
 	lives_label.text = tr("初始命数：%d") % lives
-	length_label.text = (tr("打几关：%d") % _run_length) if _mode == "finite" else tr("打几关：无尽")
+	length_label.text = (tr("关卡数：%d") % _run_length) if _mode == "finite" else tr("关卡数：无尽")
 
 
 ## 换档：背景主题色 + 装饰剪影配色 + BGM。
-## 选中已有存档时，主题与 BGM 都跟着该团的难度档走（而不是侧边栏里选的那个）。
+## 选中已有存档时，主题与 BGM 都跟着该团的难度档走（而不是配置页里选的那个）。
 ## 标题/状态文字落在橙黄横幅上，颜色固定（不再跟难度前景色，深色档的白字在橙底上会糊）。
 func _update_theme() -> void:
 	var bg: Color = NEUTRAL_COLOR
@@ -297,7 +280,7 @@ func _show_background(tier: int) -> void:
 			sprite.visible = node_index == index
 
 
-## 关卡示意图：没选存档时按侧边栏设置画，选中已有存档时画该团的真实路线，
+## 关卡示意图：没选存档时按配置页设置画，选中已有存档时画该团的真实路线，
 ## 并在当前进度那一格上站一个马里奥（与过关过场里站在椭圆顶边一致）。
 func _rebuild_preview() -> void:
 	# 先摘出再释放：queue_free 的旧节点在本帧仍是子节点，会打乱后面按下标挂马里奥。
@@ -327,7 +310,7 @@ func _rebuild_preview() -> void:
 
 ## 主面板左上角的存档摘要（选中「有团的存档位」时才有）：
 ## 第一行 mario_small 的 walk 第 2 帧 + × 命数；第二行 难度 + 进度。
-## 进度：定量团「当前关/总关数」，无尽团没有总数，显示「已通过关数（无尽）」。
+## 进度：固定「当前关/总关数」，无尽没有总数，显示「已通过关数（无尽）」。
 func _refresh_save_info() -> void:
 	if save_info == null:
 		return
@@ -347,7 +330,7 @@ func _refresh_save_info() -> void:
 	if total > 0:
 		save_progress_label.text = "%d/%d" % [int(run.get("index", 0)) + 1, total]
 	else:
-		# 无尽团没有总关数，只报进度数字（不带后缀）。
+		# 无尽没有总关数，只报进度数字（不带后缀）。
 		save_progress_label.text = "%d" % int(run.get("cleared_count", 0))
 
 
@@ -360,7 +343,7 @@ func _selected_run() -> Dictionary:
 	return {}
 
 
-## 背景主题色跟谁走：选中已有存档时用该团的难度档，否则用侧边栏选的档位。
+## 背景主题色跟谁走：选中已有存档时用该团的难度档，否则用配置页选的档位。
 func _theme_tier() -> int:
 	var run: Dictionary = _selected_run()
 	if not run.is_empty():
@@ -384,47 +367,12 @@ func _place_progress_mario(progress: int) -> void:
 	mario.position = Vector2(0.0, -ELLIPSE_H * 0.5 - MARIO_FRAME_H * MARIO_SCALE * 0.5)
 
 
-## 一关：白色半透明实心椭圆（SVG，自带黑色描边）+ 中间挖空的数字。
-## 数字分两层：白色字身用减法混合把椭圆「挖掉」（内部透背景），黑色描边盖在外沿。
-## CanvasGroup 让减法只作用在本关椭圆上，不会把后面的背景一起减掉。
-func _make_ellipse(number: int, endless: bool) -> CanvasGroup:
-	var cell: CanvasGroup = CanvasGroup.new()
-	var ellipse: Sprite2D = Sprite2D.new()
-	ellipse.texture = ELLIPSE_TEXTURE
-	ellipse.centered = true
-	cell.add_child(ellipse)
-	var number_text: String = "?" if endless else str(number)
-	var body: Label = _make_number_label(number_text)
-	body.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-	body.material = _cutout_material()
-	cell.add_child(body)
-	var edge: Label = _make_number_label(number_text)
-	edge.add_theme_color_override("font_color", Color(0, 0, 0, 0))
-	edge.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
-	edge.add_theme_constant_override("outline_size", NUMBER_OUTLINE_SIZE)
-	cell.add_child(edge)
+## 一关：object/adventure/level_node.tscn（椭圆 + 编号全在场景里，脚本只填关卡号）。
+func _make_ellipse(number: int, endless: bool) -> Node2D:
+	var cell: AdventureLevelNode = LEVEL_NODE_SCENE.instantiate()
+	cell.setup(number, endless)
 	return cell
 
-
-func _make_number_label(number_text: String) -> Label:
-	var label: Label = Label.new()
-	label.text = number_text
-	label.size = Vector2(ELLIPSE_W, ELLIPSE_H)
-	label.position = Vector2(-ELLIPSE_W * 0.5, -ELLIPSE_H * 0.5)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", NUMBER_FONT_SIZE)
-	label.add_theme_constant_override("outline_size", 0)
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	return label
-
-
-## 挖空数字用的减法混合材质（共享一份，无逐项参数）。
-func _cutout_material() -> CanvasItemMaterial:
-	if _cutout_material_instance == null:
-		_cutout_material_instance = CanvasItemMaterial.new()
-		_cutout_material_instance.blend_mode = CanvasItemMaterial.BLEND_MODE_SUB
-	return _cutout_material_instance
 
 
 # ---------------------------------------------------------------------------
@@ -438,6 +386,8 @@ func _sync_stage_slot() -> void:
 
 func _on_selection_changed(selection: int) -> void:
 	_selection = selection
+	# 每次点存档位（含重新点「新存档」）都重新允许配置页出现。
+	_params_dismissed = false
 	_sync_stage_slot()
 	_apply_selection_gate()
 	# 选中已有存档：主题色切到该团难度档，关卡示意图换成该团路线、马里奥落到当前进度。
@@ -456,8 +406,8 @@ func _apply_selection_gate() -> void:
 		var locked_by_sample: bool = index < 4 and not selectable
 		_tier_buttons[index].disabled = not params_on or locked_by_sample
 	length_slider.editable = params_on
-	# 侧边栏只在「新存档」态展开；加载中保持当前展开状态，免得收起又弹开。
-	_set_params_expanded(_selection == 0)
+	# 配置页只在新存档态出现；OK 关掉后保持关闭，加载中也不重新弹出。
+	_set_params_page(_selection == 0 and not _params_dismissed)
 	start_button.text = "开始挑战"
 	start_button.disabled = _loading or _selection < 0
 	# 右下状态文字只用来报读取进度：读完直接右划淡出，不再换成提示句（用户要求）。
@@ -467,48 +417,28 @@ func _apply_selection_gate() -> void:
 		_hide_status()
 
 
-## tscn 存的是展开态几何（侧栏左边缘 16、右边缘 404）；收起时整体滑出左边界。
-## 侧栏是**覆盖层**：展开/收起都不动关卡示意图，避免关卡圆圈被挤走。
-func _capture_params_layout() -> void:
-	_params_rest_left = params_panel.offset_left
-	_params_rest_right = params_panel.offset_right
-
-
-func _set_params_expanded(expanded: bool) -> void:
-	if _params_layout_ready and expanded == _params_expanded:
-		return
-	_params_expanded = expanded
-	if _params_tween != null and _params_tween.is_valid():
-		_params_tween.kill()
-	var slide: float = 0.0 if expanded else -PARAMS_SLIDE_DISTANCE
-	var alpha: float = 1.0 if expanded else 0.0
-	if not _params_layout_ready:
-		# 进舞台/刷新存档时不播动画，直接落到目标态，免得看见面板闪一下。
-		_params_layout_ready = true
+## 新存档配置页：与标题页 HostPage 同款的页面零件 ——
+## ControlVisibieSet 管显隐，DropInAnimation 在页面显示时自动从屏幕上方掉落进场。
+## 隐藏时给整页打 ui_focus_skip，避免方向键/手柄把焦点跳到看不见的按钮上。
+func _set_params_page(expanded: bool) -> void:
+	var page_set: Node = params_panel.get_node_or_null(PARAMS_VISIBLE_SET)
+	params_panel.set_meta(META_FOCUS_SKIP, not expanded)
+	if page_set != null:
+		if expanded:
+			page_set.call("_set_visible")
+		else:
+			page_set.call("_set_invisible")
+	else:
 		params_panel.visible = expanded
-		params_panel.modulate.a = alpha
-		params_panel.offset_left = _params_rest_left + slide
-		params_panel.offset_right = _params_rest_right + slide
-		return
-	if expanded:
-		params_panel.visible = true
-	_params_tween = create_tween().set_parallel(true)
-	_params_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_params_tween.tween_property(
-		params_panel, "offset_left", _params_rest_left + slide, PARAMS_SLIDE_SEC
-	)
-	_params_tween.tween_property(
-		params_panel, "offset_right", _params_rest_right + slide, PARAMS_SLIDE_SEC
-	)
-	_params_tween.tween_property(params_panel, "modulate:a", alpha, PARAMS_SLIDE_SEC)
-	if not expanded:
-		_params_tween.chain().tween_callback(_hide_params_panel)
+	var navigator: Node = get_node_or_null("/root/UiNavigator")
+	if navigator != null:
+		navigator.call("refresh_now")
 
 
-func _hide_params_panel() -> void:
-	# 收起动画结束后才真正隐藏，避免滑到一半被裁掉。
-	if not _params_expanded:
-		params_panel.visible = false
+## 配置页底部 OK：确认设置并关闭弹窗；「新存档」仍是选中态，可直接点开始挑战。
+func _on_params_ok() -> void:
+	_params_dismissed = true
+	_set_params_page(false)
 
 
 ## 左划淡入：从右侧偏移滑回原位并淡入。已经在显示时不重播，避免闪动。
