@@ -76,6 +76,10 @@ func _on_join_rejected(_reason: String) -> void:
 
 
 func _on_room_lost() -> void:
+	# 自己主动退出（例如主机在玩家列表页点「退出」）不是房间丢失，
+	# 页面已由退出按钮关掉，这里不要再把加入页弹出来。
+	if MPManager.is_self_leaving():
+		return
 	_restore_page(_join_page)
 
 

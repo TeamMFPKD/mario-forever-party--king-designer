@@ -64,6 +64,9 @@ var device_id: String = "invalid"
 var player: PlayerProfile = PlayerProfile.new()
 
 var _lobby_page: int = LobbyPage.NONE
+## 本地正在主动退出房间。主机关房时 room_closed 会 call_local 回自己，
+## 标题页据此区分「自己关房」与「被别人关房/掉线」。
+var _self_leaving: bool = false
 ## 上一次失败弹出的“加入失败”提示是否还开着；连上后要主动关掉，
 ## 否则它会盖住玩家列表（Notice 是全局模态面板）。
 var _join_failure_notice_open: bool = false
@@ -262,8 +265,12 @@ func leave_room(reason: String = "主动退出") -> void:
 	_reconnect_address = ""
 	_reconnect_port = 0
 	_is_reconnecting = false
+	# 主动退出期间，主机关房的 room_closed 会 call_local 回到自己，
+	# 标题页据此忽略「房间丢失 → 回加入页」。
+	_self_leaving = true
 	if net == null or not net.is_online():
 		_cleanup_session()
+		_self_leaving = false
 		return
 	if net.is_server():
 		Log.i("玩家 %s — %s" % [format_player(player.name, player.id), reason])
@@ -274,6 +281,7 @@ func leave_room(reason: String = "主动退出") -> void:
 		await get_tree().physics_frame
 	net.leave()
 	_cleanup_session()
+	_self_leaving = false
 
 
 ## 兼容旧调用点。
@@ -318,6 +326,11 @@ func get_lobby_page() -> int:
 ## TitleNetBridge._sync_from_state() 当成仍要恢复的页面。
 func clear_lobby_page() -> void:
 	_lobby_page = LobbyPage.NONE
+
+
+## 本地是否正在主动退出房间。标题页据此区分「自己关房」与「被别人关房/掉线」。
+func is_self_leaving() -> bool:
+	return _self_leaving
 
 
 ## 玩家身份色（头像外圈 / 消息气泡描边）。
@@ -433,6 +446,12 @@ func _on_room_closed() -> void:
 	_cleanup_session()
 	if was_in_game:
 		GlobalTransition.change_scene_to_file(flow.SCENE_TITLE)
+	# 等本次 room_closed 的所有回调（含标题页的判断）跑完再清标记。
+	call_deferred("_clear_self_leaving")
+
+
+func _clear_self_leaving() -> void:
+	_self_leaving = false
 
 
 func _on_join_rejected(reason: String) -> void:
