@@ -65,6 +65,10 @@ Get-Content -LiteralPath $Err -Encoding UTF8
    无头退出常见 `ObjectDB instances were leaked at exit`、`resources still in use at exit`、`找不到进程标识符`（进程已提前退出时 `Stop-Process` 报的），只要结果文件正确就不算失败。
 5. **禁止在脚本里直接手写前端，UI 必须落地为场景节点。**
    不要用 `Control.new()` / `Label.new()` 之类在 `_ready()` 里搭界面；新增或改造的 UI 一律保存为 `.tscn`（节点树、样式、文本、信号连接都在场景文件里），脚本只负责数据绑定、动画与交互逻辑。调试用的一次性状态条可以例外，但也应尽量做成场景。已有的代码搭 UI 逐步迁移，新代码不再新增。
+6. **用户没让你 commit，就不要 commit。**
+   改完就停在工作区，把改了哪些文件、为什么改、怎么验证的写清楚交给用户，由用户决定什么时候提交。
+   同理，**也不要主动 push、不要主动建分支、合并、rebase、回滚或 amend**——这些动作一旦发生就难以撤销，一并交给用户指令。
+   （提交信息的格式规范见 2.1，那是"用户要求提交时"才知道该照什么写，不是"可以自己提交"的许可。）
 
 ### 2.1 提交信息（commit message）规范
 
@@ -116,6 +120,7 @@ chore(multiplayer): drop unused signaling fallback
 | `tools/adventure_button_pv.tscn` | `tools/adventure_button_pv.png`（已采用的 V4 按钮布局单版预览） |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
 | `tools/spectate_shot.tscn` | `tools/spectate.png`（观看视图，读取 `user://` 最新 `.lvl`） |
+| `tools/endless_palette_stage_shot.tscn` | `tools/endless_palette_a.png` ~ `_d.png`（把四套候选配色依次套到真实舞台的无尽团存档卡上，用于挑配色） |
 
 ### 3.3 交互演示（人工看）
 

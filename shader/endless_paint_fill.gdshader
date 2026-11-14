@@ -1,40 +1,45 @@
 shader_type canvas_item;
 
-// 无尽团存档卡的卡面填充：流动的多色渐变（多颜色渐变油漆桶），并且一直在滚动。
+// 无尽团存档卡的卡面填充：多色渐变 + 滚动。
 //
-// 分工：
-//   * 本 shader 只画**卡面内部**，圆角在这里用 SDF 切（不依赖 clip_children，
-//     Control 的 clip_children 只按矩形裁，切不出圆角）。
-//   * 描边仍是 Button 自己的 StyleBoxFlat border；因此本节点要按描边宽度内缩，
-//     见 adventure_slot_paint.gd 的 inset_px。
-//   * 四种按钮状态（normal / hover / pressed / hover_pressed）照旧由样式表管。
+// 只画卡面内部：圆角用圆角矩形 SDF 切（不依赖 clip_children，它只按矩形裁），
+// 描边仍是 Button 自己的 StyleBoxFlat border，所以本节点要按描边宽度内缩。
 //
-// 颜色相位按**控件自身像素尺寸**换算（width_px / height_px 由脚本按实测矩形写入），
-// 换分辨率时色块大小不会跟着缩水。
+// style 选风格，band_soft 控制色带交界是硬边还是柔和过渡：
+//   0 = 干净斜向色带（默认）
+//   1 = 波浪色带（沿垂直方向起伏）
+//   2 = 旋转色环（绕中心转）
+//   3 = 液态流动（域扭曲噪声，像颜料在流动）
+//   4 = 双色扫光（只有两个颜色，一抹高光扫过）
 
-// 四色循环：色相拉开，相邻两色之间自然过渡
-uniform vec4 color_a : source_color = vec4(1.000, 0.235, 0.188, 1.000);
-uniform vec4 color_b : source_color = vec4(1.000, 0.831, 0.094, 1.000);
-uniform vec4 color_c : source_color = vec4(0.180, 0.702, 1.000, 1.000);
-uniform vec4 color_d : source_color = vec4(0.353, 0.902, 0.435, 1.000);
+uniform int style = 0;
+// 0.5 = 两色各占一半、交界柔和；越小色带越窄、交界越硬
+uniform float band_soft = 0.5;
 
-// 色块尺度（像素）：一组完整色带的波长，越小色块越碎
-uniform float brush_width_px = 210.0;
-uniform float brush_height_px = 210.0;
+// 默认配色走"同一段色相连续推过去"：蓝 → 紫 → 品红 → 珊瑚，
+// 四色首尾相接，任何一帧都只是两三个相邻色，不会同时出现红黄蓝绿。
+uniform vec4 color_a : source_color = vec4(0.290, 0.620, 1.000, 1.000);
+uniform vec4 color_b : source_color = vec4(0.482, 0.424, 1.000, 1.000);
+uniform vec4 color_c : source_color = vec4(0.784, 0.420, 1.000, 1.000);
+uniform vec4 color_d : source_color = vec4(1.000, 0.482, 0.541, 1.000);
+
+// 一组完整四色周期的波长（像素）：越大色块越宽
+uniform float brush_px = 210.0;
 // 斜向角度（度）：0 = 竖直条纹，90 = 水平波纹
 uniform float angle_deg = 34.0;
-// 滚动速度（每秒推进多少像素，负值反向）
-uniform vec2 scroll_speed = vec2(46.0, -22.0);
-// 白色高光扫过的周期（秒）与强度：0 = 关闭
-uniform float sheen_period = 4.5;
-uniform float sheen_strength = 0.18;
-// 明度与饱和度（脚本按选中态调）
+// 滚动速度（每秒推进多少像素）
+uniform vec2 scroll_speed = vec2(30.0, -12.0);
+// 顶部玻璃高光强度：0 = 关闭
+uniform float gloss = 0.12;
+// 白光扫过的周期（秒）与强度：0 = 关闭
+uniform float sheen_period = 5.0;
+uniform float sheen_strength = 0.0;
 uniform float value_mul = 1.0;
 uniform float saturation = 1.0;
 
 // 由脚本写入：当前绘制区域实际像素尺寸、内缩后的圆角半径
-uniform vec2 width_px = vec2(208.0, 76.0);
-uniform float corner_radius_px = 6.0;
+uniform vec2 width_px = vec2(339.0, 76.0);
+uniform float corner_radius_px = 4.0;
 
 float hash12(vec2 p) {
 	vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -42,8 +47,7 @@ float hash12(vec2 p) {
 	return fract((p3.x + p3.y) * p3.z);
 }
 
-// 平铺值噪声：让色块边界不是一条死板的直线
-float tile_noise(vec2 p) {
+float vnoise(vec2 p) {
 	vec2 i = floor(p);
 	vec2 f = fract(p);
 	f = f * f * (3.0 - 2.0 * f);
@@ -54,7 +58,37 @@ float tile_noise(vec2 p) {
 	return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
 
-// 圆角矩形 SDF：返回负值表示在内部
+float fbm(vec2 p) {
+	float sum = 0.0;
+	float amp = 0.5;
+	for (int i = 0; i < 3; i++) {
+		sum += vnoise(p) * amp;
+		p *= 2.03;
+		amp *= 0.5;
+	}
+	return sum;
+}
+
+// 四色环：t 为周期数（1.0 = 绕一圈）。band_soft 越小交界越硬。
+vec3 ramp(float t, float soft) {
+	float x = fract(t) * 4.0;
+	float i = floor(min(x, 3.999));
+	float f = x - i;
+	f = smoothstep(0.5 - soft, 0.5 + soft, f);
+	vec3 c0 = color_a.rgb;
+	vec3 c1 = color_b.rgb;
+	vec3 c2 = color_c.rgb;
+	vec3 c3 = color_d.rgb;
+	if (i < 1.0) {
+		return mix(c0, c1, f);
+	} else if (i < 2.0) {
+		return mix(c1, c2, f);
+	} else if (i < 3.0) {
+		return mix(c2, c3, f);
+	}
+	return mix(c3, c0, f);
+}
+
 float rounded_box_sdf(vec2 p, vec2 half_size, float radius) {
 	vec2 q = abs(p) - (half_size - vec2(radius));
 	return length(max(q, vec2(0.0))) - radius;
@@ -63,53 +97,59 @@ float rounded_box_sdf(vec2 p, vec2 half_size, float radius) {
 void fragment() {
 	float rad = radians(angle_deg);
 	vec2 dir = vec2(cos(rad), sin(rad));
-
-	// 像素坐标 → 归一化到"一个色带波长 = 1"的坐标系
-	vec2 scale = vec2(max(brush_width_px, 1.0), max(brush_height_px, 1.0));
+	vec2 perp = vec2(-dir.y, dir.x);
 	vec2 px = UV * width_px;
-	vec2 drift = scroll_speed * TIME / scale;
-	float along = dot(px / scale, dir) - dot(drift, dir);
+	vec2 drift = scroll_speed * TIME;
 
-	// 主色带 + 细碎刷痕：主带负责分色，噪声只把边界揉毛，避免糊成一团
-	float w1 = sin(along * TAU);
-	float w3 = tile_noise(px * 0.08 + drift * 1.3) * 2.0 - 1.0;
-	float sweep = w1 * 0.78 + w3 * 0.22;
+	float along = dot(px + drift, dir) / brush_px;
+	float across = dot(px, perp) / brush_px;
 
-	// 把 -1..1 映射到 0..4，在四色环上插值
-	float ring_t = clamp(sweep * 0.5 + 0.5, 0.0, 1.0) * 4.0;
-	float idx = floor(min(ring_t, 3.999));
-	float t = smoothstep(0.0, 1.0, fract(ring_t));
-
-	vec3 c0 = color_a.rgb;
-	vec3 c1 = color_b.rgb;
-	vec3 c2 = color_c.rgb;
-	vec3 c3 = color_d.rgb;
 	vec3 paint;
-	if (idx < 1.0) {
-		paint = mix(c0, c1, t);
-	} else if (idx < 2.0) {
-		paint = mix(c1, c2, t);
-	} else if (idx < 3.0) {
-		paint = mix(c2, c3, t);
+	float t = 0.0;
+
+	if (style == 0) {
+		t = along;
+		paint = ramp(t, band_soft);
+	} else if (style == 1) {
+		t = along + 0.16 * sin(across * 3.4 + TIME * 0.5);
+		paint = ramp(t, band_soft);
+	} else if (style == 2) {
+		vec2 p = px - width_px * 0.5;
+		float ang = atan(p.y, p.x) / TAU + TIME * 0.03;
+		t = ang * 1.0 + length(p) / brush_px * 0.35;
+		paint = ramp(t, band_soft);
+	} else if (style == 3) {
+		vec2 q = px / brush_px + drift / brush_px * 0.5;
+		float warp = fbm(q * 1.6) - 0.5;
+		t = (q.x + q.y) * 0.9 + warp * 0.55;
+		paint = ramp(t, band_soft);
 	} else {
-		paint = mix(c3, c0, t);
+		// 双色：低频波把两色揉在一起，再叠一抹扫光
+		float w = 0.5 + 0.5 * sin(along * TAU * 0.5);
+		paint = mix(color_a.rgb, color_c.rgb, w);
+		float sweep = 1.0 - smoothstep(0.0, 0.35, abs(fract(TIME / max(sheen_period, 0.001)) * 1.6 - UV.x + UV.y * 0.4));
+		paint = mix(paint, vec3(1.0), sweep * max(sheen_strength, 0.25));
 	}
 
-	// 斜向高光：一抹白光周期性扫过，静态截图也能看出"在动"
-	float sheen_pos = fract(TIME / max(sheen_period, 0.001));
-	float sheen_x = UV.x + UV.y * 0.55;
-	float sheen = 1.0 - smoothstep(0.0, 0.16, abs(sheen_x - (sheen_pos * 1.7 - 0.35)));
-	paint = mix(paint, vec3(1.0), sheen * sheen_strength);
+	// 白扫光（style 4 已自带，跳过）
+	if (style != 4 && sheen_strength > 0.0) {
+		float sp = fract(TIME / max(sheen_period, 0.001));
+		float sx = UV.x + UV.y * 0.5;
+		float s = 1.0 - smoothstep(0.0, 0.20, abs(sx - (sp * 1.7 - 0.35)));
+		paint = mix(paint, vec3(1.0), s * sheen_strength);
+	}
 
-	// 明度 / 饱和度
+	// 顶部玻璃高光：让卡面有"油漆未干"的湿润感
+	if (gloss > 0.0) {
+		float g = smoothstep(0.55, 0.0, UV.y) * gloss;
+		paint = mix(paint, vec3(1.0), g);
+	}
+
 	float luma = dot(paint, vec3(0.2126, 0.7152, 0.0722));
 	paint = mix(vec3(luma), paint, saturation);
 	paint *= value_mul;
 
-	// 圆角裁切（1px 抗锯齿）
 	vec2 p = UV * width_px - width_px * 0.5;
 	float d = rounded_box_sdf(p, width_px * 0.5, max(corner_radius_px, 0.0));
-	float mask = clamp(0.5 - d, 0.0, 1.0);
-
-	COLOR = vec4(paint, mask);
+	COLOR = vec4(paint, clamp(0.5 - d, 0.0, 1.0));
 }
