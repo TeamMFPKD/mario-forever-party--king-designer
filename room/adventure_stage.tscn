@@ -3,9 +3,9 @@
 [ext_resource type="Script" uid="uid://m7yc4og5f4v8" path="res://script/adventure/adventure_stage.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://cg0l8wpjkutri" path="res://mfmp_theme.tres" id="2_theme"]
 [ext_resource type="PackedScene" path="res://object/ui/adventure_save_slots.tscn" id="3_slots"]
-[ext_resource type="Script" uid="uid://dr33wf6eb2107" path="res://script/adventure/adventure_scenery.gd" id="4_scenery"]
 [ext_resource type="AudioStream" uid="uid://bc65vv7kboliu" path="res://sound/ui/ui_decide.wav" id="6_back_snd"]
 [ext_resource type="Script" uid="uid://bn1yr1qipwsnu" path="res://script/adventure/adventure_stage_preview.gd" id="7_preview"]
+[ext_resource type="Script" path="res://script/adventure/adventure_scenery.gd" id="22_scenery"]
 [ext_resource type="PackedScene" uid="uid://n5yiahk1fdsj" path="res://object/adventure/backgrounds.tscn" id="8_backgrounds"]
 [ext_resource type="Theme" uid="uid://0xyyopg2a56x" path="res://ui/theme/theme_dark_panel.tres" id="9_o8tnr"]
 [ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="10_ui_button"]
@@ -56,7 +56,7 @@ corner_radius_bottom_left = 18
 atlas = ExtResource("16_mario_small")
 region = Rect2(32, 35, 31, 31)
 
-[node name="AdventureStage" type="Control" unique_id=2142023481 node_paths=PackedStringArray("background", "backgrounds", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "lives_label", "preview_grid", "scenery", "back_button", "trash_button", "delete_button", "start_button", "save_info", "save_lives_label", "save_tier_label", "save_progress_label")]
+[node name="AdventureStage" type="Control" unique_id=2142023481 node_paths=PackedStringArray("background", "backgrounds", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "preview_grid", "scenery", "back_button", "trash_button", "delete_button", "start_button", "save_info", "save_lives_label", "save_tier_label", "save_progress_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,7 +74,6 @@ params_panel = NodePath("Layout/Box/PreviewPanel/ParamsPanel")
 params_title = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/ParamsTitle")
 length_label = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow/LengthLabel")
 length_slider = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LengthRow/LengthSlider")
-lives_label = NodePath("Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox/LivesLabel")
 preview_grid = NodePath("Layout/Box/PreviewPanel/PreviewCenter/PreviewGrid")
 scenery = NodePath("Layout/Box/PreviewPanel/Scenery")
 back_button = NodePath("Layout/Box/BottomBar/BackButton")
@@ -350,17 +349,6 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_preview")
 
-[node name="Scenery" type="Control" parent="Layout/Box/PreviewPanel" unique_id=1883192710]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("4_scenery")
-
 [node name="SaveInfo" type="PanelContainer" parent="Layout/Box/PreviewPanel" unique_id=1541185143]
 visible = false
 layout_mode = 1
@@ -602,13 +590,6 @@ min_value = 5.0
 max_value = 50.0
 value = 10.0
 
-[node name="LivesLabel" type="Label" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=479048862]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.301961, 0.329412, 0.407843, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
-text = "初始命数：20"
-
 [node name="OkButton" parent="Layout/Box/PreviewPanel/ParamsPanel/ParamsMargin/ParamsBox" unique_id=1900000003 instance=ExtResource("10_ui_button")]
 custom_minimum_size = Vector2(240, 64)
 layout_mode = 2
@@ -616,6 +597,16 @@ size_flags_horizontal = 4
 theme = ExtResource("19_yellow")
 theme_override_font_sizes/font_size = 36
 text = "OK"
+
+[node name="Scenery" type="Control" parent="Layout/Box/PreviewPanel" unique_id=1883192710]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("22_scenery")
 
 [node name="PreviewCenter" type="CenterContainer" parent="Layout/Box/PreviewPanel" unique_id=2041223727]
 layout_mode = 1

@@ -26,8 +26,19 @@ const TIER_TEXT_COLORS: Array[Color] = [
 ]
 const NEUTRAL_COLOR: Color = Color("#E7EBF2")
 const TEXT_COLOR: Color = Color("#1A1A1A")
-const SCENERY_TINT_ON_LIGHT_BG: Color = Color(0.11, 0.16, 0.27, 0.26)
-const SCENERY_TINT_ON_DARK_BG: Color = Color(1, 1, 1, 0.24)
+## 景物剪影配色：按档位分别给，索引 0 = 随机（不画）。
+##   简单（淡蓝底）→ 深蓝墨，淡一点；
+##   普通（深绿底）→ 灰黑实色，否则白剪影在中间调上糊成一片；
+##   困难（土黄底）→ 深灰褐 + 更透，块状地形体量大，实色会压住关卡路线；
+##   超难（紫底）→ 白，紫底上白最亮。
+const TIER_SCENERY_TINTS: Array[Color] = [
+	Color(0, 0, 0, 0),
+	Color(0.11, 0.16, 0.27, 0.26),
+	Color(0.28, 0.29, 0.31, 0.92),
+	# 困难：土黄底上黑块太抢眼，压成更透的深灰褐，只当远景用。
+	Color(0.20, 0.19, 0.19, 0.46),
+	Color(1, 1, 1, 0.24),
+]
 
 const POOL_BUTTON_NAMES: Array[String] = ["PoolAll", "PoolLiked"]
 const TIER_BUTTON_NAMES: Array[String] = ["Tier1", "Tier2", "Tier3", "Tier4", "Tier5"]
@@ -53,6 +64,8 @@ const MARIO_FRAME_H: float = 66.0
 const LEVEL_NODE_SCENE: PackedScene = preload("res://object/adventure/level_node.tscn")
 ## 椭圆高度（与 level_node.tscn 一致）：马里奥站在椭圆上沿时按它算脚底位置。
 const ELLIPSE_H: float = 78.0
+## 椭圆横向半径（level_node.svg 92×78，rx = 46）。
+const ELLIPSE_RX: float = 46.0
 const ENDLESS_PREVIEW_COUNT: int = 10
 ## 命数显示上限：与游玩左侧信息面板一致，触顶显示「× MAX」。
 const LIVES_CAP: int = 100
@@ -69,8 +82,8 @@ const BACKGROUND_DESIGN_SIZE: Vector2 = Vector2(1920, 1080)
 @export var params_title: Label
 @export var length_label: Label
 @export var length_slider: HSlider
-@export var lives_label: Label
 @export var preview_grid: Control
+## 关卡路线背后的难度景物（单色剪影），随机档不画。
 @export var scenery: Control
 @export var back_button: Button
 @export var trash_button: Button
@@ -228,33 +241,58 @@ func _on_length_changed(value: float) -> void:
 
 
 func _update_lives() -> void:
-	var lives: int = _run_length * 2 if _mode == "finite" else 30
-	lives_label.text = tr("初始命数：%d") % lives
 	length_label.text = (tr("关卡数：%d") % _run_length) if _mode == "finite" else tr("关卡数：无尽")
 
 
-## 换档：背景主题色 + 装饰剪影配色 + BGM。
+## 新存档按当前配置算出的初始命数。
+func _configured_lives() -> int:
+	return _run_length * 2 if _mode == "finite" else 30
+
+
+## 换档：背景主题色 + BGM。
 ## 选中已有存档时，主题与 BGM 都跟着该团的难度档走（而不是配置页里选的那个）。
 ## 标题/状态文字落在橙黄横幅上，颜色固定（不再跟难度前景色，深色档的白字在橙底上会糊）。
 func _update_theme() -> void:
 	var bg: Color = NEUTRAL_COLOR
-	var tint: Color = TEXT_COLOR
 	var theme_tier: int = _theme_tier()
 	if theme_tier >= 1 and theme_tier <= 4:
 		bg = TIER_COLORS[theme_tier - 1]
-		tint = TIER_TEXT_COLORS[theme_tier - 1]
 	# ColorRect 只做兜底底色：真正的背景是铺满整屏的难度渐变（object/adventure/backgrounds.tscn）。
 	background.color = bg
 	_show_background(theme_tier)
 	# BGM 与背景同源：切存档位时档位跟着变，曲目必须一起换（play_tier 对同档幂等，重复调用不重播）。
 	Adventure.play_bgm(theme_tier)
 	_ellipse_border = bg.darkened(0.25)
-	var dark_theme: bool = tint.get_luminance() > 0.6
-	if scenery != null:
-		scenery.set(
-			"tint",
-			SCENERY_TINT_ON_DARK_BG if dark_theme else SCENERY_TINT_ON_LIGHT_BG
-		)
+	_update_scenery(theme_tier)
+
+
+## 把关卡椭圆的占位矩形换算到景物层坐标系，让景物避开它们。
+## 两个控件都在 PreviewPanel 下、尺寸相同，所以只需减去各自的全局左上角。
+func _sync_scenery_layout() -> void:
+	if scenery == null:
+		return
+	var rects: Array[Rect2] = []
+	var origin: Vector2 = scenery.get_global_rect().position
+	for child: Node in preview_grid.get_children():
+		var cell: Node2D = child as Node2D
+		if cell == null:
+			continue
+		rects.append(Rect2(cell.global_position - origin - Vector2(ELLIPSE_RX, ELLIPSE_H * 0.5),
+			Vector2(ELLIPSE_RX * 2.0, ELLIPSE_H)))
+	# 左上角的存档摘要也是个「不能压住」的东西：它盖在景物层上面，景物穿过去会很脏。
+	if save_info != null and save_info.visible:
+		var info: Rect2 = save_info.get_global_rect()
+		rects.append(Rect2(info.position - origin, info.size))
+	scenery.call("set_layout", rects)
+
+
+## 景物跟着难度档换一套剪影与配色；随机档（tier 0）清空。
+func _update_scenery(tier: int) -> void:
+	if scenery == null:
+		return
+	var index: int = clampi(tier, 0, TIER_SCENERY_TINTS.size() - 1)
+	scenery.set("tint", TIER_SCENERY_TINTS[index])
+	scenery.set("tier", tier)
 
 
 ## 难度渐变背景铺满整个屏幕：背景 Sprite 是 1920×1080，按舞台当前尺寸拉伸并居中。
@@ -300,7 +338,12 @@ func _rebuild_preview() -> void:
 		if endless:
 			count = ENDLESS_PREVIEW_COUNT
 		else:
-			count = maxi(int(run.get("total_levels", _run_length)), 1)
+			# 用统一口径算总关数；旧存档缺 total_levels 时退回实际关卡数，
+			# 否则整条路线会塌成 1 格（摘要写着 6/6、下面却只画一个椭圆）。
+			var run_total: int = _run_total(run)
+			if run_total <= 0:
+				run_total = _run_length
+			count = maxi(run_total, 1)
 	var progress: int = 1
 	if not run.is_empty():
 		progress = int(run.get("index", 0)) + 1
@@ -319,19 +362,36 @@ func _rebuild_preview() -> void:
 	preview_grid.call("relayout")
 	# 马里奥站在窗口内的第几格：无限窗口按进度滑动，固定团进度即序号。
 	_place_progress_mario(clampi(progress - first + 1, 1, maxi(count, 1)))
+	# 先定好摘要面板的显隐，景物避让要把它一起算进去。
 	_refresh_save_info()
+	_sync_scenery_layout()
 
 
 ## 主面板左上角的存档摘要（选中「有团的存档位」时才有）：
 ## 第一行 mario_small 的 walk 第 2 帧 + × 命数；第二行 难度 + 进度。
 ## 进度：固定「当前关/总关数」，无尽没有总数，显示「已通过关数（无尽）」。
+## 新存档摘要：命数 / 难度按配置页当前设置，进度固定为 0。
+func _show_configured_summary() -> void:
+	var lives: int = _configured_lives()
+	save_lives_label.text = "× MAX" if lives >= LIVES_CAP else "× %d" % lives
+	save_tier_label.text = (
+		TIER_NAMES[_tier - 1] if _tier >= 1 and _tier <= TIER_NAMES.size() else "随机"
+	)
+	save_progress_label.text = ("0/%d" % _run_length) if _mode == "finite" else "0"
+
+
 func _refresh_save_info() -> void:
 	if save_info == null:
 		return
 	var run: Dictionary = _selected_run()
-	save_info.visible = not run.is_empty()
+	# 新存档同样显示摘要；「删除存档」只对已有存档出现。
+	var creating: bool = _selection == 0
+	save_info.visible = creating or not run.is_empty()
 	if delete_button != null:
 		delete_button.visible = not run.is_empty()
+	if creating:
+		_show_configured_summary()
+		return
 	if run.is_empty():
 		return
 	var lives: int = int(run.get("lives_left", 0))
@@ -340,12 +400,27 @@ func _refresh_save_info() -> void:
 	save_tier_label.text = (
 		TIER_NAMES[tier - 1] if tier >= 1 and tier <= TIER_NAMES.size() else "随机"
 	)
+	# 摘要与关卡路线、左侧 HUD 用同一套口径：都是「当前在第几关」= index + 1。
+	# 以前无尽这里报的是 cleared_count（已通过数，从 0 起），比马里奥站的格子少 1，
+	# 看起来就像「摘要和实际显示不符」。
+	var current: int = int(run.get("index", 0)) + 1
+	var total: int = _run_total(run)
+	if total > 0:
+		save_progress_label.text = "%d/%d" % [current, total]
+	else:
+		# 无尽没有总关数，只报当前关号（不带后缀）。
+		save_progress_label.text = "%d" % current
+
+
+## 一个团的有效总关数：固定团优先用自己的 total_levels，旧存档缺这个字段时
+## 退回它实际抽到的关卡数；无尽恒为 -1。摘要与关卡路线都走这一个口径。
+func _run_total(run: Dictionary) -> int:
+	if str(run.get("mode", "finite")) == "endless":
+		return -1
 	var total: int = int(run.get("total_levels", -1))
 	if total > 0:
-		save_progress_label.text = "%d/%d" % [int(run.get("index", 0)) + 1, total]
-	else:
-		# 无尽没有总关数，只报进度数字（不带后缀）。
-		save_progress_label.text = "%d" % int(run.get("cleared_count", 0))
+		return total
+	return int(run.get("level_count", 0))
 
 
 ## 选中的存档位对应的团数据；新存档 / 无选中返回空字典。
