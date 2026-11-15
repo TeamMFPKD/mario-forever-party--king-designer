@@ -80,7 +80,7 @@ scene_uid = &"uid://de64xnukpa0re"
 
 [node name="JumpToSceneAdventure" type="Node" parent="." unique_id=204944670]
 script = ExtResource("4_ikv4w")
-scene_uid = &"res://room/adventure_stage.tscn"
+scene_uid = &"res://room/adventure/adventure_stage.tscn"
 
 [node name="GameStart" type="Node" parent="." unique_id=2019232837 node_paths=PackedStringArray("bar")]
 script = ExtResource("5_estsl")

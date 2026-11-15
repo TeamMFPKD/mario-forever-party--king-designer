@@ -15,7 +15,7 @@ extends Control
 ##   （LetterBounceAnimation），弹稳后数据表再上划淡入。
 ## 数据来自 Adventure.last_summary（内存），不读 MPManager。
 
-const STAGE_SCENE: String = "res://room/adventure_stage.tscn"
+const STAGE_SCENE: String = "res://room/adventure/adventure_stage.tscn"
 const TITLE_SCENE: String = "res://room/title.tscn"
 
 ## 相邻字母开始下落的间隔（秒）

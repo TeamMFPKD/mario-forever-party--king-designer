@@ -28,11 +28,11 @@ const ENDLESS_LIVES: int = 30
 const LIVES_CAP: int = 100
 const LIFE_BONUS_EVERY: int = 2
 
-const STAGE_SCENE: String = "res://room/adventure_stage.tscn"
-const PLAY_SCENE: String = "res://room/adventure_play.tscn"
+const STAGE_SCENE: String = "res://room/adventure/adventure_stage.tscn"
+const PLAY_SCENE: String = "res://room/adventure/adventure_play.tscn"
 ## 结算拆成两张独立场景：GAME OVER / GAME CLEAR，共用 object/ui/adventure_result_base.tscn。
-const RESULT_OVER_SCENE: String = "res://room/adventure_result_over.tscn"
-const RESULT_CLEAR_SCENE: String = "res://room/adventure_result_clear.tscn"
+const RESULT_OVER_SCENE: String = "res://room/adventure/adventure_result_over.tscn"
+const RESULT_CLEAR_SCENE: String = "res://room/adventure/adventure_result_clear.tscn"
 
 const LIFE_BONUS_LAYER: GDScript = preload("res://script/adventure/adventure_life_bonus.gd")
 ## 百人团 BGM（挑战 / 挑战专家）：常驻本管理器，只在舞台 / 界面播放；
@@ -58,7 +58,7 @@ var _transition_dim: ColorRect
 var _transition_panel: Panel
 var _transition_label: Label
 
-## 关卡视口内的过关转场（room/adventure_play.tscn 注册，随场景销毁自动失效）
+## 关卡视口内的过关转场（room/adventure/adventure_play.tscn 注册，随场景销毁自动失效）
 var _clear_transition: CanvasLayer
 ## 本次真正在播的转场。换关时新场景的 _ready() 会重新 register_clear_transition，
 ## 覆盖 _clear_transition；定格必须用这个不受换场景影响的引用。

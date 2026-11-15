@@ -3,12 +3,12 @@ extends Control
 ## 百人团舞台：布局按 docs/raid_mode §8.3.2 参考图（顶部标题 / 通栏存档位 /
 ## 全宽预览 / 底部动作条 / 右下状态），交互按 §8.3.1「先选存档，再点开始」。
 ##
-## UI 节点全部在 room/adventure_stage.tscn，脚本只做数据绑定、主题色、关卡池扫描与交互。
+## UI 节点全部在 room/adventure/adventure_stage.tscn，脚本只做数据绑定、主题色、关卡池扫描与交互。
 
 @warning_ignore_start("unsafe_cast", "unsafe_call_argument")
 
 const TITLE_SCENE: String = "res://room/title.tscn"
-const TRASH_SCENE: String = "res://room/adventure_trash.tscn"
+const TRASH_SCENE: String = "res://room/adventure/adventure_trash.tscn"
 const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
 ## 四档主题色：淡蓝 / 偏深绿 / 土黄 / 紫。
 const TIER_COLORS: Array[Color] = [

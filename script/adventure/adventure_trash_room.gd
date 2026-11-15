@@ -6,8 +6,8 @@ extends Node2D
 ## 数据以 adventure.ini 为准（Adventure.excluded_levels）；恢复只清 excluded 标记，
 ## 不删关卡文件、不动历史样本，恢复后该关重新参与关卡池与难度分档。
 
-const STAGE_SCENE: String = "res://room/adventure_stage.tscn"
-const SELF_SCENE: String = "res://room/adventure_trash.tscn"
+const STAGE_SCENE: String = "res://room/adventure/adventure_stage.tscn"
+const SELF_SCENE: String = "res://room/adventure/adventure_trash.tscn"
 const HISTORY_EDIT_SCENE: String = "res://room/history_edit.tscn"
 const ROW_SCENE: PackedScene = preload("res://ui/list/adventure_trash_level_info.tscn")
 const LEVEL_PATH_SET_GROUP: String = "level_path_set"

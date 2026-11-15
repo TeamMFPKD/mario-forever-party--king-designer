@@ -35,11 +35,11 @@ $Out     = Join-Path $env:TEMP "mfmp_probe_out.txt"
 $Err     = Join-Path $env:TEMP "mfmp_probe_err.txt"
 
 $p = Start-Process -FilePath $Godot -PassThru -NoNewWindow `
-    -ArgumentList "--headless --path `"$Project`" $Scene" `
-    -RedirectStandardOutput $Out -RedirectStandardError $Err
+	-ArgumentList "--headless --path `"$Project`" $Scene" `
+	-RedirectStandardOutput $Out -RedirectStandardError $Err
 if (-not $p.WaitForExit(180000)) {
-    Stop-Process -Id $p.Id -Force
-    throw "probe timeout"
+	Stop-Process -Id $p.Id -Force
+	throw "probe timeout"
 }
 Get-Content -LiteralPath $Out -Encoding UTF8
 Get-Content -LiteralPath $Err -Encoding UTF8
@@ -311,7 +311,7 @@ run_active=true
 run_index=0
 ```
 
-`path_exists`、`player_found`、`run_active` 应全为 `true`；`run_index` 是当前关序号（首关通常为 0），不固定写死。`player_found` 来自 `get_tree().get_first_node_in_group("player")`，若为 `false`，先确认 `room/adventure_play.tscn` 的玩家实例化路径是否改了，而不是直接怀疑 `Adventure` 数据层。
+`path_exists`、`player_found`、`run_active` 应全为 `true`；`run_index` 是当前关序号（首关通常为 0），不固定写死。`player_found` 来自 `get_tree().get_first_node_in_group("player")`，若为 `false`，先确认 `room/adventure/adventure_play.tscn` 的玩家实例化路径是否改了，而不是直接怀疑 `Adventure` 数据层。
 
 ### 4.7 adventure_mobile_pause_probe
 
@@ -345,7 +345,7 @@ emulate_touch_after_clear=false
 
 手机模式对应 `expect_mobile=true`、`platform_name=Android`、`is_mobile=true`、`is_desktop=false`、`emulate_touch_from_mouse=true`，其余关键行相同。暂停键不再按平台隐藏，`button_visible=true` 在两种模式下都必须成立。
 
-暂停菜单 UI 是 `object/ui/adventure_pause_menu.tscn`（`room/adventure_play.tscn` 里实例化），脚本 `script/adventure/adventure_pause_menu.gd` 只做翻转与菜单动作。面板尺寸取 `GameRoomSize/SubViewportContainer/Node2D/GameBorderTextureRect` 的全局矩形，因此 `panel_size` 必须与 `border_size`（默认 1320×1000）完全一致，不能退回成 SubViewportContainer 的 1280×928。
+暂停菜单 UI 是 `object/ui/adventure_pause_menu.tscn`（`room/adventure/adventure_play.tscn` 里实例化），脚本 `script/adventure/adventure_pause_menu.gd` 只做翻转与菜单动作。面板尺寸取 `GameRoomSize/SubViewportContainer/Node2D/GameBorderTextureRect` 的全局矩形，因此 `panel_size` 必须与 `border_size`（默认 1320×1000）完全一致，不能退回成 SubViewportContainer 的 1280×928。
 
 翻转是真实透视而不是横向缩放：卡片放在 `CardViewport`（SubViewport）里，翻转期间用 `MeshInstance2D` + `shader/adventure_pause_flip.gdshader` 对 32×32 细分网格逐顶点做 Y 轴旋转 + 透视投影，正面采样关卡 SubViewport 贴图并叠 `sprite/game_border.png`，背面采样卡片贴图；正反面由同一个 `yaw` uniform 在着色器内切换（≤90° 正面、>90° 背面并把 UV.x 翻回来），不会出现换面滞后。动画结束隐藏网格、显示 `CardContainer`（SubViewportContainer）恢复按钮交互。注意 `SubViewportContainer` 隐藏时子视口可能停更，翻转期间必须保持容器可见，用 `modulate.a = 0` + `mouse_filter = IGNORE` 代替隐藏。
 
@@ -382,7 +382,7 @@ emulate_touch_after_clear=false
 
 ```powershell
 $p = Start-Process -FilePath $Godot -PassThru `
-    -ArgumentList "--path `"$Project`" res://tools/title_pipe_shot.tscn"
+	-ArgumentList "--path `"$Project`" res://tools/title_pipe_shot.tscn"
 $p.WaitForExit(120000)
 ```
 
@@ -423,7 +423,7 @@ $p.WaitForExit(120000)
 
 ```powershell
 $p = Start-Process -FilePath $Godot -PassThru `
-    -ArgumentList "--path `"$Project`" res://tools/spectate_demo.tscn -- --demo-shot"
+	-ArgumentList "--path `"$Project`" res://tools/spectate_demo.tscn -- --demo-shot"
 $p.WaitForExit(60000)
 ```
 

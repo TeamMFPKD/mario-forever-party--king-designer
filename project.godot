@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="MF: MP"
-config/version="v20261115_1716"
+config/version="v20261115_1733"
 run/main_scene="uid://dcqf1c3m14b1f"
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "GL Compatibility")
@@ -101,7 +101,7 @@ folder_colors={
 "res://object/level/projectile/": "red",
 "res://room/": "purple",
 "res://script/": "gray",
-"res://shader/": "gray",
+"res://shader/": "pink",
 "res://sound/": "blue",
 "res://sprite/animated_sprite_resource/": "purple",
 "res://sprite/background/": "green",

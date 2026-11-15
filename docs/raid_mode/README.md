@@ -40,7 +40,7 @@
 | --- | --- | --- |
 | 玩家可见文案 | 「随心挑战」（标题水管、舞台标题、数据卡「随心挑战数据」、排除房间返回按钮）；动作按钮为「开始挑战」 | **已改**（2026-11-14，见下方「文案替换清单」） |
 | 文档措辞 | 「百人团」「固定」「无尽」「打团」「本团」 | 保留，本文其余章节照旧 |
-| 代码 / 资源 | autoload `Adventure`、`script/adventure/adventure_*.gd`、`room/adventure_*.tscn`、`object/ui/adventure_*.tscn`、`tools/adventure_*` 探针 | 保留 `adventure_` 前缀，不重命名 |
+| 代码 / 资源 | autoload `Adventure`、`script/adventure/adventure_*.gd`、`room/adventure/adventure_*.tscn`、`object/ui/adventure_*.tscn`、`tools/adventure_*` 探针 | 保留 `adventure_` 前缀，不重命名 |
 | 存档 / 枚举 / 配置 | `user://adventure.ini`、`[run]`、`GameModeType.ADVENTURE`、`mode=finite` / `endless` | 保留，改名会破坏续团存档 |
 | 目录 / 导出属性 | `docs/raid_mode/`、`raid_jump` | 保留，改了会牵动场景连线与探针断言 |
 
@@ -51,10 +51,10 @@
 | 位置 | 文件 | 旧 | 新 |
 | --- | --- | --- | --- |
 | 标题水管 | `ui/title/pipe_menu.tscn` + `script/title/pipe_button.gd` 的 `LABELS` | 百人团 | 随心挑战 |
-| 舞台标题 | `room/adventure_stage.tscn` 的 `Title` | 百人团 | 随心挑战 |
-| 开始按钮 | `room/adventure_stage.tscn` 与 `script/adventure/adventure_stage.gd` | 开始打团 | 开始挑战 |
+| 舞台标题 | `room/adventure/adventure_stage.tscn` 的 `Title` | 百人团 | 随心挑战 |
+| 开始按钮 | `room/adventure/adventure_stage.tscn` 与 `script/adventure/adventure_stage.gd` | 开始打团 | 开始挑战 |
 | 状态栏提示 | `script/adventure/adventure_stage.gd` `_status_text()` | 点「开始打团」 | 点「开始挑战」 |
-| 排除房间返回键 | `room/adventure_trash.tscn` | 返回百人团 | 返回随心挑战 |
+| 排除房间返回键 | `room/adventure/adventure_trash.tscn` | 返回百人团 | 返回随心挑战 |
 | 关卡数据卡标题 | `object/ui/adventure_level_stats.tscn` | 百人团数据 | 随心挑战数据 |
 
 > **水管标签要按字宽缩放**：Label 只有 174px、字号 36，4 个汉字实测宽 442px（截图 1920 宽下的绝对像素），
@@ -95,7 +95,7 @@
 | 4 | 无解关卡可排除，记录在配置里 | `[level.<key>].excluded` |
 | 5 | 4 档难度，由自己游玩动态调整 | 个人分位分档 + 在线先验 + 每次团结束重算 |
 | 6 | 百人团有专门入口：标题画面新增按钮 | `room/title.tscn` 的 `ChooseModePanel` |
-| 7 | 进入后有类似《马里奥制造 1》百人团的专属舞台场景；SVG 绘制景物；扁的、略倾斜的椭圆表示关卡；背景主题色表示难度 | `room/adventure_stage.tscn` + `sprite/ui/adventure/*.svg` |
+| 7 | 进入后有类似《马里奥制造 1》百人团的专属舞台场景；SVG 绘制景物；扁的、略倾斜的椭圆表示关卡；背景主题色表示难度 | `room/adventure/adventure_stage.tscn` + `sprite/ui/adventure/*.svg` |
 | 8 | 玩家在舞台上选数据源、难度、流程（关卡数） | 舞台上的设置面板 |
 | 9 | 固定初始命数 = 选择关数 × 2；无尽初始 30 命 | `[run].lives_total` |
 | 10 | 每过一关有简短过渡动画 | `AdventureTransition` 覆盖层 |
@@ -537,7 +537,7 @@ for rank in 0..N-1:
 
 - 舞台动作条的「排除的关卡」：列出 `excluded=true` 的关卡（含文件已缺失的孤儿记录），可逐关「恢复」。
   恢复只清 `excluded` / `exclude_reason` / `excluded_at`，保留 `solo_*` 样本与关卡文件，
-  并立即重算可玩数与分档（`Adventure.restore_excluded_level` → 独立房间 `room/adventure_trash.tscn`，版式参考 `room/history.tscn`）；
+  并立即重算可玩数与分档（`Adventure.restore_excluded_level` → 独立房间 `room/adventure/adventure_trash.tscn`，版式参考 `room/history.tscn`）；
 - 历史/收藏的关卡信息卡（可选，阶段 2）。
 
 **疑似无解提示**：
@@ -704,7 +704,7 @@ rng.seed = run.seed
 ### 8.1 入口
 
 - 标题页 `room/title.tscn` 的 `ChooseModePanel`（现有 Host / Join / History / Options 四个按钮）新增「百人团」按钮。
-- 点击进入 `room/adventure_stage.tscn`。
+- 点击进入 `room/adventure/adventure_stage.tscn`。
 
 ### 8.2 百人团舞台场景 `adventure_stage.tscn`
 
@@ -835,7 +835,7 @@ level_ellipse_cleared.svg / level_ellipse_skipped.svg / avatar_marker.svg / icon
     右侧在无尽里永远画一段淡出连线（见下方连线规则）；
 - 样本不足时，四档按钮全部禁用，顶部显示进度：「已采样 9/16 关，随机模式可继续采样」；
 - 初始命数实时显示：定量 `N*2`（5–50 关 → 10–100 命），无尽 `30`；
-- 「排除的关卡」进入独立房间 `room/adventure_trash.tscn`，版式逐项对齐 `room/history.tscn`：相同的面板边距、单行标题（固定「排除的关卡」，按钮与标题都不显示文件数）、`ScrollContainer` 尺寸、行高与按钮尺寸。每行：序号、完整文件名、右侧「查看」「恢复」按钮；底部「返回百人团」。
+- 「排除的关卡」进入独立房间 `room/adventure/adventure_trash.tscn`，版式逐项对齐 `room/history.tscn`：相同的面板边距、单行标题（固定「排除的关卡」，按钮与标题都不显示文件数）、`ScrollContainer` 尺寸、行高与按钮尺寸。每行：序号、完整文件名、右侧「查看」「恢复」按钮；底部「返回百人团」。
   - `ui/list/adventure_trash_level_info.tscn` 与 history 行同构：序号 96px、文件名 `ui_label` 30 号（`size_flags_horizontal=3`）、按钮区套 `UiMarginContainer`（右边距 16）内放两个 190×48、40 号的 `ui_button`。
   - 「查看」按行设置 `LevelPathSet.level_path_name` 后进入 `history_edit`，并把 `return_scene_path` 记为「排除的关卡」房间，编辑器返回时回到本房间；关卡文件缺失时「查看」禁用。
   - 「恢复」规则同 §6.3，恢复后列表即时刷新。
@@ -1274,10 +1274,10 @@ script/adventure/adventure_run_controller.gd # 场景内推进（group play_next
 script/adventure/adventure_stage_view.gd     # 舞台/椭圆路径的布局与状态
 script/adventure/adventure_transition.gd     # 过渡覆盖层
 script/adventure/adventure_level_info.gd     # 左侧关卡信息面板数据绑定
-room/adventure_stage.tscn                    # 入口 + 设置 + 路径预览
-room/adventure_play.tscn                     # 游玩场景
-room/adventure_result_over.tscn              # 结算：GAME OVER
-room/adventure_result_clear.tscn             # 结算：GAME CLEAR
+room/adventure/adventure_stage.tscn                    # 入口 + 设置 + 路径预览
+room/adventure/adventure_play.tscn                     # 游玩场景
+room/adventure/adventure_result_over.tscn              # 结算：GAME OVER
+room/adventure/adventure_result_clear.tscn             # 结算：GAME CLEAR
 object/ui/adventure_result_base.tscn         # 结算两版共用的裁剪框 / 数据表 / 按钮
 object/ui/adventure_level_info.tscn
 object/adventure/adventure_pause_menu.tscn
