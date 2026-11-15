@@ -178,31 +178,60 @@ solo_death=0
 
 ### 4.2 adventure_state_probe
 
-验证单局状态机：初始 10 命（5 关固定）、每过 2 关 +1 命、死亡 -1、软跳过不扣命、最后一关被硬跳过后补位、打完替补关才结算。
+验证单局状态机：初始 10 命（5 关固定）、每过 2 关 +1 命、死亡 -1、跳过不扣命、**跳过不再推进进度**（换一关补上本格）、打完补位关才前进一格。
 
-关键判据：
+关键判据（池子 20 关、团 5 关，多出来的关卡用来补位）：
 
 ```text
 start=true
+total_levels=5
 initial_lives=10
-after_pass_1=10
+after_pass_1_lives=10
 after_pass_2_lives=11
 cleared=2
 after_death_lives=10
 after_skip_soft_soft=1
-after_pass_3_lives=10
-last_slot_number=5
+after_skip_soft_lives=10
 last_skip_running=true
 last_skip_index_same=true
+last_skip_key_changed=true
 last_skip_replaced=true
-last_skip_key_exists=true
+after_replacement_pass_index=3
+after_skip_hard_hard=1
+hard_index_same=true
+hard_key_excluded=true
+last_slot_skip_running=true
+last_slot_skip_index_same=true
+last_slot_skip_replaced=true
 finished=true
 summary_result=completed
-summary_cleared=4
-summary_skipped_hard=1
+summary_cleared=5
+summary_total=5
+summary_skipped_soft=1
+summary_skipped_hard=2
+summary_result_scene_clear=true
+skipped_never_reused=true
 ```
 
-`last_skip_replaced=true` 是「最后一关永久排除后换一关补位」的核心判据：序号不变、关卡 key 变了、团仍在进行。
+核心判据是 `index_same` / `key_changed` / `replaced` 三件套：跳过之后序号不动、关卡换了一张、团仍在进行；玩家打完补位关（`after_replacement_pass_index`）进度才 +1。
+
+**`summary_cleared` 必须等于 `summary_total`**——这是「跳过不能缩短团」的直接体现。以前跳过和过关共用 `advance()`，5 关的团跳 2 次就能以 3/5 拿到 GAME CLEAR。
+
+另外三段覆盖边界：
+
+```text
+resume_skipped_keys=1              # 续团后 skipped_keys 还在（整份 current_run 落盘）
+resume_key_is_new=true             # 续团不会把刚跳过的关卡原样抽回来
+endless_start=true
+endless_skip_index_advanced=true   # 无尽没有固定关数，跳过照旧翻页
+endless_skip_cleared=0
+tight_start=true
+tight_running=false                # 池子刚好等于团长度，跳过后无关卡可补
+tight_summary_result=no_levels     # 不是 completed，走 GAME OVER
+tight_result_scene_over=true
+```
+
+> 探针里改状态前必须先调 `_enter()` 把 `Adventure.current_key` 指到本格。`current_key` 表示「正在玩的关卡」，过关后它仍停在上一次打过的那关；不改的话跳过（尤其是硬排除）会记到旧关卡头上。
 
 命数经济或结算规则改动后，这里要同步更新期望值再跑。
 

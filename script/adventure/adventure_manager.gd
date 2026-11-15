@@ -175,7 +175,7 @@ func is_excluded(key: String) -> bool:
 ## 非跑团场景（回放页）用：把一关加入永久排除名单。
 ## 只写 excluded=manual，不记跳过样本、不推进当前团、不切场景；
 ## 已排除或 key 为空时返回 false。与 skip_current_level(true) 的区别是
-## 后者还要把本关算作一次跳过，并翻卡进入下一关。
+## 后者还要把本关算作一次跳过，并换一关补上当前这一格（团长度不变）。
 func exclude_level(key: String) -> bool:
 	if key.is_empty() or store.is_excluded(key):
 		return false
@@ -302,7 +302,8 @@ func current_level_path() -> String:
 
 
 ## 当前关卡在本团里的序号（1 起）：过场动画的「第 N/M 关」和关卡串编号都用它。
-## 跳过一关也会占掉一个序号，所以不能拿「通过数」cleared_count 当关号。
+## 固定团里跳过不占序号（那一格换一关重打），所以序号和通过数同步推进；
+## 无尽团跳过会直接翻页，序号仍只表示「走到第几格」，不能拿通过数当关号。
 func current_level_number() -> int:
 	if not is_running():
 		return 0
@@ -440,6 +441,8 @@ func start_run(settings: Dictionary) -> bool:
 		"skipped_count": 0,
 		"skipped_soft": 0,
 		"skipped_hard": 0,
+		# 本团被跳过的关卡：补给时不再抽到它们（软跳过只在本团生效）。
+		"skipped_keys": [],
 		"cycle": 1,
 		"cycle_played": [],
 		"level_keys": keys,
@@ -542,19 +545,32 @@ func skip_current_level(hard: bool) -> void:
 		else:
 			stat.solo_skip_soft += 1
 
-	# 固定的最后一关被跳过时不能直接算通关：抽一关补上这个位置，
-	# 玩家打完替补关卡才结算（否则跳一下就直接「走完了整条路线」）。
-	if _is_finite_last_slot():
-		if _replace_current_slot():
-			store.set_run(current_run)
-			run_changed.emit()
-			return
-		Log.w("Adventure", "最后一关被跳过且抽不到替补关卡，本团提前结束")
-		finish_run("no_levels")
+	# 本团内不再抽这一关（硬跳过已被 excluded 覆盖，软跳过只在本团生效）。
+	var skipped_keys: Array = current_run.get("skipped_keys", [])
+	if not skipped_keys.has(current_key):
+		skipped_keys.append(current_key)
+	current_run["skipped_keys"] = skipped_keys
+
+	# 跳过不推进进度：关号（index）原地不动，换一关补上这一格。
+	#
+	# 以前跳过和过关共用 advance()，跳一次就少打一关：10 关的团跳 1 次，
+	# 玩家只需熬过 9 关就能拿到 GAME CLEAR，第 10 关从头到尾没出现过。
+	# 现在固定的团长度是硬约束 —— 跳过改变的是「打哪一关」，不是「还要打几关」：
+	# 被跳过的那一格换上新关卡，必须真的打完它，index 才前进。
+	# 于是固定团里 index 只在过关时 +1，cleared_count 恒等于 index，
+	# 走完整条路线结算必然是 total/total；跳过次数单独显示在「跳过 / 排除」两列。
+	if str(current_run.get("mode", "finite")) != "finite":
+		# 无尽没有固定关数，跳过只是换下一关；通过数本来就只在过关时 +1。
+		store.set_run(current_run)
+		advance()
 		return
 
-	store.set_run(current_run)
-	advance()
+	if _replace_current_slot():
+		store.set_run(current_run)
+		run_changed.emit()
+		return
+	Log.w("Adventure", "跳过本关后抽不到替补关卡，本团提前结束")
+	finish_run("no_levels")
 
 
 func abandon_run() -> void:
@@ -598,15 +614,8 @@ func delete_run_slot(slot: int) -> bool:
 # 推进内部
 # ---------------------------------------------------------------------------
 
-## 当前是否正停在固定的最后一格。
-func _is_finite_last_slot() -> bool:
-	if str(current_run.get("mode", "finite")) != "finite":
-		return false
-	var total: int = int(current_run.get("total_levels", 0))
-	return total > 0 and int(current_run.get("index", 0)) >= total - 1
-
-
 ## 用一关新的补给替换当前格：关数不变、序号不变，只是换一张地图接着打。
+## 固定的团被跳过时靠它补位——跳过关不减少团的长度，只换掉那一格的内容。
 ## 抽不到（池子里全玩过 / 全排除）时返回 false。
 func _replace_current_slot() -> bool:
 	var index: int = int(current_run.get("index", 0))
@@ -633,6 +642,11 @@ func _draw_replacement_key() -> String:
 	var used: Array[String] = []
 	for entry: Variant in current_run.get("level_keys", []):
 		used.append(str(entry))
+	# 本团已经跳过的关卡不再回来：软跳过只在本团生效，补给也不该把它抽回来。
+	for entry: Variant in current_run.get("skipped_keys", []):
+		var skipped: String = str(entry)
+		if not used.has(skipped):
+			used.append(skipped)
 	if not current_key.is_empty() and not used.has(current_key):
 		used.append(current_key)
 
@@ -996,7 +1010,7 @@ func _run_pass_transition(next_scene: String, level_number: int = 0, total_level
 	if not is_instance_valid(transition):
 		return
 	_active_transition = transition
-	# 过场显示「刚通过的关卡序号」：按团进度 index 计算，跳过一关也不会串号；
+	# 过场显示「刚通过的关卡序号」：按团进度 index 计算，无尽团跳过也不会串号；
 	# 结算时 current_run 已被清空，只能用调用方在推进进度前传进来的快照。
 	var number: int = level_number if level_number > 0 else int(current_run.get("cleared_count", 1))
 	var total: int = total_levels if total_levels != 0 else int(current_run.get("total_levels", -1))

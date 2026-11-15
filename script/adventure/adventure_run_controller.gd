@@ -14,12 +14,12 @@ func next_level_pass() -> void:
 	await Adventure.wait_pause_menu_closed()
 	_close_pause_menu(true)
 	# 过场动画要显示「刚通过的是第几关」，必须在推进进度前取快照：
-	# 跳过关卡会让通过数和实际关号错位，结算时 current_run 还会被清空。
+	# 结算时 current_run 会被清空，只能在调用 on_level_passed() 之前读。
 	var level_number: int = Adventure.current_level_number()
 	var total_levels: int = Adventure.current_total_levels()
 	Adventure.on_level_passed()
 	var finished: bool = not Adventure.is_running()
-	# 过场数字与左侧面板一致，都用「团内第几关」：跳过关卡会让已通过数落后于关号，
+	# 过场数字与左侧面板一致，都用「团内第几关」：无尽团跳过会把序号往前推而不加通过数，
 	# 用通过数会让过场看起来倒退（面板已经在第 121 关，过场却从 99 开始滚）。
 	var display_number: int = level_number
 	Adventure.play_transition(
