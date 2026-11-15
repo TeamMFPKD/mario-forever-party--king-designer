@@ -17,6 +17,7 @@ extends Node
 ## - Esc / 手柄 B：合成右键单击；焦点在 ScrollContainer 内时改为跳出容器。
 ##
 ## 点击点：FOCUS 取选中控件的矩形中心，POINTER 取虚拟鼠标位置，都走 `viewport.push_input`。
+## 两者都是**视口局部坐标**，所以 push_input 必须传 `in_local_coords = true`。
 ## 四角光标：FOCUS 框选中项，POINTER 框鼠标下的控件（空白处只剩系统指针）。
 ##
 ## 设备门控：移动端 / 鼠标主导不启用；游戏内默认不启用，除非有可见的 `ui_focus_modal`。
@@ -795,7 +796,12 @@ func _send_mouse_button(point: Vector2, button: MouseButton, pressed: bool) -> v
 	event.position = point
 	event.global_position = point
 	event.button_mask = _mask_of(button) if pressed else 0
-	viewport.push_input(event)
+	# 必须声明是本地（画布）坐标：UiNavigator 里所有点都来自
+	# get_global_transform_with_canvas() / get_mouse_position()，是视口局部坐标；
+	# 而 push_input 默认把 position 当**窗口**坐标，还会乘一次 final_transform 的逆。
+	# 窗口做过内容缩放时（1280×720 跑 1920×1080 内容、全屏、DPI 缩放）两者差一个
+	# 系数，点就会落到按钮外面——表现是红框能变黄、按钮却毫无反应。
+	viewport.push_input(event, true)
 
 
 func _mask_of(button: MouseButton) -> int:
