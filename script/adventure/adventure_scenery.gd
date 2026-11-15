@@ -88,13 +88,16 @@ var tint: Color = Color(0.11, 0.16, 0.27, 0.26):
 var seed_value: int = 20261115
 var tier: int = 0:
 	set(value):
+		if value == tier:
+			return
 		tier = value
-		# 换档才算「难度切换」，要播入场；单纯尺寸变化只重建不重播。
-		_pending_animate = true
 		_queue_rebuild()
 
-## 下次重建完成后是否播 switch_in
-var _pending_animate: bool = true
+## 当前这批景物是照哪一档摆出来的。-1 = 还没摆过。
+## 是否播入场只由「摆完之后的档 != 建这批时的档」决定，跟重建被触发几次无关：
+## 舞台进房间时会连着调用多次 _update_theme() 和 set_layout()，重建可能发生两三次，
+## 但只有档位真的变了那一次才播动画。
+var _built_tier: int = -1
 ## 舞台是否已经给过布局。没给之前不生成：否则会先按「不避让」撒一遍，
 ## 等 set_layout 到了再重建一次，既闪一下又白丢一次入场动画。
 var _has_layout: bool = false
@@ -151,10 +154,12 @@ static func shapes_for_tier(value: int) -> Array:
 
 ## 舞台把「关卡椭圆占位」传进来，本层按它避让。
 func set_layout(avoid_rects: Array[Rect2]) -> void:
+	# 布局没变就别重建：重建会扔掉正在播的入场动画，
+	# 玩家看到的就是「动画播到一半突然变成完成态」。
+	if _has_layout and _avoid == avoid_rects:
+		return
 	_has_layout = true
 	_avoid = avoid_rects
-	# 只重排位置，不碰 _pending_animate：换档时它会保持 true，
-	# 于是「换档 + 重排」合并成一次重建后仍然播入场动画。
 	_queue_rebuild()
 
 
@@ -185,6 +190,11 @@ func _rebuild() -> void:
 	_rebuild_queued = false
 	if _rebuilding:
 		return
+	# 同一档位下，如果已经摆好的这批还能用（只是避让矩形略有变化），就地挪位置，
+	# 不要整批重建 —— 重建会把正在播的入场动画打断，肉眼看到的就是「播两遍」。
+	if _built_tier == tier and _can_reflow():
+		_reflow()
+		return
 	_rebuilding = true
 	_generation += 1
 	_placed.clear()
@@ -192,6 +202,8 @@ func _rebuild() -> void:
 
 	var pool: Array = shapes_for_tier(tier)
 	if pool.is_empty() or size.x < 160.0 or size.y < 160.0 or not _has_layout:
+		# 随机档没有景物：把 _built_tier 对齐，切回来时才会重新播入场。
+		_built_tier = tier
 		_rebuilding = false
 		return
 
@@ -211,8 +223,9 @@ func _rebuild() -> void:
 		_spawn(rng, texture)
 	_apply_tint()
 	_rebuilding = false
-	if _pending_animate:
-		_pending_animate = false
+	# 换档（或首次摆出来）才播入场；set_layout 引起的重排不重播。
+	if _built_tier != tier:
+		_built_tier = tier
 		switch_in()
 
 
@@ -304,6 +317,39 @@ func _pick_position(rng: RandomNumberGenerator, texture: Texture2D, base: Vector
 	if _scenery_must_not_overlap():
 		return PLACE_FAILED
 	return fallback
+
+
+## 现有这批能不能就地重排：已摆好、且档位没变。
+func _can_reflow() -> bool:
+	return _built_tier == tier and get_child_count() > 0
+
+
+## 就地重排：沿用已生成的剪影与尺寸，只把压到避让矩形的那几件挪开，
+## 挪不开就原地留（绝不叠），入场动画与摇摆状态全部保留。
+func _reflow() -> void:
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = seed_value + 1
+	_placed.clear()
+	for holder: Node in get_children():
+		var item: Node2D = holder as Node2D
+		var sprite: Sprite2D = null
+		for child: Node in item.get_children():
+			if child is Sprite2D:
+				sprite = child as Sprite2D
+		if sprite == null or sprite.texture == null:
+			continue
+		var half: Vector2 = Vector2(
+			float(sprite.texture.get_width()) * absf(sprite.scale.x),
+			float(sprite.texture.get_height()) * absf(sprite.scale.y)
+		) * 0.5
+		var rect: Rect2 = _rect_of(item.position, half)
+		if _blocked(rect.grow(AVOID_MARGIN)) or _collides(rect.grow(SCENERY_GAP)):
+			var moved: Vector2 = _pick_position(rng, sprite.texture, sprite.scale)
+			if moved != PLACE_FAILED:
+				item.position = moved
+				rect = _rect_of(moved, half)
+		if _scenery_must_not_overlap():
+			_placed.append(rect)
 
 
 ## 景物在面板里的占地矩形：原点在底边中点，向上取满高度。

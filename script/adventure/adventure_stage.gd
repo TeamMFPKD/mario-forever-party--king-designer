@@ -119,6 +119,8 @@ var _params_dismissed: bool = false
 var _ellipse_border: Color = Color(0.15, 0.2, 0.3, 0.85)
 ## 存档位数据快照：选中已有存档时，关卡示意图改成显示该团的真实路线。
 var _run_slots: Array[Dictionary] = []
+## 是否已经初始化过存档位。首次进房间要把 toggle 状态清成「无选中」。
+var _slots_initialized: bool = false
 ## 状态文字是否处于显示态（淡出动画期间已经是 false）。
 var _status_visible: bool = false
 var _status_tween: Tween
@@ -587,6 +589,11 @@ func _finish_hide_status() -> void:
 func _refresh_save_slots() -> void:
 	# 「新存档」标签落在系统实际分配的第一个空槽上，一排固定 5 格。
 	_run_slots = Adventure.get_run_slots()
+	# 首次进房间强制「无选中」：存档卡是 toggle 按钮，场景实例化时若残留下
+	# button_pressed，会让人以为默认选中了某一格（摘要也会跟着显示该存档的数据）。
+	if not _slots_initialized:
+		_slots_initialized = true
+		save_slots.call("set_selection", -1)
 	save_slots.call("setup", _run_slots, Adventure.store.first_free_slot())
 	_selection = int(save_slots.call("get_selection"))
 	_sync_stage_slot()
