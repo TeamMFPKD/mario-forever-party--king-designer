@@ -105,6 +105,11 @@ func _load_input_mappings() -> void:
 	
 	# 应用所有动作的槽位配置
 	for base_action: String in action_slots.keys():
+		# 旧版本按键面板漏掉动作名时会把 ":0" 这类键写进配置，这里直接跳过，
+		# 免得启动时对不存在的动作调用 InputMap 接口报错。
+		if not InputMap.has_action(base_action):
+			Log.w("设置", ["跳过不存在的输入动作: ", base_action])
+			continue
 		var slots: Array = action_slots[base_action]
 		InputMap.action_erase_events(base_action)
 		for ev: Variant in slots:

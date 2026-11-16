@@ -10,6 +10,13 @@ func _ready() -> void:
     super()
     add_to_group("input_map_set_button")
     pressed.connect(_on_button_pressed)
+    if input_map_name.is_empty():
+        # 场景里漏写 input_map_name 覆写时，行会回落到模板默认值（标签“上”、动作名空）。
+        # 这种行绝不能写配置，否则会把 ":0" 之类的垃圾键塞进 [input_event]。
+        Log.e("按键映射", ["缺少 input_map_name 的按键行: ", str(get_path())])
+        disabled = true
+        text = tr("未设置")
+        return
     _update_button_text()
 
 ## 供“重置按键”按钮调用：重新读取配置/InputMap 后刷新显示
@@ -17,6 +24,8 @@ func refresh_display() -> void:
     _update_button_text()
 
 func _on_button_pressed() -> void:
+    if input_map_name.is_empty():
+        return
     is_waiting_for_input = true
     text = tr("请按下一个键")
 
