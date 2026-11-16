@@ -107,6 +107,8 @@ chore(multiplayer): drop unused signaling fallback
 | `tools/adventure_start_probe.tscn` | 开局参数校验 + 切到 `Adventure.PLAY_SCENE` | `tools/adventure_start_probe_result.txt` |
 | `tools/adventure_play_probe.tscn` | 真正加载游玩场景，检查 `player` 组、`run_active`、`run_index` | `tools/adventure_play_probe_result.txt` |
 | `tools/adventure_mobile_pause_probe.tscn` | 检查百人团暂停键（默认桌面，加 `--probe-mobile` 伪装 Android）能显示、开菜单并用「继续」恢复 | `tools/adventure_mobile_pause_probe_result.txt` |
+| `tools/history_pause_click_probe.tscn` | 回放页暂停时「查看 / 返回」能否被合成点击命中（随树暂停 0 次、ALWAYS 后 1 次） | `tools/history_pause_click_probe_result.txt` |
+| `tools/history_pause_exit_probe.tscn` | 回放页暂停中按「返回」的完整链路：解冻 + 切回 history 房间 | `tools/history_pause_exit_probe_result.txt` |
 | `tools/title_pipe_probe.tscn` | 正式标题页的水管菜单：五个目标路径能否解析、点击「组织游戏」能否打开 HostPage | `tools/title_pipe_probe_result.txt` |
 | `tools/pipe_menu_probe.tscn` | `ui/title/pipe_menu.tscn` 里五根水管预设的贴图（编辑器里看到的颜色） | `tools/pipe_menu_probe_result.txt` |
 | `tools/pipe_diff.tscn` | 水管 SVG 与参考位图的逐像素差异 | `tools/pipe_diff_result.txt` |

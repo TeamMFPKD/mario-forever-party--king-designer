@@ -394,13 +394,23 @@ func _on_root_gui_input(event: InputEvent) -> void:
 ## 回放页：下层「查看 / 返回」被按下时同步解冻并收起卡片。
 ## 不能走 _close_flip() 的异步翻回 —— 切场景会把旧菜单连同 tween 一起销毁，
 ## await 永远不返回，树会一直停在 paused。
+##
+## 这两个按钮还必须提到 PROCESS_MODE_ALWAYS：它们挂在关卡场景树上，默认随树暂停。
+## Godot 在把鼠标事件派发给控件之前会先查 can_process()（Viewport::_gui_input_event），
+## 可暂停的控件会被静默丢弃。而 UiNavigator 的「按下」是合成鼠标事件而不是
+## emit_signal("pressed")，于是表现成：方向键能把红框移到「返回」上、按下红框还会变黄
+## （那是导航自己画的表现），按钮却一点反应都没有，连这里的 _on_underlying_pressed 都进不来。
+## 本菜单自己的按钮能吃下这次点击，是因为 AdventurePauseMenu 这个 CanvasLayer 本来就是 ALWAYS。
 func _connect_underlying_buttons() -> void:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return
 	for path: String in HISTORY_UNDERLYING_BUTTONS:
 		var button: Button = scene.get_node_or_null(path) as Button
-		if button != null and not button.pressed.is_connected(_on_underlying_pressed):
+		if button == null:
+			continue
+		button.process_mode = Node.PROCESS_MODE_ALWAYS
+		if not button.pressed.is_connected(_on_underlying_pressed):
 			button.pressed.connect(_on_underlying_pressed)
 
 
