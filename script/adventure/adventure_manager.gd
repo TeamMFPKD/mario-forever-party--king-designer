@@ -47,6 +47,11 @@ var last_summary: Dictionary = {}
 var last_error: String = ""
 
 var current_key: String = ""
+## 本格里「已经记了 attempt、但还没有结果」的那一关。
+## 关卡加载成功就记一次 attempt，可这一局还在打：通过率的分母必须把它排掉，
+## 否则一进关就看到自己的通过率下跌（0 通过 1 尝试 = 0%）。
+## 通过 / 跳过 / 死亡三种结局都会把它清空，此时那次 attempt 才算真的落地。
+var _pending_attempt_key: String = ""
 var resume_available: bool = false
 ## 舞台当前高亮的存档位（0 = 未选中 / 选的是「新存档」）。
 ## 「排除的关卡」页的「删除存档」按它决定删哪一个，省得两个场景之间传参。
@@ -277,6 +282,8 @@ func resume_run(slot: int = 0) -> bool:
 	if not current_run.has("deaths"):
 		current_run["deaths"] = 0
 	current_key = ""
+	# 续团还没进第一关：没有挂起的 attempt。
+	_pending_attempt_key = ""
 	_check_resume()
 	_set_level_passed_busy(false)
 	GameModeSingleton.set("game_mode", GameMode.GameModeType.ADVENTURE)
@@ -326,9 +333,15 @@ func cleared_count() -> int:
 
 ## 左侧关卡信息面板用：当前关卡在 adventure.ini 里的单人统计。
 ## 数值均为「这一关」的累计，不是本团的即时计数。
+##
+## 额外多给一个 solo_attempt_settled：把「这一局还没打完的那次 attempt」排掉。
+## 进关就 attempt+1 是为了让中途退出留下失败记录，但玩家正在打的时候，
+## 那次 attempt 还没有结局，算进通过率会让人一进关就看到自己的记录变差
+## （首次进入 = 0 通过 / 1 尝试 = 0%）。面板的通过率用 settled 这一份。
 func current_level_stats() -> Dictionary:
 	var empty: Dictionary = {
 		"solo_attempt": 0,
+		"solo_attempt_settled": 0,
 		"solo_pass": 0,
 		"solo_death": 0,
 		"solo_skip": 0,
@@ -341,8 +354,10 @@ func current_level_stats() -> Dictionary:
 		return empty
 	var saved: Dictionary = store.get_level_data(key)
 	var stats: Dictionary = empty.duplicate()
-	for field: String in stats.keys():
+	for field: String in ["solo_attempt", "solo_pass", "solo_death", "solo_skip", "solo_skip_soft"]:
 		stats[field] = int(saved.get(field, 0))
+	var pending: int = 1 if _pending_attempt_key == key else 0
+	stats["solo_attempt_settled"] = maxi(0, int(stats["solo_attempt"]) - pending)
 	return stats
 
 
@@ -449,6 +464,8 @@ func start_run(settings: Dictionary) -> bool:
 		"level_fingerprints": _fingerprints_for(keys),
 	}
 	current_key = ""
+	# 新团还没进第一关：上一个团挂起的 attempt 不能带过来（否则首关若同 key 会少算一次）。
+	_pending_attempt_key = ""
 	_set_level_passed_busy(false)
 	store.set_run(current_run, slot)
 	_check_resume()
@@ -471,6 +488,8 @@ func on_level_loaded(path: String) -> void:
 		return
 	current_key = key
 	store.record_attempt(key)
+	# 这一次 attempt 还没有结局：面板算通过率时要从分母里排掉它。
+	_pending_attempt_key = key
 	_refresh_stat(key)
 	if is_running():
 		run_changed.emit()
@@ -483,6 +502,8 @@ func on_level_passed() -> void:
 	if current_key.is_empty():
 		return
 	store.record_pass(current_key)
+	# 这次 attempt 以「通过」收尾，可以进分母了。
+	_pending_attempt_key = ""
 	_refresh_stat(current_key)
 	if not is_running():
 		return
@@ -510,6 +531,8 @@ func on_player_died() -> void:
 	if current_key.is_empty():
 		return
 	store.record_death(current_key)
+	# 这次 attempt 以「失败」收尾（没通过也没跳过），同样可以进分母。
+	_pending_attempt_key = ""
 	_refresh_stat(current_key)
 	if not is_running():
 		return
@@ -529,6 +552,8 @@ func skip_current_level(hard: bool) -> void:
 	if not is_running() or current_key.is_empty():
 		return
 	store.record_skip(current_key, not hard)
+	# 跳过也是结局：这次 attempt 归到 skip 里，不再是「正在打」。
+	_pending_attempt_key = ""
 	if hard:
 		store.set_excluded(current_key, true, "unsolvable")
 		current_run["skipped_hard"] = int(current_run.get("skipped_hard", 0)) + 1
@@ -588,6 +613,8 @@ func interrupt_run() -> void:
 	store.set_run(current_run)
 	current_run = {}
 	current_key = ""
+	# 团已经离开内存，挂起的 attempt 一律作废（它已经在 ini 里留成失败）。
+	_pending_attempt_key = ""
 	_check_resume()
 
 
@@ -601,6 +628,7 @@ func delete_run_slot(slot: int) -> bool:
 	if is_running() and int(current_run.get("slot", 0)) == slot:
 		current_run = {}
 		current_key = ""
+		_pending_attempt_key = ""
 	store.clear_run(slot)
 	_check_resume()
 	if stage_slot == slot:
@@ -773,6 +801,7 @@ func finish_run(result: String) -> void:
 	var slot: int = int(current_run.get("slot", 0))
 	current_run = {}
 	current_key = ""
+	_pending_attempt_key = ""
 	store.clear_run(slot)
 	_check_resume()
 	run_finished.emit(summary)

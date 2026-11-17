@@ -7,6 +7,8 @@ extends Control
 ## 样式沿用 history play 右侧信息卡（ui_panel 半透明底 + ui_label 白字描边），
 ## 内容为「这一关」在 adventure.ini 里的单人累计：
 ##   本关难度名称 / 当前关卡 / 本关通过数 / 本关死亡数 / 本关跳过数（只算软跳过）/ 个人通过率
+##
+## 通过率的分母排除「正在打、还没结局」的那一次 attempt（见 _format_clear_rate）。
 ## 命数固定显示在面板最上方，图标取 mario_small walk 动画的第 3 帧（帧索引 2，atlas 32,0）。
 ## 三个计数用 SVG 图标表示：旗杆=通过、骷髅=死亡、快进=跳过。
 
@@ -63,12 +65,17 @@ func _tier_name(run: Dictionary) -> String:
 	return "随机"
 
 
-## 个人通过率 = solo_pass / solo_attempt（口径见 docs/raid_mode §5.1）。
-## 进入关卡就会 attempt+1，所以第一次进新关会是 0.0%；没有样本时显示 --。
+## 个人通过率 = solo_pass / solo_attempt_settled（口径见 docs/raid_mode §5.1.1）。
+##
+## 分母用 settled，不是 ini 里的 solo_attempt 原值：进关就会 attempt+1，
+## 可这一局还没打完，那次 attempt 没有结局。把它算进去的话
+## 「0 通过 / 1 尝试」会显示成 0.0%，玩家一进关就看到自己的记录变差。
+## 排除之后，从没通过过的关就是 0/0 → 0.0%（用户指定的口径），
+## 打过并通过过的关显示真实的历史比例。
 func _format_clear_rate(stats: Dictionary) -> String:
-	var attempt: int = int(stats.get("solo_attempt", 0))
+	var attempt: int = int(stats.get("solo_attempt_settled", 0))
 	if attempt <= 0:
-		return "--"
+		return "0.0%"
 	var passed: int = int(stats.get("solo_pass", 0))
 	var rate: float = float(passed) / float(attempt) * 100.0
 	return "%.1f%%" % rate
