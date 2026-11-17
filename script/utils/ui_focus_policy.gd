@@ -6,7 +6,8 @@ extends Node
 ##
 ## | 平台     | 主导设备      | 有 gamepad_focus 标记 | 无标记 |
 ## |----------|--------------|----------------------|--------|
-## | 移动端   | —            | FOCUS_NONE           | FOCUS_NONE |
+## | 移动端   | 无手柄       | FOCUS_NONE           | FOCUS_NONE |
+## | 移动端   | **插着手柄** | **复原原值**          | FOCUS_NONE |
 ## | PC/主机  | 鼠标         | FOCUS_NONE           | FOCUS_NONE |
 ## | PC/主机  | 键盘/手柄     | **复原原值**          | FOCUS_NONE |
 ##
@@ -15,8 +16,9 @@ extends Node
 ##   装饰性按钮突然变得可聚焦。
 ## - 复原用"原值"而不是统一 FOCUS_ALL：原场景里可能有节点本来设的就是
 ##   FOCUS_CLICK。
-## - 移动端即使插着手柄也不放开：触屏布局的按钮间距按手指设计，
-##   手柄光标在上面跳来跳去体验很差。
+## - 移动端只有在**插着手柄**时才放开：触屏布局的按钮间距按手指设计，
+##   没有手柄时让光标在上面跳来跳去体验很差；而真的外接手柄时就是
+##   明确的"纯手柄操作"场景，必须放开（见 UiNavigator 的同类门控）。
 ##
 ## 依赖：InputDevice（autoload）、PlatformUtils（autoload）。
 
@@ -65,8 +67,12 @@ func _on_last_device_changed(_device: StringName) -> void:
 ## 键盘主导也放开：需求要求「上次操作是键盘或手柄时默认聚焦一个 UI」。
 ## 鼠标主导时返回 false —— 鼠标用户保留纯 hover 体验，不被焦点框打扰。
 func should_enable_gamepad_focus() -> bool:
+	# 移动端：默认不放开（触屏点触即鼠标），但插着手柄时必须放开。
+	# 这里看的是"插没插"而不是"在用没用"：手机上插了手柄就是要用手柄，
+	# 而主导设备判定要等手柄持续活动 150ms 才切过去，只按一下 D-pad
+	# 可能来不及切，用它门控会让第一下按键落空。
 	if is_mobile_platform():
-		return false
+		return InputDevice.has_gamepad()
 	if InputDevice.is_gamepad_active():
 		return true
 	return InputDevice.last_device == InputDevice.DEVICE_KEYBOARD

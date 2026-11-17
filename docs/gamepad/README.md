@@ -1,6 +1,6 @@
 # 手柄适配方案
 
-> 状态：**设计稿**。本文只描述方案与落地顺序，代码尚未实现。
+> 状态：**已落地**（基础设施 2026-11-13，移动端 + 手柄 2026-11-17）。本文既描述方案，也记录落地后的实际行为与踩过的坑。
 > 目标：让 MFMP 在**纯手柄**环境下可用，同时不破坏现有的键鼠 / 触屏体验。
 
 ---
@@ -180,7 +180,8 @@ static func is_mobile() -> bool:
 
 | 平台 | 手柄 | 被标记节点 | 未标记节点 |
 |---|---|---|---|
-| **移动端** | — | `FOCUS_NONE` | `FOCUS_NONE` |
+| **移动端** | 无 | `FOCUS_NONE` | `FOCUS_NONE` |
+| **移动端** | **有** | **复原原值** | `FOCUS_NONE` |
 | **PC / 主机** | 无 | `FOCUS_NONE` | `FOCUS_NONE` |
 | **PC / 主机** | **有** | **复原原值** | `FOCUS_NONE` |
 
@@ -189,11 +190,20 @@ static func is_mobile() -> bool:
 > 2 仅移动端默认这些 none 的 focus 设置
 > 3 如果检测到手柄，那么把设置为 none 且有 metadata 标记的节点复原为手柄可以操控
 
-### 4.2 为什么移动端即使插着手柄也不放开
+### 4.2 移动端：没手柄不放开，**插上手柄就放开**（2026-11-17 起）
 
-移动端 UI 是触屏尺寸布局，按钮间距、点击热区都按手指设计。手柄光标在触屏布局上"跳来跳去"体验很差，且移动端外接手柄是极少数场景。
+移动端 UI 是触屏尺寸布局，按钮间距、点击热区都按手指设计。**没有手柄时**让光标在上面跳来跳去体验很差——那种场景下点触即鼠标，本来也不需要焦点导航。
 
-如果要支持，把 §4.1 的表改成"移动端 + 手柄 → 放开"即可，是策略层一行判断的事。
+但**插上手柄之后必须放开**：
+
+- 外接手柄意味着明确的"纯手柄操作"场景，玩家手里没有鼠标指针；
+- 移动端系统不提供鼠标指针，如果焦点导航也关着，整个界面就**一个能操作的控件都没有**；
+- 同一个判断必须同时在 `UiFocusPolicy.should_enable_gamepad_focus()` 与
+  `UiNavigator._navigation_enabled()` 里做。只改一处会出现两种半残状态：
+  按钮可聚焦但导航没启用（红框不动）、导航启用了但按钮仍 FOCUS_NONE（红框在动、按下去没反应）。
+
+两者判的都是 `InputDevice.has_gamepad()`（**插没插**），而不是 `is_gamepad_active()`（**在用没用**）：
+主导设备的判定要等手柄持续活动 150ms 才切过去，只按一下 D-pad 可能来不及切，用它门控会让第一下按键落空。
 
 ### 4.3 焦点恢复时的连锁问题
 
@@ -302,18 +312,36 @@ if Input.is_action_pressed("move_down"):
 
 ```gdscript
 static func edit_camera_axis() -> Vector2:
-    var axis: Vector2 = camera_axis()          # WASD / 右摇杆
-    if PlatformUtils.is_mobile_platform():
-        axis += move_axis()                    # 虚拟方向键
+    var axis: Vector2 = camera_axis()                              # WASD / 右摇杆
+    if PlatformUtils.is_mobile_platform() and not InputDevice.has_gamepad():
+        axis += move_axis()                                        # 虚拟方向键
     return axis.limit_length(1.0)
 ```
 
 **为什么桌面端不受影响**：桌面仍只有 CAMERA 组，方向键/十字键继续留给 UI 焦点——
-三组互不重叠的约定没被破坏。移动端之所以能并，是因为 UI 焦点导航在移动端整体关闭
-（`UiNavigator._navigation_enabled()` 第一行就 `return false`），那一组本来就空着。
+三组互不重叠的约定没被破坏。移动端之所以能并，是因为**没有手柄时** UI 焦点导航在移动端整体关闭
+（`UiNavigator._navigation_enabled()` 直接 `return false`），那一组本来就空着。
 
 > 与用户要求的对应关系：「禁用按钮 UI 操作（已有点触相当于鼠标）+ 虚拟按键一律用于移动玩家或镜头」。
 > 移动端 UI 本来就不走焦点导航，点触即鼠标；虚拟按键现在只服务玩家（关卡内）或镜头（编辑器）。
+
+### 6.3.2 移动端 + 手柄：`move_*` 不再并入镜头（2026-11-17）
+
+**现象**：接了手柄之后，按十字键既切了 UI 焦点、又把镜头推走了。
+
+**原因**：`move_*` 里同时绑着**十字键（11~14）和左摇杆（axis 0/1）**。§6.3.1 把它并进 CAMERA 轴之后，
+手柄的十字键与左摇杆也一起被算进镜头——正好和「十字键操作 UI、左摇杆推虚拟光标」抢输入。
+
+**做法**：加 `and not InputDevice.has_gamepad()`。手柄接上后：
+
+| 输入 | 归谁 |
+|---|---|
+| 左摇杆（`ui_cursor_*`） | 虚拟光标 |
+| 十字键（`ui_focus_*`） | UI 焦点 |
+| 右摇杆（`ui_camera_*`） | 镜头 |
+| 屏幕虚拟方向键（`move_*`） | 不再需要——`OnScreenControls._process` 见到真手柄就 `hide()` |
+
+三组互不重叠的约定在手柄模式下**完整恢复**，镜头只剩右摇杆一个来源（与桌面一致）。
 
 ### 6.4 落地方式
 
@@ -418,11 +446,47 @@ if InputDeviceMonitor.is_gamepad():
 
 | 需求 | 对应章节 | 状态 |
 |---|---|---|
-| 1 新开 metadata 记录被取消聚焦的节点 | §2 | ⬜ 待实现 |
-| 2 仅移动端默认 none | §4.1 | ⬜ 待实现 |
-| 3 检测到手柄时复原有标记的节点 | §4.1 / §2.3 | ⬜ 待实现 |
-| 4 PC 端 ↑↓←→ + Enter/move_jump 确认、Esc/move_fire 取消 | §5 | ⬜ 待实现 |
-| 5 edit.tscn 特殊处理 | §6 | ⬜ 待实现 |
+| 1 新开 metadata 记录被取消聚焦的节点 | §2 | ✅ `gamepad_focus` + `UiFocusPolicy` |
+| 2 仅移动端默认 none（**无手柄时**） | §4.1 | ✅ 无手柄时仍全部 `FOCUS_NONE` |
+| 3 检测到手柄时复原有标记的节点 | §4.1 / §2.3 | ✅ 桌面与移动端都放开 |
+| 4 PC 端 ↑↓←→ + Enter/move_jump 确认、Esc/move_fire 取消 | §5 | ✅ |
+| 5 edit.tscn 特殊处理 | §6 | ✅ 见 §6.3.2 |
+| 6 **移动端 + 手柄：导航启用 + 虚拟光标** | §11 | ✅ 2026-11-17 |
+
+### 9.1 三项检查清单（2026-11-17）
+
+| # | 场景 | 结果 |
+|---|---|---|
+| 1 | 标题画面 UI 操作 | 十字键切焦点、左摇杆推虚拟光标、合成 motion 驱动 hover；5 根水管全在候选里 |
+| 2 | `history_play` 暂停后的 UI 操作 | 暂停菜单打开后导航仍启用、「查看 / 返回」可被十字键选中 |
+| 3 | `edit.tscn` | 左摇杆推虚拟光标（并送达关卡 `InputHandler`，可按 A 落块）、十字键操作 UI、右摇杆推镜头 |
+
+验证探针：`tools/mobile_gamepad_nav_probe.tscn`（结果写 `tools/mobile_gamepad_nav_probe_result.txt`）。
+它用 `PlatformUtils.set_debug_platform("Android")` + `InputDevice.set_debug_gamepad_present(true)` 伪装场景，
+再按阶段切到三个真实场景跑端到端断言。
+
+实测关键行：
+
+```text
+title_nav_enabled=true          title_pipe_candidates=5      title_focus_moves=true
+title_pointer_moves=true        title_pointer_drawn=true
+history_pause_nav=true          history_pause_focus_moves=true
+edit_nav_enabled=true           edit_stick_moves_cursor=true edit_pointer_drawn=true
+edit_cursor_reaches_input_handler=true   edit_dpad_moves_focus=true
+edit_a_button_places_tile=true  (TileMapLayer 15 -> 16 格)
+edit_rstick_moves_camera=true   (320,240) -> (800,240)
+# 回归：没手柄时行为不变
+mobile_no_pad_nav=false         mobile_no_pad_focus_policy=false
+mobile_no_pad_camera_axis_move_merged=true
+desktop_nav=true                desktop_pointer_drawn=false
+```
+
+> 探针踩过的两个坑，写在这里免得下次重犯：
+> 1. **暂停是全局状态**。跑完「回放页暂停」那段必须先 `get_tree().paused = false`，
+>    否则带进下一个场景后 `Camera2D._physics_process` 与 `InputHandler._input` 全都不跑，
+>    后两项会被误判成"手柄无效"。
+> 2. **引导器不能自己去切场景**。它本身就是 `current_scene`，切场景会把自己 free 掉，
+>    `_ready` 里挂起的协程再碰 `get_tree()` 就是 null。必须另建一个挂在 `root` 上的监听节点来切。
 
 ---
 
@@ -433,3 +497,74 @@ if InputDeviceMonitor.is_gamepad():
 这两者差别很大：PC 玩家插着手柄但一直用鼠标点菜单，如果因为"有手柄"就放开焦点，方向键就会在菜单里乱跳，反而更糟。
 
 所以必须有 §3.2 的"主导设备"判定。
+
+> **一个例外**：移动端判断"要不要启用导航"用的是 `has_gamepad()`（插没插），不是主导设备。
+> 理由见 §4.2：手机上插了手柄就是要用手柄，而主导设备要等 150ms 才切换，用它门控会吞掉第一下按键。
+
+---
+
+## 11. 移动端 + 手柄：虚拟光标（2026-11-17）
+
+### 11.1 问题：移动端没有系统鼠标指针
+
+`UiNavigator` 的 POINTER 模式原本靠 `Input.warp_mouse()` 把真实鼠标挪到 `_virtual_mouse`——
+hover、`get_mouse_position()`、系统光标贴图全都跟着走，桌面端一行就够。
+
+但移动端（Android / iOS）**没有系统鼠标指针**：`warp_mouse` 是空操作，
+`gui_get_hovered_control()` 不会变，屏幕上也什么都不显示。
+于是移动端接上手柄后虽然导航启用了，POINTER 模式却是"瞎子"——
+玩家推左摇杆，既看不见光标，也框不住任何控件。
+
+> 注：伪装平台（`--fake-platform=android`、`PlatformUtils.set_debug_platform`）在**桌面**上跑时，
+> 系统指针其实还在，只是不跟着动。所以不能靠"指针动不动"来验证，要按平台分支。
+
+### 11.2 做法：画一个光标 + 自己发合成 motion
+
+| 环节 | 桌面 | 移动端 |
+|---|---|---|
+| 让 hover 跟上 | `Input.warp_mouse()`，引擎自己补 motion | **自己 push_input 一个 `InputEventMouseMotion`** |
+| 光标怎么显示 | 系统指针 | **`ui/virtual_pointer.tscn`（`UiVirtualPointer`）** |
+
+`UiNavigator` 里就一处分支（`_uses_drawn_pointer()` 只看平台）：
+
+```gdscript
+func _warp_real_mouse() -> void:
+    InputDevice.suppress_mouse_activity()
+    if _uses_drawn_pointer():
+        _push_motion(_virtual_mouse)     # 移动端
+        return
+    Input.warp_mouse(viewport.get_screen_transform() * _virtual_mouse)   # 桌面
+```
+
+合成的 motion 同样是 `viewport.push_input(event, true)`，**位置不变就不发**（照抄 warp 的语义），
+否则站着不动也会每帧重算一遍整棵 GUI 树的 hover。
+
+### 11.3 一个附带好处：合成 motion 也能到关卡视口
+
+`push_input` 打到 root 视口后，`SubViewportContainer` 会把落在自己矩形内的鼠标事件转发进子视口
+（坐标按 `size / sub_viewport.size` 缩放）。所以编辑器里**左摇杆推虚拟光标，落点预览和实际点击位置会一起跟上**——
+`InputHandler` 收到的 `current_position` 就是光标所在的世界坐标，按 A 能在那儿放下图块。
+
+这一点已验证：光标从 `(500, 300)` 推到 `(717, 300)` 时，关卡 `InputHandler.current_position`
+同步从 `(0, 0)` 跟到 `(198, 134)`；按住 A 后 `TileMapLayer` 的格子数 `15 → 16`。
+
+### 11.4 层级
+
+`UiVirtualPointer` 与四角光标共用 `UiNavigatorCursorLayer`（`layer = 200`，高于消息面板 110 与通知 128），
+`process_mode = ALWAYS`——暂停菜单里也要跟着摇杆走。
+
+### 11.5 初始位置
+
+移动端第一次 `_ensure_mouse()` 取的是**视口正中**，而不是 `get_mouse_position()`
+（后者在移动端只会给出 `(0,0)` 或陈旧值），玩家一推摇杆就能看到光标。
+
+### 11.6 调试
+
+无头探针没法真插手柄，`InputDevice` 提供了与 `PlatformUtils` 同风格的伪装入口（仅 debug 构建）：
+
+```gdscript
+InputDevice.set_debug_gamepad_present(true)   # 伪装"插着手柄"
+PlatformUtils.set_debug_platform("Android")   # 伪装移动端
+```
+
+它只影响"插没插"这一层判断，主导设备仍按真实输入事件走。

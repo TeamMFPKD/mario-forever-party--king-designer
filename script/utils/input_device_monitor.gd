@@ -32,6 +32,9 @@ const MOUSE_MOVE_THRESHOLD: float = 2.0
 var last_device: StringName = DEVICE_KEYBOARD
 
 var _has_gamepad: bool = false
+## 调试用：伪装"插着手柄"（仅 debug 构建）。无头探针没法真的插一台手柄，
+## 用它才能把「移动端 + 手柄」那条路走通。和 PlatformUtils 的伪装平台是同一套思路。
+var _debug_gamepad_present: bool = false
 ## 手柄首次活动的时间戳；为 0 表示当前没有待确认的手柄活动
 var _gamepad_claim_since: int = 0
 var _hooked: bool = false
@@ -88,12 +91,22 @@ func _is_mouse_suppressed() -> bool:
 	return Time.get_ticks_msec() < _mouse_suppressed_until
 
 
+## 调试用：伪装手柄在场 / 不在场（导出 release 后自动失效）。
+## 无头探针没法真插一台手柄，用它才能把「移动端 + 手柄」那条路走通。
+## 只影响「插没插」这一层判断；主导设备仍按真实输入事件走。
+func set_debug_gamepad_present(present: bool) -> void:
+	if not OS.is_debug_build():
+		return
+	_debug_gamepad_present = present
+	_refresh_gamepad_presence()
+
+
 # ---------------------------------------------------------------------------
 # 内部
 # ---------------------------------------------------------------------------
 
 func _refresh_gamepad_presence() -> void:
-	var present: bool = not Input.get_connected_joypads().is_empty()
+	var present: bool = _debug_gamepad_present or not Input.get_connected_joypads().is_empty()
 	if present == _has_gamepad:
 		return
 	_has_gamepad = present

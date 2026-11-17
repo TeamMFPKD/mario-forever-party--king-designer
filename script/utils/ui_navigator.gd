@@ -20,7 +20,9 @@ extends Node
 ## 两者都是**视口局部坐标**，所以 push_input 必须传 `in_local_coords = true`。
 ## 四角光标：FOCUS 框选中项，POINTER 框鼠标下的控件（空白处只剩系统指针）。
 ##
-## 设备门控：移动端 / 鼠标主导不启用；游戏内默认不启用，除非有可见的 `ui_focus_modal`。
+## 设备门控：鼠标主导不启用；游戏内默认不启用，除非有可见的 `ui_focus_modal`。
+## 移动端默认不启用（点触即鼠标），但**插着手柄时必须启用**——外接手柄就是纯手柄操作场景，
+## 此时没有系统鼠标指针，虚拟光标由本节点自己画（见 VirtualPointer）。
 
 const META_SKIP: StringName = &"ui_focus_skip"
 const META_TARGET: StringName = &"ui_focus_target"
@@ -37,6 +39,8 @@ const META_FOCUS_RECT: StringName = &"ui_focus_rect"
 const META_SOUND_SKIP: StringName = &"ui_sound_skip"
 
 const CURSOR_SCENE_PATH: String = "res://ui/menu_cursor.tscn"
+## 移动端虚拟光标（没有系统鼠标指针，得自己画一个指在那儿）
+const POINTER_SCENE_PATH: String = "res://ui/virtual_pointer.tscn"
 ## UI 焦点移动音效（SMM2「通用-选择翻页」）
 const MOVE_SOUND_PATH: String = "res://sound/ui/ui_move.wav"
 ## 按钮按下音效（SMM2「通用-大确定」），给没自己配 pressed_sound 的按钮兜底
@@ -76,6 +80,9 @@ var _since_scan: float = 0.0
 
 var _cursor_layer: CanvasLayer = null
 var _cursor: UiMenuCursor = null
+## 移动端虚拟光标（POINTER 模式的"手在哪"，桌面端由系统指针代劳，这里是隐藏的）
+var _pointer_scene: PackedScene = null
+var _pointer: UiVirtualPointer = null
 ## 焦点移动音效播放器（单实例，每次移动重头播）
 var _move_player: AudioStreamPlayer = null
 ## 按下音效兜底播放器：只服务没自己配 pressed_sound 的按钮
@@ -103,6 +110,8 @@ var _repeat_timer: float = 0.0
 
 ## 左键当前是否按下（按住保持，用于拖拽）
 var _left_down: bool = false
+## 上一次推给视口的虚拟鼠标位置。鼠标不动就不重复发 motion，避免每帧白跑一遍 GUI 命中测试。
+var _last_sent_point: Vector2 = Vector2(-9999.0, -9999.0)
 
 var _modal_visible: bool = false
 var _modal_probe: float = 0.0
@@ -125,6 +134,9 @@ func _ready() -> void:
 	var res: Resource = load(CURSOR_SCENE_PATH)
 	if res is PackedScene:
 		_cursor_scene = res as PackedScene
+	var pointer_res: Resource = load(POINTER_SCENE_PATH)
+	if pointer_res is PackedScene:
+		_pointer_scene = pointer_res as PackedScene
 	get_tree().node_added.connect(_on_tree_changed)
 	get_tree().node_removed.connect(_on_tree_changed)
 	UiFocusPolicy.policy_changed.connect(_on_policy_changed)
@@ -243,6 +255,7 @@ func _process(delta: float) -> void:
 	if not _navigation_enabled():
 		_release_left_button()
 		_hide_cursor()
+		_hide_pointer()
 		_repeat_armed = false
 		_dirty = true
 		return
@@ -277,11 +290,19 @@ func _process(delta: float) -> void:
 # 设备门控
 # ---------------------------------------------------------------------------
 
+## 两个平台判的东西不一样，因为"要不要用键盘/手柄操作 UI"的前提不一样：
+## - 移动端：只看**插没插**手柄。插了就是纯手柄场景（没有系统鼠标指针，UI 只能靠
+##   虚拟光标 + 焦点导航，关掉等于整屏不可操作）；没插就点触即鼠标，不需要导航。
+## - 桌面：看**主导设备**。插着手柄却一直点鼠标的玩家，方向键不该抢焦点。
 func _navigation_enabled() -> bool:
 	if UiFocusPolicy.is_mobile_platform():
-		return false
-	if not (InputDevice.is_gamepad_active()
+		# 移动端只看"插没插"：有手柄就是纯手柄场景，必须启用；
+		# 没手柄就点触即鼠标，不需要焦点导航（方向键/十字键那组空着给镜头用）。
+		if not InputDevice.has_gamepad():
+			return false
+	elif not (InputDevice.is_gamepad_active()
 			or InputDevice.last_device == InputDevice.DEVICE_KEYBOARD):
+		# 桌面：手柄要真的在用（防插着手柄却一直点鼠标的情况），或者键盘主导
 		return false
 	if _modal_visible:
 		return true
@@ -719,7 +740,14 @@ func _ensure_mouse() -> void:
 	if _mouse_ready:
 		return
 	var viewport: Viewport = get_viewport()
-	_virtual_mouse = viewport.get_mouse_position() if viewport != null else Vector2.ZERO
+	if viewport == null:
+		_virtual_mouse = Vector2.ZERO
+	elif _uses_drawn_pointer():
+		# 移动端没有系统指针，get_mouse_position() 只会给出 (0,0) 或陈旧值。
+		# 从屏幕正中起步，玩家一推摇杆就能看到光标，不用先在角落里摸索。
+		_virtual_mouse = viewport.get_visible_rect().size * 0.5
+	else:
+		_virtual_mouse = viewport.get_mouse_position()
 	_mouse_ready = true
 
 
@@ -743,15 +771,50 @@ func _clamp_mouse() -> void:
 	_virtual_mouse = _virtual_mouse.clamp(Vector2.ZERO, size - Vector2.ONE)
 
 
-## 把真实鼠标挪到虚拟位置：hover 状态、get_mouse_position()、系统光标贴图都会跟着走。
+## 把鼠标挪到虚拟位置：hover 状态、get_mouse_position()、系统光标贴图都会跟着走。
+##
+## 两条路，取决于**有没有系统指针可挪**：
+## - 桌面：`Input.warp_mouse` 挪真指针，引擎自己会补一个 motion 事件，hover 跟着更新。
+## - 移动端（Android/iOS、含伪装）：压根没有系统指针，warp 是空操作——屏幕上看不见任何东西，
+##   `gui_get_hovered_control()` 也不会变。所以改成**自己塞一个合成 motion**，
+##   并把"手在哪"画到 VirtualPointer 上。
+##
+## 合成的 motion 同样是 push_input 到 root 视口，所以关卡 SubViewport 里的
+## InputHandler 也能收到——编辑器里左摇杆推虚拟光标时，放置预览与落点会一起跟上。
 func _warp_real_mouse() -> void:
 	var viewport: Viewport = get_viewport()
 	if viewport == null:
 		return
-	# warp 会让系统产生鼠标移动事件，不抑制的话 InputDevice 会判定"用户在用鼠标"
+	# warp / 合成事件都会让系统产生鼠标活动，不抑制的话 InputDevice 会判定"用户在用鼠标"
 	# 从而把导航自己关掉。
 	InputDevice.suppress_mouse_activity()
+	if _uses_drawn_pointer():
+		_push_motion(_virtual_mouse)
+		return
 	Input.warp_mouse(viewport.get_screen_transform() * _virtual_mouse)
+
+
+## 是否需要自己画光标（而不是靠系统指针）。
+## 只看平台：移动端没有系统指针。伪装平台同样走这条，探针与真机才是同一套代码路径。
+func _uses_drawn_pointer() -> bool:
+	return UiFocusPolicy.is_mobile_platform()
+
+
+## 往 root 视口塞一个合成的鼠标移动事件。
+## 坐标是视口局部坐标，push_input 必须传 in_local_coords = true（同 _send_mouse_button）。
+func _push_motion(point: Vector2) -> void:
+	var viewport: Viewport = get_viewport()
+	if viewport == null:
+		return
+	# warp_mouse 只在位置真的变了才产生事件；合成路径照抄这个语义，
+	# 否则站着不动也会每帧把整棵 GUI 树的 hover 重算一遍。
+	if point == _last_sent_point:
+		return
+	_last_sent_point = point
+	var event: InputEventMouseMotion = InputEventMouseMotion.new()
+	event.position = point
+	event.global_position = point
+	viewport.push_input(event, true)
 
 
 # ---------------------------------------------------------------------------
@@ -821,6 +884,8 @@ func _mask_of(button: MouseButton) -> int:
 
 func _sync_cursor() -> void:
 	if _mode == InputMode.FOCUS:
+		# FOCUS 模式不需要虚拟指针：四角红框本身就是"手在哪"。
+		_hide_pointer()
 		var candidate: Control = _focus_candidate()
 		if candidate == null:
 			_hide_cursor()
@@ -829,12 +894,53 @@ func _sync_cursor() -> void:
 		# 表现就是"位置瞬移 + 呼吸停住"。
 		_show_cursor_at(_canvas_rect_of(candidate), false)
 		return
-	# POINTER：框住鼠标下的控件，空白处只剩系统指针
+	# POINTER：框住鼠标下的控件，空白处只剩指针
+	_sync_pointer()
 	var hovered: Control = _hover_target()
 	if hovered == null:
 		_hide_cursor()
 		return
 	_show_cursor_at(_canvas_rect_of(hovered), false)
+
+
+## POINTER 模式下的"手"。
+## 桌面交给系统指针；移动端没有系统指针，画 VirtualPointer。
+func _sync_pointer() -> void:
+	if not _uses_drawn_pointer():
+		_hide_pointer()
+		return
+	_ensure_mouse()
+	_ensure_pointer_node()
+	if _pointer == null or not is_instance_valid(_pointer):
+		return
+	_pointer.show_at(_virtual_mouse)
+	_pointer.set_highlight(_left_down)
+
+
+func _hide_pointer() -> void:
+	if _pointer != null and is_instance_valid(_pointer):
+		_pointer.hide_pointer()
+		_pointer.set_highlight(false)
+
+
+## 与 _ensure_cursor_node 同构：挂在 CURSOR_LAYER 上，暂停时也继续画。
+func _ensure_pointer_node() -> void:
+	if _pointer != null and is_instance_valid(_pointer):
+		return
+	if _pointer_scene == null:
+		return
+	var layer: CanvasLayer = _ensure_overlay_layer()
+	if layer == null:
+		return
+	var created: Node = _pointer_scene.instantiate()
+	if not (created is UiVirtualPointer):
+		created.queue_free()
+		return
+	var pointer: UiVirtualPointer = created as UiVirtualPointer
+	pointer.name = "UiNavigatorPointer"
+	pointer.process_mode = Node.PROCESS_MODE_ALWAYS
+	layer.add_child(pointer)
+	_pointer = pointer
 
 
 func _show_cursor_at(rect: Rect2, instant: bool) -> void:
@@ -851,18 +957,28 @@ func _hide_cursor() -> void:
 		_cursor.set_highlight(false)
 
 
+## 顶层覆盖层（四角光标与虚拟指针共用）。
+## 必须高于所有 UI 面板：消息面板 110、全局通知 128，见 CURSOR_LAYER 的注释。
+func _ensure_overlay_layer() -> CanvasLayer:
+	if _cursor_layer != null and is_instance_valid(_cursor_layer):
+		return _cursor_layer
+	_cursor_layer = CanvasLayer.new()
+	_cursor_layer.name = "UiNavigatorCursorLayer"
+	_cursor_layer.layer = CURSOR_LAYER
+	# 暂停菜单里红框也要继续呼吸 / 跟手，不能跟着 tree.paused 停下
+	_cursor_layer.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(_cursor_layer)
+	return _cursor_layer
+
+
 func _ensure_cursor_node() -> void:
 	if _cursor != null and is_instance_valid(_cursor):
 		return
 	if _cursor_scene == null:
 		return
-	if _cursor_layer == null or not is_instance_valid(_cursor_layer):
-		_cursor_layer = CanvasLayer.new()
-		_cursor_layer.name = "UiNavigatorCursorLayer"
-		_cursor_layer.layer = CURSOR_LAYER
-		# 暂停菜单里红框也要继续呼吸 / 跟手，不能跟着 tree.paused 停下
-		_cursor_layer.process_mode = Node.PROCESS_MODE_ALWAYS
-		get_tree().root.add_child(_cursor_layer)
+	var layer: CanvasLayer = _ensure_overlay_layer()
+	if layer == null:
+		return
 	var created: Node = _cursor_scene.instantiate()
 	if not (created is UiMenuCursor):
 		created.queue_free()
@@ -870,7 +986,7 @@ func _ensure_cursor_node() -> void:
 	var cursor: UiMenuCursor = created as UiMenuCursor
 	cursor.name = "UiNavigatorCursor"
 	cursor.process_mode = Node.PROCESS_MODE_ALWAYS
-	_cursor_layer.add_child(cursor)
+	layer.add_child(cursor)
 	_cursor = cursor
 
 

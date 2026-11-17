@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://script/ui/virtual_pointer.gd" id="1_pointer"]
+[ext_resource type="Texture2D" path="res://sprite/Cmn_MainMenuBtn_00--Cmn_MainMenuBtn_00-Icon_Edit_08^u.png" id="2_icon"]
+
+[node name="VirtualPointer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 128.0
+offset_bottom = 128.0
+z_index = 4096
+mouse_filter = 2
+script = ExtResource("1_pointer")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 128.0
+offset_bottom = 128.0
+mouse_filter = 2
+texture = ExtResource("2_icon")
+stretch_mode = 3

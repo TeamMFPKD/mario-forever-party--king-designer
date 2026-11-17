@@ -59,14 +59,18 @@ static func camera_axis() -> Vector2:
 ##
 ## 桌面：只用 CAMERA 组（WASD / 右摇杆），方向键和十字键留给 UI 焦点，三组互不重叠。
 ##
-## 移动端：额外并上 `move_*`——屏幕上的虚拟方向键（object/on_screen_controls）
+## 移动端**没有接手柄时**：额外并上 `move_*`——屏幕上的虚拟方向键（object/on_screen_controls）
 ## 的 TouchScreenButton.action 直接就是 move_left/right/up/down，不是 ui_focus_*。
-## 移动端没有键盘，且 UI 焦点导航整体关闭（UiNavigator._navigation_enabled 在
-## 移动端直接 return false），move_* 这一组除了给玩家跑就没别人用，
+## 那种情况下没有键盘、UI 焦点导航也是关的，move_* 这一组除了给玩家跑就没别人用，
 ## 编辑器里又没有玩家，所以并进来相当于「虚拟方向键独占推镜头」。
+##
+## 移动端**接上手柄后不再并**：move_* 同时绑着十字键（11~14）和左摇杆（axis 0/1），
+## 并进来会和「十字键操作 UI、左摇杆推虚拟光标」正面抢输入——
+## 按一下十字键既切了 UI 焦点、又推了镜头。手柄接上后屏幕虚拟按键会自己隐藏
+## （OnScreenControls._process 见真手柄就 hide），所以 move_* 这边本来也没人了。
 static func edit_camera_axis() -> Vector2:
 	var axis: Vector2 = camera_axis()
-	if PlatformUtils.is_mobile_platform():
+	if PlatformUtils.is_mobile_platform() and not InputDevice.has_gamepad():
 		axis += move_axis()
 	return axis.limit_length(1.0)
 
