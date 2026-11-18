@@ -8,11 +8,24 @@ name: Build and Release
 #   push v*     -> 构建 + 发布到指定 tag（补历史版本 / 手动发版）
 #   手动运行    -> 填 release_tag 发到那个 tag；留空则按当前分支规则
 #
-# 为什么三个平台放在同一个文件里：
-#   Release 的 tag 是"先到先得"算出来的（按日期 + 撞名递增）。
-#   如果 Windows/Android 和 iOS 分成两个 workflow，两边各自算 tag，
-#   就会在几分钟的窗口里算出同一个日期 tag，然后互相覆盖附件。
-#   合并成一个文件后只有一个 job 负责建 Release，tag 只算一次。
+# ── 为什么三个平台放在同一个文件里 ──────────────────────────────────
+#   Release 的 tag 是运行时算出来的（日期 + 撞名递增）。如果 Windows/Android
+#   和 iOS 分成两个 workflow，两边各自算 tag，几分钟窗口内会算出同一个日期 tag，
+#   然后互相覆盖附件。合并成一个文件后只有一个 job 建 Release，tag 只算一次。
+#
+# ── 为什么用 --export-debug 而不是 --export-release ──────────────────
+#   Godot 的 Windows 导出里，控制台版（<名字>.console.exe）由预设项
+#   debug/export_console_wrapper 控制，默认值是 1 = "Debug Only"，
+#   源码里写的是：copy_wrapper = (mode == 1 && p_debug) || (mode == 2)。
+#   也就是说用 --export-release 时 p_debug 是 false，console.exe 根本不会生成。
+#   本地导出的包是 96.0MB，正好等于 windows_debug_x86_64.exe；
+#   release 模板是 99.7MB，所以之前 CI 出来的包和本地根本不是一回事。
+#   用 --export-debug 之后，三端都与本地导出一致，Windows 也带上 console.exe。
+#
+# ── 为什么 Windows 导出成 .zip ──────────────────────────────────────
+#   导出路径以 zip 结尾时，Godot 会先导进临时目录，再把整个目录（exe、pck、
+#   console.exe，以及按需拷的 dll）打成压缩包，路径由项目名决定。
+#   这样 Release 上是一个可直接解压运行的文件夹，而不是散装的 exe 和 pck。
 # ─────────────────────────────────────────────────────────────────────
 on:
   push:
@@ -31,7 +44,6 @@ permissions:
 
 env:
   GODOT_VERSION: 4.6.1
-  EXPORT_NAME: mfmp
 
 # 同一个 ref 上的运行串行化，避免两次 push 的 Release 互相覆盖
 concurrency:
@@ -47,10 +59,11 @@ jobs:
         include:
         - name: Windows
           export_template: "Windows Desktop"
-          ext: "exe"
+          # 以 zip 结尾，Godot 会把 exe / pck / console.exe 一起打包
+          export_path: "mfmp.zip"
         - name: Android
           export_template: "Android"
-          ext: "apk"
+          export_path: "mfmp.apk"
     runs-on: ubuntu-24.04
     container:
       image: barichello/godot-ci:4.6.1
@@ -81,11 +94,26 @@ jobs:
         run: |
           mkdir -v -p "build/${{ matrix.name }}"
           EXPORT_DIR="$(readlink -f build)"
-          godot --headless --verbose --export-release "${{ matrix.export_template }}" "${EXPORT_DIR}/${{ matrix.name }}/${EXPORT_NAME}.${{ matrix.ext }}"
+          godot --headless --verbose --export-debug "${{ matrix.export_template }}" "${EXPORT_DIR}/${{ matrix.name }}/${{ matrix.export_path }}"
         env:
+          # debug 导出读的是 DEBUG_* 这组变量；RELEASE_* 一并给出，
+          # 以后若要切回 --export-release 不用再改这里。
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: "/root/debug.keystore"
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: ${{ secrets.KEYSTORE_USER }}
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           GODOT_ANDROID_KEYSTORE_RELEASE_PATH: "/root/debug.keystore"
           GODOT_ANDROID_KEYSTORE_RELEASE_USER: ${{ secrets.KEYSTORE_USER }}
           GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+
+      # 把产物内容打进日志，方便确认 zip 里确实有 console.exe
+      - name: Show build output
+        run: |
+          ls -lh "build/${{ matrix.name }}"
+          ZIP="build/${{ matrix.name }}/mfmp.zip"
+          if [ -f "$ZIP" ]; then
+            echo "--- mfmp.zip 内容 ---"
+            unzip -l "$ZIP"
+          fi
 
       # job 之间不共享文件系统，产物要经 artifact 中转
       - name: Upload Artifact
@@ -134,7 +162,7 @@ jobs:
         run: |
           mkdir -p build/ios
           godot/Godot.app/Contents/MacOS/Godot --headless --path . \
-            --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
+            --export-debug "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
 
       - name: xcodebuild archive (unsigned)
         run: |
@@ -155,14 +183,14 @@ jobs:
           cd build/ios
           mkdir -p Payload
           cp -R App.xcarchive/Products/Applications/*.app Payload/
-          zip -r "${NAME}.ipa" Payload
-          mv "${NAME}.ipa" ../../
+          zip -r "mfmp.ipa" Payload
+          mv "mfmp.ipa" ../../
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: mfmp-iOS
-          path: ${{ env.NAME }}.ipa
+          path: mfmp.ipa
           retention-days: 14
 
   # ── 发布：唯一负责建 Release 的地方 ──────────────────────────────
@@ -217,6 +245,25 @@ jobs:
             echo "reason=master 推送" >> "$GITHUB_OUTPUT"
           fi
 
+      # 附件名带版本号，玩家下载后不用再猜是哪个版本
+      - name: Rename assets
+        env:
+          TAG: ${{ steps.meta.outputs.tag }}
+        run: |
+          mkdir -p out
+          for f in dist/*; do
+            [ -f "$f" ] || continue
+            b=$(basename "$f")
+            case "$b" in
+              *.zip)   cp "$f" "out/${TAG}-windows.zip" ;;
+              *.apk)   cp "$f" "out/${TAG}-android.apk" ;;
+              *.idsig) cp "$f" "out/${TAG}-android.apk.idsig" ;;
+              *.ipa)   cp "$f" "out/${TAG}-ios.ipa" ;;
+              *)       cp "$f" "out/${TAG}-${b}" ;;
+            esac
+          done
+          ls -lh out
+
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
@@ -224,7 +271,7 @@ jobs:
           name: ${{ steps.meta.outputs.tag }}
           generate_release_notes: true
           overwrite_files: true
-          files: dist/*
+          files: out/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
