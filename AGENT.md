@@ -113,6 +113,10 @@ chore(multiplayer): drop unused signaling fallback
 | `tools/pipe_menu_probe.tscn` | `ui/title/pipe_menu.tscn` 里五根水管预设的贴图（编辑器里看到的颜色） | `tools/pipe_menu_probe_result.txt` |
 | `tools/pipe_diff.tscn` | 水管 SVG 与参考位图的逐像素差异 | `tools/pipe_diff_result.txt` |
 | `tools/theme_probe.tscn` | 全局主题 `mfmp_theme.tres` 的 Button / Label / Panel 实效值 | `tools/theme_probe_result.txt` |
+| `tools/adventure_share_probe.tscn` | 快速导出/导入的文本码：编解码往返、聊天折行、从聊天记录里挑码、500 关大团一条码装下、关卡统计随码走、空库接收落位 | `tools/adventure_share_probe_result.txt` |
+| `tools/adventure_share_fail_probe.tscn` | 走真实 `Adventure` API 的导入失败分支：缺关卡 / 坏码 / 槽位满，且失败一律不写档 | `tools/adventure_share_fail_probe_result.txt` |
+| `tools/adventure_share_ui_probe.tscn` | 舞台按钮接线、导入页开合、剪贴板自动填充、端到端导入（写临时 ini，不碰玩家存档） | `tools/adventure_share_ui_probe_result.txt` |
+| `tools/adventure_share_size_probe.tscn` | 用玩家真实存档量导出码的长度（只读） | `tools/adventure_share_size_probe_result.txt` |
 
 `tools/pipe_variant_bake.tscn` 不是探针：改过 `sprite/ui/pipe/warp_pipe.svg` 后跑它，刷新 `variant_*.png` 五色贴图。
 
@@ -126,6 +130,7 @@ chore(multiplayer): drop unused signaling fallback
 | `tools/adventure_mobile_pause_shot.tscn` | `tools/adventure_mobile_pause.png`、`tools/adventure_mobile_pause_menu.png`、`..._flip_a/b.png`（默认桌面，鼠标点击暂停键）；加 `--shot-mobile` 伪装 Android 并输出带 `_mobile` 后缀的图 |
 | `tools/adventure_transition_shot.tscn` | `tools/adventure_transition.png`（过关过渡动画中） |
 | `tools/adventure_button_pv.tscn` | `tools/adventure_button_pv.png`（已采用的 V4 按钮布局单版预览） |
+| `tools/adventure_share_shot.tscn` | `tools/adventure_share_ui.png`（舞台右上角两个按钮）、`tools/adventure_share_export.png`（导出成功通知）、`tools/adventure_share_import.png`（导入页已填码） |
 | `tools/title_pipe_shot.tscn` | `tools/title_pipe.png`（1920×1080）、`tools/title_pipe_small.png`（1120×640，顺带验证多分辨率适配） |
 | `tools/spectate_shot.tscn` | `tools/spectate.png`（观看视图，读取 `user://` 最新 `.lvl`） |
 | `tools/endless_palette_stage_shot.tscn` | `tools/endless_palette_a.png` ~ `_d.png`（把四套候选配色依次套到真实舞台的无尽存档卡上，用于挑配色） |

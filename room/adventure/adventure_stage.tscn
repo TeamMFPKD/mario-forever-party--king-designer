@@ -56,7 +56,7 @@ corner_radius_bottom_left = 18
 atlas = ExtResource("16_mario_small")
 region = Rect2(32, 35, 31, 31)
 
-[node name="AdventureStage" type="Control" unique_id=2142023481 node_paths=PackedStringArray("background", "backgrounds", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "preview_grid", "scenery", "back_button", "trash_button", "delete_button", "start_button", "save_info", "save_lives_label", "save_tier_label", "save_progress_label")]
+[node name="AdventureStage" type="Control" unique_id=2142023481 node_paths=PackedStringArray("background", "backgrounds", "title_label", "status_label", "save_slots", "params_panel", "params_title", "length_label", "length_slider", "preview_grid", "scenery", "back_button", "trash_button", "delete_button", "start_button", "save_info", "save_lives_label", "save_tier_label", "save_progress_label", "export_code_button", "import_code_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,6 +84,8 @@ save_info = NodePath("Layout/Box/PreviewPanel/SaveInfo")
 save_lives_label = NodePath("Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/LivesRow/LivesLabel")
 save_tier_label = NodePath("Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/InfoRow/TierLabel")
 save_progress_label = NodePath("Layout/Box/PreviewPanel/SaveInfo/InfoMargin/VBox/InfoRow/ProgressLabel")
+export_code_button = NodePath("Layout/Box/TitleBar/TitleRight/CodeButtons/ExportCodeButton")
+import_code_button = NodePath("Layout/Box/TitleBar/TitleRight/CodeButtons/ImportCodeButton")
 
 [node name="Background" type="ColorRect" parent="." unique_id=650121687]
 layout_mode = 1
@@ -332,6 +334,36 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
+
+[node name="CodeButtons" type="HBoxContainer" parent="Layout/Box/TitleBar/TitleRight" unique_id=1812774403]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="ExportCodeButton" parent="Layout/Box/TitleBar/TitleRight/CodeButtons" unique_id=1812774401 instance=ExtResource("10_ui_button")]
+custom_minimum_size = Vector2(184, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "快速导出"
+
+[node name="ImportCodeButton" parent="Layout/Box/TitleBar/TitleRight/CodeButtons" unique_id=1812774402 instance=ExtResource("10_ui_button")]
+custom_minimum_size = Vector2(184, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "快速导入"
 
 [node name="SaveSlots" parent="Layout/Box" unique_id=1621592128 instance=ExtResource("3_slots")]
 custom_minimum_size = Vector2(0, 112)

@@ -9,6 +9,7 @@ extends Control
 
 const TITLE_SCENE: String = "res://room/title.tscn"
 const TRASH_SCENE: String = "res://room/adventure/adventure_trash.tscn"
+const IMPORT_PANEL_SCENE: PackedScene = preload("res://room/adventure/adventure_import_panel.tscn")
 const TIER_NAMES: Array[String] = ["简单", "普通", "困难", "超难"]
 ## 四档主题色：淡蓝 / 偏深绿 / 土黄 / 紫。
 const TIER_COLORS: Array[Color] = [
@@ -95,6 +96,9 @@ const BACKGROUND_DESIGN_SIZE: Vector2 = Vector2(1920, 1080)
 @export var save_lives_label: Label
 @export var save_tier_label: Label
 @export var save_progress_label: Label
+## 标题栏右上角的「快速导出 / 快速导入」。导出要选中存档位，导入不需要。
+@export var export_code_button: Button
+@export var import_code_button: Button
 
 var _pool_source: String = "all"
 var _tier: int = 0
@@ -124,6 +128,8 @@ var _slots_initialized: bool = false
 ## 状态文字是否处于显示态（淡出动画期间已经是 false）。
 var _status_visible: bool = false
 var _status_tween: Tween
+## 快速导入页（懒加载：第一次点「快速导入」才建，省得每个进场都多一棵常驻节点）。
+var _import_panel: Control
 
 
 func _ready() -> void:
@@ -146,6 +152,11 @@ func _ready() -> void:
 	_apply_button_states()
 	_update_theme()
 	_refresh_save_slots()
+	# 场景里的按钮文字不会走 tr()，进场时统一按当前语言刷一遍。
+	if export_code_button != null:
+		export_code_button.text = tr("快速导出")
+	if import_code_button != null:
+		import_code_button.text = tr("快速导入")
 	_load_pool.call_deferred()
 
 
@@ -175,6 +186,10 @@ func _bind_controls() -> void:
 	length_slider.value_changed.connect(_on_length_changed)
 	save_slots.connect("selection_changed", Callable(self, "_on_selection_changed"))
 	save_slots.connect("slot_clicked", Callable(self, "_on_slot_clicked"))
+	if export_code_button != null:
+		export_code_button.pressed.connect(_on_export_code_pressed)
+	if import_code_button != null:
+		import_code_button.pressed.connect(_on_import_code_pressed)
 
 
 # ---------------------------------------------------------------------------
@@ -709,6 +724,64 @@ func _on_delete_pressed() -> void:
 		return
 	Adventure.delete_run_slot(slot)
 	_refresh_save_slots()
+
+
+# ---------------------------------------------------------------------------
+# 快速导出 / 快速导入（剪贴板文本码）
+# ---------------------------------------------------------------------------
+
+## 导出当前选中的存档位：整条码写进剪贴板，再用全局通知告诉玩家「去粘吧」。
+## 没选存档位时不弹空码，直接提示要先选一个。
+func _on_export_code_pressed() -> void:
+	if _selection < 1:
+		Notice.show_notice("先选中一个存档位，再导出。", "快速导出")
+		return
+	var code: String = Adventure.export_share_code(_selection)
+	if code.is_empty():
+		Notice.show_notice("这个存档位没有可导出的团。", "快速导出")
+		return
+	DisplayServer.clipboard_set(code)
+	Notice.show_notice("存档base64码已复制到剪切板。", "快速导出")
+
+
+## 导入页：打开时自动读剪贴板（见 adventure_import_panel.gd），
+## 玩家点「导入」后回到这里做真正的写档，结果仍走全局通知。
+func _on_import_code_pressed() -> void:
+	if _import_panel == null:
+		_import_panel = IMPORT_PANEL_SCENE.instantiate() as Control
+		# 必须压过「新存档设置」页（ParamsPanel 的 z_index = 5），
+		# 否则选中「新存档」时打开导入页会被那张配置页盖住。
+		_import_panel.z_index = 20
+		add_child(_import_panel)
+		_import_panel.connect("submitted", Callable(self, "_on_import_submitted"))
+		_import_panel.connect("cancelled", Callable(self, "_on_import_cancelled"))
+	_import_panel.call("open")
+	_refresh_focus()
+
+
+func _on_import_cancelled() -> void:
+	_import_panel.call("close")
+	_refresh_focus()
+
+
+func _on_import_submitted(text: String) -> void:
+	_import_panel.call("close")
+	# 缺关卡 / 码损坏 / 槽位满 都由 import_share_code 统一判断并给出中文原因。
+	var result: Dictionary = Adventure.import_share_code(text)
+	_refresh_focus()
+	if not bool(result.get("ok", false)):
+		Notice.show_notice(str(result.get("error", "导入失败")), "快速导入")
+		return
+	_refresh_save_slots()
+	# Notice 会先 tr() 再按 args 格式化，参数必须交给它，不能自己先拼。
+	Notice.show_notice("导入成功，已存入存档%d。", "快速导入", "确认", [int(result.get("slot", 0))])
+
+
+## 弹窗显隐会改变可聚焦节点集合：通知方向键/手柄导航刷新一次。
+func _refresh_focus() -> void:
+	var navigator: Node = get_node_or_null("/root/UiNavigator")
+	if navigator != null:
+		navigator.call("refresh_now")
 
 
 func _on_back() -> void:

@@ -806,3 +806,58 @@ msgstr "Validation failed"
 
 msgid "路径不合法"
 msgstr "Invalid path"
+
+msgid "快速导出"
+msgstr "Quick Export"
+
+msgid "快速导入"
+msgstr "Quick Import"
+
+msgid "存档base64码已复制到剪切板。"
+msgstr "Save code (base64) copied to clipboard."
+
+msgid "先选中一个存档位，再导出。"
+msgstr "Select a save slot before exporting."
+
+msgid "这个存档位没有可导出的团。"
+msgstr "This save slot has no run to export."
+
+msgid "把存档码粘贴到这里"
+msgstr "Paste the save code here"
+
+msgid "看起来是一条存档码，点「导入」"
+msgstr "Looks like a save code - press Import"
+
+msgid "这段文本不像存档码，确认后再导入"
+msgstr "This does not look like a save code"
+
+msgid "导入成功，已存入存档%d。"
+msgstr "Import complete - saved to slot %d."
+
+msgid "存档位已满（%d/%d），请先结算或放弃其中一个团"
+msgstr "All save slots are full (%d/%d). Finish or abandon a run first."
+
+msgid "码为空"
+msgstr "The code is empty"
+
+msgid "不是百人团存档码"
+msgstr "Not a Raid save code"
+
+msgid "码已损坏（base64 解不开）"
+msgstr "The code is damaged (invalid base64)"
+
+msgid "码已损坏（解压失败）"
+msgstr "The code is damaged (cannot decompress)"
+
+msgid "码的格式版本不支持"
+msgstr "Unsupported code format version"
+
+msgid "码里没有存档数据"
+msgstr "The code contains no save data"
+
+msgid "存档引用了本机没有的关卡：%s"
+msgstr "This save needs levels you do not have: %s"
+
+
+
+

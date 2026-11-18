@@ -1,0 +1,108 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://script/adventure/adventure_import_panel.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://bpkayogffk0um" path="res://ui/theme/theme_yellow_top.tres" id="2_yellow"]
+[ext_resource type="PackedScene" uid="uid://dvu45nym5l6oi" path="res://ui/ui_button.tscn" id="3_button"]
+[ext_resource type="PackedScene" uid="uid://bp6yibna84ei7" path="res://ui/ui_line_edit.tscn" id="4_edit"]
+[ext_resource type="Script" uid="uid://bvha75uoxboof" path="res://script/ui/drop_in_animation.gd" id="5_drop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(1, 1, 1, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15, 0.2, 0.3, 0.22)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="AdventureImportPanel" type="Control"]
+visible = false
+metadata/ui_focus_modal = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Blocker" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.08, 0.12, 0.45)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -620.0
+offset_top = -210.0
+offset_right = 620.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_yellow")
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="DropInAnimation" type="Node" parent="Panel"]
+script = ExtResource("5_drop")
+enter_style = 1
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_font_sizes/font_size = 40
+text = "快速导入"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.101961, 0.101961, 0.121569, 1)
+theme_override_font_sizes/font_size = 22
+text = "把存档码粘贴到这里"
+horizontal_alignment = 1
+
+[node name="CodeInput" parent="Panel/Margin/VBox" instance=ExtResource("4_edit")]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+placeholder_text = "MFMP-RAID-1:..."
+caret_blink = true
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="ImportButton" parent="Panel/Margin/VBox/Buttons" instance=ExtResource("3_button")]
+custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "导入"
+
+[node name="CancelButton" parent="Panel/Margin/VBox/Buttons" instance=ExtResource("3_button")]
+custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "取消"
+metadata/ui_focus_cancel = true

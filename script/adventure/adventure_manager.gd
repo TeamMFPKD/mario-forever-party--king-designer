@@ -618,6 +618,88 @@ func interrupt_run() -> void:
 	_check_resume()
 
 
+# ---------------------------------------------------------------------------
+# 快速导出 / 快速导入（剪贴板文本码）
+# ---------------------------------------------------------------------------
+
+## 把一个存档位的团打成一条码。slot <= 0 或该位没团时返回空串。
+## 只带这个团本身 + 它用到的关卡统计，不带其它存档位与排除名单全集。
+func export_share_code(slot: int) -> String:
+	if slot <= 0:
+		return ""
+	var run: Dictionary = store.get_run(slot)
+	if run.is_empty():
+		return ""
+	return AdventureShareCode.encode(store, slot, run)
+
+
+## 一条码引用的关卡在本机缺哪些（缺了就没法续团）。
+func share_code_missing_levels(text: String) -> Array[String]:
+	var decoded: Dictionary = AdventureShareCode.decode(text)
+	if not bool(decoded.get("ok", false)):
+		return []
+	var levels: Dictionary = decoded.get("levels", {})
+	return AdventureShareCode.missing_levels(levels)
+
+
+## 把一条码写进存档：找空槽落位，同步关卡统计，然后刷新槽位摘要。
+## 返回 { ok, error, slot }；失败时 error 是可以直接弹给玩家看的中文。
+func import_share_code(text: String) -> Dictionary:
+	var decoded: Dictionary = AdventureShareCode.decode(text)
+	if not bool(decoded.get("ok", false)):
+		return {"ok": false, "slot": 0, "error": str(decoded.get("error", "码无法识别"))}
+
+	var run: Dictionary = decoded.get("run", {})
+	var levels: Dictionary = decoded.get("levels", {})
+	var missing: Array[String] = AdventureShareCode.missing_levels(levels)
+	if not missing.is_empty():
+		return {
+			"ok": false,
+			"slot": 0,
+			"error": AdventureShareCode.ERR_LEVELS % ", ".join(missing.slice(0, 3)),
+		}
+
+	# 槽位：对方码里那个号在本机空着就落回原位，否则找第一个空槽。
+	var slot: int = int(decoded.get("slot", 0))
+	if slot <= 0 or slot > MAX_RUN_SLOTS or store.is_run_occupied(slot):
+		slot = store.first_free_slot()
+	if slot <= 0:
+		return {
+			"ok": false,
+			"slot": 0,
+			"error": tr("存档位已满（%d/%d），请先结算或放弃其中一个团") % [MAX_RUN_SLOTS, MAX_RUN_SLOTS],
+		}
+
+	# 先写关卡统计：团一旦落盘，摘要就能立刻按新数据算通过率。
+	_apply_shared_levels(levels)
+
+	# 槽位号与「当前团」标记都要以本机为准：码里那个号可能已被别的团占用。
+	run["slot"] = slot
+	run["active"] = true
+	store.set_run(run, slot)
+	_check_resume()
+	run_changed.emit()
+	Log.i("Adventure", ["快速导入：团落到存档位 ", slot, "，", str(run.get("id", ""))])
+	return {"ok": true, "slot": slot, "error": ""}
+
+
+## 关卡的统计按「本机没有这一关的记录」才写：已有记录说明本机打过，
+## 对方的样本不该覆盖。指纹不同则由池加载流程按原有规则作废（与本地换关卡一致）。
+func _apply_shared_levels(levels: Dictionary) -> void:
+	var written: int = 0
+	for key: String in levels.keys():
+		var data: Dictionary = levels[key]
+		var section: String = store.level_section(key)
+		if store.config.has_section(section) and store.config.get_section_keys(section).size() > 0:
+			continue
+		for field: String in data.keys():
+			store.config.set_value(section, field, data[field])
+		written += 1
+	if written > 0:
+		store.save()
+		Log.i("Adventure", ["快速导入：写入关卡统计 ", written, " 关"])
+
+
 ## 删除某个存档位（「排除的关卡」页的「删除存档」用）。
 ## 如果被删的正是内存里正在进行的团，一并忘掉它，免得回到舞台还能续。
 ## 返回 true = 确实删掉了一个占用中的存档位。
