@@ -1,0 +1,236 @@
+name: Build and Release
+
+# ── 分支模型 ──────────────────────────────────────────────────────────
+#   push dev    -> 只构建。产物在 Actions 的 artifact 里（可下载，默认保留 90 天），
+#                  不产生 Release。日常开发推这里。
+#   push master -> 构建 + 自动 Release。tag 按北京时间日期生成（v2026.11.18），
+#                  同一天第二次会变成 v2026.11.18-2。
+#   push v*     -> 构建 + 发布到指定 tag（补历史版本 / 手动发版）
+#   手动运行    -> 填 release_tag 发到那个 tag；留空则按当前分支规则
+#
+# 为什么三个平台放在同一个文件里：
+#   Release 的 tag 是"先到先得"算出来的（按日期 + 撞名递增）。
+#   如果 Windows/Android 和 iOS 分成两个 workflow，两边各自算 tag，
+#   就会在几分钟的窗口里算出同一个日期 tag，然后互相覆盖附件。
+#   合并成一个文件后只有一个 job 负责建 Release，tag 只算一次。
+# ─────────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches: [dev, master]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: '手动指定 release tag（留空则按当前分支规则）'
+        required: false
+        default: ''
+
+# 建 Release / 传附件需要写权限。GITHUB_TOKEN 默认只读，必须显式声明。
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: 4.6.1
+  EXPORT_NAME: mfmp
+
+# 同一个 ref 上的运行串行化，避免两次 push 的 Release 互相覆盖
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ── Windows + Android：矩阵构建，两个平台并行 ──────────────────────
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - name: Windows
+          export_template: "Windows Desktop"
+          ext: "exe"
+        - name: Android
+          export_template: "Android"
+          ext: "apk"
+    runs-on: ubuntu-24.04
+    container:
+      image: barichello/godot-ci:4.6.1
+    name: Export ${{ matrix.name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+
+      # 容器里 Godot 装在 /root，步骤却以普通用户跑，要把配置挪到 ~ 下；
+      # 顺便把仓库 Secret 里的 base64 keystore 解码成签名文件。
+      - name: Setup
+        run: |
+          mkdir -v -p ~/.local/share/godot/export_templates/
+          mkdir -v -p ~/.config/
+          mv /root/.config/godot ~/.config/godot
+          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          echo "$KEYSTORE" | base64 -d > /root/debug.keystore
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+
+      # 先让 Godot 扫一遍资源，否则导出会找不到文件
+      - name: Project Import
+        run: godot --headless --verbose --import
+
+      - name: ${{ matrix.name }} Build
+        run: |
+          mkdir -v -p "build/${{ matrix.name }}"
+          EXPORT_DIR="$(readlink -f build)"
+          godot --headless --verbose --export-release "${{ matrix.export_template }}" "${EXPORT_DIR}/${{ matrix.name }}/${EXPORT_NAME}.${{ matrix.ext }}"
+        env:
+          GODOT_ANDROID_KEYSTORE_RELEASE_PATH: "/root/debug.keystore"
+          GODOT_ANDROID_KEYSTORE_RELEASE_USER: ${{ secrets.KEYSTORE_USER }}
+          GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+
+      # job 之间不共享文件系统，产物要经 artifact 中转
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mfmp-${{ matrix.name }}
+          path: build/${{ matrix.name }}
+
+  # ── iOS：必须跑 macOS runner，步骤与其他平台完全不同 ──────────────
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    name: Export iOS
+    env:
+      IOS_PRESET: iOS
+      NAME: ${{ github.event.repository.name }}
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      GODOT_VERSION: 4.6.1-stable
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          lfs: true
+
+      - name: Download Godot headless
+        run: |
+          curl -L \
+            "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_macos.universal.zip" \
+            -o godot.zip
+          unzip -q godot.zip -d godot
+
+      - name: Download and install iOS export template
+        run: |
+          TEMPLATE_VERSION=$(echo "${{ env.GODOT_VERSION }}" | sed 's/-/./')
+          curl -L \
+            "https://github.com/godotengine/godot-builds/releases/download/${{ env.GODOT_VERSION }}/Godot_v${{ env.GODOT_VERSION }}_export_templates.tpz" \
+            -o templates.tpz
+          unzip -q templates.tpz -d templates_temp
+          templates_root="$HOME/Library/Application Support/Godot/export_templates"
+          mkdir -p "$templates_root/${TEMPLATE_VERSION}"
+          cp templates_temp/templates/ios.zip "$templates_root/${TEMPLATE_VERSION}/ios.zip"
+          rm -rf templates.tpz templates_temp
+
+      # 需要在导出预设的高级选项里启用 application/export_project_only
+      - name: Export to Xcode project
+        run: |
+          mkdir -p build/ios
+          godot/Godot.app/Contents/MacOS/Godot --headless --path . \
+            --export-release "${IOS_PRESET}" build/ios/${NAME}.xcodeproj
+
+      - name: xcodebuild archive (unsigned)
+        run: |
+          xcodebuild archive \
+            -project build/ios/${NAME}.xcodeproj \
+            -scheme "${NAME}" \
+            -archivePath build/ios/App.xcarchive \
+            -configuration Release \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty
+
+      - name: Package IPA
+        run: |
+          cd build/ios
+          mkdir -p Payload
+          cp -R App.xcarchive/Products/Applications/*.app Payload/
+          zip -r "${NAME}.ipa" Payload
+          mv "${NAME}.ipa" ../../
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mfmp-iOS
+          path: ${{ env.NAME }}.ipa
+          retention-days: 14
+
+  # ── 发布：唯一负责建 Release 的地方 ──────────────────────────────
+  # 单独一个 job 是必须的。若放进矩阵，两个平台会并发建同一个 tag 的 Release，
+  # 第二个要么撞 conflict，要么把第一个刚上传的附件覆盖掉。
+  release:
+    needs: [build, build-ios]
+    runs-on: ubuntu-24.04
+    # dev 分支的 push 跳过发布；tag / master / 手动运行才走到这里
+    if: |
+      !cancelled()
+      && needs.build.result == 'success'
+      && (github.ref_type == 'tag' || github.ref_name == 'master' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Inspect
+        run: ls -lh dist
+
+      # 决定发到哪个 tag：手动填的 > 当前 tag > 按日期自动生成
+      - name: Resolve tag
+        id: meta
+        env:
+          RELEASE_TAG_INPUT: ${{ inputs.release_tag }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$RELEASE_TAG_INPUT" ]; then
+            echo "tag=$RELEASE_TAG_INPUT" >> "$GITHUB_OUTPUT"
+            echo "reason=手动指定" >> "$GITHUB_OUTPUT"
+          elif [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+            echo "reason=推送 tag" >> "$GITHUB_OUTPUT"
+          else
+            # master push：按北京时间取日期；同一天已有同名 tag 就加 -2 -3 …
+            base="v$(TZ=Asia/Shanghai date +%Y.%m.%d)"
+            tag="$base"
+            n=1
+            while [ $n -le 20 ]; do
+              code=$(curl -s -o /dev/null -w "%{http_code}" \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/$tag")
+              [ "$code" != "200" ] && break
+              n=$((n + 1))
+              tag="$base-$n"
+            done
+            echo "tag=$tag" >> "$GITHUB_OUTPUT"
+            echo "reason=master 推送" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: ${{ steps.meta.outputs.tag }}
+          generate_release_notes: true
+          overwrite_files: true
+          files: dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "### 已发布 ${{ steps.meta.outputs.tag }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 触发原因：${{ steps.meta.outputs.reason }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 提交：${{ github.sha }}" >> "$GITHUB_STEP_SUMMARY"
