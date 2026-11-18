@@ -681,10 +681,10 @@ msgstr "Save %d"
 msgid "初始命数：%d"
 msgstr "Starting Lives: %d"
 
-msgid "打几关：%d"
+msgid "关卡数：%d"
 msgstr "Levels: %d"
 
-msgid "打几关：无尽"
+msgid "关卡数：无尽"
 msgstr "Levels: Endless"
 
 msgid "第 %d/%d 关"
