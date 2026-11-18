@@ -92,6 +92,16 @@ chore(multiplayer): drop unused signaling fallback
 - body 与 summary 之间空一行，同样只用英文，分段落写动机、方案与影响；引用代码标识符可直接用反引号。
 - 检查办法：`git --no-pager log -1 --pretty=%s` 应能匹配 `^[a-z]+(\([a-z0-9-]+\))?: .+`，且 `git log -1 --pretty=%B` 无中文。
 
+### 2.2 分支与发布流程
+
+本项目主要在 `dev` 分支开发。
+
+1. **默认只在 `dev` 上操作。** 用户没有主动提及分支时，commit 与 push 都只对 `dev` 执行。
+2. **`master` 只允许 commit，不允许 push。** 用户主动要求改 `master` 时可以 commit，但不要推送。
+3. **发布才同步 `master`。** 只有用户明确表示要发版本时，才在 `dev` 的 commit 基础上同步 `master`（`git checkout master && git merge --ff-only dev`），随后 push。
+
+> 原因：`master` 的 push 会触发 CI 自动打 tag 并发 Release（见 `.github/workflows/build-and-release.yml`），而 `dev` 的 push 只产出 Actions artifact。误推 `master` 会凭空消耗一个版本号。
+
 ---
 
 ## 3. 测试脚本总览
