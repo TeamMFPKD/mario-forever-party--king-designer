@@ -813,51 +813,50 @@ msgstr "快速导出"
 msgid "快速导入"
 msgstr "快速导入"
 
-msgid "存档base64码已复制到剪切板。"
-msgstr "存档base64码已复制到剪切板。"
+msgid "存档码已复制到剪贴板。"
+msgstr "存档码已复制到剪贴板。"
 
-msgid "先选中一个存档位，再导出。"
-msgstr "先选中一个存档位，再导出。"
+msgid "请先选中一个存档位。"
+msgstr "请先选中一个存档位。"
 
-msgid "这个存档位没有可导出的团。"
-msgstr "这个存档位没有可导出的团。"
+msgid "该存档位没有可导出的团。"
+msgstr "该存档位没有可导出的团。"
 
-msgid "把存档码粘贴到这里"
-msgstr "把存档码粘贴到这里"
+msgid "请粘贴存档码"
+msgstr "请粘贴存档码"
 
-msgid "看起来是一条存档码，点「导入」"
-msgstr "看起来是一条存档码，点「导入」"
+msgid "已识别存档码"
+msgstr "已识别存档码"
 
-msgid "这段文本不像存档码，确认后再导入"
-msgstr "这段文本不像存档码，确认后再导入"
+msgid "未识别到存档码格式"
+msgstr "未识别到存档码格式"
 
-msgid "导入成功，已存入存档%d。"
-msgstr "导入成功，已存入存档%d。"
+msgid "已存入存档%d。"
+msgstr "已存入存档%d。"
 
-msgid "存档位已满（%d/%d），请先结算或放弃其中一个团"
-msgstr "存档位已满（%d/%d），请先结算或放弃其中一个团"
+msgid "存档位已满（%d/%d），请先结算或放弃一个团"
+msgstr "存档位已满（%d/%d），请先结算或放弃一个团"
 
-msgid "码为空"
-msgstr "码为空"
+msgid "存档码为空"
+msgstr "存档码为空"
 
-msgid "不是百人团存档码"
-msgstr "不是百人团存档码"
+msgid "存档码格式无效"
+msgstr "存档码格式无效"
 
-msgid "码已损坏（base64 解不开）"
-msgstr "码已损坏（base64 解不开）"
+msgid "存档码已损坏"
+msgstr "存档码已损坏"
 
-msgid "码已损坏（解压失败）"
-msgstr "码已损坏（解压失败）"
+msgid "存档码版本不受支持"
+msgstr "存档码版本不受支持"
 
-msgid "码的格式版本不支持"
-msgstr "码的格式版本不支持"
+msgid "存档码不含存档数据"
+msgstr "存档码不含存档数据"
 
-msgid "码里没有存档数据"
-msgstr "码里没有存档数据"
+msgid "以下关卡在本机不存在：%s"
+msgstr "以下关卡在本机不存在：%s"
 
-msgid "存档引用了本机没有的关卡：%s"
-msgstr "存档引用了本机没有的关卡：%s"
+msgid "，缺 %d 关"
+msgstr "，缺 %d 关"
 
-
-
-
+msgid "已存入存档%d。其中 %d 关在本机不存在，游玩时将自动跳过。"
+msgstr "已存入存档%d。其中 %d 关在本机不存在，游玩时将自动跳过。"

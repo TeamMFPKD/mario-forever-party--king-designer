@@ -81,6 +81,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	store = AdventureStore.new()
 	store.load()
+	# 玩家可能手动删过 .lvl：启动时先标一遍，免得打到那一关才发现进不去。
+	refresh_missing_levels()
 	_build_transition_ui()
 	_build_life_bonus_layer()
 	_build_bgm()
@@ -207,6 +209,28 @@ func _check_resume() -> void:
 	resume_available = _first_resumable_slot() > 0
 
 
+## 扫一遍已知关卡，把「文件已经不在」的打上 missing 标记。
+##
+## 两处会调用：启动时（玩家可能手动删过 .lvl）与导入后（对方的关卡本机未必有）。
+## 只处理 ini 里已有的 [level.*] 段；没有记录的关卡不属于任何团，不需要标记。
+## 返回本次新标记的关数（0 = 没有变化，不写盘）。
+func refresh_missing_levels() -> int:
+	var changed: int = 0
+	for section: String in store.config.get_sections():
+		if not section.begins_with("level."):
+			continue
+		var key: String = section.trim_prefix("level.")
+		if key.is_empty():
+			continue
+		var exists: bool = FileAccess.file_exists("user://" + key) 			or FileAccess.file_exists("user://liked courses/" + key)
+		if store.set_missing(key, not exists):
+			changed += 1
+	if changed > 0:
+		store.save()
+		Log.i("Adventure", ["关卡缺失检查：新标记 ", changed, " 关"])
+	return changed
+
+
 func is_run_slots_full() -> bool:
 	return store.used_run_slots() >= MAX_RUN_SLOTS
 
@@ -306,6 +330,42 @@ func current_level_key() -> String:
 
 func current_level_path() -> String:
 	return resolve_level_path(current_level_key())
+
+
+## 当前这一格的关卡文件在不在。进关前用它拦一道，避免进到一个空关卡里卡死。
+func current_level_exists() -> bool:
+	if not is_running():
+		return false
+	var key: String = current_level_key()
+	if key.is_empty():
+		return false
+	return FileAccess.file_exists("user://" + key) 		or FileAccess.file_exists("user://liked courses/" + key)
+
+
+## 结算前的救火：当前格指向一个已不存在的关卡时，按「跳过」处理掉它。
+##
+## 复用 skip_current_level() 的语义（固定团换一关补上这一格、必须打完才推进；
+## 无尽团直接翻页），只是不记跳过样本——那不是玩家的锅，是关卡文件被删了。
+## 换不到替补时由 skip_current_level() 自己走去结算，不会卡在原地。
+func skip_missing_level() -> bool:
+	if not is_running() or current_level_exists():
+		return false
+	if current_key.is_empty():
+		current_key = current_level_key()
+	var missing_key: String = current_key
+	if missing_key.is_empty():
+		return false
+	store.set_missing(missing_key, true)
+	store.save()
+	# 本团内不再抽到它，与「软跳过」一致。
+	var skipped_keys: Array = current_run.get("skipped_keys", [])
+	if not skipped_keys.has(missing_key):
+		skipped_keys.append(missing_key)
+		current_run["skipped_keys"] = skipped_keys
+	Log.w("Adventure", ["当前关卡文件不存在，按跳过处理：", missing_key])
+	# 不进样本：不记 attempt 结局、不涨 skipped_count、不动 solo_skip。
+	skip_current_level(false, false)
+	return true
 
 
 ## 当前关卡在本团里的序号（1 起）：过场动画的「第 N/M 关」和关卡串编号都用它。
@@ -548,21 +608,28 @@ func on_player_died() -> void:
 	run_changed.emit()
 
 
-func skip_current_level(hard: bool) -> void:
+## [param count_as_skip] = false 时不记跳过样本（缺关自动跳过用它）：
+## 关卡文件被别人删掉不是玩家的选择，不该让他的通过率受影响。
+func skip_current_level(hard: bool, count_as_skip: bool = true) -> void:
 	if not is_running() or current_key.is_empty():
 		return
-	store.record_skip(current_key, not hard)
+	if count_as_skip:
+		store.record_skip(current_key, not hard)
 	# 跳过也是结局：这次 attempt 归到 skip 里，不再是「正在打」。
 	_pending_attempt_key = ""
-	if hard:
+	if not count_as_skip:
+		# 缺关：不动 solo_skip / skipped_* 三个计数，只把这一格换掉。
+		pass
+	elif hard:
 		store.set_excluded(current_key, true, "unsolvable")
 		current_run["skipped_hard"] = int(current_run.get("skipped_hard", 0)) + 1
 	else:
 		current_run["skipped_soft"] = int(current_run.get("skipped_soft", 0)) + 1
-	current_run["skipped_count"] = int(current_run.get("skipped_count", 0)) + 1
+	if count_as_skip:
+		current_run["skipped_count"] = int(current_run.get("skipped_count", 0)) + 1
 
 	var stat: AdventureLevelStat = _find_stat(current_key)
-	if stat != null:
+	if stat != null and count_as_skip:
 		stat.solo_skip += 1
 		if hard:
 			stat.excluded = true
@@ -651,13 +718,10 @@ func import_share_code(text: String) -> Dictionary:
 
 	var run: Dictionary = decoded.get("run", {})
 	var levels: Dictionary = decoded.get("levels", {})
+
+	# 缺关卡不再整体拒绝：把缺的标记成 missing 后照常落盘。
+	# 团里那些格子保留，进关时按「跳过」处理（换一关补上，必须打完才推进）。
 	var missing: Array[String] = AdventureShareCode.missing_levels(levels)
-	if not missing.is_empty():
-		return {
-			"ok": false,
-			"slot": 0,
-			"error": AdventureShareCode.ERR_LEVELS % ", ".join(missing.slice(0, 3)),
-		}
 
 	# 槽位：对方码里那个号在本机空着就落回原位，否则找第一个空槽。
 	var slot: int = int(decoded.get("slot", 0))
@@ -667,7 +731,7 @@ func import_share_code(text: String) -> Dictionary:
 		return {
 			"ok": false,
 			"slot": 0,
-			"error": tr("存档位已满（%d/%d），请先结算或放弃其中一个团") % [MAX_RUN_SLOTS, MAX_RUN_SLOTS],
+			"error": tr("存档位已满（%d/%d），请先结算或放弃一个团") % [MAX_RUN_SLOTS, MAX_RUN_SLOTS],
 		}
 
 	# 先写关卡统计：团一旦落盘，摘要就能立刻按新数据算通过率。
@@ -679,8 +743,19 @@ func import_share_code(text: String) -> Dictionary:
 	store.set_run(run, slot)
 	_check_resume()
 	run_changed.emit()
-	Log.i("Adventure", ["快速导入：团落到存档位 ", slot, "，", str(run.get("id", ""))])
-	return {"ok": true, "slot": slot, "error": ""}
+	# 缺关的统计段也要写进去（否则这关连 [level.*] 记录都没有，池里查不到它）。
+	for key: String in missing:
+		if not store.config.has_section(store.level_section(key)):
+			store.config.set_value(store.level_section(key), "file", key)
+		store.set_missing(key, true)
+	if not missing.is_empty():
+		store.save()
+
+	Log.i("Adventure", [
+		"快速导入：团落到存档位 ", slot, "，", str(run.get("id", "")),
+		"，缺关卡 ", missing.size(),
+	])
+	return {"ok": true, "slot": slot, "error": "", "missing": missing}
 
 
 ## 关卡的统计按「本机没有这一关的记录」才写：已有记录说明本机打过，

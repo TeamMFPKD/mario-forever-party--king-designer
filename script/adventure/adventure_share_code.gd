@@ -24,13 +24,13 @@ class_name AdventureShareCode
 ## 码前缀：看到它才知道这段文本里有没有我们的码。版本号跟在后面。
 const PREFIX: String = "MFMP-RAID"
 const FORMAT_VERSION: int = 2
-const ERR_EMPTY: String = "码为空"
-const ERR_PREFIX: String = "不是百人团存档码"
-const ERR_BASE64: String = "码已损坏（base64 解不开）"
-const ERR_UNPACK: String = "码已损坏（解压失败）"
-const ERR_FORMAT: String = "码的格式版本不支持"
-const ERR_PAYLOAD: String = "码里没有存档数据"
-const ERR_LEVELS: String = "存档引用了本机没有的关卡：%s"
+const ERR_EMPTY: String = "存档码为空"
+const ERR_PREFIX: String = "存档码格式无效"
+const ERR_BASE64: String = "存档码已损坏"
+const ERR_UNPACK: String = "存档码已损坏"
+const ERR_FORMAT: String = "存档码版本不受支持"
+const ERR_PAYLOAD: String = "存档码不含存档数据"
+const ERR_LEVELS: String = "以下关卡在本机不存在：%s"
 
 ## 解压上限提示：一个团的载荷远小于这个数，给足余量即可。
 ## PackedByteArray.decompress() 只接受「原始大小的上限」，不是精确值。

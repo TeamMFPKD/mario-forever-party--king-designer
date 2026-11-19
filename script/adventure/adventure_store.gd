@@ -94,6 +94,8 @@ func get_level_data(key: String) -> Dictionary:
 		"excluded": bool(config.get_value(section, "excluded", false)),
 		"exclude_reason": str(config.get_value(section, "exclude_reason", "")),
 		"excluded_at": int(config.get_value(section, "excluded_at", 0)),
+		"missing": bool(config.get_value(section, "missing", false)),
+		"missing_at": int(config.get_value(section, "missing_at", 0)),
 	}
 
 
@@ -171,6 +173,25 @@ func set_excluded(key: String, excluded: bool, reason: String = "") -> void:
 
 func is_excluded(key: String) -> bool:
 	return bool(config.get_value(level_section(key), "excluded", false))
+
+
+## 本机是否已经判定「这一关的 .lvl 不见了」。
+## 与 excluded 分开存：excluded 是玩家主观排除（可在「排除的关卡」页恢复），
+## missing 是客观事实（文件不在），恢复也没用，所以不进那个列表。
+func is_missing(key: String) -> bool:
+	return bool(config.get_value(level_section(key), "missing", false))
+
+
+## 打上 / 清掉 missing 标记。already 相同就不写盘，避免每次启动都重写整份 ini。
+func set_missing(key: String, missing: bool) -> bool:
+	var section: String = level_section(key)
+	if bool(config.get_value(section, "missing", false)) == missing:
+		return false
+	config.set_value(section, "missing", missing)
+	config.set_value(
+		section, "missing_at", int(Time.get_unix_time_from_system()) if missing else 0
+	)
+	return true
 
 
 ## 「排除的关卡」界面用：所有被永久排除的关卡记录（以 ini 为准，不管文件还在不在）。

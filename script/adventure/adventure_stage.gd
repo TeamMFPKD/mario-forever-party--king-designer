@@ -734,14 +734,14 @@ func _on_delete_pressed() -> void:
 ## 没选存档位时不弹空码，直接提示要先选一个。
 func _on_export_code_pressed() -> void:
 	if _selection < 1:
-		Notice.show_notice("先选中一个存档位，再导出。", "快速导出")
+		Notice.show_notice("请先选中一个存档位。", "快速导出")
 		return
 	var code: String = Adventure.export_share_code(_selection)
 	if code.is_empty():
-		Notice.show_notice("这个存档位没有可导出的团。", "快速导出")
+		Notice.show_notice("该存档位没有可导出的团。", "快速导出")
 		return
 	DisplayServer.clipboard_set(code)
-	Notice.show_notice("存档base64码已复制到剪切板。", "快速导出")
+	Notice.show_notice("存档码已复制到剪贴板。", "快速导出")
 
 
 ## 导入页：打开时自动读剪贴板（见 adventure_import_panel.gd），
@@ -766,15 +766,24 @@ func _on_import_cancelled() -> void:
 
 func _on_import_submitted(text: String) -> void:
 	_import_panel.call("close")
-	# 缺关卡 / 码损坏 / 槽位满 都由 import_share_code 统一判断并给出中文原因。
+	# 码损坏 / 槽位满由 import_share_code 统一判断并给出原因，这里只负责显示。
 	var result: Dictionary = Adventure.import_share_code(text)
 	_refresh_focus()
 	if not bool(result.get("ok", false)):
 		Notice.show_notice(str(result.get("error", "导入失败")), "快速导入")
 		return
 	_refresh_save_slots()
+	var missing: Array = result.get("missing", [])
 	# Notice 会先 tr() 再按 args 格式化，参数必须交给它，不能自己先拼。
-	Notice.show_notice("导入成功，已存入存档%d。", "快速导入", "确认", [int(result.get("slot", 0))])
+	if missing.is_empty():
+		Notice.show_notice("已存入存档%d。", "快速导入", "确认", [int(result.get("slot", 0))])
+	else:
+		Notice.show_notice(
+			"已存入存档%d，其中 %d 关在本机不存在，游玩时将跳过。",
+			"快速导入",
+			"确认",
+			[int(result.get("slot", 0)), missing.size()]
+		)
 
 
 ## 弹窗显隐会改变可聚焦节点集合：通知方向键/手柄导航刷新一次。

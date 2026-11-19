@@ -12,6 +12,14 @@ var author: String = "author"
 
 func _ready() -> void:
 	if GameMode.is_adventure():
+		# 这一格的关卡文件不存在（本机删了 / 导入的团带进来的缺关）：
+		# 让 Adventure 按「跳过」把它换掉，然后重载场景进替补关。
+		# 不在这里干等——否则 load_from_level() 打不开文件后直接返回，
+		# 玩家会停在一个空关卡里，计时也不启动。
+		if not Adventure.current_level_exists():
+			Adventure.skip_missing_level()
+			GlobalTransition.reload_current_scene.call_deferred()
+			return
 		file_name = Adventure.current_level_path()
 		return
 	if GameModeSingleton.game_mode == GameModeSingleton.GameModeType.HISTORY_EDIT \

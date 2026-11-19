@@ -813,51 +813,50 @@ msgstr "Quick Export"
 msgid "快速导入"
 msgstr "Quick Import"
 
-msgid "存档base64码已复制到剪切板。"
-msgstr "Save code (base64) copied to clipboard."
+msgid "存档码已复制到剪贴板。"
+msgstr "Save code copied to clipboard."
 
-msgid "先选中一个存档位，再导出。"
-msgstr "Select a save slot before exporting."
+msgid "请先选中一个存档位。"
+msgstr "Select a save slot first."
 
-msgid "这个存档位没有可导出的团。"
+msgid "该存档位没有可导出的团。"
 msgstr "This save slot has no run to export."
 
-msgid "把存档码粘贴到这里"
-msgstr "Paste the save code here"
+msgid "请粘贴存档码"
+msgstr "Paste a save code"
 
-msgid "看起来是一条存档码，点「导入」"
-msgstr "Looks like a save code - press Import"
+msgid "已识别存档码"
+msgstr "Save code recognised"
 
-msgid "这段文本不像存档码，确认后再导入"
-msgstr "This does not look like a save code"
+msgid "未识别到存档码格式"
+msgstr "Not a recognised save code"
 
-msgid "导入成功，已存入存档%d。"
-msgstr "Import complete - saved to slot %d."
+msgid "已存入存档%d。"
+msgstr "Saved to slot %d."
 
-msgid "存档位已满（%d/%d），请先结算或放弃其中一个团"
+msgid "存档位已满（%d/%d），请先结算或放弃一个团"
 msgstr "All save slots are full (%d/%d). Finish or abandon a run first."
 
-msgid "码为空"
-msgstr "The code is empty"
+msgid "存档码为空"
+msgstr "The save code is empty"
 
-msgid "不是百人团存档码"
-msgstr "Not a Raid save code"
+msgid "存档码格式无效"
+msgstr "Invalid save code format"
 
-msgid "码已损坏（base64 解不开）"
-msgstr "The code is damaged (invalid base64)"
+msgid "存档码已损坏"
+msgstr "The save code is corrupted"
 
-msgid "码已损坏（解压失败）"
-msgstr "The code is damaged (cannot decompress)"
+msgid "存档码版本不受支持"
+msgstr "Unsupported save code version"
 
-msgid "码的格式版本不支持"
-msgstr "Unsupported code format version"
+msgid "存档码不含存档数据"
+msgstr "The save code contains no save data"
 
-msgid "码里没有存档数据"
-msgstr "The code contains no save data"
+msgid "以下关卡在本机不存在：%s"
+msgstr "These levels are missing here: %s"
 
-msgid "存档引用了本机没有的关卡：%s"
-msgstr "This save needs levels you do not have: %s"
+msgid "，缺 %d 关"
+msgstr ", %d missing"
 
-
-
-
+msgid "已存入存档%d。其中 %d 关在本机不存在，游玩时将自动跳过。"
+msgstr "Saved to slot %d. %d level(s) are missing here and will be skipped during play."

@@ -63,12 +63,12 @@ func _refresh_hint(_new_text: String = "") -> void:
 	var has_text: bool = not _input.text.strip_edges().is_empty()
 	_import_button.disabled = not has_text
 	if not has_text:
-		_hint.text = tr("把存档码粘贴到这里")
+		_hint.text = tr("请粘贴存档码")
 		return
 	if not AdventureShareCode.looks_like_code(_input.text):
-		_hint.text = tr("这段文本不像存档码，确认后再导入")
+		_hint.text = tr("未识别到存档码格式")
 		return
-	_hint.text = tr("看起来是一条存档码，点「导入」")
+	_hint.text = tr("已识别存档码")
 
 
 func _on_text_submitted(_text: String) -> void:
